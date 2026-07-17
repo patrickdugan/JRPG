@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0d1b">
+    <title>Bells of the Black Chrysanthemum — Bell Court Prototype</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="masthead">
+        <div>
+          <p class="eyebrow">FP-0 COMBAT PROOF</p>
+          <h1>Bells of the Black Chrysanthemum</h1>
+          <p class="subtitle">Bell Court at Takamine · a measured battle-stage prototype</p>
+        </div>
+        <div class="scope-note">Original prototype art<br>Turn-based · 12 × 7 stage</div>
+      </header>
+
+      <section class="game-frame" aria-label="Bell Court combat encounter">
+        <canvas id="gameCanvas" width="960" height="540">
+          This prototype needs a browser with Canvas and JavaScript enabled.
+        </canvas>
+      </section>
+
+      <section class="command-deck" aria-label="Combat commands">
+        <button class="command-button cut" type="button" data-action="skill:courier-cut">
+          <span class="keycap">1</span>
+          <span><strong>Courier’s Cut</strong><small>Cut · Range 1 · Recovery 2P</small></span>
+        </button>
+        <button class="command-button ember" type="button" data-action="skill:cinder-route">
+          <span class="keycap">2</span>
+          <span><strong>Cinder Route</strong><small>Arcane + Ember · Range 4 · Recovery 3P</small></span>
+        </button>
+        <button class="command-button radiance" type="button" data-action="skill:dawn-signal">
+          <span class="keycap">3</span>
+          <span><strong>Dawn Signal</strong><small>Arcane + Radiance · Range 3 · Recovery 2P</small></span>
+        </button>
+        <button class="command-button guard" type="button" data-action="stance:guard">
+          <span class="keycap">G</span>
+          <span><strong>Guard</strong><small>Next hit −45% · Recovery 1P</small></span>
+        </button>
+        <button class="command-button dodge" type="button" data-action="stance:dodge">
+          <span class="keycap">F</span>
+          <span><strong>Dodge</strong><small>Next physical hit 65% miss · 1P</small></span>
+        </button>
+      </section>
+
+      <section class="control-row" aria-label="Controls and encounter feedback">
+        <p><strong>Move:</strong> Arrow keys / WASD · <strong>Diagonal:</strong> Q E Z C · <strong>Commands:</strong> 1/2/3, G, F</p>
+        <p id="feedback" role="status" aria-live="polite"></p>
+        <button class="restart-button" type="button" data-action="restart"><span class="keycap">R</span> Restart encounter</button>
+      </section>
+
+      <p id="access-log" class="visually-hidden" aria-live="polite"></p>
+
+      <noscript><p class="noscript">Enable JavaScript to run the first-playable combat prototype.</p></noscript>
+    </main>
+    <script type="module" src="game.js"></script>
+  </body>
+</html>

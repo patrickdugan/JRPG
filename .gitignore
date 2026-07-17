@@ -1,0 +1,14 @@
+# Editor and operating-system noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+
+# Local runtime / package outputs
+node_modules/
+dist/
+build/
+.godot/
+
+# Do not ignore designed source assets or documentation.
+

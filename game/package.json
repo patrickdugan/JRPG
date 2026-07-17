@@ -1,0 +1,11 @@
+{
+  "name": "bells-black-chrysanthemum-combat-proof",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "node --check engine.mjs && node --check game.js",
+    "test": "node --test tests/engine.test.mjs",
+    "serve": "python -m http.server 8080"
+  }
+}
