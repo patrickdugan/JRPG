@@ -63,6 +63,20 @@ h1 {
   line-height: 1.45;
 }
 
+.campaign-link {
+  display: inline-block;
+  margin-top: 7px;
+  color: #f0d38b;
+  font-size: 0.68rem;
+  text-decoration: none;
+}
+
+.campaign-link:hover,
+.campaign-link:focus-visible {
+  color: #fff3c8;
+  text-decoration: underline;
+}
+
 .scope-note {
   flex: 0 0 auto;
   padding: 8px 10px;

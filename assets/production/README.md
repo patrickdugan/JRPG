@@ -1,0 +1,70 @@
+# Bells of the Black Chrysanthemum - Production References
+
+These opaque PNG files are original, project-bound visual **references** generated with the built-in image-generation workflow on 2026-07-16. They establish silhouette, palette, composition, and production intent for the animation and art team. They are not shippable sprite sheets, tilesets, fonts, UI art, frame data, or texture sources.
+
+Use [the animation bible](../../docs/10-animation-bible.md) and [the art-direction contract](../../docs/05-art-direction.md) to rebuild all game art as editable, authored assets. Do not cut pixels, text, or UI out of these images.
+
+| Filename | Dimensions | SHA-256 | Purpose | Acceptance result |
+| --- | ---: | --- | --- | --- |
+| `bells-party-roster-v1.png` | 1448 x 1086 | `f6b28f192a35f19bbc60efd366cf88af10b0b79c2f2b4aa788d59ec749fe95c5` | Six-party silhouette, palette, and costume-layering reference | Accepted: Ren, Aya, Lise, Mateus, Genta, and Kiku read as distinct roles before facial detail; no text or real-person likeness. |
+| `bells-enemy-bosses-v1.png` | 1448 x 1086 | `5b02d5144c4c5ec1e6557df672848ce8d8037103485af01b3bebc67f6f1b17df` | Enemy hierarchy and boss-scale silhouette reference | Accepted: Cinder Hound, Ash Wisp, Bell Moth, Tithe Enforcer, Tithe Enforcer Ascendant, and Takamine Bell Warden stay distinct with clean size escalation; no text or gore. |
+| `bells-takamine-keyframe-v1.png` | 1448 x 1086 | `17aea41ebe154d79fcdd509c2951a6a5a3b0273d7c4fe569c5e40561d6be16ac` | FP-1 Takamine Rain Gate environment/keyframe reference | Accepted: gate, wet approach, service-route read, warm lantern destination, and cold court pressure are legible; no text. |
+
+## Generation method
+
+- **Method:** built-in image generation, not CLI/API fallback.
+- **Output type:** opaque PNG only; no attempt was made to create transparent cutouts.
+- **Review:** each generated image was visually inspected for original character design, no readable text, no logos/watermarks, no celebrity likeness, no direct franchise imitation, and consistency with the project's historical/sensitivity constraints before it was copied here.
+- **Source copies:** the original generated files remain in the Codex generated-image directory. These stable filenames are the project copies to reference in production planning.
+
+## Exact prompt: `bells-party-roster-v1.png`
+
+```text
+Use case: stylized-concept
+Asset type: internal character art production-reference key-art roster for the original pixel-art JRPG "Bells of the Black Chrysanthemum."
+Primary request: Create a single original six-character party roster image that serves as a production reference for silhouette, palette allocation, and costume layering. Each person must be a fully original fictional character, shown in a clear 3/4 view at consistent height with generous spacing; no copied game character designs and no real-person likenesses.
+Scene/backdrop: a simple moonlit rain-indigo studio backdrop with one low wet-cedar platform and subtle paper-screen geometry, no scenery that competes with the characters.
+Subject: (1) Ren Ishikawa, Japanese village courier, forward-leaning short coat, courier satchel, short spear, cedar brown and rain blue; (2) Aya Shinohara, Japanese shrine archive keeper, squared record case, layered sleeves, folded ofuda fan, parchment and muted teal; (3) Lise Varga, European-descended vampire-hunter heir, short dark hair, practical sea-weather travel coat, compact rapier-and-needle-tool profile, desaturated blue and brass; (4) Father Mateus Avelar, European court interpreter and vampire, original narrow cassock-derived coat with high collar and ring of keys, charcoal with dried-wine accent, tired controlled posture; (5) Genta Mononobe, Japanese former retainer, broad shoulder mantle, tetsubo/shield mass, earth gray and oxidized gold; (6) Kiku Nawa, Japanese village physician, short cloak, medicine box, bottle and packet shapes, herb green and candle ivory.
+Style/medium: crisp original hand-authored 16-bit-era pixel-art character-key-art, deliberate pixel clusters, stepped diagonals, selected 1px highlights, 2-4 values per material, clean silhouette gaps, no blurry painting, no 3D, no smooth gradients.
+Composition/framing: 4:3 landscape, full bodies in a shallow arc, all six equally readable; Ren and Aya slightly forward as early party anchors; leave clear negative space between weapons and bodies; character faces are small and simplified, not detailed portraits.
+Lighting/mood: candle-ivory rim light against rain-dark indigo, somber and resolute, a restrained black-crimson court accent only on Mateus.
+Color palette: ink shadow, rain indigo, cedar brown, parchment/candle ivory, muted teal, desaturated blue/brass, earth gray/oxidized gold, herb green, with rare lacquer red and black-crimson.
+Materials/textures: rain-worn cloth, lacquer trim, cedar leather, paper, old bronze, compact travel gear.
+Constraints: no lettering, no logo, no watermark, no UI, no readable signage, no explicit religious symbols as weapons or loot, no gore, no actor likeness, no film character, no existing franchise character, no direct visual imitation.
+```
+
+## Exact prompt: `bells-enemy-bosses-v1.png`
+
+```text
+Use case: stylized-concept
+Asset type: internal enemy and boss silhouette-sheet production reference for the original pixel-art JRPG "Bells of the Black Chrysanthemum."
+Primary request: Create an original, carefully organized bestiary silhouette sheet showing six distinct enemy/boss archetypes at a shared visual scale, intended to guide editable production sprites, animation, enemy hierarchy, and battle readability. This is not a final sprite atlas and must contain no labels, letters, UI, or text.
+Scene/backdrop: flat deep ink-indigo presentation field with faint 8-pixel grid texture and a thin wet-stone baseline; no busy scenery.
+Subject: arrange these six original designs left-to-right with clear spacing and mostly side/three-quarter combat-facing poses: (1) Cinder Hound, low four-legged ash-coated predator with rising 2-pixel ember motes, compact muzzle and broken bell-metal collar; (2) Ash Wisp, hovering coal of folded paper ash with a readable dark core and a small ground shadow, its transparency suggested only with sparse clusters; (3) Bell Moth, broad angular wings whose pattern suggests an abstract bell, clean separate shadow below; (4) Tithe Enforcer, bell-forged Ashen Oni retainer with invented geometric face mask, lacquered shield, vertical ledger tabs, broken bell-metal joints, ember core visible only in active pose; (5) Tithe Enforcer Ascendant, a 96x96 boss-scale version with massive bell-backed club and two visible breakable bell-seal reads; (6) Takamine Bell Warden, a separate boss silhouette with a vertical bronze bell frame, folded court robes, and three suspended resonance rings that clearly signal its arena mechanic.
+Style/medium: original hand-authored 16-bit-era pixel-art production reference, decisive chunky pixel clusters, controlled stepped diagonals, 2-4 values per material, hard one-pixel highlights, no painted blur, no smooth gradients, no 3D render, no direct imitation of any game or artist.
+Composition/framing: 4:3 landscape contact-sheet feel; small enemies occupy the lower baseline while bosses rise above it; every body and weapon needs clear negative space; designs are readable in monochrome first. Give the Ashen Oni and the two bosses the strongest vertical silhouette hierarchy. Do not draw a grid board, labels, plates, or framing boxes.
+Lighting/mood: cold rain-indigo rim light, ember/vermilion active accents, oxidized bronze highlights, theatrical and mournful rather than gory.
+Color palette: ink shadow, rain indigo, stone gray, ash gray, oxidized green, old bronze, limited lacquer red, rare black-crimson and vermilion only for court corruption / active cores.
+Materials/textures: clumped ash, wet lacquer, corroded bell bronze, folded paper, cracked stone, matte cloth.
+Constraints: invented fantasy enemies only; Ashen Oni are court-forged fiction and must not copy a real ceremonial mask or living religious figure; no gore; no skull pile; no human ethnicity coded as monstrous; no copyrighted character, logo, lettering, readable symbols, watermark, celebrity likeness, franchise visual imitation, or text.
+```
+
+## Exact prompt: `bells-takamine-keyframe-v1.png`
+
+```text
+Use case: historical-scene
+Asset type: internal environment/keyframe production reference for FP-1 Takamine in the original pixel-art JRPG "Bells of the Black Chrysanthemum."
+Primary request: Create an original 4:3 pixel-art field-scene keyframe for the FP-00 Rain Gate: a mountain bell temple under curfew in alternate 1622 Japan. The image must guide modular environment construction, navigation readability, rain layering, and the first playable's somber story tone; it is a reference, not a shippable map.
+Scene/backdrop: five readable depth bands. Far background: misty mountain ridge and a distant black-lacquer registry tower with one small cold red vertical court accent. Mid-distance: tall black cedar gate with a closed double door, roof tiles, wet bronze hardware, and dark bell-frame geometry. Play space: a broad rain-slick stone approach with clearly walkable bands and a separate right-side cedar service path that curves behind the gate. Human detail: a supply cart with blank paper bundles, a rain basin, paper lanterns glowing behind wooden lattice, and maintained eaves. Foreground witness: a few dark cedar boughs and rain chains framing edges without blocking the route.
+Subject: Ren Ishikawa and Aya Shinohara are small field-scale figures in lower center: Ren with courier satchel and short spear, Aya with squared archive case and folded paper fan. They face the closed gate and service path, communicating cooperation and caution. No other character is required.
+Style/medium: original hand-authored 16-bit-era pixel art enlarged with sharp nearest-neighbor character, deliberate 1px/2px clusters, stepped diagonals, 2-4 value materials, sparse directional rain streaks, no blur, no smooth gradients, no 3D render, no visual imitation of any specific game or artist.
+Composition/framing: 4:3 landscape, camera at a readable three-quarter top-down field-game angle; gate and locked door form the high-contrast focal shape at upper center, lower third remains calm enough for future dialogue UI, main walkable route visibly runs from the lower center toward the right-side service path. Do not draw interface panels or grid overlays.
+Lighting/mood: monsoon dusk with rain falling left-to-right; lantern amber and candle ivory identify a human-scale point of care, cold indigo shadows establish threat; solemn, intimate, theatrical.
+Color palette: ink black and indigo shadow, rain blue, wet stone gray, cedar brown, paper/candle ivory, oxidized bronze, a very limited lacquer red / black-crimson court accent, muted teal only near Aya.
+Materials/textures: wet cedar grain, mottled stone, roof tile, bronze bell hardware, paper, water in broken reflecting bands.
+Constraints: no text, no logo, no watermark, no readable signage, no historical crest, no real sacred object used as loot or a monster prop, no gore, no celebrity or actor likeness, no existing franchise characters, and no direct franchise visual imitation.
+```
+
+## Limitation
+
+Generated reference art cannot supply editable animation frames, collision, tile boundaries, palette-index source, localization-safe UI, cultural review, or a final 320 x 180 production pass. Treat each image as a concise visual brief and rebuild it through the production gate.

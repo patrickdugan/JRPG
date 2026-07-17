@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0d1b">
+    <title>Bells of the Black Chrysanthemum — Campaign Atlas</title>
+    <link rel="stylesheet" href="campaign.css">
+  </head>
+  <body>
+    <main class="campaign-shell">
+      <header class="campaign-masthead">
+        <div>
+          <p class="eyebrow">CAMPAIGN BUILD · PRODUCTION ATLAS</p>
+          <h1>Bells of the Black Chrysanthemum</h1>
+          <p class="subtitle">A playable chapter, scene, encounter, and map framework</p>
+        </div>
+        <div class="masthead-actions">
+          <a class="battle-link" href="index.html">Play FP-0 Combat Proof</a>
+          <button id="resetCampaign" class="subtle-button" type="button">Reset story state</button>
+        </div>
+      </header>
+
+      <section class="campaign-layout" aria-label="Campaign player">
+        <aside class="chapter-rail" aria-label="Campaign chapters">
+          <div class="rail-heading">
+            <span>Story ledger</span>
+            <strong id="completionLabel">0 / 0 scenes</strong>
+          </div>
+          <div id="chapterList" class="chapter-list" role="tablist" aria-label="Choose a chapter"></div>
+        </aside>
+
+        <section class="scene-stage" aria-live="polite">
+          <header class="scene-heading">
+            <p id="chapterKicker" class="chapter-kicker"></p>
+            <h2 id="chapterTitle"></h2>
+            <p id="chapterObjective" class="objective"></p>
+          </header>
+
+          <div class="map-wrap">
+            <canvas id="mapCanvas" width="960" height="480" aria-label="Campaign field map; move one exact space with W, A, S, D or diagonals Q, E, Z, C."></canvas>
+            <div class="map-overlay">
+              <span id="mapName"></span>
+              <span id="mapLegend"></span>
+            </div>
+          </div>
+          <p id="fieldFeedback" class="field-feedback" role="status">Field movement: W/A/S/D orthogonal · Q/E/Z/C diagonal. Movement is one exact map space per key press.</p>
+          <div id="fieldControls" class="field-controls" aria-label="Field movement controls">
+            <button type="button" data-field-move="-1,-1" aria-label="Move north-west">&#8598;</button>
+            <button type="button" data-field-move="0,-1" aria-label="Move north">&#8593;</button>
+            <button type="button" data-field-move="1,-1" aria-label="Move north-east">&#8599;</button>
+            <button type="button" data-field-move="-1,0" aria-label="Move west">&#8592;</button>
+            <span aria-hidden="true">+</span>
+            <button type="button" data-field-move="1,0" aria-label="Move east">&#8594;</button>
+            <button type="button" data-field-move="-1,1" aria-label="Move south-west">&#8601;</button>
+            <button type="button" data-field-move="0,1" aria-label="Move south">&#8595;</button>
+            <button type="button" data-field-move="1,1" aria-label="Move south-east">&#8600;</button>
+          </div>
+
+          <section class="scene-card" aria-label="Current story scene">
+            <div class="scene-card-header">
+              <span id="sceneNumber" class="scene-number"></span>
+              <h3 id="sceneTitle"></h3>
+              <span id="sceneLocation" class="scene-location"></span>
+            </div>
+            <p id="sceneText" class="scene-text"></p>
+            <div id="choiceDeck" class="choice-deck" aria-label="Story choices"></div>
+            <p id="choiceResult" class="choice-result" role="status"></p>
+          </section>
+
+          <footer class="scene-controls">
+            <button id="previousScene" type="button">← Previous</button>
+            <div class="progress-wrap" aria-label="Chapter progress">
+              <span id="progressLabel"></span>
+              <div class="progress-track"><span id="progressFill"></span></div>
+            </div>
+            <button id="nextScene" type="button">Next scene →</button>
+          </footer>
+        </section>
+
+        <aside class="encounter-rail" aria-label="Chapter encounter briefing">
+          <img id="keyArt" class="key-art" src="assets/production/bells-takamine-keyframe-v1.png" alt="Original Takamine production key art">
+          <section class="briefing-card">
+            <p class="eyebrow">Encounter briefing</p>
+            <h2 id="encounterName"></h2>
+            <p id="encounterObjective"></p>
+            <dl class="briefing-list">
+              <div><dt>Lesson</dt><dd id="encounterLesson"></dd></div>
+              <div><dt>Threats</dt><dd id="encounterEnemies"></dd></div>
+              <div><dt>Boss rule</dt><dd id="bossMechanic"></dd></div>
+              <div><dt>Reward</dt><dd id="chapterReward"></dd></div>
+            </dl>
+          </section>
+          <section class="party-card">
+            <p class="eyebrow">Active story party</p>
+            <p id="partyList"></p>
+            <p class="party-note">Combat proof controls: <kbd>WASD</kbd>/<kbd>Arrows</kbd> move · <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> arts · <kbd>G</kbd>/<kbd>F</kbd> stances.</p>
+          </section>
+        </aside>
+      </section>
+
+      <p class="footer-note">This production atlas contains the complete campaign data and playable scene progression. FP-0 remains the verified combat implementation; FP-1 and later chapters are content-ready build targets, not falsely represented as finished playtime.</p>
+    </main>
+    <script type="module" src="campaign.js"></script>
+  </body>
+</html>

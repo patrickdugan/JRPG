@@ -4,7 +4,7 @@ An original, gothic historical-fantasy JRPG set in a fictionalized early Edo Jap
 
 ## Current milestone
 
-Preproduction and a deliberately small **FP-0 Combat Proof** are underway. FP-0 validates the combat hook in one encounter; it is intentionally not mislabeled as the plan-template's first playable. The documented **FP-1 Takamine Vertical Slice** is the later 28–34 minute story-and-battle target with a short route, party context, and boss-level threat.
+The repository now has a campaign foundation alongside the deliberately small **FP-0 Combat Proof**. The new Campaign Atlas plays the authored prologue-to-epilogue scene sequence, persists choices and progress, renders every documented route/encounter map, and supports exact collision-aware field movement. FP-0 remains the only fully executable combat encounter; it validates the combat hook without pretending to be the plan-template's first playable. The documented **FP-1 Takamine Vertical Slice** remains the 28–34 minute story-and-battle target with a short route, party context, and boss-level threat.
 
 ## Scope guardrails
 
@@ -22,5 +22,10 @@ Preproduction and a deliberately small **FP-0 Combat Proof** are underway. FP-0 
 - [Detailed outline](docs/04-detailed-outline.md)
 - [Art direction](docs/05-art-direction.md)
 - [Master asset list](docs/06-master-asset-list.md)
+- [Campaign content pipeline](docs/08-campaign-content-pipeline.md)
+- [Level and encounter bible](docs/09-level-and-encounter-bible.md)
+- [Animation bible](docs/10-animation-bible.md)
+- [Build QA report](docs/11-build-qa-report.md)
+- [Progression and save contract](docs/12-progression-save-contract.md)
 
-The runnable prototype and its instructions live in [`game/`](game/README.md) once the technical track has completed its initial handoff.
+Run [`game/`](game/README.md) and open either `http://localhost:8080/` for the FP-0 battle proof or `http://localhost:8080/campaign.html` for the Campaign Atlas. Production-reference art and its reproducible prompt record are in [`assets/production/`](assets/production/README.md).
