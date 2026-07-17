@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign length:** 20–25 hours on the critical path, plus 3–5 hours of optional routes  
-**Structure:** Prologue + 9 chapters + epilogue  
+**Campaign length:** 20–25 hours on the critical path, plus 3–5 hours of optional routes<br>
+**Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 
 ### Outline rules

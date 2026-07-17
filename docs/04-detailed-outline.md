@@ -2,8 +2,8 @@
 
 ## Detailed script outline
 
-**Narrative target:** a focused 20–25 hour JRPG campaign whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward.  
-**Canonical names:** Ren Ishikawa; Aya Shinohara; Elisabet “Lise” Varga; Father Mateus Avelar; Genta Mononobe; Kiku Nawa; Shogun Kurozane; Magistrate Ujiro Arata.  
+**Narrative target:** a focused 20–25 hour JRPG campaign whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward.<br>
+**Canonical names:** Ren Ishikawa; Aya Shinohara; Elisabet “Lise” Varga; Father Mateus Avelar; Genta Mononobe; Kiku Nawa; Shogun Kurozane; Magistrate Ujiro Arata.<br>
 **Format note:** Scene titles are production IDs. Dialogue below is first-draft intent and can be revised for localization and historical review; plot function, speaker ownership, and exit state are locked unless a later design review changes them.
 
 ## Scene-writing rules
@@ -18,50 +18,50 @@
 
 ### P00 — Delivery in rain
 
-**Location:** Hoshigawa river lane, late afternoon.  
-**Gameplay:** Ren walks a short route, hands over a weather-sealed state packet, and uses two ordinary interactions.  
-**Story:** The delivery is impersonal bureaucracy, not ominous prophecy. People are worried because the census is sudden, not because all officials are supernatural.  
+**Location:** Hoshigawa river lane, late afternoon.<br>
+**Gameplay:** Ren walks a short route, hands over a weather-sealed state packet, and uses two ordinary interactions.<br>
+**Story:** The delivery is impersonal bureaucracy, not ominous prophecy. People are worried because the census is sudden, not because all officials are supernatural.<br>
 **Exit:** The local headman opens an overnight census order.
 
 ### P01 — The altered order
 
-**Location:** Headman’s porch.  
-**Story:** Ren notices the spoken demand—names, household ties, “foreign contamination”—is broader than the packet he carried. A Black Chrysanthemum collector adds extra names to a separate black ledger.  
+**Location:** Headman’s porch.<br>
+**Story:** Ren notices the spoken demand—names, household ties, “foreign contamination”—is broader than the packet he carried. A Black Chrysanthemum collector adds extra names to a separate black ledger.<br>
 **Dialogue intent:**
 
-> REN: “That was not in the packet.”  
-> COLLECTOR: “Then be grateful you only carry paper.”  
-> HEADMAN: “A census has always been paper.”  
+> REN: “That was not in the packet.”<br>
+> COLLECTOR: “Then be grateful you only carry paper.”<br>
+> HEADMAN: “A census has always been paper.”<br>
 > COLLECTOR: “Not tonight.”
 
 **Exit:** Kiku asks Ren to bring medicine to a family before the lane closes.
 
 ### P02 — Medicine across the lane
 
-**Location:** narrow home lane and storehouse porch.  
-**Gameplay:** Exact top-down movement, a blocked cart, one interaction, and a clear route marker. No combat.  
-**Story:** Ren sees families quietly sharing food and warnings. Kiku says, “Do not make a promise you cannot carry,” establishing her practical ethics.  
+**Location:** narrow home lane and storehouse porch.<br>
+**Gameplay:** Exact top-down movement, a blocked cart, one interaction, and a clear route marker. No combat.<br>
+**Story:** Ren sees families quietly sharing food and warnings. Kiku says, “Do not make a promise you cannot carry,” establishing her practical ethics.<br>
 **Exit:** The census bell rings once.
 
 ### P03 — The bailiff returns
 
-**Location:** census square.  
-**Gameplay:** First battle, Ren alone with one temporary civilian support action.  
-**Story:** A person who had been taken earlier returns in ash armor. The collector calls it a bailiff; the townspeople recognize the person underneath.  
-**Battle objective:** survive three activations and move to the marked river exit. Teach Tempo, Pace, and red telegraph line.  
+**Location:** census square.<br>
+**Gameplay:** First battle, Ren alone with one temporary civilian support action.<br>
+**Story:** A person who had been taken earlier returns in ash armor. The collector calls it a bailiff; the townspeople recognize the person underneath.<br>
+**Battle objective:** survive three activations and move to the marked river exit. Teach Tempo, Pace, and red telegraph line.<br>
 **Exit:** The bell fractures when Ren blocks its swing; a hot black fragment lands in his pouch.
 
 ### P04 — River escape
 
-**Location:** riverbank path.  
-**Gameplay:** short escape run with non-punitive checkpoint.  
-**Story:** Ren gets two households out but sees other doors marked. He does not claim to have saved the village.  
+**Location:** riverbank path.<br>
+**Gameplay:** short escape run with non-punitive checkpoint.<br>
+**Story:** Ren gets two households out but sees other doors marked. He does not claim to have saved the village.<br>
 **Exit:** Aya arrives with water-damaged archive rolls and identifies the fragment seal as Takamine’s.
 
 ### P05 — The archive promise
 
-**Location:** shrine archive, dawn.  
-**Story:** Aya says the first task is to prove what was altered. Ren wants to pursue the collector; Aya insists that a person with a copied name can still be found.  
+**Location:** shrine archive, dawn.<br>
+**Story:** Aya says the first task is to prove what was altered. Ren wants to pursue the collector; Aya insists that a person with a copied name can still be found.<br>
 **Exit:** Party formed: Ren + Aya. Chapter 1 begins.
 
 ## Chapter 1 — River of Names
@@ -92,7 +92,7 @@ The collector animates the falsified ledger into a bell-bound predator. The batt
 
 ### C1-07 — Copy before fire
 
-Ren wants to burn the false records. Aya copies names and annotations first; then the party destroys the weaponized ledger. Kiku uses the copied names to start finding people.  
+Ren wants to burn the false records. Aya copies names and annotations first; then the party destroys the weaponized ledger. Kiku uses the copied names to start finding people.<br>
 **Exit:** Takamine is marked as the next destination; the first playable context is established.
 
 ## Chapter 2 — Bell at Takamine
@@ -123,7 +123,7 @@ Mateus attempts to seize Lise and destroy the witnesses. His Blood Ward makes di
 
 ### C2-07 — A name from Europe
 
-Lise identifies Mateus’s former teacher and says the Varga oath did not die with its European archive. Mateus tells the truth in pieces: Kurozane uses bells to turn denunciation into power, and he wrote part of the translation cipher. He opens the cell block, stays behind to delay soldiers, then returns at camp asking to be treated as evidence, not family.  
+Lise identifies Mateus’s former teacher and says the Varga oath did not die with its European archive. Mateus tells the truth in pieces: Kurozane uses bells to turn denunciation into power, and he wrote part of the translation cipher. He opens the cell block, stays behind to delay soldiers, then returns at camp asking to be treated as evidence, not family.<br>
 **Exit:** Lise joins. Mateus becomes camp-available; the Sodegaura key becomes next objective.
 
 ## Chapter 3 — Sodegaura Lanterns
@@ -150,7 +150,7 @@ Captain Kaji commands Genta to deliver a family to the salt warehouse. Genta ref
 
 ### C3-06 — Boss: Captain Kaji
 
-Cargo-hook combat teaches facing, Guard, and positional rescue. Kaji is disarmed and taken alive by dock workers who witnessed the order.  
+Cargo-hook combat teaches facing, Guard, and positional rescue. Kaji is disarmed and taken alive by dock workers who witnessed the order.<br>
 **Exit:** Genta joins after giving a full account of his actions. The first bell key points to a wreck on Nagi Sea Road.
 
 ## Chapter 4 — The Sea Keeps No Ledger
@@ -177,7 +177,7 @@ The bell ghost repeats unrecorded sailors’ names. It is Frost-resistant, Ember
 
 ### C4-06 — Kiku’s terms
 
-Kiku joins only after Ren agrees that the next plan accounts for noncombatants.  
+Kiku joins only after Ren agrees that the next plan accounts for noncombatants.<br>
 **Exit:** Second key acquired; a courier warns that Kagura’s forge is producing Ashen Oni.
 
 ## Chapter 5 — Ash in Kagura Pass
@@ -204,7 +204,7 @@ The Abbot absorbs Ember, resists Crush, and applies a wide Forge Sermon with 3 R
 
 ### C5-06 — Midpoint evidence
 
-The forge records prove Ujiro’s raids increased bell fuel by design. The party sees Kurozane’s portrait for the first time, but learns he is not a historical ruler: this is the alternate world’s vampire shogun.  
+The forge records prove Ujiro’s raids increased bell fuel by design. The party sees Kurozane’s portrait for the first time, but learns he is not a historical ruler: this is the alternate world’s vampire shogun.<br>
 **Exit:** Ujiro has the third key in Kōzui and plans a public tribunal.
 
 ## Chapter 6 — The Court of Masks
@@ -231,7 +231,7 @@ Ujiro uses legal seals, clerk summons, and a bell countdown. The battle’s win 
 
 ### C6-06 — All copies leave
 
-The three evidence bundles travel by different routes. The party keeps the third key but hears that the Yearless Bell is gathering prisoners at Hushroad.  
+The three evidence bundles travel by different routes. The party keeps the third key but hears that the Yearless Bell is gathering prisoners at Hushroad.<br>
 **Exit:** The chapter turns from exposure to rescue.
 
 ## Chapter 7 — The Road of the Dead
@@ -254,7 +254,7 @@ Lise burns the old Varga seal and writes a new oath: protect named people, do no
 
 ### C7-05 — Boss: Bell Warden Chiyo
 
-The Warden chains prisoners to positions. The party must break chains, use swaps to occupy rescue spaces, and stop a four-turn ringing count.  
+The Warden chains prisoners to positions. The party must break chains, use swaps to occupy rescue spaces, and stop a four-turn ringing count.<br>
 **Exit:** Survivors carry the warning to the Lantern Network. Kurozane begins the final ritual before the party can stop it.
 
 ## Chapter 8 — Lanterns Unhidden
@@ -277,7 +277,7 @@ The outer-court battle alternates party combat with lantern signals visible in t
 
 ### C8-05 — Boss: Lady Enma of Ash
 
-Enma creates Ember/Umbral hazards. Each hero has a useful response, producing the late-game party-combination tutorial.  
+Enma creates Ember/Umbral hazards. Each hero has a useful response, producing the late-game party-combination tutorial.<br>
 **Exit:** The Ashen garrison is released. Allies hold the gate by choice while the six heroes enter Kurohana.
 
 ## Chapter 9 — The Black Chrysanthemum
@@ -304,7 +304,7 @@ Phase one uses court commands and clones; phase two uses bell-node positioning; 
 
 ### C9-06 — Leave evidence alive
 
-The party escapes with the archive. The castle only collapses where bell tissue fails; the story’s proof is not conveniently destroyed.  
+The party escapes with the archive. The castle only collapses where bell tissue fails; the story’s proof is not conveniently destroyed.<br>
 **Exit:** Epilogue at three months.
 
 ## Epilogue — Names at Daybreak
@@ -327,10 +327,10 @@ This is **FP-1 Takamine Vertical Slice**, the middle section of Chapter 2 from t
 
 FP-1 begins only after FP-0 passes its automated and new-player comprehension checks. It reuses FP-0’s combat contract, then adds field navigation, a three-character party, two teaching battles, and Mateus’s boss encounter.
 
-**Expected first clear:** 28–34 minutes.  
-**Fast clear target:** 24–26 minutes.  
-**Cautious or retry target:** 35–40 minutes.  
-**Playable party:** Ren and Aya at start; Lise joins before Battle 2. Mateus is the boss only.  
+**Expected first clear:** 28–34 minutes.<br>
+**Fast clear target:** 24–26 minutes.<br>
+**Cautious or retry target:** 35–40 minutes.<br>
+**Playable party:** Ren and Aya at start; Lise joins before Battle 2. Mateus is the boss only.<br>
 **Explicitly out of scope:** overworld map, shop, crafting, party-respec menu, save-anywhere, later party members, a full stealth system, and all late-game statuses.
 
 The slice validates the player promise:
@@ -371,15 +371,15 @@ Required encounters: two normal battles and one boss. The intended number of fie
 
 ## FP-00 — Rain Gate
 
-**Time:** 0:00–2:00  
-**Map:** black cedar gate, wet stone path, locked front doors, paper lantern light behind lattice, rain falling left-to-right.  
+**Time:** 0:00–2:00<br>
+**Map:** black cedar gate, wet stone path, locked front doors, paper lantern light behind lattice, rain falling left-to-right.<br>
 **Camera:** starts tight on the gate inscription, pulls down to Ren and Aya, then gives player control facing the service path.
 
 **Trigger FP00-A, automatic on map load**
 
-> AYA: “Takamine closed its front gate before sunset. That means they expect someone.”  
-> REN: “Or they do not want anyone to see who leaves.”  
-> AYA: “The supply permit is still good. Keep it dry.”  
+> AYA: “Takamine closed its front gate before sunset. That means they expect someone.”<br>
+> REN: “Or they do not want anyone to see who leaves.”<br>
+> AYA: “The supply permit is still good. Keep it dry.”<br>
 > REN: “It is paper. Everything is dry until someone chooses otherwise.”
 
 **Gameplay**
@@ -393,18 +393,18 @@ Required encounters: two normal battles and one boss. The intended number of fie
 
 ## FP-01 — Cedar Service Path
 
-**Time:** 2:00–6:00  
+**Time:** 2:00–6:00<br>
 **Map:** three screen-widths: cedar retaining wall, narrow path, roofed loading alcove. One chest sits behind a short side path; it requires only careful navigation around a low cart.
 
 **Trigger FP01-A, path entrance**
 
-> REN: “These crates are for a temple?”  
+> REN: “These crates are for a temple?”<br>
 > AYA: “They are marked as paper, oil, and rope. None of those should make a bell sound like that.”
 
 **Battle 1: Cinder Hound ×2 + Ash Wisp ×1**
 
-**Stage:** wet cedar path; two shallow puddle spaces; no environmental damage.  
-**Start position:** Ren and Aya are bottom-center; Hounds begin upper-left and upper-right; Wisp begins center-rear.  
+**Stage:** wet cedar path; two shallow puddle spaces; no environmental damage.<br>
+**Start position:** Ren and Aya are bottom-center; Hounds begin upper-left and upper-right; Wisp begins center-rear.<br>
 **Expected duration:** 2–3 minutes.
 
 **Enemy Ledger behavior**
@@ -428,13 +428,13 @@ Required encounters: two normal battles and one boss. The intended number of fie
 
 ## FP-02 — Abandoned Chapel
 
-**Time:** 6:00–10:00  
+**Time:** 6:00–10:00<br>
 **Map:** service door, collapsed side chapel, paper-screen corridor, two prisoner grates, rear doorway. Four candles, one shattered stained glass fragment, no real-world sacred object recreated as a collectible.
 
 **Trigger FP02-A, player sees grates**
 
-> PRISONER: “Do not stop. They count footsteps.”  
-> AYA: “Then count ours. There are witnesses here.”  
+> PRISONER: “Do not stop. They count footsteps.”<br>
+> AYA: “Then count ours. There are witnesses here.”<br>
 > REN: “We will come back with the door open.”
 
 **Interaction rule:** The player can speak to both prisoner grates. Each adds a one-line note to Aya’s casebook; neither is required for progression. A third optional inspect reveals a court clerk has hidden a key behind a screen.
@@ -443,13 +443,13 @@ Required encounters: two normal battles and one boss. The intended number of fie
 
 Lise drops from the balcony into the doorway, holding the key and a narrow crossbow-like needle tool. She points it at Ren. Her silhouette is a practical sea-travel coat over period-appropriate layers, short dark hair, no celebrity reference.
 
-> LISE: “Step away from the lock.”  
-> REN: “You first.”  
-> LISE: “You wear their permit.”  
-> AYA: “And you stole their key. Neither is an introduction.”  
-> LISE: “Elisabet Varga. Lise, if you prefer it short. I am looking for a bell that should not be here.”  
-> AYA: “That makes three of us.”  
-> REN: “It makes two of us and one person holding a weapon at my throat.”  
+> LISE: “Step away from the lock.”<br>
+> REN: “You first.”<br>
+> LISE: “You wear their permit.”<br>
+> AYA: “And you stole their key. Neither is an introduction.”<br>
+> LISE: “Elisabet Varga. Lise, if you prefer it short. I am looking for a bell that should not be here.”<br>
+> AYA: “That makes three of us.”<br>
+> REN: “It makes two of us and one person holding a weapon at my throat.”<br>
 > LISE: “Then we are improving.”
 
 **Gameplay**
@@ -462,7 +462,7 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 
 ## FP-03 — Bell Stair
 
-**Time:** 10:00–14:00  
+**Time:** 10:00–14:00<br>
 **Map:** a spiral service stair rendered in three connected top-down screen segments. A large loose bell beam swings across a one-space passage every 2.5 seconds; two floor boards visibly crack after the player steps on them.
 
 **Field design contract**
@@ -475,21 +475,21 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 
 **Banter by landing**
 
-> LISE: “In my country, old towers lean. Here they attack.”  
-> REN: “It is not the tower.”  
+> LISE: “In my country, old towers lean. Here they attack.”<br>
+> REN: “It is not the tower.”<br>
 > AYA: “It is the people who left a bell above a stair.”
 
 **Exit:** At the top landing, Lise discovers a shallow Varga mark cut into black metal. She becomes quiet; Aya records it before the player descends into the undercroft.
 
 ## FP-04 — Flooded Undercroft
 
-**Time:** 14:00–19:00  
+**Time:** 14:00–19:00<br>
 **Map:** four-room undercroft: dry archive shelf, shin-deep water lane, lantern alcove, sealed bell door. The water uses blue-black tiles and clear ripple animation; no complex physics.
 
 **Trigger FP04-A**
 
-> AYA: “These slips are tied to the bell.”  
-> LISE: “Not tied. Fed. Someone made a mouth and gave it names.”  
+> AYA: “These slips are tied to the bell.”<br>
+> LISE: “Not tied. Fed. Someone made a mouth and gave it names.”<br>
 > REN: “Then we break its teeth.”
 
 **Battle 2: Tithe Enforcer ×1 + Bell Moth ×2**
@@ -510,32 +510,32 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 3. Ren either redirects the Enforcer with Shoulder Turn or uses Guard to prevent an ally being forced into water.
 4. The player sees that an aggressive skill with 2 Recovery can be correct only after the moths have committed their charge.
 
-**Reward:** Bell-room key and 1 Ward Tonic.  
+**Reward:** Bell-room key and 1 Ward Tonic.<br>
 **Exit:** The bell door opens. Remove free exploration and begin the boss approach scene.
 
 ## FP-05 — Bell Chamber
 
-**Time:** 19:00–29:00  
+**Time:** 19:00–29:00<br>
 **Map:** round chamber, buried black bell at center, paper name slips threaded into ceiling, raised west gallery, three usable stage lanes. The visual focal point is the bell; combat floor reads cleanly in dark indigo stone.
 
 **Trigger FP05-A, boss entrance**
 
 Mateus enters from the gallery in a worn black clerical coat and court sash, pale but not modeled after a real actor. He does not pose as a glamorous savior; his body language is controlled, tired, and complicit.
 
-> MATEUS: “You took longer than the bell predicted.”  
-> LISE: “It does not predict. It listens to frightened men.”  
-> MATEUS: “That distinction has kept you alive?”  
-> AYA: “It has kept us honest.”  
-> MATEUS: “Honesty is an expensive habit in this country.”  
-> REN: “Then you must be rich.”  
+> MATEUS: “You took longer than the bell predicted.”<br>
+> LISE: “It does not predict. It listens to frightened men.”<br>
+> MATEUS: “That distinction has kept you alive?”<br>
+> AYA: “It has kept us honest.”<br>
+> MATEUS: “Honesty is an expensive habit in this country.”<br>
+> REN: “Then you must be rich.”<br>
 > MATEUS: “No. I am what happens when a man pays with other people.”
 
 Mateus sees Lise’s Varga seal. One beat of silence.
 
-> MATEUS: “Varga.”  
-> LISE: “You know the mark.”  
-> MATEUS: “I knew the grave it was meant to be on.”  
-> LISE: “Then you know why I am here.”  
+> MATEUS: “Varga.”<br>
+> LISE: “You know the mark.”<br>
+> MATEUS: “I knew the grave it was meant to be on.”<br>
+> LISE: “Then you know why I am here.”<br>
 > MATEUS: “I know why Kurozane sent me.”
 
 **Boss goal:** reduce Mateus to 20% health or break both Blood Ward seals after phase two. A defeat returns to the checkpoint lantern with a concise tip showing Crimson Litany’s Recovery.
@@ -557,9 +557,9 @@ Mateus uses Pale Cut, Sanguine Step, then Blood Ward. He does not use Crimson Li
 
 **Phase 2 trigger, 55% health**
 
-> MATEUS: “There is still time to leave with the living.”  
-> LISE: “You mean leave them to become ash.”  
-> MATEUS: “I mean I have watched brave people die for a sentence.”  
+> MATEUS: “There is still time to leave with the living.”<br>
+> LISE: “You mean leave them to become ash.”<br>
+> MATEUS: “I mean I have watched brave people die for a sentence.”<br>
 > AYA: “And you have watched quiet people die for yours.”
 
 Mateus begins Crimson Litany. The HUD pauses 0.75 seconds to highlight “Recovery 3: Mateus acts later after this.” This is an explanatory pause only on the first attempt.
@@ -568,37 +568,37 @@ Mateus begins Crimson Litany. The HUD pauses 0.75 seconds to highlight “Recove
 
 Mateus’s spell breaks on the bell. He takes 20% of his own maximum health as nonlethal damage, drops to one knee, and orders the off-screen guards away.
 
-> MATEUS: “Go. Take the key.”  
-> REN: “You expect us to trust you now?”  
+> MATEUS: “Go. Take the key.”<br>
+> REN: “You expect us to trust you now?”<br>
 > MATEUS: “No. I expect you to use what I know before he makes it useless.”
 
 Battle ends. No kill animation, no experience bonus from a named human character in this slice.
 
 ## FP-06 — Cell Block Exit
 
-**Time:** 29:00–33:00  
+**Time:** 29:00–33:00<br>
 **Map:** short hall behind chamber, six closed cells, lever, rain-lit exit door. The scene is mostly walk-and-talk to return the player to an emotional consequence after the boss.
 
 **Trigger FP06-A**
 
 Mateus opens the cell lever. The player is allowed to move Ren to the lever and interact, so the rescue is not entirely a cutscene.
 
-> LISE: “Avelar. My grandmother kept a page with your name.”  
-> MATEUS: “Then she knew more than I deserved.”  
-> LISE: “It said you carried a lantern through a siege.”  
-> MATEUS: “I did. I sold the road behind it.”  
-> AYA: “You can tell us where it leads now.”  
+> LISE: “Avelar. My grandmother kept a page with your name.”<br>
+> MATEUS: “Then she knew more than I deserved.”<br>
+> LISE: “It said you carried a lantern through a siege.”<br>
+> MATEUS: “I did. I sold the road behind it.”<br>
+> AYA: “You can tell us where it leads now.”<br>
 > MATEUS: “To three bells. To Kurohana. To every name I helped turn into a number.”
 
 **Trigger FP06-B, prisoners leave**
 
-> REN: “You are coming with us?”  
-> MATEUS: “I am coming far enough to answer questions. Do not mistake that for being welcomed.”  
+> REN: “You are coming with us?”<br>
+> MATEUS: “I am coming far enough to answer questions. Do not mistake that for being welcomed.”<br>
 > LISE: “I will not.”
 
 Mateus remains behind to hold the service passage. Lise receives the bell-room key and joins permanently. A final HUD card reads:
 
-> FIRST PLAYABLE COMPLETE  
+> FIRST PLAYABLE COMPLETE<br>
 > Validated: field precision, Pace, Ledger, Recovery, three-party battle, boss readability.
 
 Fade to the first key-art composition: the bell chamber viewed from above, with the party’s three lantern colors against black rain.

@@ -1,7 +1,7 @@
 # Bells of the Black Chrysanthemum — Technical GDD
 
-**Status:** FP-0 combat-proof contract  
-**Audience:** programming, design, art, and playtest  
+**Status:** FP-0 combat-proof contract<br>
+**Audience:** programming, design, art, and playtest<br>
 **Scope:** a narrow, save-free combat vertical slice
 
 ## 1. Technical decision

@@ -2,9 +2,9 @@
 
 ## Vision document
 
-**Working title:** *Bells of the Black Chrysanthemum*  
-**Format:** 2D pixel-art, party-based turn RPG  
-**Target scope:** 20–25 hour campaign; 6 permanent party members; 3 active combatants  
+**Working title:** *Bells of the Black Chrysanthemum*<br>
+**Format:** 2D pixel-art, party-based turn RPG<br>
+**Target scope:** 20–25 hour campaign; 6 permanent party members; 3 active combatants<br>
 **Setting:** An alternate, historically informed Japan in 1622, during the early Edo transition and the widening suppression of Christianity. The country, rulers, clans, villages, and supernatural events are fictional. This is not a retelling of any real martyrdom, historical persecution, film, game, or person.
 
 ### One-sentence pitch

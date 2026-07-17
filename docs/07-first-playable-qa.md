@@ -53,4 +53,3 @@ For each tester, record:
 ## Change discipline
 
 Make the smallest change that addresses a repeated observation. Do not add unrelated abilities, an additional party member, new enemy types, map scope, or story chapters in response to a single test session.
-

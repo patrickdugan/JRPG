@@ -1,7 +1,7 @@
 # Bells of the Black Chrysanthemum - Art Direction
 
-**Status:** pre-production visual contract  
-**Audience:** art director, environment artists, character artists, UI/UX, VFX, animation, technical art  
+**Status:** pre-production visual contract<br>
+**Audience:** art director, environment artists, character artists, UI/UX, VFX, animation, technical art<br>
 **Scope:** 2D pixel-art JRPG, 320 x 180 logical pixels, integer-scaled; the first playable and the 20-25 hour production target.
 
 ## 1. Visual thesis

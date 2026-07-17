@@ -1,7 +1,7 @@
 # Bells of the Black Chrysanthemum - Master Asset List
 
-**Status:** pre-production inventory, version 1  
-**Coverage target:** 80-90% of visual production needs for a 20-25 hour, ten-chapter, 2D pixel-art JRPG.  
+**Status:** pre-production inventory, version 1<br>
+**Coverage target:** 80-90% of visual production needs for a 20-25 hour, ten-chapter, 2D pixel-art JRPG.<br>
 **Assumptions:** 320 x 180 logical pixels; 16 x 16 terrain modules; six permanent party members; three active combatants; five principal regions plus Kurohana Castle; a chapter-led route rather than ability-gated Metroidvania progression.
 
 This list is the art-production authority. Quantity is a planned final count, not a promise that every item must be unique. Reuse a carefully bounded kit aggressively; create bespoke assets only where story, navigation, or battle readability requires it.
