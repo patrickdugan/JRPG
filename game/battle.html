@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090b17">
+    <title>Bells of the Black Chrysanthemum — Battle Stage</title>
+    <link rel="stylesheet" href="battle.css">
+  </head>
+  <body>
+    <main class="battle-shell">
+      <header class="battle-masthead">
+        <div class="encounter-heading">
+          <p class="eyebrow">TACTICAL ENCOUNTER</p>
+          <h1 id="encounterTitle">Preparing encounter…</h1>
+          <p id="encounterSubtitle" class="encounter-subtitle">Reading the campaign ledger</p>
+        </div>
+        <div class="masthead-actions">
+          <a class="campaign-link" href="campaign.html">← Exit to Campaign</a>
+          <button id="restartBattle" class="restart-button" type="button" data-action="restart">
+            Restart
+          </button>
+        </div>
+      </header>
+
+      <section class="battle-layout" aria-label="Tactical battle">
+        <aside class="combatant-rail party-rail" aria-labelledby="partyHeading">
+          <header class="panel-heading">
+            <p class="eyebrow">Allied formation</p>
+            <h2 id="partyHeading">Party</h2>
+          </header>
+          <div id="partyPanel" class="combatant-list" role="list" aria-live="polite">
+            <p class="panel-placeholder">Party deployment pending.</p>
+          </div>
+        </aside>
+
+        <section class="battle-stage">
+          <div class="stage-frame">
+            <canvas
+              id="battleCanvas"
+              width="960"
+              height="540"
+              tabindex="0"
+              aria-label="Tactical battle field. Use the command deck to select actions."
+            >
+              This battle requires a browser with Canvas and JavaScript enabled.
+            </canvas>
+            <div class="stage-hud" aria-hidden="true">
+              <span id="roundLabel">ROUND 1</span>
+              <span id="phaseLabel">AWAITING ORDERS</span>
+            </div>
+          </div>
+
+          <section class="command-panel" aria-labelledby="commandHeading">
+            <div class="command-panel-heading">
+              <div>
+                <p class="eyebrow">Active combatant</p>
+                <h2 id="commandHeading">Commands</h2>
+              </div>
+              <p id="activeActorLabel" class="active-actor">No combatant selected</p>
+            </div>
+
+            <div id="commandButtons" class="command-grid" role="toolbar" aria-label="Battle commands">
+              <button type="button" data-command="move" aria-keyshortcuts="M">Move</button>
+              <button type="button" data-command="attack" aria-keyshortcuts="A">Attack</button>
+              <button type="button" data-command="skill" aria-keyshortcuts="S">Skill</button>
+              <button type="button" data-command="guard" aria-keyshortcuts="G">Guard</button>
+              <button type="button" data-command="analyze" aria-keyshortcuts="N">Analyze</button>
+              <button type="button" data-command="objective" aria-keyshortcuts="O">Objective</button>
+            </div>
+
+            <div class="selection-grid">
+              <label for="skillSelect">
+                <span>Skill / art</span>
+                <select id="skillSelect" name="skill" disabled>
+                  <option value="">Select an art</option>
+                </select>
+              </label>
+              <label for="targetSelect">
+                <span>Target</span>
+                <select id="targetSelect" name="target" disabled>
+                  <option value="">Select a target</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="commit-row">
+              <p id="commandHint" class="command-hint">Choose a combatant, then issue a command.</p>
+              <button id="confirmCommand" class="confirm-command" type="button" data-action="confirm" disabled>
+                Confirm action
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <aside class="right-rail">
+          <section class="tempo-panel" aria-labelledby="tempoHeading">
+            <header class="panel-heading inline-heading">
+              <div>
+                <p class="eyebrow">Rate-limited recovery</p>
+                <h2 id="tempoHeading">Tempo</h2>
+              </div>
+              <strong id="battleClock" aria-label="Battle time">0:00</strong>
+            </header>
+            <ol id="tempoQueue" class="tempo-queue" aria-live="polite">
+              <li class="panel-placeholder">Initiative pending.</li>
+            </ol>
+            <fieldset id="speedControls" class="speed-controls">
+              <legend>Battle speed</legend>
+              <div class="speed-options">
+                <button type="button" data-speed="1" aria-label="Set battle speed to one times" aria-pressed="true">1×</button>
+                <button type="button" data-speed="2" aria-label="Set battle speed to two times" aria-pressed="false">2×</button>
+                <button type="button" data-speed="4" aria-label="Set battle speed to four times" aria-pressed="false">4×</button>
+              </div>
+              <p id="speedStatus" class="speed-status" role="status">Speed: 1×</p>
+            </fieldset>
+          </section>
+
+          <section class="combatant-rail enemy-rail" aria-labelledby="enemyHeading">
+            <header class="panel-heading">
+              <p class="eyebrow">Hostile formation</p>
+              <h2 id="enemyHeading">Enemies</h2>
+            </header>
+            <div id="enemyPanel" class="combatant-list" role="list" aria-live="polite">
+              <p class="panel-placeholder">Enemy deployment pending.</p>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="battle-briefing" aria-label="Encounter briefing and combat log">
+        <article class="objective-card">
+          <p class="eyebrow">Victory condition</p>
+          <h2>Encounter Objective</h2>
+          <p id="objectiveText">Objective data pending.</p>
+          <p id="objectiveProgress" class="objective-progress">0 / 0</p>
+        </article>
+        <article class="result-card">
+          <div class="result-heading">
+            <div>
+              <p class="eyebrow">Battle record</p>
+              <h2>Result Log</h2>
+            </div>
+            <span id="battleStateBadge" class="state-badge">READY</span>
+          </div>
+          <ol id="resultLog" class="result-log" tabindex="0" aria-live="polite" aria-relevant="additions text">
+            <li>Awaiting encounter initialization.</li>
+          </ol>
+        </article>
+      </section>
+
+      <p id="battleAnnouncements" class="visually-hidden" role="status" aria-live="assertive"></p>
+      <noscript><p class="noscript">Enable JavaScript to run this tactical encounter.</p></noscript>
+    </main>
+
+    <script type="module" src="battle.js"></script>
+  </body>
+</html>

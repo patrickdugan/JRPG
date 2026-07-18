@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "check": "node --check engine.mjs && node --check game.js && node --check campaign.js && node --check progression.mjs && node --check content/campaign.mjs && node --check content/levels.mjs && node --check content/encounters.mjs",
-    "test": "node --test tests/engine.test.mjs tests/campaign-content.test.mjs tests/progression.test.mjs tests/world-integrity.test.mjs",
+    "check": "node --check engine.mjs && node --check game.js && node --check campaign.js && node --check battle.js && node --check campaign-combat.mjs && node --check progression.mjs && node --check advancement.mjs && node --check content/campaign.mjs && node --check content/levels.mjs && node --check content/encounters.mjs",
+    "test": "node --test tests/engine.test.mjs tests/campaign-content.test.mjs tests/campaign-combat.test.mjs tests/progression.test.mjs tests/advancement.test.mjs tests/world-integrity.test.mjs",
     "serve": "python -m http.server 8080"
   }
 }

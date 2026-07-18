@@ -4,7 +4,7 @@ An original, gothic historical-fantasy JRPG set in a fictionalized early Edo Jap
 
 ## Current milestone
 
-The repository now has a campaign foundation alongside the deliberately small **FP-0 Combat Proof**. The new Campaign Atlas plays the authored prologue-to-epilogue scene sequence, persists choices and progress, renders every documented route/encounter map, and supports exact collision-aware field movement. FP-0 remains the only fully executable combat encounter; it validates the combat hook without pretending to be the plan-template's first playable. The documented **FP-1 Takamine Vertical Slice** remains the 28–34 minute story-and-battle target with a short route, party context, and boss-level threat.
+The repository now has a playable campaign spine alongside the deliberately small **FP-0 Combat Proof**. The Campaign Atlas runs the prologue-to-epilogue scene sequence, gates story progress at 23 explicitly bound encounters, persists choices and advancement, renders every documented map, and supports exact collision-aware field movement. The shared battle stage consumes every authored encounter with multi-party Tempo/recovery, typed damage, objective actions, XP, levels, first-clear rewards, repeat grinding, and saved 1×/2×/4× speed controls. The 20-hour pacing budget is designed but not yet proven by an end-to-end timed playtest.
 
 ## Scope guardrails
 
@@ -27,5 +27,6 @@ The repository now has a campaign foundation alongside the deliberately small **
 - [Animation bible](docs/10-animation-bible.md)
 - [Build QA report](docs/11-build-qa-report.md)
 - [Progression and save contract](docs/12-progression-save-contract.md)
+- [Advancement and runtime pacing](docs/13-advancement-and-runtime-pacing.md)
 
 Run [`game/`](game/README.md) and open either `http://localhost:8080/` for the FP-0 battle proof or `http://localhost:8080/campaign.html` for the Campaign Atlas. Production-reference art and its reproducible prompt record are in [`assets/production/`](assets/production/README.md).

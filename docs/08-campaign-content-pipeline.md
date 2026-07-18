@@ -36,6 +36,7 @@ The core shape is intentionally small:
       title: 'Rain Gate',
       location: 'Takamine Rain Gate',
       mapId: 'tkm-rain-gate',
+      encounterIds: [],
       text: [{ speaker: 'AYA', line: '...' }],
       choices: [{ id: '...', label: '...', flag: '...', result: '...' }],
     }],
@@ -51,7 +52,7 @@ All player-visible text belongs in the data. Consumers may add presentation-only
 
 1. Use a chapter's `id` as the save/load and analytics key. Never use its visible title as an identifier.
 2. Render `summary`, `objective`, `party`, `boss`, `reward`, `maps`, and `encounters` in journals, map screens, encounter setup, and planning UI as appropriate.
-3. Drive story scenes from the ordered `beats` array. Every beat has a required resolving `mapId`; `trigger` is a symbolic event name for the field/scene system and is deliberately not an executable callback.
+3. Drive story scenes from the ordered `beats` array. Every beat has a required resolving `mapId`; beats that gate combat list canonical `encounterIds`. `trigger` is a symbolic event name for the field/scene system and is deliberately not an executable callback.
 4. For each selected choice, write its `flag` with a choice-specific value or record the selected choice ID beside it. The `result` is the immediate player-facing consequence.
 5. Do not gate the critical path on optional-record flags. Choices may affect copy, a route setup, an opening resistance, a later cameo, or an optional reward, but preserve the canonical campaign outcome.
 6. Use `CAMPAIGN.firstPlayable.sequence` for FP-1. Every sequence item specifies map, intended duration, objective, ordered events, and exit condition. Its durations total 32 minutes, within the 28-34 minute target.
@@ -91,6 +92,7 @@ The 32-minute expected clear remains a first-playable target, not permission to 
 - Keep a normal playable beat under roughly 90 seconds. Put a movement, interaction, or battle between longer turning points.
 - Use IDs in the existing naming pattern: `pNN-*`, `cN-NN-*`, `eNN-*`, and `fp-NN-*`. Do not rename an existing ID after it has entered a save or telemetry build.
 - Bind every beat to an existing `game/content/levels.mjs` ID through `mapId`. Do not rely on location-name matching or a chapter-primary fallback; a scene may use a nearby subarea map when it has no dedicated kit, but that choice must be explicit.
+- Bind every runtime encounter to exactly one canonical beat through `encounterIds`. Multiple learning encounters may share a beat, but no encounter may be orphaned or duplicated in the critical path.
 - A beat must change a relationship, goal, or player understanding. Atmosphere-only writing belongs in an inspectable description, ambient bark, or map art brief.
 - Dialogue choices must make their immediate consequence visible in `result`. Do not add hidden good/evil points, false abandon-rescue branches, or mutually contradictory canon.
 - Bosses must state the lesson in their `battleLesson`; battle implementation needs to expose that lesson through telegraphs, Ledger information, and recovery readouts.

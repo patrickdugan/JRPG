@@ -1,16 +1,17 @@
 # Expanded Campaign Build — QA Report
 
-Final integration audit: 2026-07-16. This report separates the authored campaign foundation from the fully executable FP-0 combat proof so the project does not overstate its playable scope.
+Integration audit: 2026-07-17. This report distinguishes implemented runtime behavior from the still-unproven 20-hour playtime target.
 
 ## Result
 
 | Area | Status | Evidence |
 | --- | --- | --- |
-| Campaign content | Pass | 11 chapters, 60 beats, 46 named map references, 48 level kits, and 23 encounter kits. Every campaign map reference resolves. |
-| Field Atlas | Pass, bounded scope | `campaign.html` renders the authored sequence, saves validated progress, resolves all map data, and supports exact collision-aware one-space movement with strict diagonal corner checks. |
-| FP-0 combat proof | Pass | One executable Bell Court encounter covers the core Pace, recovery, Guard/Dodge, resistance, deterministic enemy, victory, defeat, and restart loop. |
-| Save/progression model | Pass | Seven deterministic tests cover canonical navigation, choices, reset, serialization validation, and unavailable/corrupt local storage. |
-| Full 20–25 hour runtime | Not complete | The campaign’s routes, scenes, maps, encounter rules, art references, and progression are authored; its individual battles have not yet been connected to a shared multi-party battle runner. |
+| Campaign content | Pass | 11 chapters, 60 beats, 46 named map references, 48 level kits, and 23 encounter kits. Every map and encounter resolves. |
+| Campaign path | Pass | Every encounter is bound to exactly one canonical story beat. The Atlas blocks forward progress until that beat’s required first clears are recorded. |
+| Shared combat | Pass, production-foundation scope | All 23 encounters instantiate in the multi-party engine with exact movement, Pace, readiness/recovery, delivery and essence multipliers, Guard, Analyze, deterministic enemy AI, and terminal results. |
+| Objective families | Pass, generic presentation | All 18 authored objective types have explicit requirements/actions, including escape, escort, release, protect, rescue, relay, node, evacuation, and noncombat interaction contracts. Bespoke tokens, hazards, and encounter cinematics remain to be rendered. |
+| Advancement and grinding | Pass | Six characters have deterministic XP/stat growth to level 50. First clears grant unique authored loot; repeat victories grant diminishing XP/currency. A saved 1×/2×/4× control accelerates enemy/recovery presentation. |
+| Twenty-hour duration | Unproven | The pacing budget totals 20 hours at 1× and assigns three hours to grinding, but no complete timed playthrough currently proves that the implemented content sustains that duration. |
 
 ## Reproducible checks
 
@@ -18,22 +19,21 @@ Run from `game/` unless noted otherwise.
 
 | Check | Command / method | Result |
 | --- | --- | --- |
-| JavaScript syntax | `npm run check` | Pass. Checks FP-0, Campaign Atlas, progression, campaign, levels, and encounter modules. |
-| Unit tests | `npm test` | Pass: 26/26. Campaign content and world integrity: 6; FP-0 engine: 13; progression: 7. |
-| Diff whitespace | `git diff --check` from repository root | Pass. |
-| Content cross-reference | Import campaign, levels, and encounters; verify beat/map IDs, campaign map IDs, exit targets, encounter level IDs, static deployment coordinates, and exit reachability | Pass: 60/60 beats and 46/46 map references resolve; zero invalid exits, encounter-level links, blocked/out-of-bounds deployments, or unreachable exits. |
-| Static delivery smoke | Serve `game/` and request `campaign.html`, JS/CSS modules, and each production reference-art file | Pass: ten requested URLs returned HTTP 200. |
+| JavaScript syntax | `npm run check` | Pass across FP-0, Campaign Atlas, Campaign Battle, both combat engines, progression, advancement, and content modules. |
+| Unit tests | `npm test` | Pass: 50/50. Includes all encounter instantiation, all objective families, movement/corner collision, Tempo/recovery, typed damage, deterministic AI, XP/rewards, chapter catch-up, level-target attainability, save validation, beat bindings, map integrity, and exit reachability. |
+| Diff whitespace | `git diff --check` from repository root | Pass at integration time. |
+| Static delivery | Serve `game/`; request Atlas, Battle, JS/CSS modules, content, and art | Pass: eleven runtime/content/art URLs returned HTTP 200, including a query-selected campaign encounter. |
 
-## Scope notes
+## Runtime boundaries
 
-1. Every Atlas scene has an explicit resolving `mapId`. The Atlas is intentionally chapter-based, not a metroidvania. It never auto-advances a scene when the party marker reaches an exit; the exit is an authored field cue and narrative progression remains explicit.
+1. The battle engine consumes the real encounter and level data. It does not hard-code one showcase enemy. Party stats are derived from the saved advancement profile and victory rewards return to that same versioned profile.
 
-2. Field movement is precise by design: W/A/S/D moves one orthogonal space; Q/E/Z/C moves one diagonal space only when the destination and both cardinal corner spaces are open. Repeated keydown events are ignored.
+2. Objective actions are mechanically distinct and validated, but several currently use a generic `Objective` command rather than bespoke map objects, escort-token animation, hazard overlays, or encounter-specific cut-ins. This is acceptable scaffolding, not final encounter presentation.
 
-3. The production art is original reference material with reproducible prompts and source limitations documented in [the production-art README](../assets/production/README.md). It is not represented as final editable sprite-sheet output.
+3. Battle speed changes presentation delay while command menus stay paused and turn-based. It is intended for repeat grinding and does not skip authored story scenes or first-clear content.
 
-4. No interactive browser surface was available in this execution environment for a visual click-through or console inspection. Automated, data, syntax, unit, and static HTTP verification remain the evidence recorded here.
+4. The art remains original production reference material, not final editable sprite sheets. No interactive browser-control surface was available in this environment; DOM/canvas click-through and visual console inspection remain outstanding.
 
 ## Next implementation gate
 
-Reuse the proven FP-0 rules engine behind an encounter adapter that consumes `content/encounters.mjs`, then connect chapter route exits, hazards, rewards, and multi-party combat state to progression. That is the remaining work required to turn the authored campaign foundation into the intended full game.
+Replace generic objective actions with level-resident tokens and authored interactions, connect field exits and encounter triggers directly instead of using Atlas buttons, implement hazards/statuses/healing/Spirit/Vows/gear, and run chapter-by-chapter timed playtests. The goal is complete only when a normal first playthrough of the implemented build measures about 20 hours at 1× and the speed controls measurably shorten repeat grinding.

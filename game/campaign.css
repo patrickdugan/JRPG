@@ -170,6 +170,11 @@ h1 {
 .briefing-list div { display: grid; gap: 3px; }
 .briefing-list dt { color: var(--gold); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; }
 .briefing-list dd { margin: 0; color: var(--muted); font-size: 0.67rem; line-height: 1.45; }
+.encounter-actions { display: grid; gap: 7px; margin-top: 14px; }
+.battle-launch { padding: 9px 11px; border: 1px solid #936e36; border-radius: 4px; color: #ffe7a3; background: #382817; font-size: 0.69rem; text-align: center; text-decoration: none; }
+.battle-launch:hover { border-color: var(--gold-soft); background: #49351e; }
+.battle-launch[aria-disabled="true"] { pointer-events: none; opacity: 0.45; }
+.battle-status { color: var(--aqua); font-size: 0.62rem; line-height: 1.4; text-align: center; }
 .party-note { margin-top: 10px !important; color: #8e9ab4 !important; font-size: 0.61rem !important; }
 kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #efe2bd; background: #10162a; font-size: 0.58rem; }
 

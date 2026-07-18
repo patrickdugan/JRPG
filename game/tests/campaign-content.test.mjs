@@ -49,3 +49,21 @@ test('map and encounter kits cover every chapter with tactical data', () => {
     assert.ok(Array.isArray(encounter.enemies) && encounter.enemies.length > 0, `${encounter.id} needs enemies`);
   }
 });
+
+test('every runtime encounter is bound to exactly one canonical story beat', () => {
+  const bindings = new Map();
+  for (const chapter of getAllChapters()) {
+    for (const beat of chapter.beats) {
+      for (const encounterId of beat.encounterIds ?? []) {
+        assert.ok(!bindings.has(encounterId), `${encounterId} is bound to more than one beat`);
+        bindings.set(encounterId, { chapterId: chapter.id, beatId: beat.id });
+      }
+    }
+  }
+  assert.equal(bindings.size, ENCOUNTERS.length);
+  for (const encounter of ENCOUNTERS) {
+    const binding = bindings.get(encounter.id);
+    assert.ok(binding, `${encounter.id} needs a story-beat binding`);
+    assert.equal(binding.chapterId, encounter.chapterId, `${encounter.id} must be bound inside ${encounter.chapterId}`);
+  }
+});

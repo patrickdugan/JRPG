@@ -1,6 +1,12 @@
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
-import { ENCOUNTERS, getEncounterForChapter } from './content/encounters.mjs';
+import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
+import {
+  createAdvancementState,
+  createAdvancementStorageAdapter,
+  getAdvancementSummary,
+  getEncounterWinCount,
+} from './advancement.mjs';
 import {
   appendChoice,
   completeCurrentBeat,
@@ -47,12 +53,17 @@ const partyList = document.querySelector('#partyList');
 const keyArt = document.querySelector('#keyArt');
 const fieldFeedback = document.querySelector('#fieldFeedback');
 const fieldControls = document.querySelector('#fieldControls');
+const launchBattle = document.querySelector('#launchBattle');
+const battleStatus = document.querySelector('#battleStatus');
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
 const saveAdapter = createLocalStorageAdapter();
 const loadedSave = saveAdapter.load();
 let campaignState = loadedSave.ok ? loadedSave.state : createCampaignState();
+const advancementAdapter = createAdvancementStorageAdapter();
+const loadedAdvancement = advancementAdapter.load();
+let advancementState = loadedAdvancement.ok ? loadedAdvancement.state : createAdvancementState();
 let animationNow = 0;
 const fieldState = {
   levelId: null,
@@ -75,6 +86,17 @@ function getChapter() {
 
 function getBeat() {
   return getCurrentBeat(campaignState);
+}
+
+function getBeatEncounterState(beat = getBeat()) {
+  const encounters = (beat.encounterIds ?? []).map(getEncounter).filter(Boolean);
+  const pending = encounters.find((encounter) => getEncounterWinCount(advancementState, encounter.id) === 0) ?? null;
+  return Object.freeze({ encounters, pending, selected: pending ?? encounters[0] ?? null });
+}
+
+function currentBeatBattlesCleared() {
+  const { encounters } = getBeatEncounterState();
+  return encounters.every((encounter) => getEncounterWinCount(advancementState, encounter.id) > 0);
 }
 
 function chapterSceneCount() {
@@ -485,12 +507,33 @@ function setKeyArt(chapter) {
   keyArt.alt = selected.alt;
 }
 
+function renderBattleLaunch(beat, beatBattleState) {
+  const summary = getAdvancementSummary(advancementState);
+  const { encounters, pending, selected } = beatBattleState;
+  if (!selected) {
+    launchBattle.removeAttribute('href');
+    launchBattle.setAttribute('aria-disabled', 'true');
+    launchBattle.textContent = 'No encounter in this scene';
+    battleStatus.textContent = `${summary.firstClears}/${ENCOUNTERS.length} first clears · average level ${summary.averageUnlockedLevel.toFixed(1)}`;
+    return;
+  }
+
+  launchBattle.removeAttribute('aria-disabled');
+  const parameters = new URLSearchParams({ encounter: selected.id, return: 'campaign.html', beat: beat.id });
+  launchBattle.href = `battle.html?${parameters.toString()}`;
+  const winCount = getEncounterWinCount(advancementState, selected.id);
+  launchBattle.textContent = pending ? `Enter encounter: ${selected.name}` : `Replay for grind XP: ${selected.name}`;
+  const clearedHere = encounters.filter((encounter) => getEncounterWinCount(advancementState, encounter.id) > 0).length;
+  battleStatus.textContent = `${clearedHere}/${encounters.length} scene encounters cleared · ${winCount} wins here · ${summary.speedMultiplier}× battle speed`;
+}
+
 function render() {
   const chapter = getChapter();
   const beat = getBeat();
   const level = getLevelForBeat(chapter, beat);
   const enteredNewLevel = ensureFieldPosition(level);
-  const encounter = getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
+  const beatBattleState = getBeatEncounterState(beat);
+  const encounter = beatBattleState.selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
   const chapterIndex = currentChapterIndex();
   const beatIndex = currentBeatIndex();
   const recordIndex = allBeatRecords.findIndex((record) => record.beat.id === beat.id);
@@ -509,14 +552,18 @@ function render() {
   encounterEnemies.textContent = formatEnemies(encounter?.enemies);
   bossMechanic.textContent = formatBrief(encounter?.bossMechanic, 'No boss mechanic assigned.');
   previousScene.disabled = recordIndex <= 0;
-  nextScene.disabled = isCampaignComplete(campaignState);
-  nextScene.textContent = isCampaignComplete(campaignState) ? 'Campaign complete' : 'Next scene →';
+  const battlesCleared = currentBeatBattlesCleared();
+  nextScene.disabled = isCampaignComplete(campaignState) || !battlesCleared;
+  nextScene.textContent = isCampaignComplete(campaignState)
+    ? 'Campaign complete'
+    : battlesCleared ? 'Next scene →' : 'Clear encounter to continue';
   const progress = (beatIndex + 1) / chapter.beats.length;
   progressLabel.textContent = `${beatIndex + 1} of ${chapter.beats.length} scenes`;
   progressFill.style.width = `${Math.round(progress * 100)}%`;
   setKeyArt(chapter);
   renderChoices(beat);
   renderChapterList();
+  renderBattleLaunch(beat, beatBattleState);
   fieldFeedback.textContent = describeFieldPosition(level, enteredNewLevel ? 'Entered field' : 'Field position');
   drawMap(level, encounter, animationNow);
 }
@@ -543,6 +590,10 @@ function advance(direction) {
     return;
   }
   if (isCampaignComplete(campaignState)) return;
+  if (!currentBeatBattlesCleared()) {
+    battleStatus.textContent = 'Clear every encounter bound to this scene before advancing.';
+    return;
+  }
   campaignState = completeCurrentBeat(campaignState);
   persistCampaignState();
   render();
@@ -610,7 +661,7 @@ function animate(now) {
   animationNow = now;
   const chapter = getChapter();
   const level = getLevelForBeat(chapter, getBeat());
-  const encounter = getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
+  const encounter = getBeatEncounterState().selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
   drawMap(level, encounter, now);
   requestAnimationFrame(animate);
 }
@@ -618,3 +669,10 @@ function animate(now) {
 document.title = `${CAMPAIGN.title} — Campaign Atlas`;
 render();
 requestAnimationFrame(animate);
+
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  const refreshed = advancementAdapter.load();
+  if (refreshed.ok) advancementState = refreshed.state;
+  render();
+});

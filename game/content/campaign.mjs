@@ -179,6 +179,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'The Bailiff Returns',
           location: 'Hoshigawa Census Square',
           mapId: 'hsh-census-square',
+          encounterIds: ['prologue-ashen-bailiff'],
           trigger: 'bell_rings',
           text: [
             { speaker: 'NEIGHBOR', line: 'That is Sato. He was taken at noon.' },
@@ -334,6 +335,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Flooded Cedars',
           location: 'Flooded Cedar Route',
           mapId: 'c1-flooded-cedars',
+          encounterIds: ['c1-cinder-hounds', 'c1-ash-wisps'],
           trigger: 'after_first_resisted_cut',
           text: [
             { speaker: 'AYA', line: 'Your blade slid. Look at the Ledger before you call it bad luck.' },
@@ -373,6 +375,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Copy Before Fire',
           location: 'Tax Storehouse Ledger Room',
           mapId: 'c1-tax-storehouse',
+          encounterIds: ['c1-tithe-hound'],
           trigger: 'boss_defeated',
           text: [
             { speaker: 'REN', line: 'Burn it.' },
@@ -460,6 +463,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Chapel Service Route',
           location: 'Abandoned Chapel',
           mapId: 'tkm-abandoned-chapel',
+          encounterIds: ['fp1-cedar-path'],
           trigger: 'see_prisoner_grates',
           text: [
             { speaker: 'PRISONER', line: 'Do not stop. They count footsteps.' },
@@ -522,6 +526,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Undercrypt Truth',
           location: 'Flooded Undercroft',
           mapId: 'tkm-flooded-undercroft',
+          encounterIds: ['fp1-flooded-archive'],
           trigger: 'inspect_bell_slips',
           text: [
             { speaker: 'AYA', line: 'These slips are tied to the bell.' },
@@ -542,6 +547,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'A Name from Europe',
           location: 'Takamine Bell Chamber and Cell Block',
           mapId: 'tkm-cell-block',
+          encounterIds: ['fp1-mateus'],
           trigger: 'mateus_defeated',
           text: [
             { speaker: 'MATEUS', line: 'Varga. I knew the grave that mark was meant to be on.' },
@@ -665,6 +671,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Lantern Boat Escort',
           location: 'Rain Docks',
           mapId: 'sdg-rain-docks',
+          encounterIds: ['c3-dock-patrol'],
           trigger: 'witnesses_ready',
           text: [
             { speaker: 'AYA', line: 'Three routes. Their risks are written plainly. Choose with the witnesses, not for them.' },
@@ -717,6 +724,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'The First Key',
           location: 'Salt Warehouse Cargo Platform',
           mapId: 'sdg-salt-warehouse',
+          encounterIds: ['c3-captain-kaji'],
           trigger: 'boss_defeated',
           text: [
             { speaker: 'DOCK WORKER', line: 'We heard him. Kaji gives orders like people are crates.' },
@@ -772,6 +780,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Nets in Fog',
           location: 'Nagi Fishing Village',
           mapId: 'ngi-fishing-village',
+          encounterIds: ['c4-fog-nets'],
           trigger: 'talk_fishers',
           text: [
             { speaker: 'FISHER', line: 'The fog takes nets toward the reef. We do not launch boats for strangers.' },
@@ -856,6 +865,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Names Returned',
           location: 'Storm-Broken Reef',
           mapId: 'ngi-storm-reef',
+          encounterIds: ['c4-widow-of-fog'],
           trigger: 'boss_defeated',
           text: [
             { speaker: 'WIDOW-OF-FOG', line: 'Unwritten. Unburied. Unheard.' },
@@ -950,6 +960,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Ash Fields',
           location: 'Kagura Ash Fields',
           mapId: 'kgr-ash-fields',
+          encounterIds: ['c5-ashen-release'],
           trigger: 'hear_bound_name',
           text: [
             { speaker: 'AYA', line: 'They answer to their names.' },
@@ -1015,6 +1026,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Sigil Burned',
           location: 'Archive Furnace',
           mapId: 'kgr-archive-furnace',
+          encounterIds: ['c5-furnace-abbot'],
           trigger: 'boss_phase_two',
           text: [
             { speaker: 'FURNACE ABBOT', line: 'Return, interpreter. The court still has a room for you.' },
@@ -1141,6 +1153,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Tribunal',
           location: 'Kozui Public Tribunal',
           mapId: 'kzu-public-tribunal',
+          encounterIds: ['c6-ujiro'],
           trigger: 'ujiro_calls_case',
           text: [
             { speaker: 'UJIRO', line: 'Foreign agents. A vampire clerk. A courier with stolen state paper. Is this your resistance?' },
@@ -1161,6 +1174,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Printmaker Flight',
           location: 'Kozui Archive Roof',
           mapId: 'kzu-archive-roof',
+          encounterIds: ['c6-masked-clerks'],
           trigger: 'masked_clerks_attack',
           text: [
             { speaker: 'LISE', line: 'The courier is slower than the crate.' },
@@ -1283,6 +1297,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Aqueduct of Names',
           location: 'Subterranean Bell Aqueduct',
           mapId: 'hsh-bell-aqueduct',
+          encounterIds: ['c7-name-slip-release'],
           trigger: 'recover_first_name_slip',
           text: [
             { speaker: 'AYA', line: 'The water takes the ash when it takes the name.' },
@@ -1324,6 +1339,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Rescue Before the Ring',
           location: 'Bell Aqueduct',
           mapId: 'hsh-bell-aqueduct',
+          encounterIds: ['c7-bell-warden-chiyo'],
           trigger: 'boss_defeated',
           text: [
             { speaker: 'SURVIVOR', line: 'The bell is already ringing somewhere above us.' },
@@ -1457,6 +1473,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Lantern Breach',
           location: 'Black Gate Outer Court',
           mapId: 'c8-black-gate',
+          encounterIds: ['c8-outer-court'],
           trigger: 'breach_begins',
           text: [
             { speaker: 'AYA', line: 'Blue lantern: records moving. Green lantern: boats clear. White lantern: medical lane open.' },
@@ -1476,6 +1493,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Gate Opened',
           location: 'Black Gate',
           mapId: 'c8-black-gate',
+          encounterIds: ['c8-lady-enma'],
           trigger: 'boss_defeated',
           text: [
             { speaker: 'LADY ENMA', line: 'He fed on fear of abandonment. You brought witnesses instead.' },
@@ -1539,6 +1557,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'The Archive That Breathes',
           location: 'Kurohana Outer Archive',
           mapId: 'krh-outer-archive',
+          encounterIds: ['c9-archive-nodes'],
           trigger: 'map_load',
           text: [
             { speaker: 'AYA', line: 'The shelves are breathing.' },
@@ -1630,6 +1649,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Yearless Bell',
           location: 'Bell Spine',
           mapId: 'krh-bell-spine',
+          encounterIds: ['c9-yearless-bell'],
           trigger: 'kurozane_rings_bell',
           text: [
             { speaker: 'KUROZANE', line: 'A country is quiet when every fear has a ledger.' },
@@ -1650,6 +1670,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Dawn at the Observatory',
           location: 'Throne Observatory',
           mapId: 'krh-observatory',
+          encounterIds: ['c9-kurozane'],
           trigger: 'final_phase_start',
           text: [
             { speaker: 'MATEUS', line: 'My blood can crack the ward. It cannot undo what it served.' },
@@ -1770,6 +1791,7 @@ export const CAMPAIGN = deepFreeze({
           title: 'Repaired Tower',
           location: 'Takamine Bell Tower',
           mapId: 'epi-takamine-tower',
+          encounterIds: ['epilogue-memorial-walk'],
           trigger: 'deliver_final_packet',
           text: [
             { speaker: 'REN', line: 'This packet is not an order.' },
