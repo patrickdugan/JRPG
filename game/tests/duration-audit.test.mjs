@@ -5,6 +5,15 @@ import {
   createAdvancementState,
 } from '../advancement.mjs';
 import { CAMPAIGN } from '../content/campaign.mjs';
+import {
+  CAMP_CONVERSATION_METRICS,
+  CAMP_CONVERSATION_PLAYABLE_METRICS,
+} from '../content/camp-conversations.mjs';
+import { ARCHIVE_RECORD_METRICS } from '../content/archive-records.mjs';
+import {
+  PARTY_COUNCIL_METRICS,
+  PARTY_COUNCIL_PLAYABLE_METRICS,
+} from '../content/party-councils.mjs';
 import { ENCOUNTERS } from '../content/encounters.mjs';
 import {
   createDurationAudit,
@@ -77,6 +86,21 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   assert.equal(audit.finiteContentEvidence.completionProof.finiteSideQuestsComplete, true);
   assert.equal(audit.finiteContentEvidence.completionProof.witnessChroniclesComplete, true);
   assert.equal(audit.finiteContentEvidence.durationEvidence.durationProven, false);
+  assert.equal(audit.campConversationEvidence.completionProof.valid, true);
+  assert.equal(audit.campConversationEvidence.completionProof.allConversationsComplete, true);
+  assert.equal(audit.campConversationEvidence.completionProof.oncePerSaveEnforced, true);
+  assert.equal(audit.campConversationEvidence.summary.conversationCount, 90);
+  assert.equal(audit.campConversationEvidence.durationEvidence.durationProven, false);
+  assert.equal(audit.partyCouncilEvidence.completionProof.valid, true);
+  assert.equal(audit.partyCouncilEvidence.completionProof.allCouncilsComplete, true);
+  assert.equal(audit.partyCouncilEvidence.completionProof.oncePerSaveEnforced, true);
+  assert.equal(audit.partyCouncilEvidence.summary.councilCount, 30);
+  assert.equal(audit.partyCouncilEvidence.durationEvidence.durationProven, false);
+  assert.equal(audit.archiveRecordEvidence.completionProof.valid, true);
+  assert.equal(audit.archiveRecordEvidence.completionProof.allRecordsComplete, true);
+  assert.equal(audit.archiveRecordEvidence.completionProof.oncePerSaveEnforced, true);
+  assert.equal(audit.archiveRecordEvidence.summary.recordCount, 60);
+  assert.equal(audit.archiveRecordEvidence.durationEvidence.durationProven, false);
 
   assert.deepEqual(audit.authoredDurationDeclarations, {
     campaignChapterMinutes: 1_215,
@@ -102,16 +126,104 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
     finiteQuestCount: 18,
     finiteQuestObjectiveCount: 0,
   });
+  assert.equal(audit.campConversation.source, 'shipped-camp-conversation-runtime-v1');
+  assert.equal(audit.campConversation.finite, true);
+  assert.equal(audit.campConversation.repeatable, false);
+  assert.deepEqual(audit.campConversation.catalogueMetrics, CAMP_CONVERSATION_METRICS);
+  assert.deepEqual(audit.campConversation.playableMetrics, CAMP_CONVERSATION_PLAYABLE_METRICS);
+  assert.equal(CAMP_CONVERSATION_METRICS.mainLineCount, 3_644);
+  assert.equal(CAMP_CONVERSATION_METRICS.responseLineCount, 540);
+  assert.equal(CAMP_CONVERSATION_METRICS.wordCount, 83_435);
+  assert.equal(CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount, 76_547);
+  assert.deepEqual(audit.campConversation.metrics, {
+    dialogueWords: CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount,
+    dialogueLines: CAMP_CONVERSATION_PLAYABLE_METRICS.dialogueLineCount,
+    choices: 90,
+    fieldMoves: 0,
+    interactions: 90,
+    exits: 0,
+    playerCommands: 0,
+    enemyActivations: 0,
+    campRests: 0,
+    finiteEncounterCount: 0,
+    finiteQuestCount: 0,
+    finiteQuestObjectiveCount: 0,
+  });
+  assert.equal(audit.partyCouncil.source, 'shipped-party-council-runtime-v1');
+  assert.equal(audit.partyCouncil.finite, true);
+  assert.equal(audit.partyCouncil.repeatable, false);
+  assert.deepEqual(audit.partyCouncil.catalogueMetrics, PARTY_COUNCIL_METRICS);
+  assert.deepEqual(audit.partyCouncil.playableMetrics, PARTY_COUNCIL_PLAYABLE_METRICS);
+  assert.equal(PARTY_COUNCIL_METRICS.councilCount, 30);
+  assert.equal(PARTY_COUNCIL_METRICS.mainLineCount, 993);
+  assert.equal(PARTY_COUNCIL_METRICS.responseLineCount, 180);
+  assert.equal(PARTY_COUNCIL_METRICS.wordCount, 27_506);
+  assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount, 25_072);
+  assert.deepEqual(audit.partyCouncil.metrics, {
+    dialogueWords: PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount,
+    dialogueLines: PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount,
+    choices: 30,
+    fieldMoves: 0,
+    interactions: 30,
+    exits: 0,
+    playerCommands: 0,
+    enemyActivations: 0,
+    campRests: 0,
+    finiteEncounterCount: 0,
+    finiteQuestCount: 0,
+    finiteQuestObjectiveCount: 0,
+  });
+  assert.equal(audit.archiveRecord.source, 'shipped-public-archive-runtime-v1');
+  assert.equal(audit.archiveRecord.finite, true);
+  assert.equal(audit.archiveRecord.repeatable, false);
+  assert.deepEqual(audit.archiveRecord.catalogueMetrics, ARCHIVE_RECORD_METRICS);
+  assert.deepEqual(audit.archiveRecord.metrics, {
+    dialogueWords: ARCHIVE_RECORD_METRICS.wordCount,
+    dialogueLines: ARCHIVE_RECORD_METRICS.paragraphCount,
+    choices: 0,
+    fieldMoves: 0,
+    interactions: 60,
+    exits: 0,
+    playerCommands: 0,
+    enemyActivations: 0,
+    campRests: 0,
+    finiteEncounterCount: 0,
+    finiteQuestCount: 0,
+    finiteQuestObjectiveCount: 0,
+  });
+  assert.equal(
+    audit.estimates.reference.allFiniteContent.quantities.dialogueWords
+      - audit.estimates.reference.criticalPath.quantities.dialogueWords
+      - audit.content.finiteQuestRuntimeTextWordCount
+      - ARCHIVE_RECORD_METRICS.wordCount,
+    CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount + PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount,
+  );
+  assert.equal(
+    audit.estimates.reference.allFiniteContent.quantities.dialogueLines
+      - audit.estimates.reference.criticalPath.quantities.dialogueLines,
+    CAMP_CONVERSATION_PLAYABLE_METRICS.dialogueLineCount
+      + PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount
+      + ARCHIVE_RECORD_METRICS.paragraphCount,
+  );
   assert.ok(audit.estimates.low.allFiniteContent.estimatedMinutes
     < audit.estimates.reference.allFiniteContent.estimatedMinutes);
   assert.ok(audit.estimates.reference.allFiniteContent.estimatedMinutes
     < audit.estimates.high.allFiniteContent.estimatedMinutes);
+  assert.deepEqual(
+    Object.fromEntries(Object.entries(audit.estimates).map(([name, estimate]) => [
+      name,
+      estimate.allFiniteContent.estimatedMinutes,
+    ])),
+    { low: 776.013, reference: 1_231.072, high: 1_916.65 },
+  );
+  assert.equal(audit.estimates.low.allFiniteContent.reaches20HoursUnderModel, false);
+  assert.equal(audit.estimates.reference.allFiniteContent.reaches20HoursUnderModel, true);
+  assert.equal(audit.estimates.high.allFiniteContent.reaches20HoursUnderModel, true);
   for (const estimate of Object.values(audit.estimates)) {
     assert.equal(estimate.estimateIsProof, false);
-    assert.equal(estimate.allFiniteContent.reaches20HoursUnderModel, false);
     assert.equal(
       estimate.allFiniteContent.exactModelGapSecondsTo20Hours,
-      (DURATION_TARGET_MINUTES * 60) - estimate.allFiniteContent.estimatedSeconds,
+      Math.max(0, (DURATION_TARGET_MINUTES * 60) - estimate.allFiniteContent.estimatedSeconds),
     );
   }
   assert.equal(audit.finiteContentGapTo20Hours.isObservedPlaytime, false);

@@ -6,7 +6,7 @@ An original, gothic historical-fantasy JRPG set in a fictionalized early Edo Jap
 
 The repository now has a playable campaign spine alongside the deliberately small **FP-0 Combat Proof**. The Campaign Atlas runs the prologue-to-epilogue scene sequence, gates story progress at 23 explicitly bound encounters and 34 tested conditional route chains, and persists choices, advancement, and authored field state. Its exact collision-aware exploration drives nearby interactions, timed and conditional hazards, placed encounter triggers, field loot, and conditional exits from level data instead of displaying those records only as map notes.
 
-The optional journal adds 13 finite side quests plus four repeatable combat contracts. Their authored first pass totals 264 minutes (4.4 hours), while later contract runs remain an explicit grind option. Active objectives can route to every authored quest map, and completion grants XP, currency, inventory, and key items atomically. A functional Camp & Loadout page provides shops, consumables, equipment, forge upgrades, two-slot Vows, Spirit/status recovery, three rest tiers, and an original six-character pixel atlas; equipped Pace and Recovery modifiers now affect combat timing. Cross-page telemetry separates narrative, exploration, battle, grind, and camp time, suspends after inactivity, and requires campaign completion plus every first clear before duration can be proven. Combat objective presentation remains generic in several encounters, browser visual QA is outstanding, and the 20-hour pacing target has not been proven by an end-to-end timed playtest.
+The optional journal adds 13 finite side quests, 18 witness chronicles, and four repeatable combat contracts. Active objectives route to authored maps, finite rewards settle atomically, and repeat battles remain an explicit optional grind surface with saved 1×/2×/4× presentation speed. A functional Camp & Loadout page provides shops, consumables, equipment, forge upgrades, two-slot Vows, Spirit/status recovery, three rest tiers, an original six-character pixel atlas, 90 finite companion talks, 30 multi-character party councils, and 60 beat-bound public archive records. The explicit quantity model now crosses 20 hours under its reference assumptions, but that arithmetic is not observed playtime. Cross-page telemetry suspends after inactivity and still requires a clean completed human run with every first clear and at least 1,200 active minutes before duration can be called proven.
 
 ## Scope guardrails
 
@@ -31,5 +31,9 @@ The optional journal adds 13 finite side quests plus four repeatable combat cont
 - [Progression and save contract](docs/12-progression-save-contract.md)
 - [Advancement and runtime pacing](docs/13-advancement-and-runtime-pacing.md)
 - [Optional-content and side-quest ledger](docs/14-sidequest-ledger.md)
+- [Content-volume and duration evidence](docs/15-content-volume-and-duration-evidence.md)
+- [Companion conversation bible](docs/16-companion-conversation-bible.md)
+- [Public archive bible](docs/17-public-archive-bible.md)
+- [Party council bible](docs/18-party-council-bible.md)
 
 Run [`game/`](game/README.md) and open `http://localhost:8080/` for the FP-0 battle proof, `http://localhost:8080/campaign.html` for the Campaign Atlas, or `http://localhost:8080/camp.html` for Camp & Loadout. Production-reference art and its reproducible prompt record are in [`assets/production/`](assets/production/README.md).

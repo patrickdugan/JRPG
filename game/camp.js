@@ -37,6 +37,48 @@ import {
   createRunReceiptStorageAdapter,
   recordRunPlaytime,
 } from './run-receipt.mjs';
+import {
+  createCampaignState,
+  createLocalStorageAdapter,
+} from './progression.mjs';
+import { CAMP_CONVERSATIONS } from './content/camp-conversations.mjs';
+import { getCampConversationPlan } from './camp-conversation-contract.mjs';
+import {
+  acknowledgeCampConversationLine,
+  acknowledgeCampConversationResponse,
+  beginCampConversation,
+  chooseCampConversationOption,
+  createCampConversationState,
+  createCampConversationStorageAdapter,
+  getCampConversationAvailability,
+  getCampConversationProgress,
+  getCampConversationRecord,
+  getCampConversationRuntimeMetrics,
+} from './camp-conversation-runtime.mjs';
+import { ARCHIVE_RECORDS } from './content/archive-records.mjs';
+import {
+  acknowledgeArchiveRecordParagraph,
+  beginArchiveRecord,
+  createArchiveRecordState,
+  createArchiveRecordStorageAdapter,
+  getArchiveRecordAvailability,
+  getArchiveRecordProgress,
+  getArchiveRecordProgressRecord,
+  getArchiveRecordRuntimeMetrics,
+} from './archive-record-runtime.mjs';
+import { PARTY_COUNCILS } from './content/party-councils.mjs';
+import {
+  acknowledgePartyCouncilLine,
+  acknowledgePartyCouncilResponse,
+  beginPartyCouncil,
+  choosePartyCouncilOption,
+  createPartyCouncilState,
+  createPartyCouncilStorageAdapter,
+  getPartyCouncilAvailability,
+  getPartyCouncilProgress,
+  getPartyCouncilRecord,
+  getPartyCouncilRuntimeMetrics,
+} from './party-council-runtime.mjs';
 
 const partyList = document.querySelector('#campPartyList');
 const partyCurrency = document.querySelector('#partyCurrency');
@@ -60,7 +102,36 @@ const shopList = document.querySelector('#shopList');
 const campFeedback = document.querySelector('#campFeedback');
 const campPlaytime = document.querySelector('#campPlaytime');
 const portraitToken = document.querySelector('#portraitToken');
+const campConversationSummary = document.querySelector('#campConversationSummary');
+const campConversationList = document.querySelector('#campConversationList');
+const campConversationStage = document.querySelector('#campConversationStage');
+const campConversationMeta = document.querySelector('#campConversationMeta');
+const campConversationTitle = document.querySelector('#campConversationTitle');
+const campConversationTheme = document.querySelector('#campConversationTheme');
+const campConversationLine = document.querySelector('#campConversationLine');
+const campConversationChoices = document.querySelector('#campConversationChoices');
+const advanceCampConversation = document.querySelector('#advanceCampConversation');
+const partyCouncilSummary = document.querySelector('#partyCouncilSummary');
+const partyCouncilList = document.querySelector('#partyCouncilList');
+const partyCouncilStage = document.querySelector('#partyCouncilStage');
+const partyCouncilMeta = document.querySelector('#partyCouncilMeta');
+const partyCouncilTitle = document.querySelector('#partyCouncilTitle');
+const partyCouncilTheme = document.querySelector('#partyCouncilTheme');
+const partyCouncilLine = document.querySelector('#partyCouncilLine');
+const partyCouncilChoices = document.querySelector('#partyCouncilChoices');
+const advancePartyCouncil = document.querySelector('#advancePartyCouncil');
+const archiveRecordSummary = document.querySelector('#archiveRecordSummary');
+const archiveRecordList = document.querySelector('#archiveRecordList');
+const archiveRecordStage = document.querySelector('#archiveRecordStage');
+const archiveRecordMeta = document.querySelector('#archiveRecordMeta');
+const archiveRecordTitle = document.querySelector('#archiveRecordTitle');
+const archiveRecordAccess = document.querySelector('#archiveRecordAccess');
+const archiveRecordParagraph = document.querySelector('#archiveRecordParagraph');
+const advanceArchiveRecord = document.querySelector('#advanceArchiveRecord');
 
+const campaignAdapter = createLocalStorageAdapter();
+const campaignLoaded = campaignAdapter.load();
+let campaignState = campaignLoaded.ok ? campaignLoaded.state : createCampaignState();
 const advancementAdapter = createAdvancementStorageAdapter();
 const advancementLoaded = advancementAdapter.load();
 let advancementState = advancementLoaded.ok ? advancementLoaded.state : createAdvancementState();
@@ -77,12 +148,33 @@ let playtimeState = playtimeLoaded.ok ? playtimeLoaded.state : createPlaytimeSta
 const runReceiptAdapter = createRunReceiptStorageAdapter();
 const runReceiptLoaded = runReceiptAdapter.load();
 let runReceiptState = runReceiptLoaded.ok && runReceiptLoaded.found ? runReceiptLoaded.state : null;
+const campConversationAdapter = createCampConversationStorageAdapter();
+const campConversationLoaded = campConversationAdapter.load();
+let campConversationState = campConversationLoaded.state ?? createCampConversationState(runReceiptState?.runId);
+const partyCouncilAdapter = createPartyCouncilStorageAdapter();
+const partyCouncilLoaded = partyCouncilAdapter.load();
+let partyCouncilState = partyCouncilLoaded.state ?? createPartyCouncilState(runReceiptState?.runId);
+const archiveRecordAdapter = createArchiveRecordStorageAdapter();
+const archiveRecordLoaded = archiveRecordAdapter.load();
+let archiveRecordState = archiveRecordLoaded.state ?? createArchiveRecordState(runReceiptState?.runId);
+const finiteNarrativeLoadWarnings = [
+  !campConversationLoaded.ok ? 'Companion progress was unreadable and reset for this run.' : null,
+  campConversationLoaded.resetForRun ? 'Companion progress from another run was reset.' : null,
+  !partyCouncilLoaded.ok ? 'Party-council progress was unreadable and reset for this run.' : null,
+  partyCouncilLoaded.resetForRun ? 'Party-council progress from another run was reset.' : null,
+  !archiveRecordLoaded.ok ? 'Archive-reading progress was unreadable and reset for this run.' : null,
+  archiveRecordLoaded.resetForRun ? 'Archive-reading progress from another run was reset.' : null,
+].filter(Boolean);
 let playtimeLast = performance.now();
 let playtimeLastActivity = performance.now();
 let playtimeUnsaved = 0;
 let runReceiptPendingMs = 0;
 let selectedMemberId = getParty(advancementState, { unlockedOnly: true })[0]?.id ?? 'ren';
 let inventoryFilter = 'all';
+let selectedCampConversationId = campConversationState.records.find((record) => record.status === 'active')?.id ?? null;
+let selectedPartyCouncilId = partyCouncilState.records.find((record) => record.status === 'active')?.id ?? null;
+let selectedArchiveRecordId = archiveRecordState.records.find((record) => record.status === 'active')?.id ?? null;
+let archiveReviewParagraphIndex = null;
 
 const ROLES = Object.freeze({
   ren: 'Courier Vanguard', aya: 'Ledger Arcanist', lise: 'Dawn Hunter',
@@ -261,6 +353,264 @@ function renderCamps() {
   restParty.textContent = `Rest party · ${camp.cost} mon`;
 }
 
+function campConversationContext() {
+  return {
+    campaignState,
+    advancementState,
+    campId: campSelect.value,
+  };
+}
+
+function conversationPairNames(conversation) {
+  const plan = getCampConversationPlan(conversation.pairId);
+  return (plan?.participants ?? []).map(castName).join(' & ');
+}
+
+function renderCampConversationStage() {
+  const progress = selectedCampConversationId
+    ? getCampConversationProgress(campConversationState, selectedCampConversationId)
+    : null;
+  campConversationStage.hidden = !progress || progress.phase === 'not-started';
+  campConversationChoices.replaceChildren();
+  if (!progress || progress.phase === 'not-started') return;
+  const { conversation } = progress;
+  campConversationMeta.textContent = `${conversationPairNames(conversation)} · Talk ${conversation.sequence}/6 · ${CAMP_CATALOGUE[conversation.campId].name}`;
+  campConversationTitle.textContent = conversation.title;
+  campConversationTheme.textContent = conversation.theme;
+  advanceCampConversation.hidden = false;
+  advanceCampConversation.disabled = false;
+
+  if (progress.phase === 'main-dialogue') {
+    const line = progress.currentMainLine;
+    campConversationLine.textContent = `${castName(line.speaker)}: ${line.line}`;
+    advanceCampConversation.textContent = `Acknowledge line ${progress.mainLineIndex + 1}/${progress.mainLineCount}`;
+    return;
+  }
+  if (progress.phase === 'choice') {
+    campConversationLine.textContent = conversation.choice.prompt;
+    advanceCampConversation.hidden = true;
+    campConversationChoices.append(...conversation.choice.options.map((option) => {
+      const button = element('button', '', option.label);
+      button.type = 'button';
+      button.dataset.campConversationChoice = option.id;
+      button.dataset.campConversationId = conversation.id;
+      return button;
+    }));
+    return;
+  }
+  if (progress.phase === 'choice-response') {
+    const line = progress.currentResponseLine;
+    campConversationLine.textContent = `${castName(line.speaker)}: ${line.line}`;
+    advanceCampConversation.textContent = `Acknowledge response ${progress.responseLineIndex + 1}/${progress.responseLineCount}`;
+    return;
+  }
+  campConversationLine.textContent = progress.selectedOption
+    ? `${progress.selectedOption.label} — ${progress.selectedOption.consequence.summary}`
+    : 'This conversation is recorded.';
+  advanceCampConversation.textContent = 'Conversation complete';
+  advanceCampConversation.disabled = true;
+}
+
+function renderCampConversations() {
+  const metrics = getCampConversationRuntimeMetrics(campConversationState);
+  campConversationSummary.textContent = `${metrics.completedConversationCount} / ${metrics.conversationCount} complete`;
+  const completedBeats = new Set(campaignState.completedBeatIds ?? []);
+  const activeId = campConversationState.records.find((record) => record.status === 'active')?.id ?? null;
+  const visible = CAMP_CONVERSATIONS.conversations.filter((conversation) => {
+    const record = getCampConversationRecord(campConversationState, conversation.id);
+    if (record?.status === 'active') return true;
+    if (conversation.campId !== campSelect.value || !completedBeats.has(conversation.unlockAfterBeatId)) return false;
+    return record?.status === 'completed'
+      || getCampConversationAvailability(campConversationState, conversation.id, campConversationContext()).available;
+  });
+  if (!visible.length) {
+    campConversationList.replaceChildren(element('p', 'subtitle', 'No companion conversation is currently available at this rest point.'));
+  } else {
+    campConversationList.replaceChildren(...visible.map((conversation) => {
+      const record = getCampConversationRecord(campConversationState, conversation.id);
+      const button = element('button', 'camp-conversation-entry');
+      button.type = 'button';
+      button.dataset.campConversationId = conversation.id;
+      button.classList.toggle('is-active', conversation.id === selectedCampConversationId || conversation.id === activeId);
+      button.classList.toggle('is-complete', record?.status === 'completed');
+      const status = record?.status === 'completed' ? 'Recorded' : record?.status === 'active' ? 'Continue' : 'Available';
+      button.append(
+        element('strong', '', conversation.title),
+        element('span', '', `${conversationPairNames(conversation)} · ${status}`),
+        element('small', '', conversation.theme),
+      );
+      return button;
+    }));
+  }
+  if (!selectedCampConversationId && activeId) selectedCampConversationId = activeId;
+  renderCampConversationStage();
+}
+
+function partyCouncilContext() {
+  return {
+    campaignState,
+    advancementState,
+    campId: campSelect.value,
+  };
+}
+
+function partyCouncilNames(council) {
+  return council.participants.map(castName).join(' · ');
+}
+
+function renderPartyCouncilStage() {
+  const progress = selectedPartyCouncilId
+    ? getPartyCouncilProgress(partyCouncilState, selectedPartyCouncilId)
+    : null;
+  partyCouncilStage.hidden = !progress || progress.phase === 'not-started';
+  partyCouncilChoices.replaceChildren();
+  if (!progress || progress.phase === 'not-started') return;
+  const { council } = progress;
+  partyCouncilMeta.textContent = `${partyCouncilNames(council)} · Council ${council.sequence}/30 · ${CAMP_CATALOGUE[council.campId].name}`;
+  partyCouncilTitle.textContent = council.title;
+  partyCouncilTheme.textContent = council.theme;
+  advancePartyCouncil.hidden = false;
+  advancePartyCouncil.disabled = false;
+
+  if (progress.phase === 'main-dialogue') {
+    const line = progress.currentMainLine;
+    partyCouncilLine.textContent = `${castName(line.speaker)}: ${line.line}`;
+    advancePartyCouncil.textContent = `Acknowledge line ${progress.mainLineIndex + 1}/${progress.mainLineCount}`;
+    return;
+  }
+  if (progress.phase === 'choice') {
+    partyCouncilLine.textContent = council.choice.prompt;
+    advancePartyCouncil.hidden = true;
+    partyCouncilChoices.append(...council.choice.options.map((option) => {
+      const button = element('button', '', option.label);
+      button.type = 'button';
+      button.dataset.partyCouncilChoice = option.id;
+      button.dataset.partyCouncilId = council.id;
+      return button;
+    }));
+    return;
+  }
+  if (progress.phase === 'choice-response') {
+    const line = progress.currentResponseLine;
+    partyCouncilLine.textContent = `${castName(line.speaker)}: ${line.line}`;
+    advancePartyCouncil.textContent = `Acknowledge response ${progress.responseLineIndex + 1}/${progress.responseLineCount}`;
+    return;
+  }
+  partyCouncilLine.textContent = progress.selectedOption
+    ? `${progress.selectedOption.label} — ${progress.selectedOption.consequence.summary}`
+    : 'This finite council is recorded.';
+  advancePartyCouncil.textContent = 'Council complete';
+  advancePartyCouncil.disabled = true;
+}
+
+function renderPartyCouncils() {
+  const metrics = getPartyCouncilRuntimeMetrics(partyCouncilState);
+  partyCouncilSummary.textContent = `${metrics.completedCouncilCount} / ${metrics.councilCount} complete`;
+  const completedBeats = new Set(campaignState.completedBeatIds ?? []);
+  const activeId = partyCouncilState.records.find((record) => record.status === 'active')?.id ?? null;
+  const visible = PARTY_COUNCILS.councils.filter((council) => {
+    const record = getPartyCouncilRecord(partyCouncilState, council.id);
+    if (record?.status === 'active') return true;
+    if (council.campId !== campSelect.value || !completedBeats.has(council.unlockAfterBeatId)) return false;
+    return record?.status === 'completed'
+      || getPartyCouncilAvailability(partyCouncilState, council.id, partyCouncilContext()).available;
+  });
+  if (selectedPartyCouncilId
+    && selectedPartyCouncilId !== activeId
+    && !visible.some((council) => council.id === selectedPartyCouncilId)) {
+    selectedPartyCouncilId = null;
+  }
+  if (!visible.length) {
+    partyCouncilList.replaceChildren(element('p', 'subtitle', 'No party council is currently available at this rest point.'));
+  } else {
+    partyCouncilList.replaceChildren(...visible.map((council) => {
+      const record = getPartyCouncilRecord(partyCouncilState, council.id);
+      const button = element('button', 'party-council-entry');
+      button.type = 'button';
+      button.dataset.partyCouncilId = council.id;
+      button.classList.toggle('is-active', council.id === selectedPartyCouncilId || council.id === activeId);
+      button.classList.toggle('is-complete', record?.status === 'completed');
+      const status = record?.status === 'completed' ? 'Recorded' : record?.status === 'active' ? 'Continue' : 'Available';
+      button.append(
+        element('strong', '', council.title),
+        element('span', '', `Council ${council.sequence} · ${status}`),
+        element('small', '', partyCouncilNames(council)),
+      );
+      return button;
+    }));
+  }
+  if (!selectedPartyCouncilId && activeId) selectedPartyCouncilId = activeId;
+  renderPartyCouncilStage();
+}
+
+function archiveRecordContext() {
+  return { campaignState };
+}
+
+function renderArchiveRecordStage() {
+  const progress = selectedArchiveRecordId
+    ? getArchiveRecordProgress(archiveRecordState, selectedArchiveRecordId)
+    : null;
+  archiveRecordStage.hidden = !progress || progress.phase === 'not-started';
+  if (!progress || progress.phase === 'not-started') return;
+  const { record } = progress;
+  archiveRecordMeta.textContent = `${record.recordType} · ${record.custodian}`;
+  archiveRecordTitle.textContent = record.title;
+  archiveRecordAccess.textContent = record.accessNote;
+  advanceArchiveRecord.disabled = false;
+  if (progress.phase === 'reading') {
+    archiveRecordParagraph.textContent = progress.currentParagraph;
+    advanceArchiveRecord.textContent = `Acknowledge passage ${progress.paragraphIndex + 1}/${progress.paragraphCount}`;
+    return;
+  }
+  if (Number.isSafeInteger(archiveReviewParagraphIndex)
+    && archiveReviewParagraphIndex >= 0
+    && archiveReviewParagraphIndex < progress.paragraphCount) {
+    archiveRecordParagraph.textContent = record.paragraphs[archiveReviewParagraphIndex];
+    advanceArchiveRecord.textContent = `Review passage ${archiveReviewParagraphIndex + 1}/${progress.paragraphCount}`;
+    return;
+  }
+  archiveRecordParagraph.textContent = 'This finite public reading is recorded. Its correction and access terms remain attached.';
+  advanceArchiveRecord.textContent = 'Reading complete';
+  advanceArchiveRecord.disabled = true;
+}
+
+function renderArchiveRecords() {
+  const metrics = getArchiveRecordRuntimeMetrics(archiveRecordState);
+  archiveRecordSummary.textContent = `${metrics.completedRecordCount} / ${metrics.recordCount} read`;
+  const completedBeats = new Set(campaignState.completedBeatIds ?? []);
+  const activeId = archiveRecordState.records.find((record) => record.status === 'active')?.id ?? null;
+  const visible = ARCHIVE_RECORDS.records.filter((record) => {
+    const progressRecord = getArchiveRecordProgressRecord(archiveRecordState, record.id);
+    return progressRecord?.status === 'active'
+      || (completedBeats.has(record.unlockAfterBeatId) && (
+        progressRecord?.status === 'completed'
+        || getArchiveRecordAvailability(archiveRecordState, record.id, archiveRecordContext()).available
+      ));
+  });
+  if (!visible.length) {
+    archiveRecordList.replaceChildren(element('p', 'subtitle', 'No public archive reading has opened yet.'));
+  } else {
+    archiveRecordList.replaceChildren(...visible.map((record) => {
+      const progressRecord = getArchiveRecordProgressRecord(archiveRecordState, record.id);
+      const button = element('button', 'archive-record-entry');
+      button.type = 'button';
+      button.dataset.archiveRecordId = record.id;
+      button.classList.toggle('is-active', record.id === selectedArchiveRecordId || record.id === activeId);
+      button.classList.toggle('is-complete', progressRecord?.status === 'completed');
+      const status = progressRecord?.status === 'completed' ? 'Read' : progressRecord?.status === 'active' ? 'Continue' : 'Available';
+      button.append(
+        element('strong', '', record.title),
+        element('span', '', `${record.recordType} · ${status}`),
+        element('small', '', record.custodian),
+      );
+      return button;
+    }));
+  }
+  if (!selectedArchiveRecordId && activeId) selectedArchiveRecordId = activeId;
+  renderArchiveRecordStage();
+}
+
 function render() {
   partyCurrency.textContent = `${loadoutState.currency} mon`;
   renderParty();
@@ -268,6 +618,9 @@ function render() {
   renderInventory();
   renderShop();
   renderCamps();
+  renderCampConversations();
+  renderPartyCouncils();
+  renderArchiveRecords();
   campPlaytime.textContent = `${formatPlaytime(playtimeState.totalMs)} active play`;
 }
 
@@ -327,10 +680,231 @@ shopList.addEventListener('click', (event) => {
   else if (upgrade) commit(upgradeItem(loadoutState, upgrade.dataset.upgradeItem));
 });
 
-campSelect.addEventListener('change', renderCamps);
+campSelect.addEventListener('change', () => {
+  renderCamps();
+  renderCampConversations();
+  renderPartyCouncils();
+});
 restParty.addEventListener('click', () => {
   const unlocked = getParty(advancementState, { unlockedOnly: true }).map((member) => member.id);
   commit(restAtCamp(loadoutState, campSelect.value, unlocked));
+});
+
+campConversationList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-camp-conversation-id]');
+  if (!button || button.disabled) return;
+  const conversation = CAMP_CONVERSATIONS.conversations.find((entry) => entry.id === button.dataset.campConversationId);
+  if (!conversation) return;
+  selectedCampConversationId = conversation.id;
+  const record = getCampConversationRecord(campConversationState, conversation.id);
+  if (!record) {
+    const result = beginCampConversation(campConversationState, conversation.id, campConversationContext());
+    if (!result.ok) {
+      campFeedback.textContent = result.reason;
+      return;
+    }
+    const saved = campConversationAdapter.save(result.state);
+    if (!saved.ok) {
+      campFeedback.textContent = 'Camp conversation could not start because its save could not be written.';
+      return;
+    }
+    campConversationState = result.state;
+    render();
+    campFeedback.textContent = `Camp conversation begun: ${conversation.title}. Every line and one explicit response will be recorded once.`;
+    return;
+  }
+  renderCampConversations();
+});
+
+campConversationChoices.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-camp-conversation-choice]');
+  if (!button) return;
+  const result = chooseCampConversationOption(
+    campConversationState,
+    button.dataset.campConversationId,
+    button.dataset.campConversationChoice,
+  );
+  if (!result.ok) {
+    campFeedback.textContent = result.reason;
+    return;
+  }
+  const saved = campConversationAdapter.save(result.state);
+  if (!saved.ok) {
+    campFeedback.textContent = 'Response was not recorded because the camp-conversation save could not be written.';
+    return;
+  }
+  campConversationState = result.state;
+  renderCampConversations();
+  campFeedback.textContent = `Response recorded: ${result.option.label}`;
+});
+
+advanceCampConversation.addEventListener('click', () => {
+  if (!selectedCampConversationId) return;
+  const progress = getCampConversationProgress(campConversationState, selectedCampConversationId);
+  const result = progress?.phase === 'main-dialogue'
+    ? acknowledgeCampConversationLine(campConversationState, selectedCampConversationId)
+    : progress?.phase === 'choice-response'
+      ? acknowledgeCampConversationResponse(campConversationState, selectedCampConversationId)
+      : null;
+  if (!result?.ok) {
+    if (result) campFeedback.textContent = result.reason;
+    return;
+  }
+  const saved = campConversationAdapter.save(result.state);
+  if (!saved.ok) {
+    campFeedback.textContent = 'Line progress was not recorded because the camp-conversation save could not be written.';
+    return;
+  }
+  campConversationState = result.state;
+  renderCampConversations();
+  if (result.code === 'conversation-complete') {
+    campFeedback.textContent = `Finite conversation complete. ${result.consequence.summary}`;
+  }
+});
+
+partyCouncilList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-party-council-id]');
+  if (!button || button.disabled) return;
+  const council = PARTY_COUNCILS.councils.find((entry) => entry.id === button.dataset.partyCouncilId);
+  if (!council) return;
+  selectedPartyCouncilId = council.id;
+  const record = getPartyCouncilRecord(partyCouncilState, council.id);
+  if (!record) {
+    const result = beginPartyCouncil(partyCouncilState, council.id, partyCouncilContext());
+    if (!result.ok) {
+      campFeedback.textContent = result.reason;
+      return;
+    }
+    const saved = partyCouncilAdapter.save(result.state);
+    if (!saved.ok) {
+      campFeedback.textContent = 'Party council could not start because its save could not be written.';
+      return;
+    }
+    partyCouncilState = result.state;
+    render();
+    advancePartyCouncil.focus();
+    campFeedback.textContent = `Party council begun: ${council.title}. Every speaker and one explicit decision will be recorded once.`;
+    return;
+  }
+  renderPartyCouncils();
+  if (record.status === 'completed') partyCouncilTitle.focus();
+  else advancePartyCouncil.focus();
+  campFeedback.textContent = record.status === 'completed'
+    ? `Reviewing the recorded consequence of ${council.title}; finite state remains unchanged.`
+    : `Continuing ${council.title}.`;
+});
+
+partyCouncilChoices.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-party-council-choice]');
+  if (!button) return;
+  const result = choosePartyCouncilOption(
+    partyCouncilState,
+    button.dataset.partyCouncilId,
+    button.dataset.partyCouncilChoice,
+  );
+  if (!result.ok) {
+    campFeedback.textContent = result.reason;
+    return;
+  }
+  const saved = partyCouncilAdapter.save(result.state);
+  if (!saved.ok) {
+    campFeedback.textContent = 'Council decision was not recorded because its save could not be written.';
+    return;
+  }
+  partyCouncilState = result.state;
+  renderPartyCouncils();
+  advancePartyCouncil.focus();
+  campFeedback.textContent = `Council decision recorded: ${result.option.label}`;
+});
+
+advancePartyCouncil.addEventListener('click', () => {
+  if (!selectedPartyCouncilId) return;
+  const progress = getPartyCouncilProgress(partyCouncilState, selectedPartyCouncilId);
+  const result = progress?.phase === 'main-dialogue'
+    ? acknowledgePartyCouncilLine(partyCouncilState, selectedPartyCouncilId)
+    : progress?.phase === 'choice-response'
+      ? acknowledgePartyCouncilResponse(partyCouncilState, selectedPartyCouncilId)
+      : null;
+  if (!result?.ok) {
+    if (result) campFeedback.textContent = result.reason;
+    return;
+  }
+  const saved = partyCouncilAdapter.save(result.state);
+  if (!saved.ok) {
+    campFeedback.textContent = 'Council line progress was not recorded because its save could not be written.';
+    return;
+  }
+  partyCouncilState = result.state;
+  renderPartyCouncils();
+  if (result.progress?.phase === 'choice') {
+    partyCouncilChoices.querySelector('[data-party-council-choice]')?.focus();
+  } else if (result.code === 'council-complete') {
+    partyCouncilTitle.focus();
+  }
+});
+
+archiveRecordList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-archive-record-id]');
+  if (!button || button.disabled) return;
+  const record = ARCHIVE_RECORDS.records.find((entry) => entry.id === button.dataset.archiveRecordId);
+  if (!record) return;
+  selectedArchiveRecordId = record.id;
+  const progressRecord = getArchiveRecordProgressRecord(archiveRecordState, record.id);
+  if (progressRecord?.status === 'completed') {
+    archiveReviewParagraphIndex = 0;
+    renderArchiveRecords();
+    campFeedback.textContent = `Reviewing ${record.title}. Review does not change finite completion state.`;
+    return;
+  }
+  archiveReviewParagraphIndex = null;
+  if (!progressRecord) {
+    const result = beginArchiveRecord(archiveRecordState, record.id, archiveRecordContext());
+    if (!result.ok) {
+      campFeedback.textContent = result.reason;
+      return;
+    }
+    const saved = archiveRecordAdapter.save(result.state);
+    if (!saved.ok) {
+      campFeedback.textContent = 'Public reading could not start because its save could not be written.';
+      return;
+    }
+    archiveRecordState = result.state;
+    render();
+    campFeedback.textContent = `Public reading begun: ${record.title}. Its custody and correction terms remain visible.`;
+    return;
+  }
+  renderArchiveRecords();
+});
+
+advanceArchiveRecord.addEventListener('click', () => {
+  if (!selectedArchiveRecordId) return;
+  const progress = getArchiveRecordProgress(archiveRecordState, selectedArchiveRecordId);
+  if (progress?.complete && Number.isSafeInteger(archiveReviewParagraphIndex)) {
+    archiveReviewParagraphIndex += 1;
+    if (archiveReviewParagraphIndex >= progress.paragraphCount) {
+      archiveReviewParagraphIndex = null;
+      campFeedback.textContent = 'Read-only archive review complete; finite state was unchanged.';
+    } else {
+      campFeedback.textContent = 'Review passage advanced without changing finite completion state.';
+    }
+    renderArchiveRecordStage();
+    return;
+  }
+  const result = acknowledgeArchiveRecordParagraph(archiveRecordState, selectedArchiveRecordId);
+  if (!result.ok) {
+    campFeedback.textContent = result.reason;
+    return;
+  }
+  const saved = archiveRecordAdapter.save(result.state);
+  if (!saved.ok) {
+    campFeedback.textContent = 'Passage progress was not recorded because the archive save could not be written.';
+    return;
+  }
+  archiveRecordState = result.state;
+  renderArchiveRecords();
+  campFeedback.textContent = result.code === 'archive-reading-complete'
+    ? 'Finite public reading complete. No reward or ownership claim was created.'
+    : 'Passage acknowledged; the next public passage is ready.';
 });
 
 function tick(now) {
@@ -384,6 +958,7 @@ window.addEventListener('pagehide', () => {
   loadoutAdapter.save(loadoutState);
   playtimeAdapter.save(playtimeState);
   if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+  // Finite narrative mutations are written synchronously at each accepted transition.
 });
 document.addEventListener('visibilitychange', () => {
   playtimeLast = performance.now();
@@ -392,6 +967,7 @@ document.addEventListener('visibilitychange', () => {
     flushRunReceiptPlaytime();
     playtimeAdapter.save(playtimeState);
     if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+    // Avoid stale-tab rollback: narrative saves never need a redundant lifecycle write.
   }
 });
 window.addEventListener('pointerdown', () => { playtimeLastActivity = performance.now(); }, { passive: true });
@@ -400,6 +976,24 @@ window.addEventListener('pageshow', (event) => {
   if (!event.persisted) return;
   const refreshedAdvancement = advancementAdapter.load();
   if (refreshedAdvancement.ok) advancementState = refreshedAdvancement.state;
+  const refreshedCampaign = campaignAdapter.load();
+  if (refreshedCampaign.ok) campaignState = refreshedCampaign.state;
+  const refreshedCampConversations = campConversationAdapter.load();
+  if (refreshedCampConversations.state) {
+    campConversationState = refreshedCampConversations.state;
+    selectedCampConversationId = campConversationState.records.find((record) => record.status === 'active')?.id ?? null;
+  }
+  const refreshedPartyCouncils = partyCouncilAdapter.load();
+  if (refreshedPartyCouncils.state) {
+    partyCouncilState = refreshedPartyCouncils.state;
+    selectedPartyCouncilId = partyCouncilState.records.find((record) => record.status === 'active')?.id ?? null;
+  }
+  const refreshedArchiveRecords = archiveRecordAdapter.load();
+  if (refreshedArchiveRecords.state) {
+    archiveRecordState = refreshedArchiveRecords.state;
+    selectedArchiveRecordId = archiveRecordState.records.find((record) => record.status === 'active')?.id ?? null;
+    archiveReviewParagraphIndex = null;
+  }
   const refreshedLoadout = loadoutAdapter.load();
   if (refreshedLoadout.ok) loadoutState = refreshedLoadout.value;
   const refreshedPlaytime = playtimeAdapter.load();
@@ -418,4 +1012,5 @@ window.addEventListener('pageshow', (event) => {
 
 document.title = `${CAMPAIGN.title} — Camp & Loadout`;
 render();
+if (finiteNarrativeLoadWarnings.length) campFeedback.textContent = finiteNarrativeLoadWarnings.join(' ');
 requestAnimationFrame(tick);

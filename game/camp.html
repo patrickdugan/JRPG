@@ -74,6 +74,59 @@
           <div id="inventoryList" class="inventory-list"></div>
         </aside>
 
+        <section class="camp-conversation-panel panel" aria-label="Finite companion conversations">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Lantern voices</p><h2>Companion Conversations</h2></div>
+            <span id="campConversationSummary">0 / 90 complete</span>
+          </header>
+          <div class="camp-conversation-layout">
+            <div id="campConversationList" class="camp-conversation-list" aria-label="Available companion conversations"></div>
+            <article id="campConversationStage" class="camp-conversation-stage" hidden>
+              <small id="campConversationMeta"></small>
+              <h3 id="campConversationTitle">Conversation</h3>
+              <p id="campConversationTheme"></p>
+              <blockquote id="campConversationLine" aria-live="polite" aria-atomic="true"></blockquote>
+              <div id="campConversationChoices" class="camp-conversation-choices" aria-label="Conversation response"></div>
+              <button id="advanceCampConversation" type="button">Continue conversation</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="party-council-panel panel" aria-label="Finite multi-character party councils">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Shared lantern</p><h2>Party Councils</h2></div>
+            <span id="partyCouncilSummary">0 / 30 complete</span>
+          </header>
+          <div class="party-council-layout">
+            <div id="partyCouncilList" class="party-council-list" aria-label="Available party councils"></div>
+            <article id="partyCouncilStage" class="party-council-stage" hidden>
+              <small id="partyCouncilMeta"></small>
+              <h3 id="partyCouncilTitle" tabindex="-1">Party council</h3>
+              <p id="partyCouncilTheme"></p>
+              <blockquote id="partyCouncilLine" aria-live="polite" aria-atomic="true"></blockquote>
+              <div id="partyCouncilChoices" class="party-council-choices" role="group" aria-labelledby="partyCouncilLine"></div>
+              <button id="advancePartyCouncil" type="button">Continue council</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="archive-record-panel panel" aria-label="Finite public archive readings">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Public leaves</p><h2>Archive Reading Table</h2></div>
+            <span id="archiveRecordSummary">0 / 60 read</span>
+          </header>
+          <div class="archive-record-layout">
+            <div id="archiveRecordList" class="archive-record-list" aria-label="Unlocked public archive records"></div>
+            <article id="archiveRecordStage" class="archive-record-stage" hidden>
+              <small id="archiveRecordMeta"></small>
+              <h3 id="archiveRecordTitle">Public record</h3>
+              <p id="archiveRecordAccess"></p>
+              <blockquote id="archiveRecordParagraph" aria-live="polite" aria-atomic="true"></blockquote>
+              <button id="advanceArchiveRecord" type="button">Continue reading</button>
+            </article>
+          </div>
+        </section>
+
         <section class="shop-panel panel">
           <header class="panel-heading">
             <div><p class="eyebrow">Route quartermaster</p><h2>Trade &amp; Upgrade</h2></div>

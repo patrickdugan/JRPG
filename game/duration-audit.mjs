@@ -15,8 +15,20 @@ import {
   recordEncounterWin,
 } from './advancement.mjs';
 import { runCanonicalCompletion } from './canonical-run.mjs';
+import { runCampConversationCompletion } from './camp-conversation-run.mjs';
+import { runPartyCouncilCompletion } from './party-council-run.mjs';
+import { runArchiveRecordCompletion } from './archive-record-run.mjs';
 import { PARTY_PROFILES } from './campaign-combat.mjs';
 import { CAMPAIGN } from './content/campaign.mjs';
+import {
+  CAMP_CONVERSATION_METRICS,
+  CAMP_CONVERSATION_PLAYABLE_METRICS,
+} from './content/camp-conversations.mjs';
+import { ARCHIVE_RECORD_METRICS } from './content/archive-records.mjs';
+import {
+  PARTY_COUNCIL_METRICS,
+  PARTY_COUNCIL_PLAYABLE_METRICS,
+} from './content/party-councils.mjs';
 import { ENCOUNTERS } from './content/encounters.mjs';
 import { FULL_DIALOGUE_SCRIPT } from './content/full-dialogue.mjs';
 import { REPEATABLE_CONTRACTS, SIDE_QUESTS } from './content/sidequests.mjs';
@@ -35,7 +47,7 @@ import {
 } from './run-receipt.mjs';
 import { getWitnessStageFieldworkMetrics } from './witness-stage-fieldwork.mjs';
 
-export const DURATION_AUDIT_VERSION = 3;
+export const DURATION_AUDIT_VERSION = 6;
 export const DURATION_TARGET_MINUTES = CAMPAIGN_PACING.targetMinutesAt1x;
 
 const ASSUMPTION_KEYS = Object.freeze([
@@ -255,6 +267,80 @@ function shippedWitnessChronicleMetrics() {
   });
 }
 
+function shippedCampConversationMetrics() {
+  return deepFreeze({
+    supplied: true,
+    source: 'shipped-camp-conversation-runtime-v1',
+    finite: true,
+    repeatable: false,
+    catalogueMetrics: CAMP_CONVERSATION_METRICS,
+    playableMetrics: CAMP_CONVERSATION_PLAYABLE_METRICS,
+    metrics: {
+      dialogueWords: CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount,
+      dialogueLines: CAMP_CONVERSATION_PLAYABLE_METRICS.dialogueLineCount,
+      choices: CAMP_CONVERSATION_PLAYABLE_METRICS.choiceCount,
+      fieldMoves: 0,
+      interactions: CAMP_CONVERSATION_PLAYABLE_METRICS.conversationCount,
+      exits: 0,
+      playerCommands: 0,
+      enemyActivations: 0,
+      campRests: 0,
+      finiteEncounterCount: 0,
+      finiteQuestCount: 0,
+      finiteQuestObjectiveCount: 0,
+    },
+  });
+}
+
+function shippedArchiveRecordMetrics() {
+  return deepFreeze({
+    supplied: true,
+    source: 'shipped-public-archive-runtime-v1',
+    finite: true,
+    repeatable: false,
+    catalogueMetrics: ARCHIVE_RECORD_METRICS,
+    metrics: {
+      dialogueWords: ARCHIVE_RECORD_METRICS.wordCount,
+      dialogueLines: ARCHIVE_RECORD_METRICS.paragraphCount,
+      choices: 0,
+      fieldMoves: 0,
+      interactions: ARCHIVE_RECORD_METRICS.recordCount,
+      exits: 0,
+      playerCommands: 0,
+      enemyActivations: 0,
+      campRests: 0,
+      finiteEncounterCount: 0,
+      finiteQuestCount: 0,
+      finiteQuestObjectiveCount: 0,
+    },
+  });
+}
+
+function shippedPartyCouncilMetrics() {
+  return deepFreeze({
+    supplied: true,
+    source: 'shipped-party-council-runtime-v1',
+    finite: true,
+    repeatable: false,
+    catalogueMetrics: PARTY_COUNCIL_METRICS,
+    playableMetrics: PARTY_COUNCIL_PLAYABLE_METRICS,
+    metrics: {
+      dialogueWords: PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount,
+      dialogueLines: PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount,
+      choices: PARTY_COUNCIL_PLAYABLE_METRICS.choiceCount,
+      fieldMoves: 0,
+      interactions: PARTY_COUNCIL_PLAYABLE_METRICS.councilCount,
+      exits: 0,
+      playerCommands: 0,
+      enemyActivations: 0,
+      campRests: 0,
+      finiteEncounterCount: 0,
+      finiteQuestCount: 0,
+      finiteQuestObjectiveCount: 0,
+    },
+  });
+}
+
 function canonicalRestedProfiles(encounter, advancementState, loadoutState) {
   return Object.fromEntries(encounter.party.roster.map((memberId) => {
     const base = PARTY_PROFILES[memberId];
@@ -354,8 +440,20 @@ function inspectReceipt(receipt) {
   });
 }
 
-function quantitiesForEstimate(base, witness, includeFiniteQuests) {
-  const additions = witness.metrics;
+function quantitiesForEstimate(base, witness, campConversation, partyCouncil, archiveRecord, includeFiniteQuests) {
+  const campMetrics = includeFiniteQuests ? campConversation.metrics : Object.fromEntries(
+    DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]),
+  );
+  const archiveMetrics = includeFiniteQuests ? archiveRecord.metrics : Object.fromEntries(
+    DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]),
+  );
+  const councilMetrics = includeFiniteQuests ? partyCouncil.metrics : Object.fromEntries(
+    DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]),
+  );
+  const additions = Object.fromEntries(DURATION_WITNESS_METRIC_KEYS.map((key) => [
+    key,
+    witness.metrics[key] + campMetrics[key] + councilMetrics[key] + archiveMetrics[key],
+  ]));
   return deepFreeze({
     dialogueWords: base.dialogueWordCount
       + additions.dialogueWords
@@ -434,8 +532,20 @@ function getShippedEvidence() {
   if (shippedEvidenceCache) return shippedEvidenceCache;
   const canonicalRun = runCanonicalCompletion();
   const finiteContentRun = runFiniteContentCompletion();
+  const campConversationRun = runCampConversationCompletion();
+  const partyCouncilRun = runPartyCouncilCompletion();
+  const archiveRecordRun = runArchiveRecordCompletion();
   if (finiteContentRun.canonical.signature !== canonicalRun.signature) {
     throw new Error('Finite-content evidence was not seeded from the current canonical campaign signature.');
+  }
+  if (campConversationRun.canonical.signature !== canonicalRun.signature) {
+    throw new Error('Camp-conversation evidence was not seeded from the current canonical campaign signature.');
+  }
+  if (archiveRecordRun.canonical.signature !== canonicalRun.signature) {
+    throw new Error('Archive-record evidence was not seeded from the current canonical campaign signature.');
+  }
+  if (partyCouncilRun.canonical.signature !== canonicalRun.signature) {
+    throw new Error('Party-council evidence was not seeded from the current canonical campaign signature.');
   }
   shippedEvidenceCache = deepFreeze({
     canonicalEvidence: {
@@ -450,6 +560,27 @@ function getShippedEvidence() {
       summary: finiteContentRun.summary,
       rewardAudit: finiteContentRun.rewardAudit,
       durationEvidence: finiteContentRun.durationEvidence,
+    },
+    campConversationEvidence: {
+      signature: campConversationRun.signature,
+      completionProof: campConversationRun.completionProof,
+      summary: campConversationRun.summary,
+      catalogueMetrics: campConversationRun.catalogueMetrics,
+      durationEvidence: campConversationRun.durationEvidence,
+    },
+    partyCouncilEvidence: {
+      signature: partyCouncilRun.signature,
+      completionProof: partyCouncilRun.completionProof,
+      summary: partyCouncilRun.summary,
+      catalogueMetrics: partyCouncilRun.catalogueMetrics,
+      durationEvidence: partyCouncilRun.durationEvidence,
+    },
+    archiveRecordEvidence: {
+      signature: archiveRecordRun.signature,
+      completionProof: archiveRecordRun.completionProof,
+      summary: archiveRecordRun.summary,
+      catalogueMetrics: archiveRecordRun.catalogueMetrics,
+      durationEvidence: archiveRecordRun.durationEvidence,
     },
     content: campaignContentMetrics(canonicalRun),
     repeatBattle: repeatCircuitMetrics(),
@@ -470,11 +601,14 @@ export function createDurationAudit({
 } = {}) {
   const assumptions = mergeAndValidateAssumptions(assumptionOverrides);
   const witnessChronicle = normalizeWitnessMetrics(witnessChronicleMetrics);
+  const campConversation = shippedCampConversationMetrics();
+  const partyCouncil = shippedPartyCouncilMetrics();
+  const archiveRecord = shippedArchiveRecordMetrics();
   const shipped = getShippedEvidence();
   const { content, repeatBattle } = shipped;
   const receipt = inspectReceipt(runReceipt);
-  const criticalQuantities = quantitiesForEstimate(content, witnessChronicle, false);
-  const allFiniteQuantities = quantitiesForEstimate(content, witnessChronicle, true);
+  const criticalQuantities = quantitiesForEstimate(content, witnessChronicle, campConversation, partyCouncil, archiveRecord, false);
+  const allFiniteQuantities = quantitiesForEstimate(content, witnessChronicle, campConversation, partyCouncil, archiveRecord, true);
   const estimates = Object.fromEntries(Object.entries(assumptions).map(([name, scenarioAssumptions]) => [
     name,
     estimateScenario(name, scenarioAssumptions, criticalQuantities, allFiniteQuantities),
@@ -493,6 +627,9 @@ export function createDurationAudit({
     estimateIsProof: false,
     canonicalEvidence: shipped.canonicalEvidence,
     finiteContentEvidence: shipped.finiteContentEvidence,
+    campConversationEvidence: shipped.campConversationEvidence,
+    partyCouncilEvidence: shipped.partyCouncilEvidence,
+    archiveRecordEvidence: shipped.archiveRecordEvidence,
     content,
     authoredDurationDeclarations: {
       campaignChapterMinutes: sum(CAMPAIGN.chapters.map((chapter) => chapter.estimatedMinutes ?? 0)),
@@ -503,6 +640,9 @@ export function createDurationAudit({
       usedInQuantityEstimate: false,
     },
     witnessChronicle,
+    campConversation,
+    partyCouncil,
+    archiveRecord,
     repeatBattle,
     estimates,
     estimateMethod: {
@@ -514,7 +654,7 @@ export function createDurationAudit({
       unit: 'seconds',
     },
     finiteContentGapTo20Hours: {
-      basis: 'All canonical finite content, all finite side-quest objectives, and supplied witness metrics; repeatable loops and authored minute declarations excluded.',
+      basis: 'All canonical finite content, all finite side-quest objectives, supplied witness metrics, all finite camp conversations, all finite party councils, and all finite public archive readings; repeatable loops and authored minute declarations excluded.',
       arithmeticIsExactUnderEachAssumptionSet: true,
       isObservedPlaytime: false,
       lowSeconds: estimates.low.allFiniteContent.exactModelGapSecondsTo20Hours,
@@ -530,6 +670,9 @@ export function createDurationAudit({
       'Finite side-quest route movement is not measured by the canonical runner; objective handling is represented only by the explicit per-objective assumption.',
       'Mandatory scene-operation traversal is included in the canonical runner as one combined exact route with authored exits: 183 nodes across 60 beats, without adding the standalone 920-step placement audit on top.',
       'Witness-chronicle field movement uses the deterministic minimum spawn-to-final-node paths across all 67 fresh stage contexts; detours and authored activity-minute declarations remain excluded until observed.',
+      'Camp-conversation words include the title, theme, prompt, both visible option labels, the chosen first response, and its visible consequence; the unseen alternative response is excluded.',
+      'Party-council words include each title, theme, prompt, both visible option labels, every multi-character main line, the chosen first response, and its visible consequence; unseen alternative responses are excluded.',
+      'Public-archive words include only the player-visible title, record type, custodian, access note, and acknowledged paragraphs; the records grant no rewards or authored minutes.',
       'Side-quest setup and resolution prose exists in data but is not exposed by the current campaign runtime, so those words are reported but excluded.',
       'The canonical completion requires no repeat battles; repeat timing is an optional presentation schedule and is excluded from finite content.',
       'Only proofReceipt.report.durationProven from a valid completed clean-start run can make durationProven true.',

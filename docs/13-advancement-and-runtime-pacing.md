@@ -52,7 +52,7 @@ The speed preference is restricted to `1x`, `2x`, or `4x` and accelerates repeat
 
 Chapter level targets rise from level 2 after the Prologue to level 40 for Chapter 9 and the Epilogue. Canonical first clears attain those targets; repeat grinding provides optional over-leveling, currency, recovery from skipped party participation, or a lower-difficulty route through later encounters.
 
-This table is an authored allocation, not evidence that the current build lasts that long. The independent quantity audit in `15-content-volume-and-duration-evidence.md` excludes these declared minutes and currently projects all shipped finite content at 393.128 reference minutes, with a 806.872-minute model gap. Only one clean completed run receipt with at least 1,200 active minutes can turn the target into a duration claim.
+This table is an authored allocation, not evidence that the current build lasts that long. The independent quantity audit in `15-content-volume-and-duration-evidence.md` excludes these declared minutes and currently projects the all-finite path at 1,231.072 reference minutes, 31.072 minutes above the arithmetic target. Only one clean completed run receipt with at least 1,200 active minutes can turn the target into a duration claim.
 
 ## Save contract
 

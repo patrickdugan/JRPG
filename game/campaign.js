@@ -10,6 +10,9 @@ import {
 import { getSceneDirection } from './content/scene-direction.mjs';
 import { getFullDialogue } from './content/full-dialogue.mjs';
 import { getSceneOperation } from './content/scene-operations.mjs';
+import { DEFAULT_CAMP_CONVERSATION_SAVE_KEY } from './camp-conversation-contract.mjs';
+import { DEFAULT_PARTY_COUNCIL_SAVE_KEY } from './party-council-contract.mjs';
+import { DEFAULT_ARCHIVE_RECORD_SAVE_KEY } from './archive-record-contract.mjs';
 import {
   createAdvancementState,
   createAdvancementStorageAdapter,
@@ -1842,7 +1845,7 @@ interactFieldButton.addEventListener('click', () => {
 previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
-  if (!window.confirm('Start a clean New Game? This clears story, scene operations, battles, quests, camp inventory, field positions, playtime, and the prior run receipt.')) return;
+  if (!window.confirm('Start a clean New Game? This clears story, scene operations, battles, quests, companion conversations, party councils, public archive readings, camp inventory, field positions, playtime, and the prior run receipt.')) return;
   if (typeof globalThis.crypto?.randomUUID !== 'function') {
     fieldFeedback.textContent = 'A verified New Game requires crypto.randomUUID support in this browser.';
     return;
@@ -1881,6 +1884,21 @@ resetCampaign.addEventListener('click', () => {
   fieldAdapter.clear();
   loadoutAdapter.clear();
   playtimeAdapter.clear();
+  try {
+    globalThis.localStorage?.removeItem(DEFAULT_CAMP_CONVERSATION_SAVE_KEY);
+  } catch {
+    // The other adapters preserve this same best-effort reset behavior when storage is unavailable.
+  }
+  try {
+    globalThis.localStorage?.removeItem(DEFAULT_PARTY_COUNCIL_SAVE_KEY);
+  } catch {
+    // Party councils use an independent finite-progress namespace.
+  }
+  try {
+    globalThis.localStorage?.removeItem(DEFAULT_ARCHIVE_RECORD_SAVE_KEY);
+  } catch {
+    // Independent save namespaces are cleared independently so one failure cannot mask another.
+  }
   playtimeLastSample = performance.now();
   playtimeLastActivity = playtimeLastSample;
   playtimeUnsavedMs = 0;

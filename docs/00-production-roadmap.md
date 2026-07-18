@@ -32,7 +32,7 @@ This is the controlling execution order for the project. It applies the supplied
 - Source project-plan template is committed intact.
 - Ignore rules preserve source docs and designed art while excluding local build churn.
 
-### 1. Design documentation — active gate
+### 1. Design documentation — complete
 
 Before broad content production, deliver and cross-check:
 
@@ -43,7 +43,7 @@ Before broad content production, deliver and cross-check:
 
 **Exit criterion:** the four documents agree on the party, core hook, key locations, and the first-playable slice. Outstanding choices must be constrained to iteration-sized details.
 
-### 2. One true screenshots — active gate
+### 2. One true screenshots — complete
 
 Create an original battle target and world/story target. These are not marketing claims; they are visual contracts for systems, art, and tone.
 
@@ -53,7 +53,7 @@ Create an original battle target and world/story target. These are not marketing
 
 **Exit criterion:** each target makes genre, hook, and tone understandable without an accompanying pitch.
 
-### 3. FP-0 combat proof and tooling — active after GDD
+### 3. FP-0 combat proof and tooling — complete
 
 Build only the systems the slice needs:
 
@@ -67,7 +67,7 @@ Build only the systems the slice needs:
 
 **Exit criterion:** a player can understand the hook, make a meaningful defensive response, and finish the encounter without developer intervention. This is **FP-0 Combat Proof**: a systems-validation build, not yet the plan-template's 20–40 minute first playable.
 
-### 4. FP-1 first playable — target
+### 4. FP-1 first playable — implemented; timed external gate pending
 
 Target the documented 28–34 minute Takamine vertical slice comprising:
 
@@ -80,16 +80,23 @@ Target the documented 28–34 minute Takamine vertical slice comprising:
 
 Test with a small group once FP-1 is reliable. Record completion, wipe, and unclear-rule observations before changing mechanics.
 
-### 5. Full production — active foundation
+### 5. Full production — active
 
 The user explicitly authorized broad production expansion on 2026-07-18 after the documented design, visual targets, combat proof, and campaign contracts were in place. That authorization records the scope transition required by this roadmap; it does not waive the external playtest, cultural review, final-art, accessibility, or measured-duration gates.
 
 Current execution order:
 
-- complete Chapter 1 with final environments and scenes;
-- repeat chapter production with reusable systems and assets;
-- reserve broad balance, full-save, large maps, shops, and final FX for their appropriate milestone;
-- plan a full-game playtest with a substantially larger cohort before release.
+- preserve the mechanically complete 11-chapter campaign and its deterministic completion receipt;
+- preserve the completed finite expansion: exact-route operations, witness fieldwork, 90 companion conversations, 30 party councils, and 60 public archive readings;
+- keep first-clear and repeat combat rewards separate while tuning the optional 1×/2×/4× grind circuit;
+- replace provisional generated production atlases selectively after animation and readability review;
+- run chapter timing, cultural review, accessibility, browser/device, and full clean-start playtests before release.
+
+### 6. Campaign completeness and duration proof — active gate
+
+The shipped browser build now has a complete canonical state path, all required first clears, finite optional arcs, versioned cross-page saves, and bounded zero-time completion witnesses. Its explicit reference quantity model crosses 1,200 finite minutes, but content-volume estimates remain planning evidence only.
+
+**Exit criterion:** one clean-start human run completes the canonical story and all required first clears, records at least 1,200 active minutes in the UUID-bound receipt, and is accompanied by chapter timing notes. Optional finite content must remain replay-refusing, while the clearly labeled repeat-battle circuit may use the saved speed multiplier. No authored minute declaration or deterministic zero-time runner may substitute for this gate.
 
 ## Scope-control rule
 
