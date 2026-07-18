@@ -68,6 +68,10 @@ h1 {
 .subtitle { margin-bottom: 0; font-size: 0.82rem; }
 
 .masthead-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: end; }
+.run-proof-status { max-width: 320px; padding: 7px 9px; border: 1px solid #4a5878; border-radius: 4px; color: var(--muted); background: rgba(10, 14, 27, 0.82); font-size: 0.61rem; line-height: 1.4; text-align: right; }
+.run-proof-status[data-proof="active"] { border-color: #537f7b; color: #bfe8e3; }
+.run-proof-status[data-proof="proven"] { border-color: #8f7c43; color: #fff0b5; }
+.run-proof-status[data-proof="failed"] { border-color: #744b55; color: #e6b7be; }
 
 .battle-link, .subtle-button, .scene-controls button, .story-choice {
   border: 1px solid var(--line);
@@ -153,7 +157,19 @@ h1 {
 .scene-card h3 { margin: 0; font-size: 0.9rem; color: #fff0cf; }
 .scene-number, .scene-location { color: var(--gold); font-size: 0.64rem; }
 .scene-location { max-width: 160px; color: var(--muted); text-align: right; }
-.scene-text { min-height: 73px; margin: 0; padding: 14px; color: #d8d8d5; font-size: 0.83rem; line-height: 1.7; white-space: pre-line; }
+.scene-presentation { display: grid; grid-template-columns: 88px 1fr; gap: 10px; align-items: stretch; padding: 12px 14px 4px; }
+.scene-focus-portrait { align-self: center; width: 88px; height: 88px; border: 1px solid #4a5878; background: radial-gradient(circle, #25304b, #0b1020 72%); image-rendering: pixelated; }
+.scene-atmosphere { margin: 0; color: #b8c4d8; font-size: 0.66rem; font-style: italic; line-height: 1.5; }
+.scene-text { min-height: 61px; margin: 0; padding: 8px 0 4px; color: #d8d8d5; font-size: 0.83rem; line-height: 1.7; white-space: pre-line; }
+.dialogue-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px 13px; }
+.dialogue-controls span { color: var(--muted); font-size: 0.58rem; }
+.dialogue-controls button { padding: 7px 9px; font-size: 0.62rem; }
+.presentation-transcript { margin: 0 14px 12px; border: 1px solid #34405c; background: rgba(8, 11, 23, 0.52); }
+.presentation-transcript summary { padding: 7px 9px; color: var(--muted); cursor: pointer; font-size: 0.59rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.presentation-transcript dl { display: grid; gap: 7px; margin: 0; padding: 0 9px 10px; }
+.presentation-transcript dl div { display: grid; grid-template-columns: 70px 1fr; gap: 8px; }
+.presentation-transcript dt { color: var(--gold); font-size: 0.56rem; text-transform: uppercase; }
+.presentation-transcript dd { margin: 0; color: var(--muted); font-size: 0.59rem; line-height: 1.45; }
 
 .choice-deck { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; padding: 0 14px 13px; }
 .story-choice { padding: 9px; font-size: 0.7rem; text-align: left; line-height: 1.42; }
@@ -224,6 +240,8 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
   .field-command-row { grid-template-columns: auto 1fr; }
   .field-objective-card { grid-column: 1 / -1; }
   .scene-card-header { grid-template-columns: auto 1fr; }
+  .scene-presentation { grid-template-columns: 60px 1fr; }
+  .scene-focus-portrait { width: 60px; height: 60px; }
   .scene-location { grid-column: 1 / -1; max-width: none; text-align: left; }
   .scene-controls { grid-template-columns: 1fr 1fr; }
   .progress-wrap { grid-column: 1 / -1; grid-row: 1; }

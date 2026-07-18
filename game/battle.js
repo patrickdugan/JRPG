@@ -40,6 +40,20 @@ import {
   setMemberVitals,
   syncPartyVitals,
 } from './loadout.mjs';
+import {
+  chooseRepeatBattleCommand,
+  getRepeatStepDelayMs,
+} from './repeat-battle.mjs';
+import {
+  createRunReceiptStorageAdapter,
+  recordRunFirstClear,
+  recordRunPlaytime,
+} from './run-receipt.mjs';
+import {
+  PARTY_ATLAS,
+  atlasDirectionForMovement,
+  getPartyAtlasFrame,
+} from './sprite-atlas.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -59,6 +73,8 @@ const commandHint = document.querySelector('#commandHint');
 const activeActorLabel = document.querySelector('#activeActorLabel');
 const speedButtons = [...document.querySelectorAll('[data-speed]')];
 const speedStatus = document.querySelector('#speedStatus');
+const autoGrind = document.querySelector('#autoGrind');
+const autoGrindStatus = document.querySelector('#autoGrindStatus');
 const objectiveText = document.querySelector('#objectiveText');
 const objectiveProgress = document.querySelector('#objectiveProgress');
 const resultLog = document.querySelector('#resultLog');
@@ -69,6 +85,8 @@ const campaignLink = document.querySelector('.campaign-link');
 const continueCampaign = document.querySelector('#continueCampaign');
 
 context.imageSmoothingEnabled = false;
+const battlePartyAtlasImage = new Image();
+battlePartyAtlasImage.src = PARTY_ATLAS.url;
 
 const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
@@ -95,6 +113,11 @@ let playtimeState = playtimeLoad.ok ? playtimeLoad.state : createPlaytimeState()
 let playtimeLastSample = performance.now();
 let playtimeLastActivity = playtimeLastSample;
 let playtimeUnsavedMs = 0;
+const runReceiptAdapter = createRunReceiptStorageAdapter();
+const runReceiptLoad = runReceiptAdapter.load();
+let runReceiptState = runReceiptLoad.ok && runReceiptLoad.found ? runReceiptLoad.state : null;
+let runReceiptPendingMs = 0;
+let runReceiptPendingCategory = null;
 const questAdapter = createQuestStorageAdapter();
 const fieldAdapter = createFieldStorageAdapter();
 const loadoutAdapter = createLoadoutStorageAdapter();
@@ -110,6 +133,11 @@ let selectedTargetId = '';
 let rewardRecorded = false;
 let vitalsRecorded = false;
 let enemyActionAt = null;
+let autoGrindActive = false;
+let autoActionAt = null;
+let autoSettleAt = null;
+const battleFacingByActor = new Map();
+const battleMotionUntil = new Map();
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
 
@@ -140,6 +168,52 @@ function addMessage(message) {
   uiMessages.push(message);
   uiMessages = uiMessages.slice(-24);
   announcements.textContent = message;
+}
+
+function clearPendingRunReceiptPlaytime() {
+  runReceiptPendingMs = 0;
+  runReceiptPendingCategory = null;
+}
+
+function flushRunReceiptPlaytime() {
+  if (!runReceiptState || runReceiptState.status !== 'active') {
+    clearPendingRunReceiptPlaytime();
+    return false;
+  }
+  if (runReceiptPendingMs === 0) return false;
+  const result = recordRunPlaytime(
+    runReceiptState,
+    runReceiptState.runId,
+    runReceiptPendingCategory,
+    runReceiptPendingMs,
+    { chapterId: encounter.chapterId },
+  );
+  if (!result.ok) return false;
+  runReceiptState = result.state;
+  clearPendingRunReceiptPlaytime();
+  runReceiptAdapter.save(runReceiptState);
+  return true;
+}
+
+function queueRunReceiptPlaytime(category, elapsedMs) {
+  if (!runReceiptState || runReceiptState.status !== 'active') {
+    clearPendingRunReceiptPlaytime();
+    return;
+  }
+  if (runReceiptPendingMs > 0 && category !== runReceiptPendingCategory) flushRunReceiptPlaytime();
+  if (runReceiptPendingMs === 0) runReceiptPendingCategory = category;
+  runReceiptPendingMs += elapsedMs;
+  if (runReceiptPendingMs >= 1000) flushRunReceiptPlaytime();
+}
+
+function autoInputLocked() {
+  return autoGrindActive || autoSettleAt !== null;
+}
+
+function markBattleMotion(actorId, dx, dy) {
+  battleFacingByActor.set(actorId, atlasDirectionForMovement(dx, dy, battleFacingByActor.get(actorId) ?? 'north'));
+  const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
+  battleMotionUntil.set(actorId, performance.now() + (320 / presentationSpeed));
 }
 
 function livingEnemies(snapshot = engine.snapshot()) {
@@ -240,10 +314,45 @@ function drawBattle(now = performance.now()) {
     const centerX = originX + actor.pos.x * cell + cell / 2;
     const centerY = originY + actor.pos.y * cell + cell / 2 + Math.sin(now / 170 + actor.pos.x) * Math.max(1, cell * 0.035);
     const party = actor.faction === 'party';
-    context.fillStyle = actor.instanceId === snapshot.activeActorId ? '#f5d77e' : party ? '#70c9c2' : '#d06459';
-    context.fillRect(centerX - cell * 0.23, centerY - cell * 0.25, cell * 0.46, cell * 0.5);
-    context.fillStyle = party ? '#102b39' : '#321824';
-    context.fillRect(centerX - cell * 0.12, centerY - cell * 0.12, cell * 0.24, cell * 0.17);
+    if (party && actor.instanceId === snapshot.activeActorId) {
+      context.strokeStyle = '#f5d77e';
+      context.lineWidth = 2;
+      context.strokeRect(centerX - cell * 0.3, centerY - cell * 0.34, cell * 0.6, cell * 0.68);
+    }
+    if (party && battlePartyAtlasImage.complete && battlePartyAtlasImage.naturalWidth > 0) {
+      const nearestEnemy = snapshot.actors
+        .filter((candidate) => candidate.faction === 'enemy' && candidate.hp > 0 && candidate.active !== false)
+        .sort((left, right) => Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
+          - Math.max(Math.abs(right.pos.x - actor.pos.x), Math.abs(right.pos.y - actor.pos.y))
+          || left.instanceId.localeCompare(right.instanceId))[0];
+      const fallbackFacing = nearestEnemy
+        ? atlasDirectionForMovement(Math.sign(nearestEnemy.pos.x - actor.pos.x), Math.sign(nearestEnemy.pos.y - actor.pos.y), 'north')
+        : 'north';
+      const facing = battleFacingByActor.get(actor.instanceId) ?? fallbackFacing;
+      const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
+      const phase = now < (battleMotionUntil.get(actor.instanceId) ?? 0)
+        ? Math.floor((now * presentationSpeed) / 110) % 2
+        : 0;
+      const frame = getPartyAtlasFrame(actor.templateId, facing, phase);
+      const drawHeight = cell * 1.18;
+      const drawWidth = drawHeight * (frame.width / frame.height);
+      context.drawImage(
+        battlePartyAtlasImage,
+        frame.x,
+        frame.y,
+        frame.width,
+        frame.height,
+        centerX - drawWidth / 2,
+        centerY - drawHeight * 0.57,
+        drawWidth,
+        drawHeight,
+      );
+    } else {
+      context.fillStyle = actor.instanceId === snapshot.activeActorId ? '#f5d77e' : party ? '#70c9c2' : '#d06459';
+      context.fillRect(centerX - cell * 0.23, centerY - cell * 0.25, cell * 0.46, cell * 0.5);
+      context.fillStyle = party ? '#102b39' : '#321824';
+      context.fillRect(centerX - cell * 0.12, centerY - cell * 0.12, cell * 0.24, cell * 0.17);
+    }
     if (actor.instanceId === selectedTargetId) {
       context.strokeStyle = '#fff2ab';
       context.lineWidth = 2;
@@ -306,11 +415,12 @@ function replaceOptions(select, entries, placeholder) {
 
 function renderCommands(snapshot) {
   const actor = activePartyActor(snapshot);
+  const inputLocked = autoInputLocked();
   const available = new Set(actor ? engine.getAvailableCommands(actor.instanceId) : []);
-  activeActorLabel.textContent = actor ? `${actor.name} · ${snapshot.pace} Pace` : 'Waiting for the next activation';
+  activeActorLabel.textContent = actor ? `${actor.name} · ${snapshot.pace} Pace${inputLocked ? ' · AUTO' : ''}` : 'Waiting for the next activation';
   commandButtons.forEach((button) => {
     const command = button.dataset.command;
-    const enabled = Boolean(actor) && (command === 'attack' ? available.has('skill') : available.has(command));
+    const enabled = !inputLocked && Boolean(actor) && (command === 'attack' ? available.has('skill') : available.has(command));
     button.disabled = !enabled;
     button.setAttribute('aria-pressed', String(command === selectedCommand));
   });
@@ -323,9 +433,9 @@ function renderCommands(snapshot) {
 
   const needsSkill = ['attack', 'skill'].includes(selectedCommand);
   const needsTarget = ['attack', 'skill', 'analyze'].includes(selectedCommand);
-  skillSelect.disabled = !actor || !needsSkill || selectedCommand === 'attack';
-  targetSelect.disabled = !actor || !needsTarget;
-  confirmCommand.disabled = !actor || selectedCommand === 'move'
+  skillSelect.disabled = inputLocked || !actor || !needsSkill || selectedCommand === 'attack';
+  targetSelect.disabled = inputLocked || !actor || !needsTarget;
+  confirmCommand.disabled = inputLocked || !actor || selectedCommand === 'move'
     || (needsSkill && !skillSelect.value) || (needsTarget && !targetSelect.value)
     || (selectedCommand === 'objective' && !available.has('objective'));
   const hints = {
@@ -336,7 +446,9 @@ function renderCommands(snapshot) {
     analyze: 'Reveal the selected enemy’s delivery and essence multipliers.',
     objective: 'Advance the next explicit rescue, escort, release, relay, archive, or evacuation requirement.',
   };
-  commandHint.textContent = actor ? hints[selectedCommand] : 'Enemy intent or recovery is resolving. Battle speed changes this wait, not command time.';
+  commandHint.textContent = inputLocked
+    ? 'Auto-Grind is issuing the deterministic repeat policy; manual commands are paused.'
+    : actor ? hints[selectedCommand] : 'Enemy intent or recovery is resolving. Manual repeat speed changes this wait, not command time.';
 }
 
 function formatEngineLog(entry, actors) {
@@ -375,6 +487,14 @@ function recordVictoryIfNeeded(snapshot) {
   if (snapshot.result !== 'victory' || rewardRecorded) return;
   const priorWins = getEncounterWinCount(advancementState, encounter.id);
   const reward = getEncounterRewardPreview(encounter.id, priorWins);
+  flushRunReceiptPlaytime();
+  if (priorWins === 0 && runReceiptState?.status === 'active') {
+    const receiptResult = recordRunFirstClear(runReceiptState, runReceiptState.runId, encounter.id);
+    if (receiptResult.ok) {
+      runReceiptState = receiptResult.state;
+      runReceiptAdapter.save(runReceiptState);
+    }
+  }
   advancementState = recordEncounterWin(advancementState, encounter.id, { partyIds: encounter.party?.roster });
   advancementAdapter.save(advancementState);
   const loadoutReward = grantInventory(loadoutState, { currency: reward.currency, items: reward.items });
@@ -421,17 +541,32 @@ function recordBattleVitalsIfNeeded(snapshot) {
 
 function renderSpeedControls() {
   const grindAvailable = getEncounterWinCount(advancementState, encounter.id) > 0;
+  const snapshot = engine.snapshot();
+  const settling = autoSettleAt !== null;
   speedButtons.forEach((button) => {
-    button.disabled = !grindAvailable;
+    button.disabled = !grindAvailable || autoGrindActive || settling || Boolean(snapshot.result);
     button.setAttribute('aria-pressed', String(Number(button.dataset.speed) === speedMultiplier));
   });
   speedStatus.textContent = grindAvailable
-    ? `Speed: ${speedMultiplier}× · repeat-battle intent and recovery presentation accelerated`
+    ? `Saved repeat speed: ${speedMultiplier}× · full-loop only in Auto-Grind; manual play only shortens enemy presentation`
     : 'Speed unlocks after the first clear for repeat level grinding.';
+  autoGrind.disabled = !grindAvailable || settling || Boolean(snapshot.result);
+  autoGrind.setAttribute('aria-pressed', String(autoGrindActive));
+  autoGrind.textContent = autoGrindActive ? 'Stop Auto-Grind' : 'Start Auto-Grind';
+  autoGrindStatus.textContent = !grindAvailable
+    ? 'First-clear play remains manual. Clear this encounter once to unlock deterministic Auto-Grind.'
+    : settling
+      ? `Auto-Grind ${speedMultiplier}× is presenting the terminal result and reward.`
+      : autoGrindActive
+        ? `Auto-Grind ${speedMultiplier}× schedules commands, enemy turns, recovery, result, and reward at the saved speed.`
+        : 'Repeat-only. Uses the deterministic policy; speed does not alter decisions or rewards.';
 }
 
 function render() {
   const snapshot = engine.snapshot();
+  const settlementReady = autoSettleAt === null;
+  // Auto-Grind may delay the terminal reveal, but an earned victory must be
+  // durable before the player can restart, leave, reload, or enter BFCache.
   recordVictoryIfNeeded(snapshot);
   recordBattleVitalsIfNeeded(snapshot);
   encounterTitle.textContent = encounter.name;
@@ -440,28 +575,112 @@ function render() {
   battleClock.textContent = formatClock(snapshot.nowMs);
   roundLabel.textContent = `ACTIVATION ${engine.activationCount}`;
   phaseLabel.textContent = phaseName(snapshot);
-  battleStateBadge.textContent = snapshot.result?.toUpperCase() ?? (snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND ? 'COMMAND' : 'INTENT');
+  battleStateBadge.textContent = autoSettleAt !== null
+    ? 'RESOLVING'
+    : snapshot.result?.toUpperCase() ?? (snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND ? 'COMMAND' : 'INTENT');
   renderCombatants(snapshot);
   renderTempo(snapshot);
   renderCommands(snapshot);
   renderSpeedControls();
   renderObjective(snapshot);
   renderLog(snapshot);
-  continueCampaign.hidden = snapshot.result !== 'victory';
-  if (snapshot.result === 'victory') continueCampaign.focus({ preventScroll: true });
+  continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady;
+  if (snapshot.result === 'victory' && settlementReady) continueCampaign.focus({ preventScroll: true });
   drawBattle();
-  if (snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyActionAt === null) {
+  if (!autoInputLocked() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyActionAt === null) {
     enemyActionAt = performance.now() + (650 / speedMultiplier);
   }
 }
 
+function executeRepeatPolicyCommand(actorId, command) {
+  if (command.type === 'move') {
+    const result = engine.move(actorId, command.dx, command.dy);
+    if (result.ok) markBattleMotion(actorId, command.dx, command.dy);
+    return result;
+  }
+  if (command.type === 'skill') return engine.useSkill(actorId, command.skillId, command.targetId);
+  if (command.type === 'objective') return engine.performObjectiveAction(actorId, command.action);
+  if (command.type === 'guard') return engine.guard(actorId);
+  return { ok: false, reason: `Unsupported Auto-Grind command ${command.type}.` };
+}
+
+function stopAutoGrind(message) {
+  autoGrindActive = false;
+  autoActionAt = null;
+  if (message) addMessage(message);
+}
+
+function executeAutoGrindStep(now) {
+  if (!autoGrindActive || engine.result) return;
+  const before = engine.snapshot();
+  const beforePulse = before.nowPulse;
+  let stepType;
+  let result;
+  try {
+    if (before.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND) {
+      const command = chooseRepeatBattleCommand(engine);
+      if (!command) throw new Error('The repeat policy could not select a party command.');
+      stepType = command.type;
+      result = executeRepeatPolicyCommand(before.activeActorId, command);
+    } else if (before.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
+      stepType = 'enemyActivation';
+      result = engine.resolveEnemyActivation();
+    } else {
+      throw new Error(`Unexpected Auto-Grind phase ${before.phase}.`);
+    }
+  } catch (error) {
+    stopAutoGrind(`Auto-Grind stopped: ${error.message}`);
+    render();
+    return;
+  }
+  if (!result?.ok) {
+    stopAutoGrind(`Auto-Grind stopped: ${result?.reason ?? 'a deterministic command failed.'}`);
+    render();
+    return;
+  }
+  const after = engine.snapshot();
+  const recoveredPulses = Math.max(0, after.nowPulse - beforePulse);
+  const stepDelay = getRepeatStepDelayMs(stepType, speedMultiplier, recoveredPulses);
+  if (after.result) {
+    stopAutoGrind();
+    const terminalDelay = getRepeatStepDelayMs('resolution', speedMultiplier)
+      + (after.result === 'victory' ? getRepeatStepDelayMs('reward', speedMultiplier) : 0);
+    autoSettleAt = now + stepDelay + terminalDelay;
+    addMessage(`Auto-Grind reached ${after.result}; presenting the deterministic result${after.result === 'victory' ? ' and reward' : ''}.`);
+  } else {
+    autoActionAt = now + stepDelay;
+  }
+  render();
+}
+
+function toggleAutoGrind() {
+  if (autoGrindActive) {
+    stopAutoGrind('Auto-Grind stopped. Manual repeat controls restored.');
+    render();
+    return;
+  }
+  if (getEncounterWinCount(advancementState, encounter.id) === 0) {
+    addMessage('Auto-Grind unlocks only after this encounter\'s first clear.');
+    render();
+    return;
+  }
+  if (engine.result || autoSettleAt !== null) return;
+  autoGrindActive = true;
+  enemyActionAt = null;
+  autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
+  addMessage(`Auto-Grind started at ${speedMultiplier}×. The full repeat presentation uses the saved speed.`);
+  render();
+}
+
 function selectCommand(command) {
+  if (autoInputLocked()) return;
   selectedCommand = command;
   if (command === 'attack') skillSelect.selectedIndex = Math.min(1, skillSelect.options.length - 1);
   render();
 }
 
 function executeSelectedCommand() {
+  if (autoInputLocked()) return;
   const snapshot = engine.snapshot();
   const actor = activePartyActor(snapshot);
   if (!actor) return;
@@ -486,11 +705,13 @@ function executeSelectedCommand() {
 }
 
 function moveActive(dx, dy) {
+  if (autoInputLocked()) return;
   const snapshot = engine.snapshot();
   const actor = activePartyActor(snapshot);
   if (!actor) return;
   selectedCommand = 'move';
   const result = engine.move(actor.instanceId, dx, dy);
+  if (result.ok) markBattleMotion(actor.instanceId, dx, dy);
   if (!result.ok) addMessage(result.reason);
   render();
 }
@@ -502,6 +723,7 @@ targetSelect.addEventListener('change', () => {
   drawBattle();
 });
 enemyPanel.addEventListener('click', (event) => {
+  if (autoInputLocked()) return;
   const card = event.target.closest('[data-actor-id]');
   if (!card) return;
   selectedTargetId = card.dataset.actorId;
@@ -510,6 +732,7 @@ enemyPanel.addEventListener('click', (event) => {
 });
 
 speedButtons.forEach((button) => button.addEventListener('click', () => {
+  if (autoInputLocked() || engine.result) return;
   if (getEncounterWinCount(advancementState, encounter.id) === 0) {
     addMessage('Battle speed unlocks after this encounter’s first clear.');
     render();
@@ -522,7 +745,11 @@ speedButtons.forEach((button) => button.addEventListener('click', () => {
   render();
 }));
 
+autoGrind.addEventListener('click', toggleAutoGrind);
+
 restartBattle.addEventListener('click', () => {
+  stopAutoGrind();
+  autoSettleAt = null;
   engine = createEngine();
   rewardRecorded = false;
   vitalsRecorded = false;
@@ -547,6 +774,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 canvas.addEventListener('click', (event) => {
+  if (autoInputLocked()) return;
   const bounds = canvas.getBoundingClientRect();
   const scaleX = canvas.width / bounds.width;
   const scaleY = canvas.height / bounds.height;
@@ -575,23 +803,31 @@ function tick(now) {
     lastActivityMs: playtimeLastActivity,
     visible: document.visibilityState === 'visible',
   });
-  const battleResolved = engine.snapshot().result !== null;
+  const battleResolved = engine.snapshot().result !== null && autoSettleAt === null;
   if (!inactive && !battleResolved && elapsed > 0) {
     const category = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
     playtimeState = recordPlaytime(playtimeState, category, elapsed, { chapterId: encounter.chapterId });
+    queueRunReceiptPlaytime(category, elapsed);
     playtimeUnsavedMs += elapsed;
     if (playtimeUnsavedMs >= 10_000) {
       playtimeAdapter.save(playtimeState);
       playtimeUnsavedMs = 0;
     }
   }
-  if (enemyActionAt !== null && now >= enemyActionAt && engine.snapshot().phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
+  if (autoSettleAt !== null && now >= autoSettleAt) {
+    autoSettleAt = null;
+    render();
+  }
+  if (autoGrindActive && autoActionAt !== null && now >= autoActionAt) {
+    autoActionAt = null;
+    executeAutoGrindStep(now);
+  } else if (!autoInputLocked() && enemyActionAt !== null && now >= enemyActionAt && engine.snapshot().phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
     const result = engine.resolveEnemyActivation();
     if (!result.ok) addMessage(result.reason);
     enemyActionAt = null;
     render();
   }
-  drawBattle(now * speedMultiplier);
+  drawBattle(now);
   requestAnimationFrame(tick);
 }
 
@@ -605,17 +841,22 @@ function markPlaytimeActivity() {
 
 window.addEventListener('pointerdown', markPlaytimeActivity, { capture: true, passive: true });
 window.addEventListener('keydown', markPlaytimeActivity, { capture: true });
-window.addEventListener('pagehide', () => playtimeAdapter.save(playtimeState));
+window.addEventListener('pagehide', () => {
+  flushRunReceiptPlaytime();
+  playtimeAdapter.save(playtimeState);
+  if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+});
 window.addEventListener('pageshow', (event) => {
-  if (!event.persisted) return;
-  const refreshed = playtimeAdapter.load();
-  if (refreshed.ok) playtimeState = refreshed.state;
-  const now = performance.now();
-  playtimeLastSample = now;
-  playtimeLastActivity = now;
-  playtimeUnsavedMs = 0;
+  // A cached battle owns an engine and settlement flags from the old run.
+  // Reloading is the smallest safe rehydration boundary after New Game or
+  // any camp/loadout changes made while this page was cached.
+  if (event.persisted) window.location.reload();
 });
 document.addEventListener('visibilitychange', () => {
   playtimeLastSample = performance.now();
-  if (document.visibilityState === 'hidden') playtimeAdapter.save(playtimeState);
+  if (document.visibilityState === 'hidden') {
+    flushRunReceiptPlaytime();
+    playtimeAdapter.save(playtimeState);
+    if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+  }
 });

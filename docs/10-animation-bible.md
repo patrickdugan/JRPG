@@ -5,6 +5,8 @@
 **Applies to:** field actors, combat actors, enemies, bosses, hazards, and battle VFX
 **Primary slice:** FP-1 Takamine Vertical Slice
 
+**Runtime note (2026-07-18):** the provisional generated 6×8 party atlas now addresses all six members and four idle/walk facing pairs in Camp, field, scene-focus, and party battle rendering. Exact frame addressing and movement-facing reduction are tested in `game/sprite-atlas.mjs`; bespoke attack, hit, Guard, cast, Recovery, enemy, boss, and VFX clips in this bible remain an art-production gate.
+
 ## 1. Purpose and non-negotiables
 
 Animation must make a deliberate, spatial turn system easier to read. It is not decoration and it must never redefine a combat result.

@@ -4,20 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0b0d1b">
-    <title>Bells of the Black Chrysanthemum — Campaign Atlas</title>
+    <title>Bells of the Black Chrysanthemum — Campaign</title>
     <link rel="stylesheet" href="campaign.css">
   </head>
   <body>
     <main class="campaign-shell">
       <header class="campaign-masthead">
         <div>
-          <p class="eyebrow">CAMPAIGN BUILD · PRODUCTION ATLAS</p>
+          <p class="eyebrow">FULL CAMPAIGN · ACTIVE BUILD</p>
           <h1>Bells of the Black Chrysanthemum</h1>
-          <p class="subtitle">A playable chapter, scene, encounter, and map framework</p>
+          <p class="subtitle">Carry the names through eleven chapters of rain, bells, and witness</p>
         </div>
         <div class="masthead-actions">
+          <span id="runProofStatus" class="run-proof-status" role="status">Unverified save</span>
           <a class="subtle-button" href="camp.html">Camp &amp; Loadout</a>
-          <a class="battle-link" href="index.html">Play FP-0 Combat Proof</a>
+          <a class="battle-link" href="index.html">Training Court</a>
           <button id="resetCampaign" class="subtle-button" type="button">New Game / clear all saves</button>
         </div>
       </header>
@@ -73,7 +74,28 @@
               <h3 id="sceneTitle"></h3>
               <span id="sceneLocation" class="scene-location"></span>
             </div>
-            <p id="sceneText" class="scene-text"></p>
+            <div class="scene-presentation">
+              <canvas id="sceneFocusPortrait" class="scene-focus-portrait" width="96" height="96" aria-label="Scene focus portrait"></canvas>
+              <div>
+                <p id="sceneAtmosphere" class="scene-atmosphere"></p>
+                <p id="sceneText" class="scene-text"></p>
+              </div>
+            </div>
+            <div class="dialogue-controls">
+              <span id="dialogueProgress">Dialogue 1/1</span>
+              <button id="continueDialogue" class="subtle-button" type="button">Continue dialogue</button>
+            </div>
+            <details class="presentation-transcript">
+              <summary>Presentation transcript</summary>
+              <dl>
+                <div><dt>Score</dt><dd id="sceneMusicCue"></dd></div>
+                <div><dt>Camera</dt><dd id="sceneCameraCue"></dd></div>
+                <div><dt>Entrance</dt><dd id="sceneEntranceCue"></dd></div>
+                <div><dt>Gesture</dt><dd id="sceneGestureCue"></dd></div>
+                <div><dt>Blocking</dt><dd id="sceneBlockingCue"></dd></div>
+                <div><dt>Transition</dt><dd id="sceneTransitionCue"></dd></div>
+              </dl>
+            </details>
             <div id="choiceDeck" class="choice-deck" aria-label="Story choices"></div>
             <p id="choiceResult" class="choice-result" role="status"></p>
           </section>
@@ -124,7 +146,7 @@
         </aside>
       </section>
 
-      <p class="footer-note">This production-foundation build connects the full campaign ledger, persistent field routes, encounters, side stories, advancement, and camp systems. Bespoke encounter presentation and a measured 20-hour end-to-end playthrough remain required before the game can be called complete.</p>
+      <p class="footer-note">The clean-run receipt counts active, visible play only and requires all 60 story scenes plus all 23 canonical first clears. The authored duration target remains unproven until one receipt records the full campaign and at least 20 active hours.</p>
     </main>
     <script type="module" src="campaign.js"></script>
   </body>

@@ -33,6 +33,10 @@ import {
   isPlaytimeInactive,
   recordPlaytime,
 } from './playtime.mjs';
+import {
+  createRunReceiptStorageAdapter,
+  recordRunPlaytime,
+} from './run-receipt.mjs';
 
 const partyList = document.querySelector('#campPartyList');
 const partyCurrency = document.querySelector('#partyCurrency');
@@ -70,9 +74,13 @@ loadoutAdapter.save(loadoutState);
 const playtimeAdapter = createPlaytimeStorageAdapter();
 const playtimeLoaded = playtimeAdapter.load();
 let playtimeState = playtimeLoaded.ok ? playtimeLoaded.state : createPlaytimeState();
+const runReceiptAdapter = createRunReceiptStorageAdapter();
+const runReceiptLoaded = runReceiptAdapter.load();
+let runReceiptState = runReceiptLoaded.ok && runReceiptLoaded.found ? runReceiptLoaded.state : null;
 let playtimeLast = performance.now();
 let playtimeLastActivity = performance.now();
 let playtimeUnsaved = 0;
+let runReceiptPendingMs = 0;
 let selectedMemberId = getParty(advancementState, { unlockedOnly: true })[0]?.id ?? 'ren';
 let inventoryFilter = 'all';
 
@@ -335,6 +343,7 @@ function tick(now) {
   });
   if (!inactive && elapsed) {
     playtimeState = recordPlaytime(playtimeState, 'menusAndRest', elapsed);
+    queueRunReceiptPlaytime(elapsed);
     playtimeUnsaved += elapsed;
     campPlaytime.textContent = `${formatPlaytime(playtimeState.totalMs)} active play`;
     if (playtimeUnsaved >= 10_000) { playtimeAdapter.save(playtimeState); playtimeUnsaved = 0; }
@@ -342,14 +351,48 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 
+function flushRunReceiptPlaytime() {
+  if (!runReceiptState || runReceiptState.status !== 'active') {
+    runReceiptPendingMs = 0;
+    return false;
+  }
+  if (runReceiptPendingMs === 0) return false;
+  const result = recordRunPlaytime(
+    runReceiptState,
+    runReceiptState.runId,
+    'menusAndRest',
+    runReceiptPendingMs,
+  );
+  if (!result.ok) return false;
+  runReceiptState = result.state;
+  runReceiptPendingMs = 0;
+  runReceiptAdapter.save(runReceiptState);
+  return true;
+}
+
+function queueRunReceiptPlaytime(elapsedMs) {
+  if (!runReceiptState || runReceiptState.status !== 'active') {
+    runReceiptPendingMs = 0;
+    return;
+  }
+  runReceiptPendingMs += elapsedMs;
+  if (runReceiptPendingMs >= 1000) flushRunReceiptPlaytime();
+}
+
 window.addEventListener('pagehide', () => {
+  flushRunReceiptPlaytime();
   loadoutAdapter.save(loadoutState);
   playtimeAdapter.save(playtimeState);
+  if (runReceiptState) runReceiptAdapter.save(runReceiptState);
 });
 document.addEventListener('visibilitychange', () => {
   playtimeLast = performance.now();
   playtimeLastActivity = performance.now();
-  if (document.visibilityState === 'hidden') playtimeAdapter.save(playtimeState);
+  if (document.visibilityState === 'hidden') {
+    flushRunReceiptPlaytime();
+    playtimeAdapter.save(playtimeState);
+    if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+  }
 });
 window.addEventListener('pointerdown', () => { playtimeLastActivity = performance.now(); }, { passive: true });
 window.addEventListener('keydown', () => { playtimeLastActivity = performance.now(); }, { passive: true });
@@ -361,6 +404,9 @@ window.addEventListener('pageshow', (event) => {
   if (refreshedLoadout.ok) loadoutState = refreshedLoadout.value;
   const refreshedPlaytime = playtimeAdapter.load();
   if (refreshedPlaytime.ok) playtimeState = refreshedPlaytime.state;
+  const refreshedRunReceipt = runReceiptAdapter.load();
+  runReceiptState = refreshedRunReceipt.ok && refreshedRunReceipt.found ? refreshedRunReceipt.state : null;
+  runReceiptPendingMs = 0;
   const syncedParty = syncPartyVitals(loadoutState, getParty(advancementState));
   if (syncedParty.ok) loadoutState = syncedParty.state;
   const unlockedIds = new Set(getParty(advancementState, { unlockedOnly: true }).map((member) => member.id));

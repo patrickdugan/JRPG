@@ -1321,8 +1321,8 @@ export const LEVELS = [
   }),
   sceneHub({
     id: 'krh-audience-hall', chapterId: 'chapter-9', name: 'Kurohana Living Audience Hall', palette: courtPalette,
-    blocked: ['0,0', '1,0', '2,0', '3,0', '4,0', '15,0', '16,0', '17,0', '18,0', '19,0', '6,2', '7,2', '8,2', '9,2', '6,3', '9,3', '6,4', '7,4', '8,4', '9,4'],
-    terrain: [{ at: '4,4', tag: 'archive-floor' }, { at: '5,4', tag: 'archive-floor' }, { at: '10,4', tag: 'archive-floor' }, { at: '11,4', tag: 'archive-floor' }],
+    blocked: ['0,0', '1,0', '2,0', '3,0', '4,0', '15,0', '16,0', '17,0', '18,0', '19,0', '6,2', '7,2', '8,2', '9,2', '6,3', '9,3', '6,4', '8,4', '9,4'],
+    terrain: [{ at: '4,4', tag: 'archive-floor' }, { at: '5,4', tag: 'archive-floor' }, { at: '7,4', tag: 'archive-floor' }, { at: '10,4', tag: 'archive-floor' }, { at: '11,4', tag: 'archive-floor' }],
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'conservatory', at: '18,3', destinationLevelId: 'krh-blood-conservatory', condition: 'ujiro-custody-scene-complete' }],
     objective: 'Confront Ujiro’s last ledger and place him in public custody without destroying the evidence.',

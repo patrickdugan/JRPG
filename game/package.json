@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "check": "node --check engine.mjs && node --check game.js && node --check campaign.js && node --check battle.js && node --check camp.js && node --check campaign-combat.mjs && node --check progression.mjs && node --check advancement.mjs && node --check field-runtime.mjs && node --check quest-runtime.mjs && node --check loadout.mjs && node --check playtime.mjs && node --check content/campaign.mjs && node --check content/levels.mjs && node --check content/encounters.mjs && node --check content/sidequests.mjs",
+    "check": "node --check engine.mjs && node --check game.js && node --check campaign.js && node --check battle.js && node --check camp.js && node --check campaign-combat.mjs && node --check canonical-run.mjs && node --check progression.mjs && node --check advancement.mjs && node --check field-runtime.mjs && node --check quest-runtime.mjs && node --check narrative-runtime.mjs && node --check sprite-atlas.mjs && node --check repeat-battle.mjs && node --check run-receipt.mjs && node --check battle-solver.mjs && node --check loadout.mjs && node --check playtime.mjs && node --check content/campaign.mjs && node --check content/levels.mjs && node --check content/encounters.mjs && node --check content/sidequests.mjs && node --check content/scene-direction.mjs",
     "test": "node --test",
     "serve": "python -m http.server 8080"
   }

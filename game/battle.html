@@ -106,13 +106,21 @@
               <li class="panel-placeholder">Initiative pending.</li>
             </ol>
             <fieldset id="speedControls" class="speed-controls">
-              <legend>Battle speed</legend>
+              <legend>Repeat speed</legend>
               <div class="speed-options">
                 <button type="button" data-speed="1" aria-label="Set battle speed to one times" aria-pressed="true">1×</button>
                 <button type="button" data-speed="2" aria-label="Set battle speed to two times" aria-pressed="false">2×</button>
                 <button type="button" data-speed="4" aria-label="Set battle speed to four times" aria-pressed="false">4×</button>
               </div>
               <p id="speedStatus" class="speed-status" role="status">Speed: 1×</p>
+              <div class="auto-grind-controls">
+                <button id="autoGrind" class="auto-grind-button" type="button" aria-pressed="false" disabled>
+                  Start Auto-Grind
+                </button>
+                <p id="autoGrindStatus" class="auto-grind-status">
+                  Auto-Grind unlocks after this encounter's first clear.
+                </p>
+              </div>
             </fieldset>
           </section>
 

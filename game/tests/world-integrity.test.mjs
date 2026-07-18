@@ -54,6 +54,22 @@ function canReach(level, from, destination) {
   return false;
 }
 
+function reachableOpenKeys(level, from = level.spawn) {
+  const start = pointOf(from);
+  const seen = new Set([start.key]);
+  const queue = [start];
+  while (queue.length) {
+    const current = queue.shift();
+    for (const next of legalNeighbors(level, current)) {
+      const normalized = pointOf(next);
+      if (seen.has(normalized.key)) continue;
+      seen.add(normalized.key);
+      queue.push(normalized);
+    }
+  }
+  return seen;
+}
+
 test('every authored scene and named campaign map has an explicit resolvable level', () => {
   const chapters = getAllChapters();
   const mapReferences = chapters.flatMap((chapter) => chapter.maps ?? []);
@@ -73,6 +89,24 @@ test('every level spawn and exit honors exact collision rules and exits remain r
       assert.ok(getLevel(exit.destinationLevelId), `${level.id}:${exit.id} has an unresolved destination`);
       assert.ok(isOpen(level, exit), `${level.id}:${exit.id} must be on an open space`);
       assert.ok(canReach(level, level.spawn, exit), `${level.id}:${exit.id} must be reachable with exact 8-way movement`);
+    }
+  }
+});
+
+test('every field interaction and placed encounter is reachable under the live range rules', () => {
+  for (const level of LEVELS) {
+    const reachable = reachableOpenKeys(level);
+    for (const item of level.interactables ?? []) {
+      const target = pointOf(item);
+      const usable = [...reachable].some((key) => {
+        const position = pointOf(key);
+        return Math.max(Math.abs(position.x - target.x), Math.abs(position.y - target.y)) <= 1;
+      });
+      assert.ok(usable, `${level.id}:${item.id} must have a reachable interaction-range space`);
+    }
+    for (const trigger of level.encounterTriggers ?? []) {
+      const reachableTile = (trigger.tiles ?? []).some((key) => isOpen(level, key) && reachable.has(pointOf(key).key));
+      assert.ok(reachableTile, `${level.id}:${trigger.id} must have a reachable open trigger space`);
     }
   }
 });

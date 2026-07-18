@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`game/content/campaign.mjs` is the canonical runtime-facing campaign source for *Bells of the Black Chrysanthemum*. It translates the locked material in `docs/01-vision-doc.md`, `docs/03-beats-outline.md`, and `docs/04-detailed-outline.md` into plain JavaScript data without coupling story content to a renderer or combat engine.
+`game/content/campaign.mjs` is the canonical runtime-facing campaign source for *Bells of the Black Chrysanthemum*. It translates the locked material in `docs/01-vision-doc.md`, `docs/03-beats-outline.md`, and `docs/04-detailed-outline.md` into plain JavaScript data without coupling story content to a renderer or combat engine. `game/content/scene-direction.mjs` supplies a separate immutable presentation script for the same beat IDs, so staging can grow without changing save-stable story records.
 
 It covers the Prologue, Chapters 1-9, and Epilogue, plus the concrete 28-34 minute FP-1 Takamine first-playable sequence. It is a content contract, not an implementation of field movement, combat, save state, UI, animation, or localization.
 
@@ -13,6 +13,8 @@ The module exports:
 - `CAMPAIGN`: immutable campaign data.
 - `getChapter(id)`: returns a chapter by stable string ID or chapter number, otherwise `null`.
 - `getAllChapters()`: returns chapters in canonical story order.
+
+The presentation companion exports `SCENE_DIRECTIONS`, `getSceneDirection(beatId)`, chapter/all lookup helpers, and `validateSceneDirections()`. Its 60 records cover every beat exactly once and each author atmosphere, score, camera, entrance, cast gesture, blocking, and transition cues. The browser runtime renders atmosphere and a collapsed presentation transcript; the cues never alter simulation state or claim that unimplemented audio/animation has played.
 
 The core shape is intentionally small:
 
@@ -113,6 +115,8 @@ After changing the module, run:
 
 ```powershell
 node --check game/content/campaign.mjs
+node --check game/content/scene-direction.mjs
+node --test game/tests/scene-direction.test.mjs
 node -e "import('./game/content/campaign.mjs').then(({ CAMPAIGN, getChapter }) => { if (CAMPAIGN.chapters.length !== 11) throw new Error('Expected 11 campaign entries'); if (!getChapter('chapter-2')) throw new Error('Chapter 2 missing'); if (CAMPAIGN.firstPlayable.expectedMinutes !== 32) throw new Error('FP-1 duration drift'); console.log('campaign content OK'); })"
 ```
 

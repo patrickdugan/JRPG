@@ -2,6 +2,7 @@ import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
 import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter } from './content/sidequests.mjs';
+import { getSceneDirection } from './content/scene-direction.mjs';
 import {
   createAdvancementState,
   createAdvancementStorageAdapter,
@@ -51,6 +52,13 @@ import {
   recordPlaytime,
 } from './playtime.mjs';
 import {
+  createRunReceipt,
+  createRunReceiptStorageAdapter,
+  getRunProofReport,
+  recordRunBeatCompletion,
+  recordRunPlaytime,
+} from './run-receipt.mjs';
+import {
   acceptQuest,
   advanceQuestObjective,
   completeQuest,
@@ -59,6 +67,17 @@ import {
   getQuestAvailability,
   getQuestProgress,
 } from './quest-runtime.mjs';
+import {
+  advanceNarrative,
+  createNarrativeState,
+  createNarrativeStorageAdapter,
+  getNarrativeProgress,
+} from './narrative-runtime.mjs';
+import {
+  PARTY_ATLAS,
+  atlasDirectionForMovement,
+  getPartyAtlasFrame,
+} from './sprite-atlas.mjs';
 
 const chapterList = document.querySelector('#chapterList');
 const completionLabel = document.querySelector('#completionLabel');
@@ -67,12 +86,28 @@ const chapterTitle = document.querySelector('#chapterTitle');
 const chapterObjective = document.querySelector('#chapterObjective');
 const mapCanvas = document.querySelector('#mapCanvas');
 const mapCtx = mapCanvas.getContext('2d');
+mapCtx.imageSmoothingEnabled = false;
+const partyAtlasImage = new Image();
+partyAtlasImage.src = PARTY_ATLAS.url;
+partyAtlasImage.addEventListener('load', () => renderSceneDirection(getBeat()), { once: true });
 const mapName = document.querySelector('#mapName');
 const mapLegend = document.querySelector('#mapLegend');
 const sceneNumber = document.querySelector('#sceneNumber');
 const sceneTitle = document.querySelector('#sceneTitle');
 const sceneLocation = document.querySelector('#sceneLocation');
 const sceneText = document.querySelector('#sceneText');
+const sceneAtmosphere = document.querySelector('#sceneAtmosphere');
+const sceneFocusPortrait = document.querySelector('#sceneFocusPortrait');
+const scenePortraitCtx = sceneFocusPortrait.getContext('2d');
+scenePortraitCtx.imageSmoothingEnabled = false;
+const sceneMusicCue = document.querySelector('#sceneMusicCue');
+const sceneCameraCue = document.querySelector('#sceneCameraCue');
+const sceneEntranceCue = document.querySelector('#sceneEntranceCue');
+const sceneGestureCue = document.querySelector('#sceneGestureCue');
+const sceneBlockingCue = document.querySelector('#sceneBlockingCue');
+const sceneTransitionCue = document.querySelector('#sceneTransitionCue');
+const dialogueProgress = document.querySelector('#dialogueProgress');
+const continueDialogue = document.querySelector('#continueDialogue');
 const choiceDeck = document.querySelector('#choiceDeck');
 const choiceResult = document.querySelector('#choiceResult');
 const previousScene = document.querySelector('#previousScene');
@@ -80,6 +115,7 @@ const nextScene = document.querySelector('#nextScene');
 const progressLabel = document.querySelector('#progressLabel');
 const progressFill = document.querySelector('#progressFill');
 const resetCampaign = document.querySelector('#resetCampaign');
+const runProofStatus = document.querySelector('#runProofStatus');
 const encounterName = document.querySelector('#encounterName');
 const encounterObjective = document.querySelector('#encounterObjective');
 const encounterLesson = document.querySelector('#encounterLesson');
@@ -111,9 +147,15 @@ let advancementState = loadedAdvancement.ok ? loadedAdvancement.state : createAd
 const playtimeAdapter = createPlaytimeStorageAdapter();
 const loadedPlaytime = playtimeAdapter.load();
 let playtimeState = loadedPlaytime.ok ? loadedPlaytime.state : createPlaytimeState();
+const runReceiptAdapter = createRunReceiptStorageAdapter();
+const loadedRunReceipt = runReceiptAdapter.load();
+let runReceiptState = loadedRunReceipt.ok && loadedRunReceipt.found ? loadedRunReceipt.state : null;
 const questAdapter = createQuestStorageAdapter();
 const loadedQuests = questAdapter.load();
 let questState = loadedQuests.ok ? loadedQuests.state : createQuestState();
+const narrativeAdapter = createNarrativeStorageAdapter();
+const loadedNarrative = narrativeAdapter.load();
+let narrativeState = loadedNarrative.ok ? loadedNarrative.state : createNarrativeState();
 const loadoutAdapter = createLoadoutStorageAdapter();
 const loadedLoadout = loadoutAdapter.load();
 let loadoutState = loadedLoadout.ok ? loadedLoadout.value : createLoadoutState();
@@ -121,7 +163,12 @@ let playtimeLastSample = performance.now();
 let playtimeLastActivity = performance.now();
 let playtimeCategory = 'narrative';
 let playtimeUnsavedMs = 0;
+let runReceiptPendingMs = 0;
+let runReceiptPendingCategory = null;
+let runReceiptPendingChapterId = null;
 let animationNow = 0;
+let fieldFacing = 'south';
+let fieldWalkUntil = 0;
 const openingLevel = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
 const fieldAdapter = createFieldStorageAdapter();
 const loadedField = fieldAdapter.load({ levelId: openingLevel.id, beatId: getCurrentBeat(campaignState).id });
@@ -221,13 +268,57 @@ function sampleCampaignPlaytime(now) {
     lastActivityMs: playtimeLastActivity,
     visible: document.visibilityState === 'visible',
   })) return;
-  playtimeState = recordPlaytime(playtimeState, playtimeCategory, elapsed, { chapterId: getChapter().id });
+  const chapterId = getChapter().id;
+  playtimeState = recordPlaytime(playtimeState, playtimeCategory, elapsed, { chapterId });
+  queueRunReceiptPlaytime(playtimeCategory, elapsed, chapterId);
   fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
   playtimeUnsavedMs += elapsed;
   if (playtimeUnsavedMs >= 10_000) {
     playtimeAdapter.save(playtimeState);
     playtimeUnsavedMs = 0;
   }
+}
+
+function clearPendingRunReceiptPlaytime() {
+  runReceiptPendingMs = 0;
+  runReceiptPendingCategory = null;
+  runReceiptPendingChapterId = null;
+}
+
+function flushRunReceiptPlaytime() {
+  if (!runReceiptState || runReceiptState.status !== 'active') {
+    clearPendingRunReceiptPlaytime();
+    return false;
+  }
+  if (runReceiptPendingMs === 0) return false;
+  const result = recordRunPlaytime(
+    runReceiptState,
+    runReceiptState.runId,
+    runReceiptPendingCategory,
+    runReceiptPendingMs,
+    { chapterId: runReceiptPendingChapterId },
+  );
+  if (!result.ok) return false;
+  runReceiptState = result.state;
+  clearPendingRunReceiptPlaytime();
+  runReceiptAdapter.save(runReceiptState);
+  return true;
+}
+
+function queueRunReceiptPlaytime(category, elapsedMs, chapterId) {
+  if (!runReceiptState || runReceiptState.status !== 'active') {
+    clearPendingRunReceiptPlaytime();
+    return;
+  }
+  const changedBucket = runReceiptPendingMs > 0
+    && (category !== runReceiptPendingCategory || chapterId !== runReceiptPendingChapterId);
+  if (changedBucket) flushRunReceiptPlaytime();
+  if (runReceiptPendingMs === 0) {
+    runReceiptPendingCategory = category;
+    runReceiptPendingChapterId = chapterId;
+  }
+  runReceiptPendingMs += elapsedMs;
+  if (runReceiptPendingMs >= 1000) flushRunReceiptPlaytime();
 }
 
 function sampleFieldRuntime(now) {
@@ -558,12 +649,14 @@ function launchPlacedEncounter(event, beat) {
 
 function attemptFieldMove(dx, dy) {
   playtimeCategory = 'exploration';
+  fieldFacing = atlasDirectionForMovement(dx, dy, fieldFacing);
   const chapter = getChapter();
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
   ensureFieldPosition(level);
   const result = moveFieldBy(fieldRuntimeState, dx, dy, { flags: externalFieldFlags() });
   fieldRuntimeState = result.state;
+  if (result.moved) fieldWalkUntil = performance.now() + 320;
   fieldAdapter.save(fieldRuntimeState);
   fieldFeedback.textContent = fieldEventMessage(level, result);
   for (const event of result.events.filter((entry) => entry.type === 'hazard-hit')) {
@@ -685,13 +778,34 @@ function drawMap(level, encounter, now) {
 
   const partyPosition = fieldPosition();
   const partyX = originX + partyPosition.x * cell + cell / 2;
-  const partyY = originY + partyPosition.y * cell + cell / 2 + Math.sin(now / 150) * Math.max(1, cell * 0.045);
-  mapCtx.fillStyle = '#0b1020';
-  mapCtx.fillRect(partyX - cell * 0.2, partyY - cell * 0.24, cell * 0.4, cell * 0.48);
-  mapCtx.fillStyle = '#f6d47e';
-  mapCtx.fillRect(partyX - cell * 0.14, partyY - cell * 0.2, cell * 0.28, cell * 0.38);
-  mapCtx.fillStyle = '#e6cb80';
-  mapCtx.fillRect(partyX - cell * 0.055, partyY - cell * 0.13, cell * 0.11, cell * 0.11);
+  const partyY = originY + partyPosition.y * cell + cell / 2;
+  mapCtx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+  mapCtx.beginPath();
+  mapCtx.ellipse(partyX, partyY + cell * 0.27, cell * 0.25, cell * 0.09, 0, 0, Math.PI * 2);
+  mapCtx.fill();
+  if (partyAtlasImage.complete && partyAtlasImage.naturalWidth > 0) {
+    const moving = now < fieldWalkUntil;
+    const phase = moving ? Math.floor(now / 110) % 2 : 0;
+    const frame = getPartyAtlasFrame('ren', fieldFacing, phase);
+    const drawHeight = cell * 1.38;
+    const drawWidth = drawHeight * (frame.width / frame.height);
+    mapCtx.drawImage(
+      partyAtlasImage,
+      frame.x,
+      frame.y,
+      frame.width,
+      frame.height,
+      partyX - drawWidth / 2,
+      partyY - drawHeight * 0.68,
+      drawWidth,
+      drawHeight,
+    );
+  } else {
+    mapCtx.fillStyle = '#0b1020';
+    mapCtx.fillRect(partyX - cell * 0.2, partyY - cell * 0.24, cell * 0.4, cell * 0.48);
+    mapCtx.fillStyle = '#f6d47e';
+    mapCtx.fillRect(partyX - cell * 0.14, partyY - cell * 0.2, cell * 0.28, cell * 0.38);
+  }
 
   if (palette.rain !== false) {
     mapCtx.strokeStyle = 'rgba(177,218,255,0.27)';
@@ -716,13 +830,77 @@ function formatEnemies(enemies = []) {
   return enemies.map((enemy) => enemy.name ?? enemy.id ?? 'Unknown threat').join(', ');
 }
 
-function formatDialogue(text) {
-  if (Array.isArray(text)) {
-    return text
-      .map((line) => `${line.speaker ?? 'NARRATOR'}: ${line.line ?? line.text ?? ''}`)
-      .join('\n\n');
+function dialogueLinesForBeat(beat = getBeat()) {
+  const source = Array.isArray(beat.text) && beat.text.length
+    ? beat.text
+    : [{ speaker: 'NARRATOR', line: String(beat.text ?? 'Scene text pending.') }];
+  return source.map((entry) => Object.freeze({
+    speaker: String(entry.speaker ?? 'NARRATOR'),
+    line: String(entry.line ?? entry.text ?? ''),
+  }));
+}
+
+function narrativeProgressForBeat(beat = getBeat()) {
+  return getNarrativeProgress(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
+}
+
+function currentNarrativeComplete(beat = getBeat()) {
+  return isBeatCompleted(campaignState, beat.id) || narrativeProgressForBeat(beat).complete;
+}
+
+function currentChoicesComplete(beat = getBeat()) {
+  if (isBeatCompleted(campaignState, beat.id) || !(beat.choices ?? []).length) return true;
+  const selected = getSelectedChoiceIds(campaignState, beat.id);
+  return isMultiSelectBeat(beat) ? selected.length >= beat.choices.length : selected.length >= 1;
+}
+
+function renderDialogue(beat) {
+  const lines = dialogueLinesForBeat(beat);
+  const progress = narrativeProgressForBeat(beat);
+  if (isBeatCompleted(campaignState, beat.id)) {
+    sceneText.textContent = lines.map((line) => `${line.speaker}: ${line.line}`).join('\n\n');
+    dialogueProgress.textContent = `${lines.length}/${lines.length} lines · completed scene replay`;
+    continueDialogue.disabled = true;
+    continueDialogue.textContent = 'Scene acknowledged';
+    return;
   }
-  return String(text ?? 'Scene text pending.');
+  const line = lines[progress.currentLineIndex ?? 0];
+  sceneText.textContent = `${line.speaker}: ${line.line}`;
+  dialogueProgress.textContent = progress.complete
+    ? `${progress.lineCount}/${progress.lineCount} lines acknowledged`
+    : `Line ${progress.currentLineIndex + 1}/${progress.lineCount}`;
+  continueDialogue.disabled = progress.complete || isBeatCompleted(campaignState, beat.id);
+  continueDialogue.textContent = progress.acknowledgedLines === progress.lineCount - 1
+    ? 'Acknowledge scene'
+    : 'Continue dialogue';
+}
+
+function renderSceneDirection(beat) {
+  const direction = getSceneDirection(beat.id);
+  if (!direction) return;
+  sceneAtmosphere.textContent = direction.atmosphere;
+  sceneMusicCue.textContent = direction.musicCue;
+  sceneCameraCue.textContent = direction.cameraCue;
+  sceneEntranceCue.textContent = direction.entranceCue;
+  sceneGestureCue.textContent = `${direction.gestureCue.speaker}: ${direction.gestureCue.action}`;
+  sceneBlockingCue.textContent = direction.blockingCue;
+  sceneTransitionCue.textContent = direction.transitionCue;
+  sceneFocusPortrait.setAttribute('aria-label', `${direction.gestureCue.speaker} scene focus portrait`);
+  scenePortraitCtx.clearRect(0, 0, sceneFocusPortrait.width, sceneFocusPortrait.height);
+  if (partyAtlasImage.complete && partyAtlasImage.naturalWidth > 0) {
+    const frame = getPartyAtlasFrame(direction.gestureCue.speaker.toLowerCase(), 'south', 0);
+    scenePortraitCtx.drawImage(
+      partyAtlasImage,
+      frame.x,
+      frame.y,
+      frame.width,
+      frame.height,
+      0,
+      0,
+      sceneFocusPortrait.width,
+      sceneFocusPortrait.height,
+    );
+  }
 }
 
 function formatParty(party = []) {
@@ -792,6 +970,7 @@ function renderChoices(beat) {
     button.className = 'story-choice';
     button.dataset.choiceId = choice.id;
     button.innerHTML = `<strong>${index + 1}.</strong> ${choice.label}`;
+    button.disabled = isBeatCompleted(campaignState, beat.id) || !currentNarrativeComplete(beat);
     if (pickedIds.has(choice.id)) button.classList.add('is-picked');
     choiceDeck.append(button);
   });
@@ -935,7 +1114,8 @@ function render() {
   sceneNumber.textContent = `SCENE ${String(beatIndex + 1).padStart(2, '0')}/${String(chapter.beats.length).padStart(2, '0')}`;
   sceneTitle.textContent = beat.title;
   sceneLocation.textContent = beat.location ?? chapter.maps?.[0]?.name ?? 'Campaign route';
-  sceneText.textContent = formatDialogue(beat.text);
+  renderDialogue(beat);
+  renderSceneDirection(beat);
   partyList.textContent = formatParty(chapter.party);
   chapterReward.textContent = formatValue(chapter.reward, 'Narrative progress');
   encounterName.textContent = encounter?.name ?? formatValue(chapter.boss, 'Chapter encounter pending');
@@ -946,15 +1126,20 @@ function render() {
   previousScene.disabled = recordIndex <= 0;
   const battlesCleared = currentBeatBattlesCleared();
   const fieldRouteCleared = currentFieldRouteComplete();
-  nextScene.disabled = isCampaignComplete(campaignState) || !battlesCleared || !fieldRouteCleared;
+  const narrativeCleared = currentNarrativeComplete(beat);
+  const choicesCleared = currentChoicesComplete(beat);
+  nextScene.disabled = isCampaignComplete(campaignState) || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared;
   nextScene.textContent = isCampaignComplete(campaignState)
     ? 'Campaign complete'
     : !battlesCleared ? 'Clear encounter to continue'
-      : fieldRouteCleared ? 'Next scene →' : 'Reach and use the route exit';
+      : !narrativeCleared ? 'Finish the scene dialogue'
+        : !choicesCleared ? 'Record the scene decision'
+          : fieldRouteCleared ? 'Next scene →' : 'Reach and use the route exit';
   const progress = (beatIndex + 1) / chapter.beats.length;
   progressLabel.textContent = `${beatIndex + 1} of ${chapter.beats.length} scenes`;
   progressFill.style.width = `${Math.round(progress * 100)}%`;
   fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
+  renderRunProofStatus();
   updateFieldDashboard(level);
   setKeyArt(chapter);
   renderChoices(beat);
@@ -967,8 +1152,38 @@ function render() {
   drawMap(level, encounter, animationNow);
 }
 
+function renderRunProofStatus() {
+  if (!runReceiptState) {
+    runProofStatus.dataset.proof = 'failed';
+    runProofStatus.textContent = 'Unverified save · choose New Game for a clean-run receipt';
+    return;
+  }
+  const report = getRunProofReport(runReceiptState);
+  const elapsed = formatPlaytime(report.totalMs);
+  if (report.durationProven) {
+    runProofStatus.dataset.proof = 'proven';
+    runProofStatus.textContent = `20-hour run proven · ${elapsed} · ${report.requiredBeatCount} scenes · ${report.requiredFirstClearCount} first clears`;
+    return;
+  }
+  if (report.status === 'complete') {
+    runProofStatus.dataset.proof = 'failed';
+    runProofStatus.textContent = `Clean run complete · ${elapsed}; 20-hour duration not proven`;
+    return;
+  }
+  runProofStatus.dataset.proof = 'active';
+  runProofStatus.textContent = `Clean run ${runReceiptState.runId.slice(0, 8)} · ${elapsed} · ${report.completedBeatCount}/${report.requiredBeatCount} scenes · ${report.firstClearCount}/${report.requiredFirstClearCount} first clears`;
+}
+
 function choose(choiceId) {
   const beat = getBeat();
+  if (isBeatCompleted(campaignState, beat.id)) {
+    fieldFeedback.textContent = 'Completed-scene decisions are read-only in replay.';
+    return;
+  }
+  if (!currentNarrativeComplete(beat)) {
+    fieldFeedback.textContent = 'Finish the scene dialogue before recording its decision.';
+    return;
+  }
   const choice = (beat.choices ?? []).find((entry) => entry.id === choiceId);
   if (!choice) return;
   playtimeCategory = 'narrative';
@@ -995,11 +1210,29 @@ function advance(direction) {
     battleStatus.textContent = 'Clear every encounter bound to this scene before advancing.';
     return;
   }
+  if (!currentNarrativeComplete()) {
+    fieldFeedback.textContent = 'Acknowledge every dialogue line before advancing the story.';
+    return;
+  }
+  if (!currentChoicesComplete()) {
+    fieldFeedback.textContent = 'Record the scene decision before advancing the story.';
+    return;
+  }
   if (!currentFieldRouteComplete()) {
     fieldFeedback.textContent = 'Complete this beat’s authored field route and use its terminal exit before advancing.';
     return;
   }
+  const completedBeatId = getBeat().id;
+  const completedCount = campaignState.completedBeatIds.length;
+  flushRunReceiptPlaytime();
   campaignState = completeCurrentBeat(campaignState);
+  if (campaignState.completedBeatIds.length > completedCount && runReceiptState) {
+    const receiptResult = recordRunBeatCompletion(runReceiptState, runReceiptState.runId, completedBeatId);
+    if (receiptResult.ok) {
+      runReceiptState = receiptResult.state;
+      runReceiptAdapter.save(runReceiptState);
+    }
+  }
   persistCampaignState();
   render();
 }
@@ -1023,6 +1256,15 @@ chapterList.addEventListener('click', (event) => {
 choiceDeck.addEventListener('click', (event) => {
   const button = event.target.closest('[data-choice-id]');
   if (button) choose(button.dataset.choiceId);
+});
+
+continueDialogue.addEventListener('click', () => {
+  playtimeCategory = 'narrative';
+  const beat = getBeat();
+  const result = advanceNarrative(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
+  narrativeState = result.state;
+  narrativeAdapter.save(narrativeState);
+  render();
 });
 
 questList.addEventListener('click', (event) => {
@@ -1166,10 +1408,28 @@ interactFieldButton.addEventListener('click', () => {
 previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
-  if (!window.confirm('Start a clean New Game? This clears story, battles, quests, camp inventory, field positions, and playtime.')) return;
-  campaignState = resetCampaignState();
-  advancementState = createAdvancementState();
+  if (!window.confirm('Start a clean New Game? This clears story, battles, quests, camp inventory, field positions, playtime, and the prior run receipt.')) return;
+  if (typeof globalThis.crypto?.randomUUID !== 'function') {
+    fieldFeedback.textContent = 'A verified New Game requires crypto.randomUUID support in this browser.';
+    return;
+  }
+  const nextCampaignState = resetCampaignState();
+  const nextAdvancementState = createAdvancementState();
+  const receipt = createRunReceipt({
+    runId: globalThis.crypto.randomUUID(),
+    campaignState: nextCampaignState,
+    advancementState: nextAdvancementState,
+  });
+  if (!receipt.ok || !runReceiptAdapter.save(receipt.state).ok) {
+    fieldFeedback.textContent = 'The verified run receipt could not be created; the current game was left intact.';
+    return;
+  }
+  campaignState = nextCampaignState;
+  advancementState = nextAdvancementState;
+  runReceiptState = receipt.state;
+  clearPendingRunReceiptPlaytime();
   questState = createQuestState();
+  narrativeState = createNarrativeState();
   loadoutState = createLoadoutState();
   playtimeState = createPlaytimeState();
   const level = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
@@ -1177,6 +1437,7 @@ resetCampaign.addEventListener('click', () => {
   saveAdapter.clear();
   advancementAdapter.clear();
   questAdapter.clear();
+  narrativeAdapter.clear();
   fieldAdapter.clear();
   loadoutAdapter.clear();
   playtimeAdapter.clear();
@@ -1197,6 +1458,11 @@ window.addEventListener('keydown', (event) => {
   if (direction) {
     event.preventDefault();
     attemptFieldMove(...direction);
+    return;
+  }
+  if (event.key.toLowerCase() === 'n') {
+    event.preventDefault();
+    continueDialogue.click();
     return;
   }
   if ((event.key.toLowerCase() === 'x' || event.key === 'Enter') && !event.repeat) {
@@ -1239,12 +1505,17 @@ window.addEventListener('pageshow', (event) => {
   if (refreshed.ok) advancementState = refreshed.state;
   const refreshedQuests = questAdapter.load();
   if (refreshedQuests.ok) questState = refreshedQuests.state;
+  const refreshedNarrative = narrativeAdapter.load();
+  if (refreshedNarrative.ok) narrativeState = refreshedNarrative.state;
   const refreshedField = fieldAdapter.load();
   if (refreshedField.ok && refreshedField.found) fieldRuntimeState = refreshedField.state;
   const refreshedLoadout = loadoutAdapter.load();
   if (refreshedLoadout.ok) loadoutState = refreshedLoadout.value;
   const refreshedPlaytime = playtimeAdapter.load();
   if (refreshedPlaytime.ok) playtimeState = refreshedPlaytime.state;
+  const refreshedRunReceipt = runReceiptAdapter.load();
+  runReceiptState = refreshedRunReceipt.ok && refreshedRunReceipt.found ? refreshedRunReceipt.state : null;
+  clearPendingRunReceiptPlaytime();
   playtimeLastSample = performance.now();
   playtimeLastActivity = playtimeLastSample;
   fieldTickLast = playtimeLastSample;
@@ -1253,14 +1524,20 @@ window.addEventListener('pageshow', (event) => {
 });
 
 window.addEventListener('pagehide', () => {
+  flushRunReceiptPlaytime();
   playtimeAdapter.save(playtimeState);
+  if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+  narrativeAdapter.save(narrativeState);
   fieldAdapter.save(fieldRuntimeState);
 });
 document.addEventListener('visibilitychange', () => {
   playtimeLastSample = performance.now();
   fieldTickLast = performance.now();
   if (document.visibilityState === 'hidden') {
+    flushRunReceiptPlaytime();
     playtimeAdapter.save(playtimeState);
+    if (runReceiptState) runReceiptAdapter.save(runReceiptState);
+    narrativeAdapter.save(narrativeState);
     fieldAdapter.save(fieldRuntimeState);
   }
 });

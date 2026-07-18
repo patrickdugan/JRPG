@@ -80,9 +80,11 @@ Target the documented 28–34 minute Takamine vertical slice comprising:
 
 Test with a small group once FP-1 is reliable. Record completion, wipe, and unclear-rule observations before changing mechanics.
 
-### 5. Full production — deliberately deferred
+### 5. Full production — active foundation
 
-Only after the first-playable feedback is reviewed:
+The user explicitly authorized broad production expansion on 2026-07-18 after the documented design, visual targets, combat proof, and campaign contracts were in place. That authorization records the scope transition required by this roadmap; it does not waive the external playtest, cultural review, final-art, accessibility, or measured-duration gates.
+
+Current execution order:
 
 - complete Chapter 1 with final environments and scenes;
 - repeat chapter production with reusable systems and assets;
