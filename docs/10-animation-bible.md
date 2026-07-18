@@ -5,7 +5,7 @@
 **Applies to:** field actors, combat actors, enemies, bosses, hazards, and battle VFX
 **Primary slice:** FP-1 Takamine Vertical Slice
 
-**Runtime note (2026-07-18):** the provisional generated 6×8 party atlas now addresses all six members and four idle/walk facing pairs in Camp, field, scene-focus, and party battle rendering. Exact frame addressing and movement-facing reduction are tested in `game/sprite-atlas.mjs`; bespoke attack, hit, Guard, cast, Recovery, enemy, boss, and VFX clips in this bible remain an art-production gate.
+**Runtime note (2026-07-18):** the provisional generated 6×8 party atlas addresses all six members and four idle/walk facing pairs in Camp, field, scene-focus, and party battle rendering. A second transparent 8×4 enemy combat atlas supplies neutral, wind-up, attack, and stagger poses for all eight live enemy families. `game/battle-animation.mjs` now drives deterministic wind-up, exact-grid lunge, projectile/trail, impact, status-glyph, stagger, and recovery presentation for all eight party skills and every enemy template at 1×/2×/4× without moving simulation coordinates. Exact frame addressing, family mapping, status coverage, duration bounds, and replay determinism are tested. These generated sheets remain provisional raster production assets; editable source sheets, per-cel manifests, bespoke boss clips, and final VFX are still an art-production gate.
 
 ## 1. Purpose and non-negotiables
 
@@ -313,4 +313,4 @@ Do not use `final`, `new`, dates, arbitrary personal initials, spaces, or unclea
 
 ## 12. Production-reference limitation
 
-The opaque PNGs in `assets/production/` are original generated **production references** for palette, silhouette, composition, and mood. They are not source frames, tile sheets, font art, animation clips, or shippable game pixels. Rebuild every production asset in editable source using this bible and the approval gates above.
+The keyframes, roster sheet, and boss sheet in `assets/production/` are original generated **production references** for palette, silhouette, composition, and mood. The transparent party and enemy atlases are also original project assets and are currently rendered by the browser runtime, but they are provisional raster atlases rather than approved editable source work. They do not yet satisfy the source, pivot, event-manifest, contact-sheet, or in-engine capture handoff in section 9. Rebuild or formally promote every production asset through the approval gates above before an art lock.

@@ -1,6 +1,6 @@
 # Bells of the Black Chrysanthemum - Production References
 
-These original, project-bound PNG files were generated with the built-in image-generation workflow. The three 2026-07-16 images are opaque production references. The 2026-07-18 party atlas is a provisional transparent runtime asset used by Camp, field movement, scene focus, and party battle tokens while hand-authored frame cleanup remains open.
+These original, project-bound PNG files were generated with the built-in image-generation workflow. The three 2026-07-16 images are opaque production references. The 2026-07-18 party and enemy atlases are provisional transparent runtime assets used by Camp, field movement, scene focus, and battle tokens while hand-authored frame cleanup remains open.
 
 Use [the animation bible](../../docs/10-animation-bible.md) and [the art-direction contract](../../docs/05-art-direction.md) to rebuild all game art as editable, authored assets. Do not cut pixels, text, or UI out of these images.
 
@@ -10,11 +10,13 @@ Use [the animation bible](../../docs/10-animation-bible.md) and [the art-directi
 | `bells-enemy-bosses-v1.png` | 1448 x 1086 | `5b02d5144c4c5ec1e6557df672848ce8d8037103485af01b3bebc67f6f1b17df` | Enemy hierarchy and boss-scale silhouette reference | Accepted: Cinder Hound, Ash Wisp, Bell Moth, Tithe Enforcer, Tithe Enforcer Ascendant, and Takamine Bell Warden stay distinct with clean size escalation; no text or gore. |
 | `bells-takamine-keyframe-v1.png` | 1448 x 1086 | `17aea41ebe154d79fcdd509c2951a6a5a3b0273d7c4fe569c5e40561d6be16ac` | FP-1 Takamine Rain Gate environment/keyframe reference | Accepted: gate, wet approach, service-route read, warm lantern destination, and cold court pressure are legible; no text. |
 | `bells-party-field-atlas-v1.png` | 1536 x 1024 | `df3600769c333788126c50390fa36e3ccc4d1436578c2bf8503749617ec0c4b3` | Six-row, eight-column party field/camp atlas | Accepted provisionally: six original party silhouettes, directional pose variation, transparent background, no text or real-person likeness; wired into Camp, field, scene-focus, and party battle rendering. |
+| `bells-enemy-combat-atlas-v1.png` | 896 x 1792 | `37c8efac4ded9223b3580a5d89bee65af71310fa7ed79348c260cfc995449805` | Eight-row, four-column enemy-family combat atlas | Accepted provisionally: 32 populated neutral/wind-up/attack/stagger cells, transparent corners, original silhouettes, no text or real-person likeness; wired into enemy battle rendering by family. |
 
 ## Generation method
 
 - **Method:** built-in image generation, not CLI/API fallback.
 - **Output type:** the original references are opaque PNGs. The party atlas was generated against a flat chroma field, converted locally to RGBA, and visually checked after transparency extraction.
+- **Enemy-atlas processing:** generated against flat chroma magenta, converted locally to RGBA with the installed image-generation chroma helper, then nearest-neighbor normalized to exact 224 x 224 cells and visually checked after extraction.
 - **Review:** each generated image was visually inspected for original character design, no readable text, no logos/watermarks, no celebrity likeness, no direct franchise imitation, and consistency with the project's historical/sensitivity constraints before it was copied here.
 - **Source copies:** the original generated files remain in the Codex generated-image directory. These stable filenames are the project copies to reference in production planning.
 
@@ -46,6 +48,20 @@ Composition: exact 6-by-8 contact sheet; generous gutters; consistent scale, fee
 Background: perfectly flat saturated chroma green #00ff00 across every unused pixel, with no gradient, shadow, texture, green clothing, or green reflected light, so it can be removed deterministically.
 Palette/mood: ink shadow, rain indigo, cedar brown, parchment ivory, muted teal, desaturated blue, old brass, earth gray, oxidized gold, herb green shifted away from chroma green, rare lacquer red and black-crimson. Somber, practical, rain-worn, and resolute.
 Constraints: historically grounded alternate early-Edo travel clothing with invented fantasy details; no direct franchise imitation; no copyrighted characters; no celebrity, Adam Driver, or film-character likeness; no gore; no readable religious text; no sacred object used as a weapon or loot; no missing character row; no extra figures.
+```
+
+## Final prompt: `bells-enemy-combat-atlas-v1.png`
+
+```text
+Use case: stylized-concept
+Asset type: provisional runtime enemy animation atlas for the original historical-gothic turn-based JRPG "Bells of the Black Chrysanthemum."
+Primary request: Create one exact sprite sheet of eight fully original fictional enemy families, arranged in exactly eight horizontal rows and four evenly spaced columns. Each row is one enemy family; columns show neutral combat pose, readable wind-up/telegraph pose, attack pose, and staggered/hurt pose. Keep every figure centered inside a consistent cell, with generous gutters and no overlap.
+Subjects, top to bottom: (1) low Cinder Hound, a four-legged ash-and-bell-metal predator with compact muzzle and a broken bronze collar; (2) hovering Ash Wisp, a coal-dark core wrapped in angular folded-paper ash with sparse ember flecks; (3) Ashen Oni court enforcer, an entirely invented bell-forged armored soldier with abstract geometric mask, lacquer shield, ledger tabs, and broken bronze joints; (4) corrupt court retainer, human-sized rain-worn lamellar silhouette with blank document mask and hooked polearm, clearly a fictional official rather than a real historical person; (5) Widow-of-Fog, a broad spectral maritime figure made from torn sailcloth, net weights, and cold mist, mournful rather than gory; (6) Furnace Abbot, a massive invented ash-and-bell-bronze boss with sealed furnace mantle and frost-cracked joints, no real religious vestment or sacred symbol; (7) Bell Warden, a tall angular guardian carrying a suspended abstract resonance frame with three readable rings; (8) Shogun Kurozane, an original super-vampire ruler in black lacquer court armor with chrysanthemum-like geometric plates, long restrained silhouette and one black-crimson mantle, no real shogun likeness.
+Style/medium: original late-16-bit-era pixel art, crisp hard pixel clusters, stepped diagonals, limited 2-4-value materials, strong silhouettes, nearest-neighbor clarity, no painterly blur, no anti-aliased illustration, no 3D.
+Composition/framing: exact 8-by-4 contact sheet, consistent feet or hover baseline within each row, consistent scale except bosses may use more vertical cell height; every pose readable at small game-token scale. No borders, labels, numbers, text, logo, UI, or watermark.
+Background: perfectly flat saturated chroma magenta #ff00ff across every unused pixel, with no gradient, shadow, texture, floor plane, reflection, or magenta lighting, so it can be removed deterministically. Do not use #ff00ff anywhere in any subject.
+Palette/mood: ink shadow, rain indigo, ash gray, wet black lacquer, paper ivory, old bronze, cold blue, sparse ember vermilion, rare black-crimson. Somber, oppressive, theatrical, and mournful.
+Constraints: historically grounded alternate early-Edo fantasy with invented supernatural details; all designs original; no direct franchise or artist imitation; no copyrighted characters; no celebrity, actor, or film-character likeness; no gore; no readable religious text; no sacred object used as weapon or loot; no real ceremonial mask; no human ethnicity coded as monstrous; exactly eight rows and four columns; no extra figures.
 ```
 
 ## Exact prompt: `bells-enemy-bosses-v1.png`

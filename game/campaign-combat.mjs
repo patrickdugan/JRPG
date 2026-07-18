@@ -11,6 +11,8 @@ import { getLevel, isBlocked, isInBounds, parseTileKey } from './content/levels.
 
 export { RECOVERY_PULSE_MS };
 
+export const CAMPAIGN_COMBAT_SNAPSHOT_VERSION = 1;
+
 export const CAMPAIGN_COMBAT_PHASES = Object.freeze({
   PLAYER_COMMAND: 'player-command',
   ENEMY_COMMAND: 'enemy-command',
@@ -43,20 +45,64 @@ const EIGHT_WAY_DIRECTIONS = Object.freeze([
 const GUARD_MULTIPLIER = 0.55;
 const DEFAULT_PACE = 2;
 
+export const SPIRIT_RULES = deepFreeze({
+  guardGain: 6,
+  analyzeGain: 4,
+  objectiveGain: 2,
+});
+
+/**
+ * One-activation status vocabulary used by the authored encounter effects.
+ * Statuses trigger when their target next receives an activation, remain live
+ * through that command (so Recovery modifiers can apply), then expire.
+ */
+export const COMBAT_STATUS_DEFINITIONS = deepFreeze({
+  dread: {
+    id: 'dread',
+    name: 'Dread',
+    activationSpiritDelta: -6,
+  },
+  chill: {
+    id: 'chill',
+    name: 'Chill',
+    activationPaceDelta: -1,
+  },
+  shock: {
+    id: 'shock',
+    name: 'Shock',
+    recoveryPulsesDelta: 1,
+  },
+  scorch: {
+    id: 'scorch',
+    name: 'Scorch',
+    activationDamage: 5,
+  },
+  bound: {
+    id: 'bound',
+    name: 'Bound',
+    activationPaceCap: 0,
+  },
+  overheated: {
+    id: 'overheated',
+    name: 'Overheated',
+    recoveryPulsesDelta: 1,
+  },
+});
+
 const neutralResistances = Object.freeze({
   delivery: Object.freeze(Object.fromEntries(DELIVERY_KEYS.map((key) => [key, 1]))),
   essence: Object.freeze(Object.fromEntries(ESSENCE_KEYS.map((key) => [key, 1]))),
 });
 
 export const PARTY_SKILLS = Object.freeze({
-  'courier-cut': Object.freeze({ id: 'courier-cut', name: "Courier's Cut", delivery: 'cut', power: 11, range: 1, recoveryPulses: 2, dodgeable: true }),
-  'cinder-route': Object.freeze({ id: 'cinder-route', name: 'Cinder Route', delivery: 'arcane', essence: 'ember', power: 13, range: 4, recoveryPulses: 3, dodgeable: false }),
-  'warding-script': Object.freeze({ id: 'warding-script', name: 'Warding Script', delivery: 'arcane', essence: 'radiance', power: 10, range: 4, recoveryPulses: 2, dodgeable: false }),
-  'hunter-thrust': Object.freeze({ id: 'hunter-thrust', name: 'Hunter Thrust', delivery: 'pierce', power: 14, range: 2, recoveryPulses: 2, dodgeable: true }),
-  'dawn-bolt': Object.freeze({ id: 'dawn-bolt', name: 'Dawn Bolt', delivery: 'arcane', essence: 'radiance', power: 12, range: 5, recoveryPulses: 3, dodgeable: false }),
-  'penitent-night': Object.freeze({ id: 'penitent-night', name: 'Penitent Night', delivery: 'arcane', essence: 'umbral', power: 16, range: 4, recoveryPulses: 3, dodgeable: false }),
-  'pilgrim-maul': Object.freeze({ id: 'pilgrim-maul', name: 'Pilgrim Maul', delivery: 'crush', power: 16, range: 1, recoveryPulses: 2, dodgeable: true }),
-  'cold-medicine': Object.freeze({ id: 'cold-medicine', name: 'Cold Medicine', delivery: 'arcane', essence: 'frost', power: 12, range: 4, recoveryPulses: 2, dodgeable: false }),
+  'courier-cut': Object.freeze({ id: 'courier-cut', name: "Courier's Cut", delivery: 'cut', power: 11, range: 1, recoveryPulses: 2, dodgeable: true, spiritCost: 0, spiritGain: 3 }),
+  'cinder-route': Object.freeze({ id: 'cinder-route', name: 'Cinder Route', delivery: 'arcane', essence: 'ember', power: 13, range: 4, recoveryPulses: 3, dodgeable: false, spiritCost: 2, spiritGain: 0 }),
+  'warding-script': Object.freeze({ id: 'warding-script', name: 'Warding Script', delivery: 'arcane', essence: 'radiance', power: 10, range: 4, recoveryPulses: 2, dodgeable: false, spiritCost: 1, spiritGain: 0 }),
+  'hunter-thrust': Object.freeze({ id: 'hunter-thrust', name: 'Hunter Thrust', delivery: 'pierce', power: 14, range: 2, recoveryPulses: 2, dodgeable: true, spiritCost: 0, spiritGain: 3 }),
+  'dawn-bolt': Object.freeze({ id: 'dawn-bolt', name: 'Dawn Bolt', delivery: 'arcane', essence: 'radiance', power: 12, range: 5, recoveryPulses: 3, dodgeable: false, spiritCost: 2, spiritGain: 0 }),
+  'penitent-night': Object.freeze({ id: 'penitent-night', name: 'Penitent Night', delivery: 'arcane', essence: 'umbral', power: 16, range: 4, recoveryPulses: 3, dodgeable: false, spiritCost: 2, spiritGain: 0 }),
+  'pilgrim-maul': Object.freeze({ id: 'pilgrim-maul', name: 'Pilgrim Maul', delivery: 'crush', power: 16, range: 1, recoveryPulses: 2, dodgeable: true, spiritCost: 0, spiritGain: 4 }),
+  'cold-medicine': Object.freeze({ id: 'cold-medicine', name: 'Cold Medicine', delivery: 'arcane', essence: 'frost', power: 12, range: 4, recoveryPulses: 2, dodgeable: false, spiritCost: 1, spiritGain: 0 }),
 });
 
 const partyProfile = (id, name, stats, skillIds, resistances = {}) => Object.freeze({
@@ -68,13 +114,19 @@ const partyProfile = (id, name, stats, skillIds, resistances = {}) => Object.fre
 });
 
 export const PARTY_PROFILES = Object.freeze({
-  ren: partyProfile('ren', 'Ren Ishikawa', { hp: 118, power: 12, guard: 10, speed: 104 }, ['courier-cut', 'cinder-route']),
-  aya: partyProfile('aya', 'Aya', { hp: 96, power: 10, guard: 9, speed: 101 }, ['warding-script'], { essence: { umbral: 0.75 } }),
-  lise: partyProfile('lise', 'Lise Varga', { hp: 108, power: 13, guard: 10, speed: 108 }, ['hunter-thrust', 'dawn-bolt']),
-  mateus: partyProfile('mateus', 'Father Mateus Avelar', { hp: 126, power: 14, guard: 12, speed: 94 }, ['penitent-night'], { essence: { umbral: 0.5 } }),
-  genta: partyProfile('genta', 'Genta', { hp: 148, power: 15, guard: 15, speed: 84 }, ['pilgrim-maul']),
-  kiku: partyProfile('kiku', 'Kiku', { hp: 102, power: 11, guard: 10, speed: 99 }, ['cold-medicine'], { essence: { frost: 0.75 } }),
+  ren: partyProfile('ren', 'Ren Ishikawa', { hp: 118, spirit: 32, power: 12, guard: 10, speed: 104 }, ['courier-cut', 'cinder-route']),
+  aya: partyProfile('aya', 'Aya', { hp: 96, spirit: 36, power: 10, guard: 9, speed: 101 }, ['warding-script'], { essence: { umbral: 0.75 } }),
+  lise: partyProfile('lise', 'Lise Varga', { hp: 108, spirit: 30, power: 13, guard: 10, speed: 108 }, ['hunter-thrust', 'dawn-bolt']),
+  mateus: partyProfile('mateus', 'Father Mateus Avelar', { hp: 126, spirit: 42, power: 14, guard: 12, speed: 94 }, ['penitent-night'], { essence: { umbral: 0.5 } }),
+  genta: partyProfile('genta', 'Genta', { hp: 148, spirit: 26, power: 15, guard: 15, speed: 84 }, ['pilgrim-maul']),
+  kiku: partyProfile('kiku', 'Kiku', { hp: 102, spirit: 34, power: 11, guard: 10, speed: 99 }, ['cold-medicine'], { essence: { frost: 0.75 } }),
 });
+
+function deepFreeze(value) {
+  if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
+  for (const nested of Object.values(value)) deepFreeze(nested);
+  return Object.freeze(value);
+}
 
 function clone(value) {
   return value == null ? value : JSON.parse(JSON.stringify(value));
@@ -95,6 +147,11 @@ function distance(a, b) {
 
 function asPositiveInteger(value, fallback = 1) {
   return Number.isInteger(value) && value >= 0 ? value : fallback;
+}
+
+function boundedResource(value, maximum) {
+  const numeric = Number.isFinite(value) ? Math.trunc(value) : maximum;
+  return Math.max(0, Math.min(maximum, numeric));
 }
 
 function living(actors, faction) {
@@ -186,6 +243,8 @@ function enemyInstances(encounter, nonHostile) {
         active: !nonHostile,
         hp: template.stats.hp,
         maxHp: template.stats.hp,
+        spirit: boundedResource(template.stats.spirit, asPositiveInteger(template.stats.spirit, 0)),
+        maxSpirit: asPositiveInteger(template.stats.spirit, 0),
         power: template.stats.power ?? 0,
         guard: template.stats.guard ?? 0,
         speed: template.stats.speed ?? 0,
@@ -194,6 +253,7 @@ function enemyInstances(encounter, nonHostile) {
         stance: 'neutral',
         resistances: clone(template.resistances ?? neutralResistances),
         skills: clone(template.skills ?? []),
+        statuses: [],
         ledger: template.ledger ?? '',
         analyzed: false,
       }];
@@ -205,6 +265,8 @@ function partyInstances(encounter, profiles) {
   return encounter.party.deployment.map((deployment) => {
     const profile = profiles[deployment.actorId];
     if (!profile) throw new Error(`Missing party profile: ${deployment.actorId}`);
+    const authoredSpirit = PARTY_PROFILES[deployment.actorId]?.stats.spirit ?? 24;
+    const maxSpirit = asPositiveInteger(profile.stats.spirit, authoredSpirit);
     return {
       instanceId: deployment.actorId,
       templateId: deployment.actorId,
@@ -213,6 +275,8 @@ function partyInstances(encounter, profiles) {
       active: true,
       hp: Math.max(1, Math.min(profile.stats.hp, profile.currentHp ?? profile.stats.hp)),
       maxHp: profile.stats.hp,
+      spirit: boundedResource(profile.currentSpirit, maxSpirit),
+      maxSpirit,
       power: profile.stats.power,
       guard: profile.stats.guard,
       speed: profile.stats.speed,
@@ -223,6 +287,7 @@ function partyInstances(encounter, profiles) {
       stance: 'neutral',
       resistances: clone(profile.resistances),
       skills: profile.skillIds.map((id) => clone(PARTY_SKILLS[id])),
+      statuses: [],
       analyzed: false,
     };
   });
@@ -267,7 +332,8 @@ export class CampaignCombatEngine {
   get activeActor() { return this.getActor(this.activeActorId); }
 
   snapshot() {
-    return clone({
+    return deepFreeze(clone({
+      schemaVersion: CAMPAIGN_COMBAT_SNAPSHOT_VERSION,
       encounterId: this.encounter.id,
       levelId: this.level.id,
       phase: this.phase,
@@ -279,7 +345,12 @@ export class CampaignCombatEngine {
       actors: this.actors,
       objective: this.getObjectiveStatus(),
       log: this.log,
-    });
+    }));
+  }
+
+  /** Stable, JSON-only handoff for receipts, diagnostics, and future saves. */
+  serialize() {
+    return JSON.stringify(this.snapshot());
   }
 
   getObjectiveStatus() {
@@ -323,7 +394,25 @@ export class CampaignCombatEngine {
     const target = this.getActor(targetId);
     const skill = attacker?.skills.find((item) => item.id === skillId);
     if (!attacker || !target || !skill) return null;
+    if (attacker.spirit < asPositiveInteger(skill.spiritCost, 0)) return null;
     return calculateTypedDamage(attacker, target, skill);
+  }
+
+  getSkillSpiritQuote(actorId, skillId) {
+    const actor = this.getActor(actorId);
+    const skill = actor?.skills.find((item) => item.id === skillId);
+    if (!actor || !skill) return null;
+    const spiritCost = asPositiveInteger(skill.spiritCost, 0);
+    const spiritGain = asPositiveInteger(skill.spiritGain, 0);
+    return deepFreeze({
+      actorId,
+      skillId,
+      spirit: actor.spirit,
+      maxSpirit: actor.maxSpirit,
+      spiritCost,
+      spiritGain,
+      affordable: actor.spirit >= spiritCost,
+    });
   }
 
   useSkill(actorId, skillId, targetId) {
@@ -335,9 +424,12 @@ export class CampaignCombatEngine {
     if (!skill) return { ok: false, reason: 'Unknown skill.' };
     if (!target || target.hp <= 0 || target.faction !== 'enemy') return { ok: false, reason: 'Target is not a living enemy.' };
     if (distance(actor.pos, target.pos) > (skill.range ?? 1)) return { ok: false, reason: 'Target is outside skill range.' };
+    const quote = this.getSkillSpiritQuote(actorId, skillId);
+    if (!quote.affordable) return { ok: false, reason: `Not enough Spirit (${quote.spirit}/${quote.spiritCost}).`, spirit: quote };
+    const spirit = this._applySkillSpirit(actor, skill);
     const resolution = this._resolveAttack(actor, target, skill);
     this._commit(actor, skill.recoveryPulses, 'skill');
-    return { ok: true, ...resolution };
+    return { ok: true, ...resolution, spirit };
   }
 
   guard(actorId) {
@@ -346,8 +438,9 @@ export class CampaignCombatEngine {
     const actor = this.getActor(actorId);
     actor.stance = 'guard';
     this.log.push({ type: 'guard', actorId, pulse: this.nowPulse });
+    const spirit = this._changeSpirit(actor, SPIRIT_RULES.guardGain, 'guard');
     this._commit(actor, 1, 'guard');
-    return { ok: true };
+    return { ok: true, spirit };
   }
 
   analyze(actorId, targetId) {
@@ -359,8 +452,9 @@ export class CampaignCombatEngine {
     target.analyzed = true;
     const readout = { ledger: target.ledger, delivery: clone(target.resistances.delivery), essence: clone(target.resistances.essence) };
     this.log.push({ type: 'analyze', actorId, targetId, pulse: this.nowPulse });
+    const spirit = this._changeSpirit(actor, SPIRIT_RULES.analyzeGain, 'analyze');
     this._commit(actor, 1, 'analyze');
-    return { ok: true, readout };
+    return { ok: true, readout, spirit };
   }
 
   performObjectiveAction(actorId, action) {
@@ -378,8 +472,9 @@ export class CampaignCombatEngine {
     const amount = Math.max(1, asPositiveInteger(action.amount, 1));
     this.objectiveProgress[match.key] = Math.min(match.count, (this.objectiveProgress[match.key] ?? 0) + amount);
     this.log.push({ type: 'objective', action: action.type, targetId: action.targetId ?? null, actorId, pulse: this.nowPulse });
+    const spirit = this._changeSpirit(actor, SPIRIT_RULES.objectiveGain, 'objective');
     this._commit(actor, action.recoveryPulses ?? 1, 'objective');
-    return { ok: true, requirement: match.key, progress: this.objectiveProgress[match.key], complete: this.result === 'victory' };
+    return { ok: true, requirement: match.key, progress: this.objectiveProgress[match.key], complete: this.result === 'victory', spirit };
   }
 
   /** Explicit hook for authored losses not represented by HP (countdowns, evidence, witnesses). */
@@ -409,9 +504,11 @@ export class CampaignCombatEngine {
     const targets = living(this.actors, 'party').sort((a, b) => distance(actor.pos, a.pos) - distance(actor.pos, b.pos) || a.instanceId.localeCompare(b.instanceId));
     if (!targets.length) return this._evaluateOutcome();
     const target = targets[0];
-    const skill = actor.skills.find((item) => distance(actor.pos, target.pos) <= (item.range ?? 1));
+    const skill = actor.skills.find((item) => distance(actor.pos, target.pos) <= (item.range ?? 1)
+      && actor.spirit >= asPositiveInteger(item.spiritCost, 0));
     let resolution;
     if (skill) {
+      this._applySkillSpirit(actor, skill);
       resolution = this._resolveAttack(actor, target, skill);
       this._schedule(actor, skill.recoveryPulses);
     } else {
@@ -435,6 +532,69 @@ export class CampaignCombatEngine {
     return null;
   }
 
+  _changeSpirit(actor, requestedDelta, reason, details = {}) {
+    const before = actor.spirit;
+    const requested = Number.isFinite(requestedDelta) ? Math.trunc(requestedDelta) : 0;
+    actor.spirit = boundedResource(before + requested, actor.maxSpirit);
+    const event = {
+      type: 'spirit-change',
+      actorId: actor.instanceId,
+      reason,
+      before,
+      requestedDelta: requested,
+      delta: actor.spirit - before,
+      after: actor.spirit,
+      maxSpirit: actor.maxSpirit,
+      pulse: this.nowPulse,
+      ...details,
+    };
+    this.log.push(event);
+    return deepFreeze(clone(event));
+  }
+
+  _applySkillSpirit(actor, skill) {
+    const spiritCost = asPositiveInteger(skill.spiritCost, 0);
+    const spiritGain = asPositiveInteger(skill.spiritGain, 0);
+    if (spiritCost === 0 && spiritGain === 0) return null;
+    return this._changeSpirit(actor, spiritGain - spiritCost, `skill:${skill.id}`, {
+      skillId: skill.id,
+      spiritCost,
+      spiritGain,
+    });
+  }
+
+  _applyStatus(source, target, statusId, skillId, duration) {
+    const definition = COMBAT_STATUS_DEFINITIONS[statusId];
+    if (!definition || !target || target.hp <= 0) return null;
+    const durationActivations = Math.max(1, asPositiveInteger(
+      Number.isInteger(duration) ? duration : duration?.activations,
+      1,
+    ));
+    const existing = target.statuses.find((status) => status.id === statusId);
+    const status = {
+      id: statusId,
+      sourceActorId: source.instanceId,
+      sourceSkillId: skillId,
+      appliedAtPulse: this.nowPulse,
+      durationActivations,
+      remainingActivations: durationActivations,
+      activeThisActivation: false,
+    };
+    if (existing) Object.assign(existing, status);
+    else target.statuses.push(status);
+    const event = {
+      type: existing ? 'status-refreshed' : 'status-applied',
+      statusId,
+      targetId: target.instanceId,
+      sourceActorId: source.instanceId,
+      sourceSkillId: skillId,
+      durationActivations,
+      pulse: this.nowPulse,
+    };
+    this.log.push(event);
+    return deepFreeze(clone(event));
+  }
+
   _resolveAttack(attacker, target, skill) {
     const calculation = calculateTypedDamage(attacker, target, skill);
     const guarded = target.stance === 'guard';
@@ -447,8 +607,23 @@ export class CampaignCombatEngine {
     } else {
       target.hp = Math.max(0, target.hp - finalDamage);
     }
-    const resolution = { attackerId: attacker.instanceId, targetId: target.instanceId, skillId: skill.id, ...calculation, finalDamage, guarded, targetHp: target.hp };
+    const statusId = skill.effect?.status ?? null;
+    const statusApplied = Boolean(statusId && COMBAT_STATUS_DEFINITIONS[statusId] && finalDamage > 0 && target.hp > 0);
+    const resolution = {
+      attackerId: attacker.instanceId,
+      targetId: target.instanceId,
+      skillId: skill.id,
+      ...calculation,
+      finalDamage,
+      guarded,
+      targetHp: target.hp,
+      statusId,
+      statusApplied,
+    };
     this.log.push({ type: 'damage', ...resolution, pulse: this.nowPulse });
+    if (statusApplied) this._applyStatus(attacker, target, statusId, skill.id, skill.effect?.duration);
+    const selfStatusId = skill.effect?.selfStatus;
+    if (selfStatusId) this._applyStatus(attacker, attacker, selfStatusId, skill.id, skill.effect?.selfDuration ?? skill.effect?.duration);
     return resolution;
   }
 
@@ -474,9 +649,142 @@ export class CampaignCombatEngine {
     if (!this.result) this._selectNext();
   }
 
+  _beginActivationStatuses(actor) {
+    for (const status of actor.statuses) {
+      status.activeThisActivation = true;
+      const definition = COMBAT_STATUS_DEFINITIONS[status.id];
+      this.log.push({
+        type: 'status-triggered',
+        statusId: status.id,
+        actorId: actor.instanceId,
+        sourceActorId: status.sourceActorId,
+        sourceSkillId: status.sourceSkillId,
+        remainingActivations: status.remainingActivations,
+        pulse: this.nowPulse,
+      });
+
+      if (definition.activationSpiritDelta) {
+        const spirit = this._changeSpirit(actor, definition.activationSpiritDelta, `status:${status.id}`, {
+          statusId: status.id,
+          sourceActorId: status.sourceActorId,
+          sourceSkillId: status.sourceSkillId,
+        });
+        this.log.push({
+          type: 'status-effect',
+          statusId: status.id,
+          actorId: actor.instanceId,
+          effect: 'spirit',
+          requestedDelta: definition.activationSpiritDelta,
+          delta: spirit.delta,
+          before: spirit.before,
+          after: spirit.after,
+          pulse: this.nowPulse,
+        });
+      }
+
+      if (definition.activationDamage) {
+        const hpBefore = actor.hp;
+        const finalDamage = Math.min(hpBefore, definition.activationDamage);
+        actor.hp = Math.max(0, hpBefore - finalDamage);
+        this.log.push({
+          type: 'status-damage',
+          statusId: status.id,
+          targetId: actor.instanceId,
+          sourceActorId: status.sourceActorId,
+          sourceSkillId: status.sourceSkillId,
+          baseDamage: definition.activationDamage,
+          finalDamage,
+          hpBefore,
+          targetHp: actor.hp,
+          pulse: this.nowPulse,
+        });
+      }
+
+      if (actor.faction === 'party' && definition.activationPaceDelta) {
+        const before = this.pace;
+        this.pace = Math.max(0, this.pace + definition.activationPaceDelta);
+        this.log.push({
+          type: 'status-effect',
+          statusId: status.id,
+          actorId: actor.instanceId,
+          effect: 'pace',
+          requestedDelta: definition.activationPaceDelta,
+          delta: this.pace - before,
+          before,
+          after: this.pace,
+          pulse: this.nowPulse,
+        });
+      }
+
+      if (actor.faction === 'party' && Number.isInteger(definition.activationPaceCap)) {
+        const before = this.pace;
+        this.pace = Math.min(this.pace, definition.activationPaceCap);
+        this.log.push({
+          type: 'status-effect',
+          statusId: status.id,
+          actorId: actor.instanceId,
+          effect: 'pace-cap',
+          cap: definition.activationPaceCap,
+          delta: this.pace - before,
+          before,
+          after: this.pace,
+          pulse: this.nowPulse,
+        });
+      }
+    }
+  }
+
+  _completeActivationStatuses(actor) {
+    const remaining = [];
+    for (const status of actor.statuses) {
+      if (!status.activeThisActivation) {
+        remaining.push(status);
+        continue;
+      }
+      status.remainingActivations -= 1;
+      status.activeThisActivation = false;
+      if (status.remainingActivations > 0) {
+        remaining.push(status);
+      } else {
+        this.log.push({
+          type: 'status-expired',
+          statusId: status.id,
+          actorId: actor.instanceId,
+          sourceActorId: status.sourceActorId,
+          sourceSkillId: status.sourceSkillId,
+          pulse: this.nowPulse,
+        });
+      }
+    }
+    actor.statuses = remaining;
+  }
+
   _schedule(actor, recoveryPulses) {
     const baseRecovery = asPositiveInteger(recoveryPulses, 1);
-    actor.readyAtPulse = this.nowPulse + Math.max(1, baseRecovery + (actor.recoveryPulsesDelta ?? 0));
+    const loadoutDelta = actor.recoveryPulsesDelta ?? 0;
+    const activeRecoveryStatuses = actor.statuses.filter((status) => status.activeThisActivation
+      && COMBAT_STATUS_DEFINITIONS[status.id]?.recoveryPulsesDelta);
+    const statusDelta = activeRecoveryStatuses.reduce((sum, status) => (
+      sum + COMBAT_STATUS_DEFINITIONS[status.id].recoveryPulsesDelta
+    ), 0);
+    const finalRecovery = Math.max(1, baseRecovery + loadoutDelta + statusDelta);
+    actor.readyAtPulse = this.nowPulse + finalRecovery;
+    for (const status of activeRecoveryStatuses) {
+      this.log.push({
+        type: 'status-effect',
+        statusId: status.id,
+        actorId: actor.instanceId,
+        effect: 'recovery',
+        baseRecovery,
+        loadoutDelta,
+        statusDelta: COMBAT_STATUS_DEFINITIONS[status.id].recoveryPulsesDelta,
+        totalStatusDelta: statusDelta,
+        finalRecovery,
+        readyAtPulse: actor.readyAtPulse,
+        pulse: this.nowPulse,
+      });
+    }
+    this._completeActivationStatuses(actor);
   }
 
   _incrementAutomatic(action) {
@@ -499,6 +807,13 @@ export class CampaignCombatEngine {
     } else {
       this.phase = CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND;
       this.pace = 0;
+    }
+    this._beginActivationStatuses(actor);
+    if (actor.hp <= 0) {
+      this.activeActorId = null;
+      this.pace = 0;
+      this._evaluateOutcome();
+      if (!this.result) this._selectNext();
     }
   }
 

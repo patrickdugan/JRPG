@@ -4,9 +4,9 @@ This folder contains the playable browser runtime and the original small combat 
 
 - **FP-0 (this folder):** one original Bell Court encounter that validates integer-space movement, 2-Pace turns, Tempo/recovery, Guard/Dodge, delivery + essence resistance, deterministic Oni AI, victory/defeat, and restart.
 - **FP-1 (Takamine Vertical Slice content):** the 28–34 minute field route, scenes, learning battles, Mateus reveal, and boss specified in the narrative documents.
-- **Campaign (`campaign.html`):** all 11 chapters / 60 authored scenes, staged persistent dialogue, 60 bespoke atmosphere/score/camera/blocking transcripts, deterministic local saves, every campaign map, exact grid-field movement, persistent authored interactions, deterministic hazards, placed encounter triggers, field loot, and encounter-plus-route gates across the canonical campaign.
-- **Optional journal:** 13 finite side quests and four repeatable contracts use ordered objectives and direct journal travel to every objective map. The finite first pass is authored at 264 minutes; completion applies XP, currency, items, and key items, while contract repeats remain transparent grind loops.
-- **Campaign Battle (`battle.html?encounter=...`):** a shared multi-party engine for all authored encounters, including Tempo/recovery, Pace, typed damage, Guard, Analyze, deterministic enemy AI, nonlethal/objective actions, XP, levels, rewards, repeat grinding, equipped loadout modifiers, and repeat-only 1×/2×/4× Auto-Grind.
+- **Campaign (`campaign.html`):** all 11 chapters / 60 authored scenes, 2,746 persistent dialogue lines, 60 bespoke atmosphere/score/camera/blocking transcripts, and 183 ordered once-per-save field operations. Every operation uses exact movement and authored instructions; encounter nodes bind the existing canonical fight and cannot create a duplicate battle.
+- **Optional journal:** 13 finite side quests, 18 finite witness chronicles, and four repeatable contracts use ordered objectives and direct journal travel. Witness testimony advances one line at a time across 152 exact fieldwork nodes; all 31 finite reward settlements are atomic and replay-refusing.
+- **Campaign Battle (`battle.html?encounter=...`):** a shared multi-party engine for all authored encounters, including bounded Spirit, six live statuses, Tempo/recovery, Pace, typed damage, Guard, Analyze, deterministic enemy AI, 18 objective presentations, nonlethal actions, XP, levels, rewards, equipped loadout modifiers, deterministic attack timelines, and repeat-only 1×/2×/4× Auto-Grind.
 - **Camp & Loadout (`camp.html`):** party vitals, Spirit/status recovery, consumables, shops, buy/sell, gear, forge upgrades, two Vow slots per character, three camp-rest tiers, and the original six-character field atlas, backed by a versioned save.
 - **Active-play telemetry:** narrative, exploration, first-clear battles, repeat grind, and camp/menu time accumulate in both a general record and a clean-start, UUID-bound run receipt. Samples suspend after 30 seconds without input; proof requires 20 active hours from that same run, all 60 scenes, and every canonical first clear.
 
@@ -42,13 +42,13 @@ Then open `http://localhost:8080/` for the optional training proof, `http://loca
 | --- | --- |
 | W / A / S / D | Move exactly one open field space orthogonally. |
 | Q / E / Z / C | Move exactly one open field space diagonally; both cardinal corner spaces must be open. |
-| X | Use a nearby authored interaction, advance a nearby side-story marker, or inspect/use an exact-tile exit. |
+| X | Record the current exact-tile story operation, use an authored interaction, advance a side-story/witness marker, or inspect/use an exit. |
 | N | Advance and acknowledge the staged scene dialogue. |
 | Left / Right | Previous / next authored scene. |
 | 1–9 | Select the corresponding scene choice. |
 | Mouse or touch | Use the field pad and interaction button, or select chapters, quests, choices, and scene controls. |
 
-The Atlas stores versioned, validated campaign, field, narrative, quest, loadout, advancement, telemetry, and run-receipt saves in browser local storage. Entering a placed encounter trigger opens the associated battle; victory resolves that trigger when the player returns. An authored exit can move to the next scene or an already-unlocked destination only when its field conditions and required first clears are satisfied. `New Game / clear all saves` starts a zero-time UUID run receipt across every save domain; older saves remain explicitly unverified instead of inheriting historical time.
+The Atlas stores versioned, validated campaign, scene-operation, field, narrative, quest, witness, loadout, advancement, telemetry, and run-receipt saves in browser local storage. Entering a placed encounter trigger opens the associated battle; victory resolves that trigger when the player returns. An authored exit can move to the next scene or an already-unlocked destination only when its field conditions, ordered operation, and required first clears are satisfied. `New Game / clear all saves` starts a zero-time UUID run receipt across every save domain; older saves remain explicitly unverified instead of inheriting historical time.
 
 ## Campaign battle controls
 
@@ -62,11 +62,11 @@ The Atlas stores versioned, validated campaign, field, narrative, quest, loadout
 | Start Auto-Grind | After one manual clear, run the full deterministic repeat loop at the saved speed, including commands, enemy turns, Recovery, result, and reward presentation. |
 | Restart | Replay the encounter. First-clear loot stays unique; repeat XP and currency diminish to a stable floor. |
 
-The pacing model budgets 20 hours at 1×, with three hours assigned to optional level grinding. It estimates 18.5 hours at 2× and 17.75 hours at 4× because authored dialogue, exploration, and first-clear battles are not skipped. This remains a production target until an end-to-end timed playtest proves it.
+The authored pacing budget still targets 20 hours at 1×, with repeat grinding eligible for the saved speed control. A separate quantity audit excludes those declared minutes and projects all currently shipped finite content at about 393 reference minutes (low 223, high 692) under its explicit input assumptions. That arithmetic is not observed playtime and leaves a reference-model gap of about 807 minutes. The target remains unproven until one clean end-to-end receipt records at least 20 active hours.
 
-The bounded `canonical-run.mjs` audit proves mechanical completion without pretending to prove duration: one deterministic zero-time run covers 60 beats, 184 dialogue lines, 59 choices, 34 route chains, 599 exact field moves, 53 interactions, 41 exits, 23 first clears, and 16 safehouse rests. Its stable signature is `fnv1a32:79a6adbd`; its run receipt is complete and correctly reports `durationProven: false`.
+The bounded `canonical-run.mjs` audit proves mechanical completion without pretending to prove duration: one deterministic zero-time run covers 60 beats, 2,746 dialogue lines, 59 choices, 60/60 scene operations, 183/183 operation nodes, 34 route chains, 1,419 legal field moves, 236 interactions, 41 exits, 23 first clears, 228 player commands, 100 enemy activations, and 16 safehouse rests. Its stable signature is `fnv1a32:029392d1`; its run receipt is complete and correctly reports `durationProven: false`.
 
-The 13 side quests and first circuit of four contracts add an authored 264-minute optional-content ledger. That estimate is data validation, not measured playtime. The UUID run receipt can collect the necessary same-run cross-page evidence, but no complete run has yet met the duration-proof gate.
+The separate `finite-content-run.mjs` witness completes all 13 side quests, 59 objectives, 18 chronicles, 288 testimony acknowledgements, 67 stages, and 31 one-time reward settlements while refusing replay and leaving all four repeat contracts out of the finite count. It deliberately records zero elapsed time. The UUID run receipt can collect the necessary same-run cross-page evidence, but no complete run has yet met the duration-proof gate.
 
 ## Camp & Loadout controls
 
@@ -81,4 +81,4 @@ Each Ren Activation begins with two Pace. Move first if useful, then commit one 
 - Every hit reports base damage, delivery, optional Essence, multiplier, Guard reduction, and final damage.
 - Guard applies to the next hit. Dodge only applies to the next dodgeable physical hit; `Moonless Thorns` is Arcane + Umbral and cannot consume it.
 
-All visuals are original project assets or Canvas pixel primitives. The provisional directional party atlas was generated for this project with a recorded prompt, is used by Camp, field movement, scene focus, and party battle tokens, and explicitly excludes real-person likenesses; no copied character names or franchise assets are used.
+All visuals are original project assets or Canvas pixel primitives. The provisional directional party atlas and transparent eight-family enemy combat atlas were generated for this project with recorded prompts. The battle renderer combines those atlases with deterministic wind-up, exact-grid lunge, projectile/trail, impact, status, stagger, and recovery phases. The assets explicitly exclude real-person likenesses; no copied character names or franchise assets are used.

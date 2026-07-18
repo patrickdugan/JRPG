@@ -7,6 +7,7 @@ import { getEncounterWinCount, getParty } from '../advancement.mjs';
 import { getNarrativeProgress } from '../narrative-runtime.mjs';
 import { isCampaignComplete } from '../progression.mjs';
 import { CAMPAIGN } from '../content/campaign.mjs';
+import { getFullDialogue } from '../content/full-dialogue.mjs';
 
 const BEATS = CAMPAIGN.chapters.flatMap((chapter) => chapter.beats);
 
@@ -36,14 +37,19 @@ test('canonical DOM-free run legally completes every authority without fabricati
   assert.equal(run.fieldCoverage.complete, true);
   assert.equal(run.summary.requiredRouteCount, 34);
   assert.equal(run.summary.routeCount, run.summary.requiredRouteCount);
-  assert.equal(run.summary.fieldSteps, 599);
-  assert.equal(run.summary.interactionCount, 53);
+  assert.equal(run.summary.fieldSteps, 1_419);
+  assert.equal(run.summary.interactionCount, 236);
+  assert.equal(run.summary.sceneOperationCount, 60);
+  assert.equal(run.summary.sceneOperationNodeCount, 183);
   assert.equal(run.summary.exitCount, 41);
   assert.equal(run.summary.restCount, 16);
-  assert.equal(run.summary.playerCommands, 224);
+  assert.equal(run.summary.dialogueLineCount, 2_746);
+  assert.equal(run.summary.playerCommands, 228);
   assert.equal(run.summary.enemyActivations, 100);
   assert.deepEqual(run.fieldCoverage.routeGaps, []);
   assert.deepEqual(run.fieldCoverage.finalObjectiveGaps, []);
+  assert.equal(run.fieldCoverage.sceneOperations.campaignComplete, true);
+  assert.equal(run.fieldCoverage.sceneOperations.completedNodeCount, 183);
 
   for (const encounter of ENCOUNTERS) {
     assert.equal(getEncounterWinCount(run.states.advancement, encounter.id), 1, encounter.id);
@@ -56,7 +62,7 @@ test('canonical DOM-free run legally completes every authority without fabricati
   assert.ok(Object.values(run.states.loadout.vitals).every((vitals) =>
     vitals.hp === vitals.maxHp && vitals.statuses.length === 0));
   for (const beat of BEATS) {
-    const lineCount = Array.isArray(beat.text) && beat.text.length ? beat.text.length : 1;
+    const lineCount = getFullDialogue(beat.id).length;
     assert.equal(getNarrativeProgress(run.states.narrative, beat.id, lineCount).complete, true, beat.id);
   }
 });
@@ -66,7 +72,7 @@ test('canonical trace and signature replay identically under the same hard bound
   const replay = runCanonicalCompletion();
 
   assert.match(first.signature, /^fnv1a32:[0-9a-f]{8}$/);
-  assert.equal(first.signature, 'fnv1a32:79a6adbd');
+  assert.equal(first.signature, 'fnv1a32:029392d1');
   assert.equal(replay.signature, first.signature);
   assert.deepEqual(replay.summary, first.summary);
   assert.deepEqual(replay.trace, first.trace);

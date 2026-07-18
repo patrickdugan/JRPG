@@ -2,7 +2,14 @@ import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
 import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter } from './content/sidequests.mjs';
+import {
+  WITNESS_CHRONICLES,
+  getWitnessChronicle,
+  getWitnessChroniclesForChapter,
+} from './content/witness-chronicles.mjs';
 import { getSceneDirection } from './content/scene-direction.mjs';
+import { getFullDialogue } from './content/full-dialogue.mjs';
+import { getSceneOperation } from './content/scene-operations.mjs';
 import {
   createAdvancementState,
   createAdvancementStorageAdapter,
@@ -78,6 +85,24 @@ import {
   atlasDirectionForMovement,
   getPartyAtlasFrame,
 } from './sprite-atlas.mjs';
+import {
+  acknowledgeWitnessChronicleLine,
+  acceptWitnessChronicle,
+  advanceWitnessChronicle,
+  completeWitnessChronicle,
+  createWitnessChronicleState,
+  createWitnessChronicleStorageAdapter,
+  getWitnessChronicleAvailability,
+  getWitnessChronicleProgress,
+  getWitnessChronicleRuntimeMetrics,
+} from './witness-chronicle-runtime.mjs';
+import { getWitnessStageFieldwork } from './witness-stage-fieldwork.mjs';
+import {
+  advanceSceneOperation,
+  createSceneOperationState,
+  createSceneOperationStorageAdapter,
+  getSceneOperationProgress,
+} from './scene-operation-runtime.mjs';
 
 const chapterList = document.querySelector('#chapterList');
 const completionLabel = document.querySelector('#completionLabel');
@@ -135,6 +160,15 @@ const returnStoryRoute = document.querySelector('#returnStoryRoute');
 const interactFieldButton = document.querySelector('#interactField');
 const fieldObjective = document.querySelector('#fieldObjective');
 const fieldProgress = document.querySelector('#fieldProgress');
+const witnessSummary = document.querySelector('#witnessSummary');
+const witnessList = document.querySelector('#witnessList');
+const witnessStageCard = document.querySelector('#witnessStageCard');
+const witnessStageMeta = document.querySelector('#witnessStageMeta');
+const witnessStageTitle = document.querySelector('#witnessStageTitle');
+const witnessStageInstruction = document.querySelector('#witnessStageInstruction');
+const witnessDialogue = document.querySelector('#witnessDialogue');
+const witnessChoiceDeck = document.querySelector('#witnessChoiceDeck');
+const witnessStageHint = document.querySelector('#witnessStageHint');
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
@@ -156,6 +190,12 @@ let questState = loadedQuests.ok ? loadedQuests.state : createQuestState();
 const narrativeAdapter = createNarrativeStorageAdapter();
 const loadedNarrative = narrativeAdapter.load();
 let narrativeState = loadedNarrative.ok ? loadedNarrative.state : createNarrativeState();
+const witnessAdapter = createWitnessChronicleStorageAdapter();
+const loadedWitnessChronicles = witnessAdapter.load();
+let witnessChronicleState = loadedWitnessChronicles.ok ? loadedWitnessChronicles.state : createWitnessChronicleState();
+const sceneOperationAdapter = createSceneOperationStorageAdapter();
+const loadedSceneOperations = sceneOperationAdapter.load();
+let sceneOperationState = loadedSceneOperations.ok ? loadedSceneOperations.state : createSceneOperationState();
 const loadoutAdapter = createLoadoutStorageAdapter();
 const loadedLoadout = loadoutAdapter.load();
 let loadoutState = loadedLoadout.ok ? loadedLoadout.value : createLoadoutState();
@@ -177,6 +217,8 @@ let fieldRuntimeState = loadedField.ok
   : createPersistentFieldState({ levelId: openingLevel.id, beatId: getCurrentBeat(campaignState).id });
 let fieldTickLast = performance.now();
 let fieldTickAccumulator = 0;
+let selectedWitnessChronicleId = witnessChronicleState.records.find((record) => record.status === 'active')?.id ?? null;
+let selectedWitnessChoiceId = null;
 
 const fallbackPalette = Object.freeze({
   floor: '#23314a',
@@ -207,6 +249,14 @@ function currentBeatBattlesCleared() {
   return encounters.every((encounter) => getEncounterWinCount(advancementState, encounter.id) > 0);
 }
 
+function currentSceneOperationProgress(beat = getBeat()) {
+  return getSceneOperationProgress(sceneOperationState, beat.id);
+}
+
+function currentSceneOperationComplete(beat = getBeat()) {
+  return currentSceneOperationProgress(beat)?.complete === true;
+}
+
 function chapterSceneCount() {
   return chapters.reduce((sum, chapter) => sum + chapter.beats.length, 0);
 }
@@ -228,6 +278,10 @@ function persistCampaignState() {
 }
 
 function questContext() {
+  return { campaignState, advancementState };
+}
+
+function witnessChronicleContext() {
   return { campaignState, advancementState };
 }
 
@@ -257,6 +311,33 @@ function settleReadyQuests() {
     completedTitles.push(quest.title);
   }
   if (changed) questAdapter.save(questState);
+  return completedTitles;
+}
+
+function settleReadyWitnessChronicles() {
+  let changed = false;
+  const completedTitles = [];
+  for (const entry of WITNESS_CHRONICLES) {
+    const progress = getWitnessChronicleProgress(witnessChronicleState, entry.id);
+    if (!progress?.readyToComplete) continue;
+    const result = completeWitnessChronicle(witnessChronicleState, entry.id);
+    if (!result.ok) continue;
+    const advancementReward = grantRewardBundle(advancementState, result.reward);
+    const loadoutReward = grantInventory(loadoutState, result.reward);
+    if (!advancementReward.ok || !loadoutReward.ok) continue;
+    witnessChronicleState = result.state;
+    advancementState = advancementReward.state;
+    loadoutState = loadoutReward.state;
+    advancementAdapter.save(advancementState);
+    loadoutAdapter.save(loadoutState);
+    changed = true;
+    completedTitles.push(entry.title);
+    if (selectedWitnessChronicleId === entry.id) {
+      selectedWitnessChronicleId = null;
+      selectedWitnessChoiceId = null;
+    }
+  }
+  if (changed) witnessAdapter.save(witnessChronicleState);
   return completedTitles;
 }
 
@@ -406,7 +487,8 @@ function getLevelForBeat(chapter, beat) {
 
 function getActiveLevelForBeat(chapter, beat) {
   const current = fieldRuntimeState?.current;
-  if (current?.beatId === beat.id) {
+  const witnessContextId = getWitnessFieldContextId();
+  if (current?.beatId === beat.id || (witnessContextId && current?.beatId === witnessContextId)) {
     const active = getLevel(current.levelId);
     if (active) return active;
   }
@@ -570,8 +652,71 @@ function getActiveQuestMarker(level) {
   return null;
 }
 
+function getSelectedWitnessProgress() {
+  if (!selectedWitnessChronicleId) return null;
+  const progress = getWitnessChronicleProgress(witnessChronicleState, selectedWitnessChronicleId);
+  return progress?.status === 'active' ? progress : null;
+}
+
+function getWitnessFieldContextId(progress = getSelectedWitnessProgress()) {
+  return progress?.currentStage
+    ? `witness:${progress.chronicle.id}:${progress.currentStage.id}`
+    : null;
+}
+
+function getWitnessTaskView(progress = getSelectedWitnessProgress()) {
+  const stage = progress?.currentStage;
+  if (!stage) return null;
+  const fieldwork = getWitnessStageFieldwork(progress.chronicle.id, stage.id);
+  if (!fieldwork?.nodes.length) return null;
+  const dialogueNodeCount = Math.max(1, fieldwork.nodes.length - 1);
+  const taskIndex = progress.dialogueComplete
+    ? fieldwork.nodes.length - 1
+    : Math.min(dialogueNodeCount - 1, Math.floor(
+      (progress.acknowledgedLines * dialogueNodeCount) / Math.max(1, progress.dialogueLineCount),
+    ));
+  return Object.freeze({ fieldwork, taskIndex, task: fieldwork.nodes[taskIndex] });
+}
+
+function getActiveWitnessMarker(level) {
+  const progress = getSelectedWitnessProgress();
+  const currentStage = progress?.currentStage;
+  if (!currentStage || currentStage.mapId !== level.id) return null;
+  const taskView = getWitnessTaskView(progress);
+  if (!taskView) return null;
+  const { fieldwork, task, taskIndex } = taskView;
+  return Object.freeze({
+    chronicle: progress.chronicle,
+    progress,
+    stage: currentStage,
+    fieldwork,
+    task,
+    taskIndex,
+    position: coordinatesOf(task.at),
+  });
+}
+
+function getActiveSceneOperationMarker(level, beat = getBeat()) {
+  const operation = getSceneOperation(beat.id);
+  const progress = currentSceneOperationProgress(beat);
+  const current = fieldRuntimeState?.current;
+  if (!operation || !progress?.currentNode || progress.complete) return null;
+  if (operation.levelId !== level.id || current?.levelId !== level.id || current?.beatId !== beat.id) return null;
+  return Object.freeze({
+    operation,
+    progress,
+    node: progress.currentNode,
+    nodeIndex: progress.currentNodeIndex,
+    position: coordinatesOf(progress.currentNode.at),
+  });
+}
+
 function inInteractionRange(left, right) {
   return left && right && Math.max(Math.abs(left.x - right.x), Math.abs(left.y - right.y)) <= 1;
+}
+
+function onExactFieldPosition(left, right) {
+  return Boolean(left && right && left.x === right.x && left.y === right.y);
 }
 
 function firstOpenFieldPosition(level, requested) {
@@ -595,11 +740,23 @@ function externalFieldFlags() {
   const questFlags = questState.records
     .filter((record) => record.status === 'completed')
     .flatMap((record) => [record.id, `${record.id}-complete`]);
+  const witnessFlags = witnessChronicleState.records
+    .filter((record) => record.status === 'completed')
+    .flatMap((record) => {
+      const entry = getWitnessChronicle(record.id);
+      const selected = entry?.choice.options.find((option) => option.id === record.choiceId);
+      return [record.id, `${record.id}-complete`, selected?.consequence.flag].filter(Boolean);
+    });
+  const operationFlags = sceneOperationState.records
+    .filter((record) => record.status === 'completed')
+    .flatMap((record) => [`scene-operation:${record.beatId}`, `scene-operation:${record.beatId}:complete`]);
   return [
     ...Object.keys(campaignState.flags ?? {}),
     ...(advancementState.inventory?.keyItems ?? []),
     ...encounterFlags,
     ...questFlags,
+    ...witnessFlags,
+    ...operationFlags,
   ];
 }
 
@@ -608,7 +765,9 @@ function fieldPosition() {
 }
 
 function ensureFieldPosition(level) {
-  const beatId = getBeat().id;
+  const progress = getSelectedWitnessProgress();
+  const witnessContextId = progress?.currentStage?.mapId === level.id ? getWitnessFieldContextId(progress) : null;
+  const beatId = witnessContextId ?? getBeat().id;
   const current = fieldRuntimeState.current;
   const changed = current.levelId !== level.id || current.beatId !== beatId;
   const next = enterField(fieldRuntimeState, level.id, beatId, { flags: externalFieldFlags() });
@@ -743,6 +902,23 @@ function drawMap(level, encounter, now) {
     }
   }
 
+  const sceneOperationMarker = getActiveSceneOperationMarker(level);
+  if (sceneOperationMarker) {
+    const px = originX + sceneOperationMarker.position.x * cell + cell / 2;
+    const py = originY + sceneOperationMarker.position.y * cell + cell / 2;
+    const pulse = 0.7 + (Math.sin(now / 230) * 0.18);
+    mapCtx.fillStyle = `rgba(244, 190, 92, ${pulse})`;
+    mapCtx.fillRect(px - cell * 0.23, py - cell * 0.23, cell * 0.46, cell * 0.46);
+    mapCtx.strokeStyle = '#fff0bb';
+    mapCtx.lineWidth = 2;
+    mapCtx.strokeRect(px - cell * 0.28, py - cell * 0.28, cell * 0.56, cell * 0.56);
+    mapCtx.fillStyle = '#21170b';
+    mapCtx.font = `${Math.max(8, Math.floor(cell * 0.27))}px monospace`;
+    mapCtx.textAlign = 'center';
+    mapCtx.textBaseline = 'middle';
+    mapCtx.fillText(String(sceneOperationMarker.nodeIndex + 1), px, py + 1);
+  }
+
   const questMarker = getActiveQuestMarker(level);
   if (questMarker) {
     const px = originX + questMarker.position.x * cell + cell / 2;
@@ -758,6 +934,23 @@ function drawMap(level, encounter, now) {
     mapCtx.fill();
     mapCtx.strokeStyle = '#a08ad1';
     mapCtx.stroke();
+  }
+
+  const witnessMarker = getActiveWitnessMarker(level);
+  if (witnessMarker) {
+    const px = originX + witnessMarker.position.x * cell + cell / 2;
+    const py = originY + witnessMarker.position.y * cell + cell / 2;
+    const pulse = 0.72 + (Math.sin(now / 250) * 0.16);
+    mapCtx.fillStyle = `rgba(160, 138, 209, ${pulse})`;
+    mapCtx.beginPath();
+    mapCtx.arc(px, py, cell * 0.24, 0, Math.PI * 2);
+    mapCtx.fill();
+    mapCtx.strokeStyle = '#fff0bb';
+    mapCtx.lineWidth = 2;
+    mapCtx.stroke();
+    mapCtx.fillStyle = '#fff0bb';
+    mapCtx.fillRect(px - 1, py - cell * 0.16, 2, cell * 0.22);
+    mapCtx.fillRect(px - 1, py + cell * 0.1, 2, 2);
   }
 
   const enemyTokens = (encounter?.enemies ?? []).flatMap((enemy, enemyIndex) => {
@@ -822,7 +1015,8 @@ function drawMap(level, encounter, now) {
 
   mapName.textContent = level?.name ?? 'Campaign map pending';
   const terrainTags = [...new Set((level?.terrain ?? []).map((entry) => entry.type ?? entry.terrain ?? entry.tag).filter(Boolean))];
-  mapLegend.textContent = terrainTags.length ? terrainTags.join(' · ') : 'Tactical preview';
+  const terrainLegend = terrainTags.length ? terrainTags.join(' · ') : 'Tactical preview';
+  mapLegend.textContent = `${terrainLegend} · Story operation ■ · Witness ● · Side story ◆`;
 }
 
 function formatEnemies(enemies = []) {
@@ -831,13 +1025,15 @@ function formatEnemies(enemies = []) {
 }
 
 function dialogueLinesForBeat(beat = getBeat()) {
+  const compiled = getFullDialogue(beat.id);
+  if (compiled) return compiled;
   const source = Array.isArray(beat.text) && beat.text.length
     ? beat.text
     : [{ speaker: 'NARRATOR', line: String(beat.text ?? 'Scene text pending.') }];
-  return source.map((entry) => Object.freeze({
+  return Object.freeze(source.map((entry) => Object.freeze({
     speaker: String(entry.speaker ?? 'NARRATOR'),
     line: String(entry.line ?? entry.text ?? ''),
-  }));
+  })));
 }
 
 function narrativeProgressForBeat(beat = getBeat()) {
@@ -1015,21 +1211,113 @@ function renderQuestJournal(chapter) {
   }));
 }
 
+function renderWitnessChronicleJournal(chapter) {
+  const metrics = getWitnessChronicleRuntimeMetrics(witnessChronicleState);
+  witnessSummary.textContent = `${metrics.completedChronicles}/${metrics.totalChronicles} complete · ${metrics.completedStages}/${metrics.totalStages} stages`;
+  const active = WITNESS_CHRONICLES.filter((entry) => getWitnessChronicleProgress(witnessChronicleState, entry.id)?.status === 'active');
+  const candidates = [...new Map([
+    ...active,
+    ...getWitnessChroniclesForChapter(chapter.id),
+  ].map((entry) => [entry.id, entry])).values()];
+  witnessList.replaceChildren(...candidates.map((entry) => {
+    const progress = getWitnessChronicleProgress(witnessChronicleState, entry.id);
+    const availability = getWitnessChronicleAvailability(witnessChronicleState, entry.id, witnessChronicleContext());
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'quest-entry';
+    button.dataset.witnessChronicleId = entry.id;
+    const status = progress.status === 'active'
+      ? `Stage ${Math.min(progress.stageIndex + 1, progress.stageCount)}/${progress.stageCount}`
+      : progress.status === 'completed' ? 'Finite route complete' : availability.available ? 'Accept chronicle' : 'Not yet available';
+    const map = getLevel(progress.currentStage?.mapId ?? entry.stages[0].mapId);
+    const detail = progress.currentStage?.activity.instruction ?? (availability.available ? entry.setup : availability.reason);
+    const small = document.createElement('small');
+    small.textContent = `${status} · ${entry.estimatedMinutes} min authored activity`;
+    const strong = document.createElement('strong');
+    strong.textContent = entry.title;
+    const span = document.createElement('span');
+    span.textContent = `${detail} · ${map?.name ?? progress.currentStage?.mapId ?? entry.stages[0].mapId}`;
+    button.append(small, strong, span);
+    button.disabled = progress.status !== 'active' && !availability.available;
+    if (progress.status === 'active') button.classList.add('is-active');
+    if (progress.status === 'completed') button.classList.add('is-complete');
+    if (selectedWitnessChronicleId === entry.id) button.classList.add('is-selected');
+    return button;
+  }));
+
+  const progress = getSelectedWitnessProgress();
+  const stage = progress?.currentStage;
+  const taskView = getWitnessTaskView(progress);
+  witnessStageCard.hidden = !stage;
+  witnessChoiceDeck.replaceChildren();
+  if (!stage) return;
+  const level = getLevel(stage.mapId);
+  witnessStageMeta.textContent = `Stage ${progress.stageIndex + 1}/${progress.stageCount} · task ${(taskView?.taskIndex ?? 0) + 1}/${taskView?.fieldwork.nodes.length ?? 1} · ${stage.activity.type} · ${level?.name ?? stage.mapId}`;
+  witnessStageTitle.textContent = progress.chronicle.title;
+  witnessStageInstruction.textContent = taskView
+    ? `${taskView.task.verb}: ${taskView.task.instruction}`
+    : stage.activity.instruction;
+  const currentLine = progress.currentDialogueLine;
+  witnessDialogue.textContent = currentLine
+    ? `${currentLine.speaker}: ${currentLine.line}`
+    : `All ${progress.dialogueLineCount} testimony lines acknowledged. The stage action can now be recorded.`;
+
+  const isChoiceStage = progress.chronicle.choice.stageId === stage.id;
+  if (isChoiceStage && progress.dialogueComplete) {
+    const prompt = document.createElement('p');
+    prompt.textContent = progress.chronicle.choice.prompt;
+    witnessChoiceDeck.append(prompt, ...progress.chronicle.choice.options.map((option) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.witnessChoiceId = option.id;
+      button.setAttribute('aria-pressed', String(selectedWitnessChoiceId === option.id));
+      button.textContent = `${option.label} ${option.consequence.summary}`;
+      return button;
+    }));
+  }
+
+  const activeLevel = getActiveLevelForBeat(getChapter(), getBeat());
+  const marker = getActiveWitnessMarker(activeLevel);
+  const nearby = marker && onExactFieldPosition(fieldPosition(), marker.position);
+  witnessStageHint.textContent = activeLevel.id !== stage.mapId
+    ? `Select this chronicle to travel to ${level?.name ?? stage.mapId}.`
+    : !nearby ? `Step onto fieldwork node ${(taskView?.taskIndex ?? 0) + 1}/${taskView?.fieldwork.nodes.length ?? 1}.`
+      : !progress.dialogueComplete ? `Press X / Interact to acknowledge line ${progress.acknowledgedLines + 1}/${progress.dialogueLineCount}.`
+        : isChoiceStage && !selectedWitnessChoiceId ? 'Choose one explicit custody consequence, then press X / Interact.'
+          : stage.encounterId ? `Press X / Interact to enter ${getEncounter(stage.encounterId)?.name ?? stage.encounterId}.`
+            : 'Press X / Interact once more to record this finite stage.';
+}
+
 function updateFieldDashboard(level) {
   const status = getFieldStatus(fieldRuntimeState, { flags: externalFieldFlags() });
+  const sceneOperationMarker = getActiveSceneOperationMarker(level);
+  const sceneOperationNearby = sceneOperationMarker && onExactFieldPosition(status.position, sceneOperationMarker.position);
+  const witnessMarker = getActiveWitnessMarker(level);
+  const witnessNearby = witnessMarker && onExactFieldPosition(status.position, witnessMarker.position);
   const marker = getActiveQuestMarker(level);
   const markerNearby = marker && inInteractionRange(status.position, marker.position);
   const authored = status.nearbyInteractables.find((item) => !item.consumed) ?? status.nearbyInteractables[0] ?? null;
-  fieldObjective.textContent = status.objective.text ?? level.objective ?? 'Explore the scene and follow its marked exit.';
+  fieldObjective.textContent = sceneOperationMarker
+    ? sceneOperationMarker.node.instruction
+    : status.objective.text ?? level.objective ?? 'Explore the scene and follow its marked exit.';
   const requirements = status.objective.requirements.length
     ? status.objective.requirements.map((item) => `${item.complete ? '✓' : '○'} ${item.label}`).join(' · ')
     : `${(level.interactables ?? []).length} authored interactions`;
-  fieldProgress.textContent = marker
-    ? `Side story: ${marker.quest.title} · ${marker.objective.instruction}`
+  fieldProgress.textContent = sceneOperationMarker
+    ? `Story operation ${sceneOperationMarker.nodeIndex + 1}/${sceneOperationMarker.progress.nodeCount} · ${sceneOperationMarker.node.verb} · ${sceneOperationMarker.node.activityType}`
+    : witnessMarker
+      ? `Witness chronicle: ${witnessMarker.chronicle.title} · ${witnessMarker.task.verb} ${witnessMarker.taskIndex + 1}/${witnessMarker.fieldwork.nodes.length} · ${witnessMarker.task.instruction}`
+    : marker
+      ? `Side story: ${marker.quest.title} · ${marker.objective.instruction}`
     : `${status.objective.completedCount}/${status.objective.totalCount} route requirements · ${requirements}`;
-  interactFieldButton.disabled = !markerNearby && !authored && !status.exit;
-  interactFieldButton.textContent = markerNearby
-    ? 'Advance side story (X)'
+  interactFieldButton.disabled = !sceneOperationNearby && !witnessNearby && !markerNearby && !authored && !status.exit;
+  interactFieldButton.textContent = sceneOperationNearby
+    ? `${sceneOperationMarker.node.verb} story operation (X)`
+    : witnessNearby
+      ? (witnessMarker.progress.dialogueComplete
+      ? witnessMarker.stage.encounterId ? 'Enter chronicle battle (X)' : 'Record witness stage (X)'
+      : `Hear testimony ${witnessMarker.progress.acknowledgedLines + 1}/${witnessMarker.progress.dialogueLineCount} (X)`)
+    : markerNearby ? 'Advance side story (X)'
     : authored ? `${authored.consumed ? 'Review' : 'Interact'}: ${authored.id} (X)`
       : status.exit ? `${status.exit.ready ? 'Use' : 'Inspect'} exit (X)` : 'Nothing nearby (X)';
 }
@@ -1099,6 +1387,7 @@ function renderBattleLaunch(beat, beatBattleState) {
 
 function render() {
   const newlyCompletedQuests = settleReadyQuests();
+  const newlyCompletedWitnessChronicles = settleReadyWitnessChronicles();
   const chapter = getChapter();
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
@@ -1124,14 +1413,16 @@ function render() {
   encounterEnemies.textContent = formatEnemies(encounter?.enemies);
   bossMechanic.textContent = formatBrief(encounter?.bossMechanic, 'No boss mechanic assigned.');
   previousScene.disabled = recordIndex <= 0;
+  const operationCleared = currentSceneOperationComplete(beat);
   const battlesCleared = currentBeatBattlesCleared();
   const fieldRouteCleared = currentFieldRouteComplete();
   const narrativeCleared = currentNarrativeComplete(beat);
   const choicesCleared = currentChoicesComplete(beat);
-  nextScene.disabled = isCampaignComplete(campaignState) || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared;
+  nextScene.disabled = isCampaignComplete(campaignState) || !operationCleared || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared;
   nextScene.textContent = isCampaignComplete(campaignState)
     ? 'Campaign complete'
-    : !battlesCleared ? 'Clear encounter to continue'
+    : !operationCleared ? 'Complete the scene operation'
+      : !battlesCleared ? 'Clear encounter to continue'
       : !narrativeCleared ? 'Finish the scene dialogue'
         : !choicesCleared ? 'Record the scene decision'
           : fieldRouteCleared ? 'Next scene →' : 'Reach and use the route exit';
@@ -1144,10 +1435,15 @@ function render() {
   setKeyArt(chapter);
   renderChoices(beat);
   renderQuestJournal(chapter);
+  renderWitnessChronicleJournal(chapter);
   renderChapterList();
   renderBattleLaunch(beat, beatBattleState);
-  fieldFeedback.textContent = newlyCompletedQuests.length
-    ? `Side story complete: ${newlyCompletedQuests.join(', ')}. Rewards recorded in the regional journal.`
+  const completionNotices = [
+    newlyCompletedQuests.length ? `Side story complete: ${newlyCompletedQuests.join(', ')}.` : '',
+    newlyCompletedWitnessChronicles.length ? `Witness chronicle complete: ${newlyCompletedWitnessChronicles.join(', ')}.` : '',
+  ].filter(Boolean);
+  fieldFeedback.textContent = completionNotices.length
+    ? `${completionNotices.join(' ')} One-time rewards recorded.`
     : describeFieldPosition(level, enteredNewLevel ? 'Entered field' : 'Field position');
   drawMap(level, encounter, animationNow);
 }
@@ -1206,6 +1502,10 @@ function advance(direction) {
     return;
   }
   if (isCampaignComplete(campaignState)) return;
+  if (!currentSceneOperationComplete()) {
+    fieldFeedback.textContent = 'Complete every ordered field node in this scene operation before advancing the story.';
+    return;
+  }
   if (!currentBeatBattlesCleared()) {
     battleStatus.textContent = 'Clear every encounter bound to this scene before advancing.';
     return;
@@ -1296,12 +1596,57 @@ questList.addEventListener('click', (event) => {
   renderQuestJournal(getChapter());
 });
 
+witnessList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-witness-chronicle-id]');
+  if (!button) return;
+  const chronicleId = button.dataset.witnessChronicleId;
+  let progress = getWitnessChronicleProgress(witnessChronicleState, chronicleId);
+  if (progress?.status !== 'active') {
+    playtimeCategory = 'narrative';
+    const accepted = acceptWitnessChronicle(witnessChronicleState, chronicleId, witnessChronicleContext());
+    if (!accepted.ok) {
+      fieldFeedback.textContent = accepted.reason;
+      return;
+    }
+    witnessChronicleState = accepted.state;
+    witnessAdapter.save(witnessChronicleState);
+    progress = accepted.progress;
+  }
+  if (!progress?.currentStage) return;
+  const destination = getLevel(progress.currentStage.mapId);
+  if (!destination) {
+    fieldFeedback.textContent = `The witness destination ${progress.currentStage.mapId} is not authored.`;
+    return;
+  }
+  selectedWitnessChronicleId = chronicleId;
+  selectedWitnessChoiceId = null;
+  playtimeCategory = 'exploration';
+  fieldRuntimeState = enterField(fieldRuntimeState, destination.id, getWitnessFieldContextId(progress), { flags: externalFieldFlags() });
+  fieldAdapter.save(fieldRuntimeState);
+  render();
+  fieldFeedback.textContent = `Witness route: ${progress.currentStage.activity.instruction} (${destination.name}). Follow the violet marker.`;
+});
+
+witnessChoiceDeck.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-witness-choice-id]');
+  const progress = getSelectedWitnessProgress();
+  if (!button || !progress?.currentStage || progress.chronicle.choice.stageId !== progress.currentStage.id) return;
+  const option = progress.chronicle.choice.options.find((candidate) => candidate.id === button.dataset.witnessChoiceId);
+  if (!option) return;
+  selectedWitnessChoiceId = option.id;
+  playtimeCategory = 'narrative';
+  renderWitnessChronicleJournal(getChapter());
+  fieldFeedback.textContent = `Witness consequence selected: ${option.label}`;
+});
+
 returnStoryRoute.addEventListener('click', () => {
   playtimeCategory = 'exploration';
   const chapter = getChapter();
   const beat = getBeat();
   const destination = getLevelForBeat(chapter, beat);
   fieldRuntimeState = enterField(fieldRuntimeState, destination.id, beat.id, { flags: externalFieldFlags() });
+  selectedWitnessChronicleId = null;
+  selectedWitnessChoiceId = null;
   fieldAdapter.save(fieldRuntimeState);
   render();
   fieldFeedback.textContent = `Returned to the main story route at ${destination.name}.`;
@@ -1320,6 +1665,91 @@ interactFieldButton.addEventListener('click', () => {
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
   ensureFieldPosition(level);
+  const sceneOperationMarker = getActiveSceneOperationMarker(level, beat);
+  if (sceneOperationMarker && onExactFieldPosition(fieldPosition(), sceneOperationMarker.position)) {
+    const result = advanceSceneOperation(
+      sceneOperationState,
+      beat.id,
+      sceneOperationMarker.node.id,
+      { at: keyOf(fieldPosition()), encounterWins: advancementState.encounterWins ?? {} },
+    );
+    if (!result.ok && result.code === 'encounter-victory-required') {
+      const encounterId = result.pendingEncounterIds[0];
+      const parameters = new URLSearchParams({
+        encounter: encounterId,
+        return: 'campaign.html',
+        beat: beat.id,
+        sceneOperation: beat.id,
+        sceneOperationNode: sceneOperationMarker.node.id,
+      });
+      fieldAdapter.save(fieldRuntimeState);
+      sceneOperationAdapter.save(sceneOperationState);
+      window.location.href = `battle.html?${parameters.toString()}`;
+      return;
+    }
+    if (!result.ok) {
+      fieldFeedback.textContent = result.reason;
+      return;
+    }
+    sceneOperationState = result.state;
+    sceneOperationAdapter.save(sceneOperationState);
+    render();
+    fieldFeedback.textContent = result.beatCompleted
+      ? `Scene operation complete: all ${result.progress.nodeCount} finite field nodes are recorded.`
+      : `${result.node.verb} complete. Continue to story operation ${result.progress.currentNodeIndex + 1}/${result.progress.nodeCount}: ${result.progress.currentNode.instruction}`;
+    return;
+  }
+  const witnessMarker = getActiveWitnessMarker(level);
+  if (witnessMarker && onExactFieldPosition(fieldPosition(), witnessMarker.position)) {
+    const { chronicle, progress, stage } = witnessMarker;
+    if (!progress.dialogueComplete) {
+      const acknowledged = acknowledgeWitnessChronicleLine(witnessChronicleState, chronicle.id);
+      if (!acknowledged.ok) {
+        fieldFeedback.textContent = acknowledged.reason;
+        return;
+      }
+      witnessChronicleState = acknowledged.state;
+      witnessAdapter.save(witnessChronicleState);
+      playtimeCategory = 'narrative';
+      renderWitnessChronicleJournal(chapter);
+      updateFieldDashboard(level);
+      fieldFeedback.textContent = `${acknowledged.line.speaker}: ${acknowledged.line.line}`;
+      return;
+    }
+    const isChoiceStage = chronicle.choice.stageId === stage.id;
+    if (isChoiceStage && !selectedWitnessChoiceId) {
+      fieldFeedback.textContent = 'Choose one explicit witness consequence in the chronicle panel before recording this stage.';
+      return;
+    }
+    if (stage.encounterId) {
+      const parameters = new URLSearchParams({
+        encounter: stage.encounterId,
+        return: 'campaign.html',
+        beat: beat.id,
+        chronicle: chronicle.id,
+        chronicleStage: stage.id,
+      });
+      if (selectedWitnessChoiceId) parameters.set('chronicleChoice', selectedWitnessChoiceId);
+      fieldAdapter.save(fieldRuntimeState);
+      witnessAdapter.save(witnessChronicleState);
+      window.location.href = `battle.html?${parameters.toString()}`;
+      return;
+    }
+    const evidence = isChoiceStage ? { choiceId: selectedWitnessChoiceId } : {};
+    const advanced = advanceWitnessChronicle(witnessChronicleState, chronicle.id, stage.id, evidence);
+    if (!advanced.ok) {
+      fieldFeedback.textContent = advanced.reason;
+      return;
+    }
+    witnessChronicleState = advanced.state;
+    witnessAdapter.save(witnessChronicleState);
+    selectedWitnessChoiceId = null;
+    render();
+    fieldFeedback.textContent = advanced.progress.readyToComplete
+      ? `${chronicle.title}: every finite stage is recorded; its one-time reward has been settled.`
+      : `${chronicle.title}: stage recorded. Next: ${advanced.progress.currentStage.activity.instruction}`;
+    return;
+  }
   const marker = getActiveQuestMarker(level);
   if (marker && inInteractionRange(fieldPosition(), marker.position)) {
     if (marker.objective.type === 'battle-replay' && marker.objective.encounterId) {
@@ -1385,6 +1815,10 @@ interactFieldButton.addEventListener('click', () => {
     return;
   }
   if (status.exit) {
+    if (fieldRuntimeState.current.beatId === beat.id && !currentSceneOperationComplete(beat)) {
+      fieldFeedback.textContent = 'This route remains open, but the ordered scene operation must be completed before leaving its story field.';
+      return;
+    }
     const result = useFieldExit(fieldRuntimeState, status.exit.id, {
       flags: externalFieldFlags(),
       enterDestination: true,
@@ -1408,7 +1842,7 @@ interactFieldButton.addEventListener('click', () => {
 previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
-  if (!window.confirm('Start a clean New Game? This clears story, battles, quests, camp inventory, field positions, playtime, and the prior run receipt.')) return;
+  if (!window.confirm('Start a clean New Game? This clears story, scene operations, battles, quests, camp inventory, field positions, playtime, and the prior run receipt.')) return;
   if (typeof globalThis.crypto?.randomUUID !== 'function') {
     fieldFeedback.textContent = 'A verified New Game requires crypto.randomUUID support in this browser.';
     return;
@@ -1430,6 +1864,10 @@ resetCampaign.addEventListener('click', () => {
   clearPendingRunReceiptPlaytime();
   questState = createQuestState();
   narrativeState = createNarrativeState();
+  witnessChronicleState = createWitnessChronicleState();
+  sceneOperationState = createSceneOperationState();
+  selectedWitnessChronicleId = null;
+  selectedWitnessChoiceId = null;
   loadoutState = createLoadoutState();
   playtimeState = createPlaytimeState();
   const level = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
@@ -1438,6 +1876,8 @@ resetCampaign.addEventListener('click', () => {
   advancementAdapter.clear();
   questAdapter.clear();
   narrativeAdapter.clear();
+  witnessAdapter.clear();
+  sceneOperationAdapter.clear();
   fieldAdapter.clear();
   loadoutAdapter.clear();
   playtimeAdapter.clear();
@@ -1507,6 +1947,10 @@ window.addEventListener('pageshow', (event) => {
   if (refreshedQuests.ok) questState = refreshedQuests.state;
   const refreshedNarrative = narrativeAdapter.load();
   if (refreshedNarrative.ok) narrativeState = refreshedNarrative.state;
+  const refreshedWitnessChronicles = witnessAdapter.load();
+  if (refreshedWitnessChronicles.ok) witnessChronicleState = refreshedWitnessChronicles.state;
+  const refreshedSceneOperations = sceneOperationAdapter.load();
+  if (refreshedSceneOperations.ok) sceneOperationState = refreshedSceneOperations.state;
   const refreshedField = fieldAdapter.load();
   if (refreshedField.ok && refreshedField.found) fieldRuntimeState = refreshedField.state;
   const refreshedLoadout = loadoutAdapter.load();
@@ -1528,6 +1972,8 @@ window.addEventListener('pagehide', () => {
   playtimeAdapter.save(playtimeState);
   if (runReceiptState) runReceiptAdapter.save(runReceiptState);
   narrativeAdapter.save(narrativeState);
+  witnessAdapter.save(witnessChronicleState);
+  sceneOperationAdapter.save(sceneOperationState);
   fieldAdapter.save(fieldRuntimeState);
 });
 document.addEventListener('visibilitychange', () => {
@@ -1538,6 +1984,8 @@ document.addEventListener('visibilitychange', () => {
     playtimeAdapter.save(playtimeState);
     if (runReceiptState) runReceiptAdapter.save(runReceiptState);
     narrativeAdapter.save(narrativeState);
+    witnessAdapter.save(witnessChronicleState);
+    sceneOperationAdapter.save(sceneOperationState);
     fieldAdapter.save(fieldRuntimeState);
   }
 });

@@ -1,6 +1,7 @@
 import { getEncounter, ENCOUNTERS } from './content/encounters.mjs';
 import {
   CAMPAIGN_COMBAT_PHASES,
+  COMBAT_STATUS_DEFINITIONS,
   PARTY_PROFILES,
   CampaignCombatEngine,
   canMoveEightWay,
@@ -54,6 +55,32 @@ import {
   atlasDirectionForMovement,
   getPartyAtlasFrame,
 } from './sprite-atlas.mjs';
+import {
+  ENEMY_ATLAS,
+  getEnemyAtlasFrame,
+} from './enemy-atlas.mjs';
+import {
+  formatObjectiveRequirement,
+  getObjectiveActionPresentation,
+  getObjectiveTokenPlacements,
+} from './objective-presentation.mjs';
+import {
+  canStartAutoGrindPresentation,
+  createEnemyIntentSchedule,
+  createEnemyFamilyTimeline,
+  createPartySkillTimeline,
+  getBattlePresentationElapsedMs,
+  getBattlePresentationActors,
+  getNextBattleActionAt,
+  isBattlePresentationSettled,
+  rescaleEnemyIntentSchedule,
+  sampleBattleAnimation,
+} from './battle-animation.mjs';
+import {
+  advanceWitnessChronicle,
+  createWitnessChronicleState,
+  createWitnessChronicleStorageAdapter,
+} from './witness-chronicle-runtime.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -87,6 +114,8 @@ const continueCampaign = document.querySelector('#continueCampaign');
 context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
 battlePartyAtlasImage.src = PARTY_ATLAS.url;
+const battleEnemyAtlasImage = new Image();
+battleEnemyAtlasImage.src = ENEMY_ATLAS.url;
 
 const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
@@ -95,6 +124,9 @@ const requestedReturn = query.get('return');
 const requestedQuestId = query.get('quest');
 const requestedQuestObjectiveId = query.get('objective');
 const requestedFieldTriggerId = query.get('fieldTrigger');
+const requestedChronicleId = query.get('chronicle');
+const requestedChronicleStageId = query.get('chronicleStage');
+const requestedChronicleChoiceId = query.get('chronicleChoice');
 if (requestedReturn && /^[a-z0-9._/?=&-]+$/i.test(requestedReturn)) {
   campaignLink.href = requestedReturn;
   continueCampaign.href = requestedReturn;
@@ -107,6 +139,7 @@ advancementState = preparePartyForEncounter(advancementState, encounter.id);
 advancementAdapter.save(advancementState);
 const repeatBattleAtLoad = getEncounterWinCount(advancementState, encounter.id) > 0;
 let speedMultiplier = repeatBattleAtLoad ? advancementState.speedMultiplier : 1;
+let battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
 const playtimeAdapter = createPlaytimeStorageAdapter();
 const playtimeLoad = playtimeAdapter.load();
 let playtimeState = playtimeLoad.ok ? playtimeLoad.state : createPlaytimeState();
@@ -119,6 +152,7 @@ let runReceiptState = runReceiptLoad.ok && runReceiptLoad.found ? runReceiptLoad
 let runReceiptPendingMs = 0;
 let runReceiptPendingCategory = null;
 const questAdapter = createQuestStorageAdapter();
+const witnessAdapter = createWitnessChronicleStorageAdapter();
 const fieldAdapter = createFieldStorageAdapter();
 const loadoutAdapter = createLoadoutStorageAdapter();
 const loadoutLoaded = loadoutAdapter.load();
@@ -132,12 +166,15 @@ let selectedCommand = 'attack';
 let selectedTargetId = '';
 let rewardRecorded = false;
 let vitalsRecorded = false;
-let enemyActionAt = null;
+let enemyIntentSchedule = null;
 let autoGrindActive = false;
 let autoActionAt = null;
 let autoSettleAt = null;
 const battleFacingByActor = new Map();
 const battleMotionUntil = new Map();
+const battleEnemyPoseByActor = new Map();
+const battleEnemyPoseUntil = new Map();
+let activeBattleAnimation = null;
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
 
@@ -210,10 +247,90 @@ function autoInputLocked() {
   return autoGrindActive || autoSettleAt !== null;
 }
 
+function battleAnimationActive(now = performance.now()) {
+  return Boolean(activeBattleAnimation && now < activeBattleAnimation.endsAt);
+}
+
+function manualInputLocked(now = performance.now()) {
+  return autoInputLocked() || battleAnimationActive(now);
+}
+
+function clearEnemyIntentSchedule() {
+  enemyIntentSchedule = null;
+}
+
+function scheduleEnemyIntent(now = performance.now()) {
+  enemyIntentSchedule = createEnemyIntentSchedule(now, speedMultiplier);
+  return enemyIntentSchedule;
+}
+
+function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapshot()) {
+  if (!result?.ok || !attackerId || !result.targetId || !result.skillId) return null;
+  const attacker = beforeSnapshot.actors.find((actor) => actor.instanceId === attackerId);
+  const target = beforeSnapshot.actors.find((actor) => actor.instanceId === result.targetId);
+  if (!attacker || !target) return null;
+  const speed = autoGrindActive ? speedMultiplier : 1;
+  const sourceTile = attacker.pos;
+  const targetTile = target.pos;
+  const skill = attacker.skills?.find((candidate) => candidate.id === result.skillId) ?? {
+    id: result.skillId,
+    delivery: result.delivery,
+    essence: result.essence,
+    effect: result.statusApplied ? { status: result.statusId } : undefined,
+  };
+  const selfStatusId = skill.effect?.selfStatus ?? null;
+  const afterAttacker = engine.snapshot().actors.find((actor) => actor.instanceId === attackerId);
+  const selfStatusApplied = Boolean(selfStatusId && afterAttacker?.statuses?.some((status) => status.id === selfStatusId));
+  const animationOptions = {
+    sourceTile,
+    targetTile,
+    statusId: result.statusId ?? null,
+    statusApplied: Boolean(result.statusApplied),
+    selfStatusId,
+    selfStatusApplied,
+    speed,
+  };
+  const timeline = attacker.faction === 'party'
+    ? createPartySkillTimeline(result.skillId, animationOptions)
+    : createEnemyFamilyTimeline(attacker.templateId, { ...animationOptions, skill });
+  const startedAt = performance.now();
+  clearEnemyIntentSchedule();
+  activeBattleAnimation = Object.freeze({
+    attackerId,
+    targetId: result.targetId,
+    retainedActors: Object.freeze([attacker, target]),
+    timeline,
+    startedAt,
+    endsAt: startedAt + timeline.durationMs,
+  });
+  return activeBattleAnimation;
+}
+
+function currentBattleAnimationFrame(now = performance.now()) {
+  if (!activeBattleAnimation) return null;
+  if (now >= activeBattleAnimation.endsAt) return null;
+  return {
+    ...activeBattleAnimation,
+    frame: sampleBattleAnimation(activeBattleAnimation.timeline, now - activeBattleAnimation.startedAt),
+  };
+}
+
 function markBattleMotion(actorId, dx, dy) {
   battleFacingByActor.set(actorId, atlasDirectionForMovement(dx, dy, battleFacingByActor.get(actorId) ?? 'north'));
   const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
   battleMotionUntil.set(actorId, performance.now() + (320 / presentationSpeed));
+}
+
+function markEnemyPose(actorId, pose, durationMs = 360) {
+  const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
+  battleEnemyPoseByActor.set(actorId, pose);
+  battleEnemyPoseUntil.set(actorId, performance.now() + (durationMs / presentationSpeed));
+}
+
+function markCombatResolutionPose(result, attackerId = null) {
+  if (!result?.ok) return;
+  if (attackerId && (result.skillId || Number.isFinite(result.finalDamage))) markEnemyPose(attackerId, 'attack');
+  if (result.targetId && result.finalDamage > 0) markEnemyPose(result.targetId, 'stagger');
 }
 
 function livingEnemies(snapshot = engine.snapshot()) {
@@ -257,10 +374,125 @@ function mapGeometry() {
   };
 }
 
+function traceObjectiveMarker(marker, radius) {
+  context.beginPath();
+  if (marker === 'node') {
+    context.moveTo(0, -radius); context.lineTo(radius, 0); context.lineTo(0, radius); context.lineTo(-radius, 0); context.closePath();
+  } else if (marker === 'gate') {
+    context.rect(-radius * 0.72, -radius, radius * 1.44, radius * 1.9);
+    context.moveTo(0, -radius); context.lineTo(0, radius * 0.9);
+  } else if (marker === 'shield') {
+    context.moveTo(0, -radius); context.lineTo(radius * 0.78, -radius * 0.55); context.lineTo(radius * 0.58, radius * 0.55);
+    context.lineTo(0, radius); context.lineTo(-radius * 0.58, radius * 0.55); context.lineTo(-radius * 0.78, -radius * 0.55); context.closePath();
+  } else if (marker === 'anchor') {
+    context.moveTo(0, -radius); context.lineTo(0, radius * 0.75); context.moveTo(-radius * 0.7, radius * 0.2);
+    context.quadraticCurveTo(0, radius * 1.15, radius * 0.7, radius * 0.2);
+  } else if (marker === 'water') {
+    context.moveTo(-radius, -radius * 0.25); context.quadraticCurveTo(-radius * 0.5, -radius * 0.75, 0, -radius * 0.25);
+    context.quadraticCurveTo(radius * 0.5, radius * 0.25, radius, -radius * 0.25);
+    context.moveTo(-radius, radius * 0.45); context.quadraticCurveTo(-radius * 0.5, -radius * 0.05, 0, radius * 0.45);
+    context.quadraticCurveTo(radius * 0.5, radius * 0.95, radius, radius * 0.45);
+  } else if (marker === 'chain') {
+    context.ellipse(-radius * 0.38, 0, radius * 0.48, radius * 0.3, -0.5, 0, Math.PI * 2);
+    context.moveTo(radius * 0.1, -radius * 0.18);
+    context.ellipse(radius * 0.38, 0, radius * 0.48, radius * 0.3, -0.5, 0, Math.PI * 2);
+  } else if (marker === 'lantern') {
+    context.rect(-radius * 0.55, -radius * 0.75, radius * 1.1, radius * 1.5);
+    context.moveTo(-radius * 0.35, -radius); context.lineTo(radius * 0.35, -radius);
+  } else if (marker === 'record' || marker === 'orders') {
+    context.rect(-radius * 0.65, -radius * 0.9, radius * 1.3, radius * 1.8);
+    context.moveTo(-radius * 0.4, -radius * 0.35); context.lineTo(radius * 0.4, -radius * 0.35);
+    context.moveTo(-radius * 0.4, radius * 0.15); context.lineTo(radius * 0.4, radius * 0.15);
+  } else if (marker === 'release') {
+    context.arc(0, 0, radius * 0.82, 0.35, Math.PI * 1.75);
+    context.moveTo(radius * 0.82, -radius * 0.25); context.lineTo(radius * 0.95, radius * 0.15); context.lineTo(radius * 0.52, radius * 0.08);
+  } else if (marker === 'chevron') {
+    context.moveTo(-radius, -radius * 0.6); context.lineTo(0, 0); context.lineTo(-radius, radius * 0.6);
+    context.moveTo(0, -radius * 0.6); context.lineTo(radius, 0); context.lineTo(0, radius * 0.6);
+  } else {
+    context.arc(0, 0, radius * 0.82, 0, Math.PI * 2);
+  }
+}
+
+function drawObjectiveTokens(snapshot, level, geometry, now) {
+  const occupied = snapshot.actors
+    .filter((actor) => actor.hp > 0 && actor.active !== false)
+    .map((actor) => `${actor.pos.x},${actor.pos.y}`);
+  const placements = getObjectiveTokenPlacements(level, snapshot.objective.requirements, occupied);
+  for (const placement of placements) {
+    const centerX = geometry.originX + placement.x * geometry.cell + geometry.cell / 2;
+    const centerY = geometry.originY + placement.y * geometry.cell + geometry.cell / 2;
+    const radius = Math.max(4, geometry.cell * 0.22);
+    context.save();
+    context.translate(centerX, centerY);
+    context.globalAlpha = placement.complete ? 0.28 : 0.72 + Math.sin(now / 180 + placement.index) * 0.12;
+    context.fillStyle = '#07111d';
+    context.beginPath();
+    context.arc(0, 0, radius * 1.35, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = placement.presentation.color;
+    context.lineWidth = Math.max(1.5, geometry.cell * 0.055);
+    traceObjectiveMarker(placement.presentation.marker, radius);
+    context.stroke();
+    context.restore();
+  }
+}
+
+function battleCanvasPoint(tile, geometry) {
+  return {
+    x: geometry.originX + tile.x * geometry.cell + geometry.cell / 2,
+    y: geometry.originY + tile.y * geometry.cell + geometry.cell / 2,
+  };
+}
+
+function drawBattleAnimationFx(animation, geometry) {
+  const frame = animation?.frame;
+  if (!frame) return;
+  context.save();
+  context.imageSmoothingEnabled = false;
+  if (frame.emission) {
+    const from = battleCanvasPoint(frame.emission.fromTile, geometry);
+    const head = battleCanvasPoint(frame.emission.headTile, geometry);
+    context.strokeStyle = frame.emission.color;
+    context.lineWidth = Math.max(2, geometry.cell * (frame.emission.leavesTrail ? 0.12 : 0.07));
+    context.globalAlpha = 0.82;
+    context.beginPath();
+    context.moveTo(from.x, from.y);
+    context.lineTo(head.x, head.y);
+    context.stroke();
+    context.fillStyle = frame.emission.accentColor;
+    const size = Math.max(3, geometry.cell * 0.13);
+    context.fillRect(Math.round(head.x - size / 2), Math.round(head.y - size / 2), Math.round(size), Math.round(size));
+  }
+  if (frame.impact) {
+    const at = battleCanvasPoint(frame.impact.tile, geometry);
+    context.globalAlpha = frame.impact.opacity;
+    context.fillStyle = frame.impact.color;
+    context.beginPath();
+    context.arc(at.x, at.y, frame.impact.radiusTiles * geometry.cell, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = frame.impact.accentColor;
+    context.lineWidth = Math.max(2, geometry.cell * 0.06);
+    context.stroke();
+  }
+  for (const glyph of [frame.statusGlyph, frame.selfStatusGlyph].filter(Boolean)) {
+    const at = battleCanvasPoint(glyph.tile, geometry);
+    context.globalAlpha = glyph.opacity;
+    context.fillStyle = glyph.color;
+    context.font = `${Math.max(12, Math.round(geometry.cell * 0.36 * glyph.scale))}px monospace`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText(glyph.glyph, Math.round(at.x), Math.round(at.y));
+  }
+  context.restore();
+}
+
 function drawBattle(now = performance.now()) {
   const snapshot = engine.snapshot();
   const level = engine.level;
   const { cell, originX, originY } = mapGeometry();
+  const geometry = { cell, originX, originY };
+  const animation = currentBattleAnimationFrame(now);
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
@@ -310,9 +542,16 @@ function drawBattle(now = performance.now()) {
     }
   }
 
-  for (const actor of snapshot.actors.filter((entry) => entry.hp > 0 && entry.active !== false)) {
-    const centerX = originX + actor.pos.x * cell + cell / 2;
-    const centerY = originY + actor.pos.y * cell + cell / 2 + Math.sin(now / 170 + actor.pos.x) * Math.max(1, cell * 0.035);
+  drawObjectiveTokens(snapshot, level, geometry, now);
+
+  const presentationActors = getBattlePresentationActors(snapshot.actors, animation?.retainedActors ?? []);
+  for (const actor of presentationActors) {
+    const animatedActor = animation && actor.instanceId === animation.attackerId ? animation.frame.actor : null;
+    const animatedTarget = animation && actor.instanceId === animation.targetId ? animation.frame.target : null;
+    const renderTile = animatedActor?.renderTile ?? animatedTarget?.renderTile ?? actor.pos;
+    const centerX = originX + renderTile.x * cell + cell / 2;
+    const centerY = originY + renderTile.y * cell + cell / 2 + Math.sin(now / 170 + actor.pos.x) * Math.max(1, cell * 0.035);
+    const animationScale = animatedActor?.scale ?? 1;
     const party = actor.faction === 'party';
     if (party && actor.instanceId === snapshot.activeActorId) {
       context.strokeStyle = '#f5d77e';
@@ -328,13 +567,16 @@ function drawBattle(now = performance.now()) {
       const fallbackFacing = nearestEnemy
         ? atlasDirectionForMovement(Math.sign(nearestEnemy.pos.x - actor.pos.x), Math.sign(nearestEnemy.pos.y - actor.pos.y), 'north')
         : 'north';
-      const facing = battleFacingByActor.get(actor.instanceId) ?? fallbackFacing;
+      const animationFacing = animatedActor?.facing
+        ? atlasDirectionForMovement(animatedActor.facing.x, animatedActor.facing.y, fallbackFacing)
+        : null;
+      const facing = animationFacing ?? battleFacingByActor.get(actor.instanceId) ?? fallbackFacing;
       const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
       const phase = now < (battleMotionUntil.get(actor.instanceId) ?? 0)
         ? Math.floor((now * presentationSpeed) / 110) % 2
         : 0;
       const frame = getPartyAtlasFrame(actor.templateId, facing, phase);
-      const drawHeight = cell * 1.18;
+      const drawHeight = cell * 1.18 * animationScale;
       const drawWidth = drawHeight * (frame.width / frame.height);
       context.drawImage(
         battlePartyAtlasImage,
@@ -347,6 +589,52 @@ function drawBattle(now = performance.now()) {
         drawWidth,
         drawHeight,
       );
+    } else if (!party && battleEnemyAtlasImage.complete && battleEnemyAtlasImage.naturalWidth > 0) {
+      const animationPose = animatedActor?.pose ?? animatedTarget?.pose;
+      const transientPose = now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)
+        ? battleEnemyPoseByActor.get(actor.instanceId)
+        : null;
+      const pose = animationPose
+        ?? transientPose
+        ?? (snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && actor.instanceId === snapshot.activeActorId
+          ? 'windup'
+          : 'neutral');
+      const frame = getEnemyAtlasFrame(actor.templateId, pose);
+      const scaleByFamily = {
+        hound: 0.98,
+        wisp: 0.9,
+        'ashen-oni': 1.25,
+        'court-retainer': 1.18,
+        widow: 1.3,
+        furnace: 1.42,
+        'bell-warden': 1.38,
+        'black-court': 1.4,
+      };
+      const drawHeight = cell * (scaleByFamily[frame.familyId] ?? 1.2) * animationScale;
+      const drawWidth = drawHeight * (frame.width / frame.height);
+      const nearestParty = snapshot.actors
+        .filter((candidate) => candidate.faction === 'party' && candidate.hp > 0 && candidate.active !== false)
+        .sort((left, right) => Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
+          - Math.max(Math.abs(right.pos.x - actor.pos.x), Math.abs(right.pos.y - actor.pos.y))
+          || left.instanceId.localeCompare(right.instanceId))[0];
+      const faceLeft = animatedActor?.facing?.x
+        ? animatedActor.facing.x < 0
+        : !nearestParty || nearestParty.pos.x <= actor.pos.x;
+      context.save();
+      context.translate(centerX, 0);
+      context.scale(faceLeft ? -1 : 1, 1);
+      context.drawImage(
+        battleEnemyAtlasImage,
+        frame.x,
+        frame.y,
+        frame.width,
+        frame.height,
+        -drawWidth / 2,
+        centerY - drawHeight * 0.58,
+        drawWidth,
+        drawHeight,
+      );
+      context.restore();
     } else {
       context.fillStyle = actor.instanceId === snapshot.activeActorId ? '#f5d77e' : party ? '#70c9c2' : '#d06459';
       context.fillRect(centerX - cell * 0.23, centerY - cell * 0.25, cell * 0.46, cell * 0.5);
@@ -359,6 +647,7 @@ function drawBattle(now = performance.now()) {
       context.strokeRect(centerX - cell * 0.31, centerY - cell * 0.33, cell * 0.62, cell * 0.66);
     }
   }
+  drawBattleAnimationFx(animation, geometry);
 }
 
 function createCombatantCard(actor, selected = false) {
@@ -381,10 +670,28 @@ function createCombatantCard(actor, selected = false) {
   fill.style.setProperty('--meter-value', `${Math.max(0, Math.round((actor.hp / actor.maxHp) * 100))}%`);
   fill.style.setProperty('--meter-color', actor.faction === 'party' ? '#77c9c5' : '#d76555');
   meter.append(fill);
+  const spirit = document.createElement('div');
+  spirit.className = 'combatant-resource';
+  if (actor.maxSpirit > 0) {
+    const spiritLabel = document.createElement('span');
+    spiritLabel.textContent = `Spirit ${actor.spirit}/${actor.maxSpirit}`;
+    const spiritMeter = document.createElement('div');
+    spiritMeter.className = 'meter spirit-meter';
+    const spiritFill = document.createElement('span');
+    spiritFill.style.setProperty('--meter-value', `${Math.round((actor.spirit / actor.maxSpirit) * 100)}%`);
+    spiritFill.style.setProperty('--meter-color', '#a68ee8');
+    spiritMeter.append(spiritFill);
+    spirit.append(spiritLabel, spiritMeter);
+  }
   const meta = document.createElement('div');
   meta.className = 'combatant-meta';
-  meta.textContent = `${actor.stance.toUpperCase()} · ready pulse ${actor.readyAtPulse}${actor.analyzed ? ' · ANALYZED' : ''}`;
-  card.append(name, meter, meta);
+  const statuses = actor.statuses?.map((status) => (
+    `${COMBAT_STATUS_DEFINITIONS[status.id]?.name ?? status.id} ${status.remainingActivations}`
+  )) ?? [];
+  meta.textContent = `${actor.stance.toUpperCase()} · ready pulse ${actor.readyAtPulse}${actor.analyzed ? ' · ANALYZED' : ''}${statuses.length ? ` · ${statuses.join(', ')}` : ''}`;
+  card.append(name, meter);
+  if (spirit.childElementCount) card.append(spirit);
+  card.append(meta);
   return card;
 }
 
@@ -408,25 +715,48 @@ function renderTempo(snapshot) {
 function replaceOptions(select, entries, placeholder) {
   const prior = select.value;
   const placeholderOption = new Option(placeholder, '');
-  select.replaceChildren(placeholderOption, ...entries.map((entry) => new Option(entry.label, entry.value)));
-  if (entries.some((entry) => entry.value === prior)) select.value = prior;
-  else if (entries.length) select.value = entries[0].value;
+  const options = entries.map((entry) => {
+    const option = new Option(entry.label, entry.value);
+    option.disabled = Boolean(entry.disabled);
+    return option;
+  });
+  select.replaceChildren(placeholderOption, ...options);
+  if (entries.some((entry) => entry.value === prior && !entry.disabled)) select.value = prior;
+  else {
+    const firstEnabled = entries.find((entry) => !entry.disabled);
+    if (firstEnabled) select.value = firstEnabled.value;
+  }
 }
 
 function renderCommands(snapshot) {
   const actor = activePartyActor(snapshot);
-  const inputLocked = autoInputLocked();
+  const inputLocked = manualInputLocked();
   const available = new Set(actor ? engine.getAvailableCommands(actor.instanceId) : []);
-  activeActorLabel.textContent = actor ? `${actor.name} · ${snapshot.pace} Pace${inputLocked ? ' · AUTO' : ''}` : 'Waiting for the next activation';
+  activeActorLabel.textContent = actor
+    ? `${actor.name} · ${snapshot.pace} Pace · ${actor.spirit}/${actor.maxSpirit} Spirit${autoInputLocked() ? ' · AUTO' : battleAnimationActive() ? ' · ANIMATING' : ''}`
+    : 'Waiting for the next activation';
   commandButtons.forEach((button) => {
     const command = button.dataset.command;
     const enabled = !inputLocked && Boolean(actor) && (command === 'attack' ? available.has('skill') : available.has(command));
     button.disabled = !enabled;
     button.setAttribute('aria-pressed', String(command === selectedCommand));
   });
+  const pendingObjective = snapshot.objective.requirements
+    .find((requirement) => !requirement.automatic && !requirement.complete);
+  const objectivePresentation = getObjectiveActionPresentation(pendingObjective);
+  const objectiveButton = commandButtons.find((button) => button.dataset.command === 'objective');
+  if (objectiveButton) objectiveButton.textContent = pendingObjective ? objectivePresentation.buttonLabel : 'Objective';
 
   const skills = actor?.skills ?? [];
-  replaceOptions(skillSelect, skills.map((skill) => ({ value: skill.id, label: `${skill.name} · R${skill.recoveryPulses}` })), 'Select an art');
+  replaceOptions(skillSelect, skills.map((skill) => {
+    const quote = engine.getSkillSpiritQuote(actor.instanceId, skill.id);
+    const economy = skill.spiritCost > 0 ? `${skill.spiritCost} SP` : `+${skill.spiritGain} SP`;
+    return {
+      value: skill.id,
+      label: `${skill.name} · R${skill.recoveryPulses} · ${economy}${quote.affordable ? '' : ' · NEED SPIRIT'}`,
+      disabled: !quote.affordable,
+    };
+  }), 'Select an art');
   replaceOptions(targetSelect, livingEnemies(snapshot).map((target) => ({ value: target.instanceId, label: `${target.name} · ${target.hp} HP` })), 'Select a target');
   if (selectedTargetId && livingEnemies(snapshot).some((target) => target.instanceId === selectedTargetId)) targetSelect.value = selectedTargetId;
   selectedTargetId = targetSelect.value;
@@ -437,6 +767,7 @@ function renderCommands(snapshot) {
   targetSelect.disabled = inputLocked || !actor || !needsTarget;
   confirmCommand.disabled = inputLocked || !actor || selectedCommand === 'move'
     || (needsSkill && !skillSelect.value) || (needsTarget && !targetSelect.value)
+    || (needsSkill && skillSelect.selectedOptions[0]?.disabled)
     || (selectedCommand === 'objective' && !available.has('objective'));
   const hints = {
     move: 'Use W/A/S/D, Q/E/Z/C, arrow keys, or click an adjacent space. Movement spends one Pace and does not end the activation.',
@@ -444,20 +775,29 @@ function renderCommands(snapshot) {
     skill: 'Choose an art and target. Recovery controls when this character returns to Tempo.',
     guard: 'Reduce the next incoming hit, then recover for one pulse.',
     analyze: 'Reveal the selected enemy’s delivery and essence multipliers.',
-    objective: 'Advance the next explicit rescue, escort, release, relay, archive, or evacuation requirement.',
+    objective: pendingObjective ? objectivePresentation.hint : 'No manual encounter requirement remains.',
   };
   commandHint.textContent = inputLocked
-    ? 'Auto-Grind is issuing the deterministic repeat policy; manual commands are paused.'
+    ? autoInputLocked()
+      ? 'Auto-Grind is issuing the deterministic repeat policy; manual commands are paused.'
+      : 'The current action timeline is resolving; simulation positions remain exact and unchanged.'
     : actor ? hints[selectedCommand] : 'Enemy intent or recovery is resolving. Manual repeat speed changes this wait, not command time.';
 }
 
 function formatEngineLog(entry, actors) {
   const name = (id) => actors.find((actor) => actor.instanceId === id)?.name ?? id;
   if (entry.type === 'move') return `${name(entry.actorId)} moves to ${entry.at}.`;
-  if (entry.type === 'damage') return `${name(entry.attackerId)} uses ${entry.skillId} on ${name(entry.targetId)}: ${entry.finalDamage} damage (${Math.round(entry.deliveryMultiplier * 100)}% delivery${entry.essenceMultiplier !== 1 ? `, ${Math.round(entry.essenceMultiplier * 100)}% essence` : ''}).`;
+  if (entry.type === 'damage') return `${name(entry.attackerId)} uses ${entry.skillId} on ${name(entry.targetId)}: ${entry.finalDamage} damage (${Math.round(entry.deliveryMultiplier * 100)}% delivery${entry.essenceMultiplier !== 1 ? `, ${Math.round(entry.essenceMultiplier * 100)}% essence` : ''})${entry.statusApplied ? ` and applies ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId}` : ''}.`;
   if (entry.type === 'guard') return `${name(entry.actorId)} guards.`;
   if (entry.type === 'analyze') return `${name(entry.actorId)} analyzes ${name(entry.targetId)}.`;
-  if (entry.type === 'objective') return `${name(entry.actorId)} advances objective action ${entry.action}.`;
+  if (entry.type === 'spirit-change' && entry.delta !== 0) return `${name(entry.actorId)} Spirit ${entry.delta > 0 ? '+' : ''}${entry.delta} (${entry.after}/${entry.maxSpirit}).`;
+  if (entry.type === 'status-applied' || entry.type === 'status-refreshed') return `${name(entry.targetId)}: ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} ${entry.type === 'status-refreshed' ? 'refreshed' : 'applied'} for ${entry.durationActivations} activation${entry.durationActivations === 1 ? '' : 's'}.`;
+  if (entry.type === 'status-effect') return `${name(entry.actorId)}: ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} changes ${entry.effect} by ${entry.delta}.`;
+  if (entry.type === 'status-damage') return `${name(entry.targetId)} takes ${entry.finalDamage} ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} damage.`;
+  if (entry.type === 'objective') {
+    const presentation = getObjectiveActionPresentation({ action: entry.action, targetId: entry.targetId });
+    return `${name(entry.actorId)}: ${presentation.label}.`;
+  }
   if (entry.type === 'objective-failure') return `Objective failed: ${entry.reason}.`;
   return null;
 }
@@ -478,7 +818,7 @@ function renderObjective(snapshot) {
   const requirements = snapshot.objective.requirements;
   const completed = requirements.filter((requirement) => requirement.complete).length;
   const requirementText = requirements.length
-    ? requirements.map((requirement) => `${requirement.complete ? '✓' : '○'} ${requirement.key} ${requirement.progress}/${requirement.count}`).join(' · ')
+    ? requirements.map((requirement) => `${requirement.complete ? '✓' : '○'} ${formatObjectiveRequirement(requirement)}`).join(' · ')
     : 'Defeat the required hostile formation.';
   objectiveProgress.textContent = `${completed}/${requirements.length} objective requirements · ${snapshot.objective.combatComplete ? 'combat condition met' : 'combat condition pending'} · ${requirementText}`;
 }
@@ -514,6 +854,26 @@ function recordVictoryIfNeeded(snapshot) {
       addMessage(`Side-story objective recorded: ${requestedQuestObjectiveId}.`);
     }
   }
+  if (requestedChronicleId && requestedChronicleStageId) {
+    const loadedWitnessState = witnessAdapter.load();
+    const evidence = {
+      encounterId: encounter.id,
+      victory: true,
+      ...(requestedChronicleChoiceId ? { choiceId: requestedChronicleChoiceId } : {}),
+    };
+    const witnessResult = advanceWitnessChronicle(
+      loadedWitnessState.ok ? loadedWitnessState.state : createWitnessChronicleState(),
+      requestedChronicleId,
+      requestedChronicleStageId,
+      evidence,
+    );
+    if (witnessResult.ok) {
+      witnessAdapter.save(witnessResult.state);
+      addMessage(`Witness chronicle stage recorded: ${requestedChronicleStageId}.`);
+    } else {
+      addMessage(`Witness chronicle evidence was not recorded: ${witnessResult.reason}`);
+    }
+  }
   if (requestedFieldTriggerId) {
     const loadedFieldState = fieldAdapter.load();
     if (loadedFieldState.ok && loadedFieldState.found) {
@@ -543,19 +903,22 @@ function renderSpeedControls() {
   const grindAvailable = getEncounterWinCount(advancementState, encounter.id) > 0;
   const snapshot = engine.snapshot();
   const settling = autoSettleAt !== null;
+  const manualAnimation = !autoGrindActive && !settling && battleAnimationActive();
   speedButtons.forEach((button) => {
-    button.disabled = !grindAvailable || autoGrindActive || settling || Boolean(snapshot.result);
+    button.disabled = !grindAvailable || autoGrindActive || settling || manualAnimation || Boolean(snapshot.result);
     button.setAttribute('aria-pressed', String(Number(button.dataset.speed) === speedMultiplier));
   });
   speedStatus.textContent = grindAvailable
     ? `Saved repeat speed: ${speedMultiplier}× · full-loop only in Auto-Grind; manual play only shortens enemy presentation`
     : 'Speed unlocks after the first clear for repeat level grinding.';
-  autoGrind.disabled = !grindAvailable || settling || Boolean(snapshot.result);
+  autoGrind.disabled = !grindAvailable || settling || Boolean(snapshot.result) || manualAnimation;
   autoGrind.setAttribute('aria-pressed', String(autoGrindActive));
   autoGrind.textContent = autoGrindActive ? 'Stop Auto-Grind' : 'Start Auto-Grind';
   autoGrindStatus.textContent = !grindAvailable
     ? 'First-clear play remains manual. Clear this encounter once to unlock deterministic Auto-Grind.'
-    : settling
+    : manualAnimation
+      ? 'Finish the current action animation before starting Auto-Grind.'
+      : settling
       ? `Auto-Grind ${speedMultiplier}× is presenting the terminal result and reward.`
       : autoGrindActive
         ? `Auto-Grind ${speedMultiplier}× schedules commands, enemy turns, recovery, result, and reward at the saved speed.`
@@ -564,7 +927,11 @@ function renderSpeedControls() {
 
 function render() {
   const snapshot = engine.snapshot();
-  const settlementReady = autoSettleAt === null;
+  const settlementReady = isBattlePresentationSettled({
+    result: snapshot.result,
+    animationActive: battleAnimationActive(),
+    settling: autoSettleAt !== null,
+  });
   // Auto-Grind may delay the terminal reveal, but an earned victory must be
   // durable before the player can restart, leave, reload, or enter BFCache.
   recordVictoryIfNeeded(snapshot);
@@ -587,18 +954,23 @@ function render() {
   continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady;
   if (snapshot.result === 'victory' && settlementReady) continueCampaign.focus({ preventScroll: true });
   drawBattle();
-  if (!autoInputLocked() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyActionAt === null) {
-    enemyActionAt = performance.now() + (650 / speedMultiplier);
+  if (!autoInputLocked() && !battleAnimationActive() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyIntentSchedule === null) {
+    scheduleEnemyIntent();
   }
 }
 
-function executeRepeatPolicyCommand(actorId, command) {
+function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.snapshot()) {
   if (command.type === 'move') {
     const result = engine.move(actorId, command.dx, command.dy);
     if (result.ok) markBattleMotion(actorId, command.dx, command.dy);
     return result;
   }
-  if (command.type === 'skill') return engine.useSkill(actorId, command.skillId, command.targetId);
+  if (command.type === 'skill') {
+    const result = engine.useSkill(actorId, command.skillId, command.targetId);
+    markCombatResolutionPose(result);
+    startCombatAnimation(result, actorId, beforeSnapshot);
+    return result;
+  }
   if (command.type === 'objective') return engine.performObjectiveAction(actorId, command.action);
   if (command.type === 'guard') return engine.guard(actorId);
   return { ok: false, reason: `Unsupported Auto-Grind command ${command.type}.` };
@@ -621,10 +993,12 @@ function executeAutoGrindStep(now) {
       const command = chooseRepeatBattleCommand(engine);
       if (!command) throw new Error('The repeat policy could not select a party command.');
       stepType = command.type;
-      result = executeRepeatPolicyCommand(before.activeActorId, command);
+      result = executeRepeatPolicyCommand(before.activeActorId, command, before);
     } else if (before.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
       stepType = 'enemyActivation';
       result = engine.resolveEnemyActivation();
+      markCombatResolutionPose({ ok: result.ok, ...result.resolution }, before.activeActorId);
+      startCombatAnimation({ ok: result.ok, ...result.resolution }, before.activeActorId, before);
     } else {
       throw new Error(`Unexpected Auto-Grind phase ${before.phase}.`);
     }
@@ -641,14 +1015,21 @@ function executeAutoGrindStep(now) {
   const after = engine.snapshot();
   const recoveredPulses = Math.max(0, after.nowPulse - beforePulse);
   const stepDelay = getRepeatStepDelayMs(stepType, speedMultiplier, recoveredPulses);
+  const animationEnd = activeBattleAnimation?.endsAt ?? 0;
   if (after.result) {
     stopAutoGrind();
     const terminalDelay = getRepeatStepDelayMs('resolution', speedMultiplier)
       + (after.result === 'victory' ? getRepeatStepDelayMs('reward', speedMultiplier) : 0);
-    autoSettleAt = now + stepDelay + terminalDelay;
+    autoSettleAt = Math.max(now + stepDelay, animationEnd) + terminalDelay;
     addMessage(`Auto-Grind reached ${after.result}; presenting the deterministic result${after.result === 'victory' ? ' and reward' : ''}.`);
   } else {
-    autoActionAt = now + stepDelay;
+    autoActionAt = getNextBattleActionAt({
+      nowMs: now,
+      stepDelayMs: stepDelay,
+      animationEndsAt: activeBattleAnimation ? animationEnd : null,
+      nextIsEnemy: after.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND,
+      speed: speedMultiplier,
+    });
   }
   render();
 }
@@ -659,28 +1040,41 @@ function toggleAutoGrind() {
     render();
     return;
   }
-  if (getEncounterWinCount(advancementState, encounter.id) === 0) {
+  const grindAvailable = getEncounterWinCount(advancementState, encounter.id) > 0;
+  if (!grindAvailable) {
     addMessage('Auto-Grind unlocks only after this encounter\'s first clear.');
     render();
     return;
   }
-  if (engine.result || autoSettleAt !== null) return;
+  const animationActive = battleAnimationActive();
+  if (animationActive) {
+    addMessage('Finish the current action animation before starting Auto-Grind.');
+    render();
+    return;
+  }
+  if (!canStartAutoGrindPresentation({
+    unlocked: grindAvailable,
+    animationActive,
+    result: engine.result,
+    settling: autoSettleAt !== null,
+  })) return;
   autoGrindActive = true;
-  enemyActionAt = null;
+  activeBattleAnimation = null;
+  clearEnemyIntentSchedule();
   autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind started at ${speedMultiplier}×. The full repeat presentation uses the saved speed.`);
   render();
 }
 
 function selectCommand(command) {
-  if (autoInputLocked()) return;
+  if (manualInputLocked()) return;
   selectedCommand = command;
   if (command === 'attack') skillSelect.selectedIndex = Math.min(1, skillSelect.options.length - 1);
   render();
 }
 
 function executeSelectedCommand() {
-  if (autoInputLocked()) return;
+  if (manualInputLocked()) return;
   const snapshot = engine.snapshot();
   const actor = activePartyActor(snapshot);
   if (!actor) return;
@@ -700,12 +1094,16 @@ function executeSelectedCommand() {
   }
   if (!result?.ok) addMessage(result?.reason ?? 'Command failed.');
   else if (result.readout) addMessage(`${targetSelect.options[targetSelect.selectedIndex]?.text ?? 'Target'} Ledger: ${result.readout.ledger || 'No note.'}`);
-  enemyActionAt = null;
+  if (selectedCommand === 'attack' || selectedCommand === 'skill') {
+    markCombatResolutionPose(result);
+    startCombatAnimation(result, actor.instanceId, snapshot);
+  }
+  clearEnemyIntentSchedule();
   render();
 }
 
 function moveActive(dx, dy) {
-  if (autoInputLocked()) return;
+  if (manualInputLocked()) return;
   const snapshot = engine.snapshot();
   const actor = activePartyActor(snapshot);
   if (!actor) return;
@@ -723,7 +1121,7 @@ targetSelect.addEventListener('change', () => {
   drawBattle();
 });
 enemyPanel.addEventListener('click', (event) => {
-  if (autoInputLocked()) return;
+  if (manualInputLocked()) return;
   const card = event.target.closest('[data-actor-id]');
   if (!card) return;
   selectedTargetId = card.dataset.actorId;
@@ -732,16 +1130,19 @@ enemyPanel.addEventListener('click', (event) => {
 });
 
 speedButtons.forEach((button) => button.addEventListener('click', () => {
-  if (autoInputLocked() || engine.result) return;
+  if (manualInputLocked() || engine.result) return;
   if (getEncounterWinCount(advancementState, encounter.id) === 0) {
     addMessage('Battle speed unlocks after this encounter’s first clear.');
     render();
     return;
   }
-  speedMultiplier = Number(button.dataset.speed);
+  const nextSpeed = Number(button.dataset.speed);
+  if (enemyIntentSchedule) {
+    enemyIntentSchedule = rescaleEnemyIntentSchedule(enemyIntentSchedule, performance.now(), nextSpeed);
+  }
+  speedMultiplier = nextSpeed;
   advancementState = setSpeedMultiplier(advancementState, speedMultiplier);
   advancementAdapter.save(advancementState);
-  enemyActionAt = null;
   render();
 }));
 
@@ -750,11 +1151,17 @@ autoGrind.addEventListener('click', toggleAutoGrind);
 restartBattle.addEventListener('click', () => {
   stopAutoGrind();
   autoSettleAt = null;
+  battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
   engine = createEngine();
   rewardRecorded = false;
   vitalsRecorded = false;
   selectedTargetId = '';
-  enemyActionAt = null;
+  clearEnemyIntentSchedule();
+  battleFacingByActor.clear();
+  battleMotionUntil.clear();
+  battleEnemyPoseByActor.clear();
+  battleEnemyPoseUntil.clear();
+  activeBattleAnimation = null;
   uiMessages = [`Restarted ${encounter.name}. First-clear rewards remain saved; victories can be replayed for grind XP.`];
   render();
 });
@@ -774,7 +1181,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 canvas.addEventListener('click', (event) => {
-  if (autoInputLocked()) return;
+  if (manualInputLocked()) return;
   const bounds = canvas.getBoundingClientRect();
   const scaleX = canvas.width / bounds.width;
   const scaleY = canvas.height / bounds.height;
@@ -803,16 +1210,27 @@ function tick(now) {
     lastActivityMs: playtimeLastActivity,
     visible: document.visibilityState === 'visible',
   });
-  const battleResolved = engine.snapshot().result !== null && autoSettleAt === null;
-  if (!inactive && !battleResolved && elapsed > 0) {
-    const category = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
-    playtimeState = recordPlaytime(playtimeState, category, elapsed, { chapterId: encounter.chapterId });
-    queueRunReceiptPlaytime(category, elapsed);
-    playtimeUnsavedMs += elapsed;
+  const countableElapsed = getBattlePresentationElapsedMs({
+    elapsedMs: elapsed,
+    intervalEndMs: now,
+    result: engine.snapshot().result,
+    settling: autoSettleAt !== null,
+    animationEndsAt: activeBattleAnimation?.endsAt ?? null,
+  });
+  if (!inactive && countableElapsed > 0) {
+    const category = battlePlaytimeCategory;
+    playtimeState = recordPlaytime(playtimeState, category, countableElapsed, { chapterId: encounter.chapterId });
+    queueRunReceiptPlaytime(category, countableElapsed);
+    playtimeUnsavedMs += countableElapsed;
     if (playtimeUnsavedMs >= 10_000) {
       playtimeAdapter.save(playtimeState);
       playtimeUnsavedMs = 0;
     }
+  }
+  if (activeBattleAnimation && now >= activeBattleAnimation.endsAt) {
+    activeBattleAnimation = null;
+    clearEnemyIntentSchedule();
+    render();
   }
   if (autoSettleAt !== null && now >= autoSettleAt) {
     autoSettleAt = null;
@@ -821,10 +1239,14 @@ function tick(now) {
   if (autoGrindActive && autoActionAt !== null && now >= autoActionAt) {
     autoActionAt = null;
     executeAutoGrindStep(now);
-  } else if (!autoInputLocked() && enemyActionAt !== null && now >= enemyActionAt && engine.snapshot().phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
+  } else if (!autoInputLocked() && enemyIntentSchedule !== null && now >= enemyIntentSchedule.dueAt && engine.snapshot().phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
+    const before = engine.snapshot();
+    const enemyActorId = before.activeActorId;
+    clearEnemyIntentSchedule();
     const result = engine.resolveEnemyActivation();
     if (!result.ok) addMessage(result.reason);
-    enemyActionAt = null;
+    markCombatResolutionPose({ ok: result.ok, ...result.resolution }, enemyActorId);
+    startCombatAnimation({ ok: result.ok, ...result.resolution }, enemyActorId, before);
     render();
   }
   drawBattle(now);

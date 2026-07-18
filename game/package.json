@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "check": "node --check engine.mjs && node --check game.js && node --check campaign.js && node --check battle.js && node --check camp.js && node --check campaign-combat.mjs && node --check canonical-run.mjs && node --check progression.mjs && node --check advancement.mjs && node --check field-runtime.mjs && node --check quest-runtime.mjs && node --check narrative-runtime.mjs && node --check sprite-atlas.mjs && node --check repeat-battle.mjs && node --check run-receipt.mjs && node --check battle-solver.mjs && node --check loadout.mjs && node --check playtime.mjs && node --check content/campaign.mjs && node --check content/levels.mjs && node --check content/encounters.mjs && node --check content/sidequests.mjs && node --check content/scene-direction.mjs",
+    "check": "node -e \"const fs=require('node:fs'),p=require('node:path'),cp=require('node:child_process');const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.name==='node_modules'||e.name==='tests'?[]:e.isDirectory()?walk(p.join(d,e.name)):/\\.(?:m?js)$/.test(e.name)?[p.join(d,e.name)]:[]);for(const file of walk('.').sort()){const result=cp.spawnSync(process.execPath,['--check',file],{stdio:'inherit'});if(result.status!==0)process.exit(result.status??1)}\"",
     "test": "node --test",
     "serve": "python -m http.server 8080"
   }

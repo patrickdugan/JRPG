@@ -126,6 +126,8 @@ button.combatant-card { cursor: pointer; }
 .combatant-card.is-defeated { filter: grayscale(0.85); opacity: 0.5; }
 .combatant-name { display: flex; justify-content: space-between; gap: 8px; font-size: 0.7rem; }
 .combatant-meta { color: var(--muted); font-size: 0.58rem; }
+.combatant-resource { display: grid; grid-template-columns: auto minmax(44px, 1fr); align-items: center; gap: 7px; color: #c5b4f4; font-size: 0.56rem; }
+.combatant-resource .meter { min-width: 44px; }
 .meter { height: 5px; overflow: hidden; background: #080b14; }
 .meter > span { display: block; width: var(--meter-value, 0%); height: 100%; background: var(--meter-color, var(--aqua)); }
 

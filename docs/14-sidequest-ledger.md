@@ -7,10 +7,17 @@
 | Content | Entries | First-pass minutes |
 | --- | ---: | ---: |
 | Story quests | 13 | 224 |
+| Witness chronicles | 18 | 398 |
 | First circuit of contracts | 4 | 40 |
-| Total authored optional pass | 17 | 264 (4.4 hours) |
+| Total authored optional pass | 35 | 662 (11.03 hours) |
 
-Contract repeats remain available after the first circuit and are intentionally excluded from the finite 264-minute receipt. They provide transparent level-grind loops without padding the authored story estimate or changing first-clear campaign resolutions.
+These are authored declarations, not measured playtime and not inputs to the quantity-based duration estimate. Contract repeats remain available after the first circuit and are excluded from the finite completion witness. They provide transparent level-grind loops without padding finite state-transition evidence or changing first-clear campaign resolutions.
+
+## Witness chronicles
+
+The 18 witness chronicles are a second finite optional-content lane spanning every chapter. Together they contain 67 stages, 288 acknowledged dialogue lines, 18 explicit consequence choices, and 152 ordered exact-tile fieldwork nodes. Twelve stages bind an existing canonical encounter and accept only explicit victory evidence; they never register a new or duplicate fight. Each chronicle settles one reward exactly once across chronicle, advancement, and loadout state.
+
+`game/finite-content-run.mjs` completes every story quest and witness chronicle, audits all 31 atomic reward settlements, and proves that replay/duplicate completion is refused. Its zero-time result is state-transition evidence only. The 729-step witness fieldwork figure is a deterministic minimum-path catalog audit, not observed traversal time.
 
 ## Story quests
 

@@ -207,12 +207,24 @@ h1 {
 .quest-entry { display: grid; gap: 4px; padding: 8px; border: 1px solid #3d4866; background: rgba(9, 12, 25, 0.65); }
 .quest-entry { width: 100%; color: inherit; text-align: left; cursor: pointer; }
 .quest-entry:hover:not(:disabled), .quest-entry.is-active { border-color: var(--aqua); background: rgba(21, 45, 53, 0.7); }
+.quest-entry.is-selected { box-shadow: inset 3px 0 #a08ad1; border-color: #a08ad1; }
 .quest-entry.is-complete { border-color: #58644e; }
 .quest-return { width: 100%; margin-top: 9px; }
 .quest-entry:disabled { cursor: default; opacity: 0.67; }
 .quest-entry strong { color: #f2dfae; font-size: 0.65rem; line-height: 1.35; }
 .quest-entry span { color: var(--muted); font-size: 0.58rem; line-height: 1.4; }
 .quest-entry small { color: var(--gold); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.witness-journal-card { background: linear-gradient(180deg, rgba(35, 27, 49, 0.42), rgba(9, 12, 25, 0.3)); }
+.witness-stage-card { display: grid; gap: 7px; margin-top: 10px; padding: 10px; border: 1px solid #66547f; background: rgba(12, 10, 24, 0.82); }
+.witness-stage-card[hidden] { display: none; }
+.witness-stage-card small { color: #c5b4f4; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.witness-stage-card h3 { color: #fff0cf; font-size: 0.76rem; line-height: 1.35; }
+.witness-stage-card p { margin: 0; color: #c6cbd8; font-size: 0.64rem; line-height: 1.5; }
+.witness-dialogue { min-height: 54px; margin: 0; padding: 8px; border-left: 3px solid #a08ad1; color: #f0e8ff; background: rgba(45, 34, 65, 0.55); font-size: 0.66rem; line-height: 1.55; }
+.witness-choice-deck { display: grid; gap: 6px; }
+.witness-choice-deck button { padding: 7px; border: 1px solid #584a72; color: #e8dcff; background: #191329; font-size: 0.59rem; text-align: left; cursor: pointer; }
+.witness-choice-deck button[aria-pressed="true"] { border-color: var(--gold); color: #fff0bb; background: #352d1a; }
+.witness-stage-hint { color: var(--gold) !important; }
 kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #efe2bd; background: #10162a; font-size: 0.58rem; }
 
 .footer-note { max-width: 980px; margin: 18px auto 0; font-size: 0.65rem; line-height: 1.6; text-align: center; }

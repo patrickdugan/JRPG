@@ -22,6 +22,8 @@ import {
   CampaignCombatEngine,
 } from './campaign-combat.mjs';
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getFullDialogue } from './content/full-dialogue.mjs';
+import { getSceneOperation } from './content/scene-operations.mjs';
 import { ENCOUNTERS, getEncounter } from './content/encounters.mjs';
 import {
   LEVELS,
@@ -69,8 +71,13 @@ import {
   recordRunBeatCompletion,
   recordRunFirstClear,
 } from './run-receipt.mjs';
+import {
+  advanceSceneOperation,
+  createSceneOperationState,
+  getSceneOperationRuntimeMetrics,
+} from './scene-operation-runtime.mjs';
 
-export const CANONICAL_RUN_VERSION = 1;
+export const CANONICAL_RUN_VERSION = 2;
 export const DEFAULT_CANONICAL_RUN_ID = 'canonical-run-audit-0001';
 
 const BEAT_RECORDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) =>
@@ -219,6 +226,7 @@ export function runCanonicalCompletion(options = {}) {
   let advancementState = createAdvancementState();
   let loadoutState = createLoadoutState();
   let narrativeState = createNarrativeState();
+  let sceneOperationState = createSceneOperationState();
   const firstBeat = BEAT_RECORDS[0]?.beat;
   if (!firstBeat || !getLevel(firstBeat.mapId)) throw new Error('Canonical campaign has no valid opening field level.');
   let fieldState = createFieldState({ levelId: firstBeat.mapId, beatId: firstBeat.id });
@@ -231,6 +239,7 @@ export function runCanonicalCompletion(options = {}) {
   let requiredRouteCount = 0;
   let narrativeTransitionCount = 0;
   let interactionCount = 0;
+  let sceneOperationNodeCount = 0;
   let exitCount = 0;
   let battleCount = 0;
   let restCount = 0;
@@ -418,6 +427,49 @@ export function runCanonicalCompletion(options = {}) {
     }
   };
 
+  const completeBeatSceneOperation = (beat) => {
+    const operation = getSceneOperation(beat.id);
+    if (!operation) throw new Error(`Canonical beat ${beat.id} has no finite scene operation.`);
+    if (getCurrentFieldContext(fieldState).levelId !== operation.levelId) {
+      throw new Error(`Scene operation ${beat.id} expected ${operation.levelId}.`);
+    }
+    for (const node of operation.nodes) {
+      const at = parseTileKey(node.at);
+      walkUntil(
+        (position) => position.x === at.x && position.y === at.y,
+        `${operation.levelId}/${node.id}`,
+      );
+      for (const encounterId of node.encounterIds) executeBattle(encounterId, `scene-operation:${node.id}`);
+      const encounterWins = Object.fromEntries(ENCOUNTER_IDS.map((encounterId) => [
+        encounterId,
+        getEncounterWinCount(advancementState, encounterId),
+      ]));
+      const advanced = requireOk(
+        advanceSceneOperation(sceneOperationState, beat.id, node.id, { at: node.at, encounterWins }),
+        `record scene operation ${node.id}`,
+      );
+      sceneOperationState = advanced.state;
+      sceneOperationNodeCount += 1;
+      interactionCount += 1;
+      emit({
+        type: 'scene-operation-node',
+        beatId: beat.id,
+        nodeId: node.id,
+        activityType: node.activityType,
+        at: node.at,
+        encounterIds: node.encounterIds,
+        operationComplete: advanced.beatCompleted,
+      });
+    }
+    const progress = getSceneOperationRuntimeMetrics(sceneOperationState);
+    emit({
+      type: 'scene-operation-complete',
+      beatId: beat.id,
+      completedOperationCount: progress.completedOperationCount,
+      completedNodeCount: progress.completedNodeCount,
+    });
+  };
+
   const consumeInteraction = (level, item) => {
     const at = parseTileKey(item.at);
     walkUntil((position) => chebyshev(position, at) <= 1, `${level.id}/${item.id}`);
@@ -564,7 +616,7 @@ export function runCanonicalCompletion(options = {}) {
     }
 
     fieldState = enterField(fieldState, beat.mapId, beat.id, { flags: externalFieldFlags() });
-    const lineCount = Array.isArray(beat.text) && beat.text.length ? beat.text.length : 1;
+    const lineCount = getFullDialogue(beat.id)?.length ?? (Array.isArray(beat.text) && beat.text.length ? beat.text.length : 1);
     while (!getNarrativeProgress(narrativeState, beat.id, lineCount).complete) {
       const advanced = requireOk(advanceNarrative(narrativeState, beat.id, lineCount), `advance ${beat.id} narrative`);
       narrativeState = advanced.state;
@@ -582,6 +634,8 @@ export function runCanonicalCompletion(options = {}) {
       choiceCount += 1;
       emit({ type: 'story-choice', beatId: beat.id, choiceId: choice.id, flag: choice.flag ?? null });
     }
+
+    completeBeatSceneOperation(beat);
 
     for (const encounterId of beat.encounterIds ?? []) {
       const firstClear = executeBattle(encounterId, `beat:${beat.id}`);
@@ -660,6 +714,10 @@ export function runCanonicalCompletion(options = {}) {
       throw new Error(`Canonical encounter ${encounterId} does not have exactly one win.`);
     }
   }
+  const sceneOperationMetrics = getSceneOperationRuntimeMetrics(sceneOperationState);
+  if (!sceneOperationMetrics.campaignComplete) {
+    throw new Error(`Canonical scene operations are incomplete: ${sceneOperationMetrics.completedOperationCount}/${sceneOperationMetrics.operationCount}.`);
+  }
   const proof = getRunProofReport(receiptState);
   const summary = deepFreeze({
     beatCount: campaignState.completedBeatIds.length,
@@ -669,6 +727,8 @@ export function runCanonicalCompletion(options = {}) {
     narrativeTransitionCount,
     fieldSteps,
     interactionCount,
+    sceneOperationCount: sceneOperationMetrics.completedOperationCount,
+    sceneOperationNodeCount,
     exitCount,
     battleCount,
     restCount,
@@ -682,18 +742,19 @@ export function runCanonicalCompletion(options = {}) {
   const frozenTrace = deepFreeze([...trace]);
   return deepFreeze({
     ok: true,
-    fullyIntegrated: routeGaps.length === 0 && finalObjectiveGaps.length === 0,
+    fullyIntegrated: routeGaps.length === 0 && finalObjectiveGaps.length === 0 && sceneOperationMetrics.campaignComplete,
     version: CANONICAL_RUN_VERSION,
     runId,
     signature: traceSignature(frozenTrace),
     summary,
     proof,
     fieldCoverage: {
-      complete: routeGaps.length === 0 && finalObjectiveGaps.length === 0,
+      complete: routeGaps.length === 0 && finalObjectiveGaps.length === 0 && sceneOperationMetrics.campaignComplete,
       requiredRouteCount,
       completedRouteCount: routeCount,
       routeGaps,
       finalObjectiveGaps,
+      sceneOperations: sceneOperationMetrics,
     },
     trace: frozenTrace,
     states: {
@@ -702,6 +763,7 @@ export function runCanonicalCompletion(options = {}) {
       loadout: loadoutState,
       field: fieldState,
       narrative: narrativeState,
+      sceneOperations: sceneOperationState,
       receipt: receiptState,
     },
   });
