@@ -546,7 +546,7 @@ export const CAMPAIGN = deepFreeze({
           id: 'c2-06-name-from-europe',
           title: 'A Name from Europe',
           location: 'Takamine Bell Chamber and Cell Block',
-          mapId: 'tkm-cell-block',
+          mapId: 'tkm-bell-chamber',
           encounterIds: ['fp1-mateus'],
           trigger: 'mateus_defeated',
           text: [

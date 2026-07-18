@@ -134,11 +134,19 @@ h1 {
 .map-overlay { position: absolute; top: 8px; right: 9px; display: flex; gap: 8px; color: #eee5c9; font-size: 0.64rem; text-shadow: 0 1px 2px #000; }
 .map-overlay span { padding: 4px 6px; border: 1px solid rgba(198, 211, 236, 0.35); background: rgba(7, 9, 18, 0.68); }
 .field-feedback { min-height: 18px; margin: 7px 2px 0; color: #9ecfca; font-size: 0.64rem; line-height: 1.45; }
-.field-controls { display: grid; grid-template-columns: repeat(3, 30px); gap: 3px; width: max-content; margin: 8px 2px 0; }
+.field-command-row { display: grid; grid-template-columns: auto minmax(160px, auto) minmax(220px, 1fr); gap: 10px; align-items: stretch; margin: 8px 2px 0; }
+.field-controls { display: grid; grid-template-columns: repeat(3, 30px); gap: 3px; width: max-content; }
 .field-controls button, .field-controls span { display: grid; width: 30px; height: 26px; place-items: center; border: 1px solid #465575; color: var(--paper); background: #151d33; font: inherit; font-size: 0.78rem; line-height: 1; }
 .field-controls button { cursor: pointer; }
 .field-controls button:hover { border-color: var(--aqua); color: #e7fffc; background: #152d35; }
 .field-controls span { color: var(--gold); background: #101729; }
+.field-interact { min-height: 84px; padding: 10px 13px; border: 1px solid #806a3c; border-radius: 4px; color: #ffe9ac; background: linear-gradient(145deg, #3b2d18, #201a11); cursor: pointer; font-size: 0.7rem; line-height: 1.55; }
+.field-interact:hover:not(:disabled) { border-color: var(--gold-soft); background: #47351d; }
+.field-interact:disabled { cursor: not-allowed; opacity: 0.42; }
+.field-objective-card { display: grid; align-content: center; gap: 4px; min-height: 84px; padding: 9px 11px; border: 1px solid #3d4b68; background: rgba(8, 11, 23, 0.58); }
+.field-objective-card strong { color: var(--gold); font-size: 0.61rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.field-objective-card span { color: #d7dbe4; font-size: 0.66rem; line-height: 1.45; }
+.field-objective-card small { color: var(--aqua); font-size: 0.59rem; line-height: 1.4; }
 
 .scene-card { margin-top: 13px; border: 1px solid #3d4866; background: rgba(8, 11, 23, 0.66); }
 .scene-card-header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 11px 13px; border-bottom: 1px solid #303a56; background: rgba(31, 39, 65, 0.7); }
@@ -163,9 +171,9 @@ h1 {
 
 .encounter-rail { overflow: hidden; }
 .key-art { display: block; width: 100%; max-height: 180px; object-fit: cover; border-bottom: 1px solid var(--line); image-rendering: pixelated; background: #0b0e18; }
-.briefing-card, .party-card { padding: 13px; border-bottom: 1px solid #303a56; }
-.briefing-card h2 { margin-bottom: 8px; color: #fff0cf; font-size: 0.95rem; line-height: 1.25; }
-.briefing-card p, .party-card p { margin-bottom: 0; color: #c6cbd8; font-size: 0.71rem; line-height: 1.6; }
+.briefing-card, .party-card, .journal-card { padding: 13px; border-bottom: 1px solid #303a56; }
+.briefing-card h2, .journal-card h2 { margin-bottom: 8px; color: #fff0cf; font-size: 0.95rem; line-height: 1.25; }
+.briefing-card p, .party-card p, .journal-card p { margin-bottom: 0; color: #c6cbd8; font-size: 0.71rem; line-height: 1.6; }
 .briefing-list { display: grid; gap: 9px; margin: 13px 0 0; }
 .briefing-list div { display: grid; gap: 3px; }
 .briefing-list dt { color: var(--gold); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -176,6 +184,19 @@ h1 {
 .battle-launch[aria-disabled="true"] { pointer-events: none; opacity: 0.45; }
 .battle-status { color: var(--aqua); font-size: 0.62rem; line-height: 1.4; text-align: center; }
 .party-note { margin-top: 10px !important; color: #8e9ab4 !important; font-size: 0.61rem !important; }
+.journal-heading { display: flex; align-items: start; justify-content: space-between; gap: 8px; }
+.journal-heading h2 { margin: 0; }
+.journal-heading > span { color: var(--aqua); font-size: 0.59rem; text-align: right; }
+.quest-list { display: grid; gap: 7px; margin-top: 11px; }
+.quest-entry { display: grid; gap: 4px; padding: 8px; border: 1px solid #3d4866; background: rgba(9, 12, 25, 0.65); }
+.quest-entry { width: 100%; color: inherit; text-align: left; cursor: pointer; }
+.quest-entry:hover:not(:disabled), .quest-entry.is-active { border-color: var(--aqua); background: rgba(21, 45, 53, 0.7); }
+.quest-entry.is-complete { border-color: #58644e; }
+.quest-return { width: 100%; margin-top: 9px; }
+.quest-entry:disabled { cursor: default; opacity: 0.67; }
+.quest-entry strong { color: #f2dfae; font-size: 0.65rem; line-height: 1.35; }
+.quest-entry span { color: var(--muted); font-size: 0.58rem; line-height: 1.4; }
+.quest-entry small { color: var(--gold); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.06em; }
 kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #efe2bd; background: #10162a; font-size: 0.58rem; }
 
 .footer-note { max-width: 980px; margin: 18px auto 0; font-size: 0.65rem; line-height: 1.6; text-align: center; }
@@ -184,7 +205,8 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
   .campaign-layout { grid-template-columns: minmax(160px, 0.7fr) minmax(420px, 2fr); }
   .encounter-rail { grid-column: 1 / -1; display: grid; grid-template-columns: 220px 1fr 1fr; }
   .key-art { height: 100%; max-height: none; border-right: 1px solid var(--line); border-bottom: 0; }
-  .briefing-card, .party-card { border-bottom: 0; border-right: 1px solid #303a56; }
+  .briefing-card, .party-card, .journal-card { border-bottom: 0; border-right: 1px solid #303a56; }
+  .encounter-rail { grid-template-columns: 220px repeat(3, 1fr); }
 }
 
 @media (max-width: 720px) {
@@ -197,8 +219,10 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
   .chapter-button { width: 162px; }
   .encounter-rail { display: block; grid-column: auto; }
   .key-art { height: auto; max-height: 220px; border-right: 0; border-bottom: 1px solid var(--line); }
-  .briefing-card, .party-card { border-right: 0; border-bottom: 1px solid #303a56; }
+  .briefing-card, .party-card, .journal-card { border-right: 0; border-bottom: 1px solid #303a56; }
   .scene-stage { padding: 11px; }
+  .field-command-row { grid-template-columns: auto 1fr; }
+  .field-objective-card { grid-column: 1 / -1; }
   .scene-card-header { grid-template-columns: auto 1fr; }
   .scene-location { grid-column: 1 / -1; max-width: none; text-align: left; }
   .scene-controls { grid-template-columns: 1fr 1fr; }

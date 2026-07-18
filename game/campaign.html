@@ -16,8 +16,9 @@
           <p class="subtitle">A playable chapter, scene, encounter, and map framework</p>
         </div>
         <div class="masthead-actions">
+          <a class="subtle-button" href="camp.html">Camp &amp; Loadout</a>
           <a class="battle-link" href="index.html">Play FP-0 Combat Proof</a>
-          <button id="resetCampaign" class="subtle-button" type="button">Reset story state</button>
+          <button id="resetCampaign" class="subtle-button" type="button">New Game / clear all saves</button>
         </div>
       </header>
 
@@ -42,19 +43,28 @@
             <div class="map-overlay">
               <span id="mapName"></span>
               <span id="mapLegend"></span>
+              <span id="fieldPlaytime">00:00:00</span>
             </div>
           </div>
           <p id="fieldFeedback" class="field-feedback" role="status">Field movement: W/A/S/D orthogonal · Q/E/Z/C diagonal. Movement is one exact map space per key press.</p>
-          <div id="fieldControls" class="field-controls" aria-label="Field movement controls">
-            <button type="button" data-field-move="-1,-1" aria-label="Move north-west">&#8598;</button>
-            <button type="button" data-field-move="0,-1" aria-label="Move north">&#8593;</button>
-            <button type="button" data-field-move="1,-1" aria-label="Move north-east">&#8599;</button>
-            <button type="button" data-field-move="-1,0" aria-label="Move west">&#8592;</button>
-            <span aria-hidden="true">+</span>
-            <button type="button" data-field-move="1,0" aria-label="Move east">&#8594;</button>
-            <button type="button" data-field-move="-1,1" aria-label="Move south-west">&#8601;</button>
-            <button type="button" data-field-move="0,1" aria-label="Move south">&#8595;</button>
-            <button type="button" data-field-move="1,1" aria-label="Move south-east">&#8600;</button>
+          <div class="field-command-row">
+            <div id="fieldControls" class="field-controls" aria-label="Field movement controls">
+              <button type="button" data-field-move="-1,-1" aria-label="Move north-west">&#8598;</button>
+              <button type="button" data-field-move="0,-1" aria-label="Move north">&#8593;</button>
+              <button type="button" data-field-move="1,-1" aria-label="Move north-east">&#8599;</button>
+              <button type="button" data-field-move="-1,0" aria-label="Move west">&#8592;</button>
+              <span aria-hidden="true">+</span>
+              <button type="button" data-field-move="1,0" aria-label="Move east">&#8594;</button>
+              <button type="button" data-field-move="-1,1" aria-label="Move south-west">&#8601;</button>
+              <button type="button" data-field-move="0,1" aria-label="Move south">&#8595;</button>
+              <button type="button" data-field-move="1,1" aria-label="Move south-east">&#8600;</button>
+            </div>
+            <button id="interactField" class="field-interact" type="button">Interact / Investigate <kbd>X</kbd></button>
+            <div class="field-objective-card">
+              <strong>Field objective</strong>
+              <span id="fieldObjective"></span>
+              <small id="fieldProgress"></small>
+            </div>
           </div>
 
           <section class="scene-card" aria-label="Current story scene">
@@ -98,12 +108,23 @@
           <section class="party-card">
             <p class="eyebrow">Active story party</p>
             <p id="partyList"></p>
-            <p class="party-note">Combat proof controls: <kbd>WASD</kbd>/<kbd>Arrows</kbd> move · <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> arts · <kbd>G</kbd>/<kbd>F</kbd> stances.</p>
+            <p class="party-note">Field: <kbd>WASD</kbd>/<kbd>QEZC</kbd> move · <kbd>X</kbd>/<kbd>Enter</kbd> interact. Battle: <kbd>WASD</kbd>/<kbd>Arrows</kbd> move · <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> arts.</p>
+          </section>
+          <section class="journal-card">
+            <div class="journal-heading">
+              <div>
+                <p class="eyebrow">Regional journal</p>
+                <h2>Side stories</h2>
+              </div>
+              <span id="questSummary">0 available</span>
+            </div>
+            <div id="questList" class="quest-list"></div>
+            <button id="returnStoryRoute" class="subtle-button quest-return" type="button">Return to story route</button>
           </section>
         </aside>
       </section>
 
-      <p class="footer-note">This production atlas contains the complete campaign data and playable scene progression. FP-0 remains the verified combat implementation; FP-1 and later chapters are content-ready build targets, not falsely represented as finished playtime.</p>
+      <p class="footer-note">This production-foundation build connects the full campaign ledger, persistent field routes, encounters, side stories, advancement, and camp systems. Bespoke encounter presentation and a measured 20-hour end-to-end playthrough remain required before the game can be called complete.</p>
     </main>
     <script type="module" src="campaign.js"></script>
   </body>

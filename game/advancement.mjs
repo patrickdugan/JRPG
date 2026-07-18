@@ -71,6 +71,8 @@ const ENCOUNTERS_BY_CHAPTER = new Map(CAMPAIGN.chapters.map((chapter) => [
 const STATE_KEYS = Object.freeze(['schemaVersion', 'campaignId', 'speedMultiplier', 'party', 'encounterWins', 'inventory', 'revision']);
 const MEMBER_KEYS = Object.freeze(['id', 'unlocked', 'xp']);
 const INVENTORY_KEYS = Object.freeze(['currency', 'items', 'keyItems']);
+const REWARD_KEYS = Object.freeze(['xpPerMember', 'currency', 'items', 'keyItems']);
+const REWARD_ITEM_KEYS = Object.freeze(['name', 'quantity']);
 
 function isPlainObject(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
@@ -415,6 +417,175 @@ function validateActiveParty(encounter, partyIds) {
     seen.add(id);
   }
   return Object.freeze([...ids]);
+}
+
+function rewardFailure(state, errors) {
+  return Object.freeze({
+    ok: false,
+    code: 'invalid-reward',
+    state,
+    errors: Object.freeze([...errors]),
+  });
+}
+
+function validateRewardPartyIds(snapshot, options, errors) {
+  if (!isPlainObject(options)) {
+    errors.push('reward options must be a plain object.');
+    return [];
+  }
+  for (const key of Object.keys(options)) {
+    if (key !== 'partyIds') errors.push(`reward options.${key} is not supported.`);
+  }
+  const ids = hasOwn(options, 'partyIds')
+    ? options.partyIds
+    : snapshot.party.filter(({ unlocked }) => unlocked).map(({ id }) => id);
+  if (!Array.isArray(ids) || !ids.length) {
+    errors.push('reward partyIds must contain at least one unlocked canonical party member.');
+    return [];
+  }
+  const seen = new Set();
+  for (const id of ids) {
+    if (!PARTY_BY_ID.has(id)) errors.push(`reward partyIds contains unknown party member ${id}.`);
+    else if (!snapshot.party.find((member) => member.id === id)?.unlocked) errors.push(`reward party member ${id} is locked.`);
+    if (seen.has(id)) errors.push(`reward partyIds contains duplicate ${id}.`);
+    seen.add(id);
+  }
+  return [...ids];
+}
+
+function validateRewardBundle(snapshot, reward, options) {
+  const errors = [];
+  const partyIds = validateRewardPartyIds(snapshot, options, errors);
+  const normalized = { xpPerMember: 0, currency: 0, items: [], keyItems: [] };
+  if (!isPlainObject(reward)) {
+    errors.push('reward must be a plain object.');
+    return { errors, partyIds, reward: normalized };
+  }
+  validateExactKeys(reward, REWARD_KEYS, 'reward', errors);
+  if (!Number.isSafeInteger(reward.xpPerMember) || reward.xpPerMember < 0) {
+    errors.push('reward.xpPerMember must be a non-negative safe integer.');
+  } else {
+    normalized.xpPerMember = reward.xpPerMember;
+  }
+  if (!Number.isSafeInteger(reward.currency) || reward.currency < 0) {
+    errors.push('reward.currency must be a non-negative safe integer.');
+  } else {
+    normalized.currency = reward.currency;
+    if (reward.currency > Number.MAX_SAFE_INTEGER - snapshot.inventory.currency) {
+      errors.push('reward.currency would exceed the inventory currency limit.');
+    }
+  }
+
+  if (!Array.isArray(reward.items)) {
+    errors.push('reward.items must be an array.');
+  } else {
+    const seen = new Set();
+    reward.items.forEach((item, index) => {
+      const label = `reward.items[${index}]`;
+      if (!isPlainObject(item)) {
+        errors.push(`${label} must be a plain object.`);
+        return;
+      }
+      validateExactKeys(item, REWARD_ITEM_KEYS, label, errors);
+      const validName = typeof item.name === 'string' && item.name.trim() && item.name === item.name.trim();
+      if (!validName) errors.push(`${label}.name must be a trimmed non-empty string.`);
+      if (!Number.isSafeInteger(item.quantity) || item.quantity < 1) errors.push(`${label}.quantity must be a positive safe integer.`);
+      if (!validName || !Number.isSafeInteger(item.quantity) || item.quantity < 1) return;
+      if (seen.has(item.name)) errors.push(`reward.items contains duplicate ${item.name}.`);
+      seen.add(item.name);
+      const existing = snapshot.inventory.items[item.name] ?? 0;
+      if (item.quantity > Number.MAX_SAFE_INTEGER - existing) errors.push(`${label}.quantity would exceed the item stack limit.`);
+      normalized.items.push({ name: item.name, quantity: item.quantity });
+    });
+  }
+
+  if (!Array.isArray(reward.keyItems)) {
+    errors.push('reward.keyItems must be an array.');
+  } else {
+    const seen = new Set();
+    reward.keyItems.forEach((item, index) => {
+      if (typeof item !== 'string' || !item.trim() || item !== item.trim()) {
+        errors.push(`reward.keyItems[${index}] must be a trimmed non-empty string.`);
+        return;
+      }
+      if (seen.has(item)) errors.push(`reward.keyItems contains duplicate ${item}.`);
+      seen.add(item);
+      normalized.keyItems.push(item);
+    });
+  }
+
+  if (normalized.xpPerMember === 0 && normalized.currency === 0 && normalized.items.length === 0 && normalized.keyItems.length === 0) {
+    errors.push('reward must contain at least one XP, currency, item, or key-item grant.');
+  }
+  return { errors, partyIds, reward: normalized };
+}
+
+/**
+ * Apply one optional-content reward as a single advancement transaction.
+ * XP defaults to every currently unlocked member; callers may provide a
+ * unique unlocked canonical partyIds subset. Invalid grants leave the state
+ * unchanged, while a valid grant increments revision exactly once.
+ */
+export function grantRewardBundle(state, reward, options = {}) {
+  const snapshot = assertValidState(state);
+  const validation = validateRewardBundle(snapshot, reward, options);
+  if (validation.errors.length) return rewardFailure(snapshot, validation.errors);
+
+  const targeted = new Set(validation.partyIds);
+  const xpAwards = [];
+  const party = snapshot.party.map((member) => {
+    if (!targeted.has(member.id)) return member;
+    const awarded = Math.min(validation.reward.xpPerMember, MAX_MEMBER_XP - member.xp);
+    const after = member.xp + awarded;
+    xpAwards.push({
+      memberId: member.id,
+      before: member.xp,
+      requested: validation.reward.xpPerMember,
+      awarded,
+      after,
+      capped: after === MAX_MEMBER_XP,
+    });
+    return { ...member, xp: after };
+  });
+
+  const items = { ...snapshot.inventory.items };
+  for (const item of validation.reward.items) items[item.name] = (items[item.name] ?? 0) + item.quantity;
+  const keyItems = [...snapshot.inventory.keyItems];
+  const addedKeyItems = [];
+  const existingKeyItems = [];
+  for (const item of validation.reward.keyItems) {
+    if (keyItems.includes(item)) existingKeyItems.push(item);
+    else {
+      keyItems.push(item);
+      addedKeyItems.push(item);
+    }
+  }
+  const next = buildState({
+    speedMultiplier: snapshot.speedMultiplier,
+    party,
+    encounterWins: snapshot.encounterWins,
+    inventory: {
+      currency: snapshot.inventory.currency + validation.reward.currency,
+      items,
+      keyItems,
+    },
+    revision: snapshot.revision + 1,
+  });
+  const receipt = deepFreeze({
+    type: 'reward-bundle',
+    partyIds: validation.partyIds,
+    xpPerMember: validation.reward.xpPerMember,
+    xpAwards,
+    currency: {
+      before: snapshot.inventory.currency,
+      awarded: validation.reward.currency,
+      after: next.inventory.currency,
+    },
+    items: validation.reward.items,
+    keyItems: { added: addedKeyItems, alreadyOwned: existingKeyItems },
+    revision: next.revision,
+  });
+  return Object.freeze({ ok: true, state: next, receipt });
 }
 
 /**

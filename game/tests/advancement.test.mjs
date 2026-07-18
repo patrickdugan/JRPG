@@ -9,6 +9,7 @@ import {
   PARTY_MEMBER_IDS,
   createAdvancementState,
   createAdvancementStorageAdapter,
+  grantRewardBundle,
   getAdvancementSummary,
   getChapterLevelTarget,
   getEncounterRewardPreview,
@@ -119,6 +120,102 @@ test('custom active party shares XP only with selected canonical members', () =>
     () => recordEncounterWin(state, 'c4-fog-nets', { partyIds: ['ren', 'ren'] }),
     /Duplicate active party member/,
   );
+});
+
+test('optional reward bundles atomically grant XP and inventory to every unlocked member', () => {
+  const fresh = createAdvancementState();
+  const reward = {
+    xpPerMember: 100,
+    currency: 25,
+    items: [{ name: 'Ward Tonic', quantity: 1 }, { name: 'River Salve', quantity: 2 }],
+    keyItems: ['Sayo\'s consent copy'],
+  };
+  const result = grantRewardBundle(fresh, reward);
+
+  assert.equal(result.ok, true);
+  assert.equal(result.state.revision, fresh.revision + 1);
+  assert.equal(getPartyMember(result.state, 'ren').xp, 100);
+  assert.equal(getPartyMember(result.state, 'aya').xp, 0, 'locked members do not receive default quest XP');
+  assert.deepEqual(result.state.inventory, {
+    currency: 25,
+    items: { 'River Salve': 2, 'Ward Tonic': 1 },
+    keyItems: ['Sayo\'s consent copy'],
+  });
+  assert.deepEqual(result.receipt.partyIds, ['ren']);
+  assert.deepEqual(result.receipt.xpAwards, [{
+    memberId: 'ren', before: 0, requested: 100, awarded: 100, after: 100, capped: false,
+  }]);
+  assert.deepEqual(result.receipt.currency, { before: 0, awarded: 25, after: 25 });
+  assert.equal(result.receipt.revision, result.state.revision);
+  assert.equal(Object.isFrozen(result.receipt), true);
+  assert.equal(getPartyMember(fresh, 'ren').xp, 0, 'the source state remains unchanged');
+});
+
+test('optional reward targeting requires unlocked canonical members and caps XP exactly', () => {
+  let prepared = unlockPartyMember(createAdvancementState(), 'aya');
+  const payload = JSON.parse(serializeAdvancementState(prepared));
+  payload.party[0].xp = MAX_MEMBER_XP - 5;
+  payload.party[1].xp = MAX_MEMBER_XP;
+  prepared = loadAdvancementState(payload).value;
+
+  const result = grantRewardBundle(prepared, {
+    xpPerMember: 50,
+    currency: 1,
+    items: [],
+    keyItems: [],
+  }, { partyIds: ['ren', 'aya'] });
+
+  assert.equal(result.ok, true);
+  assert.equal(getPartyMember(result.state, 'ren').xp, MAX_MEMBER_XP);
+  assert.equal(getPartyMember(result.state, 'aya').xp, MAX_MEMBER_XP);
+  assert.deepEqual(result.receipt.xpAwards.map(({ memberId, awarded, capped }) => ({ memberId, awarded, capped })), [
+    { memberId: 'ren', awarded: 5, capped: true },
+    { memberId: 'aya', awarded: 0, capped: true },
+  ]);
+  assert.equal(result.state.revision, prepared.revision + 1);
+
+  const locked = grantRewardBundle(prepared, {
+    xpPerMember: 1, currency: 0, items: [], keyItems: [],
+  }, { partyIds: ['lise'] });
+  assert.equal(locked.ok, false);
+  assert.equal(locked.code, 'invalid-reward');
+  assert.match(locked.errors.join(' '), /lise is locked/);
+  assert.deepEqual(locked.state, prepared);
+});
+
+test('invalid optional reward bundles fail without partial XP, currency, or inventory changes', () => {
+  const fresh = createAdvancementState();
+  const malformed = grantRewardBundle(fresh, {
+    xpPerMember: 10,
+    currency: -1,
+    items: [{ name: 'River Salve', quantity: 1 }, { name: 'River Salve', quantity: 2 }],
+    keyItems: ['Duplicate folio', 'Duplicate folio'],
+  }, { partyIds: ['ren', 'ren'] });
+
+  assert.equal(malformed.ok, false);
+  assert.equal(malformed.code, 'invalid-reward');
+  assert.match(malformed.errors.join(' '), /currency.*non-negative/);
+  assert.match(malformed.errors.join(' '), /duplicate River Salve/);
+  assert.match(malformed.errors.join(' '), /duplicate Duplicate folio/);
+  assert.match(malformed.errors.join(' '), /duplicate ren/);
+  assert.deepEqual(malformed.state, fresh);
+  assert.equal(malformed.state.revision, fresh.revision);
+
+  const payload = JSON.parse(serializeAdvancementState(fresh));
+  payload.inventory.currency = Number.MAX_SAFE_INTEGER;
+  const wealthy = loadAdvancementState(payload).value;
+  const overflow = grantRewardBundle(wealthy, {
+    xpPerMember: 0, currency: 1, items: [], keyItems: [],
+  });
+  assert.equal(overflow.ok, false);
+  assert.match(overflow.errors.join(' '), /currency limit/);
+  assert.deepEqual(overflow.state, wealthy);
+
+  const empty = grantRewardBundle(fresh, {
+    xpPerMember: 0, currency: 0, items: [], keyItems: [],
+  });
+  assert.equal(empty.ok, false);
+  assert.match(empty.errors.join(' '), /at least one/);
 });
 
 test('encounter preparation unlocks the roster and applies the prior-chapter catch-up floor', () => {

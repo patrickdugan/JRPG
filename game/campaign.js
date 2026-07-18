@@ -1,9 +1,11 @@
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
+import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter } from './content/sidequests.mjs';
 import {
   createAdvancementState,
   createAdvancementStorageAdapter,
+  grantRewardBundle,
   getAdvancementSummary,
   getEncounterWinCount,
 } from './advancement.mjs';
@@ -22,6 +24,41 @@ import {
   resetCampaignState,
   selectChoice,
 } from './progression.mjs';
+import {
+  advanceFieldTime,
+  createFieldState as createPersistentFieldState,
+  createFieldStorageAdapter,
+  enterField,
+  grantFieldFlags,
+  getCurrentFieldContext,
+  getFieldStatus,
+  interactField as performFieldInteraction,
+  moveFieldBy,
+  resolveFieldEncounter,
+  useFieldExit,
+} from './field-runtime.mjs';
+import {
+  createLoadoutState,
+  createLoadoutStorageAdapter,
+  grantInventory,
+  setMemberVitals,
+} from './loadout.mjs';
+import {
+  createPlaytimeState,
+  createPlaytimeStorageAdapter,
+  formatPlaytime,
+  isPlaytimeInactive,
+  recordPlaytime,
+} from './playtime.mjs';
+import {
+  acceptQuest,
+  advanceQuestObjective,
+  completeQuest,
+  createQuestState,
+  createQuestStorageAdapter,
+  getQuestAvailability,
+  getQuestProgress,
+} from './quest-runtime.mjs';
 
 const chapterList = document.querySelector('#chapterList');
 const completionLabel = document.querySelector('#completionLabel');
@@ -55,6 +92,13 @@ const fieldFeedback = document.querySelector('#fieldFeedback');
 const fieldControls = document.querySelector('#fieldControls');
 const launchBattle = document.querySelector('#launchBattle');
 const battleStatus = document.querySelector('#battleStatus');
+const fieldPlaytime = document.querySelector('#fieldPlaytime');
+const questSummary = document.querySelector('#questSummary');
+const questList = document.querySelector('#questList');
+const returnStoryRoute = document.querySelector('#returnStoryRoute');
+const interactFieldButton = document.querySelector('#interactField');
+const fieldObjective = document.querySelector('#fieldObjective');
+const fieldProgress = document.querySelector('#fieldProgress');
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
@@ -64,11 +108,28 @@ let campaignState = loadedSave.ok ? loadedSave.state : createCampaignState();
 const advancementAdapter = createAdvancementStorageAdapter();
 const loadedAdvancement = advancementAdapter.load();
 let advancementState = loadedAdvancement.ok ? loadedAdvancement.state : createAdvancementState();
+const playtimeAdapter = createPlaytimeStorageAdapter();
+const loadedPlaytime = playtimeAdapter.load();
+let playtimeState = loadedPlaytime.ok ? loadedPlaytime.state : createPlaytimeState();
+const questAdapter = createQuestStorageAdapter();
+const loadedQuests = questAdapter.load();
+let questState = loadedQuests.ok ? loadedQuests.state : createQuestState();
+const loadoutAdapter = createLoadoutStorageAdapter();
+const loadedLoadout = loadoutAdapter.load();
+let loadoutState = loadedLoadout.ok ? loadedLoadout.value : createLoadoutState();
+let playtimeLastSample = performance.now();
+let playtimeLastActivity = performance.now();
+let playtimeCategory = 'narrative';
+let playtimeUnsavedMs = 0;
 let animationNow = 0;
-const fieldState = {
-  levelId: null,
-  position: null,
-};
+const openingLevel = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
+const fieldAdapter = createFieldStorageAdapter();
+const loadedField = fieldAdapter.load({ levelId: openingLevel.id, beatId: getCurrentBeat(campaignState).id });
+let fieldRuntimeState = loadedField.ok
+  ? loadedField.state
+  : createPersistentFieldState({ levelId: openingLevel.id, beatId: getCurrentBeat(campaignState).id });
+let fieldTickLast = performance.now();
+let fieldTickAccumulator = 0;
 
 const fallbackPalette = Object.freeze({
   floor: '#23314a',
@@ -119,6 +180,100 @@ function persistCampaignState() {
   saveAdapter.save(campaignState);
 }
 
+function questContext() {
+  return { campaignState, advancementState };
+}
+
+function settleReadyQuests() {
+  let changed = false;
+  const completedTitles = [];
+  for (const quest of ALL_OPTIONAL_QUESTS) {
+    const progress = getQuestProgress(questState, quest.id);
+    if (!progress?.readyToComplete) continue;
+    const result = completeQuest(questState, quest.id);
+    if (!result.ok) continue;
+    let nextAdvancementState = advancementState;
+    let nextLoadoutState = loadoutState;
+    if (result.reward) {
+      const advancementReward = grantRewardBundle(advancementState, result.reward);
+      const loadoutReward = grantInventory(loadoutState, result.reward);
+      if (!advancementReward.ok || !loadoutReward.ok) continue;
+      nextAdvancementState = advancementReward.state;
+      nextLoadoutState = loadoutReward.state;
+    }
+    questState = result.state;
+    advancementState = nextAdvancementState;
+    loadoutState = nextLoadoutState;
+    advancementAdapter.save(advancementState);
+    loadoutAdapter.save(loadoutState);
+    changed = true;
+    completedTitles.push(quest.title);
+  }
+  if (changed) questAdapter.save(questState);
+  return completedTitles;
+}
+
+function sampleCampaignPlaytime(now) {
+  const elapsed = Math.min(1000, Math.max(0, Math.floor(now - playtimeLastSample)));
+  playtimeLastSample = now;
+  if (elapsed === 0 || isPlaytimeInactive({
+    nowMs: now,
+    lastActivityMs: playtimeLastActivity,
+    visible: document.visibilityState === 'visible',
+  })) return;
+  playtimeState = recordPlaytime(playtimeState, playtimeCategory, elapsed, { chapterId: getChapter().id });
+  fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
+  playtimeUnsavedMs += elapsed;
+  if (playtimeUnsavedMs >= 10_000) {
+    playtimeAdapter.save(playtimeState);
+    playtimeUnsavedMs = 0;
+  }
+}
+
+function sampleFieldRuntime(now) {
+  const elapsed = Math.min(1000, Math.max(0, Math.floor(now - fieldTickLast)));
+  fieldTickLast = now;
+  if (elapsed === 0 || isPlaytimeInactive({
+    nowMs: now,
+    lastActivityMs: playtimeLastActivity,
+    visible: document.visibilityState === 'visible',
+  })) return;
+  fieldTickAccumulator += elapsed;
+  if (fieldTickAccumulator < 250) return;
+  const tickMs = fieldTickAccumulator;
+  fieldTickAccumulator = 0;
+  const result = advanceFieldTime(fieldRuntimeState, tickMs, { flags: externalFieldFlags() });
+  fieldRuntimeState = result.state;
+  const important = result.events.find((event) => event.type === 'hazard-hit' || event.type === 'hazard-warning');
+  if (important?.type === 'hazard-hit') {
+    const consequence = applyFieldHazardConsequence(important);
+    fieldFeedback.textContent = `Hazard ${important.hazardId} triggered${consequence ? `; ${consequence}` : ''}. The last safe tile is preserved.`;
+  }
+  else if (important?.cue) fieldFeedback.textContent = important.cue;
+  if (fieldRuntimeState.revision % 20 === 0) fieldAdapter.save(fieldRuntimeState);
+}
+
+function applyFieldHazardConsequence(event) {
+  const effect = event.effect ?? {};
+  const leaderId = getChapter().party?.[0] ?? 'ren';
+  const vitals = loadoutState.vitals?.[leaderId];
+  if (!vitals) return '';
+  const patch = {};
+  if (effect.type === 'fieldDamage' || effect.type === 'damage' || effect.type === 'physicalDamage') {
+    const percent = effect.percentMaxHp ?? 10;
+    const minimum = effect.minimumHp ?? 1;
+    patch.hp = Math.max(minimum, vitals.hp - Math.ceil(vitals.maxHp * (percent / 100)));
+  }
+  if (effect.status) patch.statuses = [...new Set([...vitals.statuses, effect.status])];
+  if (!Object.keys(patch).length) return '';
+  const result = setMemberVitals(loadoutState, leaderId, patch);
+  if (!result.ok) return '';
+  loadoutState = result.state;
+  loadoutAdapter.save(loadoutState);
+  const hpLoss = vitals.hp - loadoutState.vitals[leaderId].hp;
+  return `${CAMPAIGN.cast?.[leaderId]?.name ?? leaderId} loses ${hpLoss} HP${effect.status ? ` and gains ${effect.status}` : ''}`;
+}
+
 function isMultiSelectBeat(beat) {
   return beat.id === 'c9-03-conservatory-offers';
 }
@@ -156,6 +311,54 @@ function mapReferenceForBeat(chapter, beat) {
 function getLevelForBeat(chapter, beat) {
   const authoredReference = mapReferenceForBeat(chapter, beat);
   return getLevel(authoredReference?.id) ?? getLevelForChapter(chapter.id) ?? LEVELS[0];
+}
+
+function getActiveLevelForBeat(chapter, beat) {
+  const current = fieldRuntimeState?.current;
+  if (current?.beatId === beat.id) {
+    const active = getLevel(current.levelId);
+    if (active) return active;
+  }
+  return getLevelForBeat(chapter, beat);
+}
+
+function nextBeatRecord(beat = getBeat()) {
+  const index = allBeatRecords.findIndex((record) => record.beat.id === beat.id);
+  return index >= 0 ? allBeatRecords[index + 1] ?? null : null;
+}
+
+function fieldRouteReaches(startLevelId, targetLevelId) {
+  if (startLevelId === targetLevelId) return true;
+  const queue = [startLevelId];
+  const visited = new Set(queue);
+  while (queue.length) {
+    const level = getLevel(queue.shift());
+    for (const exit of level?.exits ?? []) {
+      if (exit.destinationLevelId === targetLevelId) return true;
+      if (getLevel(exit.destinationLevelId) && !visited.has(exit.destinationLevelId)) {
+        visited.add(exit.destinationLevelId);
+        queue.push(exit.destinationLevelId);
+      }
+    }
+  }
+  return false;
+}
+
+function beatRequiresFieldRoute(chapter = getChapter(), beat = getBeat()) {
+  const next = nextBeatRecord(beat);
+  if (!next) return false;
+  const start = getLevelForBeat(chapter, beat);
+  const targetChapter = chapters.find((entry) => entry.id === next.chapterId);
+  const target = getLevelForBeat(targetChapter, next.beat);
+  return start.id !== target.id && fieldRouteReaches(start.id, target.id);
+}
+
+function fieldRouteFlag(beat = getBeat()) {
+  return `beat-route-complete-${beat.id}`;
+}
+
+function currentFieldRouteComplete() {
+  return !beatRequiresFieldRoute() || fieldRuntimeState.flags.includes(fieldRouteFlag());
 }
 
 function keyOf(position) {
@@ -230,6 +433,56 @@ function isFieldOpen(level, x, y) {
   return TERRAIN_TAGS[terrain]?.passable !== false;
 }
 
+function stableHash(value) {
+  let hash = 2166136261;
+  for (const character of String(value)) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function reachableFieldPositions(level) {
+  const rawSpawn = Array.isArray(level.spawn) ? level.spawn[0] : level.spawn;
+  const start = firstOpenFieldPosition(level, coordinatesOf(rawSpawn));
+  const queue = [start];
+  const visited = new Set([keyOf(start)]);
+  for (let index = 0; index < queue.length; index += 1) {
+    const current = queue[index];
+    for (const [dx, dy] of [[0, -1], [-1, 0], [1, 0], [0, 1]]) {
+      const target = { x: current.x + dx, y: current.y + dy };
+      const key = keyOf(target);
+      if (!visited.has(key) && isFieldOpen(level, target.x, target.y)) {
+        visited.add(key);
+        queue.push(target);
+      }
+    }
+  }
+  const reserved = new Set([
+    ...(level.exits ?? []).map(keyOf),
+    ...(level.interactables ?? []).map(keyOf),
+    keyOf(start),
+  ]);
+  const open = queue.filter((position) => !reserved.has(keyOf(position)));
+  return open.length ? open : queue;
+}
+
+function getActiveQuestMarker(level) {
+  for (const quest of ALL_OPTIONAL_QUESTS) {
+    const progress = getQuestProgress(questState, quest.id);
+    const objective = progress?.currentObjective;
+    if (progress?.status !== 'active' || objective?.mapId !== level.id) continue;
+    const positions = reachableFieldPositions(level);
+    if (!positions.length) return null;
+    return Object.freeze({ quest, progress, objective, position: positions[stableHash(objective.targetId ?? objective.id) % positions.length] });
+  }
+  return null;
+}
+
+function inInteractionRange(left, right) {
+  return left && right && Math.max(Math.abs(left.x - right.x), Math.abs(left.y - right.y)) <= 1;
+}
+
 function firstOpenFieldPosition(level, requested) {
   if (requested && isFieldOpen(level, requested.x, requested.y)) return requested;
   for (let y = 0; y < level.height; y += 1) {
@@ -240,42 +493,89 @@ function firstOpenFieldPosition(level, requested) {
   return requested ?? { x: 0, y: 0 };
 }
 
+function externalFieldFlags() {
+  const wonEncounterIds = Object.entries(advancementState.encounterWins ?? {})
+    .filter(([, wins]) => wins > 0)
+    .map(([id]) => id);
+  const encounterFlags = wonEncounterIds.flatMap((id) => {
+    const reward = getEncounter(id)?.reward ?? {};
+    return [id, `${id}-cleared`, ...(reward.flags ?? []), ...(reward.keyItems ?? [])];
+  });
+  const questFlags = questState.records
+    .filter((record) => record.status === 'completed')
+    .flatMap((record) => [record.id, `${record.id}-complete`]);
+  return [
+    ...Object.keys(campaignState.flags ?? {}),
+    ...(advancementState.inventory?.keyItems ?? []),
+    ...encounterFlags,
+    ...questFlags,
+  ];
+}
+
+function fieldPosition() {
+  return getCurrentFieldContext(fieldRuntimeState).position;
+}
+
 function ensureFieldPosition(level) {
-  if (fieldState.levelId === level.id && fieldState.position) return false;
-  const rawSpawn = Array.isArray(level.spawn) ? level.spawn[0] : level.spawn;
-  fieldState.levelId = level.id;
-  fieldState.position = firstOpenFieldPosition(level, coordinatesOf(rawSpawn));
-  return true;
+  const beatId = getBeat().id;
+  const current = fieldRuntimeState.current;
+  const changed = current.levelId !== level.id || current.beatId !== beatId;
+  const next = enterField(fieldRuntimeState, level.id, beatId, { flags: externalFieldFlags() });
+  if (next !== fieldRuntimeState) {
+    fieldRuntimeState = next;
+    fieldAdapter.save(fieldRuntimeState);
+  }
+  return changed;
 }
 
 function describeFieldPosition(level, prefix = 'Field position') {
-  const position = fieldState.position;
+  const position = fieldPosition();
   return `${prefix}: ${level.name}, space ${position.x + 1},${position.y + 1}. W/A/S/D orthogonal · Q/E/Z/C diagonal.`;
 }
 
+function fieldEventMessage(level, result) {
+  const event = result.events.find((entry) => entry.type !== 'moved') ?? result.events.at(-1);
+  if (!result.moved) return `Blocked ${event?.direction?.includes('-') ? 'diagonal' : 'orthogonal'} step (${event?.reason ?? 'collision'}). ${describeFieldPosition(level)}`;
+  if (!event || event.type === 'moved') return describeFieldPosition(level, 'Moved one exact space');
+  if (event.type === 'encounter-triggered') return `Encounter triggered: ${getEncounter(event.encounterId)?.name ?? event.encounterId}.`;
+  if (event.type === 'exit-ready') return `Exit ready: ${event.destinationLevelId}. Press Interact to continue the route.`;
+  if (event.type === 'exit-locked') return `Exit locked until ${event.condition}.`;
+  if (event.type === 'hazard-warning') return event.cue ?? `Hazard ${event.hazardId} is warning.`;
+  if (event.type === 'hazard-hit') return `Hazard ${event.hazardId} triggered. The field record marked a safe recovery tile.`;
+  return describeFieldPosition(level, 'Moved one exact space');
+}
+
+function launchPlacedEncounter(event, beat) {
+  fieldAdapter.save(fieldRuntimeState);
+  const parameters = new URLSearchParams({
+    encounter: event.encounterId,
+    return: 'campaign.html',
+    beat: beat.id,
+    fieldTrigger: event.triggerId,
+  });
+  window.location.href = `battle.html?${parameters.toString()}`;
+}
+
 function attemptFieldMove(dx, dy) {
+  playtimeCategory = 'exploration';
   const chapter = getChapter();
   const beat = getBeat();
-  const level = getLevelForBeat(chapter, beat);
+  const level = getActiveLevelForBeat(chapter, beat);
   ensureFieldPosition(level);
-  const current = fieldState.position;
-  const target = { x: current.x + dx, y: current.y + dy };
-  const direction = dx && dy ? 'diagonal' : 'orthogonal';
-
-  if (!isFieldOpen(level, target.x, target.y)) {
-    fieldFeedback.textContent = `Blocked ${direction} step. ${describeFieldPosition(level)}`;
+  const result = moveFieldBy(fieldRuntimeState, dx, dy, { flags: externalFieldFlags() });
+  fieldRuntimeState = result.state;
+  fieldAdapter.save(fieldRuntimeState);
+  fieldFeedback.textContent = fieldEventMessage(level, result);
+  for (const event of result.events.filter((entry) => entry.type === 'hazard-hit')) {
+    const consequence = applyFieldHazardConsequence(event);
+    if (consequence) fieldFeedback.textContent += ` ${consequence}.`;
+  }
+  const encounterEvent = result.events.find((event) => event.type === 'encounter-triggered');
+  if (encounterEvent) {
+    launchPlacedEncounter(encounterEvent, beat);
     return;
   }
-  if (dx && dy && (!isFieldOpen(level, current.x + dx, current.y) || !isFieldOpen(level, current.x, current.y + dy))) {
-    fieldFeedback.textContent = `Diagonal corner blocked; use an open orthogonal route. ${describeFieldPosition(level)}`;
-    return;
-  }
-
-  fieldState.position = target;
-  const reachedExit = (level.exits ?? []).find((exit) => keyOf(exit) === `${target.x},${target.y}`);
-  fieldFeedback.textContent = reachedExit
-    ? `Reached exit: ${reachedExit.id ?? 'route marker'} → ${reachedExit.destinationLevelId ?? 'next story route'}. Story progression stays under your control.`
-    : describeFieldPosition(level, `Moved one ${direction} space`);
+  updateFieldDashboard(level);
 }
 
 function drawMap(level, encounter, now) {
@@ -350,6 +650,23 @@ function drawMap(level, encounter, now) {
     }
   }
 
+  const questMarker = getActiveQuestMarker(level);
+  if (questMarker) {
+    const px = originX + questMarker.position.x * cell + cell / 2;
+    const py = originY + questMarker.position.y * cell + cell / 2;
+    const pulse = 0.68 + (Math.sin(now / 210) * 0.15);
+    mapCtx.fillStyle = `rgba(244, 221, 148, ${pulse})`;
+    mapCtx.beginPath();
+    mapCtx.moveTo(px, py - cell * 0.28);
+    mapCtx.lineTo(px + cell * 0.24, py);
+    mapCtx.lineTo(px, py + cell * 0.28);
+    mapCtx.lineTo(px - cell * 0.24, py);
+    mapCtx.closePath();
+    mapCtx.fill();
+    mapCtx.strokeStyle = '#a08ad1';
+    mapCtx.stroke();
+  }
+
   const enemyTokens = (encounter?.enemies ?? []).flatMap((enemy, enemyIndex) => {
     const positions = enemy.positions ?? (enemy.position ? [enemy.position] : []);
     return positions.map((position, positionIndex) => ({
@@ -366,7 +683,7 @@ function drawMap(level, encounter, now) {
     mapCtx.fillRect(px - cell * 0.08, py - cell * 0.1, cell * 0.16, cell * 0.1);
   });
 
-  const partyPosition = fieldState.position;
+  const partyPosition = fieldPosition();
   const partyX = originX + partyPosition.x * cell + cell / 2;
   const partyY = originY + partyPosition.y * cell + cell / 2 + Math.sin(now / 150) * Math.max(1, cell * 0.045);
   mapCtx.fillStyle = '#0b1020';
@@ -484,6 +801,80 @@ function renderChoices(beat) {
   if (results.length) choiceResult.textContent = results.join(' ');
 }
 
+function renderQuestJournal(chapter) {
+  const active = ALL_OPTIONAL_QUESTS.filter((quest) => getQuestProgress(questState, quest.id)?.status === 'active');
+  const candidates = [...new Map([...active, ...getOptionalQuestsForChapter(chapter.id)].map((quest) => [quest.id, quest])).values()];
+  const availableCount = candidates.filter((quest) => getQuestAvailability(questState, quest.id, questContext()).available).length;
+  const activeCount = active.length;
+  questSummary.textContent = `${activeCount} active · ${availableCount} available`;
+  returnStoryRoute.disabled = fieldRuntimeState.current.levelId === getLevelForBeat(chapter, getBeat()).id;
+  questList.replaceChildren(...candidates.map((quest) => {
+    const progress = getQuestProgress(questState, quest.id);
+    const availability = getQuestAvailability(questState, quest.id, questContext());
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'quest-entry';
+    button.dataset.questId = quest.id;
+    const status = progress.status === 'active'
+      ? `Objective ${Math.min(progress.objectiveIndex + 1, progress.objectiveCount)}/${progress.objectiveCount}`
+      : progress.status === 'completed' ? `Completed ${progress.completions}×` : availability.available ? 'Accept side story' : 'Not yet available';
+    const detail = progress.currentObjective?.instruction
+      ?? (availability.available ? quest.hook : availability.reason);
+    const mapName = progress.currentObjective?.mapId ?? quest.mapIds[0];
+    const small = document.createElement('small');
+    small.textContent = `${status} · ${quest.estimatedMinutes} min`;
+    const strong = document.createElement('strong');
+    strong.textContent = quest.title;
+    const span = document.createElement('span');
+    span.textContent = `${detail ?? quest.summary ?? 'Optional regional story.'} · ${mapName}`;
+    button.append(small, strong, span);
+    button.disabled = progress.status !== 'active' && !availability.available;
+    if (progress.status === 'active') button.title = `Travel to ${mapName}`;
+    if (progress.status === 'active') button.classList.add('is-active');
+    if (progress.status === 'completed') button.classList.add('is-complete');
+    return button;
+  }));
+}
+
+function updateFieldDashboard(level) {
+  const status = getFieldStatus(fieldRuntimeState, { flags: externalFieldFlags() });
+  const marker = getActiveQuestMarker(level);
+  const markerNearby = marker && inInteractionRange(status.position, marker.position);
+  const authored = status.nearbyInteractables.find((item) => !item.consumed) ?? status.nearbyInteractables[0] ?? null;
+  fieldObjective.textContent = status.objective.text ?? level.objective ?? 'Explore the scene and follow its marked exit.';
+  const requirements = status.objective.requirements.length
+    ? status.objective.requirements.map((item) => `${item.complete ? '✓' : '○'} ${item.label}`).join(' · ')
+    : `${(level.interactables ?? []).length} authored interactions`;
+  fieldProgress.textContent = marker
+    ? `Side story: ${marker.quest.title} · ${marker.objective.instruction}`
+    : `${status.objective.completedCount}/${status.objective.totalCount} route requirements · ${requirements}`;
+  interactFieldButton.disabled = !markerNearby && !authored && !status.exit;
+  interactFieldButton.textContent = markerNearby
+    ? 'Advance side story (X)'
+    : authored ? `${authored.consumed ? 'Review' : 'Interact'}: ${authored.id} (X)`
+      : status.exit ? `${status.exit.ready ? 'Use' : 'Inspect'} exit (X)` : 'Nothing nearby (X)';
+}
+
+function moveCampaignThroughExit(transition) {
+  const currentIndex = allBeatRecords.findIndex((record) => record.beat.id === getBeat().id);
+  const targetIndex = allBeatRecords.findIndex((record, index) => index > currentIndex
+    && getLevelForBeat(chapters.find((chapter) => chapter.id === record.chapterId), record.beat).id === transition.destinationLevelId);
+  if (targetIndex === currentIndex + 1 && currentBeatBattlesCleared()) {
+    fieldRuntimeState = grantFieldFlags(fieldRuntimeState, fieldRouteFlag());
+    fieldAdapter.save(fieldRuntimeState);
+    advance(1);
+    return true;
+  }
+  const target = targetIndex >= 0 ? allBeatRecords[targetIndex] : null;
+  if (target && getUnlockedBeatIds(campaignState).includes(target.beat.id)) {
+    campaignState = moveToBeat(campaignState, target.chapterId, target.beat.id);
+    persistCampaignState();
+    render();
+    return true;
+  }
+  return false;
+}
+
 function setKeyArt(chapter) {
   const artByChapter = {
     prologue: {
@@ -528,9 +919,10 @@ function renderBattleLaunch(beat, beatBattleState) {
 }
 
 function render() {
+  const newlyCompletedQuests = settleReadyQuests();
   const chapter = getChapter();
   const beat = getBeat();
-  const level = getLevelForBeat(chapter, beat);
+  const level = getActiveLevelForBeat(chapter, beat);
   const enteredNewLevel = ensureFieldPosition(level);
   const beatBattleState = getBeatEncounterState(beat);
   const encounter = beatBattleState.selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
@@ -553,18 +945,25 @@ function render() {
   bossMechanic.textContent = formatBrief(encounter?.bossMechanic, 'No boss mechanic assigned.');
   previousScene.disabled = recordIndex <= 0;
   const battlesCleared = currentBeatBattlesCleared();
-  nextScene.disabled = isCampaignComplete(campaignState) || !battlesCleared;
+  const fieldRouteCleared = currentFieldRouteComplete();
+  nextScene.disabled = isCampaignComplete(campaignState) || !battlesCleared || !fieldRouteCleared;
   nextScene.textContent = isCampaignComplete(campaignState)
     ? 'Campaign complete'
-    : battlesCleared ? 'Next scene →' : 'Clear encounter to continue';
+    : !battlesCleared ? 'Clear encounter to continue'
+      : fieldRouteCleared ? 'Next scene →' : 'Reach and use the route exit';
   const progress = (beatIndex + 1) / chapter.beats.length;
   progressLabel.textContent = `${beatIndex + 1} of ${chapter.beats.length} scenes`;
   progressFill.style.width = `${Math.round(progress * 100)}%`;
+  fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
+  updateFieldDashboard(level);
   setKeyArt(chapter);
   renderChoices(beat);
+  renderQuestJournal(chapter);
   renderChapterList();
   renderBattleLaunch(beat, beatBattleState);
-  fieldFeedback.textContent = describeFieldPosition(level, enteredNewLevel ? 'Entered field' : 'Field position');
+  fieldFeedback.textContent = newlyCompletedQuests.length
+    ? `Side story complete: ${newlyCompletedQuests.join(', ')}. Rewards recorded in the regional journal.`
+    : describeFieldPosition(level, enteredNewLevel ? 'Entered field' : 'Field position');
   drawMap(level, encounter, animationNow);
 }
 
@@ -572,6 +971,7 @@ function choose(choiceId) {
   const beat = getBeat();
   const choice = (beat.choices ?? []).find((entry) => entry.id === choiceId);
   if (!choice) return;
+  playtimeCategory = 'narrative';
   campaignState = isMultiSelectBeat(beat)
     ? appendChoice(campaignState, choice.id)
     : selectChoice(campaignState, choice.id);
@@ -580,6 +980,7 @@ function choose(choiceId) {
 }
 
 function advance(direction) {
+  playtimeCategory = 'narrative';
   const currentIndex = allBeatRecords.findIndex((record) => record.beat.id === getBeat().id);
   if (direction < 0) {
     if (currentIndex <= 0) return;
@@ -594,6 +995,10 @@ function advance(direction) {
     battleStatus.textContent = 'Clear every encounter bound to this scene before advancing.';
     return;
   }
+  if (!currentFieldRouteComplete()) {
+    fieldFeedback.textContent = 'Complete this beat’s authored field route and use its terminal exit before advancing.';
+    return;
+  }
   campaignState = completeCurrentBeat(campaignState);
   persistCampaignState();
   render();
@@ -606,14 +1011,58 @@ chapterList.addEventListener('click', (event) => {
   const unlocked = new Set(getUnlockedBeatIds(campaignState));
   const target = chapter?.beats.filter((beat) => unlocked.has(beat.id)).at(-1);
   if (!chapter || !target) return;
+  playtimeCategory = 'narrative';
   campaignState = moveToBeat(campaignState, chapter.id, target.id);
+  const storyLevel = getLevelForBeat(chapter, target);
+  fieldRuntimeState = enterField(fieldRuntimeState, storyLevel.id, target.id, { flags: externalFieldFlags() });
   persistCampaignState();
+  fieldAdapter.save(fieldRuntimeState);
   render();
 });
 
 choiceDeck.addEventListener('click', (event) => {
   const button = event.target.closest('[data-choice-id]');
   if (button) choose(button.dataset.choiceId);
+});
+
+questList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-quest-id]');
+  if (!button) return;
+  const progress = getQuestProgress(questState, button.dataset.questId);
+  if (progress?.status === 'active' && progress.currentObjective?.mapId) {
+    const destination = getLevel(progress.currentObjective.mapId);
+    if (!destination) {
+      fieldFeedback.textContent = `The side-story destination ${progress.currentObjective.mapId} is not authored.`;
+      return;
+    }
+    playtimeCategory = 'exploration';
+    fieldRuntimeState = enterField(fieldRuntimeState, destination.id, getBeat().id, { flags: externalFieldFlags() });
+    fieldAdapter.save(fieldRuntimeState);
+    render();
+    fieldFeedback.textContent = `Side-story route: ${progress.currentObjective.instruction} (${destination.name}).`;
+    return;
+  }
+  playtimeCategory = 'narrative';
+  const result = acceptQuest(questState, button.dataset.questId, questContext());
+  if (!result.ok) {
+    fieldFeedback.textContent = result.reason;
+    return;
+  }
+  questState = result.state;
+  questAdapter.save(questState);
+  fieldFeedback.textContent = `Side story accepted: ${result.progress.quest.title}. ${result.progress.currentObjective?.instruction ?? ''}`;
+  renderQuestJournal(getChapter());
+});
+
+returnStoryRoute.addEventListener('click', () => {
+  playtimeCategory = 'exploration';
+  const chapter = getChapter();
+  const beat = getBeat();
+  const destination = getLevelForBeat(chapter, beat);
+  fieldRuntimeState = enterField(fieldRuntimeState, destination.id, beat.id, { flags: externalFieldFlags() });
+  fieldAdapter.save(fieldRuntimeState);
+  render();
+  fieldFeedback.textContent = `Returned to the main story route at ${destination.name}.`;
 });
 
 fieldControls.addEventListener('click', (event) => {
@@ -623,11 +1072,118 @@ fieldControls.addEventListener('click', (event) => {
   attemptFieldMove(dx, dy);
 });
 
+interactFieldButton.addEventListener('click', () => {
+  playtimeCategory = 'exploration';
+  const chapter = getChapter();
+  const beat = getBeat();
+  const level = getActiveLevelForBeat(chapter, beat);
+  ensureFieldPosition(level);
+  const marker = getActiveQuestMarker(level);
+  if (marker && inInteractionRange(fieldPosition(), marker.position)) {
+    if (marker.objective.type === 'battle-replay' && marker.objective.encounterId) {
+      const parameters = new URLSearchParams({
+        encounter: marker.objective.encounterId,
+        return: 'campaign.html',
+        beat: beat.id,
+        quest: marker.quest.id,
+        objective: marker.objective.id,
+      });
+      window.location.href = `battle.html?${parameters.toString()}`;
+      return;
+    }
+    const result = advanceQuestObjective(questState, marker.quest.id, marker.objective.id);
+    if (!result.ok) {
+      fieldFeedback.textContent = result.reason;
+      return;
+    }
+    questState = result.state;
+    questAdapter.save(questState);
+    fieldFeedback.textContent = `Side-story objective complete: ${marker.objective.instruction}`;
+    render();
+    return;
+  }
+  const status = getFieldStatus(fieldRuntimeState, { flags: externalFieldFlags() });
+  const nearby = status.nearbyInteractables.find((item) => !item.consumed) ?? status.nearbyInteractables[0];
+  if (nearby) {
+    let result = performFieldInteraction(fieldRuntimeState, nearby.id, { flags: externalFieldFlags() });
+    if (!result.ok && result.code === 'choice-required') {
+      const chosen = window.prompt(`Choose for ${nearby.id}: ${result.choices.join(' / ')}`, result.choices[0]);
+      if (chosen === null) return;
+      try {
+        result = performFieldInteraction(fieldRuntimeState, nearby.id, { flags: externalFieldFlags(), choice: chosen });
+      } catch {
+        fieldFeedback.textContent = `Choose exactly one of: ${result.choices.join(', ')}.`;
+        return;
+      }
+    }
+    if (!result.ok) {
+      fieldFeedback.textContent = result.code === 'requirement-missing'
+        ? `${nearby.id} requires ${result.blockedBy}.`
+        : `Interaction unavailable: ${result.code}.`;
+      return;
+    }
+    fieldRuntimeState = result.state;
+    fieldAdapter.save(fieldRuntimeState);
+    const event = result.events[0];
+    let lootText = '';
+    if (!result.repeated && event?.reward) {
+      const loot = grantInventory(loadoutState, { items: [{ name: event.reward, quantity: 1 }] });
+      if (loot.ok) {
+        loadoutState = loot.state;
+        loadoutAdapter.save(loadoutState);
+        lootText = loot.receipt.unknown.length
+          ? ` ${event.reward} is recorded as uncatalogued evidence.`
+          : ` ${event.reward} was added to camp inventory.`;
+      }
+    }
+    fieldFeedback.textContent = result.repeated
+      ? `${nearby.id} was already completed.${event?.text ? ` ${event.text}` : ''}`
+      : `${nearby.id}: ${event?.text ?? event?.result ?? event?.reward ?? `${event?.action ?? 'interaction'} complete`}.${lootText}`;
+    updateFieldDashboard(level);
+    return;
+  }
+  if (status.exit) {
+    const result = useFieldExit(fieldRuntimeState, status.exit.id, {
+      flags: externalFieldFlags(),
+      enterDestination: true,
+      destinationBeatId: beat.id,
+    });
+    if (!result.ok) {
+      fieldFeedback.textContent = `Exit locked: ${result.condition ?? status.exit.condition ?? 'route objective incomplete'}.`;
+      return;
+    }
+    fieldRuntimeState = result.state;
+    fieldAdapter.save(fieldRuntimeState);
+    if (!moveCampaignThroughExit(result.transition)) {
+      render();
+      fieldFeedback.textContent = `Entered ${getLevel(result.transition.destinationLevelId)?.name ?? result.transition.destinationLevelId}. The current story beat continues across this route.`;
+    }
+    return;
+  }
+  fieldFeedback.textContent = 'No interaction is within the marked one-space range.';
+});
+
 previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
+  if (!window.confirm('Start a clean New Game? This clears story, battles, quests, camp inventory, field positions, and playtime.')) return;
   campaignState = resetCampaignState();
+  advancementState = createAdvancementState();
+  questState = createQuestState();
+  loadoutState = createLoadoutState();
+  playtimeState = createPlaytimeState();
+  const level = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
+  fieldRuntimeState = createPersistentFieldState({ levelId: level.id, beatId: getCurrentBeat(campaignState).id });
   saveAdapter.clear();
+  advancementAdapter.clear();
+  questAdapter.clear();
+  fieldAdapter.clear();
+  loadoutAdapter.clear();
+  playtimeAdapter.clear();
+  playtimeLastSample = performance.now();
+  playtimeLastActivity = playtimeLastSample;
+  playtimeUnsavedMs = 0;
+  playtimeCategory = 'narrative';
   render();
 });
 
@@ -641,6 +1197,11 @@ window.addEventListener('keydown', (event) => {
   if (direction) {
     event.preventDefault();
     attemptFieldMove(...direction);
+    return;
+  }
+  if ((event.key.toLowerCase() === 'x' || event.key === 'Enter') && !event.repeat) {
+    event.preventDefault();
+    interactFieldButton.click();
     return;
   }
   if (event.key === 'ArrowLeft') {
@@ -658,9 +1219,11 @@ window.addEventListener('keydown', (event) => {
 });
 
 function animate(now) {
+  sampleCampaignPlaytime(now);
+  sampleFieldRuntime(now);
   animationNow = now;
   const chapter = getChapter();
-  const level = getLevelForBeat(chapter, getBeat());
+  const level = getActiveLevelForBeat(chapter, getBeat());
   const encounter = getBeatEncounterState().selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
   drawMap(level, encounter, now);
   requestAnimationFrame(animate);
@@ -674,5 +1237,32 @@ window.addEventListener('pageshow', (event) => {
   if (!event.persisted) return;
   const refreshed = advancementAdapter.load();
   if (refreshed.ok) advancementState = refreshed.state;
+  const refreshedQuests = questAdapter.load();
+  if (refreshedQuests.ok) questState = refreshedQuests.state;
+  const refreshedField = fieldAdapter.load();
+  if (refreshedField.ok && refreshedField.found) fieldRuntimeState = refreshedField.state;
+  const refreshedLoadout = loadoutAdapter.load();
+  if (refreshedLoadout.ok) loadoutState = refreshedLoadout.value;
+  const refreshedPlaytime = playtimeAdapter.load();
+  if (refreshedPlaytime.ok) playtimeState = refreshedPlaytime.state;
+  playtimeLastSample = performance.now();
+  playtimeLastActivity = playtimeLastSample;
+  fieldTickLast = playtimeLastSample;
+  fieldTickAccumulator = 0;
   render();
 });
+
+window.addEventListener('pagehide', () => {
+  playtimeAdapter.save(playtimeState);
+  fieldAdapter.save(fieldRuntimeState);
+});
+document.addEventListener('visibilitychange', () => {
+  playtimeLastSample = performance.now();
+  fieldTickLast = performance.now();
+  if (document.visibilityState === 'hidden') {
+    playtimeAdapter.save(playtimeState);
+    fieldAdapter.save(fieldRuntimeState);
+  }
+});
+window.addEventListener('pointerdown', () => { playtimeLastActivity = performance.now(); }, { passive: true });
+window.addEventListener('keydown', () => { playtimeLastActivity = performance.now(); }, { passive: true });

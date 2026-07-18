@@ -8,6 +8,7 @@ import {
   canMoveEightWay,
   createCampaignCombat,
   OBJECTIVE_ACTIONS,
+  PARTY_PROFILES,
   RECOVERY_PULSE_MS,
 } from '../campaign-combat.mjs';
 import { ENCOUNTERS } from '../content/encounters.mjs';
@@ -39,6 +40,48 @@ test('loads authored encounter and level data into multiple actor instances', ()
   assert.equal(engine.activeActorId, 'ren');
   assert.equal(engine.pace, 2);
   assert.equal(engine.pulseMs, RECOVERY_PULSE_MS);
+});
+
+test('party profiles may enter battle wounded without reducing maximum HP', () => {
+  const engine = new CampaignCombatEngine({
+    encounterId: 'c1-cinder-hounds',
+    partyProfiles: { ren: { ...PARTY_PROFILES.ren, currentHp: 37 } },
+  });
+  const ren = engine.snapshot().actors.find((actor) => actor.templateId === 'ren');
+  assert.equal(ren.hp, 37);
+  assert.equal(ren.maxHp, PARTY_PROFILES.ren.stats.hp);
+});
+
+test('loadout timing modifiers grant Pace and shorten recovery deterministically', () => {
+  const engine = new CampaignCombatEngine({
+    encounter: simpleEncounter(),
+    level: simpleLevel(),
+    partyProfiles: {
+      ren: { ...PARTY_PROFILES.ren, loadout: { paceDelta: 1, recoveryPulsesDelta: -1 } },
+    },
+  });
+  const ren = engine.getActor('ren');
+  assert.equal(ren.paceDelta, 1);
+  assert.equal(ren.recoveryPulsesDelta, -1);
+  assert.equal(engine.pace, 3);
+  assert.equal(engine.move('ren', 1, 0).ok, true);
+  assert.equal(engine.move('ren', 1, 0).ok, true);
+  assert.equal(engine.useSkill('ren', 'courier-cut', 'dummy-1').ok, true);
+  assert.equal(ren.readyAtPulse, 1);
+});
+
+test('loadout timing modifiers cannot produce negative Pace or sub-pulse recovery', () => {
+  const engine = new CampaignCombatEngine({
+    encounter: simpleEncounter(),
+    level: simpleLevel(),
+    partyProfiles: {
+      ren: { ...PARTY_PROFILES.ren, loadout: { paceDelta: -99, recoveryPulsesDelta: -99 } },
+    },
+  });
+  assert.equal(engine.pace, 0);
+  assert.equal(engine.move('ren', 1, 0).ok, false);
+  assert.equal(engine.guard('ren').ok, true);
+  assert.equal(engine.getActor('ren').readyAtPulse, 1);
 });
 
 test('every authored campaign encounter instantiates with a first-class objective contract', () => {

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0d1b">
+    <title>Bells of the Black Chrysanthemum — Camp &amp; Loadout</title>
+    <link rel="stylesheet" href="camp.css">
+  </head>
+  <body>
+    <main class="camp-shell">
+      <header class="camp-masthead">
+        <div>
+          <p class="eyebrow">LANTERN CAMP · PARTY PREPARATION</p>
+          <h1>Camp &amp; Loadout</h1>
+          <p id="campSubtitle" class="subtitle">Rest, equip the party, and bind Vows before returning to the route.</p>
+        </div>
+        <div class="masthead-actions">
+          <span id="campPlaytime" class="playtime">00:00:00 active play</span>
+          <a class="return-link" href="campaign.html">← Return to Campaign</a>
+        </div>
+      </header>
+
+      <section class="camp-layout" aria-label="Camp menu">
+        <aside class="party-rail panel">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Formation</p><h2>Party</h2></div>
+            <span id="partyCurrency">0 mon</span>
+          </header>
+          <div id="campPartyList" class="party-list" role="tablist" aria-label="Choose a party member"></div>
+          <section class="rest-card">
+            <label for="campSelect">Rest point</label>
+            <select id="campSelect"></select>
+            <p id="campDescription">Choose an unlocked safe camp.</p>
+            <button id="restParty" type="button">Rest the whole party</button>
+          </section>
+        </aside>
+
+        <section class="character-stage panel">
+          <header class="character-heading">
+            <div class="portrait-token" id="portraitToken" aria-hidden="true"><span></span></div>
+            <div>
+              <p id="memberRole" class="eyebrow"></p>
+              <h2 id="memberName">Party member</h2>
+              <p id="memberVitals" class="subtitle">HP — / — · MP — / —</p>
+            </div>
+            <span id="memberLevel" class="level-badge">LV 1</span>
+          </header>
+
+          <div id="memberStats" class="stat-grid" aria-label="Derived character statistics"></div>
+
+          <section class="equipment-section">
+            <div class="section-heading"><div><p class="eyebrow">Equipment</p><h3>Loadout</h3></div><span id="equipmentSummary"></span></div>
+            <div id="equipmentSlots" class="equipment-slots"></div>
+          </section>
+
+          <section class="vow-section">
+            <div class="section-heading"><div><p class="eyebrow">Character build</p><h3>Bound Vows</h3></div><span id="vowSlotSummary"></span></div>
+            <div id="equippedVows" class="equipped-vows"></div>
+            <div id="vowCatalogue" class="vow-catalogue"></div>
+          </section>
+        </section>
+
+        <aside class="inventory-rail panel">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Shared stores</p><h2>Inventory</h2></div>
+            <span id="inventoryCount">0 items</span>
+          </header>
+          <div class="inventory-tabs" role="tablist" aria-label="Inventory filters">
+            <button type="button" data-inventory-filter="all" aria-selected="true">All</button>
+            <button type="button" data-inventory-filter="gear">Gear</button>
+            <button type="button" data-inventory-filter="consumable">Remedies</button>
+          </div>
+          <div id="inventoryList" class="inventory-list"></div>
+        </aside>
+
+        <section class="shop-panel panel">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Route quartermaster</p><h2>Trade &amp; Upgrade</h2></div>
+            <span>Prices are explicit</span>
+          </header>
+          <div id="shopList" class="shop-list"></div>
+        </section>
+
+        <section class="camp-log-panel panel">
+          <header class="panel-heading">
+            <div><p class="eyebrow">Camp record</p><h2>Latest action</h2></div>
+          </header>
+          <p id="campFeedback" role="status">The lantern is steady. Choose a party member or prepare the route.</p>
+        </section>
+      </section>
+      <noscript><p class="noscript">Enable JavaScript to use the camp menu.</p></noscript>
+    </main>
+    <script type="module" src="camp.js"></script>
+  </body>
+</html>

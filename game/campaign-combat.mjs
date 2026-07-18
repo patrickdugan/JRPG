@@ -211,11 +211,13 @@ function partyInstances(encounter, profiles) {
       name: profile.name,
       faction: 'party',
       active: true,
-      hp: profile.stats.hp,
+      hp: Math.max(1, Math.min(profile.stats.hp, profile.currentHp ?? profile.stats.hp)),
       maxHp: profile.stats.hp,
       power: profile.stats.power,
       guard: profile.stats.guard,
       speed: profile.stats.speed,
+      paceDelta: Number.isFinite(profile.loadout?.paceDelta) ? Math.trunc(profile.loadout.paceDelta) : 0,
+      recoveryPulsesDelta: Number.isFinite(profile.loadout?.recoveryPulsesDelta) ? Math.trunc(profile.loadout.recoveryPulsesDelta) : 0,
       pos: positionFrom(deployment.at),
       readyAtPulse: 0,
       stance: 'neutral',
@@ -473,7 +475,8 @@ export class CampaignCombatEngine {
   }
 
   _schedule(actor, recoveryPulses) {
-    actor.readyAtPulse = this.nowPulse + Math.max(1, asPositiveInteger(recoveryPulses, 1));
+    const baseRecovery = asPositiveInteger(recoveryPulses, 1);
+    actor.readyAtPulse = this.nowPulse + Math.max(1, baseRecovery + (actor.recoveryPulsesDelta ?? 0));
   }
 
   _incrementAutomatic(action) {
@@ -492,7 +495,7 @@ export class CampaignCombatEngine {
     this.activationCount += 1;
     if (actor.faction === 'party') {
       this.phase = CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND;
-      this.pace = this.pacePerActivation;
+      this.pace = Math.max(0, this.pacePerActivation + (actor.paceDelta ?? 0));
     } else {
       this.phase = CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND;
       this.pace = 0;

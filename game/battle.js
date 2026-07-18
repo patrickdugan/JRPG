@@ -10,11 +10,36 @@ import {
   createAdvancementStorageAdapter,
   getEncounterRewardPreview,
   getEncounterWinCount,
+  getParty,
   getPartyMember,
   preparePartyForEncounter,
   recordEncounterWin,
   setSpeedMultiplier,
 } from './advancement.mjs';
+import {
+  createPlaytimeState,
+  createPlaytimeStorageAdapter,
+  getBattlePlaytimeCategory,
+  isPlaytimeInactive,
+  recordPlaytime,
+} from './playtime.mjs';
+import {
+  advanceQuestObjective,
+  createQuestState,
+  createQuestStorageAdapter,
+} from './quest-runtime.mjs';
+import {
+  createFieldStorageAdapter,
+  resolveFieldEncounter,
+} from './field-runtime.mjs';
+import {
+  applyLoadoutToPartyProfile,
+  createLoadoutState,
+  createLoadoutStorageAdapter,
+  grantInventory,
+  setMemberVitals,
+  syncPartyVitals,
+} from './loadout.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -41,6 +66,7 @@ const battleStateBadge = document.querySelector('#battleStateBadge');
 const announcements = document.querySelector('#battleAnnouncements');
 const restartBattle = document.querySelector('#restartBattle');
 const campaignLink = document.querySelector('.campaign-link');
+const continueCampaign = document.querySelector('#continueCampaign');
 
 context.imageSmoothingEnabled = false;
 
@@ -48,17 +74,41 @@ const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
 const encounter = getEncounter(requestedEncounterId) ?? ENCOUNTERS[0];
 const requestedReturn = query.get('return');
-if (requestedReturn && /^[a-z0-9._/?=&-]+$/i.test(requestedReturn)) campaignLink.href = requestedReturn;
+const requestedQuestId = query.get('quest');
+const requestedQuestObjectiveId = query.get('objective');
+const requestedFieldTriggerId = query.get('fieldTrigger');
+if (requestedReturn && /^[a-z0-9._/?=&-]+$/i.test(requestedReturn)) {
+  campaignLink.href = requestedReturn;
+  continueCampaign.href = requestedReturn;
+}
 
 const advancementAdapter = createAdvancementStorageAdapter();
 const advancementLoad = advancementAdapter.load();
 let advancementState = advancementLoad.ok ? advancementLoad.state : createAdvancementState();
 advancementState = preparePartyForEncounter(advancementState, encounter.id);
 advancementAdapter.save(advancementState);
-let speedMultiplier = getEncounterWinCount(advancementState, encounter.id) > 0 ? advancementState.speedMultiplier : 1;
+const repeatBattleAtLoad = getEncounterWinCount(advancementState, encounter.id) > 0;
+let speedMultiplier = repeatBattleAtLoad ? advancementState.speedMultiplier : 1;
+const playtimeAdapter = createPlaytimeStorageAdapter();
+const playtimeLoad = playtimeAdapter.load();
+let playtimeState = playtimeLoad.ok ? playtimeLoad.state : createPlaytimeState();
+let playtimeLastSample = performance.now();
+let playtimeLastActivity = playtimeLastSample;
+let playtimeUnsavedMs = 0;
+const questAdapter = createQuestStorageAdapter();
+const fieldAdapter = createFieldStorageAdapter();
+const loadoutAdapter = createLoadoutStorageAdapter();
+const loadoutLoaded = loadoutAdapter.load();
+let loadoutState = loadoutLoaded.ok ? loadoutLoaded.value : createLoadoutState();
+const syncedLoadout = syncPartyVitals(loadoutState, getParty(advancementState));
+if (syncedLoadout.ok) {
+  loadoutState = syncedLoadout.state;
+  loadoutAdapter.save(loadoutState);
+}
 let selectedCommand = 'attack';
 let selectedTargetId = '';
 let rewardRecorded = false;
+let vitalsRecorded = false;
 let enemyActionAt = null;
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
@@ -68,7 +118,7 @@ function combatProfiles() {
   for (const memberId of encounter.party?.roster ?? ['ren']) {
     const base = PARTY_PROFILES[memberId];
     const member = getPartyMember(advancementState, memberId);
-    profiles[memberId] = {
+    const adapted = applyLoadoutToPartyProfile({
       ...base,
       stats: {
         hp: member.stats.hp,
@@ -76,7 +126,8 @@ function combatProfiles() {
         guard: member.stats.guard,
         speed: member.stats.speed,
       },
-    };
+    }, loadoutState, memberId);
+    profiles[memberId] = { ...adapted, currentHp: loadoutState.vitals[memberId]?.hp ?? adapted.stats.hp };
   }
   return profiles;
 }
@@ -326,9 +377,46 @@ function recordVictoryIfNeeded(snapshot) {
   const reward = getEncounterRewardPreview(encounter.id, priorWins);
   advancementState = recordEncounterWin(advancementState, encounter.id, { partyIds: encounter.party?.roster });
   advancementAdapter.save(advancementState);
+  const loadoutReward = grantInventory(loadoutState, { currency: reward.currency, items: reward.items });
+  if (loadoutReward.ok) {
+    loadoutState = loadoutReward.state;
+    loadoutAdapter.save(loadoutState);
+  }
+  if (requestedQuestId && requestedQuestObjectiveId) {
+    const loadedQuestState = questAdapter.load();
+    const questResult = advanceQuestObjective(
+      loadedQuestState.ok ? loadedQuestState.state : createQuestState(),
+      requestedQuestId,
+      requestedQuestObjectiveId,
+    );
+    if (questResult.ok) {
+      questAdapter.save(questResult.state);
+      addMessage(`Side-story objective recorded: ${requestedQuestObjectiveId}.`);
+    }
+  }
+  if (requestedFieldTriggerId) {
+    const loadedFieldState = fieldAdapter.load();
+    if (loadedFieldState.ok && loadedFieldState.found) {
+      const fieldResult = resolveFieldEncounter(loadedFieldState.state, requestedFieldTriggerId);
+      if (fieldResult.ok) {
+        fieldAdapter.save(fieldResult.state);
+        addMessage(`Field encounter ${requestedFieldTriggerId} resolved for the route.`);
+      }
+    }
+  }
   speedMultiplier = advancementState.speedMultiplier;
   rewardRecorded = true;
   addMessage(`Victory reward: ${reward.xpPerMember} XP per active member, ${reward.currency} mon${reward.repeat ? ' (repeat grind reward)' : ' plus first-clear loot'}.`);
+}
+
+function recordBattleVitalsIfNeeded(snapshot) {
+  if (snapshot.result !== 'victory' || vitalsRecorded) return;
+  for (const actor of snapshot.actors.filter((entry) => entry.faction === 'party')) {
+    const result = setMemberVitals(loadoutState, actor.templateId, { hp: Math.max(1, actor.hp) });
+    if (result.ok) loadoutState = result.state;
+  }
+  loadoutAdapter.save(loadoutState);
+  vitalsRecorded = true;
 }
 
 function renderSpeedControls() {
@@ -345,6 +433,7 @@ function renderSpeedControls() {
 function render() {
   const snapshot = engine.snapshot();
   recordVictoryIfNeeded(snapshot);
+  recordBattleVitalsIfNeeded(snapshot);
   encounterTitle.textContent = encounter.name;
   encounterSubtitle.textContent = `${encounter.chapterId} · ${engine.level.name} · ${encounter.format}`;
   document.title = `${encounter.name} — Bells Battle`;
@@ -358,6 +447,8 @@ function render() {
   renderSpeedControls();
   renderObjective(snapshot);
   renderLog(snapshot);
+  continueCampaign.hidden = snapshot.result !== 'victory';
+  if (snapshot.result === 'victory') continueCampaign.focus({ preventScroll: true });
   drawBattle();
   if (snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyActionAt === null) {
     enemyActionAt = performance.now() + (650 / speedMultiplier);
@@ -434,6 +525,7 @@ speedButtons.forEach((button) => button.addEventListener('click', () => {
 restartBattle.addEventListener('click', () => {
   engine = createEngine();
   rewardRecorded = false;
+  vitalsRecorded = false;
   selectedTargetId = '';
   enemyActionAt = null;
   uiMessages = [`Restarted ${encounter.name}. First-clear rewards remain saved; victories can be replayed for grind XP.`];
@@ -476,6 +568,23 @@ canvas.addEventListener('click', (event) => {
 });
 
 function tick(now) {
+  const elapsed = Math.min(1000, Math.max(0, Math.floor(now - playtimeLastSample)));
+  playtimeLastSample = now;
+  const inactive = isPlaytimeInactive({
+    nowMs: now,
+    lastActivityMs: playtimeLastActivity,
+    visible: document.visibilityState === 'visible',
+  });
+  const battleResolved = engine.snapshot().result !== null;
+  if (!inactive && !battleResolved && elapsed > 0) {
+    const category = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
+    playtimeState = recordPlaytime(playtimeState, category, elapsed, { chapterId: encounter.chapterId });
+    playtimeUnsavedMs += elapsed;
+    if (playtimeUnsavedMs >= 10_000) {
+      playtimeAdapter.save(playtimeState);
+      playtimeUnsavedMs = 0;
+    }
+  }
   if (enemyActionAt !== null && now >= enemyActionAt && engine.snapshot().phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
     const result = engine.resolveEnemyActivation();
     if (!result.ok) addMessage(result.reason);
@@ -489,3 +598,24 @@ function tick(now) {
 engine = createEngine();
 render();
 requestAnimationFrame(tick);
+
+function markPlaytimeActivity() {
+  playtimeLastActivity = performance.now();
+}
+
+window.addEventListener('pointerdown', markPlaytimeActivity, { capture: true, passive: true });
+window.addEventListener('keydown', markPlaytimeActivity, { capture: true });
+window.addEventListener('pagehide', () => playtimeAdapter.save(playtimeState));
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  const refreshed = playtimeAdapter.load();
+  if (refreshed.ok) playtimeState = refreshed.state;
+  const now = performance.now();
+  playtimeLastSample = now;
+  playtimeLastActivity = now;
+  playtimeUnsavedMs = 0;
+});
+document.addEventListener('visibilitychange', () => {
+  playtimeLastSample = performance.now();
+  if (document.visibilityState === 'hidden') playtimeAdapter.save(playtimeState);
+});

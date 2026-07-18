@@ -1,6 +1,6 @@
 # Bells of the Black Chrysanthemum - Production References
 
-These opaque PNG files are original, project-bound visual **references** generated with the built-in image-generation workflow on 2026-07-16. They establish silhouette, palette, composition, and production intent for the animation and art team. They are not shippable sprite sheets, tilesets, fonts, UI art, frame data, or texture sources.
+These original, project-bound PNG files were generated with the built-in image-generation workflow. The three 2026-07-16 images are opaque production references. The 2026-07-18 party atlas is a provisional transparent runtime asset used by the Camp screen while hand-authored frame cleanup remains open.
 
 Use [the animation bible](../../docs/10-animation-bible.md) and [the art-direction contract](../../docs/05-art-direction.md) to rebuild all game art as editable, authored assets. Do not cut pixels, text, or UI out of these images.
 
@@ -9,11 +9,12 @@ Use [the animation bible](../../docs/10-animation-bible.md) and [the art-directi
 | `bells-party-roster-v1.png` | 1448 x 1086 | `f6b28f192a35f19bbc60efd366cf88af10b0b79c2f2b4aa788d59ec749fe95c5` | Six-party silhouette, palette, and costume-layering reference | Accepted: Ren, Aya, Lise, Mateus, Genta, and Kiku read as distinct roles before facial detail; no text or real-person likeness. |
 | `bells-enemy-bosses-v1.png` | 1448 x 1086 | `5b02d5144c4c5ec1e6557df672848ce8d8037103485af01b3bebc67f6f1b17df` | Enemy hierarchy and boss-scale silhouette reference | Accepted: Cinder Hound, Ash Wisp, Bell Moth, Tithe Enforcer, Tithe Enforcer Ascendant, and Takamine Bell Warden stay distinct with clean size escalation; no text or gore. |
 | `bells-takamine-keyframe-v1.png` | 1448 x 1086 | `17aea41ebe154d79fcdd509c2951a6a5a3b0273d7c4fe569c5e40561d6be16ac` | FP-1 Takamine Rain Gate environment/keyframe reference | Accepted: gate, wet approach, service-route read, warm lantern destination, and cold court pressure are legible; no text. |
+| `bells-party-field-atlas-v1.png` | 1536 x 1024 | `df3600769c333788126c50390fa36e3ccc4d1436578c2bf8503749617ec0c4b3` | Six-row, eight-column party field/camp atlas | Accepted provisionally: six original party silhouettes, directional pose variation, transparent background, no text or real-person likeness; wired into Camp portraits. |
 
 ## Generation method
 
 - **Method:** built-in image generation, not CLI/API fallback.
-- **Output type:** opaque PNG only; no attempt was made to create transparent cutouts.
+- **Output type:** the original references are opaque PNGs. The party atlas was generated against a flat chroma field, converted locally to RGBA, and visually checked after transparency extraction.
 - **Review:** each generated image was visually inspected for original character design, no readable text, no logos/watermarks, no celebrity likeness, no direct franchise imitation, and consistency with the project's historical/sensitivity constraints before it was copied here.
 - **Source copies:** the original generated files remain in the Codex generated-image directory. These stable filenames are the project copies to reference in production planning.
 
@@ -31,6 +32,20 @@ Lighting/mood: candle-ivory rim light against rain-dark indigo, somber and resol
 Color palette: ink shadow, rain indigo, cedar brown, parchment/candle ivory, muted teal, desaturated blue/brass, earth gray/oxidized gold, herb green, with rare lacquer red and black-crimson.
 Materials/textures: rain-worn cloth, lacquer trim, cedar leather, paper, old bronze, compact travel gear.
 Constraints: no lettering, no logo, no watermark, no UI, no readable signage, no explicit religious symbols as weapons or loot, no gore, no actor likeness, no film character, no existing franchise character, no direct visual imitation.
+```
+
+## Final prompt: `bells-party-field-atlas-v1.png`
+
+```text
+Use case: stylized-concept
+Asset type: production field-sprite atlas for the original historical gothic JRPG "Bells of the Black Chrysanthemum."
+Primary request: Create one clean sprite sheet for six fully original fictional party members. Arrange exactly six horizontal character rows and eight evenly spaced columns. Each row is one character; columns show readable field-animation poses in this order: north idle, north walk, east idle, east walk, south idle, south walk, west idle, west walk. Keep every figure centered in a consistent cell with no overlap.
+Subjects, top to bottom: (1) Ren Ishikawa, Japanese courier with short spear, satchel, cedar-brown and rain-blue coat; (2) Aya Shinohara, Japanese archive keeper with squared record case and folded paper fan, parchment and muted teal; (3) Lise Varga, original European-descended vampire-hunter heir with compact rapier, short dark hair, sea-weather blue coat and brass; (4) Father Mateus Avelar, original European vampire interpreter in a narrow charcoal cassock-derived coat with keys and a restrained dried-wine accent, with no actor or film likeness; (5) Genta Mononobe, broad Japanese former retainer with repair maul and earth-gray/oxidized-gold layers; (6) Kiku Nawa, Japanese village physician with medicine box, herb-green cloak, and candle-ivory packets.
+Style/medium: original late-16-bit-era pixel art, hard pixel clusters, stepped diagonals, limited 2-4-value materials, strong silhouettes, nearest-neighbor clarity, restrained animation changes, no painterly blur, no anti-aliased illustration, no 3D.
+Composition: exact 6-by-8 contact sheet; generous gutters; consistent scale, feet line, lighting, and view angle. Use the south idle column as the cleanest camp-portrait pose. No borders, labels, numbers, text, logo, UI, or watermark.
+Background: perfectly flat saturated chroma green #00ff00 across every unused pixel, with no gradient, shadow, texture, green clothing, or green reflected light, so it can be removed deterministically.
+Palette/mood: ink shadow, rain indigo, cedar brown, parchment ivory, muted teal, desaturated blue, old brass, earth gray, oxidized gold, herb green shifted away from chroma green, rare lacquer red and black-crimson. Somber, practical, rain-worn, and resolute.
+Constraints: historically grounded alternate early-Edo travel clothing with invented fantasy details; no direct franchise imitation; no copyrighted characters; no celebrity, Adam Driver, or film-character likeness; no gore; no readable religious text; no sacred object used as a weapon or loot; no missing character row; no extra figures.
 ```
 
 ## Exact prompt: `bells-enemy-bosses-v1.png`
@@ -67,4 +82,4 @@ Constraints: no text, no logo, no watermark, no readable signage, no historical 
 
 ## Limitation
 
-Generated reference art cannot supply editable animation frames, collision, tile boundaries, palette-index source, localization-safe UI, cultural review, or a final 320 x 180 production pass. Treat each image as a concise visual brief and rebuild it through the production gate.
+Generated art does not supply editable frame layers, collision, tile boundaries, palette-index source, localization-safe UI, cultural review, or a final 320 x 180 production pass. Treat the atlas as provisional runtime art and rebuild/clean it through the animation production gate.
