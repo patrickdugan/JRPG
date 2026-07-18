@@ -69,4 +69,3 @@ export function getEnemyAtlasFrame(templateId, pose = 'neutral') {
 export function hasAuthoredEnemyFamily(templateId) {
   return FAMILY_BY_TEMPLATE.has(templateId);
 }
-

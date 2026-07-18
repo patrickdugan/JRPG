@@ -227,4 +227,3 @@ test('unsupported ids, malformed tiles, damage keys, statuses, and speeds resolv
   assert.equal(generic.fallbackUsed, true);
   assertDeepFrozen(generic);
 });
-

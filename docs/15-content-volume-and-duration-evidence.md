@@ -1,7 +1,9 @@
 # Content Volume and Duration Evidence
 
-**Audit date:** 2026-07-18  
-**Target:** a normal first playthrough near 20 active hours at 1×, with faster repeat grinding at 2×/4×  
+**Audit date:** 2026-07-18
+
+**Target:** a normal first playthrough near 20 active hours at 1×, with faster repeat grinding at 2×/4×
+
 **Current proof status:** unproven
 
 This document separates three things that are easy to conflate:

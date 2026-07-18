@@ -55,4 +55,3 @@ test('objective actions have player-facing verbs instead of generic internal key
   }), 'Light Lantern Relay West 0/1');
   assert.equal(Object.isFrozen(presentation), true);
 });
-

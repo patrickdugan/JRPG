@@ -251,4 +251,3 @@ test('validator rejects order drift, unreachable coordinates, duplicate nodes, a
   assert.equal(duplicateBattle.ok, false);
   assert.ok(duplicateBattle.errors.some((error) => error.includes('duplicate encounter')));
 });
-

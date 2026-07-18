@@ -701,4 +701,3 @@ export function validateSceneOperations(catalog = SCENE_OPERATIONS) {
 // Fail fast during authoring; importing invalid route data is never a soft error.
 const validation = validateSceneOperations(SCENE_OPERATIONS);
 if (!validation.ok) throw new Error(`Invalid scene operations:\n${validation.errors.join('\n')}`);
-

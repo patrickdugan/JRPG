@@ -69,4 +69,3 @@ test('partial packs are usable only when strict coverage is explicitly disabled'
   assert.equal(allowed.metrics.coveredBeats, 1);
   assert.equal(Object.isFrozen(allowed.scenes[0].dialogue), true);
 });
-
