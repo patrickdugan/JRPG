@@ -72,7 +72,10 @@ export function recordPlaytime(state, category, elapsedMs, { chapterId } = {}) {
 
 export function getPlaytimeReport(state, evidence = {}) {
   const targetMs = CAMPAIGN_PACING.targetMinutesAt1x * 60_000;
-  const fixedTargetMs = (CAMPAIGN_PACING.targetMinutesAt1x - CAMPAIGN_PACING.grindMinutesAt1x) * 60_000;
+  // Grind may satisfy no more than this legacy allocation. This is an
+  // anti-padding proof policy, not a prediction of how long the route takes.
+  const maximumCreditedGrindMs = CAMPAIGN_PACING.grindMinutesAt1x * 60_000;
+  const fixedTargetMs = targetMs - maximumCreditedGrindMs;
   const fixedActualMs = state.totalMs - state.categories.grind;
   const suppliedIds = Array.isArray(evidence.firstClearEncounterIds)
     ? new Set(evidence.firstClearEncounterIds.filter((id) => ENCOUNTER_ID_SET.has(id)))

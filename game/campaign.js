@@ -1392,6 +1392,24 @@ function updateFieldDashboard(level) {
   const marker = getActiveQuestMarker(level);
   const markerNearby = marker && inInteractionRange(status.position, marker.position);
   const authored = status.nearbyInteractables.find((item) => !item.consumed) ?? status.nearbyInteractables[0] ?? null;
+  mapCanvas.dataset.beatId = getBeat().id;
+  mapCanvas.dataset.levelId = level.id;
+  mapCanvas.dataset.fieldX = String(status.position.x);
+  mapCanvas.dataset.fieldY = String(status.position.y);
+  mapCanvas.dataset.fieldState = sceneOperationMarker
+    ? 'story-operation'
+    : witnessMarker ? 'witness-chronicle'
+      : marker ? 'side-story'
+        : status.exit?.ready ? 'route-exit-ready' : 'field-route';
+  if (sceneOperationMarker?.position) {
+    mapCanvas.dataset.storyOperationNodeId = sceneOperationMarker.node.id;
+    mapCanvas.dataset.storyOperationX = String(sceneOperationMarker.position.x);
+    mapCanvas.dataset.storyOperationY = String(sceneOperationMarker.position.y);
+  } else {
+    delete mapCanvas.dataset.storyOperationNodeId;
+    delete mapCanvas.dataset.storyOperationX;
+    delete mapCanvas.dataset.storyOperationY;
+  }
   fieldObjective.textContent = sceneOperationMarker
     ? sceneOperationMarker.node.instruction
     : status.objective.text ?? level.objective ?? 'Explore the scene and follow its marked exit.';
@@ -1498,7 +1516,7 @@ function renderBattleLaunch(beat, beatBattleState) {
   const winCount = getEncounterWinCount(advancementState, selected.id);
   launchBattle.textContent = pending ? `Enter encounter: ${selected.name}` : `Replay for grind XP: ${selected.name}`;
   const clearedHere = encounters.filter((encounter) => getEncounterWinCount(advancementState, encounter.id) > 0).length;
-  battleStatus.textContent = `${clearedHere}/${encounters.length} scene encounters cleared · ${winCount} wins here · ${summary.speedMultiplier}× battle speed`;
+  battleStatus.textContent = `${clearedHere}/${encounters.length} scene encounters cleared · ${winCount} wins here · saved repeat speed ${summary.speedMultiplier}×`;
 }
 
 function requiredRouteProgress() {

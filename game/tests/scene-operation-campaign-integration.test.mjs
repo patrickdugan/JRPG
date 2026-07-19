@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const campaignSource = await readFile(new URL('../campaign.js', import.meta.url), 'utf8');
+const campaignHtml = await readFile(new URL('../campaign.html', import.meta.url), 'utf8');
 
 test('campaign loads, renders, and gates all canonical scene operations', () => {
   assert.match(campaignSource, /from '\.\/content\/scene-operations\.mjs'/);
@@ -21,6 +22,19 @@ test('operation interaction requires the exact node tile and explicit encounter-
   assert.match(campaignSource, /sceneOperation: beat\.id/);
   assert.match(campaignSource, /sceneOperationNode: sceneOperationMarker\.node\.id/);
   assert.match(campaignSource, /commitStateChanges\('Scene operation',[\s\S]*?adapter: sceneOperationAdapter[\s\S]*?nextState: result\.state/);
+});
+
+test('the rendered map publishes read-only exact route coordinates for control-only QA', () => {
+  assert.match(campaignHtml, /id="mapCanvas"[^>]*data-coordinate-space="zero-based-grid"[^>]*data-field-state="loading"/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.beatId = getBeat\(\)\.id/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.levelId = level\.id/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.fieldX = String\(status\.position\.x\)/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.fieldY = String\(status\.position\.y\)/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.fieldState = sceneOperationMarker/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.storyOperationNodeId = sceneOperationMarker\.node\.id/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.storyOperationX = String\(sceneOperationMarker\.position\.x\)/);
+  assert.match(campaignSource, /mapCanvas\.dataset\.storyOperationY = String\(sceneOperationMarker\.position\.y\)/);
+  assert.match(campaignSource, /delete mapCanvas\.dataset\.storyOperationNodeId/);
 });
 
 test('unfinished story operations cannot be abandoned through a route exit', () => {

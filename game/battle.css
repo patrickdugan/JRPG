@@ -171,6 +171,8 @@ button.combatant-card { cursor: pointer; }
 .speed-options button:hover, .speed-options button[aria-pressed="true"] { border-color: var(--aqua); color: #e6fffc; background: #15313a; }
 .speed-status { min-height: 15px; margin: 7px 0 0; color: var(--muted); font-size: 0.58rem; text-align: center; }
 .auto-grind-controls { display: grid; gap: 6px; margin-top: 9px; padding-top: 9px; border-top: 1px solid #34405c; }
+.auto-grind-wins { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; color: var(--muted); font-size: 0.59rem; }
+.auto-grind-wins select { min-height: 30px; padding: 4px 22px 4px 7px; border: 1px solid #465473; border-radius: 4px; color: #edf2ff; background: #111827; font: inherit; }
 .auto-grind-button { min-height: 36px; padding: 7px; border-color: #8b713c; color: #fff0bb; background: #342915; font-size: 0.67rem; }
 .auto-grind-button:hover, .auto-grind-button[aria-pressed="true"] { border-color: var(--gold-soft); color: #fff7d6; background: #57431d; }
 .auto-grind-status { min-height: 28px; margin: 0; color: var(--muted); font-size: 0.57rem; line-height: 1.45; text-align: center; }

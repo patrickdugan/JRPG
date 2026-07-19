@@ -47,6 +47,12 @@ import {
   resolveBattlePresentationSpeed,
 } from './repeat-battle.mjs';
 import {
+  cancelRepeatGrindQueue,
+  createRepeatGrindQueue,
+  recordRepeatGrindVictory,
+  startRepeatGrindQueue,
+} from './repeat-grind-queue.mjs';
+import {
   createRunReceiptStorageAdapter,
   recordRunFirstClear,
   recordRunPlaytime,
@@ -103,6 +109,7 @@ const activeActorLabel = document.querySelector('#activeActorLabel');
 const speedButtons = [...document.querySelectorAll('[data-speed]')];
 const speedStatus = document.querySelector('#speedStatus');
 const autoGrind = document.querySelector('#autoGrind');
+const autoGrindWins = document.querySelector('#autoGrindWins');
 const autoGrindStatus = document.querySelector('#autoGrindStatus');
 const objectiveText = document.querySelector('#objectiveText');
 const objectiveProgress = document.querySelector('#objectiveProgress');
@@ -174,6 +181,8 @@ let enemyIntentSchedule = null;
 let autoGrindActive = false;
 let autoActionAt = null;
 let autoSettleAt = null;
+let repeatGrindQueue = createRepeatGrindQueue();
+let queuedVictoryRecorded = false;
 const battleFacingByActor = new Map();
 const battleMotionUntil = new Map();
 const battleEnemyPoseByActor = new Map();
@@ -974,25 +983,31 @@ function renderSpeedControls() {
   const snapshot = engine.snapshot();
   const settling = autoSettleAt !== null;
   const manualAnimation = !autoGrindActive && !settling && battleAnimationActive();
+  const queueInProgress = repeatGrindQueue.active;
   speedButtons.forEach((button) => {
-    button.disabled = !grindAvailable || autoGrindActive || settling || manualAnimation || Boolean(snapshot.result);
+    button.disabled = !grindAvailable || queueInProgress || settling || manualAnimation || Boolean(snapshot.result);
     button.setAttribute('aria-pressed', String(Number(button.dataset.speed) === speedMultiplier));
   });
   speedStatus.textContent = grindAvailable
     ? `Saved repeat speed: ${speedMultiplier}× · full-loop only in Auto-Grind; manual play only shortens enemy presentation`
     : 'Speed unlocks after the first clear for repeat level grinding.';
-  autoGrind.disabled = !grindAvailable || settling || Boolean(snapshot.result) || manualAnimation;
-  autoGrind.setAttribute('aria-pressed', String(autoGrindActive));
-  autoGrind.textContent = autoGrindActive ? 'Stop Auto-Grind' : 'Start Auto-Grind';
+  autoGrindWins.disabled = !grindAvailable || queueInProgress || settling || Boolean(snapshot.result) || manualAnimation;
+  autoGrind.disabled = !grindAvailable || manualAnimation || (!queueInProgress && (settling || Boolean(snapshot.result)));
+  autoGrind.setAttribute('aria-pressed', String(queueInProgress));
+  autoGrind.textContent = queueInProgress
+    ? `Cancel Auto-Grind ${repeatGrindQueue.completedWins}/${repeatGrindQueue.plannedWins}`
+    : 'Start Auto-Grind';
   autoGrindStatus.textContent = !grindAvailable
     ? 'First-clear play remains manual. Clear this encounter once to unlock deterministic Auto-Grind.'
     : manualAnimation
       ? 'Finish the current action animation before starting Auto-Grind.'
+      : queueInProgress && settling
+        ? `Auto-Grind saved win ${repeatGrindQueue.completedWins}/${repeatGrindQueue.plannedWins}; the next repeat starts after the result hold.`
       : settling
       ? `Auto-Grind ${speedMultiplier}× is presenting the terminal result and reward.`
-      : autoGrindActive
-        ? `Auto-Grind ${speedMultiplier}× schedules commands, enemy turns, recovery, result, and reward at the saved speed.`
-        : 'Repeat-only. Uses the deterministic policy; speed does not alter decisions or rewards.';
+      : queueInProgress
+        ? `Auto-Grind ${speedMultiplier}× is running win ${repeatGrindQueue.completedWins + 1}/${repeatGrindQueue.plannedWins}; every reward is saved before another repeat starts.`
+        : 'Repeat-only. Choose 1, 5, or 10 wins; the queue stops on cancellation, defeat, or reload.';
 }
 
 function render() {
@@ -1005,6 +1020,14 @@ function render() {
   // Auto-Grind may delay the terminal reveal, but an earned victory must be
   // durable before the player can restart, leave, reload, or enter BFCache.
   const durableVictory = recordVictoryIfNeeded(snapshot);
+  if (durableVictory && repeatGrindQueue.active && !queuedVictoryRecorded) {
+    const recorded = recordRepeatGrindVictory(repeatGrindQueue);
+    repeatGrindQueue = recorded.state;
+    queuedVictoryRecorded = true;
+    if (recorded.complete) {
+      addMessage(`Auto-Grind queue complete: ${repeatGrindQueue.completedWins}/${repeatGrindQueue.plannedWins} repeat rewards saved.`);
+    }
+  }
   encounterTitle.textContent = encounter.name;
   encounterSubtitle.textContent = `${encounter.chapterId} · ${engine.level.name} · ${encounter.format}`;
   document.title = `${encounter.name} — Bells Battle`;
@@ -1051,6 +1074,11 @@ function stopAutoGrind(message) {
   if (message) addMessage(message);
 }
 
+function cancelQueuedAutoGrind(message) {
+  repeatGrindQueue = cancelRepeatGrindQueue(repeatGrindQueue);
+  stopAutoGrind(message);
+}
+
 function executeAutoGrindStep(now) {
   if (!autoGrindActive || engine.result) return;
   const before = engine.snapshot();
@@ -1072,12 +1100,12 @@ function executeAutoGrindStep(now) {
       throw new Error(`Unexpected Auto-Grind phase ${before.phase}.`);
     }
   } catch (error) {
-    stopAutoGrind(`Auto-Grind stopped: ${error.message}`);
+    cancelQueuedAutoGrind(`Auto-Grind stopped: ${error.message}`);
     render();
     return;
   }
   if (!result?.ok) {
-    stopAutoGrind(`Auto-Grind stopped: ${result?.reason ?? 'a deterministic command failed.'}`);
+    cancelQueuedAutoGrind(`Auto-Grind stopped: ${result?.reason ?? 'a deterministic command failed.'}`);
     render();
     return;
   }
@@ -1087,6 +1115,7 @@ function executeAutoGrindStep(now) {
   const animationEnd = activeBattleAnimation?.endsAt ?? 0;
   if (after.result) {
     stopAutoGrind();
+    if (after.result !== 'victory') repeatGrindQueue = cancelRepeatGrindQueue(repeatGrindQueue);
     const terminalDelay = getRepeatStepDelayMs('resolution', speedMultiplier)
       + (after.result === 'victory' ? getRepeatStepDelayMs('reward', speedMultiplier) : 0);
     autoSettleAt = Math.max(now + stepDelay, animationEnd) + terminalDelay;
@@ -1104,8 +1133,9 @@ function executeAutoGrindStep(now) {
 }
 
 function toggleAutoGrind() {
-  if (autoGrindActive) {
-    stopAutoGrind('Auto-Grind stopped. Manual repeat controls restored.');
+  if (repeatGrindQueue.active) {
+    cancelQueuedAutoGrind(`Auto-Grind cancelled after ${repeatGrindQueue.completedWins}/${repeatGrindQueue.plannedWins} saved wins. Manual repeat controls restored.`);
+    autoSettleAt = null;
     render();
     return;
   }
@@ -1127,11 +1157,33 @@ function toggleAutoGrind() {
     result: engine.result,
     settling: autoSettleAt !== null,
   })) return;
+  repeatGrindQueue = startRepeatGrindQueue(createRepeatGrindQueue(Number(autoGrindWins.value)));
+  queuedVictoryRecorded = false;
   autoGrindActive = true;
   activeBattleAnimation = null;
   clearEnemyIntentSchedule();
   autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
-  addMessage(`Auto-Grind started at ${speedMultiplier}×. The full repeat presentation uses the saved speed.`);
+  addMessage(`Auto-Grind started for ${repeatGrindQueue.plannedWins} win${repeatGrindQueue.plannedWins === 1 ? '' : 's'} at ${speedMultiplier}×. Every reward saves before the next repeat.`);
+  render();
+}
+
+function restartQueuedAutoGrind(now) {
+  battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
+  engine = createEngine();
+  rewardRecorded = false;
+  queuedVictoryRecorded = false;
+  victoryPersistenceError = null;
+  victorySaveRetryAt = 0;
+  selectedTargetId = '';
+  clearEnemyIntentSchedule();
+  battleFacingByActor.clear();
+  battleMotionUntil.clear();
+  battleEnemyPoseByActor.clear();
+  battleEnemyPoseUntil.clear();
+  activeBattleAnimation = null;
+  autoGrindActive = true;
+  autoActionAt = now + getRepeatStepDelayMs('intro', speedMultiplier);
+  addMessage(`Auto-Grind starting win ${repeatGrindQueue.completedWins + 1}/${repeatGrindQueue.plannedWins} at ${speedMultiplier}×.`);
   render();
 }
 
@@ -1218,11 +1270,12 @@ speedButtons.forEach((button) => button.addEventListener('click', () => {
 autoGrind.addEventListener('click', toggleAutoGrind);
 
 restartBattle.addEventListener('click', () => {
-  stopAutoGrind();
+  cancelQueuedAutoGrind();
   autoSettleAt = null;
   battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
   engine = createEngine();
   rewardRecorded = false;
+  queuedVictoryRecorded = false;
   victoryPersistenceError = null;
   victorySaveRetryAt = 0;
   selectedTargetId = '';
@@ -1304,7 +1357,8 @@ function tick(now) {
   }
   if (autoSettleAt !== null && now >= autoSettleAt) {
     autoSettleAt = null;
-    render();
+    if (repeatGrindQueue.active && queuedVictoryRecorded) restartQueuedAutoGrind(now);
+    else render();
   }
   if (autoGrindActive && autoActionAt !== null && now >= autoActionAt) {
     autoActionAt = null;

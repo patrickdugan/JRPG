@@ -1,0 +1,653 @@
+#!/usr/bin/env python3
+"""Bounded, player-control-only browser attempt of the canonical Campaign route.
+
+The driver starts with the rendered New Game button and uses only DOM controls
+that a player can reach.  It deliberately does not seed, edit, or delete web
+storage and does not invoke game transition functions through JavaScript.
+"""
+
+from __future__ import annotations
+
+import argparse
+import functools
+import json
+import re
+import sys
+import threading
+import time
+from collections.abc import Callable
+from dataclasses import dataclass
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import urlparse
+
+try:
+    from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError, sync_playwright
+except ImportError as error:  # pragma: no cover
+    raise SystemExit(
+        "Install the optional QA dependency with: python -m pip install playwright"
+    ) from error
+
+
+GAME_DIR = Path(__file__).resolve().parents[1]
+CHROMIUM_CANDIDATES = (
+    Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+    Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+    Path.home() / r"AppData\Local\Google\Chrome\Application\chrome.exe",
+    Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
+)
+POSITION_PATTERN = re.compile(r"space\s+(\d+),(\d+)", re.IGNORECASE)
+
+DIRECTIONS = (
+    ("0,-1", "0,1"),
+    ("1,0", "-1,0"),
+    ("0,1", "0,-1"),
+    ("-1,0", "1,0"),
+    ("1,-1", "-1,1"),
+    ("1,1", "-1,-1"),
+    ("-1,1", "1,-1"),
+    ("-1,-1", "1,1"),
+)
+
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, _format: str, *_args: object) -> None:
+        return
+
+
+class RouteBlocked(RuntimeError):
+    def __init__(self, code: str, message: str, **details: object) -> None:
+        super().__init__(message)
+        self.code = code
+        self.details = details
+
+
+@dataclass
+class Budget:
+    deadline: float
+    max_scenes: int
+    max_field_moves_per_scene: int
+    max_battle_commands: int
+
+    def check(self, checkpoint: str) -> None:
+        if time.monotonic() >= self.deadline:
+            raise RouteBlocked("time-budget", "The bounded route-attempt time budget expired.", checkpoint=checkpoint)
+
+
+class PlayerDriver:
+    def __init__(self, page: Page, budget: Budget) -> None:
+        self.page = page
+        self.budget = budget
+        self.controls = 0
+        self.field_moves = 0
+        self.battle_commands = 0
+        self.camp_controls = 0
+        self.scenes: list[dict[str, object]] = []
+        self.last_position: tuple[int, int] | None = None
+
+    def click(self, selector: str, *, timeout: int = 10_000) -> None:
+        self.page.locator(selector).click(timeout=timeout)
+        self.controls += 1
+
+    def scene_key(self) -> str:
+        return " | ".join(
+            self.page.locator(selector).inner_text().strip()
+            for selector in ("#chapterTitle", "#sceneNumber", "#sceneTitle")
+        )
+
+    def checkpoint(self) -> dict[str, object]:
+        path = urlparse(self.page.url).path.rsplit("/", 1)[-1]
+        if path == "battle.html":
+            return {
+                "page": path,
+                "encounter": self.page.locator("#encounterTitle").inner_text(),
+                "battleState": self.page.locator("#battleStateBadge").inner_text(),
+                "objective": self.page.locator("#objectiveProgress").inner_text(),
+                "lastLog": self.page.locator("#resultLog").inner_text()[-800:],
+            }
+        if path == "camp.html":
+            return {
+                "page": path,
+                "feedback": self.page.locator("#campFeedback").inner_text(),
+                "url": self.page.url,
+            }
+        return {
+            "page": path,
+            "scene": self.scene_key(),
+            "dialogue": self.page.locator("#dialogueProgress").inner_text(),
+            "fieldObjective": self.page.locator("#fieldObjective").inner_text(),
+            "fieldProgress": self.page.locator("#fieldProgress").inner_text(),
+            "fieldFeedback": self.page.locator("#fieldFeedback").inner_text(),
+            "interaction": self.page.locator("#interactField").inner_text(),
+            "nextScene": self.page.locator("#nextScene").inner_text(),
+            "route": self.page.locator("#routeSummary").inner_text(),
+            "routeStatus": self.page.locator("#routeStatus").inner_text(),
+            "runProof": self.page.locator("#runProofStatus").inner_text(),
+        }
+
+    def position(self) -> tuple[int, int]:
+        map_canvas = self.page.locator("#mapCanvas")
+        field_x = map_canvas.get_attribute("data-field-x")
+        field_y = map_canvas.get_attribute("data-field-y")
+        if field_x is not None and field_y is not None:
+            self.last_position = int(field_x), int(field_y)
+            return self.last_position
+        text = self.page.locator("#fieldFeedback").inner_text()
+        match = POSITION_PATTERN.search(text)
+        if not match:
+            if self.last_position is not None:
+                return self.last_position
+            raise RouteBlocked(
+                "position-unobservable",
+                "The rendered field feedback did not expose the current exact space.",
+                feedback=text,
+            )
+        self.last_position = int(match.group(1)), int(match.group(2))
+        return self.last_position
+
+    def story_operation_target(self) -> tuple[str, tuple[int, int]] | None:
+        canvas = self.page.locator("#mapCanvas")
+        node_id = canvas.get_attribute("data-story-operation-node-id")
+        target_x = canvas.get_attribute("data-story-operation-x")
+        target_y = canvas.get_attribute("data-story-operation-y")
+        if node_id is None or target_x is None or target_y is None:
+            return None
+        return node_id, (int(target_x), int(target_y))
+
+    def navigate_to_exact_target(self, target: tuple[int, int], scene_key: str, *, max_steps: int = 700) -> None:
+        visits: dict[tuple[int, int], int] = {}
+        blocked_edges: set[tuple[tuple[int, int], str]] = set()
+        vectors = {
+            "-1,-1": (-1, -1), "0,-1": (0, -1), "1,-1": (1, -1),
+            "-1,0": (-1, 0), "1,0": (1, 0),
+            "-1,1": (-1, 1), "0,1": (0, 1), "1,1": (1, 1),
+        }
+        for _ in range(max_steps):
+            self.budget.check("exact story-operation navigation")
+            here = self.position()
+            if here == target:
+                return
+            visits[here] = visits.get(here, 0) + 1
+            candidates = sorted(
+                vectors.items(),
+                key=lambda item: (
+                    visits.get((here[0] + item[1][0], here[1] + item[1][1]), 0),
+                    max(abs(target[0] - here[0] - item[1][0]), abs(target[1] - here[1] - item[1][1])),
+                    item[0],
+                ),
+            )
+            moved = False
+            for vector, _delta in candidates:
+                if (here, vector) in blocked_edges:
+                    continue
+                after = self.move(vector)
+                if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                    return
+                if after == here:
+                    blocked_edges.add((here, vector))
+                    continue
+                moved = True
+                break
+            if not moved:
+                raise RouteBlocked(
+                    "operation-target-unreachable",
+                    "Every rendered movement control from the current tile was blocked before reaching the published operation target.",
+                    current=here,
+                    target=target,
+                )
+        raise RouteBlocked(
+            "operation-target-step-budget",
+            "The published story-operation target was not reached within the rendered-movement step budget.",
+            current=self.position(),
+            target=target,
+            stepBudget=max_steps,
+        )
+
+    def finish_published_story_operations(self, scene_key: str) -> None:
+        for _ in range(12):
+            published = self.story_operation_target()
+            if not published:
+                return
+            node_id, target = published
+            self.navigate_to_exact_target(target, scene_key)
+            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                return
+            interaction = self.page.locator("#interactField")
+            if interaction.is_disabled() or "story operation" not in interaction.inner_text():
+                raise RouteBlocked(
+                    "operation-target-mismatch",
+                    "The published operation coordinate was reached but its rendered interaction was unavailable.",
+                    nodeId=node_id,
+                    target=target,
+                    interaction=interaction.inner_text(),
+                )
+            interaction.click()
+            self.controls += 1
+        raise RouteBlocked("operation-node-loop", "More than 12 operation-node transitions occurred in one scene.")
+
+    def finish_dialogue_and_choices(self) -> None:
+        dialogue = self.page.locator("#continueDialogue")
+        for _ in range(500):
+            if dialogue.is_disabled():
+                break
+            dialogue.click()
+            self.controls += 1
+        else:
+            raise RouteBlocked("dialogue-loop", "Dialogue did not reach its rendered terminal state.")
+
+        choices = self.page.locator("[data-choice-id]")
+        for index in range(choices.count()):
+            choice = choices.nth(index)
+            if not choice.is_disabled() and "is-picked" not in (choice.get_attribute("class") or ""):
+                choice.click()
+                self.controls += 1
+
+    def move(self, vector: str) -> tuple[int, int]:
+        before = self.position()
+        self.page.locator(f'[data-field-move="{vector}"]').click()
+        self.controls += 1
+        self.field_moves += 1
+        if urlparse(self.page.url).path.endswith("battle.html"):
+            return before
+        return self.position()
+
+    def interact_if_productive(self) -> bool:
+        button = self.page.locator("#interactField")
+        if button.is_disabled():
+            return False
+        label = button.inner_text().strip()
+        productive = (
+            "story operation" in label
+            or label.startswith("Interact:")
+            or label.startswith("Advance side story")
+            or label.startswith("Hear testimony")
+            or label.startswith("Record witness stage")
+            or label.startswith("Enter chronicle battle")
+        )
+        if not productive:
+            return False
+        button.click()
+        self.controls += 1
+        return True
+
+    def explore_field_once(self, scene_key: str) -> tuple[int, int]:
+        visited: set[tuple[int, int]] = set()
+        start = self.position()
+        moved_at_start = self.field_moves
+
+        def walk() -> bool:
+            self.budget.check("field exploration")
+            if self.field_moves - moved_at_start >= self.budget.max_field_moves_per_scene:
+                raise RouteBlocked(
+                    "field-move-budget",
+                    "The scene exceeded the bounded rendered-movement budget.",
+                    scene=scene_key,
+                    moves=self.field_moves - moved_at_start,
+                )
+            here = self.position()
+            visited.add(here)
+            self.interact_if_productive()
+            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                return True
+            for vector, reverse in DIRECTIONS:
+                before = self.position()
+                after = self.move(vector)
+                if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                    return True
+                if after == before:
+                    continue
+                if after not in visited and walk():
+                    return True
+                if self.position() != before:
+                    restored = self.move(reverse)
+                    if restored != before:
+                        # Some authored terrain is directional. End this sweep
+                        # at the newly rendered space and begin a fresh graph
+                        # walk instead of assuming every edge is reversible.
+                        return True
+            return False
+
+        walk()
+        return start
+
+    def use_ready_exit(self, scene_key: str) -> bool:
+        visited: set[tuple[int, int]] = set()
+
+        def walk() -> bool:
+            self.budget.check("route exit search")
+            here = self.position()
+            visited.add(here)
+            interaction = self.page.locator("#interactField")
+            if not interaction.is_disabled() and interaction.inner_text().startswith("Use exit"):
+                interaction.click()
+                self.controls += 1
+                return True
+            for vector, reverse in DIRECTIONS:
+                before = self.position()
+                after = self.move(vector)
+                if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                    return True
+                if after == before:
+                    continue
+                if after not in visited and walk():
+                    return True
+                if self.position() != before:
+                    restored = self.move(reverse)
+                    if restored != before:
+                        return False
+            return False
+
+        return walk()
+
+    def finish_camp_entry(self) -> None:
+        focused = self.page.locator(".is-route-focus")
+        stage_selectors = ("#campConversationStage", "#partyCouncilStage", "#archiveRecordStage")
+        stage_already_open = any(self.page.locator(selector).is_visible() for selector in stage_selectors)
+        if focused.count() == 1 and not focused.is_disabled():
+            focused.click()
+            self.controls += 1
+            self.camp_controls += 1
+        elif not stage_already_open:
+            raise RouteBlocked(
+                "camp-entry-unavailable",
+                "The Campaign route link exposed neither a usable focus nor an already-open Camp stage.",
+                url=self.page.url,
+                focusedCount=focused.count(),
+            )
+        stages = (
+            ("#advanceCampConversation", "#campConversationChoices button"),
+            ("#advancePartyCouncil", "#partyCouncilChoices button"),
+            ("#advanceArchiveRecord", None),
+        )
+        for advance_selector, choice_selector in stages:
+            advance = self.page.locator(advance_selector)
+            if not advance.is_visible():
+                continue
+            for _ in range(160):
+                choices = self.page.locator(choice_selector) if choice_selector else None
+                usable_choice = choices and choices.count() and choices.first.is_visible()
+                if usable_choice:
+                    choices.first.click()
+                elif not advance.is_disabled():
+                    advance.click()
+                else:
+                    break
+                self.controls += 1
+                self.camp_controls += 1
+            else:
+                raise RouteBlocked("camp-entry-loop", "A focused Camp entry did not terminate.", url=self.page.url)
+            break
+        else:
+            raise RouteBlocked("camp-stage-missing", "The focused Camp entry opened no rendered stage.")
+        self.page.locator('a[href="campaign.html"]').first.click()
+        self.controls += 1
+        self.page.wait_for_url("**/campaign.html")
+        self.page.locator("#sceneTitle").wait_for()
+
+    def start_due_entries(self) -> None:
+        for _ in range(30):
+            due = self.page.locator("[data-route-activity-id]")
+            if due.count() == 0:
+                return
+            activity_type = due.first.get_attribute("data-route-activity-type")
+            due.first.click()
+            self.controls += 1
+            if urlparse(self.page.url).path.endswith("camp.html"):
+                self.page.locator("#campFeedback").wait_for()
+                self.finish_camp_entry()
+                continue
+            # Quest and witness entries use their rendered list control to accept
+            # and travel. Their field objectives are completed by the normal map
+            # traversal before the story frontier closes.
+            if activity_type not in ("finite-sidequest", "repeat-grind-milestone", "witness-chronicle"):
+                raise RouteBlocked("unknown-route-entry", "A route entry exposed an unknown player workflow.", activityType=activity_type)
+            return
+        raise RouteBlocked("route-entry-loop", "The due-entry list did not converge after 30 rendered entries.")
+
+    def play_battle(self) -> None:
+        self.page.locator("#battleStateBadge").wait_for()
+        encounter = self.page.locator("#encounterTitle").inner_text()
+        attempted_moves = ("e", "w", "d", "a", "q", "s", "c", "z")
+        while self.battle_commands < self.budget.max_battle_commands:
+            self.budget.check(f"battle {encounter}")
+            badge = self.page.locator("#battleStateBadge").inner_text().strip()
+            if badge == "VICTORY" and self.page.locator("#continueCampaign").is_visible():
+                self.page.locator("#continueCampaign").click()
+                self.controls += 1
+                self.page.wait_for_url("**/campaign.html")
+                self.page.locator("#sceneTitle").wait_for()
+                return
+            if badge == "DEFEAT":
+                raise RouteBlocked("battle-defeat", "The rendered-control policy was defeated.", encounter=encounter)
+            if badge != "COMMAND":
+                self.page.wait_for_timeout(80)
+                continue
+
+            objective = self.page.locator('[data-command="objective"]')
+            if not objective.is_disabled():
+                objective.click()
+                self.page.locator("#confirmCommand").click()
+                self.controls += 2
+                self.battle_commands += 1
+                self.page.wait_for_timeout(80)
+                continue
+
+            acted = False
+            attack = self.page.locator('[data-command="attack"]')
+            if not attack.is_disabled():
+                prior = self.page.locator("#resultLog li").count()
+                attack.click()
+                confirm = self.page.locator("#confirmCommand")
+                if not confirm.is_disabled():
+                    confirm.click()
+                    self.controls += 2
+                    self.battle_commands += 1
+                    self.page.wait_for_timeout(80)
+                    acted = self.page.locator("#resultLog li").count() > prior
+            if acted:
+                continue
+
+            canvas = self.page.locator("#battleCanvas")
+            canvas.focus()
+            for key in attempted_moves:
+                self.page.keyboard.press(key)
+                self.controls += 1
+                self.battle_commands += 1
+                self.page.wait_for_timeout(30)
+                if self.page.locator("#battleStateBadge").inner_text().strip() != "COMMAND":
+                    acted = True
+                    break
+            if acted:
+                continue
+            guard = self.page.locator('[data-command="guard"]')
+            if not guard.is_disabled():
+                guard.click()
+                self.page.locator("#confirmCommand").click()
+                self.controls += 2
+                self.battle_commands += 1
+                continue
+            self.page.wait_for_timeout(80)
+        raise RouteBlocked(
+            "battle-command-budget",
+            "The rendered-control battle policy did not reach a terminal result.",
+            encounter=encounter,
+            commandBudget=self.budget.max_battle_commands,
+        )
+
+    def finish_story_scene(self) -> None:
+        initial = self.scene_key()
+        self.finish_dialogue_and_choices()
+        self.start_due_entries()
+        if urlparse(self.page.url).path.endswith("battle.html"):
+            self.play_battle()
+            return
+
+        self.finish_published_story_operations(initial)
+        if urlparse(self.page.url).path.endswith("battle.html"):
+            self.play_battle()
+            return
+        if self.page.locator("#nextScene").is_enabled():
+            self.page.locator("#nextScene").click()
+            self.controls += 1
+            return
+
+        for _ in range(12):
+            self.explore_field_once(initial)
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                self.play_battle()
+                return
+            if self.scene_key() != initial:
+                return
+            self.finish_dialogue_and_choices()
+            self.start_due_entries()
+            if self.page.locator("#nextScene").is_enabled():
+                self.page.locator("#nextScene").click()
+                self.controls += 1
+                return
+            progress = self.page.locator("#fieldProgress").inner_text()
+            if "Story operation" not in progress:
+                break
+
+        if self.use_ready_exit(initial):
+            return
+        if self.page.locator("#launchBattle").get_attribute("aria-disabled") != "true":
+            self.page.locator("#launchBattle").click()
+            self.controls += 1
+            self.page.wait_for_url("**/battle.html**")
+            self.play_battle()
+            return
+        raise RouteBlocked(
+            "scene-gate",
+            "All bounded rendered-control strategies were exhausted while the scene remained gated.",
+            checkpoint=self.checkpoint(),
+        )
+
+
+def find_chromium(explicit: str | None) -> Path:
+    candidates = (Path(explicit),) if explicit else CHROMIUM_CANDIDATES
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    raise FileNotFoundError("No installed Chrome or Edge executable was found.")
+
+
+def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
+    handler = functools.partial(QuietHandler, directory=str(GAME_DIR))
+    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{server.server_address[1]}"
+    console_errors: list[str] = []
+    page_errors: list[str] = []
+    started = time.monotonic()
+    evidence: dict[str, object] = {
+        "policy": "rendered-controls-only; no storage mutation; no runtime transition calls",
+        "chromium": str(chromium),
+        "requestedSceneLimit": args.max_scenes,
+        "requestedSeconds": args.max_seconds,
+    }
+    try:
+        with sync_playwright() as playwright:
+            browser = playwright.chromium.launch(
+                headless=not args.headed,
+                executable_path=str(chromium),
+                args=["--disable-extensions", "--no-first-run", "--disable-background-networking"],
+            )
+            context = browser.new_context(viewport={"width": 1440, "height": 1200})
+            page = context.new_page()
+            page.set_default_timeout(15_000)
+            page.set_default_navigation_timeout(45_000)
+            page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
+            page.on("pageerror", lambda error: page_errors.append(str(error)))
+            page.on("dialog", lambda dialog: dialog.accept())
+            budget = Budget(
+                deadline=started + args.max_seconds,
+                max_scenes=args.max_scenes,
+                max_field_moves_per_scene=args.max_field_moves,
+                max_battle_commands=args.max_battle_commands,
+            )
+            driver = PlayerDriver(page, budget)
+            try:
+                response = page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+                if response is None or response.status != 200:
+                    raise RouteBlocked("delivery", "Campaign did not return HTTP 200.")
+                page.locator("#resetCampaign").click()
+                driver.controls += 1
+                page.locator("#sceneTitle").wait_for()
+                proof = page.locator("#runProofStatus").inner_text()
+                if not proof.startswith("Clean run "):
+                    raise RouteBlocked("new-game-receipt", "New Game did not expose a clean-run receipt.", runProof=proof)
+
+                for _ in range(args.max_scenes):
+                    budget.check("story frontier")
+                    before = driver.scene_key()
+                    driver.finish_story_scene()
+                    if urlparse(page.url).path.endswith("credits.html"):
+                        evidence["status"] = "complete"
+                        break
+                    after = driver.scene_key()
+                    driver.scenes.append({"before": before, "after": after, "route": page.locator("#routeSummary").inner_text()})
+                    if before == after:
+                        raise RouteBlocked("no-scene-progress", "A scene attempt returned without advancing the story.", checkpoint=driver.checkpoint())
+                else:
+                    evidence["status"] = "bounded"
+                    evidence["blocker"] = {
+                        "code": "scene-limit",
+                        "message": "The requested scene limit was reached before credits.",
+                        "checkpoint": driver.checkpoint(),
+                    }
+            except (RouteBlocked, PlaywrightTimeoutError) as error:
+                evidence["status"] = "blocked"
+                if isinstance(error, RouteBlocked):
+                    evidence["blocker"] = {"code": error.code, "message": str(error), **error.details}
+                else:
+                    evidence["blocker"] = {
+                        "code": "playwright-timeout",
+                        "message": str(error),
+                        "checkpoint": driver.checkpoint(),
+                    }
+            evidence.update(
+                {
+                    "elapsedSeconds": round(time.monotonic() - started, 3),
+                    "controlActivations": driver.controls,
+                    "fieldMoves": driver.field_moves,
+                    "battleCommands": driver.battle_commands,
+                    "campControls": driver.camp_controls,
+                    "sceneTransitions": driver.scenes,
+                    "finalCheckpoint": driver.checkpoint(),
+                    "consoleErrors": console_errors,
+                    "pageErrors": page_errors,
+                }
+            )
+            context.close()
+            browser.close()
+    finally:
+        server.shutdown()
+        server.server_close()
+    return evidence
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--chromium", help="Path to Chrome or Edge.")
+    parser.add_argument("--headed", action="store_true", help="Show the browser while the bounded attempt runs.")
+    parser.add_argument("--max-scenes", type=int, default=60)
+    parser.add_argument("--max-seconds", type=int, default=300)
+    parser.add_argument("--max-field-moves", type=int, default=4_000)
+    parser.add_argument("--max-battle-commands", type=int, default=500)
+    parser.add_argument("--require-complete", action="store_true", help="Exit nonzero unless the route reaches credits.")
+    args = parser.parse_args()
+    for name in ("max_scenes", "max_seconds", "max_field_moves", "max_battle_commands"):
+        if getattr(args, name) <= 0:
+            parser.error(f"--{name.replace('_', '-')} must be positive")
+    return args
+
+
+def main() -> int:
+    args = parse_args()
+    evidence = run_attempt(find_chromium(args.chromium), args)
+    print(json.dumps(evidence, indent=2, ensure_ascii=True))
+    return 1 if args.require_complete and evidence.get("status") != "complete" else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

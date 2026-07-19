@@ -249,7 +249,7 @@ test('canonical first clears reach the authored final chapter level target witho
   assert.ok(repeat.xpPerMember > 0, 'post-target speed-up grinding must remain available');
 });
 
-test('pacing model is 20 hours at 1x and speeds only the grind budget', () => {
+test('legacy planning projection retains the 20-hour evidence target and speeds only its hypothetical grind allocation', () => {
   assert.equal(CAMPAIGN_PACING.targetMinutesAt1x, 1200);
   assert.deepEqual(getPacingEstimate(1), {
     speedMultiplier: 1,

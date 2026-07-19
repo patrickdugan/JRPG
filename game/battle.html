@@ -115,6 +115,14 @@
               </div>
               <p id="speedStatus" class="speed-status" role="status">Speed: 1×</p>
               <div class="auto-grind-controls">
+                <label class="auto-grind-wins" for="autoGrindWins">
+                  Repeat wins
+                  <select id="autoGrindWins" aria-describedby="autoGrindStatus">
+                    <option value="1" selected>1 win</option>
+                    <option value="5">5 wins</option>
+                    <option value="10">10 wins</option>
+                  </select>
+                </label>
                 <button id="autoGrind" class="auto-grind-button" type="button" aria-pressed="false" disabled>
                   Start Auto-Grind
                 </button>

@@ -141,13 +141,25 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   const loaded = raw ? a.loadAdvancementState(raw) : { ok: false };
                   let state = loaded.ok ? loaded.value : a.createAdvancementState();
                   if (a.getEncounterWinCount(state, id) === 0) state = a.recordEncounterWin(state, id);
+                  const training = a.grantRewardBundle(state, {
+                    xpPerMember: a.MAX_MEMBER_XP,
+                    currency: 0,
+                    items: [],
+                    keyItems: [],
+                  });
+                  if (!training.ok) throw new Error(training.errors.join(' '));
+                  state = training.state;
                   state = a.setSpeedMultiplier(state, 1);
                   localStorage.setItem(a.DEFAULT_ADVANCEMENT_SAVE_KEY, a.serializeAdvancementState(state));
-                  return { wins: a.getEncounterWinCount(state, id), speed: state.speedMultiplier };
+                  return {
+                    wins: a.getEncounterWinCount(state, id),
+                    speed: state.speedMultiplier,
+                    level: a.getPartyMember(state, 'ren').level,
+                  };
                 }""",
                 encounter_id,
             )
-            require(seed == {"wins": 1, "speed": 1}, "Repeat seed was not one prior win.")
+            require(seed == {"wins": 1, "speed": 1, "level": 50}, "Repeat queue QA seed drifted.")
             page.reload(wait_until="domcontentloaded")
             page.locator("#autoGrind").wait_for()
             require(
@@ -164,12 +176,15 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 page.locator('[data-speed="4"]').get_attribute("aria-pressed") == "true",
                 "4x speed did not persist through reload.",
             )
+            page.locator("#autoGrindWins").select_option("5")
+            require(page.locator("#autoGrindWins").input_value() == "5", "Five-win grind queue was not selectable.")
             page.locator("#autoGrind").click()
             page.wait_for_timeout(150)
             require(page.locator("#autoGrind").get_attribute("aria-pressed") == "true", "Auto-Grind did not start.")
             page.wait_for_function(
-                "() => !document.querySelector('#continueCampaign').hidden",
-                timeout=60_000,
+                "() => document.querySelector('#autoGrind').getAttribute('aria-pressed') === 'false'"
+                " && !document.querySelector('#continueCampaign').hidden",
+                timeout=120_000,
             )
             require(page.locator("#battleStateBadge").inner_text() == "VICTORY", "Auto-Grind did not win.")
             final = page.evaluate(
@@ -180,7 +195,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 }""",
                 encounter_id,
             )
-            require(final == {"wins": 2, "speed": 4}, "Repeat reward or speed authority drifted.")
+            require(final == {"wins": 6, "speed": 4}, "Five-win repeat queue or speed authority drifted.")
 
             page.locator("body").focus()
             focus_trace: list[str] = []
@@ -779,6 +794,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         first_clear_speed_locked=True,
         repeat_seed=seed,
         repeat_terminal="VICTORY",
+        repeat_queue_wins=5,
         repeat_final=final,
         keyboard_terminal_link=True,
         credits_seed=credits_seed,

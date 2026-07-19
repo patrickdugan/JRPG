@@ -198,7 +198,7 @@ test('browser controller wires locks, ghosts, fresh intent scheduling, and compl
 
   const restart = source.slice(source.indexOf("restartBattle.addEventListener('click'"), source.indexOf("window.addEventListener('keydown'"));
   for (const requiredReset of [
-    'stopAutoGrind();',
+    'cancelQueuedAutoGrind();',
     'autoSettleAt = null;',
     'clearEnemyIntentSchedule();',
     'battleFacingByActor.clear();',
@@ -212,4 +212,20 @@ test('browser controller wires locks, ghosts, fresh intent scheduling, and compl
 
   assert.match(source, /if \(snapshot\.result !== 'victory'\) return false;/, 'non-victories cannot record rewards');
   assert.match(source, /if \(rewardRecorded\) return true;/, 'a durable reward remains exactly-once guarded');
+});
+
+test('finite Auto-Grind queues expose 1/5/10 wins and only advance after durable settlement', async () => {
+  const [source, html] = await Promise.all([
+    readFile(new URL('../battle.js', import.meta.url), 'utf8'),
+    readFile(new URL('../battle.html', import.meta.url), 'utf8'),
+  ]);
+  assert.match(html, /id="autoGrindWins"/);
+  for (const wins of [1, 5, 10]) assert.match(html, new RegExp(`<option value="${wins}"`));
+
+  const durableIndex = source.indexOf('const durableVictory = recordVictoryIfNeeded(snapshot);');
+  const queueIndex = source.indexOf('recordRepeatGrindVictory(repeatGrindQueue)');
+  assert.ok(durableIndex >= 0 && queueIndex > durableIndex, 'the queue counts only a transactionally durable victory');
+  assert.match(source, /if \(repeatGrindQueue\.active && queuedVictoryRecorded\) restartQueuedAutoGrind\(now\);/);
+  assert.match(source, /cancelQueuedAutoGrind\(`Auto-Grind cancelled after/);
+  assert.match(source, /repeatGrindQueue = startRepeatGrindQueue\(createRepeatGrindQueue\(Number\(autoGrindWins\.value\)\)\);/);
 });

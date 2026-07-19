@@ -21,9 +21,11 @@ const deepFreeze = (value) => {
 };
 
 /**
- * The critical path is twenty hours at 1x. Only the deliberately repeatable
- * level-grind budget is accelerated; authored scenes and first-clear battles
- * keep their intended cadence.
+ * Legacy production-planning allocation plus the release-evidence target.
+ * This is not a critical-path estimate: the measured quantity model lives in
+ * duration-audit.mjs. The 180-minute grind allocation is also the maximum
+ * amount of repeat time that can satisfy the proof gate; all other required
+ * active time must come from non-grind play.
  */
 export const CAMPAIGN_PACING = deepFreeze({
   targetMinutesAt1x: 1200,
