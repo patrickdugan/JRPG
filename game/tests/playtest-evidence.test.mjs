@@ -47,7 +47,7 @@ function freshReceipt() {
 
 test('partial playtest exports remain explicit about every missing proof', () => {
   const report = createPlaytestEvidenceReport(freshReceipt(), deriveRequiredRouteProgress(freshAuthorities()));
-  assert.equal(report.schemaVersion, 1);
+  assert.equal(report.schemaVersion, 2);
   assert.match(report.signature, /^fnv1a32:[0-9a-f]{8}$/);
   assert.equal(report.story.complete, false);
   assert.equal(report.combat.complete, false);
@@ -56,6 +56,19 @@ test('partial playtest exports remain explicit about every missing proof', () =>
   assert.equal(report.requiredRoute.requiredActivityCount, 215);
   assert.equal(report.playtime.totalMs, 0);
   assert.equal(report.playtime.unattributedMs, 0);
+  assert.equal(report.pacing.diagnosticOnly, true);
+  assert.equal(report.pacing.observedPlaytimeProof, false);
+  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:8107b2cd');
+  assert.equal(report.pacing.aggregateReferenceTargetMs, 73_901_133);
+  assert.equal(report.pacing.chapters.length, 11);
+  assert.deepEqual(report.pacing.chapters[0], {
+    chapterId: 'prologue',
+    complete: false,
+    actualMs: 0,
+    referenceTargetMs: 3_274_233,
+    deltaMs: -3_274_233,
+    percentOfReference: 0,
+  });
   assert.equal(report.proof.chapterTimingComplete, true);
   assert.equal(report.proof.durationProven, false);
   assert.equal(report.proof.releaseTargetProven, false);
@@ -115,6 +128,11 @@ test('the combined release verdict needs same-run 215/215 route and timing proof
   assert.equal(report.proof.chapterTimingComplete, true);
   assert.equal(report.playtime.unattributedMs, 0);
   assert.equal(report.proof.releaseTargetProven, true);
+  assert.equal(report.pacing.chapters.every((chapter) => chapter.complete), true);
+  assert.equal(
+    report.pacing.chapters.reduce((total, chapter) => total + chapter.actualMs, 0),
+    report.playtime.totalMs,
+  );
 
   const mixedRun = JSON.parse(JSON.stringify(progress));
   mixedRun.runBinding.campConversations = 'evidence-other-0001';

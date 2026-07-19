@@ -1,6 +1,7 @@
 /** Versioned, deterministic export for a clean-run timing playtest. */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { CHAPTER_PACING_CHECKPOINTS } from './chapter-pacing.mjs';
 import { getRunProofReport, validateRunReceiptPayload } from './run-receipt.mjs';
 import {
   REQUIRED_ROUTE_ACTIVITY_TYPES,
@@ -8,7 +9,7 @@ import {
 } from './required-route-contract.mjs';
 import { REQUIRED_ROUTE_PROGRESS_VERSION } from './required-route-progress.mjs';
 
-export const PLAYTEST_EVIDENCE_SCHEMA_VERSION = 1;
+export const PLAYTEST_EVIDENCE_SCHEMA_VERSION = 2;
 
 const deepFreeze = (value) => {
   if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
@@ -88,6 +89,20 @@ export function createPlaytestEvidenceReport(receipt, requiredRouteProgress) {
   const attributedChapterMs = Object.values(proof.chapterMs).reduce((sum, value) => sum + value, 0);
   const unattributedMs = proof.totalMs - attributedChapterMs;
   const chapterTimingComplete = unattributedMs === 0;
+  const completedBeatIds = new Set(proof.completedBeatIds);
+  const pacingChapters = CHAPTER_PACING_CHECKPOINTS.chapters.map((checkpoint) => {
+    const chapter = CAMPAIGN.chapters.find(({ id }) => id === checkpoint.chapterId);
+    if (!chapter) throw new Error(`Pacing checkpoint ${checkpoint.chapterId} is not a canonical chapter.`);
+    const actualMs = proof.chapterMs[checkpoint.chapterId] ?? 0;
+    return {
+      chapterId: checkpoint.chapterId,
+      complete: chapter.beats.every((beat) => completedBeatIds.has(beat.id)),
+      actualMs,
+      referenceTargetMs: checkpoint.targetMs,
+      deltaMs: actualMs - checkpoint.targetMs,
+      percentOfReference: Number(((actualMs / checkpoint.targetMs) * 100).toFixed(3)),
+    };
+  });
   const body = {
     schemaVersion: PLAYTEST_EVIDENCE_SCHEMA_VERSION,
     campaignId: CAMPAIGN.id,
@@ -142,6 +157,15 @@ export function createPlaytestEvidenceReport(receipt, requiredRouteProgress) {
       chapterMs: proof.chapterMs,
       attributedChapterMs,
       unattributedMs,
+    },
+    pacing: {
+      diagnosticOnly: CHAPTER_PACING_CHECKPOINTS.diagnosticOnly,
+      observedPlaytimeProof: CHAPTER_PACING_CHECKPOINTS.observedPlaytimeProof,
+      checkpointSchemaVersion: CHAPTER_PACING_CHECKPOINTS.schemaVersion,
+      checkpointSignature: CHAPTER_PACING_CHECKPOINTS.signature,
+      scope: CHAPTER_PACING_CHECKPOINTS.scope,
+      aggregateReferenceTargetMs: CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs,
+      chapters: pacingChapters,
     },
     proof: {
       validRunReceipt: proof.valid,
