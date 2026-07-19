@@ -900,7 +900,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
     page_errors: list[str] = []
     started = time.monotonic()
     evidence: dict[str, object] = {
-        "policy": "rendered-controls-only; no storage mutation; no runtime transition calls",
+        "policy": "rendered-controls-only; no direct storage mutation; no runtime transition calls; optional recovery uses the rendered file control",
         "chromium": str(chromium),
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
@@ -930,14 +930,34 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 response = page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
                 if response is None or response.status != 200:
                     raise RouteBlocked("delivery", "Campaign did not return HTTP 200.")
-                page.locator("#resetCampaign").click()
-                driver.controls += 1
+                if args.recovery_in:
+                    recovery_in = Path(args.recovery_in).resolve()
+                    with page.expect_navigation(wait_until="domcontentloaded"):
+                        page.locator("#recoveryFile").set_input_files(str(recovery_in))
+                    driver.controls += 1
+                    evidence["recoveryImport"] = {
+                        "path": str(recovery_in),
+                        "recoveryOnly": True,
+                        "proofClaimed": False,
+                    }
+                else:
+                    page.locator("#resetCampaign").click()
+                    driver.controls += 1
                 page.locator("#sceneTitle").wait_for()
                 proof = page.locator("#runProofStatus").inner_text()
                 if not proof.startswith("Clean run "):
-                    raise RouteBlocked("new-game-receipt", "New Game did not expose a clean-run receipt.", runProof=proof)
+                    raise RouteBlocked("clean-run-receipt", "The rendered start path did not expose a clean-run receipt.", runProof=proof)
+                evidence["startCheckpoint"] = driver.checkpoint()
 
                 for _ in range(args.max_scenes):
+                    if args.recovery_out and budget.deadline - time.monotonic() < args.frontier_reserve_seconds:
+                        evidence["status"] = "bounded"
+                        evidence["blocker"] = {
+                            "code": "recovery-frontier",
+                            "message": "The session retained its requested recovery-export reserve at a Campaign frontier.",
+                            "checkpoint": driver.checkpoint(),
+                        }
+                        break
                     budget.check("story frontier")
                     before = driver.scene_key()
                     driver.finish_story_scene()
@@ -964,6 +984,27 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                         "code": "playwright-timeout",
                         "message": str(error),
                         "checkpoint": driver.checkpoint(),
+                    }
+            if args.recovery_out:
+                recovery_out = Path(args.recovery_out).resolve()
+                if urlparse(page.url).path.endswith("campaign.html"):
+                    with page.expect_download() as download_info:
+                        page.locator("#exportRecovery").click()
+                    driver.controls += 1
+                    download = download_info.value
+                    download.save_as(str(recovery_out))
+                    evidence["recoveryExport"] = {
+                        "path": str(recovery_out),
+                        "suggestedFilename": download.suggested_filename,
+                        "recoveryOnly": True,
+                        "proofClaimed": False,
+                    }
+                else:
+                    evidence["recoveryExport"] = {
+                        "path": str(recovery_out),
+                        "recoveryOnly": True,
+                        "proofClaimed": False,
+                        "error": "The bounded session stopped outside Campaign, so no rendered recovery export was available.",
                     }
             evidence.update(
                 {
@@ -994,11 +1035,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-seconds", type=int, default=300)
     parser.add_argument("--max-field-moves", type=int, default=4_000)
     parser.add_argument("--max-battle-commands", type=int, default=500)
+    parser.add_argument("--recovery-in", help="Restore a recovery-only checkpoint through Campaign's rendered file control instead of starting New Game.")
+    parser.add_argument("--recovery-out", help="Export a recovery-only checkpoint through Campaign's rendered download control before closing.")
+    parser.add_argument("--frontier-reserve-seconds", type=int, default=120, help="When exporting recovery, retain this many seconds rather than starting another scene.")
     parser.add_argument("--require-complete", action="store_true", help="Exit nonzero unless the route reaches credits.")
     args = parser.parse_args()
-    for name in ("max_scenes", "max_seconds", "max_field_moves", "max_battle_commands"):
+    for name in ("max_scenes", "max_seconds", "max_field_moves", "max_battle_commands", "frontier_reserve_seconds"):
         if getattr(args, name) <= 0:
             parser.error(f"--{name.replace('_', '-')} must be positive")
+    if args.recovery_in and not Path(args.recovery_in).is_file():
+        parser.error("--recovery-in must name an existing checkpoint file")
+    if args.recovery_out and not Path(args.recovery_out).expanduser().resolve().parent.is_dir():
+        parser.error("--recovery-out parent directory must already exist")
     return args
 
 

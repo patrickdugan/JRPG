@@ -40,7 +40,16 @@ For the stricter rendered-control-only route probe, run:
 python tools/browser-route-playthrough.py --max-scenes 10 --max-seconds 300
 ```
 
-That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks and keys. Its latest bounded receipt reaches 10/60 scenes, 15/215 route entries, and 3/23 durable first clears after 1,453 controls, 555 exact field moves, 59 battle commands, and 155 Camp controls, with no console/page errors. It stops cleanly at the configured scene cap; it is not yet a complete route witness. Add `--require-complete` only when running an intentionally long full-route gate.
+That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks and keys. Its latest extended receipt reaches 11/60 scenes, 19/215 route entries, and 4/23 durable first clears after 1,825 controls, 649 exact field moves, 121 battle commands, and 195 Camp controls, with no console/page errors. It stops at the configured time budget; it is not yet a complete route witness. Add `--require-complete` only when running an intentionally long full-route gate.
+
+Long QA routes can continue across bounded sessions without direct save injection. Export and restore the game's explicitly recovery-only 13-authority bundle through its rendered controls:
+
+```powershell
+python tools/browser-route-playthrough.py --max-scenes 10 --max-seconds 450 --recovery-out route-recovery.json
+python tools/browser-route-playthrough.py --max-scenes 10 --max-seconds 450 --recovery-in route-recovery.json --recovery-out route-recovery-next.json
+```
+
+The runner labels both files `recoveryOnly: true` and `proofClaimed: false`; they preserve continuity but cannot prove duration.
 
 To verify every shipped browser file over a real local HTTP boundary without installing another package, run:
 

@@ -57,3 +57,13 @@ test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () 
   assert.match(routeSource, /def play_battle_and_resume_scene\(self, scene_key: str\)/);
   assert.match(routeSource, /if self\.scene_key\(\) == scene_key:\s+self\.finish_story_scene\(\)/);
 });
+
+test('bounded sessions can continue only through labeled rendered recovery controls', () => {
+  assert.match(routeSource, /page\.locator\("#recoveryFile"\)\.set_input_files\(str\(recovery_in\)\)/);
+  assert.match(routeSource, /page\.locator\("#exportRecovery"\)\.click\(\)/);
+  assert.match(routeSource, /download\.save_as\(str\(recovery_out\)\)/);
+  assert.match(routeSource, /"recoveryOnly": True/);
+  assert.match(routeSource, /"proofClaimed": False/);
+  assert.match(routeSource, /"code": "recovery-frontier"/);
+  assert.doesNotMatch(routeSource, /localStorage|sessionStorage|add_init_script|page\.evaluate/);
+});
