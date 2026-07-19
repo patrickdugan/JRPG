@@ -243,6 +243,10 @@ test('rendered battle state exposes exact active and authoritative objective til
   assert.match(publish, /canvas\.dataset\.combatTargetX = String\(target\.pos\.x\)/);
   assert.match(publish, /canvas\.dataset\.combatTargetY = String\(target\.pos\.y\)/);
   assert.match(publish, /canvas\.dataset\.combatSkillRange = String\(actor\.skills\[0\]\.range \?\? 1\)/);
+  assert.match(publish, /const suggestion = chooseRepeatBattleCommand\(engine\)/);
+  assert.match(publish, /canvas\.dataset\.suggestedCommand = suggestion\.type/);
+  assert.match(publish, /canvas\.dataset\.suggestedSkillId = suggestion\.skillId/);
+  assert.match(publish, /canvas\.dataset\.suggestedTargetId = suggestion\.targetId/);
   assert.match(publish, /!requirement\.automatic && !requirement\.complete/);
   assert.match(publish, /if \(!pending\.tile && !pending\.tiles\?\.length\) return;/);
   assert.match(publish, /getObjectiveTokenPlacements\(engine\.level, \[pending\], occupied\)/);

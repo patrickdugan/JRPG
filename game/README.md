@@ -40,7 +40,7 @@ For the stricter rendered-control-only route probe, run:
 python tools/browser-route-playthrough.py --max-scenes 10 --max-seconds 300
 ```
 
-That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks and keys. Its latest bounded receipt reaches scene 5 (7/215 route entries and 1/23 first clears) after 790 controls, 278 exact field moves, and 57 Camp controls, with no console/page errors. It stops at the configured time budget; it is not yet a complete route witness. Add `--require-complete` only when running an intentionally long full-route gate.
+That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks and keys. Its latest bounded receipt reaches 10/60 scenes, 15/215 route entries, and 3/23 durable first clears after 1,453 controls, 555 exact field moves, 59 battle commands, and 155 Camp controls, with no console/page errors. It stops cleanly at the configured scene cap; it is not yet a complete route witness. Add `--require-complete` only when running an intentionally long full-route gate.
 
 To verify every shipped browser file over a real local HTTP boundary without installing another package, run:
 

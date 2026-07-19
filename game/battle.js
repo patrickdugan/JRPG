@@ -720,6 +720,8 @@ function publishRenderedBattleState(snapshot) {
     'activeActorId', 'activeActorX', 'activeActorY',
     'objectiveAction', 'objectiveRequirementKey', 'objectiveTargetX', 'objectiveTargetY',
     'combatTargetId', 'combatTargetX', 'combatTargetY', 'combatSkillRange',
+    'suggestedCommand', 'suggestedDx', 'suggestedDy', 'suggestedSkillId',
+    'suggestedTargetId', 'suggestedObjectiveAction', 'suggestedObjectiveTargetId',
   ]) delete canvas.dataset[key];
 
   if (actor) {
@@ -738,6 +740,20 @@ function publishRenderedBattleState(snapshot) {
       canvas.dataset.combatTargetX = String(target.pos.x);
       canvas.dataset.combatTargetY = String(target.pos.y);
       canvas.dataset.combatSkillRange = String(actor.skills[0].range ?? 1);
+    }
+    const suggestion = chooseRepeatBattleCommand(engine);
+    if (suggestion) {
+      canvas.dataset.suggestedCommand = suggestion.type;
+      if (suggestion.type === 'move') {
+        canvas.dataset.suggestedDx = String(suggestion.dx);
+        canvas.dataset.suggestedDy = String(suggestion.dy);
+      } else if (suggestion.type === 'skill') {
+        canvas.dataset.suggestedSkillId = suggestion.skillId;
+        canvas.dataset.suggestedTargetId = suggestion.targetId;
+      } else if (suggestion.type === 'objective') {
+        canvas.dataset.suggestedObjectiveAction = suggestion.action.type;
+        if (suggestion.action.targetId) canvas.dataset.suggestedObjectiveTargetId = suggestion.action.targetId;
+      }
     }
   }
 

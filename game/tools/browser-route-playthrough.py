@@ -55,6 +55,7 @@ BATTLE_DIRECTIONS = (
     ("a", (-1, 0)), ("d", (1, 0)),
     ("z", (-1, 1)), ("s", (0, 1)), ("c", (1, 1)),
 )
+BATTLE_KEY_BY_DELTA = {delta: key for key, delta in BATTLE_DIRECTIONS}
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -207,8 +208,9 @@ class PlayerDriver:
             candidates = sorted(
                 vectors.items(),
                 key=lambda item: (
+                    max(abs(target[0] - here[0] - item[1][0]), abs(target[1] - here[1] - item[1][1]))
+                    + 3 * visits.get((here[0] + item[1][0], here[1] + item[1][1]), 0),
                     visits.get((here[0] + item[1][0], here[1] + item[1][1]), 0),
-                    max(abs(target[0] - here[0] - item[1][0]), abs(target[1] - here[1] - item[1][1])),
                     item[0],
                 ),
             )
@@ -651,6 +653,56 @@ class PlayerDriver:
             return None
         return target_id, (int(target_x), int(target_y)), int(skill_range)
 
+    def execute_battle_suggestion(self) -> bool:
+        canvas = self.page.locator("#battleCanvas")
+        command = canvas.get_attribute("data-suggested-command")
+        if command is None:
+            return False
+        if command == "move":
+            dx = int(canvas.get_attribute("data-suggested-dx") or "99")
+            dy = int(canvas.get_attribute("data-suggested-dy") or "99")
+            key = BATTLE_KEY_BY_DELTA.get((dx, dy))
+            if key is None:
+                raise RouteBlocked("battle-suggestion-invalid", "The rendered battle suggestion exposed an invalid movement vector.", dx=dx, dy=dy)
+            _actor_id, before, _action, _target = self.battle_control_state()
+            canvas.focus()
+            self.page.keyboard.press(key)
+            self.controls += 1
+            self.battle_commands += 1
+            self.page.wait_for_timeout(30)
+            if self.page.locator("#battleStateBadge").inner_text().strip() == "COMMAND":
+                _next_actor, after, _action, _target = self.battle_control_state()
+                if after == before:
+                    raise RouteBlocked("battle-suggestion-rejected", "The rendered suggested movement did not change the active actor tile.", key=key, position=before)
+            return True
+        if command == "skill":
+            skill_id = canvas.get_attribute("data-suggested-skill-id")
+            target_id = canvas.get_attribute("data-suggested-target-id")
+            if not skill_id or not target_id:
+                raise RouteBlocked("battle-suggestion-invalid", "The rendered skill suggestion omitted its skill or target.")
+            self.page.locator('[data-command="skill"]').click()
+            self.page.locator("#skillSelect").select_option(skill_id)
+            self.page.locator("#targetSelect").select_option(target_id)
+            confirm = self.page.locator("#confirmCommand")
+            if confirm.is_disabled():
+                raise RouteBlocked("battle-suggestion-rejected", "The rendered suggested skill could not be confirmed.", skillId=skill_id, targetId=target_id)
+            confirm.click()
+            self.controls += 4
+            self.battle_commands += 1
+            self.page.wait_for_timeout(80)
+            return True
+        if command in ("objective", "guard"):
+            self.page.locator(f'[data-command="{command}"]').click()
+            confirm = self.page.locator("#confirmCommand")
+            if confirm.is_disabled():
+                raise RouteBlocked("battle-suggestion-rejected", "The rendered suggested command could not be confirmed.", command=command)
+            confirm.click()
+            self.controls += 2
+            self.battle_commands += 1
+            self.page.wait_for_timeout(80)
+            return True
+        raise RouteBlocked("battle-suggestion-invalid", "The rendered battle suggestion used an unknown command.", command=command)
+
     def move_battle_actor_toward(self, target: tuple[int, int]) -> bool:
         actor_id, here, _action, _published_target = self.battle_control_state()
         candidates = sorted(
@@ -696,6 +748,12 @@ class PlayerDriver:
                 raise RouteBlocked("battle-defeat", "The rendered-control policy was defeated.", encounter=encounter)
             if badge != "COMMAND":
                 self.page.wait_for_timeout(80)
+                continue
+            if self.page.locator('[data-command="move"]').is_disabled():
+                self.page.wait_for_timeout(80)
+                continue
+
+            if self.execute_battle_suggestion():
                 continue
 
             objective = self.page.locator('[data-command="objective"]')
@@ -755,6 +813,11 @@ class PlayerDriver:
             commandsUsed=self.battle_commands - commands_at_start,
         )
 
+    def play_battle_and_resume_scene(self, scene_key: str) -> None:
+        self.play_battle()
+        if self.scene_key() == scene_key:
+            self.finish_story_scene()
+
     def finish_story_scene(self) -> None:
         initial = self.scene_key()
         self.finish_dialogue_and_choices()
@@ -769,8 +832,7 @@ class PlayerDriver:
 
         self.finish_published_story_operations(initial)
         if urlparse(self.page.url).path.endswith("battle.html"):
-            self.play_battle()
-            self.finish_story_scene()
+            self.play_battle_and_resume_scene(initial)
             return
         if self.page.locator("#nextScene").is_enabled():
             self.page.locator("#nextScene").click()
@@ -778,20 +840,20 @@ class PlayerDriver:
             return
         if self.finish_published_field_objectives(initial):
             if urlparse(self.page.url).path.endswith("battle.html"):
-                self.play_battle()
+                self.play_battle_and_resume_scene(initial)
             return
 
         for _ in range(12):
             self.explore_field_once(initial)
             if urlparse(self.page.url).path.endswith("battle.html"):
-                self.play_battle()
+                self.play_battle_and_resume_scene(initial)
                 return
             if self.scene_key() != initial:
                 return
             self.finish_dialogue_and_choices()
             self.drain_due_route_work(initial)
             if urlparse(self.page.url).path.endswith("battle.html"):
-                self.play_battle()
+                self.play_battle_and_resume_scene(initial)
                 return
             self.return_to_story_route_if_available()
             if self.page.locator("#nextScene").is_enabled():
@@ -800,7 +862,7 @@ class PlayerDriver:
                 return
             if self.finish_published_field_objectives(initial):
                 if urlparse(self.page.url).path.endswith("battle.html"):
-                    self.play_battle()
+                    self.play_battle_and_resume_scene(initial)
                 return
             progress = self.page.locator("#fieldProgress").inner_text()
             if "Story operation" not in progress:
@@ -812,7 +874,7 @@ class PlayerDriver:
             self.page.locator("#launchBattle").click()
             self.controls += 1
             self.page.wait_for_url("**/battle.html**")
-            self.play_battle()
+            self.play_battle_and_resume_scene(initial)
             return
         raise RouteBlocked(
             "scene-gate",
