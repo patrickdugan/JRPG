@@ -31,7 +31,7 @@ For an isolated real-browser pass, install the optional Python `playwright` pack
 python tools/browser-smoke.py
 ```
 
-The harness uses a fresh Chromium context and ephemeral localhost port. It verifies New Game, a fresh one-click opening route action and Camp deep link, a real keyboard archive advance, Campaign/Camp receipt continuity, first-clear speed gating, saved 4× repeat speed, a complete Auto-Grind victory and reward, the all-215 credits gate and explicit seal, a downloaded and parsed evidence report, exact 390×844 no-overflow geometry and visible primary controls across all five pages, keyboard reachability, denied-storage startup, HTTP delivery, and console cleanliness without touching the player's browser profile.
+The harness uses a fresh Chromium context and ephemeral localhost port. It verifies New Game, a fresh one-click opening route action and Camp deep link, a real keyboard archive advance, Campaign/Camp receipt continuity, first-clear speed gating, saved 4× repeat speed, a complete Auto-Grind victory and reward, the all-215 credits gate and explicit seal, a downloaded and parsed evidence report, exact 390×844 no-overflow geometry and visible primary controls across all five pages, duplicate-ID/access-name/image-alt semantic gates, keyboard reachability, denied-storage startup, HTTP delivery, and console cleanliness without touching the player's browser profile.
 
 To verify every shipped browser file over a real local HTTP boundary without installing another package, run:
 

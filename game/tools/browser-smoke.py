@@ -416,6 +416,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 ("credits.html", "#creditsStatus"),
             )
             responsive_widths: dict[str, dict[str, int]] = {}
+            semantic_audits: dict[str, dict[str, list[str]]] = {}
             for path, selector in responsive_pages:
                 response = responsive_page.goto(f"{base}/{path}", wait_until="domcontentloaded")
                 require(response is not None and response.status == 200, f"Responsive {path} failed delivery.")
@@ -432,7 +433,44 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     max(widths["document"], widths["body"]) <= widths["viewport"] + 1,
                     f"Responsive {path} overflows horizontally: {widths}.",
                 )
+                semantic = responsive_page.evaluate(
+                    """() => {
+                      const visible = element => {
+                        const style = getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return !element.hidden && style.display !== 'none' && style.visibility !== 'hidden'
+                          && rect.width > 0 && rect.height > 0;
+                      };
+                      const accessibleName = element => {
+                        const labelledBy = (element.getAttribute('aria-labelledby') || '')
+                          .split(/\s+/).filter(Boolean)
+                          .map(id => document.getElementById(id)?.textContent?.trim() || '').join(' ').trim();
+                        const explicitLabel = element.id
+                          ? document.querySelector(`label[for="${CSS.escape(element.id)}"]`)?.textContent?.trim() || ''
+                          : '';
+                        return (element.getAttribute('aria-label') || labelledBy || explicitLabel
+                          || element.textContent || element.getAttribute('title') || '').trim();
+                      };
+                      const seen = new Set();
+                      const duplicateIds = [...document.querySelectorAll('[id]')].flatMap(element => {
+                        if (seen.has(element.id)) return [element.id];
+                        seen.add(element.id);
+                        return [];
+                      });
+                      const unnamedInteractive = [...document.querySelectorAll('button, a[href], select')]
+                        .filter(element => visible(element) && !accessibleName(element))
+                        .map(element => `${element.tagName.toLowerCase()}#${element.id || '(no-id)'}`);
+                      const imagesMissingAlt = [...document.images]
+                        .filter(image => !image.hasAttribute('alt'))
+                        .map(image => image.getAttribute('src') || '(inline image)');
+                      return { duplicateIds, unnamedInteractive, imagesMissingAlt };
+                    }"""
+                )
+                require(not semantic["duplicateIds"], f"{path} has duplicate IDs: {semantic['duplicateIds']}.")
+                require(not semantic["unnamedInteractive"], f"{path} has unnamed visible controls: {semantic['unnamedInteractive']}.")
+                require(not semantic["imagesMissingAlt"], f"{path} has images without alt text: {semantic['imagesMissingAlt']}.")
                 responsive_widths[path] = widths
+                semantic_audits[path] = semantic
             responsive_context.close()
 
             restricted_errors: list[str] = []
@@ -481,6 +519,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         evidence_export=evidence_export,
         route_action=route_action,
         responsive_widths=responsive_widths,
+        semantic_audits=semantic_audits,
         denied_storage_pages=[path for path, _selector in restricted_pages],
         console_errors=[],
         page_errors=[],
