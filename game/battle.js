@@ -1,4 +1,5 @@
-import { getEncounter, ENCOUNTERS } from './content/encounters.mjs';
+import { getEncounter, isBossEncounter, ENCOUNTERS } from './content/encounters.mjs';
+import { mountAudioControls } from './audio-controls.mjs';
 import {
   CAMPAIGN_COMBAT_PHASES,
   COMBAT_STATUS_DEFINITIONS,
@@ -129,6 +130,7 @@ battleEnemyAtlasImage.src = ENEMY_ATLAS.url;
 const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
 const encounter = getEncounter(requestedEncounterId) ?? ENCOUNTERS[0];
+const pageAudio = mountAudioControls({ desiredLoop: isBossEncounter(encounter) ? 'boss' : 'battle' });
 const requestedReturn = query.get('return');
 const requestedQuestId = query.get('quest');
 const requestedQuestObjectiveId = query.get('objective');
@@ -280,6 +282,10 @@ function scheduleEnemyIntent(now = performance.now()) {
 
 function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapshot()) {
   if (!result?.ok || !attackerId || !result.targetId || !result.skillId) return null;
+  if (result.finalDamage < 0 || Object.is(result.finalDamage, -0)) pageAudio.playCue('combatHeal');
+  else if (result.guarded) pageAudio.playCue('combatGuard');
+  else if (result.deliveryMultiplier * result.essenceMultiplier > 1) pageAudio.playCue('combatCritical');
+  else if (Number.isFinite(result.finalDamage)) pageAudio.playCue('combatHit');
   const attacker = beforeSnapshot.actors.find((actor) => actor.instanceId === attackerId);
   const target = beforeSnapshot.actors.find((actor) => actor.instanceId === result.targetId);
   if (!attacker || !target) return null;
@@ -1127,7 +1133,11 @@ function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.sn
     return result;
   }
   if (command.type === 'objective') return engine.performObjectiveAction(actorId, command.action);
-  if (command.type === 'guard') return engine.guard(actorId);
+  if (command.type === 'guard') {
+    const result = engine.guard(actorId);
+    if (result.ok) pageAudio.playCue('combatGuard');
+    return result;
+  }
   return { ok: false, reason: `Unsupported Auto-Grind command ${command.type}.` };
 }
 
@@ -1268,6 +1278,7 @@ function executeSelectedCommand() {
     result = engine.useSkill(actor.instanceId, skillId, targetSelect.value);
   } else if (selectedCommand === 'guard') {
     result = engine.guard(actor.instanceId);
+    if (result.ok) pageAudio.playCue('combatGuard');
   } else if (selectedCommand === 'analyze') {
     result = engine.analyze(actor.instanceId, targetSelect.value);
   } else if (selectedCommand === 'objective') {

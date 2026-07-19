@@ -70,6 +70,14 @@ class RouteBlocked(RuntimeError):
         self.details = details
 
 
+def accept_player_dialog(dialog: object) -> None:
+    """Accept native controls, preserving a prompt's player-visible default choice."""
+    if dialog.type == "prompt":
+        dialog.accept(dialog.default_value)
+    else:
+        dialog.accept()
+
+
 @dataclass
 class Budget:
     deadline: float
@@ -940,7 +948,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
             page.set_default_navigation_timeout(45_000)
             page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
             page.on("pageerror", lambda error: page_errors.append(str(error)))
-            page.on("dialog", lambda dialog: dialog.accept())
+            page.on("dialog", accept_player_dialog)
             budget = Budget(
                 deadline=started + args.max_seconds,
                 max_scenes=args.max_scenes,

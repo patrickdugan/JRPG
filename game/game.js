@@ -5,12 +5,14 @@ import {
   PHASES,
   combatData,
 } from './engine.mjs';
+import { mountAudioControls } from './audio-controls.mjs';
 
 const canvas = document.querySelector('#gameCanvas');
 const ctx = canvas.getContext('2d');
 const feedback = document.querySelector('#feedback');
 const accessLog = document.querySelector('#access-log');
 const commandButtons = [...document.querySelectorAll('[data-action]')];
+const pageAudio = mountAudioControls({ desiredLoop: 'battle' });
 
 ctx.imageSmoothingEnabled = false;
 
@@ -497,6 +499,7 @@ function updateInterface() {
 }
 
 function applyAction(action) {
+  pageAudio.playCue('uiConfirm');
   const [kind, value] = action.split(':');
   if (kind === 'skill') engine.usePlayerSkill(value);
   if (kind === 'stance') engine.takeStance(value);

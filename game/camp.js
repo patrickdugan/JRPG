@@ -1,4 +1,5 @@
 import { CAMPAIGN } from './content/campaign.mjs';
+import { mountAudioControls } from './audio-controls.mjs';
 import {
   PARTY_MEMBER_IDS,
   createAdvancementState,
@@ -128,6 +129,7 @@ const archiveRecordTitle = document.querySelector('#archiveRecordTitle');
 const archiveRecordAccess = document.querySelector('#archiveRecordAccess');
 const archiveRecordParagraph = document.querySelector('#archiveRecordParagraph');
 const advanceArchiveRecord = document.querySelector('#advanceArchiveRecord');
+const pageAudio = mountAudioControls({ desiredLoop: 'exploration' });
 
 const campaignAdapter = createLocalStorageAdapter();
 const campaignLoaded = campaignAdapter.load();
@@ -226,6 +228,7 @@ function commit(result) {
     return false;
   }
   loadoutState = result.state;
+  pageAudio.playCue('uiConfirm');
   render();
   return true;
 }

@@ -7,6 +7,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <title>Bells of the Black Chrysanthemum — Camp &amp; Loadout</title>
     <link rel="stylesheet" href="camp.css">
+    <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
     <main class="camp-shell">
@@ -17,6 +18,11 @@
           <p id="campSubtitle" class="subtitle">Rest, equip the party, and bind Vows before returning to the route. Reading controls: <kbd>N</kbd> next line · <kbd>1</kbd>/<kbd>2</kbd> choose.</p>
         </div>
         <div class="masthead-actions">
+          <div class="audio-controls" role="group" aria-label="Sound controls">
+            <button id="audioToggle" type="button" aria-pressed="false">Sound: Off</button>
+            <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
+            <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
+          </div>
           <span id="campPlaytime" class="playtime">00:00:00 active play</span>
           <a class="return-link" href="campaign.html">← Return to Campaign</a>
         </div>

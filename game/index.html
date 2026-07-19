@@ -7,6 +7,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <title>Bells of the Black Chrysanthemum — Bell Court Prototype</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
     <main class="game-shell">
@@ -17,6 +18,11 @@
           <p class="subtitle">Bell Court at Takamine · a measured battle-stage prototype</p>
         </div>
         <div class="scope-note">Original prototype art<br>Turn-based · 12 × 7 stage<br><a class="campaign-link" href="campaign.html">Open Campaign Atlas →</a></div>
+        <div class="audio-controls" role="group" aria-label="Sound controls">
+          <button id="audioToggle" type="button" aria-pressed="false">Sound: Off</button>
+          <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
+          <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
+        </div>
       </header>
 
       <section class="game-frame" aria-label="Bell Court combat encounter">

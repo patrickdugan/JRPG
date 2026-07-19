@@ -62,6 +62,17 @@ test('a route exit blocked by newly due work hands control back to the rendered 
   assert.match(finishField, /if self\.field_objective_target\(\) != published:\s+continue/);
 });
 
+test('native field-choice prompts retain their published player-visible default', () => {
+  const handler = routeSource.slice(
+    routeSource.indexOf('def accept_player_dialog'),
+    routeSource.indexOf('\n\n@dataclass', routeSource.indexOf('def accept_player_dialog')),
+  );
+  assert.match(handler, /dialog\.type == "prompt"/);
+  assert.match(handler, /dialog\.accept\(dialog\.default_value\)/);
+  assert.match(routeSource, /page\.on\("dialog", accept_player_dialog\)/);
+  assert.doesNotMatch(handler, /evaluate|localStorage|sessionStorage/);
+});
+
 test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () => {
   assert.match(routeSource, /self\.recover_after_battle\(\)/);
   assert.match(routeSource, /self\.page\.locator\('a\[href="camp\.html"\]'\)\.first\.click\(\)/);

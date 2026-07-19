@@ -31,6 +31,7 @@ import {
   createPlaytestEvidenceReport,
   serializePlaytestEvidenceReport,
 } from './playtest-evidence.mjs';
+import { mountAudioControls } from './audio-controls.mjs';
 
 const creditsStatus = document.querySelector('#creditsStatus');
 const creditsProof = document.querySelector('#creditsProof');
@@ -43,6 +44,7 @@ const categoryTimingList = document.querySelector('#categoryTimingList');
 const chapterTimingList = document.querySelector('#chapterTimingList');
 const timingAttribution = document.querySelector('#timingAttribution');
 const pacingBasis = document.querySelector('#pacingBasis');
+const pageAudio = mountAudioControls({ desiredLoop: 'exploration' });
 const receiptAdapter = createRunReceiptStorageAdapter();
 const campaignAdapter = createLocalStorageAdapter();
 const loadedCampaign = campaignAdapter.load();
@@ -255,6 +257,7 @@ sealCredits.addEventListener('click', () => {
   }
   receiptState = result.state;
   pendingMs = 0;
+  pageAudio.playCue('uiConfirm');
   render();
   creditsStatus.focus();
 });

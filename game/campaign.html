@@ -7,6 +7,7 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <title>Bells of the Black Chrysanthemum — Campaign</title>
     <link rel="stylesheet" href="campaign.css">
+    <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
     <main class="campaign-shell">
@@ -17,6 +18,11 @@
           <p class="subtitle">Carry the names through eleven chapters of rain, bells, and witness</p>
         </div>
         <div class="masthead-actions">
+          <div class="audio-controls" role="group" aria-label="Sound controls">
+            <button id="audioToggle" type="button" aria-pressed="false">Sound: Off</button>
+            <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
+            <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
+          </div>
           <span id="runProofStatus" class="run-proof-status" role="status">Unverified save</span>
           <span id="recoveryStatus" class="recovery-status" role="status">Recovery checkpoints are separate from playtest proof.</span>
           <a class="subtle-button" href="camp.html">Camp &amp; Loadout</a>

@@ -1,4 +1,5 @@
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
+import { mountAudioControls } from './audio-controls.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
 import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter, getSideQuest } from './content/sidequests.mjs';
@@ -203,6 +204,7 @@ const witnessStageHint = document.querySelector('#witnessStageHint');
 const routeSummary = document.querySelector('#routeSummary');
 const routeStatus = document.querySelector('#routeStatus');
 const routeDueList = document.querySelector('#routeDueList');
+const pageAudio = mountAudioControls({ desiredLoop: 'exploration' });
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
@@ -918,7 +920,10 @@ function attemptFieldMove(dx, dy) {
   if (!commitStateChanges('Field movement', changes).ok) return;
   fieldRuntimeState = result.state;
   loadoutState = nextLoadoutState;
-  if (result.moved) fieldWalkUntil = performance.now() + 320;
+  if (result.moved) {
+    fieldWalkUntil = performance.now() + 320;
+    pageAudio.playCue('fieldStep');
+  }
   fieldFeedback.textContent = fieldEventMessage(level, result);
   if (consequenceMessages.length) fieldFeedback.textContent += ` ${consequenceMessages.join(' ')}.`;
   const encounterEvent = result.events.find((event) => event.type === 'encounter-triggered');
@@ -1172,6 +1177,7 @@ function renderDialogue(beat) {
 
 function renderSceneDirection(beat) {
   const direction = getSceneDirection(beat.id);
+  pageAudio.setLoop('exploration');
   if (!direction) return;
   sceneAtmosphere.textContent = direction.atmosphere;
   sceneMusicCue.textContent = direction.musicCue;
@@ -1934,7 +1940,10 @@ chapterList.addEventListener('click', (event) => {
 
 choiceDeck.addEventListener('click', (event) => {
   const button = event.target.closest('[data-choice-id]');
-  if (button) choose(button.dataset.choiceId);
+  if (button) {
+    pageAudio.playCue('uiConfirm');
+    choose(button.dataset.choiceId);
+  }
 });
 
 continueDialogue.addEventListener('click', () => {
@@ -1945,6 +1954,7 @@ continueDialogue.addEventListener('click', () => {
     { id: 'narrative', adapter: narrativeAdapter, previousState: narrativeState, nextState: result.state },
   ]).ok) return;
   narrativeState = result.state;
+  pageAudio.playCue('uiConfirm');
   render();
 });
 
@@ -2106,6 +2116,7 @@ interactFieldButton.addEventListener('click', () => {
       { id: 'scene-operation', adapter: sceneOperationAdapter, previousState: sceneOperationState, nextState: result.state },
     ]).ok) return;
     sceneOperationState = result.state;
+    pageAudio.playCue('fieldInteract');
     render();
     fieldFeedback.textContent = result.beatCompleted
       ? `Scene operation complete: all ${result.progress.nodeCount} finite field nodes are recorded.`
@@ -2212,6 +2223,7 @@ interactFieldButton.addEventListener('click', () => {
       { id: 'quest', adapter: questAdapter, previousState: questState, nextState: result.state },
     ]).ok) return;
     questState = result.state;
+    pageAudio.playCue('fieldInteract');
     fieldFeedback.textContent = `Side-story objective complete: ${marker.objective.instruction}`;
     render();
     return;
@@ -2257,6 +2269,7 @@ interactFieldButton.addEventListener('click', () => {
     if (!commitStateChanges('Field interaction', changes).ok) return;
     fieldRuntimeState = result.state;
     loadoutState = nextLoadoutState;
+    pageAudio.playCue('fieldInteract');
     fieldFeedback.textContent = result.repeated
       ? `${nearby.id} was already completed.${event?.text ? ` ${event.text}` : ''}`
       : `${nearby.id}: ${event?.text ?? event?.result ?? event?.reward ?? `${event?.action ?? 'interaction'} complete`}.${lootText}`;

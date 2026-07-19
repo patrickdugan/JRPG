@@ -784,6 +784,10 @@ export function getEncounter(id) {
   return ENCOUNTERS.find((encounter) => encounter.id === id) ?? null;
 }
 
+export function isBossEncounter(encounter) {
+  return typeof encounter?.format === 'string' && encounter.format.includes('boss');
+}
+
 export function getEncountersForChapter(chapterId) {
   return ENCOUNTERS.filter((encounter) => encounter.chapterId === chapterId);
 }
