@@ -1540,7 +1540,13 @@ function renderRequiredRouteLedger(progress) {
   const highlighted = (entryMode ? progress.entryDueActivityIds : progress.dueActivityIds).slice(0, 5);
   const nodes = highlighted.map((activityId) => {
     const item = document.createElement('li');
-    item.textContent = `${entryMode ? 'Start' : 'Finish'} · ${requiredRouteActivityLabel(activityId)}`;
+    const activity = getRequiredRouteActivity(activityId);
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.dataset.routeActivityId = activityId;
+    action.dataset.routeActivityType = activity?.type ?? 'unknown';
+    action.textContent = `${entryMode ? 'Start' : 'Continue'} · ${requiredRouteActivityLabel(activityId)}`;
+    item.append(action);
     return item;
   });
   const hiddenCount = (entryMode ? progress.entryDueActivityIds.length : progress.dueActivityIds.length) - highlighted.length;
@@ -1557,6 +1563,29 @@ function renderRequiredRouteLedger(progress) {
     nodes.push(empty);
   }
   routeDueList.replaceChildren(...nodes);
+}
+
+function campRouteHref(activity) {
+  const parameters = new URLSearchParams({ routeType: activity.type, routeId: activity.id });
+  return `camp.html?${parameters.toString()}`;
+}
+
+function focusAndActivateRouteEntry(activity) {
+  if (['camp-conversation', 'party-council', 'archive-record'].includes(activity.type)) {
+    window.location.href = campRouteHref(activity);
+    return;
+  }
+  const selector = activity.type === 'witness-chronicle'
+    ? `[data-witness-chronicle-id="${CSS.escape(activity.id)}"]`
+    : `[data-quest-id="${CSS.escape(activity.questId)}"]`;
+  const target = document.querySelector(selector);
+  if (!target) {
+    fieldFeedback.textContent = `${requiredRouteActivityLabel(activity.id)} is not available on this story frontier.`;
+    return;
+  }
+  target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  target.focus();
+  target.click();
 }
 
 function render() {
@@ -1848,6 +1877,17 @@ questList.addEventListener('click', (event) => {
   questState = result.state;
   fieldFeedback.textContent = `Side story accepted: ${result.progress.quest.title}. ${result.progress.currentObjective?.instruction ?? ''}`;
   renderQuestJournal(getChapter());
+});
+
+routeDueList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-route-activity-id]');
+  if (!button) return;
+  const activity = getRequiredRouteActivity(button.dataset.routeActivityId);
+  if (!activity) {
+    fieldFeedback.textContent = 'This route entry is no longer part of the canonical itinerary.';
+    return;
+  }
+  focusAndActivateRouteEntry(activity);
 });
 
 witnessList.addEventListener('click', (event) => {

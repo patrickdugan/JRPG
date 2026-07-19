@@ -175,6 +175,15 @@ let selectedCampConversationId = campConversationState.records.find((record) => 
 let selectedPartyCouncilId = partyCouncilState.records.find((record) => record.status === 'active')?.id ?? null;
 let selectedArchiveRecordId = archiveRecordState.records.find((record) => record.status === 'active')?.id ?? null;
 let archiveReviewParagraphIndex = null;
+const routeParameters = new URLSearchParams(window.location.search);
+const requestedRouteType = routeParameters.get('routeType');
+const requestedRouteId = routeParameters.get('routeId');
+const ROUTE_FOCUS_SELECTORS = Object.freeze({
+  'camp-conversation': 'campConversationId',
+  'party-council': 'partyCouncilId',
+  'archive-record': 'archiveRecordId',
+});
+let routeFocusPending = Boolean(ROUTE_FOCUS_SELECTORS[requestedRouteType] && requestedRouteId);
 
 const ROLES = Object.freeze({
   ren: 'Courier Vanguard', aya: 'Ledger Arcanist', lise: 'Dawn Hunter',
@@ -351,7 +360,14 @@ function renderShop() {
 function renderCamps() {
   const prior = campSelect.value;
   campSelect.replaceChildren(...Object.values(CAMP_CATALOGUE).map((camp) => new Option(`${camp.name} · ${camp.cost} mon`, camp.id)));
-  campSelect.value = CAMP_CATALOGUE[prior] ? prior : Object.keys(CAMP_CATALOGUE)[0];
+  const requestedCampId = routeFocusPending && requestedRouteType === 'camp-conversation'
+    ? CAMP_CONVERSATIONS.conversations.find(({ id }) => id === requestedRouteId)?.campId
+    : routeFocusPending && requestedRouteType === 'party-council'
+      ? PARTY_COUNCILS.councils.find(({ id }) => id === requestedRouteId)?.campId
+      : null;
+  campSelect.value = CAMP_CATALOGUE[requestedCampId]
+    ? requestedCampId
+    : CAMP_CATALOGUE[prior] ? prior : Object.keys(CAMP_CATALOGUE)[0];
   const camp = CAMP_CATALOGUE[campSelect.value];
   campDescription.textContent = camp.description;
   restParty.textContent = `Rest party · ${camp.cost} mon`;
@@ -626,6 +642,23 @@ function render() {
   renderPartyCouncils();
   renderArchiveRecords();
   campPlaytime.textContent = `${formatPlaytime(playtimeState.totalMs)} active play`;
+  applyRequestedRouteFocus();
+}
+
+function applyRequestedRouteFocus() {
+  if (!routeFocusPending) return;
+  const datasetKey = ROUTE_FOCUS_SELECTORS[requestedRouteType];
+  const selector = datasetKey ? `[data-${datasetKey.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${CSS.escape(requestedRouteId)}"]` : null;
+  const target = selector ? document.querySelector(selector) : null;
+  routeFocusPending = false;
+  if (!target) {
+    campFeedback.textContent = 'The requested route entry is not available for this save frontier.';
+    return;
+  }
+  target.classList.add('is-route-focus');
+  target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  target.focus();
+  target.click();
 }
 
 partyList.addEventListener('click', (event) => {

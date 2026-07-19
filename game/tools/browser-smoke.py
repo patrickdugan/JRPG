@@ -317,6 +317,61 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             }
             context.close()
 
+            route_context = browser.new_context(viewport={"width": 1280, "height": 900})
+            route_page = route_context.new_page()
+            route_page.set_default_timeout(20_000)
+            route_page.set_default_navigation_timeout(45_000)
+            route_page.on(
+                "console",
+                lambda message: console_errors.append({"text": message.text, "url": message.location.get("url", "")})
+                if message.type == "error"
+                else None,
+            )
+            route_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            route_page.on("dialog", lambda dialog: dialog.accept())
+            route_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            route_page.locator("#resetCampaign").click()
+            route_page.wait_for_timeout(250)
+            first_route_beat = route_page.evaluate(
+                """async () => {
+                  const progression = await import('./progression.mjs');
+                  const adapter = progression.createLocalStorageAdapter();
+                  const loaded = adapter.load();
+                  const next = progression.completeCurrentBeat(loaded.state);
+                  if (!adapter.save(next).ok) throw new Error('Route-guide campaign seed did not save.');
+                  return next.completedBeatIds[0];
+                }"""
+            )
+            route_page.reload(wait_until="domcontentloaded")
+            route_action_button = route_page.locator("#routeDueList [data-route-activity-id]").first
+            route_action_button.wait_for()
+            route_activity_id = route_action_button.get_attribute("data-route-activity-id")
+            route_activity_type = route_action_button.get_attribute("data-route-activity-type")
+            require(route_activity_type == "archive-record", "First route-guide action is no longer the opening archive record.")
+            route_action_button.click(no_wait_after=True)
+            route_page.wait_for_url("**/camp.html?routeType=archive-record&routeId=**")
+            route_page.locator("#archiveRecordStage:not([hidden])").wait_for()
+            route_record = route_page.evaluate(
+                """async id => {
+                  const archive = await import('./archive-record-runtime.mjs');
+                  const loaded = archive.createArchiveRecordStorageAdapter().load();
+                  const record = loaded.state?.records.find(entry => entry.id === id);
+                  return record ? { id: record.id, status: record.status } : null;
+                }""",
+                route_activity_id,
+            )
+            require(
+                route_record == {"id": route_activity_id, "status": "active"},
+                "One-click route guide did not begin the requested archive record.",
+            )
+            route_action = {
+                "beatId": first_route_beat,
+                "activityId": route_activity_id,
+                "activityType": route_activity_type,
+                "status": route_record["status"],
+            }
+            route_context.close()
+
             restricted_errors: list[str] = []
             restricted = browser.new_context(viewport={"width": 1024, "height": 768})
             restricted.add_init_script(
@@ -361,6 +416,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         credits_seed=credits_seed,
         credits_final=credits_final,
         evidence_export=evidence_export,
+        route_action=route_action,
         denied_storage_pages=[path for path, _selector in restricted_pages],
         console_errors=[],
         page_errors=[],

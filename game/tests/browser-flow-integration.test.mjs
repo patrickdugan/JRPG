@@ -110,6 +110,12 @@ test('the intended-route ledger blocks story frontiers and credits from real sav
   assert.ok(start >= 0 && refreshIndex > start && gateIndex > refreshIndex && completeIndex > gateIndex,
     'credits must refresh and pass the 215-activity gate before sealing');
   assert.match(credits.source, /routeTotals\.completedActivityCount/);
+  assert.match(campaign.source, /routeDueList\.addEventListener\('click'/);
+  assert.match(campaign.source, /campRouteHref\(activity\)/);
+  const camp = pageRecords.find(({ sourceName }) => sourceName === 'camp.js');
+  assert.match(camp.source, /new URLSearchParams\(window\.location\.search\)/);
+  assert.match(camp.source, /applyRequestedRouteFocus\(\)/);
+  assert.match(camp.source, /target\.click\(\)/);
 });
 
 test('New Game does not depend exclusively on randomUUID support', () => {

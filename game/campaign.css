@@ -220,8 +220,11 @@ h1 {
 .route-status[data-state="ready"] { color: #bfe8d8; }
 .route-status[data-state="due"] { color: #f0d59a; }
 .route-due-list { display: grid; gap: 5px; margin: 10px 0 0; padding: 0; list-style: none; }
-.route-due-list li { padding-left: 10px; border-left: 2px solid #665a38; color: #cbd1de; font-size: 0.66rem; line-height: 1.45; }
+.route-due-list li { border-left: 2px solid #665a38; color: #cbd1de; font-size: 0.66rem; line-height: 1.45; }
+.route-due-list button { width: 100%; padding: 6px 8px; border: 0; color: inherit; background: transparent; font: inherit; line-height: inherit; text-align: left; cursor: pointer; }
+.route-due-list button:hover, .route-due-list button:focus-visible { color: #fff0bd; background: rgba(128, 106, 60, .18); }
 .route-due-list li.more { color: #a9b1c4; }
+.route-due-list li.more { padding-left: 10px; }
 .route-camp-link { display: block; margin-top: 11px; text-align: center; text-decoration: none; }
 .witness-stage-card { display: grid; gap: 7px; margin-top: 10px; padding: 10px; border: 1px solid #66547f; background: rgba(12, 10, 24, 0.82); }
 .witness-stage-card[hidden] { display: none; }

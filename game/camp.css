@@ -125,6 +125,7 @@ h2, h3 { color: #fff0d1; }
 .archive-record-entry:hover:not(:disabled), .archive-record-entry.is-active { border-color: var(--aqua); color: #d9fffb; background: rgba(63,126,126,.16); }
 .archive-record-entry.is-complete { border-color: #536080; background: rgba(41,51,76,.34); }
 .archive-record-entry:disabled { cursor: default; opacity: .58; }
+.camp-conversation-entry.is-route-focus, .party-council-entry.is-route-focus, .archive-record-entry.is-route-focus { outline: 2px solid var(--focus); outline-offset: 2px; }
 .archive-record-entry strong { color: inherit; font-size: .78rem; }
 .archive-record-entry span { color: var(--gold); font-size: .68rem; }
 .archive-record-entry small { color: #9aa5bd; font-size: .66rem; line-height: 1.45; }
