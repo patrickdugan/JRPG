@@ -125,6 +125,9 @@ test('the intended-route ledger blocks story frontiers and credits from real sav
   assert.match(campaign.html, /id=["']routeDueList["']/);
   assert.match(campaign.source, /deriveRequiredRouteProgress\(\{/);
   assert.match(campaign.source, /routeProgress\.metrics\.total\.entryDueActivityCount/);
+  assert.match(campaign.source, /\.\.\.progress\.inProgressActivityIds, \.\.\.progress\.entryDueActivityIds/);
+  assert.match(campaign.source, /const needsEntry = progress\.entryDueActivityIds\.includes\(activityId\)/);
+  assert.match(campaign.source, /needsEntry \? 'Start' : 'Continue'/);
   assert.match(campaign.source, /if \(routeProgress\.metrics\.total\.entryDueActivityCount > 0\)/);
   assert.match(
     campaign.source,

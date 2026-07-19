@@ -342,6 +342,8 @@ class PlayerDriver:
             self.navigate_to_exact_target(target, scene_key, interaction_range=interaction_range)
             if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
                 return True
+            if self.field_objective_target() != published:
+                continue
             interaction = self.page.locator("#interactField")
             label = interaction.inner_text().strip()
             expected = label.startswith("Interact:") if target_type == "interaction" else label.startswith("Use exit")
@@ -359,6 +361,10 @@ class PlayerDriver:
             self.controls += 1
             if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
                 return True
+            if self.page.locator("#routeDueList [data-route-activity-id]").count():
+                self.drain_due_route_work(scene_key)
+                if self.on_battle_page() or self.scene_key() != scene_key:
+                    return True
         raise RouteBlocked("field-objective-loop", "More than 30 published field objective transitions occurred in one scene.")
 
     def finish_dialogue_and_choices(self) -> None:

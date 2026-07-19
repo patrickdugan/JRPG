@@ -56,6 +56,8 @@ test('the rendered map publishes the next incomplete field interaction or ready 
   assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'interaction'/);
   assert.match(campaignSource, /missingInteractablePrerequisite = requiredInteractable\?\.requires/);
   assert.match(campaignSource, /find\(\(item\) => item\.id === requiredInteractable\.requires\)/);
+  assert.match(campaignSource, /exitBlockingInteractable = readyExit && authored && !authored\.consumed \? authored : null/);
+  assert.match(campaignSource, /nextRequiredInteractable = missingInteractablePrerequisite \?\? requiredInteractable \?\? exitBlockingInteractable/);
   assert.match(campaignSource, /status\.objective\.exits\.find\(\(exit\) => exit\.ready\)/);
   assert.match(campaignSource, /type: 'interaction'/);
   assert.match(campaignSource, /type: 'route-exit'/);

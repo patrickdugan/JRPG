@@ -51,6 +51,17 @@ test('exact field navigation balances target distance with bounded revisit press
   assert.match(routeSource, /self\.page\.wait_for_timeout\(50\)/);
 });
 
+test('a route exit blocked by newly due work hands control back to the rendered route ledger', () => {
+  const finishField = routeSource.slice(
+    routeSource.indexOf('    def finish_published_field_objectives'),
+    routeSource.indexOf('    def finish_dialogue_and_choices', routeSource.indexOf('    def finish_published_field_objectives')),
+  );
+  assert.match(finishField, /interaction\.click\(\)/);
+  assert.match(finishField, /self\.page\.locator\("#routeDueList \[data-route-activity-id\]"\)\.count\(\)/);
+  assert.match(finishField, /self\.drain_due_route_work\(scene_key\)/);
+  assert.match(finishField, /if self\.field_objective_target\(\) != published:\s+continue/);
+});
+
 test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () => {
   assert.match(routeSource, /self\.recover_after_battle\(\)/);
   assert.match(routeSource, /self\.page\.locator\('a\[href="camp\.html"\]'\)\.first\.click\(\)/);

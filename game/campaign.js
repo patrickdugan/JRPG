@@ -1448,7 +1448,8 @@ function updateFieldDashboard(level) {
   const readyExit = unfinishedFieldRequirement
     ? null
     : status.objective.exits.find((exit) => exit.ready) ?? null;
-  const nextRequiredInteractable = missingInteractablePrerequisite ?? requiredInteractable;
+  const exitBlockingInteractable = readyExit && authored && !authored.consumed ? authored : null;
+  const nextRequiredInteractable = missingInteractablePrerequisite ?? requiredInteractable ?? exitBlockingInteractable;
   const fieldTarget = nextRequiredInteractable?.at
     ? { type: 'interaction', id: nextRequiredInteractable.id, at: nextRequiredInteractable.at, range: 1 }
     : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 0 } : null;
@@ -1623,20 +1624,23 @@ function renderRequiredRouteLedger(progress) {
     routeStatus.textContent = 'No intended-route entry is due at this story frontier.';
   }
 
-  const entryMode = progress.entryDueActivityIds.length > 0;
-  const highlighted = (entryMode ? progress.entryDueActivityIds : progress.dueActivityIds).slice(0, 5);
+  const prioritized = progress.entryDueActivityIds.length > 0
+    ? [...new Set([...progress.inProgressActivityIds, ...progress.entryDueActivityIds])]
+    : progress.dueActivityIds;
+  const highlighted = prioritized.slice(0, 5);
   const nodes = highlighted.map((activityId) => {
     const item = document.createElement('li');
     const activity = getRequiredRouteActivity(activityId);
+    const needsEntry = progress.entryDueActivityIds.includes(activityId);
     const action = document.createElement('button');
     action.type = 'button';
     action.dataset.routeActivityId = activityId;
     action.dataset.routeActivityType = activity?.type ?? 'unknown';
-    action.textContent = `${entryMode ? 'Start' : 'Continue'} · ${requiredRouteActivityLabel(activityId)}`;
+    action.textContent = `${needsEntry ? 'Start' : 'Continue'} · ${requiredRouteActivityLabel(activityId)}`;
     item.append(action);
     return item;
   });
-  const hiddenCount = (entryMode ? progress.entryDueActivityIds.length : progress.dueActivityIds.length) - highlighted.length;
+  const hiddenCount = prioritized.length - highlighted.length;
   if (hiddenCount > 0) {
     const more = document.createElement('li');
     more.className = 'more';
