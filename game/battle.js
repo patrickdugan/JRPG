@@ -714,6 +714,52 @@ function renderCombatants(snapshot) {
   enemyPanel.replaceChildren(...snapshot.actors.filter((actor) => actor.faction !== 'party').map((actor) => createCombatantCard(actor, actor.instanceId === selectedTargetId)));
 }
 
+function publishRenderedBattleState(snapshot) {
+  const actor = activePartyActor(snapshot);
+  for (const key of [
+    'activeActorId', 'activeActorX', 'activeActorY',
+    'objectiveAction', 'objectiveRequirementKey', 'objectiveTargetX', 'objectiveTargetY',
+    'combatTargetId', 'combatTargetX', 'combatTargetY', 'combatSkillRange',
+  ]) delete canvas.dataset[key];
+
+  if (actor) {
+    canvas.dataset.activeActorId = actor.instanceId;
+    canvas.dataset.activeActorX = String(actor.pos.x);
+    canvas.dataset.activeActorY = String(actor.pos.y);
+    const target = livingEnemies(snapshot)
+      .sort((left, right) => (
+        left.hp - right.hp
+        || left.instanceId.localeCompare(right.instanceId)
+        || Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
+        - Math.max(Math.abs(right.pos.x - actor.pos.x), Math.abs(right.pos.y - actor.pos.y))
+      ))[0];
+    if (target && actor.skills[0]) {
+      canvas.dataset.combatTargetId = target.instanceId;
+      canvas.dataset.combatTargetX = String(target.pos.x);
+      canvas.dataset.combatTargetY = String(target.pos.y);
+      canvas.dataset.combatSkillRange = String(actor.skills[0].range ?? 1);
+    }
+  }
+
+  const pending = snapshot.objective.requirements
+    .find((requirement) => !requirement.automatic && !requirement.complete);
+  if (!pending) return;
+  canvas.dataset.objectiveAction = pending.action;
+  canvas.dataset.objectiveRequirementKey = pending.key;
+
+  // Only publish a navigation target when the simulation itself enforces a
+  // tile. Presentation-only fallback markers must never become false rules.
+  if (!pending.tile && !pending.tiles?.length) return;
+  const occupied = snapshot.actors
+    .filter((entry) => entry.hp > 0 && entry.active !== false)
+    .map((entry) => `${entry.pos.x},${entry.pos.y}`);
+  const target = getObjectiveTokenPlacements(engine.level, [pending], occupied)
+    .find((placement) => !placement.complete);
+  if (!target) return;
+  canvas.dataset.objectiveTargetX = String(target.x);
+  canvas.dataset.objectiveTargetY = String(target.y);
+}
+
 function renderTempo(snapshot) {
   const actors = snapshot.actors.filter((actor) => actor.hp > 0 && actor.active !== false && actor.faction !== 'neutral')
     .sort((left, right) => left.readyAtPulse - right.readyAtPulse || right.speed - left.speed || left.instanceId.localeCompare(right.instanceId));
@@ -1037,6 +1083,7 @@ function render() {
   battleStateBadge.textContent = autoSettleAt !== null
     ? 'RESOLVING'
     : snapshot.result?.toUpperCase() ?? (snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND ? 'COMMAND' : 'INTENT');
+  publishRenderedBattleState(snapshot);
   renderCombatants(snapshot);
   renderTempo(snapshot);
   renderCommands(snapshot);

@@ -37,6 +37,7 @@ CHROMIUM_CANDIDATES = (
     Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
 )
 POSITION_PATTERN = re.compile(r"space\s+(\d+),(\d+)", re.IGNORECASE)
+VITALS_PATTERN = re.compile(r"HP\s+(\d+)/(\d+)")
 
 DIRECTIONS = (
     ("0,-1", "0,1"),
@@ -47,6 +48,12 @@ DIRECTIONS = (
     ("1,1", "-1,-1"),
     ("-1,1", "1,-1"),
     ("-1,-1", "1,1"),
+)
+
+BATTLE_DIRECTIONS = (
+    ("q", (-1, -1)), ("w", (0, -1)), ("e", (1, -1)),
+    ("a", (-1, 0)), ("d", (1, 0)),
+    ("z", (-1, 1)), ("s", (0, 1)), ("c", (1, 1)),
 )
 
 
@@ -154,7 +161,36 @@ class PlayerDriver:
             return None
         return node_id, (int(target_x), int(target_y))
 
-    def navigate_to_exact_target(self, target: tuple[int, int], scene_key: str, *, max_steps: int = 700) -> None:
+    def route_marker_target(self) -> tuple[str, str, str, tuple[int, int]] | None:
+        canvas = self.page.locator("#mapCanvas")
+        marker_type = canvas.get_attribute("data-route-marker-type")
+        marker_id = canvas.get_attribute("data-route-marker-id")
+        owner_id = canvas.get_attribute("data-route-marker-owner-id")
+        target_x = canvas.get_attribute("data-route-marker-x")
+        target_y = canvas.get_attribute("data-route-marker-y")
+        if None in (marker_type, marker_id, owner_id, target_x, target_y):
+            return None
+        return marker_type, marker_id, owner_id, (int(target_x), int(target_y))
+
+    def field_objective_target(self) -> tuple[str, str, tuple[int, int], int] | None:
+        canvas = self.page.locator("#mapCanvas")
+        target_type = canvas.get_attribute("data-field-objective-target-type")
+        target_id = canvas.get_attribute("data-field-objective-target-id")
+        target_x = canvas.get_attribute("data-field-objective-target-x")
+        target_y = canvas.get_attribute("data-field-objective-target-y")
+        target_range = canvas.get_attribute("data-field-objective-target-range")
+        if None in (target_type, target_id, target_x, target_y, target_range):
+            return None
+        return target_type, target_id, (int(target_x), int(target_y)), int(target_range)
+
+    def navigate_to_exact_target(
+        self,
+        target: tuple[int, int],
+        scene_key: str,
+        *,
+        interaction_range: int = 0,
+        max_steps: int = 700,
+    ) -> None:
         visits: dict[tuple[int, int], int] = {}
         blocked_edges: set[tuple[tuple[int, int], str]] = set()
         vectors = {
@@ -165,7 +201,7 @@ class PlayerDriver:
         for _ in range(max_steps):
             self.budget.check("exact story-operation navigation")
             here = self.position()
-            if here == target:
+            if max(abs(here[0] - target[0]), abs(here[1] - target[1])) <= interaction_range:
                 return
             visits[here] = visits.get(here, 0) + 1
             candidates = sorted(
@@ -203,6 +239,61 @@ class PlayerDriver:
             stepBudget=max_steps,
         )
 
+    def finish_published_route_markers(self, scene_key: str) -> None:
+        prior_signature: tuple[str, str, str, tuple[int, int], str] | None = None
+        repeated_signature = 0
+        for _ in range(180):
+            published = self.route_marker_target()
+            if not published:
+                return
+            marker_type, marker_id, owner_id, target = published
+            self.navigate_to_exact_target(
+                target,
+                scene_key,
+                interaction_range=1 if marker_type == "side-story" else 0,
+            )
+            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                return
+            choices = self.page.locator("#witnessChoiceDeck button")
+            if choices.count() and choices.first.is_visible():
+                choices.first.click()
+                self.controls += 1
+            interaction = self.page.locator("#interactField")
+            label = interaction.inner_text().strip()
+            expected = (
+                label.startswith("Hear testimony")
+                or label.startswith("Record witness stage")
+                or label.startswith("Enter chronicle battle")
+                or label.startswith("Advance side story")
+            )
+            if interaction.is_disabled() or not expected:
+                raise RouteBlocked(
+                    "route-marker-mismatch",
+                    "The published witness or side-story coordinate was reached but its rendered interaction was unavailable.",
+                    markerType=marker_type,
+                    markerId=marker_id,
+                    ownerId=owner_id,
+                    target=target,
+                    current=self.position(),
+                    interaction=label,
+                )
+            signature = (marker_type, marker_id, owner_id, target, label)
+            repeated_signature = repeated_signature + 1 if signature == prior_signature else 0
+            prior_signature = signature
+            if repeated_signature >= 20:
+                raise RouteBlocked(
+                    "route-marker-no-progress",
+                    "A rendered route-marker interaction repeated without changing its stable state.",
+                    markerType=marker_type,
+                    markerId=marker_id,
+                    interaction=label,
+                )
+            interaction.click()
+            self.controls += 1
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                return
+        raise RouteBlocked("route-marker-loop", "More than 180 route-marker interactions occurred without leaving the field activity.")
+
     def finish_published_story_operations(self, scene_key: str) -> None:
         for _ in range(12):
             published = self.story_operation_target()
@@ -223,7 +314,37 @@ class PlayerDriver:
                 )
             interaction.click()
             self.controls += 1
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                return
         raise RouteBlocked("operation-node-loop", "More than 12 operation-node transitions occurred in one scene.")
+
+    def finish_published_field_objectives(self, scene_key: str) -> bool:
+        for _ in range(30):
+            published = self.field_objective_target()
+            if not published:
+                return False
+            target_type, target_id, target, interaction_range = published
+            self.navigate_to_exact_target(target, scene_key, interaction_range=interaction_range)
+            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                return True
+            interaction = self.page.locator("#interactField")
+            label = interaction.inner_text().strip()
+            expected = label.startswith("Interact:") if target_type == "interaction" else label.startswith("Use exit")
+            if interaction.is_disabled() or not expected:
+                raise RouteBlocked(
+                    "field-objective-target-mismatch",
+                    "The published field objective target was reached but its rendered interaction was unavailable.",
+                    targetType=target_type,
+                    targetId=target_id,
+                    target=target,
+                    current=self.position(),
+                    interaction=label,
+                )
+            interaction.click()
+            self.controls += 1
+            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                return True
+        raise RouteBlocked("field-objective-loop", "More than 30 published field objective transitions occurred in one scene.")
 
     def finish_dialogue_and_choices(self) -> None:
         dialogue = self.page.locator("#continueDialogue")
@@ -286,7 +407,8 @@ class PlayerDriver:
                 )
             here = self.position()
             visited.add(here)
-            self.interact_if_productive()
+            if self.interact_if_productive():
+                return True
             if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
                 return True
             for vector, reverse in DIRECTIONS:
@@ -379,10 +501,81 @@ class PlayerDriver:
             break
         else:
             raise RouteBlocked("camp-stage-missing", "The focused Camp entry opened no rendered stage.")
+        self.rest_party_if_needed()
+        self.return_from_camp()
+
+    def rest_party_if_needed(self) -> bool:
+        damaged = False
+        members = self.page.locator("#campPartyList [data-member-id]")
+        for index in range(members.count()):
+            member = members.nth(index)
+            if member.is_disabled():
+                continue
+            member.click()
+            self.controls += 1
+            self.camp_controls += 1
+            match = VITALS_PATTERN.search(self.page.locator("#memberVitals").inner_text())
+            damaged = damaged or bool(match and int(match.group(1)) < int(match.group(2)))
+        if damaged:
+            rest = self.page.locator("#restParty")
+            if rest.is_disabled():
+                raise RouteBlocked("camp-rest-unavailable", "The party was damaged but the rendered rest control was unavailable.")
+            rest.click()
+            self.controls += 1
+            self.camp_controls += 1
+            feedback = self.page.locator("#campFeedback").inner_text().lower()
+            if "rested at" not in feedback:
+                if "already rested" not in feedback or not self.use_remedies_for_damaged_party():
+                    raise RouteBlocked(
+                        "camp-rest-rejected",
+                        "The damaged party could not complete a rendered Camp rest or Remedy use.",
+                        feedback=self.page.locator("#campFeedback").inner_text(),
+                    )
+            return True
+        return False
+
+    def use_remedies_for_damaged_party(self) -> bool:
+        filter_button = self.page.locator('[data-inventory-filter="consumable"]')
+        if not filter_button.is_visible() or filter_button.is_disabled():
+            return False
+        filter_button.click()
+        self.controls += 1
+        self.camp_controls += 1
+        used = False
+        members = self.page.locator("#campPartyList [data-member-id]")
+        for index in range(members.count()):
+            member = members.nth(index)
+            if member.is_disabled():
+                continue
+            member.click()
+            self.controls += 1
+            self.camp_controls += 1
+            for _ in range(8):
+                match = VITALS_PATTERN.search(self.page.locator("#memberVitals").inner_text())
+                if not match or int(match.group(1)) >= int(match.group(2)):
+                    break
+                remedies = self.page.locator("#inventoryList [data-use-item]")
+                if remedies.count() == 0:
+                    return used
+                remedies.first.click()
+                self.controls += 1
+                self.camp_controls += 1
+                used = True
+        return used
+
+    def return_from_camp(self) -> None:
         self.page.locator('a[href="campaign.html"]').first.click()
         self.controls += 1
         self.page.wait_for_url("**/campaign.html")
         self.page.locator("#sceneTitle").wait_for()
+
+    def recover_after_battle(self) -> None:
+        self.page.locator('a[href="camp.html"]').first.click()
+        self.controls += 1
+        self.page.wait_for_url("**/camp.html")
+        self.page.locator("#campFeedback").wait_for()
+        self.rest_party_if_needed()
+        self.return_from_camp()
 
     def start_due_entries(self) -> None:
         for _ in range(30):
@@ -404,11 +597,92 @@ class PlayerDriver:
             return
         raise RouteBlocked("route-entry-loop", "The due-entry list did not converge after 30 rendered entries.")
 
+    def drain_due_route_work(self, scene_key: str) -> None:
+        """Alternate frontier entry and its published fieldwork until neither changes."""
+        for _ in range(30):
+            due = self.page.locator("#routeDueList [data-route-activity-id]")
+            before_due = due.first.get_attribute("data-route-activity-id") if due.count() else None
+            before_marker = self.route_marker_target()
+            self.start_due_entries()
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                return
+            self.finish_published_route_markers(scene_key)
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                return
+            due = self.page.locator("#routeDueList [data-route-activity-id]")
+            after_due = due.first.get_attribute("data-route-activity-id") if due.count() else None
+            after_marker = self.route_marker_target()
+            if after_due is None and after_marker is None:
+                return
+            if after_due == before_due and after_marker == before_marker:
+                return
+        raise RouteBlocked("route-work-loop", "Due route entries and their published fieldwork did not converge.")
+
+    def return_to_story_route_if_available(self) -> None:
+        button = self.page.locator("#returnStoryRoute")
+        if button.count() and button.is_visible() and not button.is_disabled():
+            button.click()
+            self.controls += 1
+            self.page.locator("#mapCanvas[data-field-state]").wait_for()
+
+    def battle_control_state(self) -> tuple[str, tuple[int, int], str | None, tuple[int, int] | None]:
+        canvas = self.page.locator("#battleCanvas")
+        actor_id = canvas.get_attribute("data-active-actor-id")
+        actor_x = canvas.get_attribute("data-active-actor-x")
+        actor_y = canvas.get_attribute("data-active-actor-y")
+        action = canvas.get_attribute("data-objective-action")
+        target_x = canvas.get_attribute("data-objective-target-x")
+        target_y = canvas.get_attribute("data-objective-target-y")
+        if actor_id is None or actor_x is None or actor_y is None:
+            raise RouteBlocked(
+                "battle-position-unobservable",
+                "The rendered COMMAND state did not expose the active actor's exact simulation tile.",
+            )
+        target = None if target_x is None or target_y is None else (int(target_x), int(target_y))
+        return actor_id, (int(actor_x), int(actor_y)), action, target
+
+    def battle_combat_target(self) -> tuple[str, tuple[int, int], int] | None:
+        canvas = self.page.locator("#battleCanvas")
+        target_id = canvas.get_attribute("data-combat-target-id")
+        target_x = canvas.get_attribute("data-combat-target-x")
+        target_y = canvas.get_attribute("data-combat-target-y")
+        skill_range = canvas.get_attribute("data-combat-skill-range")
+        if target_id is None or target_x is None or target_y is None or skill_range is None:
+            return None
+        return target_id, (int(target_x), int(target_y)), int(skill_range)
+
+    def move_battle_actor_toward(self, target: tuple[int, int]) -> bool:
+        actor_id, here, _action, _published_target = self.battle_control_state()
+        candidates = sorted(
+            BATTLE_DIRECTIONS,
+            key=lambda item: (
+                max(abs(target[0] - here[0] - item[1][0]), abs(target[1] - here[1] - item[1][1])),
+                item[0],
+            ),
+        )
+        canvas = self.page.locator("#battleCanvas")
+        canvas.focus()
+        for key, _delta in candidates:
+            self.page.keyboard.press(key)
+            self.controls += 1
+            self.battle_commands += 1
+            self.page.wait_for_timeout(30)
+            badge = self.page.locator("#battleStateBadge").inner_text().strip()
+            if badge != "COMMAND":
+                return True
+            next_actor_id, after, _action, _target = self.battle_control_state()
+            if next_actor_id != actor_id or after != here:
+                return True
+            last_log = self.page.locator("#resultLog li").last.inner_text() if self.page.locator("#resultLog li").count() else ""
+            if "No Pace remains" in last_log or "recovering" in last_log:
+                return False
+        return False
+
     def play_battle(self) -> None:
         self.page.locator("#battleStateBadge").wait_for()
         encounter = self.page.locator("#encounterTitle").inner_text()
-        attempted_moves = ("e", "w", "d", "a", "q", "s", "c", "z")
-        while self.battle_commands < self.budget.max_battle_commands:
+        commands_at_start = self.battle_commands
+        while self.battle_commands - commands_at_start < self.budget.max_battle_commands:
             self.budget.check(f"battle {encounter}")
             badge = self.page.locator("#battleStateBadge").inner_text().strip()
             if badge == "VICTORY" and self.page.locator("#continueCampaign").is_visible():
@@ -416,6 +690,7 @@ class PlayerDriver:
                 self.controls += 1
                 self.page.wait_for_url("**/campaign.html")
                 self.page.locator("#sceneTitle").wait_for()
+                self.recover_after_battle()
                 return
             if badge == "DEFEAT":
                 raise RouteBlocked("battle-defeat", "The rendered-control policy was defeated.", encounter=encounter)
@@ -425,12 +700,29 @@ class PlayerDriver:
 
             objective = self.page.locator('[data-command="objective"]')
             if not objective.is_disabled():
-                objective.click()
-                self.page.locator("#confirmCommand").click()
-                self.controls += 2
-                self.battle_commands += 1
-                self.page.wait_for_timeout(80)
-                continue
+                _actor_id, here, _action, target = self.battle_control_state()
+                if target is not None and here != target:
+                    if self.move_battle_actor_toward(target):
+                        continue
+                else:
+                    objective.click()
+                    self.page.locator("#confirmCommand").click()
+                    self.controls += 2
+                    self.battle_commands += 1
+                    self.page.wait_for_timeout(80)
+                    continue
+
+            _actor_id, here, _action, _objective_target = self.battle_control_state()
+            combat_target = self.battle_combat_target()
+            if combat_target is not None:
+                target_id, target, skill_range = combat_target
+                target_select = self.page.locator("#targetSelect")
+                if target_select.input_value() != target_id:
+                    target_select.select_option(target_id)
+                    self.controls += 1
+                if max(abs(here[0] - target[0]), abs(here[1] - target[1])) > skill_range:
+                    if self.move_battle_actor_toward(target):
+                        continue
 
             acted = False
             attack = self.page.locator('[data-command="attack"]')
@@ -447,18 +739,6 @@ class PlayerDriver:
             if acted:
                 continue
 
-            canvas = self.page.locator("#battleCanvas")
-            canvas.focus()
-            for key in attempted_moves:
-                self.page.keyboard.press(key)
-                self.controls += 1
-                self.battle_commands += 1
-                self.page.wait_for_timeout(30)
-                if self.page.locator("#battleStateBadge").inner_text().strip() != "COMMAND":
-                    acted = True
-                    break
-            if acted:
-                continue
             guard = self.page.locator('[data-command="guard"]')
             if not guard.is_disabled():
                 guard.click()
@@ -472,23 +752,33 @@ class PlayerDriver:
             "The rendered-control battle policy did not reach a terminal result.",
             encounter=encounter,
             commandBudget=self.budget.max_battle_commands,
+            commandsUsed=self.battle_commands - commands_at_start,
         )
 
     def finish_story_scene(self) -> None:
         initial = self.scene_key()
         self.finish_dialogue_and_choices()
-        self.start_due_entries()
+        self.drain_due_route_work(initial)
         if urlparse(self.page.url).path.endswith("battle.html"):
             self.play_battle()
-            return
+            # A registered battle is one node inside the current scene
+            # operation. Returning to the same scene is expected; continue
+            # through its rendered post-battle acknowledgement.
+            initial = self.scene_key()
+        self.return_to_story_route_if_available()
 
         self.finish_published_story_operations(initial)
         if urlparse(self.page.url).path.endswith("battle.html"):
             self.play_battle()
+            self.finish_story_scene()
             return
         if self.page.locator("#nextScene").is_enabled():
             self.page.locator("#nextScene").click()
             self.controls += 1
+            return
+        if self.finish_published_field_objectives(initial):
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                self.play_battle()
             return
 
         for _ in range(12):
@@ -499,10 +789,18 @@ class PlayerDriver:
             if self.scene_key() != initial:
                 return
             self.finish_dialogue_and_choices()
-            self.start_due_entries()
+            self.drain_due_route_work(initial)
+            if urlparse(self.page.url).path.endswith("battle.html"):
+                self.play_battle()
+                return
+            self.return_to_story_route_if_available()
             if self.page.locator("#nextScene").is_enabled():
                 self.page.locator("#nextScene").click()
                 self.controls += 1
+                return
+            if self.finish_published_field_objectives(initial):
+                if urlparse(self.page.url).path.endswith("battle.html"):
+                    self.play_battle()
                 return
             progress = self.page.locator("#fieldProgress").inner_text()
             if "Story operation" not in progress:

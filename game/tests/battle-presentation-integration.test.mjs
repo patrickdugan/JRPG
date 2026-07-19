@@ -229,3 +229,24 @@ test('finite Auto-Grind queues expose 1/5/10 wins and only advance after durable
   assert.match(source, /cancelQueuedAutoGrind\(`Auto-Grind cancelled after/);
   assert.match(source, /repeatGrindQueue = startRepeatGrindQueue\(createRepeatGrindQueue\(Number\(autoGrindWins\.value\)\)\);/);
 });
+
+test('rendered battle state exposes exact active and authoritative objective tiles without inventing rules', async () => {
+  const source = await readFile(new URL('../battle.js', import.meta.url), 'utf8');
+  const publish = source.slice(
+    source.indexOf('function publishRenderedBattleState(snapshot)'),
+    source.indexOf('\nfunction renderTempo', source.indexOf('function publishRenderedBattleState(snapshot)')),
+  );
+  assert.match(publish, /canvas\.dataset\.activeActorId = actor\.instanceId/);
+  assert.match(publish, /canvas\.dataset\.activeActorX = String\(actor\.pos\.x\)/);
+  assert.match(publish, /canvas\.dataset\.activeActorY = String\(actor\.pos\.y\)/);
+  assert.match(publish, /const target = livingEnemies\(snapshot\)/);
+  assert.match(publish, /canvas\.dataset\.combatTargetX = String\(target\.pos\.x\)/);
+  assert.match(publish, /canvas\.dataset\.combatTargetY = String\(target\.pos\.y\)/);
+  assert.match(publish, /canvas\.dataset\.combatSkillRange = String\(actor\.skills\[0\]\.range \?\? 1\)/);
+  assert.match(publish, /!requirement\.automatic && !requirement\.complete/);
+  assert.match(publish, /if \(!pending\.tile && !pending\.tiles\?\.length\) return;/);
+  assert.match(publish, /getObjectiveTokenPlacements\(engine\.level, \[pending\], occupied\)/);
+  assert.match(publish, /canvas\.dataset\.objectiveTargetX = String\(target\.x\)/);
+  assert.match(publish, /canvas\.dataset\.objectiveTargetY = String\(target\.y\)/);
+  assert.match(source, /publishRenderedBattleState\(snapshot\);\s+renderCombatants\(snapshot\);/);
+});

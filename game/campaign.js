@@ -1410,6 +1410,61 @@ function updateFieldDashboard(level) {
     delete mapCanvas.dataset.storyOperationX;
     delete mapCanvas.dataset.storyOperationY;
   }
+  const routeMarker = witnessMarker?.position
+    ? {
+      type: 'witness-chronicle',
+      id: witnessMarker.task.id ?? `${witnessMarker.chronicle.id}:${witnessMarker.stage.id}:${witnessMarker.taskIndex}`,
+      ownerId: witnessMarker.chronicle.id,
+      position: witnessMarker.position,
+    }
+    : marker?.position ? {
+      type: 'side-story',
+      id: marker.objective.id,
+      ownerId: marker.quest.id,
+      position: marker.position,
+    } : null;
+  if (routeMarker) {
+    mapCanvas.dataset.routeMarkerType = routeMarker.type;
+    mapCanvas.dataset.routeMarkerId = routeMarker.id;
+    mapCanvas.dataset.routeMarkerOwnerId = routeMarker.ownerId;
+    mapCanvas.dataset.routeMarkerX = String(routeMarker.position.x);
+    mapCanvas.dataset.routeMarkerY = String(routeMarker.position.y);
+  } else {
+    delete mapCanvas.dataset.routeMarkerType;
+    delete mapCanvas.dataset.routeMarkerId;
+    delete mapCanvas.dataset.routeMarkerOwnerId;
+    delete mapCanvas.dataset.routeMarkerX;
+    delete mapCanvas.dataset.routeMarkerY;
+  }
+  const unfinishedFieldRequirement = status.objective.requirements.find((requirement) => !requirement.complete);
+  const requiredInteractable = unfinishedFieldRequirement?.type === 'interaction'
+    ? (level.interactables ?? []).find((item) => item.id === unfinishedFieldRequirement.id)
+    : null;
+  const missingInteractablePrerequisite = requiredInteractable?.requires
+    && !status.flags.includes(requiredInteractable.requires)
+    ? (level.interactables ?? []).find((item) => item.id === requiredInteractable.requires)
+    : null;
+  const readyExit = unfinishedFieldRequirement
+    ? null
+    : status.objective.exits.find((exit) => exit.ready) ?? null;
+  const nextRequiredInteractable = missingInteractablePrerequisite ?? requiredInteractable;
+  const fieldTarget = nextRequiredInteractable?.at
+    ? { type: 'interaction', id: nextRequiredInteractable.id, at: nextRequiredInteractable.at, range: 1 }
+    : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 0 } : null;
+  const [fieldTargetX, fieldTargetY] = fieldTarget?.at?.split(',').map(Number) ?? [];
+  if (fieldTarget && Number.isSafeInteger(fieldTargetX) && Number.isSafeInteger(fieldTargetY)) {
+    mapCanvas.dataset.fieldObjectiveTargetType = fieldTarget.type;
+    mapCanvas.dataset.fieldObjectiveTargetId = fieldTarget.id;
+    mapCanvas.dataset.fieldObjectiveTargetX = String(fieldTargetX);
+    mapCanvas.dataset.fieldObjectiveTargetY = String(fieldTargetY);
+    mapCanvas.dataset.fieldObjectiveTargetRange = String(fieldTarget.range);
+  } else {
+    delete mapCanvas.dataset.fieldObjectiveTargetType;
+    delete mapCanvas.dataset.fieldObjectiveTargetId;
+    delete mapCanvas.dataset.fieldObjectiveTargetX;
+    delete mapCanvas.dataset.fieldObjectiveTargetY;
+    delete mapCanvas.dataset.fieldObjectiveTargetRange;
+  }
   fieldObjective.textContent = sceneOperationMarker
     ? sceneOperationMarker.node.instruction
     : status.objective.text ?? level.objective ?? 'Explore the scene and follow its marked exit.';
@@ -1913,8 +1968,8 @@ questList.addEventListener('click', (event) => {
     { id: 'quest', adapter: questAdapter, previousState: questState, nextState: result.state },
   ]).ok) return;
   questState = result.state;
+  render();
   fieldFeedback.textContent = `Side story accepted: ${result.progress.quest.title}. ${result.progress.currentObjective?.instruction ?? ''}`;
-  renderQuestJournal(getChapter());
 });
 
 routeDueList.addEventListener('click', (event) => {
