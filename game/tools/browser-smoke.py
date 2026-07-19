@@ -403,6 +403,172 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             }
             route_context.close()
 
+            catalog_context = browser.new_context(viewport={"width": 1280, "height": 900})
+            catalog_page = catalog_context.new_page()
+            catalog_page.set_default_timeout(45_000)
+            catalog_page.set_default_navigation_timeout(45_000)
+            catalog_page.on(
+                "console",
+                lambda message: console_errors.append({"text": message.text, "url": message.location.get("url", "")})
+                if message.type == "error"
+                else None,
+            )
+            catalog_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            catalog_page.on("dialog", lambda dialog: dialog.accept())
+            catalog_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            catalog_page.locator("#resetCampaign").click()
+            catalog_page.wait_for_timeout(200)
+            catalog_seed = catalog_page.evaluate(
+                """async () => {
+                  const canonical = await import('./canonical-run.mjs');
+                  const progression = await import('./progression.mjs');
+                  const advancement = await import('./advancement.mjs');
+                  const loadout = await import('./loadout.mjs');
+                  const receipt = await import('./run-receipt.mjs');
+                  const run = canonical.runCanonicalCompletion();
+                  const saves = [
+                    progression.createLocalStorageAdapter().save(run.states.campaign),
+                    advancement.createAdvancementStorageAdapter().save(run.states.advancement),
+                    loadout.createLoadoutStorageAdapter().save(run.states.loadout),
+                  ];
+                  if (saves.some(result => !result.ok)) throw new Error('Canonical catalogue prerequisites did not save.');
+                  const loadedReceipt = receipt.createRunReceiptStorageAdapter().load();
+                  if (!loadedReceipt.ok || !loadedReceipt.found) throw new Error('Catalogue run receipt is missing.');
+                  return {
+                    canonicalSignature: run.signature,
+                    completedBeatCount: run.states.campaign.completedBeatIds.length,
+                    unlockedPartyCount: run.states.advancement.party.filter(member => member.unlocked).length,
+                    receiptRunId: loadedReceipt.state.runId,
+                    receiptBeatCount: loadedReceipt.state.completedBeatIds.length,
+                  };
+                }"""
+            )
+            require(catalog_seed["completedBeatCount"] == 60, "Catalogue prerequisite seed omitted story beats.")
+            require(catalog_seed["unlockedPartyCount"] == 6, "Catalogue prerequisite seed omitted party members.")
+            require(catalog_seed["receiptBeatCount"] == 0, "Catalogue prerequisite seed fabricated receipt story evidence.")
+            catalog_page.goto(f"{base}/camp.html", wait_until="domcontentloaded")
+            catalog_page.locator("#memberName").wait_for()
+            catalog_browser = catalog_page.evaluate(
+                """async expectedRunId => {
+                  const conversations = await import('./content/camp-conversations.mjs');
+                  const councils = await import('./content/party-councils.mjs');
+                  const archives = await import('./content/archive-records.mjs');
+                  const conversationRuntime = await import('./camp-conversation-runtime.mjs');
+                  const councilRuntime = await import('./party-council-runtime.mjs');
+                  const archiveRuntime = await import('./archive-record-runtime.mjs');
+                  const receiptRuntime = await import('./run-receipt.mjs');
+
+                  const visible = element => element && !element.hidden && getComputedStyle(element).display !== 'none';
+                  const selectCamp = campId => {
+                    if (!campId) return;
+                    const select = document.querySelector('#campSelect');
+                    select.value = campId;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                  };
+                  const completeEntries = ({ entries, type, buttonAttribute, stageSelector, advanceSelector, choicesSelector }) => {
+                    let controlActivations = 0;
+                    let choiceActivations = 0;
+                    for (const entry of entries) {
+                      selectCamp(entry.campId);
+                      const button = document.querySelector(`[${buttonAttribute}="${CSS.escape(entry.id)}"]`);
+                      if (!button || button.disabled) throw new Error(`${type}:${entry.id} is not available through its list control.`);
+                      button.click();
+                      controlActivations += 1;
+                      const stage = document.querySelector(stageSelector);
+                      if (!visible(stage)) throw new Error(`${type}:${entry.id} did not open its player-facing stage.`);
+                      let transitions = 0;
+                      while (transitions < 100) {
+                        const advance = document.querySelector(advanceSelector);
+                        const choices = choicesSelector
+                          ? [...document.querySelectorAll(`${choicesSelector} button`)].filter(visible)
+                          : [];
+                        if (choices.length) {
+                          choices[0].click();
+                          choiceActivations += 1;
+                          controlActivations += 1;
+                        } else if (visible(advance) && !advance.disabled) {
+                          advance.click();
+                          controlActivations += 1;
+                        } else if (advance?.disabled) {
+                          break;
+                        } else {
+                          throw new Error(`${type}:${entry.id} exposed no usable continuation control.`);
+                        }
+                        transitions += 1;
+                      }
+                      if (transitions >= 100 || !document.querySelector(advanceSelector)?.disabled) {
+                        throw new Error(`${type}:${entry.id} did not reach its finite terminal state.`);
+                      }
+                    }
+                    return { entryCount: entries.length, controlActivations, choiceActivations };
+                  };
+
+                  const companion = completeEntries({
+                    entries: conversations.CAMP_CONVERSATIONS.conversations,
+                    type: 'camp-conversation',
+                    buttonAttribute: 'data-camp-conversation-id',
+                    stageSelector: '#campConversationStage',
+                    advanceSelector: '#advanceCampConversation',
+                    choicesSelector: '#campConversationChoices',
+                  });
+                  const council = completeEntries({
+                    entries: councils.PARTY_COUNCILS.councils,
+                    type: 'party-council',
+                    buttonAttribute: 'data-party-council-id',
+                    stageSelector: '#partyCouncilStage',
+                    advanceSelector: '#advancePartyCouncil',
+                    choicesSelector: '#partyCouncilChoices',
+                  });
+                  const archive = completeEntries({
+                    entries: archives.ARCHIVE_RECORDS.records,
+                    type: 'archive-record',
+                    buttonAttribute: 'data-archive-record-id',
+                    stageSelector: '#archiveRecordStage',
+                    advanceSelector: '#advanceArchiveRecord',
+                    choicesSelector: null,
+                  });
+
+                  const conversationState = conversationRuntime.createCampConversationStorageAdapter().load().state;
+                  const councilState = councilRuntime.createPartyCouncilStorageAdapter().load().state;
+                  const archiveState = archiveRuntime.createArchiveRecordStorageAdapter().load().state;
+                  const receipt = receiptRuntime.createRunReceiptStorageAdapter().load().state;
+                  const conversationMetrics = conversationRuntime.getCampConversationRuntimeMetrics(conversationState);
+                  const councilMetrics = councilRuntime.getPartyCouncilRuntimeMetrics(councilState);
+                  const archiveMetrics = archiveRuntime.getArchiveRecordRuntimeMetrics(archiveState);
+                  return {
+                    companion,
+                    council,
+                    archive,
+                    completed: {
+                      companion: conversationMetrics.completedConversationCount,
+                      council: councilMetrics.completedCouncilCount,
+                      archive: archiveMetrics.completedRecordCount,
+                    },
+                    runBinding: {
+                      companion: conversationState.runId,
+                      council: councilState.runId,
+                      archive: archiveState.runId,
+                    },
+                    expectedRunId,
+                    receiptRunId: receipt.runId,
+                    receiptBeatCount: receipt.completedBeatIds.length,
+                    durationProven: receiptRuntime.getRunProofReport(receipt).durationProven,
+                  };
+                }""",
+                catalog_seed["receiptRunId"],
+            )
+            require(catalog_browser["completed"] == {"companion": 90, "council": 30, "archive": 60},
+                    "Browser catalogue controls did not complete all 180 finite entries.")
+            require(all(run_id == catalog_seed["receiptRunId"] for run_id in catalog_browser["runBinding"].values()),
+                    "Browser catalogue ledgers are not bound to the clean-run UUID.")
+            require(catalog_browser["receiptRunId"] == catalog_seed["receiptRunId"],
+                    "Browser catalogue receipt identity drifted.")
+            require(catalog_browser["receiptBeatCount"] == 0,
+                    "Browser catalogue prerequisite seed fabricated receipt beat evidence.")
+            require(catalog_browser["durationProven"] is False,
+                    "Accelerated browser catalogue exercise fabricated duration proof.")
+            catalog_context.close()
+
             responsive_context = browser.new_context(viewport={"width": 390, "height": 844})
             responsive_page = responsive_context.new_page()
             responsive_page.set_default_timeout(20_000)
@@ -530,6 +696,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         credits_final=credits_final,
         evidence_export=evidence_export,
         route_action=route_action,
+        catalog_seed=catalog_seed,
+        catalog_browser=catalog_browser,
         responsive_widths=responsive_widths,
         semantic_audits=semantic_audits,
         denied_storage_pages=[path for path, _selector in restricted_pages],
