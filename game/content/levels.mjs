@@ -975,7 +975,7 @@ export const LEVELS = [
     exits: [{ id: 'lantern-boat', at: '11,3', destinationLevelId: 'sdg-salt-warehouse', condition: 'witnesses-escorted' }],
     objective: 'Escort two witness tokens past a visible patrol route to the lantern boat.',
     palette: coastPalette,
-    interactables: [{ id: 'lantern-boat-signal', at: '11,3', action: 'signal', requires: 'two-witnesses-present' }],
+    interactables: [{ id: 'lantern-boat-signal', at: '11,3', action: 'signal', requires: 'c3-lantern-route' }],
     lesson: 'A route choice produces a readable encounter, not a stealth fail state.',
   },
   {

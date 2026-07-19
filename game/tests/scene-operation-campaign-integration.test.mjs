@@ -54,6 +54,8 @@ test('the rendered map publishes and clears stable witness and side-story marker
 test('the rendered map publishes the next incomplete field interaction or ready exit', () => {
   assert.match(campaignSource, /unfinishedFieldRequirement = status\.objective\.requirements\.find/);
   assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'interaction'/);
+  assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'flag'/);
+  assert.match(campaignSource, /item\.result === unfinishedFieldRequirement\.id \|\| item\.id === unfinishedFieldRequirement\.id/);
   assert.match(campaignSource, /missingInteractablePrerequisite = requiredInteractable\?\.requires/);
   assert.match(campaignSource, /find\(\(item\) => item\.id === requiredInteractable\.requires\)/);
   assert.match(campaignSource, /exitBlockingInteractable = readyExit && authored && !authored\.consumed \? authored : null/);
@@ -71,6 +73,11 @@ test('dashboard and field action share ready-exit interaction priority', () => {
   assert.match(campaignSource, /from '\.\/field-interaction-priority\.mjs'/);
   assert.match(campaignSource, /const authored = selectNearbyFieldInteractable\(status\)/);
   assert.match(campaignSource, /const nearby = selectNearbyFieldInteractable\(status\)/);
+});
+
+test('Genta evidence derives the Sodegaura lantern-route field flag', () => {
+  assert.match(campaignSource, /campaignFlags\.includes\('c3_genta_evidence_seen'\) \? \['lantern-route-chosen'\] : \[\]/);
+  assert.match(campaignSource, /\.\.\.campaignFlags,\s+\.\.\.derivedCampaignFlags/);
 });
 
 test('unfinished story operations cannot be abandoned through a route exit', () => {

@@ -834,8 +834,11 @@ function externalFieldFlags() {
   const operationFlags = sceneOperationState.records
     .filter((record) => record.status === 'completed')
     .flatMap((record) => [`scene-operation:${record.beatId}`, `scene-operation:${record.beatId}:complete`]);
+  const campaignFlags = Object.keys(campaignState.flags ?? {});
+  const derivedCampaignFlags = campaignFlags.includes('c3_genta_evidence_seen') ? ['lantern-route-chosen'] : [];
   return [
-    ...Object.keys(campaignState.flags ?? {}),
+    ...campaignFlags,
+    ...derivedCampaignFlags,
     ...(advancementState.inventory?.keyItems ?? []),
     ...encounterFlags,
     ...questFlags,
@@ -1440,7 +1443,9 @@ function updateFieldDashboard(level) {
   const unfinishedFieldRequirement = status.objective.requirements.find((requirement) => !requirement.complete);
   const requiredInteractable = unfinishedFieldRequirement?.type === 'interaction'
     ? (level.interactables ?? []).find((item) => item.id === unfinishedFieldRequirement.id)
-    : null;
+    : unfinishedFieldRequirement?.type === 'flag'
+      ? (level.interactables ?? []).find((item) => item.result === unfinishedFieldRequirement.id || item.id === unfinishedFieldRequirement.id)
+      : null;
   const missingInteractablePrerequisite = requiredInteractable?.requires
     && !status.flags.includes(requiredInteractable.requires)
     ? (level.interactables ?? []).find((item) => item.id === requiredInteractable.requires)

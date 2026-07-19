@@ -73,6 +73,9 @@ const ARMED_HAZARD_KEYS = Object.freeze(['hazardId', 'enteredAtMs']);
 const EMPTY_ARRAY = Object.freeze([]);
 const LEVEL_BY_ID = new Map(LEVELS.map((level) => [level.id, level]));
 const LEVEL_INDEX = new Map(LEVELS.map((level, index) => [level.id, index]));
+const LEGACY_INTERACTABLE_IDS_BY_LEVEL = Object.freeze({
+  'sdg-market-lane': Object.freeze(['lantern-route-board']),
+});
 const BUILT_STATES = new WeakSet();
 
 /**
@@ -408,7 +411,10 @@ function validateContext(context, index, errors) {
   validatePosition(context.safePosition, `${label}.safePosition`, level, errors);
   if (!FIELD_DIRECTIONS[context.facing]) errors.push(`${label}.facing must be a canonical eight-way direction.`);
 
-  const interactableIds = (level.interactables ?? []).map(({ id }) => id);
+  const interactableIds = [
+    ...(level.interactables ?? []).map(({ id }) => id),
+    ...(LEGACY_INTERACTABLE_IDS_BY_LEVEL[level.id] ?? []),
+  ];
   const triggerIds = (level.encounterTriggers ?? []).map(({ id }) => id);
   const encounterIds = [...new Set((level.encounterTriggers ?? []).map(({ encounterId }) => encounterId))];
   const discovered = validateCanonicalIdArray(context.discoveredInteractableIds, `${label}.discoveredInteractableIds`, interactableIds, errors);

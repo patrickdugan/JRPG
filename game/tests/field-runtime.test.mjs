@@ -243,3 +243,14 @@ test('storage adapter handles empty, valid, corrupt, and unavailable saves', () 
   assert.equal(unavailable.available, false);
   assert.deepEqual(unavailable.save(state), { ok: false, code: 'storage-unavailable' });
 });
+
+test('retired Sodegaura route-board evidence loads once and normalizes out of live field state', () => {
+  const state = createFieldState({ levelId: 'sdg-market-lane', beatId: 'legacy-route-board' });
+  const payload = JSON.parse(serializeFieldState(state));
+  payload.contexts[0].discoveredInteractableIds.push('lantern-route-board');
+  payload.contexts[0].consumedInteractableIds.push('lantern-route-board');
+  const loaded = loadFieldState(payload);
+  assert.equal(loaded.ok, true);
+  assert.equal(loaded.value.contexts[0].discoveredInteractableIds.includes('lantern-route-board'), false);
+  assert.equal(loaded.value.contexts[0].consumedInteractableIds.includes('lantern-route-board'), false);
+});

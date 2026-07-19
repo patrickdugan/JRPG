@@ -82,6 +82,21 @@ test('every authored scene and named campaign map has an explicit resolvable lev
   }
 });
 
+test('the Sodegaura rain-docks route is bound to Genta evidence and its derived field flag', () => {
+  const market = getLevel('sdg-market-lane');
+  const checkpointBeat = getAllChapters().flatMap(({ beats }) => beats).find(({ id }) => id === 'c3-02-the-checkpoint');
+  assert.ok(checkpointBeat.choices.some(({ flag }) => flag === 'c3_genta_evidence_seen'));
+  assert.ok(market.exits.some(({ id, condition }) => id === 'rain-docks' && condition === 'lantern-route-chosen'));
+});
+
+test('the dock escort first clear makes its co-located boat signal available', () => {
+  const docks = getLevel('sdg-rain-docks');
+  const signal = docks.interactables.find(({ id }) => id === 'lantern-boat-signal');
+  const escort = ENCOUNTERS.find(({ id }) => id === 'c3-dock-patrol');
+  assert.ok(escort.reward.flags.includes(signal.requires));
+  assert.ok(docks.exits.some(({ id, condition }) => id === 'lantern-boat' && condition === 'witnesses-escorted'));
+});
+
 test('every level spawn and exit honors exact collision rules and exits remain reachable', () => {
   for (const level of LEVELS) {
     assert.ok(isOpen(level, level.spawn), `${level.id} spawn must be open`);

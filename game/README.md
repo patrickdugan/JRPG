@@ -40,7 +40,7 @@ For the stricter rendered-control-only route probe, run:
 python tools/browser-route-playthrough.py --max-scenes 10 --max-seconds 300
 ```
 
-That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks and keys. A chained same-run receipt has reached 19/60 scenes, 37/215 route entries, 7/23 durable first clears, and 25:39 active play. A recovery checkpoint does not itself contain a browser-error ledger and is not yet a complete route witness. Add `--require-complete` only when running an intentionally long full-route gate.
+That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks and keys. A chained same-run receipt has reached 22/60 scenes, 45/215 route entries, 9/23 durable first clears, and 35:03 active play. A recovery checkpoint does not itself contain a browser-error ledger and is not yet a complete route witness. Add `--require-complete` only when running an intentionally long full-route gate.
 
 Long QA routes can continue across bounded sessions without direct save injection. Export and restore the game's explicitly recovery-only 13-authority bundle through its rendered controls:
 

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "check": "node -e \"const fs=require('node:fs'),p=require('node:path'),cp=require('node:child_process');const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.name==='node_modules'||e.name==='tests'?[]:e.isDirectory()?walk(p.join(d,e.name)):/\\.(?:m?js)$/.test(e.name)?[p.join(d,e.name)]:[]);for(const file of walk('.').sort()){const result=cp.spawnSync(process.execPath,['--check',file],{stdio:'inherit'});if(result.status!==0)process.exit(result.status??1)}\"",
-    "test": "node --test",
+    "test": "node --test --test-concurrency=4",
     "serve": "python -m http.server 8080"
   }
 }
