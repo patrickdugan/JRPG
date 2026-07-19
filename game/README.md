@@ -8,7 +8,7 @@ This folder contains the playable browser runtime and the original small combat 
 - **Intended-route journal:** 13 finite side quests, 18 finite witness chronicles, and four one-circuit repeat milestones use ordered objectives and direct journal travel. Witness testimony advances one line at a time across 152 exact fieldwork nodes; finite rewards settle transactionally and refuse one-time replay.
 - **Campaign Battle (`battle.html?encounter=...`):** a shared multi-party engine for all authored encounters, including bounded Spirit, six live statuses, Tempo/recovery, Pace, typed damage, Guard, Analyze, deterministic enemy AI, 18 objective presentations, nonlethal actions, XP, levels, rewards, equipped loadout modifiers, deterministic attack timelines, and repeat-only 1×/2×/4× Auto-Grind. Victory is durable before Continue appears: advancement, loot/vitals, requested quest or chronicle evidence, field resolution, and clean-run first-clear evidence share one compensating transaction.
 - **Camp & Loadout (`camp.html`):** party vitals, Spirit/status recovery, consumables, shops, buy/sell, gear, forge upgrades, two Vow slots per character, three camp-rest tiers, the original six-character field atlas, 90 finite two-person companion conversations, 30 multi-character party councils, and a 60-record public reading table tied to canonical story beats.
-- **Active-play telemetry:** narrative, exploration, first-clear battles, repeat grind, and camp/menu time accumulate in both a general record and a clean-start, UUID-bound run receipt. Samples suspend after 30 seconds without input. The player-facing credits seal additionally requires completed evidence for all 215 intended-route activities; duration proof still needs 20 active hours from that same run, all 60 scenes, every canonical first clear, and explicit credits completion.
+- **Active-play telemetry:** narrative, exploration, first-clear battles, repeat grind, and camp/menu time accumulate in both a general record and a clean-start, UUID-bound run receipt. Samples suspend after 30 seconds without input. The player-facing credits seal additionally requires completed evidence for all 215 intended-route activities; duration proof still needs 20 active hours from that same run, all 60 scenes, every canonical first clear, and explicit credits completion. Credits can export a signed JSON report containing the current category/chapter timing and every satisfied or missing proof condition.
 
 The rules contract is in [the technical GDD](../docs/02-technical-gdd.md). The prototype names Ren Ishikawa, Elisabet “Lise” Varga, and Father Mateus Avelar in its opening record so the intended narrative relationship is visible without pretending that this one-combatant proof has a full party or story implementation.
 
@@ -31,7 +31,7 @@ For an isolated real-browser pass, install the optional Python `playwright` pack
 python tools/browser-smoke.py
 ```
 
-The harness uses a fresh Chromium context and ephemeral localhost port. It verifies New Game, Campaign/Camp receipt continuity, first-clear speed gating, saved 4× repeat speed, a complete Auto-Grind victory and reward, the all-215 credits gate and explicit seal, keyboard reachability, denied-storage startup, HTTP delivery, and console cleanliness without touching the player's browser profile.
+The harness uses a fresh Chromium context and ephemeral localhost port. It verifies New Game, Campaign/Camp receipt continuity, first-clear speed gating, saved 4× repeat speed, a complete Auto-Grind victory and reward, the all-215 credits gate and explicit seal, a downloaded and parsed evidence report, keyboard reachability, denied-storage startup, HTTP delivery, and console cleanliness without touching the player's browser profile.
 
 To verify every shipped browser file over a real local HTTP boundary without installing another package, run:
 
@@ -39,7 +39,7 @@ To verify every shipped browser file over a real local HTTP boundary without ins
 python tools/static-delivery.py
 ```
 
-The current release manifest contains 82 byte-verified files: five pages, five stylesheets, five controllers, 61 modules, five PNG production assets, and one SVG favicon.
+The current release manifest contains 84 byte-verified files: five pages, five stylesheets, five controllers, 63 modules, five PNG production assets, and one SVG favicon.
 
 ## FP-0 controls
 
@@ -84,7 +84,7 @@ The bounded `canonical-run.mjs` audit proves mechanical completion without prete
 
 The separate `finite-content-run.mjs` witness completes all 13 side quests, 59 objectives, 18 chronicles, 288 testimony acknowledgements, 67 stages, and 31 one-time reward settlements while refusing replay and leaving all four repeat contracts out of the finite count. It deliberately records zero elapsed time. The UUID run receipt can collect the necessary same-run cross-page evidence, but no complete run has yet met the duration-proof gate.
 
-The chronological `required-route-run.mjs` witness combines the canonical and finite systems into the exact 215-activity itinerary. It completes 60 beats, 23 first clears, 13 quests, 18 chronicles, 90 talks, 30 councils, 60 archive records, and four genuine repeat wins through 6,851 public transitions. Contract signature: `fnv1a32:b7b98301`; executable signature: `fnv1a32:16ce2ff5`. Its 1×/2×/4× repeat schedules are measured engine output with invariant decisions and rewards. It records zero elapsed time and honestly leaves the 152-node witness fieldwork catalogue as audited rather than claiming browser traversal.
+The chronological `required-route-run.mjs` witness combines the canonical and finite systems into the exact 215-activity itinerary. It completes 60 beats, 23 first clears, 13 quests, 18 chronicles, 90 talks, 30 councils, 60 archive records, and four genuine repeat wins through 7,580 public transitions. Its witness-fieldwork component starts 67 fresh authored map contexts and reaches all 152 ordered nodes through exactly 729 public `moveFieldBy` steps, with zero coordinate jumps. Contract signature: `fnv1a32:b7b98301`; fieldwork traversal signature: `fnv1a32:18eed422`; executable signature: `fnv1a32:deee52ef`. Its 1×/2×/4× repeat schedules are measured engine output with invariant decisions and rewards. It records zero elapsed time and makes no duration claim from deterministic traversal.
 
 The `camp-conversation-run.mjs` witness completes all 90 finite companion talks in canonical order: 3,644 main-line acknowledgements, 270 selected response acknowledgements, 90 explicit choices, 4,094 successful transitions, and 90 replay refusals. The catalogue contains 83,435 authored words across both branches; the duration audit counts 76,547 words visible on its canonical first-choice path. Its prose-bound catalogue signature is `fnv1a32:3265b9bc`, its completion signature is `fnv1a32:d09e58ef`, and it records zero elapsed time.
 

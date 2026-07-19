@@ -67,6 +67,11 @@ test('fresh valid states expose a locked, zero-credit 215-activity ledger', () =
     archiveRecords: true,
     advancement: true,
   });
+  assert.deepEqual(progress.runBinding, {
+    campConversations: 'route-progress-test',
+    partyCouncils: 'route-progress-test',
+    archiveRecords: 'route-progress-test',
+  });
   assert.deepEqual(progress.metrics.total, {
     requiredActivityCount: 215,
     unlockedActivityCount: 0,

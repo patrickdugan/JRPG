@@ -9,7 +9,7 @@ const routeRun = runRequiredRouteCompletion({ runId: 'required-route-test-0001' 
 test('required route executes every finite activity at its chronological frontier', () => {
   const run = routeRun;
   assert.equal(run.ok, true);
-  assert.equal(run.signature, 'fnv1a32:16ce2ff5');
+  assert.equal(run.signature, 'fnv1a32:deee52ef');
   assert.deepEqual(run.summary, {
     canonicalBeatCount: 60,
     canonicalFirstClearCount: 23,
@@ -35,11 +35,11 @@ test('required route executes every finite activity at its chronological frontie
     repeatGrindMilestoneCount: 4,
     requiredRepeatWinCount: 4,
     rewardSettlementCount: 35,
-    transitionCount: 6851,
+    transitionCount: 7580,
     traceEventCount: 630,
     fieldworkStageCount: 67,
     fieldworkNodeCount: 152,
-    fieldworkTraversalExecuted: false,
+    fieldworkTraversalExecuted: true,
     recordedPlaytimeMs: 0,
     durationProven: false,
   });
@@ -52,6 +52,7 @@ test('required route executes every finite activity at its chronological frontie
     allFiniteActivitiesComplete: true,
     grindMilestonesComplete: true,
     repeatDecisionsAndRewardsSpeedInvariant: true,
+    fieldworkTraversalComplete: true,
     creditsCompletionGateSatisfied: true,
     durationProven: false,
   });
@@ -136,7 +137,11 @@ test('required grind has measured scheduler outputs at exact ratios and no durat
   });
   assert.equal(run.canonical.proof.totalMs, 0);
   assert.equal(run.canonical.proof.durationProven, false);
-  assert.equal(run.fieldworkAudit.traversalExecuted, false);
+  assert.equal(run.fieldworkAudit.traversalExecuted, true);
+  assert.equal(run.fieldworkAudit.traversalSignature, 'fnv1a32:18eed422');
+  assert.equal(run.fieldworkAudit.exactMovementSteps, 729);
+  assert.equal(run.fieldworkAudit.coordinateJumpCount, 0);
+  assert.equal(run.fieldworkAudit.recordedPlaytimeMs, 0);
 });
 
 test('required-route options fail closed on invalid identity and bounds', () => {

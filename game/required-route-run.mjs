@@ -93,6 +93,7 @@ import {
   getWitnessStageFieldworkMetrics,
   validateWitnessStageFieldwork,
 } from './witness-stage-fieldwork.mjs';
+import { runWitnessFieldworkTraversal } from './witness-fieldwork-run.mjs';
 
 export const REQUIRED_ROUTE_RUN_VERSION = 1;
 export const DEFAULT_REQUIRED_ROUTE_RUN_ID = 'required-route-audit-0001';
@@ -650,6 +651,17 @@ export function runRequiredRouteCompletion(options = {}) {
   const archiveMetrics = getArchiveRecordRuntimeMetrics(archiveState);
   const witnessMetrics = getWitnessChronicleRuntimeMetrics(witnessState);
   const fieldworkMetrics = getWitnessStageFieldworkMetrics();
+  const fieldworkTraversal = runWitnessFieldworkTraversal({
+    maxStages: fieldworkMetrics.stageCount,
+    maxMovementSteps: fieldworkMetrics.minimumExactMovementSteps,
+  });
+  if (fieldworkTraversal.summary.completedStageCount !== fieldworkMetrics.stageCount
+    || fieldworkTraversal.summary.completedNodeCount !== fieldworkMetrics.nodeCount
+    || fieldworkTraversal.summary.exactMovementSteps !== fieldworkMetrics.minimumExactMovementSteps
+    || fieldworkTraversal.summary.recordedPlaytimeMs !== 0) {
+    throw new Error('Executable witness fieldwork differs from its canonical catalogue metrics.');
+  }
+  consumeTransitions(fieldworkTraversal.summary.exactMovementSteps, 'exact witness fieldwork traversal');
   if (!campMetrics.complete || !councilMetrics.complete || !archiveMetrics.complete
     || witnessMetrics.completedChronicles !== REQUIRED_ROUTE_METRICS.witnessChronicleCount
     || completedWitnessIds.size !== REQUIRED_ROUTE_METRICS.witnessChronicleCount
@@ -696,7 +708,7 @@ export function runRequiredRouteCompletion(options = {}) {
     traceEventCount: trace.length,
     fieldworkStageCount: fieldworkMetrics.stageCount,
     fieldworkNodeCount: fieldworkMetrics.nodeCount,
-    fieldworkTraversalExecuted: false,
+    fieldworkTraversalExecuted: true,
     recordedPlaytimeMs: 0,
     durationProven: false,
   });
@@ -710,6 +722,7 @@ export function runRequiredRouteCompletion(options = {}) {
       && completedWitnessIds.size === REQUIRED_ROUTE_METRICS.witnessChronicleCount,
     grindMilestonesComplete: repeatWinCount === REQUIRED_ROUTE_METRICS.requiredRepeatWinCount,
     repeatDecisionsAndRewardsSpeedInvariant: repeatSchedules.every((schedule) => schedule.decisionsAndRewardsInvariant),
+    fieldworkTraversalComplete: fieldworkTraversal.ok,
     creditsCompletionGateSatisfied: creditsGate.creditsReady,
     durationProven: false,
   });
@@ -726,7 +739,13 @@ export function runRequiredRouteCompletion(options = {}) {
     ok: true,
     version: REQUIRED_ROUTE_RUN_VERSION,
     runId,
-    signature: signatureFor({ contract: REQUIRED_ROUTE_CONTRACT, trace: frozenTrace, summary, repeatSchedules: frozenRepeatSchedules }),
+    signature: signatureFor({
+      contract: REQUIRED_ROUTE_CONTRACT,
+      trace: frozenTrace,
+      summary,
+      repeatSchedules: frozenRepeatSchedules,
+      fieldworkTraversalSignature: fieldworkTraversal.signature,
+    }),
     contractSignature: signatureFor(REQUIRED_ROUTE_CONTRACT),
     summary,
     completionProof,
@@ -743,8 +762,13 @@ export function runRequiredRouteCompletion(options = {}) {
       stageCount: fieldworkMetrics.stageCount,
       nodeCount: fieldworkMetrics.nodeCount,
       minimumExactMovementSteps: fieldworkMetrics.minimumExactMovementSteps,
-      traversalExecuted: false,
+      traversalSignature: fieldworkTraversal.signature,
+      exactMovementSteps: fieldworkTraversal.summary.exactMovementSteps,
+      coordinateJumpCount: fieldworkTraversal.summary.coordinateJumpCount,
+      recordedPlaytimeMs: fieldworkTraversal.summary.recordedPlaytimeMs,
+      traversalExecuted: true,
     },
+    fieldworkTraversal,
     canonical: {
       signature: canonical.signature,
       summary: canonical.summary,

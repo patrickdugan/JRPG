@@ -179,6 +179,11 @@ export function deriveRequiredRouteProgress({
       archiveRecords: Boolean(validated.archiveRecords),
       advancement: Boolean(validated.advancement),
     },
+    runBinding: {
+      campConversations: validated.campConversations?.runId ?? null,
+      partyCouncils: validated.partyCouncils?.runId ?? null,
+      archiveRecords: validated.archiveRecords?.runId ?? null,
+    },
     unlockedActivityIds: orderedIds(sets.unlocked),
     enteredActivityIds,
     completedActivityIds,

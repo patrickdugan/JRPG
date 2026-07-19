@@ -110,7 +110,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(page.locator("#campConversationSummary").inner_text() == "0 / 90 complete", "Camp talk frontier drifted.")
             require(page.locator("#partyCouncilSummary").inner_text() == "0 / 30 complete", "Council frontier drifted.")
             require(page.locator("#archiveRecordSummary").inner_text() == "0 / 60 read", "Archive frontier drifted.")
-            page.locator('a[href="campaign.html"]').click()
+            page.locator('a[href="campaign.html"]').click(no_wait_after=True)
             page.wait_for_url("**/campaign.html")
             page.locator("#runProofStatus").wait_for()
             require(
@@ -293,6 +293,28 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 credits_final == {"status": "complete", "storyComplete": True, "creditsComplete": True},
                 "Explicit credits did not seal the completed story receipt.",
             )
+            page.locator("#exportEvidence").wait_for()
+            require(not page.locator("#exportEvidence").is_disabled(), "Evidence export stayed disabled for a valid receipt.")
+            with page.expect_download() as download_info:
+                page.locator("#exportEvidence").click()
+            download = download_info.value
+            download_path = download.path()
+            require(download.failure() is None and download_path is not None, "Evidence JSON download failed.")
+            exported_report = json.loads(Path(download_path).read_text(encoding="utf-8"))
+            require(exported_report.get("schemaVersion") == 1, "Evidence export schema drifted.")
+            require(exported_report.get("story", {}).get("creditsComplete") is True, "Evidence export omitted credits completion.")
+            require(exported_report.get("combat", {}).get("complete") is True, "Evidence export omitted first-clear completion.")
+            require(exported_report.get("requiredRoute", {}).get("complete") is True, "Evidence export omitted the 215/215 route.")
+            require(exported_report.get("proof", {}).get("durationProven") is False, "Zero-time browser seed fabricated duration proof.")
+            require(exported_report.get("proof", {}).get("releaseTargetProven") is False, "Zero-time browser seed fabricated release proof.")
+            signature = exported_report.get("signature", "")
+            require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")
+            evidence_export = {
+                "filename": download.suggested_filename,
+                "signature": signature,
+                "routeActivities": exported_report["requiredRoute"]["completedActivityCount"],
+                "durationProven": exported_report["proof"]["durationProven"],
+            }
             context.close()
 
             restricted_errors: list[str] = []
@@ -338,6 +360,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         keyboard_terminal_link=True,
         credits_seed=credits_seed,
         credits_final=credits_final,
+        evidence_export=evidence_export,
         denied_storage_pages=[path for path, _selector in restricted_pages],
         console_errors=[],
         page_errors=[],

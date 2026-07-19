@@ -25,12 +25,18 @@ import {
   createArchiveRecordStorageAdapter,
 } from './archive-record-runtime.mjs';
 import { deriveRequiredRouteProgress } from './required-route-progress.mjs';
+import {
+  createPlaytestEvidenceReport,
+  serializePlaytestEvidenceReport,
+} from './playtest-evidence.mjs';
 
 const creditsStatus = document.querySelector('#creditsStatus');
 const creditsProof = document.querySelector('#creditsProof');
 const routeProof = document.querySelector('#routeProof');
 const creditsActionHint = document.querySelector('#creditsActionHint');
 const sealCredits = document.querySelector('#sealCredits');
+const exportEvidence = document.querySelector('#exportEvidence');
+const evidenceExportHint = document.querySelector('#evidenceExportHint');
 const receiptAdapter = createRunReceiptStorageAdapter();
 const loadedReceipt = receiptAdapter.load();
 let receiptState = loadedReceipt.ok && loadedReceipt.found ? loadedReceipt.state : null;
@@ -74,10 +80,16 @@ function render() {
     creditsProof.textContent = 'Credits remain viewable, but there is no valid run evidence to seal.';
     creditsActionHint.textContent = 'Return to the campaign and start a clean New Game to create verified evidence.';
     sealCredits.disabled = true;
+    exportEvidence.disabled = true;
+    evidenceExportHint.textContent = 'A valid clean-run receipt is required before evidence can be exported.';
     return;
   }
 
   const report = getRunProofReport(receiptState);
+  exportEvidence.disabled = false;
+  evidenceExportHint.textContent = report.durationProven && routeReady
+    ? 'The export contains a signed release-target proof with category, chapter, story, combat, and 215-activity evidence.'
+    : 'The export records current evidence and names every missing condition; it never upgrades incomplete timing or route data.';
   const elapsed = formatPlaytime(report.totalMs);
   creditsProof.textContent = `${report.completedBeatCount}/${report.requiredBeatCount} story scenes · ${report.firstClearCount}/${report.requiredFirstClearCount} canonical first clears · ${elapsed} active play`;
   if (report.creditsComplete) {
@@ -170,6 +182,31 @@ sealCredits.addEventListener('click', () => {
   pendingMs = 0;
   render();
   creditsStatus.focus();
+});
+
+exportEvidence.addEventListener('click', () => {
+  if (!receiptState) return;
+  if (!flushPlaytime()) {
+    evidenceExportHint.textContent = 'Pending active time could not be saved, so no stale evidence file was created.';
+    return;
+  }
+  requiredRouteProgress = loadRequiredRouteProgress();
+  try {
+    const report = createPlaytestEvidenceReport(receiptState, requiredRouteProgress);
+    const blob = new Blob([serializePlaytestEvidenceReport(report)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `bells-playtest-evidence-${report.runId}.json`;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+    render();
+    evidenceExportHint.textContent = `Evidence ${report.signature} exported for run ${report.runId}.`;
+  } catch (error) {
+    evidenceExportHint.textContent = error instanceof Error ? error.message : 'Playtest evidence could not be exported.';
+  }
 });
 
 window.addEventListener('pointerdown', () => { lastActivity = performance.now(); }, { passive: true });

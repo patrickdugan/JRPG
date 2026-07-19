@@ -83,6 +83,9 @@ test('credits are an explicit durable seal boundary after story completion', () 
   assert.match(sealBoundary, /if \(!saved\.ok\)/);
   assert.match(creditsSource, /report\.storyComplete/);
   assert.match(creditsSource, /report\.creditsComplete/);
+  assert.match(creditsSource, /createPlaytestEvidenceReport\(receiptState, requiredRouteProgress\)/);
+  assert.match(creditsSource, /serializePlaytestEvidenceReport\(report\)/);
+  assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']exportEvidence["']/);
 });
 
 test('the intended-route ledger blocks story frontiers and credits from real save evidence', () => {

@@ -49,14 +49,14 @@ The finite-content runner begins from the canonical zero-time result and complet
 | Witness chronicles | 18 / 18 |
 | Testimony acknowledgements | 288 / 288 |
 | Witness stages | 67 / 67 |
-| Witness fieldwork nodes audited | 152 |
-| Minimum fresh-context witness steps | 729 |
+| Witness fieldwork nodes traversed | 152 / 152 |
+| Fresh-context exact movement steps | 729 / 729 |
 | Atomic finite reward settlements | 31 |
 | Replay refusals | 31 completions / 62 refused attempts |
 | Repeat contracts included | 0 |
 | Recorded playtime | 0 ms |
 
-The 729 witness steps are a deterministic minimum across 67 fresh stage contexts. The optional completion runner audits that route catalogue but does not pretend to traverse it or record elapsed time. Its isolated witness excludes repeat contracts; the separate intended-route contract below requires one measured circuit of each of the four repeatable contracts.
+The 729 witness steps are both the deterministic minimum across 67 fresh stage contexts and the exact count executed by `witness-fieldwork-run.mjs` through the public one-step field runtime. The traversal reaches all 152 ordered nodes with zero coordinate jumps and records no elapsed time. Its isolated witness excludes repeat contracts; the separate intended-route contract below requires one measured circuit of each of the four repeatable contracts.
 
 ## Finite companion-conversation completion
 
@@ -129,7 +129,7 @@ Each visible record word belongs to its title, form, custodian, access note, or 
 
 Each activity must be entered when its exact unlock beat becomes available. A witness chronicle may then pause until its later canonical-combat evidence frontier, but it cannot be silently deferred past the route contract. The four repeat milestones require one repeat victory apiece; 1×/2×/4× changes their presentation schedule only, not decisions or rewards. The final credits gate requires completed evidence for all 215 activities, not merely entry, and the run receipt stays active through final-beat camp content until credits are explicitly completed.
 
-The deterministic required-route runner audits chronology, finite completion, replay refusal, the four repeat outcomes, and speed-invariant decisions/rewards while recording zero elapsed time. It does not claim that the 729 catalogued witness-fieldwork steps were interactively traversed, so that remains a human/browser route check rather than fabricated evidence.
+The deterministic required-route runner audits chronology, finite completion, replay refusal, the four repeat outcomes, speed-invariant decisions/rewards, and all 729 exact witness-fieldwork steps while recording zero elapsed time. This proves legal runtime traversal, not human route comprehension, controller feel, or elapsed duration.
 
 ## Quantity-based duration audit
 
@@ -161,10 +161,10 @@ The versioned run receipt begins only beside pristine campaign and advancement s
 - explicit completion of the credits after final-beat content;
 - at least 1,200 active minutes belonging to the same clean run.
 
-A story-complete receipt remains active, allowing final-beat talks, council, and archive reading to accrue before the player explicitly completes credits. A deterministic completion trace cannot satisfy the time requirement because it calls no playtime transition. A locally stored receipt is an internal QA instrument, not cryptographic or independent attestation. A release claim still needs a witnessed human playthrough and chapter-level timing notes.
+A story-complete receipt remains active, allowing final-beat talks, council, and archive reading to accrue before the player explicitly completes credits. A deterministic completion trace cannot satisfy the time requirement because it calls no playtime transition. Credits can export a signed, versioned JSON snapshot with run identity, receipt revision, category/chapter timing, story and first-clear evidence, all six required-route activity types, remaining IDs, and a fail-closed release-target verdict. All three run-bound narrative ledgers must carry the receipt UUID or the combined verdict remains false. The signature detects accidental report drift but is not cryptographic or independent attestation. A release claim still needs a witnessed human playthrough; the export supplies its chapter-level timing record.
 
 ## Remaining proof and production gap
 
-The intended all-finite route clears the arithmetic reference target by 31.686 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. The remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, witness-fieldwork traversal confirmation, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
+The intended all-finite route clears the arithmetic reference target by 31.686 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. Exact witness-fieldwork traversal is now confirmed; the remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
 
 Until a clean receipt meets the gate, all documentation must say **20-hour target unproven**.

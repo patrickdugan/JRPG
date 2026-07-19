@@ -17,7 +17,7 @@ These are authored declarations, not measured playtime and not inputs to the qua
 
 The 18 witness chronicles are a second finite optional-content lane spanning every chapter. Together they contain 67 stages, 288 acknowledged dialogue lines, 18 explicit consequence choices, and 152 ordered exact-tile fieldwork nodes. Twelve stages bind an existing canonical encounter and accept only explicit victory evidence; they never register a new or duplicate fight. Each chronicle settles one reward exactly once across chronicle, advancement, and loadout state.
 
-`game/finite-content-run.mjs` completes every story quest and witness chronicle, audits all 31 atomic reward settlements, and proves that replay/duplicate completion is refused. Its zero-time result is state-transition evidence only. The 729-step witness fieldwork figure is a deterministic minimum-path catalog audit, not observed traversal time.
+`game/finite-content-run.mjs` completes every story quest and witness chronicle, audits all 31 atomic reward settlements, and proves that replay/duplicate completion is refused. The separate `game/witness-fieldwork-run.mjs` starts each of the 67 authored stage contexts at its real spawn and reaches all 152 nodes through 729 public exact-movement transitions. Both results remain zero-time state-transition evidence, not observed traversal time.
 
 ## Story quests
 
