@@ -97,15 +97,28 @@ class PlayerDriver:
         self.page.locator(selector).click(timeout=timeout)
         self.controls += 1
 
-    def scene_key(self) -> str:
-        return " | ".join(
-            self.page.locator(selector).inner_text().strip()
-            for selector in ("#chapterTitle", "#sceneNumber", "#sceneTitle")
+    def on_battle_page(self) -> bool:
+        return (
+            urlparse(self.page.url).path.endswith("battle.html")
+            or self.page.locator("#battleStateBadge").count() > 0
         )
+
+    def scene_key(self) -> str:
+        if self.on_battle_page():
+            return "__BATTLE__"
+        try:
+            return " | ".join(
+                self.page.locator(selector).inner_text().strip()
+                for selector in ("#chapterTitle", "#sceneNumber", "#sceneTitle")
+            )
+        except PlaywrightTimeoutError:
+            if self.on_battle_page():
+                return "__BATTLE__"
+            raise
 
     def checkpoint(self) -> dict[str, object]:
         path = urlparse(self.page.url).path.rsplit("/", 1)[-1]
-        if path == "battle.html":
+        if path == "battle.html" or self.on_battle_page():
             return {
                 "page": path,
                 "encounter": self.page.locator("#encounterTitle").inner_text(),
@@ -292,7 +305,7 @@ class PlayerDriver:
                 )
             interaction.click()
             self.controls += 1
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 return
         raise RouteBlocked("route-marker-loop", "More than 180 route-marker interactions occurred without leaving the field activity.")
 
@@ -316,7 +329,7 @@ class PlayerDriver:
                 )
             interaction.click()
             self.controls += 1
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 return
         raise RouteBlocked("operation-node-loop", "More than 12 operation-node transitions occurred in one scene.")
 
@@ -370,7 +383,8 @@ class PlayerDriver:
         self.page.locator(f'[data-field-move="{vector}"]').click()
         self.controls += 1
         self.field_moves += 1
-        if urlparse(self.page.url).path.endswith("battle.html"):
+        self.page.wait_for_timeout(50)
+        if self.on_battle_page():
             return before
         return self.position()
 
@@ -606,10 +620,10 @@ class PlayerDriver:
             before_due = due.first.get_attribute("data-route-activity-id") if due.count() else None
             before_marker = self.route_marker_target()
             self.start_due_entries()
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 return
             self.finish_published_route_markers(scene_key)
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 return
             due = self.page.locator("#routeDueList [data-route-activity-id]")
             after_due = due.first.get_attribute("data-route-activity-id") if due.count() else None
@@ -822,7 +836,7 @@ class PlayerDriver:
         initial = self.scene_key()
         self.finish_dialogue_and_choices()
         self.drain_due_route_work(initial)
-        if urlparse(self.page.url).path.endswith("battle.html"):
+        if self.on_battle_page():
             self.play_battle()
             # A registered battle is one node inside the current scene
             # operation. Returning to the same scene is expected; continue
@@ -831,7 +845,7 @@ class PlayerDriver:
         self.return_to_story_route_if_available()
 
         self.finish_published_story_operations(initial)
-        if urlparse(self.page.url).path.endswith("battle.html"):
+        if self.on_battle_page():
             self.play_battle_and_resume_scene(initial)
             return
         if self.page.locator("#nextScene").is_enabled():
@@ -839,20 +853,20 @@ class PlayerDriver:
             self.controls += 1
             return
         if self.finish_published_field_objectives(initial):
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 self.play_battle_and_resume_scene(initial)
             return
 
         for _ in range(12):
             self.explore_field_once(initial)
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 self.play_battle_and_resume_scene(initial)
                 return
             if self.scene_key() != initial:
                 return
             self.finish_dialogue_and_choices()
             self.drain_due_route_work(initial)
-            if urlparse(self.page.url).path.endswith("battle.html"):
+            if self.on_battle_page():
                 self.play_battle_and_resume_scene(initial)
                 return
             self.return_to_story_route_if_available()
@@ -861,7 +875,7 @@ class PlayerDriver:
                 self.controls += 1
                 return
             if self.finish_published_field_objectives(initial):
-                if urlparse(self.page.url).path.endswith("battle.html"):
+                if self.on_battle_page():
                     self.play_battle_and_resume_scene(initial)
                 return
             progress = self.page.locator("#fieldProgress").inner_text()
@@ -869,6 +883,8 @@ class PlayerDriver:
                 break
 
         if self.use_ready_exit(initial):
+            if self.on_battle_page():
+                self.play_battle_and_resume_scene(initial)
             return
         if self.page.locator("#launchBattle").get_attribute("aria-disabled") != "true":
             self.page.locator("#launchBattle").click()
@@ -961,6 +977,8 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     budget.check("story frontier")
                     before = driver.scene_key()
                     driver.finish_story_scene()
+                    if driver.on_battle_page():
+                        driver.play_battle_and_resume_scene(before)
                     if urlparse(page.url).path.endswith("credits.html"):
                         evidence["status"] = "complete"
                         break

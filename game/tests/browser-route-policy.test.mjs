@@ -46,6 +46,9 @@ test('exact field navigation balances target distance with bounded revisit press
   assert.match(navigate, /\+ 3 \* visits\.get/);
   assert.match(navigate, /blocked_edges\.add\(\(here, vector\)\)/);
   assert.match(navigate, /self\.move\(vector\)/);
+  assert.match(routeSource, /def on_battle_page\(self\) -> bool:/);
+  assert.match(routeSource, /self\.page\.locator\("#battleStateBadge"\)\.count\(\) > 0/);
+  assert.match(routeSource, /self\.page\.wait_for_timeout\(50\)/);
 });
 
 test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () => {
@@ -57,6 +60,8 @@ test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () 
   assert.match(routeSource, /locator\('a\[href="campaign\.html"\]'\)\.first\.click\(no_wait_after=True\)/);
   assert.match(routeSource, /def play_battle_and_resume_scene\(self, scene_key: str\)/);
   assert.match(routeSource, /if self\.scene_key\(\) == scene_key:\s+self\.finish_story_scene\(\)/);
+  assert.match(routeSource, /if self\.use_ready_exit\(initial\):\s+if self\.on_battle_page\(\):\s+self\.play_battle_and_resume_scene\(initial\)/);
+  assert.match(routeSource, /driver\.finish_story_scene\(\)\s+if driver\.on_battle_page\(\):\s+driver\.play_battle_and_resume_scene\(before\)/);
 });
 
 test('bounded sessions can continue only through labeled rendered recovery controls', () => {
