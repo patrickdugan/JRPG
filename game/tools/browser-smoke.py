@@ -307,6 +307,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(exported_report.get("requiredRoute", {}).get("complete") is True, "Evidence export omitted the 215/215 route.")
             require(exported_report.get("proof", {}).get("durationProven") is False, "Zero-time browser seed fabricated duration proof.")
             require(exported_report.get("proof", {}).get("releaseTargetProven") is False, "Zero-time browser seed fabricated release proof.")
+            require(exported_report.get("proof", {}).get("chapterTimingComplete") is True, "Browser play left unattributed chapter time.")
+            require(exported_report.get("playtime", {}).get("unattributedMs") == 0, "Evidence export contains unattributed playtime.")
             signature = exported_report.get("signature", "")
             require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")
             evidence_export = {
@@ -314,6 +316,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "signature": signature,
                 "routeActivities": exported_report["requiredRoute"]["completedActivityCount"],
                 "durationProven": exported_report["proof"]["durationProven"],
+                "unattributedMs": exported_report["playtime"]["unattributedMs"],
             }
             context.close()
 

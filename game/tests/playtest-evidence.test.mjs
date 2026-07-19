@@ -55,6 +55,8 @@ test('partial playtest exports remain explicit about every missing proof', () =>
   assert.equal(report.requiredRoute.runBoundSourcesMatchReceipt, true);
   assert.equal(report.requiredRoute.requiredActivityCount, 215);
   assert.equal(report.playtime.totalMs, 0);
+  assert.equal(report.playtime.unattributedMs, 0);
+  assert.equal(report.proof.chapterTimingComplete, true);
   assert.equal(report.proof.durationProven, false);
   assert.equal(report.proof.releaseTargetProven, false);
   assert.equal(Object.isFrozen(report), true);
@@ -73,6 +75,8 @@ test('twenty hours alone cannot prove release target without route completion', 
   receipt = completeRunCredits(receipt, receipt.runId).state;
   const report = createPlaytestEvidenceReport(receipt, deriveRequiredRouteProgress(freshAuthorities()));
   assert.equal(report.proof.durationProven, true);
+  assert.equal(report.proof.chapterTimingComplete, false);
+  assert.equal(report.playtime.unattributedMs, 72_000_000);
   assert.equal(report.requiredRoute.complete, false);
   assert.equal(report.proof.releaseTargetProven, false);
 });
@@ -86,7 +90,9 @@ test('the combined release verdict needs same-run 215/215 route and timing proof
     advancementState: createAdvancementState(),
   }).state;
   for (let sample = 0; sample < 1200; sample += 1) {
-    receipt = recordRunPlaytime(receipt, runId, 'narrative', 60_000).state;
+    receipt = recordRunPlaytime(receipt, runId, 'narrative', 60_000, {
+      chapterId: CAMPAIGN.chapters[sample % CAMPAIGN.chapters.length].id,
+    }).state;
   }
   for (const encounter of ENCOUNTERS) receipt = recordRunFirstClear(receipt, runId, encounter.id).state;
   for (const chapter of CAMPAIGN.chapters) {
@@ -106,6 +112,8 @@ test('the combined release verdict needs same-run 215/215 route and timing proof
   assert.equal(report.requiredRoute.completedActivityCount, 215);
   assert.equal(report.requiredRoute.runBoundSourcesMatchReceipt, true);
   assert.equal(report.proof.durationProven, true);
+  assert.equal(report.proof.chapterTimingComplete, true);
+  assert.equal(report.playtime.unattributedMs, 0);
   assert.equal(report.proof.releaseTargetProven, true);
 
   const mixedRun = JSON.parse(JSON.stringify(progress));

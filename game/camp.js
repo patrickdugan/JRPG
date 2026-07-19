@@ -953,7 +953,7 @@ function tick(now) {
     visible: document.visibilityState === 'visible',
   });
   if (!inactive && elapsed) {
-    playtimeState = recordPlaytime(playtimeState, 'menusAndRest', elapsed);
+    playtimeState = recordPlaytime(playtimeState, 'menusAndRest', elapsed, { chapterId: campaignState.current.chapterId });
     queueRunReceiptPlaytime(elapsed);
     playtimeUnsaved += elapsed;
     campPlaytime.textContent = `${formatPlaytime(playtimeState.totalMs)} active play`;
@@ -973,6 +973,7 @@ function flushRunReceiptPlaytime() {
     runReceiptState.runId,
     'menusAndRest',
     runReceiptPendingMs,
+    { chapterId: campaignState.current.chapterId },
   );
   if (!result.ok) return false;
   runReceiptState = result.state;

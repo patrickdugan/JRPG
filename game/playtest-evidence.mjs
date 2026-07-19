@@ -85,6 +85,9 @@ export function createPlaytestEvidenceReport(receipt, requiredRouteProgress) {
     && requiredRouteProgress.creditsGate.creditsReady
     && total.completedActivityCount === total.requiredActivityCount
     && requiredRouteProgress.remainingActivityIds.length === 0;
+  const attributedChapterMs = Object.values(proof.chapterMs).reduce((sum, value) => sum + value, 0);
+  const unattributedMs = proof.totalMs - attributedChapterMs;
+  const chapterTimingComplete = unattributedMs === 0;
   const body = {
     schemaVersion: PLAYTEST_EVIDENCE_SCHEMA_VERSION,
     campaignId: CAMPAIGN.id,
@@ -137,13 +140,16 @@ export function createPlaytestEvidenceReport(receipt, requiredRouteProgress) {
       grindMs: proof.grindMs,
       categories: proof.categories,
       chapterMs: proof.chapterMs,
+      attributedChapterMs,
+      unattributedMs,
     },
     proof: {
       validRunReceipt: proof.valid,
       runScoped: proof.runScoped,
       routeComplete,
+      chapterTimingComplete,
       durationProven: proof.durationProven,
-      releaseTargetProven: proof.durationProven && routeComplete,
+      releaseTargetProven: proof.durationProven && routeComplete && chapterTimingComplete,
     },
   };
   return deepFreeze({ ...body, signature: signatureFor(body) });

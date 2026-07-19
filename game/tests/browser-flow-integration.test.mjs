@@ -85,7 +85,19 @@ test('credits are an explicit durable seal boundary after story completion', () 
   assert.match(creditsSource, /report\.creditsComplete/);
   assert.match(creditsSource, /createPlaytestEvidenceReport\(receiptState, requiredRouteProgress\)/);
   assert.match(creditsSource, /serializePlaytestEvidenceReport\(report\)/);
+  assert.match(creditsSource, /chapterId: campaignState\.current\.chapterId/);
   assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']exportEvidence["']/);
+});
+
+test('all player-facing clean-run timers attach their samples to a canonical chapter', () => {
+  const campaign = pageRecords.find(({ sourceName }) => sourceName === 'campaign.js').source;
+  const battle = pageRecords.find(({ sourceName }) => sourceName === 'battle.js').source;
+  const camp = pageRecords.find(({ sourceName }) => sourceName === 'camp.js').source;
+  const credits = pageRecords.find(({ sourceName }) => sourceName === 'credits.js').source;
+  assert.match(campaign, /recordRunPlaytime\([\s\S]*?chapterId: runReceiptPendingChapterId/);
+  assert.match(battle, /recordRunPlaytime\([\s\S]*?chapterId: encounter\.chapterId/);
+  assert.match(camp, /recordRunPlaytime\([\s\S]*?chapterId: campaignState\.current\.chapterId/);
+  assert.match(credits, /recordRunPlaytime\([\s\S]*?chapterId: campaignState\.current\.chapterId/);
 });
 
 test('the intended-route ledger blocks story frontiers and credits from real save evidence', () => {

@@ -38,6 +38,9 @@ const sealCredits = document.querySelector('#sealCredits');
 const exportEvidence = document.querySelector('#exportEvidence');
 const evidenceExportHint = document.querySelector('#evidenceExportHint');
 const receiptAdapter = createRunReceiptStorageAdapter();
+const campaignAdapter = createLocalStorageAdapter();
+const loadedCampaign = campaignAdapter.load();
+let campaignState = loadedCampaign.state ?? createCampaignState();
 const loadedReceipt = receiptAdapter.load();
 let receiptState = loadedReceipt.ok && loadedReceipt.found ? loadedReceipt.state : null;
 let pendingMs = 0;
@@ -45,7 +48,6 @@ let lastSample = performance.now();
 let lastActivity = lastSample;
 
 function loadRequiredRouteProgress() {
-  const campaign = createLocalStorageAdapter().load();
   const advancement = createAdvancementStorageAdapter().load();
   const quests = createQuestStorageAdapter().load();
   const witnesses = createWitnessChronicleStorageAdapter().load();
@@ -53,7 +55,7 @@ function loadRequiredRouteProgress() {
   const councils = createPartyCouncilStorageAdapter().load();
   const archives = createArchiveRecordStorageAdapter().load();
   return deriveRequiredRouteProgress({
-    campaignState: campaign.state ?? createCampaignState(),
+    campaignState,
     advancementState: advancement.state ?? createAdvancementState(),
     questState: quests.state ?? createQuestState(),
     witnessChronicleState: witnesses.state ?? createWitnessChronicleState(),
@@ -127,7 +129,9 @@ function flushPlaytime() {
     pendingMs = 0;
     return true;
   }
-  const result = recordRunPlaytime(receiptState, receiptState.runId, 'narrative', pendingMs);
+  const result = recordRunPlaytime(receiptState, receiptState.runId, 'narrative', pendingMs, {
+    chapterId: campaignState.current.chapterId,
+  });
   if (!result.ok) return false;
   const saved = receiptAdapter.save(result.state);
   if (!saved.ok) return false;
@@ -217,6 +221,8 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') flushPlaytime();
 });
 window.addEventListener('pageshow', () => {
+  const refreshedCampaign = campaignAdapter.load();
+  if (refreshedCampaign.ok) campaignState = refreshedCampaign.state;
   const refreshedReceipt = receiptAdapter.load();
   receiptState = refreshedReceipt.ok && refreshedReceipt.found ? refreshedReceipt.state : null;
   requiredRouteProgress = loadRequiredRouteProgress();
