@@ -84,3 +84,14 @@ test('device audio preference is not part of recovery or run-proof authority', (
     assert.doesNotMatch(proofSource, /AUDIO_PREFERENCE_KEY/);
   }
 });
+
+test('actual-browser smoke activates and adjusts audio on every responsive surface', () => {
+  const smoke = source('tools/browser-smoke.py');
+  assert.match(smoke, /audio_toggle\.click\(\)/);
+  assert.match(smoke, /aria-pressed'\) === 'true'/);
+  assert.match(smoke, /get_by_label\("Volume", exact=True\)/);
+  assert.match(smoke, /audio_volume\.fill\("0\.35"\)/);
+  assert.match(smoke, /includes\('playing at 35%'\)/);
+  assert.match(smoke, /audio_surfaces\[path\] =/);
+  assert.match(smoke, /audio_surfaces=audio_surfaces/);
+});

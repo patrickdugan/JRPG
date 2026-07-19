@@ -699,6 +699,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             responsive_widths: dict[str, dict[str, int]] = {}
             semantic_audits: dict[str, dict[str, list[str]]] = {}
+            audio_surfaces: dict[str, dict[str, object]] = {}
             for path, selector in responsive_pages:
                 response = responsive_page.goto(f"{base}/{path}", wait_until="domcontentloaded")
                 require(response is not None and response.status == 200, f"Responsive {path} failed delivery.")
@@ -751,6 +752,31 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 require(not semantic["duplicateIds"], f"{path} has duplicate IDs: {semantic['duplicateIds']}.")
                 require(not semantic["unnamedInteractive"], f"{path} has unnamed visible controls: {semantic['unnamedInteractive']}.")
                 require(not semantic["imagesMissingAlt"], f"{path} has images without alt text: {semantic['imagesMissingAlt']}.")
+
+                audio_toggle = responsive_page.locator("#audioToggle")
+                audio_volume = responsive_page.get_by_label("Volume", exact=True)
+                audio_status = responsive_page.locator("#audioStatus")
+                require(audio_toggle.is_visible(), f"{path} hid its sound toggle.")
+                require(audio_volume.is_visible(), f"{path} hid its labelled volume range.")
+                audio_toggle.click()
+                responsive_page.wait_for_function(
+                    "() => document.querySelector('#audioToggle')?.getAttribute('aria-pressed') === 'true'",
+                )
+                playing_status = audio_status.inner_text()
+                require(
+                    "playing at" in playing_status,
+                    f"{path} claimed sound was active without a playing status: {playing_status!r}.",
+                )
+                audio_volume.fill("0.35")
+                responsive_page.wait_for_function(
+                    "() => document.querySelector('#audioVolume')?.getAttribute('aria-valuetext') === '35 percent'"
+                    " && document.querySelector('#audioStatus')?.textContent?.includes('playing at 35%')",
+                )
+                audio_surfaces[path] = {
+                    "aria_pressed": audio_toggle.get_attribute("aria-pressed"),
+                    "aria_valuetext": audio_volume.get_attribute("aria-valuetext"),
+                    "status": audio_status.inner_text(),
+                }
                 responsive_widths[path] = widths
                 semantic_audits[path] = semantic
             responsive_context.close()
@@ -804,6 +830,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         route_action=route_action,
         catalog_seed=catalog_seed,
         catalog_browser=catalog_browser,
+        audio_surfaces=audio_surfaces,
         responsive_widths=responsive_widths,
         semantic_audits=semantic_audits,
         denied_storage_pages=[path for path, _selector in restricted_pages],
