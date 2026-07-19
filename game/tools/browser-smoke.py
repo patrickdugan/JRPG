@@ -391,6 +391,50 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             }
             route_context.close()
 
+            responsive_context = browser.new_context(viewport={"width": 390, "height": 844})
+            responsive_page = responsive_context.new_page()
+            responsive_page.set_default_timeout(20_000)
+            responsive_page.set_default_navigation_timeout(45_000)
+            responsive_page.on(
+                "console",
+                lambda message: console_errors.append({"text": message.text, "url": message.location.get("url", "")})
+                if message.type == "error"
+                else None,
+            )
+            responsive_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            responsive_page.on(
+                "response",
+                lambda response: delivery_errors.append({"status": response.status, "url": response.url})
+                if response.status >= 400
+                else None,
+            )
+            responsive_pages = (
+                ("index.html", ".campaign-link"),
+                ("campaign.html", "#resetCampaign"),
+                (f"battle.html?encounter={encounter_id}", "#encounterTitle"),
+                ("camp.html", "#memberName"),
+                ("credits.html", "#creditsStatus"),
+            )
+            responsive_widths: dict[str, dict[str, int]] = {}
+            for path, selector in responsive_pages:
+                response = responsive_page.goto(f"{base}/{path}", wait_until="domcontentloaded")
+                require(response is not None and response.status == 200, f"Responsive {path} failed delivery.")
+                responsive_page.locator(selector).wait_for()
+                require(responsive_page.locator(selector).is_visible(), f"Responsive {path} hid its primary control.")
+                widths = responsive_page.evaluate(
+                    """() => ({
+                      viewport: window.innerWidth,
+                      document: document.documentElement.scrollWidth,
+                      body: document.body.scrollWidth,
+                    })"""
+                )
+                require(
+                    max(widths["document"], widths["body"]) <= widths["viewport"] + 1,
+                    f"Responsive {path} overflows horizontally: {widths}.",
+                )
+                responsive_widths[path] = widths
+            responsive_context.close()
+
             restricted_errors: list[str] = []
             restricted = browser.new_context(viewport={"width": 1024, "height": 768})
             restricted.add_init_script(
@@ -436,6 +480,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         credits_final=credits_final,
         evidence_export=evidence_export,
         route_action=route_action,
+        responsive_widths=responsive_widths,
         denied_storage_pages=[path for path, _selector in restricted_pages],
         console_errors=[],
         page_errors=[],
