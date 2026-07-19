@@ -1,0 +1,72 @@
+:root {
+  color-scheme: dark;
+  --ink: #070912;
+  --panel: #11172a;
+  --paper: #eee7d6;
+  --muted: #aab3c8;
+  --line: #465474;
+  --gold: #d9b85f;
+  --focus: #fff1a8;
+  --aqua: #83d0ca;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--paper);
+  background: radial-gradient(circle at 50% -10%, #303a58 0, #111629 38%, var(--ink) 78%);
+  font-family: ui-monospace, "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+button, a { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+.credits-shell { width: min(1080px, calc(100% - 28px)); margin: 0 auto; padding: 22px 0 44px; }
+.credits-hero { position: relative; min-height: clamp(310px, 55vw, 570px); overflow: hidden; border: 1px solid #4b5775; border-radius: 8px 8px 0 0; background: #111626; }
+.credits-hero img { position: absolute; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+.hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 8, 17, 0.08) 30%, rgba(6, 8, 17, 0.93) 100%); }
+.hero-copy { position: absolute; right: clamp(20px, 5vw, 62px); bottom: clamp(22px, 6vw, 64px); left: clamp(20px, 5vw, 62px); text-align: center; text-shadow: 0 2px 12px #000; }
+.hero-copy h1 { margin: 0 0 10px; color: #fff3cf; font-size: clamp(1.8rem, 5vw, 3.8rem); letter-spacing: -0.06em; }
+.hero-copy p:last-child { margin: 0; color: #d8deeb; }
+.eyebrow { margin: 0 0 7px; color: var(--gold); font-size: 0.7rem; letter-spacing: 0.15em; }
+
+.credits-ledger { padding: clamp(22px, 5vw, 56px); border: 1px solid #4b5775; border-top: 0; border-radius: 0 0 8px 8px; background: rgba(15, 20, 37, 0.96); }
+.credits-heading { display: flex; align-items: start; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+h2, h3, p { margin-top: 0; }
+h2 { margin-bottom: 0; color: #fff0c7; }
+h3 { margin-bottom: 12px; color: var(--gold); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.receipt-status { max-width: 420px; padding: 8px 10px; border: 1px solid #537f7b; border-radius: 4px; color: #c4ebe6; font-size: 0.7rem; line-height: 1.45; text-align: right; }
+.receipt-status[data-state="sealed"] { border-color: #8f7c43; color: #fff0b5; }
+.receipt-status[data-state="error"] { border-color: #80505a; color: #efbdc5; }
+
+.credit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 52px; padding: 38px 0; }
+.credit-grid section { border-left: 2px solid #354361; padding-left: 18px; }
+.credit-grid p { margin-bottom: 8px; color: var(--muted); font-size: 0.8rem; line-height: 1.55; }
+blockquote { margin: 0 0 38px; padding: 22px clamp(20px, 4vw, 40px); border: 1px solid #4c5b7a; border-left: 4px solid var(--gold); color: #e8e0cd; background: #0d1222; line-height: 1.7; }
+
+.seal-card { display: flex; align-items: center; justify-content: space-between; gap: 26px; padding: 24px; border: 1px solid #5c6c8e; border-radius: 6px; background: linear-gradient(135deg, #18203a, #111729); }
+.seal-card h2 { margin-bottom: 10px; }
+.seal-card p { max-width: 680px; margin-bottom: 7px; color: var(--muted); font-size: 0.76rem; line-height: 1.55; }
+.seal-card .hint { margin-bottom: 0; color: #d6c998; }
+#routeProof[data-state="complete"] { color: #bfe8d8; }
+#routeProof[data-state="incomplete"] { color: #f0c6a1; }
+.seal-card button, .return-actions a { border: 1px solid #746438; border-radius: 4px; color: #fff1be; background: #29243a; text-decoration: none; }
+.seal-card button { flex: 0 0 min(290px, 100%); padding: 13px 16px; cursor: pointer; }
+.seal-card button:hover:not(:disabled), .return-actions a:hover { border-color: var(--gold); background: #34304b; }
+.seal-card button:disabled { cursor: not-allowed; opacity: 0.55; }
+.return-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding-top: 28px; }
+.return-actions a { padding: 10px 14px; }
+
+@media (max-width: 720px) {
+  .credits-heading, .seal-card { align-items: stretch; flex-direction: column; }
+  .receipt-status { max-width: none; text-align: left; }
+  .credit-grid { grid-template-columns: 1fr; }
+  .seal-card button { flex-basis: auto; width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

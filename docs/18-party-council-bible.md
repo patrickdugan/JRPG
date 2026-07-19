@@ -126,7 +126,7 @@ This witness proves deterministic reachability, authored-line coverage, canonica
 
 The shipped quantities can enter the duration audit's explicit reading-speed and interaction-time formulas. Arithmetic under those assumptions is an estimate, even when every input count and calculation is exact. It is not observed duration.
 
-The DOM-free witness deliberately records zero timed minutes, sets `durationClaimed` to false, and sets `durationProven` to false. Zero is not an estimate that councils take no time; it is proof that the automated state witness did not fabricate elapsed time. Only a valid clean human run receipt with recorded active play can support a duration claim for the game or this content in context.
+The DOM-free witness deliberately records zero timed minutes, sets `durationClaimed` to false, and sets `durationProven` to false. Zero is not an estimate that councils take no time; it is proof that the automated state witness did not fabricate elapsed time. All 30 councils belong to the 215-activity intended route, including final-beat pre-credits content; credits cannot seal until their completed evidence is present. Only a valid clean human run receipt with at least 1,200 active minutes and explicit credits completion can support the 20-hour claim.
 
 ## Writing review checklist
 

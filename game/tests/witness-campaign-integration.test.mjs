@@ -132,7 +132,7 @@ test('campaign interaction requires the selected on-map marker and hands exact c
   ]) assert.match(interaction, exactParameter);
   assert.match(interaction, /parameters\.set\(\s*['\"]chronicleChoice['\"]\s*,\s*selectedWitnessChoiceId\s*\)/);
   assert.match(interaction, /advanceWitnessChronicle\(\s*witnessChronicleState\s*,\s*chronicle\.id\s*,\s*stage\.id\s*,\s*evidence\s*\)/);
-  assert.match(interaction, /witnessAdapter\.save\(\s*witnessChronicleState\s*\)/);
+  assert.match(interaction, /commitStateChanges\('Witness stage',[\s\S]*?adapter: witnessAdapter[\s\S]*?nextState: advanced\.state/);
 });
 
 test('New Game and browser lifecycle clear, reload, and save witness progress', () => {
@@ -141,10 +141,10 @@ test('New Game and browser lifecycle clear, reload, and save witness progress', 
     "resetCampaign.addEventListener('click'",
     "window.addEventListener('keydown'",
   );
-  assert.match(reset, /witnessChronicleState\s*=\s*createWitnessChronicleState\(\s*\)/);
+  assert.match(reset, /const\s+nextWitnessState\s*=\s*createWitnessChronicleState\(\s*\)/);
   assert.match(reset, /selectedWitnessChronicleId\s*=\s*null/);
   assert.match(reset, /selectedWitnessChoiceId\s*=\s*null/);
-  assert.match(reset, /witnessAdapter\.clear\(\s*\)/);
+  assert.match(reset, /commitStateChanges\('New Game',[\s\S]*?adapter: witnessAdapter[\s\S]*?nextState: nextWitnessState/);
 
   const pageshow = sourceSection(
     campaignSource,
@@ -166,7 +166,7 @@ test('New Game and browser lifecycle clear, reload, and save witness progress', 
 
 test('battle consumes the exact handoff and advances a chronicle only after victory', () => {
   const names = importedNames(battleSource, './witness-chronicle-runtime.mjs');
-  for (const required of ['advanceWitnessChronicle', 'createWitnessChronicleState', 'createWitnessChronicleStorageAdapter']) {
+  for (const required of ['advanceWitnessChronicle', 'createWitnessChronicleStorageAdapter', 'getWitnessChronicleProgress']) {
     assert.equal(names.has(required), true, `battle.js must import ${required}`);
   }
   assert.match(battleSource, /const\s+requestedChronicleId\s*=\s*query\.get\(\s*['\"]chronicle['\"]\s*\)/);
@@ -176,9 +176,9 @@ test('battle consumes the exact handoff and advances a chronicle only after vict
   const victorySettlement = sourceSection(
     battleSource,
     'function recordVictoryIfNeeded',
-    'function recordBattleVitalsIfNeeded',
+    'function renderSpeedControls',
   );
-  const victoryGate = victorySettlement.search(/if\s*\(\s*snapshot\.result\s*!==\s*['\"]victory['\"]\s*\|\|\s*rewardRecorded\s*\)\s*return/);
+  const victoryGate = victorySettlement.search(/if\s*\(\s*snapshot\.result\s*!==\s*['\"]victory['\"]\s*\)\s*return false;[\s\S]*?if\s*\(\s*rewardRecorded\s*\)\s*return true/);
   const witnessAdvance = victorySettlement.indexOf('advanceWitnessChronicle(');
   assert.ok(victoryGate >= 0 && witnessAdvance > victoryGate, 'chronicle advancement must remain inside victory settlement');
   assert.match(victorySettlement, /if\s*\(\s*requestedChronicleId\s*&&\s*requestedChronicleStageId\s*\)/);
@@ -186,7 +186,9 @@ test('battle consumes the exact handoff and advances a chronicle only after vict
   assert.match(victorySettlement, /victory\s*:\s*true/);
   assert.match(victorySettlement, /requestedChronicleChoiceId\s*\?\s*\{\s*choiceId\s*:\s*requestedChronicleChoiceId\s*\}\s*:\s*\{\s*\}/);
   assert.match(victorySettlement, /advanceWitnessChronicle\(\s*[\s\S]*?requestedChronicleId\s*,\s*requestedChronicleStageId\s*,\s*evidence\s*,?\s*\)/);
-  assert.match(victorySettlement, /if\s*\(\s*witnessResult\.ok\s*\)\s*\{\s*witnessAdapter\.save\(\s*witnessResult\.state\s*\)/);
+  assert.match(victorySettlement, /if\s*\(\s*witnessResult\.ok\s*\)\s*\{\s*changes\.push\(\{\s*id:\s*['"]witness['"]/);
+  assert.match(victorySettlement, /commitPersistenceTransaction\(changes\.map/);
+  assert.doesNotMatch(victorySettlement, /witnessAdapter\.save\(/);
   assert.equal((battleSource.match(/advanceWitnessChronicle\s*\(/g) ?? []).length, 1, 'battle must have one guarded chronicle transition site');
 });
 

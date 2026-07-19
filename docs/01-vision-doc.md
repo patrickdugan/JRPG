@@ -4,7 +4,7 @@
 
 **Working title:** *Bells of the Black Chrysanthemum*<br>
 **Format:** 2D pixel-art, party-based turn RPG<br>
-**Target scope:** 20–25 hour campaign; 6 permanent party members; 3 active combatants<br>
+**Target scope:** an intended 20-hour first-play route; 6 permanent party members; 3 active combatants. Duration audit v8 estimates the 60-beat canonical story at about 5.14 reference hours and the complete 215-activity route at about 20.53 reference hours; human timing remains unproven.<br>
 **Setting:** An alternate, historically informed Japan in 1622, during the early Edo transition and the widening suppression of Christianity. The country, rulers, clans, villages, and supernatural events are fictional. This is not a retelling of any real martyrdom, historical persecution, film, game, or person.
 
 ### One-sentence pitch

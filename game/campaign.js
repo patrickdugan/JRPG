@@ -1,7 +1,7 @@
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
-import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter } from './content/sidequests.mjs';
+import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter, getSideQuest } from './content/sidequests.mjs';
 import {
   WITNESS_CHRONICLES,
   getWitnessChronicle,
@@ -10,9 +10,16 @@ import {
 import { getSceneDirection } from './content/scene-direction.mjs';
 import { getFullDialogue } from './content/full-dialogue.mjs';
 import { getSceneOperation } from './content/scene-operations.mjs';
+import { getCampConversation } from './content/camp-conversations.mjs';
+import { getPartyCouncil } from './content/party-councils.mjs';
+import { getArchiveRecord } from './content/archive-records.mjs';
 import { DEFAULT_CAMP_CONVERSATION_SAVE_KEY } from './camp-conversation-contract.mjs';
 import { DEFAULT_PARTY_COUNCIL_SAVE_KEY } from './party-council-contract.mjs';
 import { DEFAULT_ARCHIVE_RECORD_SAVE_KEY } from './archive-record-contract.mjs';
+import { createBrowserRunUuid } from './browser-runtime.mjs';
+import { commitPersistenceTransaction, stateSaveStep } from './persistence-transaction.mjs';
+import { getRequiredRouteActivity } from './required-route-contract.mjs';
+import { deriveRequiredRouteProgress } from './required-route-progress.mjs';
 import {
   createAdvancementState,
   createAdvancementStorageAdapter,
@@ -106,6 +113,18 @@ import {
   createSceneOperationStorageAdapter,
   getSceneOperationProgress,
 } from './scene-operation-runtime.mjs';
+import {
+  createCampConversationState,
+  createCampConversationStorageAdapter,
+} from './camp-conversation-runtime.mjs';
+import {
+  createPartyCouncilState,
+  createPartyCouncilStorageAdapter,
+} from './party-council-runtime.mjs';
+import {
+  createArchiveRecordState,
+  createArchiveRecordStorageAdapter,
+} from './archive-record-runtime.mjs';
 
 const chapterList = document.querySelector('#chapterList');
 const completionLabel = document.querySelector('#completionLabel');
@@ -172,6 +191,9 @@ const witnessStageInstruction = document.querySelector('#witnessStageInstruction
 const witnessDialogue = document.querySelector('#witnessDialogue');
 const witnessChoiceDeck = document.querySelector('#witnessChoiceDeck');
 const witnessStageHint = document.querySelector('#witnessStageHint');
+const routeSummary = document.querySelector('#routeSummary');
+const routeStatus = document.querySelector('#routeStatus');
+const routeDueList = document.querySelector('#routeDueList');
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
@@ -187,6 +209,15 @@ let playtimeState = loadedPlaytime.ok ? loadedPlaytime.state : createPlaytimeSta
 const runReceiptAdapter = createRunReceiptStorageAdapter();
 const loadedRunReceipt = runReceiptAdapter.load();
 let runReceiptState = loadedRunReceipt.ok && loadedRunReceipt.found ? loadedRunReceipt.state : null;
+const campConversationAdapter = createCampConversationStorageAdapter();
+const loadedCampConversations = campConversationAdapter.load();
+let campConversationState = loadedCampConversations.state ?? createCampConversationState(runReceiptState?.runId);
+const partyCouncilAdapter = createPartyCouncilStorageAdapter();
+const loadedPartyCouncils = partyCouncilAdapter.load();
+let partyCouncilState = loadedPartyCouncils.state ?? createPartyCouncilState(runReceiptState?.runId);
+const archiveRecordAdapter = createArchiveRecordStorageAdapter();
+const loadedArchiveRecords = archiveRecordAdapter.load();
+let archiveRecordState = loadedArchiveRecords.state ?? createArchiveRecordState(runReceiptState?.runId);
 const questAdapter = createQuestStorageAdapter();
 const loadedQuests = questAdapter.load();
 let questState = loadedQuests.ok ? loadedQuests.state : createQuestState();
@@ -276,8 +307,19 @@ function currentBeatIndex() {
   return getChapter().beats.findIndex((beat) => beat.id === getBeat().id);
 }
 
-function persistCampaignState() {
-  saveAdapter.save(campaignState);
+function persistenceFailureText(action, result) {
+  const rollback = result.rollbackComplete
+    ? 'No live progress was changed.'
+    : `Storage rollback also failed for ${result.rollbackFailedIds.join(', ')}; reload before continuing.`;
+  return `${action} could not be saved (${result.failedId}). ${rollback}`;
+}
+
+function commitStateChanges(action, changes, { report = true } = {}) {
+  const result = commitPersistenceTransaction(changes.map(({ id, adapter, previousState, nextState }) => (
+    stateSaveStep(id, adapter, previousState, nextState, { supportsOverwriteRollback: true })
+  )));
+  if (!result.ok && report) fieldFeedback.textContent = persistenceFailureText(action, result);
+  return result;
 }
 
 function questContext() {
@@ -289,8 +331,8 @@ function witnessChronicleContext() {
 }
 
 function settleReadyQuests() {
-  let changed = false;
   const completedTitles = [];
+  const failures = [];
   for (const quest of ALL_OPTIONAL_QUESTS) {
     const progress = getQuestProgress(questState, quest.id);
     if (!progress?.readyToComplete) continue;
@@ -305,21 +347,29 @@ function settleReadyQuests() {
       nextAdvancementState = advancementReward.state;
       nextLoadoutState = loadoutReward.state;
     }
+    const changes = [
+      { id: 'quest', adapter: questAdapter, previousState: questState, nextState: result.state },
+      ...(result.reward ? [
+        { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: nextAdvancementState },
+        { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: nextLoadoutState },
+      ] : []),
+    ];
+    const persisted = commitStateChanges(`Side-story reward for ${quest.title}`, changes, { report: false });
+    if (!persisted.ok) {
+      failures.push(persistenceFailureText(`Side-story reward for ${quest.title}`, persisted));
+      continue;
+    }
     questState = result.state;
     advancementState = nextAdvancementState;
     loadoutState = nextLoadoutState;
-    advancementAdapter.save(advancementState);
-    loadoutAdapter.save(loadoutState);
-    changed = true;
     completedTitles.push(quest.title);
   }
-  if (changed) questAdapter.save(questState);
-  return completedTitles;
+  return Object.freeze({ completedTitles: Object.freeze(completedTitles), failures: Object.freeze(failures) });
 }
 
 function settleReadyWitnessChronicles() {
-  let changed = false;
   const completedTitles = [];
+  const failures = [];
   for (const entry of WITNESS_CHRONICLES) {
     const progress = getWitnessChronicleProgress(witnessChronicleState, entry.id);
     if (!progress?.readyToComplete) continue;
@@ -328,20 +378,25 @@ function settleReadyWitnessChronicles() {
     const advancementReward = grantRewardBundle(advancementState, result.reward);
     const loadoutReward = grantInventory(loadoutState, result.reward);
     if (!advancementReward.ok || !loadoutReward.ok) continue;
+    const persisted = commitStateChanges(`Witness reward for ${entry.title}`, [
+      { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: result.state },
+      { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: advancementReward.state },
+      { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: loadoutReward.state },
+    ], { report: false });
+    if (!persisted.ok) {
+      failures.push(persistenceFailureText(`Witness reward for ${entry.title}`, persisted));
+      continue;
+    }
     witnessChronicleState = result.state;
     advancementState = advancementReward.state;
     loadoutState = loadoutReward.state;
-    advancementAdapter.save(advancementState);
-    loadoutAdapter.save(loadoutState);
-    changed = true;
     completedTitles.push(entry.title);
     if (selectedWitnessChronicleId === entry.id) {
       selectedWitnessChronicleId = null;
       selectedWitnessChoiceId = null;
     }
   }
-  if (changed) witnessAdapter.save(witnessChronicleState);
-  return completedTitles;
+  return Object.freeze({ completedTitles: Object.freeze(completedTitles), failures: Object.freeze(failures) });
 }
 
 function sampleCampaignPlaytime(now) {
@@ -372,9 +427,9 @@ function clearPendingRunReceiptPlaytime() {
 function flushRunReceiptPlaytime() {
   if (!runReceiptState || runReceiptState.status !== 'active') {
     clearPendingRunReceiptPlaytime();
-    return false;
+    return Object.freeze({ ok: true, saved: false });
   }
-  if (runReceiptPendingMs === 0) return false;
+  if (runReceiptPendingMs === 0) return Object.freeze({ ok: true, saved: false });
   const result = recordRunPlaytime(
     runReceiptState,
     runReceiptState.runId,
@@ -382,11 +437,12 @@ function flushRunReceiptPlaytime() {
     runReceiptPendingMs,
     { chapterId: runReceiptPendingChapterId },
   );
-  if (!result.ok) return false;
+  if (!result.ok) return Object.freeze({ ok: false, code: result.code ?? 'receipt-transition-failed' });
+  const saved = runReceiptAdapter.save(result.state);
+  if (!saved.ok) return Object.freeze({ ok: false, code: saved.code ?? 'receipt-write-failed' });
   runReceiptState = result.state;
   clearPendingRunReceiptPlaytime();
-  runReceiptAdapter.save(runReceiptState);
-  return true;
+  return Object.freeze({ ok: true, saved: true });
 }
 
 function queueRunReceiptPlaytime(category, elapsedMs, chapterId) {
@@ -418,21 +474,31 @@ function sampleFieldRuntime(now) {
   const tickMs = fieldTickAccumulator;
   fieldTickAccumulator = 0;
   const result = advanceFieldTime(fieldRuntimeState, tickMs, { flags: externalFieldFlags() });
-  fieldRuntimeState = result.state;
   const important = result.events.find((event) => event.type === 'hazard-hit' || event.type === 'hazard-warning');
   if (important?.type === 'hazard-hit') {
-    const consequence = applyFieldHazardConsequence(important);
-    fieldFeedback.textContent = `Hazard ${important.hazardId} triggered${consequence ? `; ${consequence}` : ''}. The last safe tile is preserved.`;
+    const consequence = getFieldHazardConsequence(important, loadoutState);
+    const changes = [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: result.state },
+      ...(consequence.state !== loadoutState ? [
+        { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: consequence.state },
+      ] : []),
+    ];
+    if (!commitStateChanges('Field hazard', changes).ok) return;
+    fieldRuntimeState = result.state;
+    loadoutState = consequence.state;
+    fieldFeedback.textContent = `Hazard ${important.hazardId} triggered${consequence.message ? `; ${consequence.message}` : ''}. The last safe tile is preserved.`;
+    return;
   }
-  else if (important?.cue) fieldFeedback.textContent = important.cue;
+  fieldRuntimeState = result.state;
+  if (important?.cue) fieldFeedback.textContent = important.cue;
   if (fieldRuntimeState.revision % 20 === 0) fieldAdapter.save(fieldRuntimeState);
 }
 
-function applyFieldHazardConsequence(event) {
+function getFieldHazardConsequence(event, state) {
   const effect = event.effect ?? {};
   const leaderId = getChapter().party?.[0] ?? 'ren';
-  const vitals = loadoutState.vitals?.[leaderId];
-  if (!vitals) return '';
+  const vitals = state.vitals?.[leaderId];
+  if (!vitals) return Object.freeze({ state, message: '' });
   const patch = {};
   if (effect.type === 'fieldDamage' || effect.type === 'damage' || effect.type === 'physicalDamage') {
     const percent = effect.percentMaxHp ?? 10;
@@ -440,13 +506,14 @@ function applyFieldHazardConsequence(event) {
     patch.hp = Math.max(minimum, vitals.hp - Math.ceil(vitals.maxHp * (percent / 100)));
   }
   if (effect.status) patch.statuses = [...new Set([...vitals.statuses, effect.status])];
-  if (!Object.keys(patch).length) return '';
-  const result = setMemberVitals(loadoutState, leaderId, patch);
-  if (!result.ok) return '';
-  loadoutState = result.state;
-  loadoutAdapter.save(loadoutState);
-  const hpLoss = vitals.hp - loadoutState.vitals[leaderId].hp;
-  return `${CAMPAIGN.cast?.[leaderId]?.name ?? leaderId} loses ${hpLoss} HP${effect.status ? ` and gains ${effect.status}` : ''}`;
+  if (!Object.keys(patch).length) return Object.freeze({ state, message: '' });
+  const result = setMemberVitals(state, leaderId, patch);
+  if (!result.ok) return Object.freeze({ state, message: '' });
+  const hpLoss = vitals.hp - result.state.vitals[leaderId].hp;
+  return Object.freeze({
+    state: result.state,
+    message: `${CAMPAIGN.cast?.[leaderId]?.name ?? leaderId} loses ${hpLoss} HP${effect.status ? ` and gains ${effect.status}` : ''}`,
+  });
 }
 
 function isMultiSelectBeat(beat) {
@@ -775,10 +842,12 @@ function ensureFieldPosition(level) {
   const changed = current.levelId !== level.id || current.beatId !== beatId;
   const next = enterField(fieldRuntimeState, level.id, beatId, { flags: externalFieldFlags() });
   if (next !== fieldRuntimeState) {
+    if (!commitStateChanges('Field entry', [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: next },
+    ]).ok) return Object.freeze({ ok: false, changed: false });
     fieldRuntimeState = next;
-    fieldAdapter.save(fieldRuntimeState);
   }
-  return changed;
+  return Object.freeze({ ok: true, changed });
 }
 
 function describeFieldPosition(level, prefix = 'Field position') {
@@ -799,7 +868,6 @@ function fieldEventMessage(level, result) {
 }
 
 function launchPlacedEncounter(event, beat) {
-  fieldAdapter.save(fieldRuntimeState);
   const parameters = new URLSearchParams({
     encounter: event.encounterId,
     return: 'campaign.html',
@@ -815,16 +883,27 @@ function attemptFieldMove(dx, dy) {
   const chapter = getChapter();
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
-  ensureFieldPosition(level);
+  if (!ensureFieldPosition(level).ok) return;
   const result = moveFieldBy(fieldRuntimeState, dx, dy, { flags: externalFieldFlags() });
-  fieldRuntimeState = result.state;
-  if (result.moved) fieldWalkUntil = performance.now() + 320;
-  fieldAdapter.save(fieldRuntimeState);
-  fieldFeedback.textContent = fieldEventMessage(level, result);
+  let nextLoadoutState = loadoutState;
+  const consequenceMessages = [];
   for (const event of result.events.filter((entry) => entry.type === 'hazard-hit')) {
-    const consequence = applyFieldHazardConsequence(event);
-    if (consequence) fieldFeedback.textContent += ` ${consequence}.`;
+    const consequence = getFieldHazardConsequence(event, nextLoadoutState);
+    nextLoadoutState = consequence.state;
+    if (consequence.message) consequenceMessages.push(consequence.message);
   }
+  const changes = [
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: result.state },
+    ...(nextLoadoutState !== loadoutState ? [
+      { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: nextLoadoutState },
+    ] : []),
+  ];
+  if (!commitStateChanges('Field movement', changes).ok) return;
+  fieldRuntimeState = result.state;
+  loadoutState = nextLoadoutState;
+  if (result.moved) fieldWalkUntil = performance.now() + 320;
+  fieldFeedback.textContent = fieldEventMessage(level, result);
+  if (consequenceMessages.length) fieldFeedback.textContent += ` ${consequenceMessages.join(' ')}.`;
   const encounterEvent = result.events.find((event) => event.type === 'encounter-triggered');
   if (encounterEvent) {
     launchPlacedEncounter(encounterEvent, beat);
@@ -847,7 +926,7 @@ function drawMap(level, encounter, now) {
   const blocked = asPositions(level?.blocked ?? []);
   const exits = asPositions(level?.exits ?? []);
   const spawn = asPositions(Array.isArray(level?.spawn) ? level.spawn : level?.spawn ? [level.spawn] : []);
-  ensureFieldPosition(level);
+  if (!ensureFieldPosition(level).ok) return;
   const cell = Math.floor(Math.min(mapCanvas.width / width, mapCanvas.height / height));
   const originX = Math.floor((mapCanvas.width - width * cell) / 2);
   const originY = Math.floor((mapCanvas.height - height * cell) / 2);
@@ -1325,24 +1404,45 @@ function updateFieldDashboard(level) {
       : status.exit ? `${status.exit.ready ? 'Use' : 'Inspect'} exit (X)` : 'Nothing nearby (X)';
 }
 
-function moveCampaignThroughExit(transition) {
+function moveCampaignThroughExit(transition, enteredFieldState) {
   const currentIndex = allBeatRecords.findIndex((record) => record.beat.id === getBeat().id);
   const targetIndex = allBeatRecords.findIndex((record, index) => index > currentIndex
     && getLevelForBeat(chapters.find((chapter) => chapter.id === record.chapterId), record.beat).id === transition.destinationLevelId);
   if (targetIndex === currentIndex + 1 && currentBeatBattlesCleared()) {
-    fieldRuntimeState = grantFieldFlags(fieldRuntimeState, fieldRouteFlag());
-    fieldAdapter.save(fieldRuntimeState);
-    advance(1);
-    return true;
+    const routedFieldState = grantFieldFlags(enteredFieldState, fieldRouteFlag());
+    if (currentSceneOperationComplete() && currentNarrativeComplete() && currentChoicesComplete()) {
+      const storyAdvanced = persistCurrentBeatCompletion({ nextFieldState: routedFieldState, action: 'Route and scene completion' });
+      return Object.freeze({
+        ok: storyAdvanced,
+        storyAdvanced,
+      });
+    }
+    if (!commitStateChanges('Route completion', [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: routedFieldState },
+    ]).ok) return Object.freeze({ ok: false, storyAdvanced: false });
+    fieldRuntimeState = routedFieldState;
+    render();
+    fieldFeedback.textContent = 'Route exit recorded. Finish the remaining dialogue or decision before advancing the scene.';
+    return Object.freeze({ ok: true, storyAdvanced: false });
   }
   const target = targetIndex >= 0 ? allBeatRecords[targetIndex] : null;
   if (target && getUnlockedBeatIds(campaignState).includes(target.beat.id)) {
-    campaignState = moveToBeat(campaignState, target.chapterId, target.beat.id);
-    persistCampaignState();
+    const nextCampaignState = moveToBeat(campaignState, target.chapterId, target.beat.id);
+    if (!commitStateChanges('Unlocked route transition', [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: enteredFieldState },
+      { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+    ]).ok) return Object.freeze({ ok: false, storyAdvanced: false });
+    fieldRuntimeState = enteredFieldState;
+    campaignState = nextCampaignState;
     render();
-    return true;
+    return Object.freeze({ ok: true, storyAdvanced: true });
   }
-  return false;
+  if (!commitStateChanges('Field exit', [
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: enteredFieldState },
+  ]).ok) return Object.freeze({ ok: false, storyAdvanced: false });
+  fieldRuntimeState = enteredFieldState;
+  render();
+  return Object.freeze({ ok: true, storyAdvanced: false });
 }
 
 function setKeyArt(chapter) {
@@ -1388,13 +1488,85 @@ function renderBattleLaunch(beat, beatBattleState) {
   battleStatus.textContent = `${clearedHere}/${encounters.length} scene encounters cleared · ${winCount} wins here · ${summary.speedMultiplier}× battle speed`;
 }
 
+function requiredRouteProgress() {
+  return deriveRequiredRouteProgress({
+    campaignState,
+    questState,
+    witnessChronicleState,
+    campConversationState,
+    partyCouncilState,
+    archiveRecordState,
+    advancementState,
+  });
+}
+
+function requiredRouteActivityLabel(activityId) {
+  const activity = getRequiredRouteActivity(activityId);
+  if (!activity) return activityId;
+  if (activity.type === 'finite-sidequest' || activity.type === 'repeat-grind-milestone') {
+    return getSideQuest(activity.questId)?.title ?? activity.id;
+  }
+  if (activity.type === 'witness-chronicle') return getWitnessChronicle(activity.id)?.title ?? activity.id;
+  if (activity.type === 'camp-conversation') return getCampConversation(activity.id)?.title ?? activity.id;
+  if (activity.type === 'party-council') return getPartyCouncil(activity.id)?.title ?? activity.id;
+  if (activity.type === 'archive-record') return getArchiveRecord(activity.id)?.title ?? activity.id;
+  return activity.id;
+}
+
+function renderRequiredRouteLedger(progress) {
+  const totals = progress.metrics.total;
+  routeSummary.textContent = `${totals.completedActivityCount} / ${totals.requiredActivityCount} complete`;
+  const invalidSources = Object.entries(progress.sourceValidity)
+    .filter(([, valid]) => !valid)
+    .map(([source]) => source);
+  if (invalidSources.length) {
+    routeStatus.dataset.state = 'due';
+    routeStatus.textContent = `Route evidence is unavailable for: ${invalidSources.join(', ')}. Progress fails closed.`;
+  } else if (progress.creditsGate.creditsReady) {
+    routeStatus.dataset.state = 'ready';
+    routeStatus.textContent = 'All 215 activities are complete. The intended route is ready for credits.';
+  } else if (totals.entryDueActivityCount > 0) {
+    routeStatus.dataset.state = 'due';
+    routeStatus.textContent = `${totals.entryDueActivityCount} unlocked ${totals.entryDueActivityCount === 1 ? 'entry must' : 'entries must'} be started before the next story frontier closes.`;
+  } else if (totals.dueActivityCount > 0) {
+    routeStatus.dataset.state = 'ready';
+    routeStatus.textContent = `${totals.dueActivityCount} entered ${totals.dueActivityCount === 1 ? 'activity remains' : 'activities remain'} finite; story may continue, but credits will wait.`;
+  } else {
+    routeStatus.dataset.state = 'ready';
+    routeStatus.textContent = 'No intended-route entry is due at this story frontier.';
+  }
+
+  const entryMode = progress.entryDueActivityIds.length > 0;
+  const highlighted = (entryMode ? progress.entryDueActivityIds : progress.dueActivityIds).slice(0, 5);
+  const nodes = highlighted.map((activityId) => {
+    const item = document.createElement('li');
+    item.textContent = `${entryMode ? 'Start' : 'Finish'} · ${requiredRouteActivityLabel(activityId)}`;
+    return item;
+  });
+  const hiddenCount = (entryMode ? progress.entryDueActivityIds.length : progress.dueActivityIds.length) - highlighted.length;
+  if (hiddenCount > 0) {
+    const more = document.createElement('li');
+    more.className = 'more';
+    more.textContent = `+ ${hiddenCount} more in the route ledger`;
+    nodes.push(more);
+  }
+  if (!nodes.length) {
+    const empty = document.createElement('li');
+    empty.className = 'more';
+    empty.textContent = totals.lockedActivityCount > 0 ? 'Continue the story to unlock the next entries.' : 'The ledger is complete.';
+    nodes.push(empty);
+  }
+  routeDueList.replaceChildren(...nodes);
+}
+
 function render() {
-  const newlyCompletedQuests = settleReadyQuests();
-  const newlyCompletedWitnessChronicles = settleReadyWitnessChronicles();
+  const questSettlements = settleReadyQuests();
+  const witnessSettlements = settleReadyWitnessChronicles();
   const chapter = getChapter();
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
-  const enteredNewLevel = ensureFieldPosition(level);
+  const fieldEntry = ensureFieldPosition(level);
+  const enteredNewLevel = fieldEntry.ok && fieldEntry.changed;
   const beatBattleState = getBeatEncounterState(beat);
   const encounter = beatBattleState.selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
   const chapterIndex = currentChapterIndex();
@@ -1421,10 +1593,15 @@ function render() {
   const fieldRouteCleared = currentFieldRouteComplete();
   const narrativeCleared = currentNarrativeComplete(beat);
   const choicesCleared = currentChoicesComplete(beat);
-  nextScene.disabled = isCampaignComplete(campaignState) || !operationCleared || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared;
+  const campaignComplete = isCampaignComplete(campaignState);
+  const routeProgress = requiredRouteProgress();
+  const routeEntryCleared = routeProgress.metrics.total.entryDueActivityCount === 0;
+  nextScene.disabled = !campaignComplete
+    && (!routeEntryCleared || !operationCleared || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared);
   nextScene.textContent = isCampaignComplete(campaignState)
-    ? 'Campaign complete'
-    : !operationCleared ? 'Complete the scene operation'
+    ? 'View credits & seal run →'
+    : !routeEntryCleared ? `Start ${routeProgress.metrics.total.entryDueActivityCount} route ${routeProgress.metrics.total.entryDueActivityCount === 1 ? 'entry' : 'entries'}`
+      : !operationCleared ? 'Complete the scene operation'
       : !battlesCleared ? 'Clear encounter to continue'
       : !narrativeCleared ? 'Finish the scene dialogue'
         : !choicesCleared ? 'Record the scene decision'
@@ -1439,15 +1616,19 @@ function render() {
   renderChoices(beat);
   renderQuestJournal(chapter);
   renderWitnessChronicleJournal(chapter);
+  renderRequiredRouteLedger(routeProgress);
   renderChapterList();
   renderBattleLaunch(beat, beatBattleState);
   const completionNotices = [
-    newlyCompletedQuests.length ? `Side story complete: ${newlyCompletedQuests.join(', ')}.` : '',
-    newlyCompletedWitnessChronicles.length ? `Witness chronicle complete: ${newlyCompletedWitnessChronicles.join(', ')}.` : '',
+    questSettlements.completedTitles.length ? `Side story complete: ${questSettlements.completedTitles.join(', ')}.` : '',
+    witnessSettlements.completedTitles.length ? `Witness chronicle complete: ${witnessSettlements.completedTitles.join(', ')}.` : '',
   ].filter(Boolean);
-  fieldFeedback.textContent = completionNotices.length
-    ? `${completionNotices.join(' ')} One-time rewards recorded.`
-    : describeFieldPosition(level, enteredNewLevel ? 'Entered field' : 'Field position');
+  const persistenceFailures = [...questSettlements.failures, ...witnessSettlements.failures];
+  fieldFeedback.textContent = persistenceFailures.length
+    ? persistenceFailures.join(' ')
+    : completionNotices.length
+      ? `${completionNotices.join(' ')} One-time rewards recorded.`
+      : describeFieldPosition(level, enteredNewLevel ? 'Entered field' : 'Field position');
   drawMap(level, encounter, animationNow);
 }
 
@@ -1462,6 +1643,11 @@ function renderRunProofStatus() {
   if (report.durationProven) {
     runProofStatus.dataset.proof = 'proven';
     runProofStatus.textContent = `20-hour run proven · ${elapsed} · ${report.requiredBeatCount} scenes · ${report.requiredFirstClearCount} first clears`;
+    return;
+  }
+  if (report.storyComplete && !report.creditsComplete) {
+    runProofStatus.dataset.proof = 'active';
+    runProofStatus.textContent = `Story complete · ${elapsed} · receipt active until credits finish`;
     return;
   }
   if (report.status === 'complete') {
@@ -1486,11 +1672,61 @@ function choose(choiceId) {
   const choice = (beat.choices ?? []).find((entry) => entry.id === choiceId);
   if (!choice) return;
   playtimeCategory = 'narrative';
-  campaignState = isMultiSelectBeat(beat)
+  const nextCampaignState = isMultiSelectBeat(beat)
     ? appendChoice(campaignState, choice.id)
     : selectChoice(campaignState, choice.id);
-  persistCampaignState();
+  if (!commitStateChanges('Scene decision', [
+    { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+  ]).ok) return;
+  campaignState = nextCampaignState;
   render();
+}
+
+function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene completion' } = {}) {
+  const routeProgress = requiredRouteProgress();
+  if (routeProgress.metrics.total.entryDueActivityCount > 0) {
+    fieldFeedback.textContent = `${action} is paused until the ${routeProgress.metrics.total.entryDueActivityCount} unlocked intended-route ${routeProgress.metrics.total.entryDueActivityCount === 1 ? 'entry is' : 'entries are'} started.`;
+    return false;
+  }
+  const completedBeatId = getBeat().id;
+  const completedCount = campaignState.completedBeatIds.length;
+  const flushed = flushRunReceiptPlaytime();
+  if (!flushed.ok) {
+    fieldFeedback.textContent = `${action} is paused because active run time could not be saved.`;
+    return false;
+  }
+  const nextCampaignState = completeCurrentBeat(campaignState);
+  let persistedFieldState = nextFieldState ?? fieldRuntimeState;
+  if (!isCampaignComplete(nextCampaignState)) {
+    const nextChapter = getCurrentChapter(nextCampaignState);
+    const nextBeat = getCurrentBeat(nextCampaignState);
+    const nextLevel = getLevelForBeat(nextChapter, nextBeat);
+    persistedFieldState = enterField(persistedFieldState, nextLevel.id, nextBeat.id, { flags: externalFieldFlags() });
+  }
+  let nextRunReceiptState = runReceiptState;
+  if (nextCampaignState.completedBeatIds.length > completedCount && runReceiptState) {
+    const receiptResult = recordRunBeatCompletion(runReceiptState, runReceiptState.runId, completedBeatId);
+    if (!receiptResult.ok) {
+      fieldFeedback.textContent = `${action} could not update the clean-run receipt (${receiptResult.code}).`;
+      return false;
+    }
+    nextRunReceiptState = receiptResult.state;
+  }
+  const changes = [
+    ...(persistedFieldState !== fieldRuntimeState ? [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: persistedFieldState },
+    ] : []),
+    { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+    ...(nextRunReceiptState !== runReceiptState ? [
+      { id: 'run-receipt', adapter: runReceiptAdapter, previousState: runReceiptState, nextState: nextRunReceiptState },
+    ] : []),
+  ];
+  if (!commitStateChanges(action, changes).ok) return false;
+  fieldRuntimeState = persistedFieldState;
+  campaignState = nextCampaignState;
+  runReceiptState = nextRunReceiptState;
+  render();
+  return true;
 }
 
 function advance(direction) {
@@ -1499,12 +1735,28 @@ function advance(direction) {
   if (direction < 0) {
     if (currentIndex <= 0) return;
     const previous = allBeatRecords[currentIndex - 1];
-    campaignState = moveToBeat(campaignState, previous.chapterId, previous.beat.id);
-    persistCampaignState();
+    const nextCampaignState = moveToBeat(campaignState, previous.chapterId, previous.beat.id);
+    if (!commitStateChanges('Previous-scene navigation', [
+      { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+    ]).ok) return;
+    campaignState = nextCampaignState;
     render();
     return;
   }
-  if (isCampaignComplete(campaignState)) return;
+  if (isCampaignComplete(campaignState)) {
+    const flushed = flushRunReceiptPlaytime();
+    if (!flushed.ok) {
+      fieldFeedback.textContent = 'Credits navigation is paused because active run time could not be saved.';
+      return;
+    }
+    window.location.href = 'credits.html';
+    return;
+  }
+  const routeProgress = requiredRouteProgress();
+  if (routeProgress.metrics.total.entryDueActivityCount > 0) {
+    fieldFeedback.textContent = `Start the ${routeProgress.metrics.total.entryDueActivityCount} unlocked intended-route ${routeProgress.metrics.total.entryDueActivityCount === 1 ? 'entry' : 'entries'} shown in the route ledger before closing this story frontier.`;
+    return;
+  }
   if (!currentSceneOperationComplete()) {
     fieldFeedback.textContent = 'Complete every ordered field node in this scene operation before advancing the story.';
     return;
@@ -1525,19 +1777,7 @@ function advance(direction) {
     fieldFeedback.textContent = 'Complete this beat’s authored field route and use its terminal exit before advancing.';
     return;
   }
-  const completedBeatId = getBeat().id;
-  const completedCount = campaignState.completedBeatIds.length;
-  flushRunReceiptPlaytime();
-  campaignState = completeCurrentBeat(campaignState);
-  if (campaignState.completedBeatIds.length > completedCount && runReceiptState) {
-    const receiptResult = recordRunBeatCompletion(runReceiptState, runReceiptState.runId, completedBeatId);
-    if (receiptResult.ok) {
-      runReceiptState = receiptResult.state;
-      runReceiptAdapter.save(runReceiptState);
-    }
-  }
-  persistCampaignState();
-  render();
+  persistCurrentBeatCompletion();
 }
 
 chapterList.addEventListener('click', (event) => {
@@ -1548,11 +1788,15 @@ chapterList.addEventListener('click', (event) => {
   const target = chapter?.beats.filter((beat) => unlocked.has(beat.id)).at(-1);
   if (!chapter || !target) return;
   playtimeCategory = 'narrative';
-  campaignState = moveToBeat(campaignState, chapter.id, target.id);
+  const nextCampaignState = moveToBeat(campaignState, chapter.id, target.id);
   const storyLevel = getLevelForBeat(chapter, target);
-  fieldRuntimeState = enterField(fieldRuntimeState, storyLevel.id, target.id, { flags: externalFieldFlags() });
-  persistCampaignState();
-  fieldAdapter.save(fieldRuntimeState);
+  const nextFieldState = enterField(fieldRuntimeState, storyLevel.id, target.id, { flags: externalFieldFlags() });
+  if (!commitStateChanges('Chapter navigation', [
+    { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: nextFieldState },
+  ]).ok) return;
+  campaignState = nextCampaignState;
+  fieldRuntimeState = nextFieldState;
   render();
 });
 
@@ -1565,8 +1809,10 @@ continueDialogue.addEventListener('click', () => {
   playtimeCategory = 'narrative';
   const beat = getBeat();
   const result = advanceNarrative(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
+  if (!commitStateChanges('Dialogue progress', [
+    { id: 'narrative', adapter: narrativeAdapter, previousState: narrativeState, nextState: result.state },
+  ]).ok) return;
   narrativeState = result.state;
-  narrativeAdapter.save(narrativeState);
   render();
 });
 
@@ -1581,8 +1827,11 @@ questList.addEventListener('click', (event) => {
       return;
     }
     playtimeCategory = 'exploration';
-    fieldRuntimeState = enterField(fieldRuntimeState, destination.id, getBeat().id, { flags: externalFieldFlags() });
-    fieldAdapter.save(fieldRuntimeState);
+    const nextFieldState = enterField(fieldRuntimeState, destination.id, getBeat().id, { flags: externalFieldFlags() });
+    if (!commitStateChanges('Side-story travel', [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: nextFieldState },
+    ]).ok) return;
+    fieldRuntimeState = nextFieldState;
     render();
     fieldFeedback.textContent = `Side-story route: ${progress.currentObjective.instruction} (${destination.name}).`;
     return;
@@ -1593,8 +1842,10 @@ questList.addEventListener('click', (event) => {
     fieldFeedback.textContent = result.reason;
     return;
   }
+  if (!commitStateChanges('Side-story acceptance', [
+    { id: 'quest', adapter: questAdapter, previousState: questState, nextState: result.state },
+  ]).ok) return;
   questState = result.state;
-  questAdapter.save(questState);
   fieldFeedback.textContent = `Side story accepted: ${result.progress.quest.title}. ${result.progress.currentObjective?.instruction ?? ''}`;
   renderQuestJournal(getChapter());
 });
@@ -1603,6 +1854,8 @@ witnessList.addEventListener('click', (event) => {
   const button = event.target.closest('[data-witness-chronicle-id]');
   if (!button) return;
   const chronicleId = button.dataset.witnessChronicleId;
+  const previousWitnessState = witnessChronicleState;
+  let nextWitnessState = witnessChronicleState;
   let progress = getWitnessChronicleProgress(witnessChronicleState, chronicleId);
   if (progress?.status !== 'active') {
     playtimeCategory = 'narrative';
@@ -1611,8 +1864,7 @@ witnessList.addEventListener('click', (event) => {
       fieldFeedback.textContent = accepted.reason;
       return;
     }
-    witnessChronicleState = accepted.state;
-    witnessAdapter.save(witnessChronicleState);
+    nextWitnessState = accepted.state;
     progress = accepted.progress;
   }
   if (!progress?.currentStage) return;
@@ -1621,11 +1873,19 @@ witnessList.addEventListener('click', (event) => {
     fieldFeedback.textContent = `The witness destination ${progress.currentStage.mapId} is not authored.`;
     return;
   }
+  const nextFieldState = enterField(fieldRuntimeState, destination.id, getWitnessFieldContextId(progress), { flags: externalFieldFlags() });
+  const changes = [
+    ...(nextWitnessState !== previousWitnessState ? [
+      { id: 'witness', adapter: witnessAdapter, previousState: previousWitnessState, nextState: nextWitnessState },
+    ] : []),
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: nextFieldState },
+  ];
+  if (!commitStateChanges('Witness-route entry', changes).ok) return;
+  witnessChronicleState = nextWitnessState;
+  fieldRuntimeState = nextFieldState;
   selectedWitnessChronicleId = chronicleId;
   selectedWitnessChoiceId = null;
   playtimeCategory = 'exploration';
-  fieldRuntimeState = enterField(fieldRuntimeState, destination.id, getWitnessFieldContextId(progress), { flags: externalFieldFlags() });
-  fieldAdapter.save(fieldRuntimeState);
   render();
   fieldFeedback.textContent = `Witness route: ${progress.currentStage.activity.instruction} (${destination.name}). Follow the violet marker.`;
 });
@@ -1647,10 +1907,13 @@ returnStoryRoute.addEventListener('click', () => {
   const chapter = getChapter();
   const beat = getBeat();
   const destination = getLevelForBeat(chapter, beat);
-  fieldRuntimeState = enterField(fieldRuntimeState, destination.id, beat.id, { flags: externalFieldFlags() });
+  const nextFieldState = enterField(fieldRuntimeState, destination.id, beat.id, { flags: externalFieldFlags() });
+  if (!commitStateChanges('Story-route return', [
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: nextFieldState },
+  ]).ok) return;
+  fieldRuntimeState = nextFieldState;
   selectedWitnessChronicleId = null;
   selectedWitnessChoiceId = null;
-  fieldAdapter.save(fieldRuntimeState);
   render();
   fieldFeedback.textContent = `Returned to the main story route at ${destination.name}.`;
 });
@@ -1667,7 +1930,7 @@ interactFieldButton.addEventListener('click', () => {
   const chapter = getChapter();
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
-  ensureFieldPosition(level);
+  if (!ensureFieldPosition(level).ok) return;
   const sceneOperationMarker = getActiveSceneOperationMarker(level, beat);
   if (sceneOperationMarker && onExactFieldPosition(fieldPosition(), sceneOperationMarker.position)) {
     const result = advanceSceneOperation(
@@ -1685,8 +1948,10 @@ interactFieldButton.addEventListener('click', () => {
         sceneOperation: beat.id,
         sceneOperationNode: sceneOperationMarker.node.id,
       });
-      fieldAdapter.save(fieldRuntimeState);
-      sceneOperationAdapter.save(sceneOperationState);
+      if (!commitStateChanges('Scene-operation battle handoff', [
+        { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: fieldRuntimeState },
+        { id: 'scene-operation', adapter: sceneOperationAdapter, previousState: sceneOperationState, nextState: sceneOperationState },
+      ]).ok) return;
       window.location.href = `battle.html?${parameters.toString()}`;
       return;
     }
@@ -1694,8 +1959,10 @@ interactFieldButton.addEventListener('click', () => {
       fieldFeedback.textContent = result.reason;
       return;
     }
+    if (!commitStateChanges('Scene operation', [
+      { id: 'scene-operation', adapter: sceneOperationAdapter, previousState: sceneOperationState, nextState: result.state },
+    ]).ok) return;
     sceneOperationState = result.state;
-    sceneOperationAdapter.save(sceneOperationState);
     render();
     fieldFeedback.textContent = result.beatCompleted
       ? `Scene operation complete: all ${result.progress.nodeCount} finite field nodes are recorded.`
@@ -1711,8 +1978,10 @@ interactFieldButton.addEventListener('click', () => {
         fieldFeedback.textContent = acknowledged.reason;
         return;
       }
+      if (!commitStateChanges('Witness testimony', [
+        { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: acknowledged.state },
+      ]).ok) return;
       witnessChronicleState = acknowledged.state;
-      witnessAdapter.save(witnessChronicleState);
       playtimeCategory = 'narrative';
       renderWitnessChronicleJournal(chapter);
       updateFieldDashboard(level);
@@ -1733,8 +2002,10 @@ interactFieldButton.addEventListener('click', () => {
         chronicleStage: stage.id,
       });
       if (selectedWitnessChoiceId) parameters.set('chronicleChoice', selectedWitnessChoiceId);
-      fieldAdapter.save(fieldRuntimeState);
-      witnessAdapter.save(witnessChronicleState);
+      if (!commitStateChanges('Witness battle handoff', [
+        { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: fieldRuntimeState },
+        { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: witnessChronicleState },
+      ]).ok) return;
       window.location.href = `battle.html?${parameters.toString()}`;
       return;
     }
@@ -1744,8 +2015,10 @@ interactFieldButton.addEventListener('click', () => {
       fieldFeedback.textContent = advanced.reason;
       return;
     }
+    if (!commitStateChanges('Witness stage', [
+      { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: advanced.state },
+    ]).ok) return;
     witnessChronicleState = advanced.state;
-    witnessAdapter.save(witnessChronicleState);
     selectedWitnessChoiceId = null;
     render();
     fieldFeedback.textContent = advanced.progress.readyToComplete
@@ -1763,6 +2036,10 @@ interactFieldButton.addEventListener('click', () => {
         quest: marker.quest.id,
         objective: marker.objective.id,
       });
+      if (!commitStateChanges('Side-story battle handoff', [
+        { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: fieldRuntimeState },
+        { id: 'quest', adapter: questAdapter, previousState: questState, nextState: questState },
+      ]).ok) return;
       window.location.href = `battle.html?${parameters.toString()}`;
       return;
     }
@@ -1771,8 +2048,10 @@ interactFieldButton.addEventListener('click', () => {
       fieldFeedback.textContent = result.reason;
       return;
     }
+    if (!commitStateChanges('Side-story objective', [
+      { id: 'quest', adapter: questAdapter, previousState: questState, nextState: result.state },
+    ]).ok) return;
     questState = result.state;
-    questAdapter.save(questState);
     fieldFeedback.textContent = `Side-story objective complete: ${marker.objective.instruction}`;
     render();
     return;
@@ -1797,20 +2076,27 @@ interactFieldButton.addEventListener('click', () => {
         : `Interaction unavailable: ${result.code}.`;
       return;
     }
-    fieldRuntimeState = result.state;
-    fieldAdapter.save(fieldRuntimeState);
     const event = result.events[0];
     let lootText = '';
+    let nextLoadoutState = loadoutState;
     if (!result.repeated && event?.reward) {
       const loot = grantInventory(loadoutState, { items: [{ name: event.reward, quantity: 1 }] });
       if (loot.ok) {
-        loadoutState = loot.state;
-        loadoutAdapter.save(loadoutState);
+        nextLoadoutState = loot.state;
         lootText = loot.receipt.unknown.length
           ? ` ${event.reward} is recorded as uncatalogued evidence.`
           : ` ${event.reward} was added to camp inventory.`;
       }
     }
+    const changes = [
+      { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: result.state },
+      ...(nextLoadoutState !== loadoutState ? [
+        { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: nextLoadoutState },
+      ] : []),
+    ];
+    if (!commitStateChanges('Field interaction', changes).ok) return;
+    fieldRuntimeState = result.state;
+    loadoutState = nextLoadoutState;
     fieldFeedback.textContent = result.repeated
       ? `${nearby.id} was already completed.${event?.text ? ` ${event.text}` : ''}`
       : `${nearby.id}: ${event?.text ?? event?.result ?? event?.reward ?? `${event?.action ?? 'interaction'} complete`}.${lootText}`;
@@ -1831,10 +2117,9 @@ interactFieldButton.addEventListener('click', () => {
       fieldFeedback.textContent = `Exit locked: ${result.condition ?? status.exit.condition ?? 'route objective incomplete'}.`;
       return;
     }
-    fieldRuntimeState = result.state;
-    fieldAdapter.save(fieldRuntimeState);
-    if (!moveCampaignThroughExit(result.transition)) {
-      render();
+    const transitionResult = moveCampaignThroughExit(result.transition, result.state);
+    if (!transitionResult.ok) return;
+    if (!transitionResult.storyAdvanced) {
       fieldFeedback.textContent = `Entered ${getLevel(result.transition.destinationLevelId)?.name ?? result.transition.destinationLevelId}. The current story beat continues across this route.`;
     }
     return;
@@ -1846,44 +2131,51 @@ previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
   if (!window.confirm('Start a clean New Game? This clears story, scene operations, battles, quests, companion conversations, party councils, public archive readings, camp inventory, field positions, playtime, and the prior run receipt.')) return;
-  if (typeof globalThis.crypto?.randomUUID !== 'function') {
-    fieldFeedback.textContent = 'A verified New Game requires crypto.randomUUID support in this browser.';
-    return;
-  }
   const nextCampaignState = resetCampaignState();
   const nextAdvancementState = createAdvancementState();
+  const nextQuestState = createQuestState();
+  const nextNarrativeState = createNarrativeState();
+  const nextWitnessState = createWitnessChronicleState();
+  const nextSceneOperationState = createSceneOperationState();
+  const nextLoadoutState = createLoadoutState();
+  const nextPlaytimeState = createPlaytimeState();
+  const level = getLevelForBeat(getCurrentChapter(nextCampaignState), getCurrentBeat(nextCampaignState));
+  const nextFieldState = createPersistentFieldState({ levelId: level.id, beatId: getCurrentBeat(nextCampaignState).id });
   const receipt = createRunReceipt({
-    runId: globalThis.crypto.randomUUID(),
+    runId: createBrowserRunUuid(),
     campaignState: nextCampaignState,
     advancementState: nextAdvancementState,
   });
-  if (!receipt.ok || !runReceiptAdapter.save(receipt.state).ok) {
+  if (!receipt.ok) {
     fieldFeedback.textContent = 'The verified run receipt could not be created; the current game was left intact.';
     return;
   }
+  const resetPersisted = commitStateChanges('New Game', [
+    { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+    { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: nextAdvancementState },
+    { id: 'quest', adapter: questAdapter, previousState: questState, nextState: nextQuestState },
+    { id: 'narrative', adapter: narrativeAdapter, previousState: narrativeState, nextState: nextNarrativeState },
+    { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: nextWitnessState },
+    { id: 'scene-operation', adapter: sceneOperationAdapter, previousState: sceneOperationState, nextState: nextSceneOperationState },
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: nextFieldState },
+    { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: nextLoadoutState },
+    { id: 'playtime', adapter: playtimeAdapter, previousState: playtimeState, nextState: nextPlaytimeState },
+    { id: 'run-receipt', adapter: runReceiptAdapter, previousState: runReceiptState, nextState: receipt.state },
+  ]);
+  if (!resetPersisted.ok) return;
   campaignState = nextCampaignState;
   advancementState = nextAdvancementState;
   runReceiptState = receipt.state;
   clearPendingRunReceiptPlaytime();
-  questState = createQuestState();
-  narrativeState = createNarrativeState();
-  witnessChronicleState = createWitnessChronicleState();
-  sceneOperationState = createSceneOperationState();
+  questState = nextQuestState;
+  narrativeState = nextNarrativeState;
+  witnessChronicleState = nextWitnessState;
+  sceneOperationState = nextSceneOperationState;
   selectedWitnessChronicleId = null;
   selectedWitnessChoiceId = null;
-  loadoutState = createLoadoutState();
-  playtimeState = createPlaytimeState();
-  const level = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
-  fieldRuntimeState = createPersistentFieldState({ levelId: level.id, beatId: getCurrentBeat(campaignState).id });
-  saveAdapter.clear();
-  advancementAdapter.clear();
-  questAdapter.clear();
-  narrativeAdapter.clear();
-  witnessAdapter.clear();
-  sceneOperationAdapter.clear();
-  fieldAdapter.clear();
-  loadoutAdapter.clear();
-  playtimeAdapter.clear();
+  loadoutState = nextLoadoutState;
+  playtimeState = nextPlaytimeState;
+  fieldRuntimeState = nextFieldState;
   try {
     globalThis.localStorage?.removeItem(DEFAULT_CAMP_CONVERSATION_SAVE_KEY);
   } catch {
@@ -1899,6 +2191,9 @@ resetCampaign.addEventListener('click', () => {
   } catch {
     // Independent save namespaces are cleared independently so one failure cannot mask another.
   }
+  campConversationState = createCampConversationState(receipt.state.runId);
+  partyCouncilState = createPartyCouncilState(receipt.state.runId);
+  archiveRecordState = createArchiveRecordState(receipt.state.runId);
   playtimeLastSample = performance.now();
   playtimeLastActivity = playtimeLastSample;
   playtimeUnsavedMs = 0;
@@ -1977,6 +2272,12 @@ window.addEventListener('pageshow', (event) => {
   if (refreshedPlaytime.ok) playtimeState = refreshedPlaytime.state;
   const refreshedRunReceipt = runReceiptAdapter.load();
   runReceiptState = refreshedRunReceipt.ok && refreshedRunReceipt.found ? refreshedRunReceipt.state : null;
+  const refreshedCampConversations = campConversationAdapter.load();
+  if (refreshedCampConversations.ok) campConversationState = refreshedCampConversations.state;
+  const refreshedPartyCouncils = partyCouncilAdapter.load();
+  if (refreshedPartyCouncils.ok) partyCouncilState = refreshedPartyCouncils.state;
+  const refreshedArchiveRecords = archiveRecordAdapter.load();
+  if (refreshedArchiveRecords.ok) archiveRecordState = refreshedArchiveRecords.state;
   clearPendingRunReceiptPlaytime();
   playtimeLastSample = performance.now();
   playtimeLastActivity = playtimeLastSample;

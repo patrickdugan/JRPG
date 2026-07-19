@@ -241,9 +241,13 @@ export function getNextBattleActionAt({
 } = {}) {
   const now = safeNowMs(nowMs);
   const delayedAt = now + (Number.isFinite(stepDelayMs) ? Math.max(0, stepDelayMs) : 0);
-  if (!Number.isFinite(animationEndsAt)) return delayedAt;
-  let dueAt = Math.max(delayedAt, animationEndsAt);
-  if (nextIsEnemy) dueAt = Math.max(dueAt, createEnemyIntentSchedule(animationEndsAt, speed).dueAt);
+  const presentationBoundary = Number.isFinite(animationEndsAt)
+    ? Math.max(now, safeNowMs(animationEndsAt))
+    : now;
+  let dueAt = Math.max(delayedAt, presentationBoundary);
+  if (nextIsEnemy) {
+    dueAt = Math.max(dueAt, createEnemyIntentSchedule(presentationBoundary, speed).dueAt);
+  }
   return dueAt;
 }
 

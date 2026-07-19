@@ -10,6 +10,7 @@
 
 import { CAMPAIGN } from './content/campaign.mjs';
 import { ENCOUNTERS } from './content/encounters.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import {
   createAdvancementState,
   validateAdvancementPayload,
@@ -25,8 +26,9 @@ import {
   validatePlaytimePayload,
 } from './playtime.mjs';
 
-export const RUN_RECEIPT_SCHEMA_VERSION = 1;
+export const RUN_RECEIPT_SCHEMA_VERSION = 2;
 export const DEFAULT_RUN_RECEIPT_SAVE_KEY = `${CAMPAIGN.id}.run-receipt.v${RUN_RECEIPT_SCHEMA_VERSION}`;
+export const LEGACY_RUN_RECEIPT_SAVE_KEY = `${CAMPAIGN.id}.run-receipt.v1`;
 export const RUN_RECEIPT_STATUSES = Object.freeze({ ACTIVE: 'active', COMPLETE: 'complete' });
 
 const RUN_KEYS = Object.freeze([
@@ -35,11 +37,13 @@ const RUN_KEYS = Object.freeze([
   'runId',
   'cleanStart',
   'status',
+  'creditsCompleted',
   'playtime',
   'completedBeatIds',
   'firstClearEncounterIds',
   'revision',
 ]);
+const LEGACY_RUN_KEYS = Object.freeze(RUN_KEYS.filter((key) => key !== 'creditsCompleted'));
 const BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
 const ENCOUNTER_IDS = Object.freeze(ENCOUNTERS.map((encounter) => encounter.id));
 const ENCOUNTER_ID_SET = new Set(ENCOUNTER_IDS);
@@ -60,19 +64,18 @@ function validRunId(runId) {
   return typeof runId === 'string' && /^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$/.test(runId);
 }
 
-function statusFor(completedBeatIds) {
-  return completedBeatIds.length === BEAT_IDS.length
-    ? RUN_RECEIPT_STATUSES.COMPLETE
-    : RUN_RECEIPT_STATUSES.ACTIVE;
+function statusFor(creditsCompleted) {
+  return creditsCompleted ? RUN_RECEIPT_STATUSES.COMPLETE : RUN_RECEIPT_STATUSES.ACTIVE;
 }
 
-function buildState({ runId, playtime, completedBeatIds, firstClearEncounterIds, revision }) {
+function buildState({ runId, creditsCompleted = false, playtime, completedBeatIds, firstClearEncounterIds, revision }) {
   return Object.freeze({
     schemaVersion: RUN_RECEIPT_SCHEMA_VERSION,
     campaignId: CAMPAIGN.id,
     runId,
     cleanStart: true,
-    status: statusFor(completedBeatIds),
+    status: statusFor(creditsCompleted),
+    creditsCompleted,
     playtime,
     completedBeatIds: Object.freeze([...completedBeatIds]),
     firstClearEncounterIds: Object.freeze([...firstClearEncounterIds]),
@@ -116,6 +119,7 @@ export function createRunReceipt({ runId, campaignState, advancementState } = {}
   if (errors.length) return failure('invalid-run-start', errors);
   return success(buildState({
     runId,
+    creditsCompleted: false,
     playtime: createPlaytimeState(),
     completedBeatIds: [],
     firstClearEncounterIds: [],
@@ -157,11 +161,56 @@ function validateFirstClearIds(ids, errors) {
 export function validateRunReceiptPayload(payload) {
   const errors = [];
   if (!isPlainObject(payload)) return failure('invalid-run-receipt', ['Run receipt must be a plain object.']);
+  if (payload.schemaVersion === 1) return validateLegacyRunReceiptPayload(payload);
   const keys = Object.keys(payload);
   if (keys.length !== RUN_KEYS.length || keys.some((key, index) => key !== RUN_KEYS[index])) {
     errors.push('Run receipt keys or order are invalid.');
   }
   if (payload.schemaVersion !== RUN_RECEIPT_SCHEMA_VERSION) errors.push(`schemaVersion must equal ${RUN_RECEIPT_SCHEMA_VERSION}.`);
+  if (payload.campaignId !== CAMPAIGN.id) errors.push(`campaignId must equal ${CAMPAIGN.id}.`);
+  if (!validRunId(payload.runId)) errors.push('runId is invalid.');
+  if (payload.cleanStart !== true) errors.push('cleanStart must be true.');
+  if (!Object.values(RUN_RECEIPT_STATUSES).includes(payload.status)) errors.push('status is invalid.');
+  if (typeof payload.creditsCompleted !== 'boolean') errors.push('creditsCompleted must be a boolean.');
+  if (!Number.isSafeInteger(payload.revision) || payload.revision < 0) errors.push('revision must be a non-negative safe integer.');
+
+  const playtimeValidation = validatePlaytimePayload(payload.playtime);
+  if (!playtimeValidation.ok) errors.push(...playtimeValidation.errors.map((error) => `playtime: ${error}`));
+  const completedBeatIds = validateCanonicalPrefix(payload.completedBeatIds, BEAT_IDS, 'completedBeatIds', errors);
+  const firstClearEncounterIds = validateFirstClearIds(payload.firstClearEncounterIds, errors);
+  if (payload.creditsCompleted === true && completedBeatIds.length !== BEAT_IDS.length) {
+    errors.push('credits cannot be completed before every canonical beat.');
+  }
+  if (typeof payload.creditsCompleted === 'boolean' && payload.status !== statusFor(payload.creditsCompleted)) {
+    errors.push('status must match credits completion.');
+  }
+  if (playtimeValidation.ok && Number.isSafeInteger(payload.revision)) {
+    const expectedRevision = playtimeValidation.state.revision + completedBeatIds.length
+      + firstClearEncounterIds.length + (payload.creditsCompleted === true ? 1 : 0);
+    if (payload.revision !== expectedRevision) errors.push('revision does not match the run transition receipt.');
+  }
+  if (errors.length) return failure('invalid-run-receipt', errors);
+  return Object.freeze({
+    ok: true,
+    state: buildState({
+      runId: payload.runId,
+      creditsCompleted: payload.creditsCompleted,
+      playtime: playtimeValidation.state,
+      completedBeatIds,
+      firstClearEncounterIds,
+      revision: payload.revision,
+    }),
+    errors: Object.freeze([]),
+  });
+}
+
+function validateLegacyRunReceiptPayload(payload) {
+  const errors = [];
+  const keys = Object.keys(payload);
+  if (keys.length !== LEGACY_RUN_KEYS.length || keys.some((key, index) => key !== LEGACY_RUN_KEYS[index])) {
+    errors.push('Legacy run receipt keys or order are invalid.');
+  }
+  if (payload.schemaVersion !== 1) errors.push('Legacy schemaVersion must equal 1.');
   if (payload.campaignId !== CAMPAIGN.id) errors.push(`campaignId must equal ${CAMPAIGN.id}.`);
   if (!validRunId(payload.runId)) errors.push('runId is invalid.');
   if (payload.cleanStart !== true) errors.push('cleanStart must be true.');
@@ -172,23 +221,27 @@ export function validateRunReceiptPayload(payload) {
   if (!playtimeValidation.ok) errors.push(...playtimeValidation.errors.map((error) => `playtime: ${error}`));
   const completedBeatIds = validateCanonicalPrefix(payload.completedBeatIds, BEAT_IDS, 'completedBeatIds', errors);
   const firstClearEncounterIds = validateFirstClearIds(payload.firstClearEncounterIds, errors);
-  if (Array.isArray(completedBeatIds) && payload.status !== statusFor(completedBeatIds)) {
-    errors.push('status must match canonical campaign completion.');
-  }
+  const legacyStatus = completedBeatIds.length === BEAT_IDS.length
+    ? RUN_RECEIPT_STATUSES.COMPLETE
+    : RUN_RECEIPT_STATUSES.ACTIVE;
+  if (payload.status !== legacyStatus) errors.push('Legacy status must match canonical campaign completion.');
   if (playtimeValidation.ok && Number.isSafeInteger(payload.revision)) {
     const expectedRevision = playtimeValidation.state.revision + completedBeatIds.length + firstClearEncounterIds.length;
-    if (payload.revision !== expectedRevision) errors.push('revision does not match the run transition receipt.');
+    if (payload.revision !== expectedRevision) errors.push('revision does not match the legacy run transition receipt.');
   }
   if (errors.length) return failure('invalid-run-receipt', errors);
   return Object.freeze({
     ok: true,
     state: buildState({
       runId: payload.runId,
+      creditsCompleted: false,
       playtime: playtimeValidation.state,
       completedBeatIds,
       firstClearEncounterIds,
       revision: payload.revision,
     }),
+    migrated: true,
+    fromSchemaVersion: 1,
     errors: Object.freeze([]),
   });
 }
@@ -243,7 +296,7 @@ export function recordRunFirstClear(state, runId, encounterId) {
   return success(next, { recorded: true, firstClearCount: firstClearEncounterIds.length });
 }
 
-/** Advance the same run's canonical beat prefix; the final beat seals it. */
+/** Advance the same run's canonical beat prefix; story completion remains active through post-final camp. */
 export function recordRunBeatCompletion(state, runId, beatId) {
   const snapshot = assertReceipt(state);
   const blocked = transitionGuard(snapshot, runId);
@@ -263,15 +316,34 @@ export function recordRunBeatCompletion(state, runId, beatId) {
   });
   return success(next, {
     recorded: true,
-    campaignComplete: next.status === RUN_RECEIPT_STATUSES.COMPLETE,
+    storyComplete: completedBeatIds.length === BEAT_IDS.length,
+    campaignComplete: false,
     completedBeatCount: completedBeatIds.length,
   });
+}
+
+/** Explicitly finish the credits and seal an otherwise complete story receipt. */
+export function completeRunCredits(state, runId) {
+  const snapshot = assertReceipt(state);
+  const blocked = transitionGuard(snapshot, runId);
+  if (blocked) return blocked;
+  if (snapshot.completedBeatIds.length !== BEAT_IDS.length) {
+    return failure('story-incomplete', ['Credits cannot seal the run before every canonical beat is complete.'], snapshot);
+  }
+  return success(buildState({
+    ...snapshot,
+    creditsCompleted: true,
+    revision: snapshot.revision + 1,
+  }), { recorded: true, storyComplete: true, campaignComplete: true });
 }
 
 /** Return a validated proof that can only consume evidence owned by this run. */
 export function getRunProofReport(state) {
   const snapshot = assertReceipt(state);
-  const campaignComplete = snapshot.status === RUN_RECEIPT_STATUSES.COMPLETE;
+  const storyComplete = snapshot.completedBeatIds.length === BEAT_IDS.length;
+  const creditsComplete = snapshot.creditsCompleted === true;
+  const campaignComplete = storyComplete && creditsComplete
+    && snapshot.status === RUN_RECEIPT_STATUSES.COMPLETE;
   const pacing = getPlaytimeReport(snapshot.playtime, {
     campaignComplete,
     firstClearEncounterIds: snapshot.firstClearEncounterIds,
@@ -282,6 +354,8 @@ export function getRunProofReport(state) {
     runId: snapshot.runId,
     cleanStart: snapshot.cleanStart,
     status: snapshot.status,
+    storyComplete,
+    creditsComplete,
     completedBeatCount: snapshot.completedBeatIds.length,
     requiredBeatCount: BEAT_IDS.length,
     missingBeatIds: BEAT_IDS.slice(snapshot.completedBeatIds.length),
@@ -312,13 +386,8 @@ export function loadRunReceipt(serializedOrPayload) {
   return Object.freeze({ ...validation, found: validation.ok });
 }
 
-function resolveDefaultStorage() {
-  try { return typeof globalThis !== 'undefined' ? globalThis.localStorage : null; }
-  catch { return null; }
-}
-
 export function createRunReceiptStorageAdapter(storage = undefined, key = DEFAULT_RUN_RECEIPT_SAVE_KEY) {
-  const target = storage === undefined ? resolveDefaultStorage() : storage;
+  const target = storage === undefined ? getDefaultBrowserStorage() : storage;
   const available = Boolean(target && typeof target.getItem === 'function' && typeof target.setItem === 'function' && typeof target.removeItem === 'function');
   const unavailable = () => Object.freeze({ ok: false, code: 'storage-unavailable' });
   return Object.freeze({
@@ -326,7 +395,23 @@ export function createRunReceiptStorageAdapter(storage = undefined, key = DEFAUL
     available,
     load() {
       if (!available) return unavailable();
-      try { return loadRunReceipt(target.getItem(key)); }
+      try {
+        const current = target.getItem(key);
+        if (current != null && current !== '') return loadRunReceipt(current);
+        if (key !== DEFAULT_RUN_RECEIPT_SAVE_KEY) return loadRunReceipt(current);
+        const legacy = target.getItem(LEGACY_RUN_RECEIPT_SAVE_KEY);
+        const loaded = loadRunReceipt(legacy);
+        if (!loaded.ok || !loaded.found || !loaded.migrated) return loaded;
+        let migrationPersisted = false;
+        try {
+          target.setItem(key, serializeRunReceipt(loaded.state));
+          target.removeItem(LEGACY_RUN_RECEIPT_SAVE_KEY);
+          migrationPersisted = true;
+        } catch {
+          // A valid in-memory migration remains usable; the next load can retry persistence.
+        }
+        return Object.freeze({ ...loaded, migrationPersisted });
+      }
       catch { return Object.freeze({ ok: false, code: 'storage-read-failed' }); }
     },
     save(state) {
@@ -339,7 +424,11 @@ export function createRunReceiptStorageAdapter(storage = undefined, key = DEFAUL
     },
     clear() {
       if (!available) return unavailable();
-      try { target.removeItem(key); return Object.freeze({ ok: true }); }
+      try {
+        target.removeItem(key);
+        if (key === DEFAULT_RUN_RECEIPT_SAVE_KEY) target.removeItem(LEGACY_RUN_RECEIPT_SAVE_KEY);
+        return Object.freeze({ ok: true });
+      }
       catch { return Object.freeze({ ok: false, code: 'storage-clear-failed' }); }
     },
   });

@@ -56,7 +56,7 @@ The finite-content runner begins from the canonical zero-time result and complet
 | Repeat contracts included | 0 |
 | Recorded playtime | 0 ms |
 
-The 729 witness steps are a deterministic minimum across 67 fresh stage contexts. The optional completion runner audits that route catalog but does not pretend to traverse it or record elapsed time. Repeat contracts remain a transparent grind surface and are excluded from finite-content duration.
+The 729 witness steps are a deterministic minimum across 67 fresh stage contexts. The optional completion runner audits that route catalogue but does not pretend to traverse it or record elapsed time. Its isolated witness excludes repeat contracts; the separate intended-route contract below requires one measured circuit of each of the four repeatable contracts.
 
 ## Finite companion-conversation completion
 
@@ -113,17 +113,43 @@ The public reading table opens one record after every canonical beat. Its runner
 
 Each visible record word belongs to its title, form, custodian, access note, or paragraph. Prose-bound catalogue signature: `fnv1a32:afd97309`; completion signature: `fnv1a32:fda26e63`.
 
+## Intended-route contract
+
+`game/required-route-contract.mjs` turns the all-finite content set into one exact chronological itinerary rather than assuming that a player happens to find every optional menu. It covers all 60 canonical beats and requires 215 activities:
+
+| Required activity | Count |
+| --- | ---: |
+| Finite side quests | 13 |
+| Witness chronicles | 18 |
+| Companion conversations | 90 |
+| Party councils | 30 |
+| Public archive records | 60 |
+| One-circuit repeat milestones | 4 |
+| **Total** | **215** |
+
+Each activity must be entered when its exact unlock beat becomes available. A witness chronicle may then pause until its later canonical-combat evidence frontier, but it cannot be silently deferred past the route contract. The four repeat milestones require one repeat victory apiece; 1×/2×/4× changes their presentation schedule only, not decisions or rewards. The final credits gate requires completed evidence for all 215 activities, not merely entry, and the run receipt stays active through final-beat camp content until credits are explicitly completed.
+
+The deterministic required-route runner audits chronology, finite completion, replay refusal, the four repeat outcomes, and speed-invariant decisions/rewards while recording zero elapsed time. It does not claim that the 729 catalogued witness-fieldwork steps were interactively traversed, so that remains a human/browser route check rather than fabricated evidence.
+
 ## Quantity-based duration audit
 
-`game/duration-audit.mjs` applies exposed low/reference/high assumptions to shipped words, line advances, choices, combined canonical movement, interactions, exits, combat decisions, rests, finite objectives, witness fieldwork, companion talks, party councils, and public archive readings. Authored chapter/quest/chronicle minute declarations and repeat loops are excluded.
+Duration audit v8 applies exposed low/reference/high assumptions to shipped words, line advances, choices, combined canonical movement, interactions, exits, combat decisions, rests, finite objectives, witness fieldwork, companion talks, party councils, and public archive readings. Authored chapter, quest, chronicle, and contract-minute declarations are excluded. The intended route adds only the actual engine scheduler output for its four required repeat wins; open-ended repeats are excluded.
 
-| Scenario | Estimated finite minutes | Hours | Model gap to 20 hours |
+| Scenario | Canonical only | Canonical + quests/chronicles | Intended all-finite route |
 | --- | ---: | ---: | ---: |
-| Low | 776.013 | 12.93 | 423.987 min |
-| Reference | 1,231.072 | 20.52 | 0 min |
-| High | 1,916.650 | 31.94 | 0 min |
+| Low | 186.549 min / 3.11 h | 223.258 min / 3.72 h | 776.626 min / 12.94 h |
+| Reference | 308.680 min / 5.14 h | 393.128 min / 6.55 h | 1,231.686 min / 20.53 h |
+| High | 498.286 min / 8.30 h | 691.875 min / 11.53 h | 1,917.264 min / 31.95 h |
 
-The reference assumptions include 180 reading words per minute, 0.8 seconds per dialogue advance, 0.35 seconds per field step, 5 seconds per interaction, 4 seconds per player combat command, and explicit finite-objective handling time. These are editable model inputs, not confidence intervals and not observed behavior. The reference and high-input scenarios cross 20 hours; that is a sensitivity result for the all-finite path, not proof that players read or act at those rates or that every player will choose all optional content.
+The canonical-only column is the 60-beat story, required traversal, first clears, and canonical rests. “Canonical + quests/chronicles” adds the 13 finite side quests and 18 witness chronicles. The intended all-finite column adds all 90 talks, 30 councils, 60 archive records, final-beat pre-credits content, and the four one-circuit repeat milestones. The 1× reference model clears 20 hours by 31.686 minutes; the canonical-only reference model is about 5.14 hours, so no critical-path-only 20-hour claim is supportable.
+
+| Repeat presentation speed | Intended-route reference estimate |
+| --- | ---: |
+| 1× | 1,231.686 min |
+| 2× | 1,231.379 min |
+| 4× | 1,231.226 min |
+
+Only the four repeat schedules accelerate. The reference assumptions include 180 reading words per minute, 0.8 seconds per dialogue advance, 0.35 seconds per field step, 5 seconds per interaction, 4 seconds per player combat command, and explicit finite-objective handling time. These are editable model inputs, not confidence intervals and not observed behavior. Crossing 20 hours is a sensitivity result for the complete intended route, not proof that a player reads or acts at those rates.
 
 ## What can prove 20 hours
 
@@ -131,12 +157,14 @@ The versioned run receipt begins only beside pristine campaign and advancement s
 
 - all 60 canonical beats completed in order;
 - all 23 canonical first clears recorded once;
+- all 215 intended-route activities completed before the credits gate will seal the run;
+- explicit completion of the credits after final-beat content;
 - at least 1,200 active minutes belonging to the same clean run.
 
-A deterministic completion trace cannot satisfy the time requirement because it calls no playtime transition. A locally stored receipt is an internal QA instrument, not cryptographic or independent attestation. A release claim still needs a witnessed human playthrough and chapter-level timing notes.
+A story-complete receipt remains active, allowing final-beat talks, council, and archive reading to accrue before the player explicitly completes credits. A deterministic completion trace cannot satisfy the time requirement because it calls no playtime transition. A locally stored receipt is an internal QA instrument, not cryptographic or independent attestation. A release claim still needs a witnessed human playthrough and chapter-level timing notes.
 
 ## Remaining proof and production gap
 
-The shipped all-finite path now clears the arithmetic reference target by 31.072 minutes. That closes the reference-model content gap; it does not justify a measured 20-hour claim, establish the duration of a critical-path-only run, or show how much optional material a normal player will complete. The remaining work is interactive browser and accessibility QA, cultural review, chapter-level human timing, full clean-start timing, and evidence-driven tuning if observed routes fall short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
+The intended all-finite route clears the arithmetic reference target by 31.686 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. The remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, witness-fieldwork traversal confirmation, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
 
 Until a clean receipt meets the gate, all documentation must say **20-hour target unproven**.

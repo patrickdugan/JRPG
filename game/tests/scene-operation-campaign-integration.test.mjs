@@ -20,7 +20,7 @@ test('operation interaction requires the exact node tile and explicit encounter-
   assert.match(campaignSource, /result\.code === 'encounter-victory-required'/);
   assert.match(campaignSource, /sceneOperation: beat\.id/);
   assert.match(campaignSource, /sceneOperationNode: sceneOperationMarker\.node\.id/);
-  assert.match(campaignSource, /sceneOperationAdapter\.save\(sceneOperationState\)/);
+  assert.match(campaignSource, /commitStateChanges\('Scene operation',[\s\S]*?adapter: sceneOperationAdapter[\s\S]*?nextState: result\.state/);
 });
 
 test('unfinished story operations cannot be abandoned through a route exit', () => {
@@ -29,9 +29,9 @@ test('unfinished story operations cannot be abandoned through a route exit', () 
 });
 
 test('New Game and browser lifecycle clear, reload, and persist operation state', () => {
-  assert.match(campaignSource, /sceneOperationState = createSceneOperationState\(\)/);
-  assert.match(campaignSource, /sceneOperationAdapter\.clear\(\)/);
+  assert.match(campaignSource, /const nextSceneOperationState = createSceneOperationState\(\)/);
+  assert.match(campaignSource, /commitStateChanges\('New Game',[\s\S]*?adapter: sceneOperationAdapter[\s\S]*?nextState: nextSceneOperationState/);
   assert.match(campaignSource, /const refreshedSceneOperations = sceneOperationAdapter\.load\(\)/);
   const saveCalls = campaignSource.match(/sceneOperationAdapter\.save\(sceneOperationState\)/g) ?? [];
-  assert.ok(saveCalls.length >= 4, 'interaction, handoff, pagehide, and visibility saves are required');
+  assert.ok(saveCalls.length >= 2, 'pagehide and visibility remain explicit best-effort lifecycle saves');
 });

@@ -4,11 +4,11 @@ This folder contains the playable browser runtime and the original small combat 
 
 - **FP-0 (this folder):** one original Bell Court encounter that validates integer-space movement, 2-Pace turns, Tempo/recovery, Guard/Dodge, delivery + essence resistance, deterministic Oni AI, victory/defeat, and restart.
 - **FP-1 (Takamine Vertical Slice content):** the 28–34 minute field route, scenes, learning battles, Mateus reveal, and boss specified in the narrative documents.
-- **Campaign (`campaign.html`):** all 11 chapters / 60 authored scenes, 2,746 persistent dialogue lines, 60 bespoke atmosphere/score/camera/blocking transcripts, and 183 ordered once-per-save field operations. Every operation uses exact movement and authored instructions; encounter nodes bind the existing canonical fight and cannot create a duplicate battle.
-- **Optional journal:** 13 finite side quests, 18 finite witness chronicles, and four repeatable contracts use ordered objectives and direct journal travel. Witness testimony advances one line at a time across 152 exact fieldwork nodes; all 31 finite reward settlements are atomic and replay-refusing.
-- **Campaign Battle (`battle.html?encounter=...`):** a shared multi-party engine for all authored encounters, including bounded Spirit, six live statuses, Tempo/recovery, Pace, typed damage, Guard, Analyze, deterministic enemy AI, 18 objective presentations, nonlethal actions, XP, levels, rewards, equipped loadout modifiers, deterministic attack timelines, and repeat-only 1×/2×/4× Auto-Grind.
+- **Campaign (`campaign.html`):** all 11 chapters / 60 authored scenes, 2,746 persistent dialogue lines, 60 bespoke atmosphere/score/camera/blocking transcripts, and 183 ordered once-per-save field operations. Every operation uses exact movement and authored instructions; encounter nodes bind the existing canonical fight and cannot create a duplicate battle. A live route ledger prevents the next story frontier from closing until each newly unlocked intended-route entry has begun.
+- **Intended-route journal:** 13 finite side quests, 18 finite witness chronicles, and four one-circuit repeat milestones use ordered objectives and direct journal travel. Witness testimony advances one line at a time across 152 exact fieldwork nodes; finite rewards settle transactionally and refuse one-time replay.
+- **Campaign Battle (`battle.html?encounter=...`):** a shared multi-party engine for all authored encounters, including bounded Spirit, six live statuses, Tempo/recovery, Pace, typed damage, Guard, Analyze, deterministic enemy AI, 18 objective presentations, nonlethal actions, XP, levels, rewards, equipped loadout modifiers, deterministic attack timelines, and repeat-only 1×/2×/4× Auto-Grind. Victory is durable before Continue appears: advancement, loot/vitals, requested quest or chronicle evidence, field resolution, and clean-run first-clear evidence share one compensating transaction.
 - **Camp & Loadout (`camp.html`):** party vitals, Spirit/status recovery, consumables, shops, buy/sell, gear, forge upgrades, two Vow slots per character, three camp-rest tiers, the original six-character field atlas, 90 finite two-person companion conversations, 30 multi-character party councils, and a 60-record public reading table tied to canonical story beats.
-- **Active-play telemetry:** narrative, exploration, first-clear battles, repeat grind, and camp/menu time accumulate in both a general record and a clean-start, UUID-bound run receipt. Samples suspend after 30 seconds without input; proof requires 20 active hours from that same run, all 60 scenes, and every canonical first clear.
+- **Active-play telemetry:** narrative, exploration, first-clear battles, repeat grind, and camp/menu time accumulate in both a general record and a clean-start, UUID-bound run receipt. Samples suspend after 30 seconds without input. The player-facing credits seal additionally requires completed evidence for all 215 intended-route activities; duration proof still needs 20 active hours from that same run, all 60 scenes, every canonical first clear, and explicit credits completion.
 
 The rules contract is in [the technical GDD](../docs/02-technical-gdd.md). The prototype names Ren Ishikawa, Elisabet “Lise” Varga, and Father Mateus Avelar in its opening record so the intended narrative relationship is visible without pretending that this one-combatant proof has a full party or story implementation.
 
@@ -23,7 +23,23 @@ npm test
 npm run serve
 ```
 
-Then open `http://localhost:8080/` for the optional training proof, `http://localhost:8080/campaign.html` for the full Campaign, or `http://localhost:8080/camp.html` for Camp & Loadout. Stop the local server with `Ctrl+C` when finished.
+Then open `http://localhost:8080/` for the optional training proof, `http://localhost:8080/campaign.html` for the full Campaign, `http://localhost:8080/camp.html` for Camp & Loadout, or `http://localhost:8080/credits.html` for the explicit ending boundary. Stop the local server with `Ctrl+C` when finished.
+
+For an isolated real-browser pass, install the optional Python `playwright` package and run:
+
+```powershell
+python tools/browser-smoke.py
+```
+
+The harness uses a fresh Chromium context and ephemeral localhost port. It verifies New Game, Campaign/Camp receipt continuity, first-clear speed gating, saved 4× repeat speed, a complete Auto-Grind victory and reward, the all-215 credits gate and explicit seal, keyboard reachability, denied-storage startup, HTTP delivery, and console cleanliness without touching the player's browser profile.
+
+To verify every shipped browser file over a real local HTTP boundary without installing another package, run:
+
+```powershell
+python tools/static-delivery.py
+```
+
+The current release manifest contains 82 byte-verified files: five pages, five stylesheets, five controllers, 61 modules, five PNG production assets, and one SVG favicon.
 
 ## FP-0 controls
 
@@ -62,11 +78,13 @@ The Atlas stores versioned, validated campaign, scene-operation, field, narrativ
 | Start Auto-Grind | After one manual clear, run the full deterministic repeat loop at the saved speed, including commands, enemy turns, Recovery, result, and reward presentation. |
 | Restart | Replay the encounter. First-clear loot stays unique; repeat XP and currency diminish to a stable floor. |
 
-The authored pacing budget still targets 20 hours at 1×, with repeat grinding eligible for the saved speed control. A separate quantity audit excludes declared minutes and repeat loops and projects the all-finite path at 1,231.072 reference minutes (low 776.013, high 1,916.650) under its explicit input assumptions. The reference model therefore clears 20 hours by 31.072 minutes. That arithmetic is not observed playtime, does not establish a critical-path-only duration, and is still not proof. The target remains unproven until one clean end-to-end receipt records at least 20 active hours.
+The explicit 215-activity route targets 20 hours at 1×. Duration audit v8 excludes authored minute labels and open-ended repeats; it estimates the canonical story at 186.549/308.680/498.286 minutes and the complete intended route at 776.626/1,231.686/1,917.264 minutes low/reference/high. The intended-route reference model clears 20 hours by 31.686 minutes, while canonical-only reference play is about 5.14 hours. Only four measured repeat schedules accelerate, producing reference estimates of 1,231.379 minutes at 2× and 1,231.226 at 4×. This arithmetic is not observed playtime. The target remains unproven until one clean human run completes the route and records at least 20 active hours.
 
 The bounded `canonical-run.mjs` audit proves mechanical completion without pretending to prove duration: one deterministic zero-time run covers 60 beats, 2,746 dialogue lines, 59 choices, 60/60 scene operations, 183/183 operation nodes, 34 route chains, 1,419 legal field moves, 236 interactions, 41 exits, 23 first clears, 228 player commands, 100 enemy activations, and 16 safehouse rests. Its stable signature is `fnv1a32:029392d1`; its run receipt is complete and correctly reports `durationProven: false`.
 
 The separate `finite-content-run.mjs` witness completes all 13 side quests, 59 objectives, 18 chronicles, 288 testimony acknowledgements, 67 stages, and 31 one-time reward settlements while refusing replay and leaving all four repeat contracts out of the finite count. It deliberately records zero elapsed time. The UUID run receipt can collect the necessary same-run cross-page evidence, but no complete run has yet met the duration-proof gate.
+
+The chronological `required-route-run.mjs` witness combines the canonical and finite systems into the exact 215-activity itinerary. It completes 60 beats, 23 first clears, 13 quests, 18 chronicles, 90 talks, 30 councils, 60 archive records, and four genuine repeat wins through 6,851 public transitions. Contract signature: `fnv1a32:b7b98301`; executable signature: `fnv1a32:16ce2ff5`. Its 1×/2×/4× repeat schedules are measured engine output with invariant decisions and rewards. It records zero elapsed time and honestly leaves the 152-node witness fieldwork catalogue as audited rather than claiming browser traversal.
 
 The `camp-conversation-run.mjs` witness completes all 90 finite companion talks in canonical order: 3,644 main-line acknowledgements, 270 selected response acknowledgements, 90 explicit choices, 4,094 successful transitions, and 90 replay refusals. The catalogue contains 83,435 authored words across both branches; the duration audit counts 76,547 words visible on its canonical first-choice path. Its prose-bound catalogue signature is `fnv1a32:3265b9bc`, its completion signature is `fnv1a32:d09e58ef`, and it records zero elapsed time.
 

@@ -215,6 +215,14 @@ h1 {
 .quest-entry span { color: var(--muted); font-size: 0.58rem; line-height: 1.4; }
 .quest-entry small { color: var(--gold); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.06em; }
 .witness-journal-card { background: linear-gradient(180deg, rgba(35, 27, 49, 0.42), rgba(9, 12, 25, 0.3)); }
+.route-ledger-card { background: linear-gradient(180deg, rgba(57, 45, 25, 0.46), rgba(12, 16, 29, 0.34)); }
+.route-status { margin-top: 9px; }
+.route-status[data-state="ready"] { color: #bfe8d8; }
+.route-status[data-state="due"] { color: #f0d59a; }
+.route-due-list { display: grid; gap: 5px; margin: 10px 0 0; padding: 0; list-style: none; }
+.route-due-list li { padding-left: 10px; border-left: 2px solid #665a38; color: #cbd1de; font-size: 0.66rem; line-height: 1.45; }
+.route-due-list li.more { color: #a9b1c4; }
+.route-camp-link { display: block; margin-top: 11px; text-align: center; text-decoration: none; }
 .witness-stage-card { display: grid; gap: 7px; margin-top: 10px; padding: 10px; border: 1px solid #66547f; background: rgba(12, 10, 24, 0.82); }
 .witness-stage-card[hidden] { display: none; }
 .witness-stage-card small { color: #c5b4f4; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.06em; }

@@ -5,16 +5,19 @@ import {
   benchmarkRepeatBattleSpeeds,
   getRepeatStepDelayMs,
   REPEAT_BATTLE_SPEEDS,
+  resolveBattlePresentationSpeed,
   runRepeatBattle,
 } from '../repeat-battle.mjs';
 import { PARTY_PROFILES } from '../campaign-combat.mjs';
 import { ENCOUNTERS } from '../content/encounters.mjs';
 import {
   createAdvancementState,
+  createAdvancementStorageAdapter,
   getEncounterRewardPreview,
   getPartyMember,
   preparePartyForEncounter,
   recordEncounterWin,
+  setSpeedMultiplier,
 } from '../advancement.mjs';
 import {
   applyLoadoutToPartyProfile,
@@ -23,6 +26,33 @@ import {
 } from '../loadout.mjs';
 
 const ENCOUNTER_ID = 'c1-ash-wisps';
+
+class MemoryStorage {
+  constructor() { this.values = new Map(); }
+  getItem(key) { return this.values.has(key) ? this.values.get(key) : null; }
+  setItem(key, value) { this.values.set(key, String(value)); }
+  removeItem(key) { this.values.delete(key); }
+}
+
+test('saved 1x/2x/4x preferences apply only at an encounter replay boundary', () => {
+  for (const selectedSpeed of REPEAT_BATTLE_SPEEDS) {
+    const storage = new MemoryStorage();
+    const key = `repeat-speed-${selectedSpeed}`;
+    const writer = createAdvancementStorageAdapter(storage, key);
+    let state = recordEncounterWin(createAdvancementState(), ENCOUNTER_ID);
+    state = setSpeedMultiplier(state, selectedSpeed);
+    assert.deepEqual(writer.save(state), { ok: true });
+
+    const reloaded = createAdvancementStorageAdapter(storage, key).load();
+    assert.equal(reloaded.ok, true);
+    assert.equal(reloaded.found, true);
+    assert.equal(reloaded.state.speedMultiplier, selectedSpeed);
+    assert.equal(resolveBattlePresentationSpeed(1, reloaded.state.speedMultiplier), selectedSpeed);
+    assert.equal(resolveBattlePresentationSpeed(0, reloaded.state.speedMultiplier), 1, 'another encounter first clear remains 1x');
+  }
+  assert.throws(() => resolveBattlePresentationSpeed(-1, 1), /priorWins/);
+  assert.throws(() => resolveBattlePresentationSpeed(1, 3), /must be 1, 2, or 4/);
+});
 
 test('repeat automation is unavailable before a canonical first clear', () => {
   assert.throws(

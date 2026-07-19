@@ -6,6 +6,7 @@
  */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import { SCENE_OPERATIONS, getSceneOperation } from './content/scene-operations.mjs';
 
 export const SCENE_OPERATION_SAVE_SCHEMA_VERSION = 1;
@@ -210,7 +211,7 @@ export function loadSceneOperationState(serialized) {
   }
 }
 
-export function createSceneOperationStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_SCENE_OPERATION_SAVE_KEY) {
+export function createSceneOperationStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_SCENE_OPERATION_SAVE_KEY) {
   return Object.freeze({
     key,
     load() {

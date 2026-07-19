@@ -1,6 +1,7 @@
 /** Persistent, DOM-free line staging for campaign dialogue. */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 
 export const NARRATIVE_SCHEMA_VERSION = 1;
 export const DEFAULT_NARRATIVE_SAVE_KEY = `${CAMPAIGN.id}.narrative.v${NARRATIVE_SCHEMA_VERSION}`;
@@ -105,7 +106,7 @@ export function loadNarrativeState(serialized) {
   }
 }
 
-export function createNarrativeStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_NARRATIVE_SAVE_KEY) {
+export function createNarrativeStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_NARRATIVE_SAVE_KEY) {
   return Object.freeze({
     load() {
       try { return loadNarrativeState(storage?.getItem?.(key)); }

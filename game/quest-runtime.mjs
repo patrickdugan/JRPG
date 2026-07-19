@@ -6,6 +6,7 @@
  */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import { ALL_OPTIONAL_QUESTS, getSideQuest } from './content/sidequests.mjs';
 
 export const QUEST_SCHEMA_VERSION = 1;
@@ -211,7 +212,7 @@ export function loadQuestState(serialized) {
   }
 }
 
-export function createQuestStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_QUEST_SAVE_KEY) {
+export function createQuestStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_QUEST_SAVE_KEY) {
   return Object.freeze({
     load() {
       try {

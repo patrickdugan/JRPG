@@ -208,8 +208,12 @@ function resultMessage(result) {
 function commit(result) {
   campFeedback.textContent = resultMessage(result);
   if (!result.ok) return false;
+  const saved = loadoutAdapter.save(result.state);
+  if (!saved.ok) {
+    campFeedback.textContent = 'Camp change was not applied because its save could not be written.';
+    return false;
+  }
   loadoutState = result.state;
-  loadoutAdapter.save(loadoutState);
   render();
   return true;
 }

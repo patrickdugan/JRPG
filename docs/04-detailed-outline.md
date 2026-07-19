@@ -2,7 +2,7 @@
 
 ## Detailed script outline
 
-**Narrative target:** a focused 20–25 hour JRPG campaign whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward.<br>
+**Narrative target:** a focused 60-beat JRPG story whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward. The story-only quantity estimate is about 5.14 reference hours; the intended 20-hour route comes from the explicitly interleaved 215-activity contract, not an unsupported critical-path claim.<br>
 **Canonical names:** Ren Ishikawa; Aya Shinohara; Elisabet “Lise” Varga; Father Mateus Avelar; Genta Mononobe; Kiku Nawa; Shogun Kurozane; Magistrate Ujiro Arata.<br>
 **Format note:** Scene titles are production IDs. Dialogue below is first-draft intent and can be revised for localization and historical review; plot function, speaker ownership, and exit state are locked unless a later design review changes them.
 

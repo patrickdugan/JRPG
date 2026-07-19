@@ -1,6 +1,7 @@
 /** Cross-page active-play telemetry used to prove campaign duration. */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import { ENCOUNTERS } from './content/encounters.mjs';
 import { CAMPAIGN_PACING } from './advancement.mjs';
 
@@ -162,7 +163,7 @@ export function loadPlaytimeState(serialized) {
   }
 }
 
-export function createPlaytimeStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_PLAYTIME_SAVE_KEY) {
+export function createPlaytimeStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_PLAYTIME_SAVE_KEY) {
   return Object.freeze({
     load() {
       try { return loadPlaytimeState(storage?.getItem?.(key)); }

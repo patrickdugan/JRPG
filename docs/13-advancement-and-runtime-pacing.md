@@ -31,28 +31,23 @@ The 20% XP floor keeps optional grinding viable without making one early encount
 
 ## Twenty-hour pacing target
 
-The model targets 1,200 minutes at normal speed:
+The advancement module retains `CAMPAIGN_PACING` and `getPacingEstimate` as production-planning declarations. Their category allocations—including the old hypothetical 180-minute grind allocation—are not observations and are not inputs to duration audit v8. They must not be quoted as shipped playtime or used to pad the intended route.
 
-| Activity | Minutes at 1x |
-| --- | ---: |
-| Narrative and dialogue | 480 |
-| Exploration and field objectives | 300 |
-| First-clear combat | 180 |
-| Menus, camps, and rest | 60 |
-| Optional/recommended level grind | 180 |
-| Total | 1,200 (20 hours) |
+The player-facing route is instead defined by an exact chronological contract: 60 canonical beats and 215 activities entered at their unlock frontier. Those activities are 13 finite side quests, 18 witness chronicles, 90 companion talks, 30 party councils, 60 archive readings, and exactly four repeat-grind milestones. Each grind milestone is one circuit of its linked repeatable contract. Later repetition is available for leveling but is not required and contributes no authored contract-minute allowance.
 
-The speed preference is restricted to `1x`, `2x`, or `4x` and accelerates repeat/grind time only. It does not shorten authored scenes or first-clear encounters. `getPacingEstimate` therefore returns:
+The speed preference remains restricted to `1x`, `2x`, or `4x`. It affects only repeat-battle presentation, never scenes, exploration, first-clear combat, decisions, or rewards. Duration audit v8 adds the measured engine schedule for the four required repeat wins and reports this reference sensitivity:
 
-| Speed | Estimated grind | Estimated campaign |
+| Required repeat speed | Intended-route reference estimate | Hours |
 | --- | ---: | ---: |
-| 1x | 180 min | 20 h |
-| 2x | 90 min | 18.5 h |
-| 4x | 45 min | 17.75 h |
+| 1× | 1,231.686 min | 20.53 |
+| 2× | 1,231.379 min | 20.52 |
+| 4× | 1,231.226 min | 20.52 |
+
+Only 0.614 reference minute at 1× belongs to the four required repeat presentation schedules, so speed-up changes the estimate by seconds rather than removing hours of authored play.
 
 Chapter level targets rise from level 2 after the Prologue to level 40 for Chapter 9 and the Epilogue. Canonical first clears attain those targets; repeat grinding provides optional over-leveling, currency, recovery from skipped party participation, or a lower-difficulty route through later encounters.
 
-This table is an authored allocation, not evidence that the current build lasts that long. The independent quantity audit in `15-content-volume-and-duration-evidence.md` excludes these declared minutes and currently projects the all-finite path at 1,231.072 reference minutes, 31.072 minutes above the arithmetic target. Only one clean completed run receipt with at least 1,200 active minutes can turn the target into a duration claim.
+The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 186.549/308.680/498.286 minutes and the complete intended route at 776.626/1,231.686/1,917.264 minutes low/reference/high. The 1× reference route is 31.686 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
 
 ## Save contract
 

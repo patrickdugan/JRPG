@@ -24,6 +24,7 @@ import {
   createCampaignState,
 } from '../progression.mjs';
 import {
+  completeRunCredits,
   createRunReceipt,
   recordRunBeatCompletion,
   recordRunFirstClear,
@@ -36,6 +37,7 @@ const BEAT_IDS = CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat)
 test('duration audit derives concrete shipped quantities and keeps estimates unproven', () => {
   const audit = createDurationAudit();
 
+  assert.equal(audit.schemaVersion, 8);
   assert.equal(audit.targetMinutes, 1_200);
   assert.equal(audit.targetHours, 20);
   assert.equal(audit.status, 'duration-unproven');
@@ -101,6 +103,22 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   assert.equal(audit.archiveRecordEvidence.completionProof.oncePerSaveEnforced, true);
   assert.equal(audit.archiveRecordEvidence.summary.recordCount, 60);
   assert.equal(audit.archiveRecordEvidence.durationEvidence.durationProven, false);
+  assert.equal(audit.requiredRouteEvidence.completionProof.valid, true);
+  assert.equal(audit.requiredRouteEvidence.completionProof.grindMilestonesComplete, true);
+  assert.equal(audit.requiredRouteEvidence.completionProof.repeatDecisionsAndRewardsSpeedInvariant, true);
+  assert.equal(audit.requiredRouteEvidence.summary.repeatGrindMilestoneCount, 4);
+  assert.equal(audit.requiredRouteEvidence.summary.requiredRepeatWinCount, 4);
+  assert.equal(audit.requiredRouteEvidence.repeatScheduleAudit.schedules.length, 4);
+  assert.deepEqual(audit.requiredRouteEvidence.repeatScheduleAudit.aggregateScheduledMsBySpeed, {
+    1: 36_800,
+    2: 18_400,
+    4: 9_200,
+  });
+  assert.deepEqual(audit.requiredRouteEvidence.repeatScheduleAudit.exactRatios, { 1: 1, 2: 2, 4: 4 });
+  assert.equal(audit.requiredRouteEvidence.repeatScheduleAudit.scheduleOnly, true);
+  assert.equal(audit.requiredRouteEvidence.repeatScheduleAudit.elapsedTimeRecordedMs, 0);
+  assert.equal(audit.requiredRouteEvidence.repeatScheduleAudit.schedules
+    .every((schedule) => schedule.decisionsAndRewardsInvariant), true);
 
   assert.deepEqual(audit.authoredDurationDeclarations, {
     campaignChapterMinutes: 1_215,
@@ -191,34 +209,122 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
     finiteQuestCount: 0,
     finiteQuestObjectiveCount: 0,
   });
+
+  assert.deepEqual(audit.postStoryPreCreditsContent, {
+    finalBeatId: 'e02-repaired-tower',
+    receiptRemainsActiveAfterFinalBeat: true,
+    creditsCompletionSealsReceipt: true,
+    includedInAllFiniteContent: true,
+    sideQuestIds: [],
+    witnessChronicleIds: [],
+    campConversationIds: [],
+    partyCouncilIds: ['council-30-e02-repaired-tower'],
+    archiveRecordIds: ['archive-e02-repaired-tower'],
+    metrics: {
+      dialogueWords: 1_806,
+      dialogueLines: 48,
+      choices: 1,
+      fieldMoves: 0,
+      interactions: 2,
+      exits: 0,
+      playerCommands: 0,
+      enemyActivations: 0,
+      campRests: 0,
+      finiteEncounterCount: 0,
+      finiteQuestCount: 0,
+      finiteQuestObjectiveCount: 0,
+    },
+  });
+  assert.deepEqual(audit.partyCouncil.postStoryPreCreditsMetrics, {
+    dialogueWords: 1_281,
+    dialogueLines: 39,
+    choices: 1,
+    fieldMoves: 0,
+    interactions: 1,
+    exits: 0,
+    playerCommands: 0,
+    enemyActivations: 0,
+    campRests: 0,
+    finiteEncounterCount: 0,
+    finiteQuestCount: 0,
+    finiteQuestObjectiveCount: 0,
+  });
+  assert.equal(audit.archiveRecord.postStoryPreCreditsMetrics.dialogueWords, 525);
+  assert.equal(audit.archiveRecord.postStoryPreCreditsMetrics.dialogueLines, 9);
+  assert.deepEqual(audit.campConversation.postStoryPreCreditsIds, []);
+  assert.deepEqual(
+    audit.estimates.reference.postStoryPreCredits.quantities,
+    audit.postStoryPreCreditsContent.metrics,
+  );
+
+  assert.deepEqual(audit.estimates.reference.canonicalOnly.quantities, {
+    dialogueWords: 37_717,
+    dialogueLines: 2_746,
+    choices: 59,
+    fieldMoves: 1_419,
+    interactions: 236,
+    exits: 41,
+    playerCommands: 228,
+    enemyActivations: 100,
+    campRests: 16,
+    finiteEncounterCount: 23,
+    finiteQuestCount: 0,
+    finiteQuestObjectiveCount: 0,
+  });
+  assert.equal(Object.hasOwn(audit.estimates.reference, 'criticalPath'), false);
+  assert.match(audit.estimates.reference.canonicalOnly.scope, /Canonical dialogue/);
+  assert.match(audit.estimates.reference.optionalInclusive.scope, /finite side quests/);
   assert.equal(
-    audit.estimates.reference.allFiniteContent.quantities.dialogueWords
-      - audit.estimates.reference.criticalPath.quantities.dialogueWords
-      - audit.content.finiteQuestRuntimeTextWordCount
-      - ARCHIVE_RECORD_METRICS.wordCount,
-    CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount + PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount,
+    audit.estimates.reference.optionalInclusive.quantities.dialogueWords
+      - audit.estimates.reference.canonicalOnly.quantities.dialogueWords,
+    audit.content.finiteQuestRuntimeTextWordCount + audit.witnessChronicle.metrics.dialogueWords,
   );
   assert.equal(
     audit.estimates.reference.allFiniteContent.quantities.dialogueLines
-      - audit.estimates.reference.criticalPath.quantities.dialogueLines,
+      - audit.estimates.reference.optionalInclusive.quantities.dialogueLines,
     CAMP_CONVERSATION_PLAYABLE_METRICS.dialogueLineCount
       + PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount
       + ARCHIVE_RECORD_METRICS.paragraphCount,
   );
-  assert.ok(audit.estimates.low.allFiniteContent.estimatedMinutes
-    < audit.estimates.reference.allFiniteContent.estimatedMinutes);
-  assert.ok(audit.estimates.reference.allFiniteContent.estimatedMinutes
-    < audit.estimates.high.allFiniteContent.estimatedMinutes);
+  assert.ok(Math.abs(
+    audit.estimates.reference.allFiniteContent.estimatedSeconds
+      - audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedSeconds
+      - audit.estimates.reference.postStoryPreCredits.estimatedSeconds,
+  ) < 1e-9);
+  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 308.68);
+  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 393.128);
+  assert.ok(audit.estimates.low.allFiniteBeforeStoryCompletion.estimatedMinutes
+    < audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes);
+  assert.ok(audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes
+    < audit.estimates.high.allFiniteBeforeStoryCompletion.estimatedMinutes);
+  assert.deepEqual(
+    Object.fromEntries(Object.entries(audit.estimates).map(([name, estimate]) => [
+      name,
+      estimate.allFiniteBeforeStoryCompletion.estimatedMinutes,
+    ])),
+    { low: 769.3, reference: 1_220.746, high: 1_901.521 },
+  );
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates).map(([name, estimate]) => [
       name,
       estimate.allFiniteContent.estimatedMinutes,
     ])),
-    { low: 776.013, reference: 1_231.072, high: 1_916.65 },
+    { low: 776.626, reference: 1_231.686, high: 1_917.264 },
   );
+  assert.equal(audit.estimates.reference.allFiniteContent.requiredRepeatPresentationMs, 36_800);
+  assert.equal(audit.estimates.reference.allFiniteContent.breakdownMinutes.requiredRepeatPresentation, 0.613);
+  assert.deepEqual(
+    Object.fromEntries(Object.entries(audit.estimates.reference.allFiniteContent.repeatSpeedVariants)
+      .map(([speed, variant]) => [speed, variant.estimatedMinutes])),
+    { 1: 1_231.686, 2: 1_231.379, 4: 1_231.226 },
+  );
+  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 31.686);
   assert.equal(audit.estimates.low.allFiniteContent.reaches20HoursUnderModel, false);
   assert.equal(audit.estimates.reference.allFiniteContent.reaches20HoursUnderModel, true);
   assert.equal(audit.estimates.high.allFiniteContent.reaches20HoursUnderModel, true);
+  assert.equal(audit.estimates.reference.allFiniteContent.eligibleBeforeCreditsSeal, true);
+  assert.equal(audit.estimates.reference.postStoryPreCredits.eligibleBeforeCreditsSeal, true);
+  assert.equal(audit.estimates.reference.postStoryPreCredits.includedInAllFiniteContent, true);
   for (const estimate of Object.values(audit.estimates)) {
     assert.equal(estimate.estimateIsProof, false);
     assert.equal(
@@ -300,7 +406,7 @@ test('caller-supplied witness chronicle metrics can replace the shipped witness 
   assert.deepEqual(DEFAULT_DURATION_ASSUMPTIONS.low.readingWordsPerMinute, 260);
 });
 
-function completedTwentyHourReceipt() {
+function storyCompleteTwentyHourReceipt() {
   const created = createRunReceipt({
     runId: 'duration-audit-proof-0001',
     campaignState: createCampaignState(),
@@ -323,20 +429,34 @@ function completedTwentyHourReceipt() {
   return receipt;
 }
 
-test('only a valid completed twenty-hour run receipt can prove duration', () => {
+test('post-story play remains countable and only explicit credits completion can prove duration', () => {
   const invalid = createDurationAudit({ runReceipt: { fabricated: true } });
   assert.equal(invalid.durationProven, false);
   assert.equal(invalid.proofReceipt.valid, false);
   assert.equal(invalid.proofReceipt.status, 'invalid');
 
-  const receipt = completedTwentyHourReceipt();
-  const audit = createDurationAudit({ runReceipt: serializeRunReceipt(receipt) });
+  const receipt = storyCompleteTwentyHourReceipt();
+  const unsealed = createDurationAudit({ runReceipt: serializeRunReceipt(receipt) });
+  assert.equal(unsealed.durationProven, false);
+  assert.equal(unsealed.proofReceipt.report.storyComplete, true);
+  assert.equal(unsealed.proofReceipt.report.creditsComplete, false);
+
+  const postStoryReading = recordRunPlaytime(
+    receipt,
+    receipt.runId,
+    'narrative',
+    60_000,
+  );
+  assert.equal(postStoryReading.ok, true);
+  const sealed = completeRunCredits(postStoryReading.state, receipt.runId);
+  assert.equal(sealed.ok, true);
+  const audit = createDurationAudit({ runReceipt: serializeRunReceipt(sealed.state) });
   assert.equal(audit.status, 'duration-proven-by-valid-run-receipt');
   assert.equal(audit.durationProven, true);
   assert.equal(audit.proofReceipt.valid, true);
   assert.equal(audit.proofReceipt.report.campaignComplete, true);
   assert.equal(audit.proofReceipt.report.firstClearsComplete, true);
-  assert.equal(audit.proofReceipt.report.totalMinutes, 1_200);
+  assert.equal(audit.proofReceipt.report.totalMinutes, 1_201);
   assert.equal(audit.proofReceipt.report.durationProven, true);
   assert.equal(audit.estimateIsProof, false, 'the estimate remains separate even with proof');
 });

@@ -1,6 +1,7 @@
 /** Immutable finite reading progress for the public archive catalogue. */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import {
   ARCHIVE_RECORDS,
   getArchiveRecord,
@@ -225,7 +226,7 @@ export function loadArchiveRecordState(serialized) {
   }
 }
 
-export function createArchiveRecordStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_ARCHIVE_RECORD_SAVE_KEY) {
+export function createArchiveRecordStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_ARCHIVE_RECORD_SAVE_KEY) {
   let hasObservedStorage = false;
   let lastObservedSerialized = null;
   let hasObservedRunId = false;

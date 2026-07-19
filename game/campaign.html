@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0b0d1b">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <title>Bells of the Black Chrysanthemum — Campaign</title>
     <link rel="stylesheet" href="campaign.css">
   </head>
@@ -132,6 +133,18 @@
             <p id="partyList"></p>
             <p class="party-note">Field: <kbd>WASD</kbd>/<kbd>QEZC</kbd> move · <kbd>X</kbd>/<kbd>Enter</kbd> interact. Battle: <kbd>WASD</kbd>/<kbd>Arrows</kbd> move · <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> arts.</p>
           </section>
+          <section class="journal-card route-ledger-card" aria-labelledby="routeLedgerHeading">
+            <div class="journal-heading">
+              <div>
+                <p class="eyebrow">Intended 20-hour route</p>
+                <h2 id="routeLedgerHeading">Route ledger</h2>
+              </div>
+              <span id="routeSummary">0 / 215 complete</span>
+            </div>
+            <p id="routeStatus" class="route-status" role="status">Finish each finite route entry as it unlocks.</p>
+            <ul id="routeDueList" class="route-due-list" aria-label="Required route entries due now"></ul>
+            <a class="subtle-button route-camp-link" href="camp.html">Open camp talks, councils &amp; archive</a>
+          </section>
           <section class="journal-card">
             <div class="journal-heading">
               <div>
@@ -164,7 +177,7 @@
         </aside>
       </section>
 
-      <p class="footer-note">The clean-run receipt counts active, visible play only and requires all 60 story scenes plus all 23 canonical first clears. The authored duration target remains unproven until one receipt records the full campaign and at least 20 active hours.</p>
+      <p class="footer-note">The intended route interleaves all 215 finite activities with the 60-scene story and four transparent repeat circuits. Credits require the entire route ledger; the clean-run receipt separately counts active, visible play and remains open until the explicit credits seal.</p>
     </main>
     <script type="module" src="campaign.js"></script>
   </body>

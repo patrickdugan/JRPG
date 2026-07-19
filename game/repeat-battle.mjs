@@ -11,10 +11,10 @@ import {
   RECOVERY_PULSE_MS,
 } from './campaign-combat.mjs';
 import { getEncounter } from './content/encounters.mjs';
-import { getEncounterRewardPreview } from './advancement.mjs';
+import { getEncounterRewardPreview, SPEED_MULTIPLIERS } from './advancement.mjs';
 import { chooseCampaignCombatCommand } from './battle-solver.mjs';
 
-export const REPEAT_BATTLE_SPEEDS = Object.freeze([1, 2, 4]);
+export const REPEAT_BATTLE_SPEEDS = SPEED_MULTIPLIERS;
 export const REPEAT_LOOP_PRESENTATION_MS = Object.freeze({
   intro: 800,
   move: 240,
@@ -32,6 +32,21 @@ function validateSpeed(speedMultiplier) {
   if (!REPEAT_BATTLE_SPEEDS.includes(speedMultiplier)) {
     throw new RangeError('Repeat battle speed must be 1, 2, or 4.');
   }
+}
+
+/**
+ * Resolve the presentation speed at the battle boundary.
+ *
+ * A saved preference is deliberately ignored until this exact encounter has
+ * a prior win. This keeps every first clear at the authored 1x cadence while
+ * allowing the same global preference to follow the player into any replay.
+ */
+export function resolveBattlePresentationSpeed(priorWins, savedSpeedMultiplier = 1) {
+  if (!Number.isSafeInteger(priorWins) || priorWins < 0) {
+    throw new RangeError('priorWins must be a non-negative safe integer.');
+  }
+  validateSpeed(savedSpeedMultiplier);
+  return priorWins > 0 ? savedSpeedMultiplier : 1;
 }
 
 /** Shared UI/benchmark timing contract for one presented repeat-loop step. */

@@ -12,14 +12,18 @@ import {
   createCampaignState,
 } from '../progression.mjs';
 import {
+  completeRunCredits,
   createRunReceipt,
   createRunReceiptStorageAdapter,
   getRunProofReport,
   loadRunReceipt,
+  DEFAULT_RUN_RECEIPT_SAVE_KEY,
+  LEGACY_RUN_RECEIPT_SAVE_KEY,
   recordRunBeatCompletion,
   recordRunFirstClear,
   recordRunPlaytime,
   RUN_RECEIPT_STATUSES,
+  RUN_RECEIPT_SCHEMA_VERSION,
   serializeRunReceipt,
   validateRunReceiptPayload,
 } from '../run-receipt.mjs';
@@ -52,6 +56,7 @@ test('a run receipt can start only beside pristine campaign and advancement stat
   });
   assert.equal(clean.ok, true);
   assert.equal(clean.state.runId, 'run-clean-0001');
+  assert.equal(clean.state.schemaVersion, RUN_RECEIPT_SCHEMA_VERSION);
   assert.equal(clean.state.cleanStart, true);
   assert.equal(clean.state.status, RUN_RECEIPT_STATUSES.ACTIVE);
   assert.equal(clean.state.playtime.totalMs, 0);
@@ -126,10 +131,22 @@ test('proof uses only same-run zero-based time, completion, and first-clear evid
   for (const encounterId of ENCOUNTER_IDS) completed = recordRunFirstClear(completed, completed.runId, encounterId).state;
   for (const beatId of BEAT_IDS) completed = recordRunBeatCompletion(completed, completed.runId, beatId).state;
 
+  const storyProof = getRunProofReport(completed);
+  assert.equal(completed.status, RUN_RECEIPT_STATUSES.ACTIVE, 'the final beat leaves post-final camp time open');
+  assert.equal(storyProof.storyComplete, true);
+  assert.equal(storyProof.creditsComplete, false);
+  assert.equal(storyProof.campaignComplete, false);
+  assert.equal(storyProof.durationProven, false, 'unsealed credits cannot prove duration');
+  const postFinal = recordRunPlaytime(completed, completed.runId, 'menusAndRest', 500);
+  assert.equal(postFinal.ok, true, 'post-final camp activity remains recordable');
+  completed = completeRunCredits(postFinal.state, completed.runId).state;
+
   const proof = getRunProofReport(completed);
   assert.equal(proof.runScoped, true);
   assert.equal(proof.runId, completed.runId);
   assert.equal(proof.campaignComplete, true);
+  assert.equal(proof.storyComplete, true);
+  assert.equal(proof.creditsComplete, true);
   assert.equal(proof.firstClearsComplete, true);
   assert.equal(proof.durationProven, true);
   assert.deepEqual(proof.missingBeatIds, []);
@@ -145,6 +162,69 @@ test('proof uses only same-run zero-based time, completion, and first-clear evid
   assert.equal(frozen.ok, false);
   assert.equal(frozen.code, 'run-complete');
   assert.equal(frozen.state.playtime.totalMs, completed.playtime.totalMs);
+});
+
+test('credits cannot seal an unfinished story and explicit completion survives storage reload', () => {
+  const initial = start('run-credits-0001');
+  const early = completeRunCredits(initial, initial.runId);
+  assert.equal(early.ok, false);
+  assert.equal(early.code, 'story-incomplete');
+
+  let storyComplete = initial;
+  for (const beatId of BEAT_IDS) storyComplete = recordRunBeatCompletion(storyComplete, storyComplete.runId, beatId).state;
+  const sealed = completeRunCredits(storyComplete, storyComplete.runId);
+  assert.equal(sealed.ok, true);
+  assert.equal(sealed.state.status, RUN_RECEIPT_STATUSES.COMPLETE);
+  assert.equal(sealed.state.creditsCompleted, true);
+  assert.equal(sealed.state.revision, storyComplete.revision + 1);
+
+  const storage = new MemoryStorage();
+  const adapter = createRunReceiptStorageAdapter(storage, 'credits-reload');
+  assert.equal(adapter.save(sealed.state).ok, true);
+  const reloaded = adapter.load();
+  assert.equal(reloaded.ok, true);
+  assert.equal(reloaded.state.creditsCompleted, true);
+  assert.equal(getRunProofReport(reloaded.state).creditsComplete, true);
+  assert.equal(recordRunPlaytime(reloaded.state, reloaded.state.runId, 'narrative', 1).code, 'run-complete');
+});
+
+test('schema-one receipts migrate to an active unsealed v2 receipt and persist under the new key', () => {
+  let oldState = start('run-legacy-0001');
+  for (const beatId of BEAT_IDS) oldState = recordRunBeatCompletion(oldState, oldState.runId, beatId).state;
+  const legacyPayload = {
+    schemaVersion: 1,
+    campaignId: oldState.campaignId,
+    runId: oldState.runId,
+    cleanStart: true,
+    status: RUN_RECEIPT_STATUSES.COMPLETE,
+    playtime: oldState.playtime,
+    completedBeatIds: oldState.completedBeatIds,
+    firstClearEncounterIds: oldState.firstClearEncounterIds,
+    revision: oldState.revision,
+  };
+  const migrated = loadRunReceipt(legacyPayload);
+  assert.equal(migrated.ok, true);
+  assert.equal(migrated.migrated, true);
+  assert.equal(migrated.fromSchemaVersion, 1);
+  assert.equal(migrated.state.schemaVersion, RUN_RECEIPT_SCHEMA_VERSION);
+  assert.equal(migrated.state.status, RUN_RECEIPT_STATUSES.ACTIVE);
+  assert.equal(migrated.state.creditsCompleted, false);
+  assert.equal(getRunProofReport(migrated.state).storyComplete, true);
+  assert.equal(getRunProofReport(migrated.state).creditsComplete, false);
+
+  const storage = new MemoryStorage();
+  storage.setItem(LEGACY_RUN_RECEIPT_SAVE_KEY, JSON.stringify(legacyPayload));
+  const adapter = createRunReceiptStorageAdapter(storage);
+  const loaded = adapter.load();
+  assert.equal(loaded.ok, true);
+  assert.equal(loaded.migrationPersisted, true);
+  assert.equal(storage.getItem(LEGACY_RUN_RECEIPT_SAVE_KEY), null);
+  assert.ok(storage.getItem(DEFAULT_RUN_RECEIPT_SAVE_KEY));
+  assert.equal(createRunReceiptStorageAdapter(storage).load().state.creditsCompleted, false);
+  storage.setItem(LEGACY_RUN_RECEIPT_SAVE_KEY, JSON.stringify(legacyPayload));
+  assert.equal(adapter.clear().ok, true);
+  assert.equal(storage.getItem(DEFAULT_RUN_RECEIPT_SAVE_KEY), null);
+  assert.equal(storage.getItem(LEGACY_RUN_RECEIPT_SAVE_KEY), null, 'clear cannot resurrect a legacy receipt');
 });
 
 test('run receipts round-trip, reject tampering, and persist independently', () => {

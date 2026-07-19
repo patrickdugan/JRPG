@@ -66,6 +66,7 @@ import {
   selectChoice,
 } from './progression.mjs';
 import {
+  completeRunCredits,
   createRunReceipt,
   getRunProofReport,
   recordRunBeatCompletion,
@@ -718,6 +719,10 @@ export function runCanonicalCompletion(options = {}) {
   if (!sceneOperationMetrics.campaignComplete) {
     throw new Error(`Canonical scene operations are incomplete: ${sceneOperationMetrics.completedOperationCount}/${sceneOperationMetrics.operationCount}.`);
   }
+  receiptState = requireOk(
+    completeRunCredits(receiptState, receiptState.runId),
+    'complete canonical credits',
+  ).state;
   const proof = getRunProofReport(receiptState);
   const summary = deepFreeze({
     beatCount: campaignState.completedBeatIds.length,

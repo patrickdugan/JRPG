@@ -11,7 +11,7 @@
 | First circuit of contracts | 4 | 40 |
 | Total authored optional pass | 35 | 662 (11.03 hours) |
 
-These are authored declarations, not measured playtime and not inputs to the quantity-based duration estimate. Contract repeats remain available after the first circuit and are excluded from the finite completion witness. They provide transparent level-grind loops without padding finite state-transition evidence or changing first-clear campaign resolutions.
+These are authored declarations, not measured playtime and not inputs to the quantity-based duration estimate. The standalone finite-content witness excludes repeat contracts, while the 215-activity intended-route contract requires exactly one circuit of each of the four contracts at its unlock frontier. Duration audit v8 counts only those four engine-measured presentation schedules; later repeats remain available as transparent level-grind loops without padding finite state-transition evidence or changing first-clear campaign resolutions.
 
 ## Witness chronicles
 

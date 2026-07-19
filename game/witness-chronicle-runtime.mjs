@@ -7,6 +7,7 @@
  */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import {
   WITNESS_CHRONICLES,
   getWitnessChronicle,
@@ -275,7 +276,7 @@ export function loadWitnessChronicleState(serialized) {
   }
 }
 
-export function createWitnessChronicleStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_WITNESS_CHRONICLE_SAVE_KEY) {
+export function createWitnessChronicleStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_WITNESS_CHRONICLE_SAVE_KEY) {
   return Object.freeze({
     load() {
       try {

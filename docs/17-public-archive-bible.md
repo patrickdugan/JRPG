@@ -60,7 +60,7 @@ The exact witness executes 558 successful transitions and records 619 trace even
 
 The quantity model counts the exact visible title, record type, custodian, access note, and paragraphs. It adds one explicit start interaction and one line-advance input per paragraph. It does not use a declared reading duration, unseen prose, rewards, idle time, or repeat loops.
 
-This arithmetic remains a model. A public record may be skimmed, reread, discussed, or ignored. Only the same clean human run receipt that completes the campaign and records 1,200 active minutes can prove the 20-hour target.
+This arithmetic remains a model. A public record may be skimmed, reread, discussed, or ignored. All 60 records are part of the 215-activity intended route, including the record unlocked by the final beat. The receipt therefore remains active for that post-story, pre-credits reading and the credits gate refuses to seal until it and the other 214 activities are complete. Only a clean human run that explicitly completes credits and records at least 1,200 active minutes on that same receipt can prove the 20-hour target.
 
 ## Editorial review checklist
 

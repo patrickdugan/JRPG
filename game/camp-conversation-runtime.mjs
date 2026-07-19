@@ -1,6 +1,7 @@
 /** Immutable finite progress for the party's two-person camp conversations. */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import {
   CAMP_CONVERSATIONS,
   getCampConversation,
@@ -322,7 +323,7 @@ export function loadCampConversationState(serialized) {
   }
 }
 
-export function createCampConversationStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_CAMP_CONVERSATION_SAVE_KEY) {
+export function createCampConversationStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_CAMP_CONVERSATION_SAVE_KEY) {
   let hasObservedStorage = false;
   let lastObservedSerialized = null;
   let hasObservedRunId = false;

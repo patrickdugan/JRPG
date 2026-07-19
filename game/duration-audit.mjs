@@ -23,16 +23,18 @@ import { CAMPAIGN } from './content/campaign.mjs';
 import {
   CAMP_CONVERSATION_METRICS,
   CAMP_CONVERSATION_PLAYABLE_METRICS,
+  CAMP_CONVERSATIONS,
 } from './content/camp-conversations.mjs';
-import { ARCHIVE_RECORD_METRICS } from './content/archive-records.mjs';
+import { ARCHIVE_RECORD_METRICS, ARCHIVE_RECORDS } from './content/archive-records.mjs';
 import {
   PARTY_COUNCIL_METRICS,
   PARTY_COUNCIL_PLAYABLE_METRICS,
+  PARTY_COUNCILS,
 } from './content/party-councils.mjs';
 import { ENCOUNTERS } from './content/encounters.mjs';
 import { FULL_DIALOGUE_SCRIPT } from './content/full-dialogue.mjs';
 import { REPEATABLE_CONTRACTS, SIDE_QUESTS } from './content/sidequests.mjs';
-import { getWitnessChronicleMetrics } from './content/witness-chronicles.mjs';
+import { getWitnessChronicleMetrics, WITNESS_CHRONICLES } from './content/witness-chronicles.mjs';
 import { runFiniteContentCompletion } from './finite-content-run.mjs';
 import {
   applyLoadoutToPartyProfile,
@@ -40,6 +42,7 @@ import {
   grantInventory,
 } from './loadout.mjs';
 import { REPEAT_BATTLE_SPEEDS, runRepeatBattle } from './repeat-battle.mjs';
+import { runRequiredRouteCompletion } from './required-route-run.mjs';
 import {
   getRunProofReport,
   loadRunReceipt,
@@ -47,7 +50,7 @@ import {
 } from './run-receipt.mjs';
 import { getWitnessStageFieldworkMetrics } from './witness-stage-fieldwork.mjs';
 
-export const DURATION_AUDIT_VERSION = 6;
+export const DURATION_AUDIT_VERSION = 8;
 export const DURATION_TARGET_MINUTES = CAMPAIGN_PACING.targetMinutesAt1x;
 
 const ASSUMPTION_KEYS = Object.freeze([
@@ -146,6 +149,94 @@ function sum(values) {
 
 function rounded(value, digits = 3) {
   return Number(value.toFixed(digits));
+}
+
+const CANONICAL_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => (
+  chapter.beats.map((beat) => beat.id)
+)));
+const FINAL_CANONICAL_BEAT_ID = CANONICAL_BEAT_IDS.at(-1);
+
+function emptyDurationMetrics() {
+  return Object.fromEntries(DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]));
+}
+
+function combineDurationMetrics(...sources) {
+  return deepFreeze(Object.fromEntries(DURATION_WITNESS_METRIC_KEYS.map((key) => [
+    key,
+    sum(sources.map((source) => source?.[key] ?? 0)),
+  ])));
+}
+
+function conversationDurationMetrics(conversations) {
+  return deepFreeze(conversations.reduce((metrics, conversation) => {
+    const selectedOption = conversation.choice.options[0];
+    const visibleText = [
+      conversation.title,
+      conversation.theme,
+      conversation.choice.prompt,
+      ...conversation.dialogue.map((line) => line.line),
+      ...conversation.choice.options.map((option) => option.label),
+      ...selectedOption.response.map((line) => line.line),
+      selectedOption.consequence.summary,
+    ];
+    metrics.dialogueWords += sum(visibleText.map(wordCount));
+    metrics.dialogueLines += conversation.dialogue.length + selectedOption.response.length;
+    metrics.choices += 1;
+    metrics.interactions += 1;
+    return metrics;
+  }, emptyDurationMetrics()));
+}
+
+function councilDurationMetrics(councils) {
+  return deepFreeze(councils.reduce((metrics, council) => {
+    const selectedOption = council.choice.options[0];
+    const visibleText = [
+      council.title,
+      council.theme,
+      council.choice.prompt,
+      ...council.dialogue.map((line) => line.line),
+      ...council.choice.options.map((option) => option.label),
+      ...selectedOption.response.map((line) => line.line),
+      selectedOption.consequence.summary,
+    ];
+    metrics.dialogueWords += sum(visibleText.map(wordCount));
+    metrics.dialogueLines += council.dialogue.length + selectedOption.response.length;
+    metrics.choices += 1;
+    metrics.interactions += 1;
+    return metrics;
+  }, emptyDurationMetrics()));
+}
+
+function archiveDurationMetrics(records) {
+  return deepFreeze(records.reduce((metrics, record) => {
+    metrics.dialogueWords += sum([
+      record.title,
+      record.recordType,
+      record.custodian,
+      record.accessNote,
+      ...record.paragraphs,
+    ].map(wordCount));
+    metrics.dialogueLines += record.paragraphs.length;
+    metrics.interactions += 1;
+    return metrics;
+  }, emptyDurationMetrics()));
+}
+
+function sideQuestDurationMetrics(quests) {
+  const metrics = emptyDurationMetrics();
+  metrics.dialogueWords = sum(quests.map((quest) => (
+    wordCount(quest.title)
+      + sum(quest.objectives.map((objective) => wordCount(objective.instruction)))
+  )));
+  metrics.finiteQuestCount = quests.length;
+  metrics.finiteQuestObjectiveCount = sum(quests.map((quest) => quest.objectives.length));
+  return deepFreeze(metrics);
+}
+
+function splitAtStoryCompletion(entries, unlockKey) {
+  const postStoryPreCredits = entries.filter((entry) => entry?.[unlockKey] === FINAL_CANONICAL_BEAT_ID);
+  const beforeStoryCompletion = entries.filter((entry) => entry?.[unlockKey] !== FINAL_CANONICAL_BEAT_ID);
+  return deepFreeze({ beforeStoryCompletion, postStoryPreCredits });
 }
 
 function mergeAndValidateAssumptions(overrides = {}) {
@@ -268,6 +359,10 @@ function shippedWitnessChronicleMetrics() {
 }
 
 function shippedCampConversationMetrics() {
+  const availability = splitAtStoryCompletion(CAMP_CONVERSATIONS.conversations, 'unlockAfterBeatId');
+  const metrics = conversationDurationMetrics(CAMP_CONVERSATIONS.conversations);
+  const beforeStoryCompletionMetrics = conversationDurationMetrics(availability.beforeStoryCompletion);
+  const postStoryPreCreditsMetrics = conversationDurationMetrics(availability.postStoryPreCredits);
   return deepFreeze({
     supplied: true,
     source: 'shipped-camp-conversation-runtime-v1',
@@ -275,48 +370,36 @@ function shippedCampConversationMetrics() {
     repeatable: false,
     catalogueMetrics: CAMP_CONVERSATION_METRICS,
     playableMetrics: CAMP_CONVERSATION_PLAYABLE_METRICS,
-    metrics: {
-      dialogueWords: CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount,
-      dialogueLines: CAMP_CONVERSATION_PLAYABLE_METRICS.dialogueLineCount,
-      choices: CAMP_CONVERSATION_PLAYABLE_METRICS.choiceCount,
-      fieldMoves: 0,
-      interactions: CAMP_CONVERSATION_PLAYABLE_METRICS.conversationCount,
-      exits: 0,
-      playerCommands: 0,
-      enemyActivations: 0,
-      campRests: 0,
-      finiteEncounterCount: 0,
-      finiteQuestCount: 0,
-      finiteQuestObjectiveCount: 0,
-    },
+    metrics,
+    beforeStoryCompletionMetrics,
+    postStoryPreCreditsMetrics,
+    postStoryPreCreditsIds: availability.postStoryPreCredits.map((conversation) => conversation.id),
   });
 }
 
 function shippedArchiveRecordMetrics() {
+  const availability = splitAtStoryCompletion(ARCHIVE_RECORDS.records, 'unlockAfterBeatId');
+  const metrics = archiveDurationMetrics(ARCHIVE_RECORDS.records);
+  const beforeStoryCompletionMetrics = archiveDurationMetrics(availability.beforeStoryCompletion);
+  const postStoryPreCreditsMetrics = archiveDurationMetrics(availability.postStoryPreCredits);
   return deepFreeze({
     supplied: true,
     source: 'shipped-public-archive-runtime-v1',
     finite: true,
     repeatable: false,
     catalogueMetrics: ARCHIVE_RECORD_METRICS,
-    metrics: {
-      dialogueWords: ARCHIVE_RECORD_METRICS.wordCount,
-      dialogueLines: ARCHIVE_RECORD_METRICS.paragraphCount,
-      choices: 0,
-      fieldMoves: 0,
-      interactions: ARCHIVE_RECORD_METRICS.recordCount,
-      exits: 0,
-      playerCommands: 0,
-      enemyActivations: 0,
-      campRests: 0,
-      finiteEncounterCount: 0,
-      finiteQuestCount: 0,
-      finiteQuestObjectiveCount: 0,
-    },
+    metrics,
+    beforeStoryCompletionMetrics,
+    postStoryPreCreditsMetrics,
+    postStoryPreCreditsIds: availability.postStoryPreCredits.map((record) => record.id),
   });
 }
 
 function shippedPartyCouncilMetrics() {
+  const availability = splitAtStoryCompletion(PARTY_COUNCILS.councils, 'unlockAfterBeatId');
+  const metrics = councilDurationMetrics(PARTY_COUNCILS.councils);
+  const beforeStoryCompletionMetrics = councilDurationMetrics(availability.beforeStoryCompletion);
+  const postStoryPreCreditsMetrics = councilDurationMetrics(availability.postStoryPreCredits);
   return deepFreeze({
     supplied: true,
     source: 'shipped-party-council-runtime-v1',
@@ -324,20 +407,10 @@ function shippedPartyCouncilMetrics() {
     repeatable: false,
     catalogueMetrics: PARTY_COUNCIL_METRICS,
     playableMetrics: PARTY_COUNCIL_PLAYABLE_METRICS,
-    metrics: {
-      dialogueWords: PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount,
-      dialogueLines: PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount,
-      choices: PARTY_COUNCIL_PLAYABLE_METRICS.choiceCount,
-      fieldMoves: 0,
-      interactions: PARTY_COUNCIL_PLAYABLE_METRICS.councilCount,
-      exits: 0,
-      playerCommands: 0,
-      enemyActivations: 0,
-      campRests: 0,
-      finiteEncounterCount: 0,
-      finiteQuestCount: 0,
-      finiteQuestObjectiveCount: 0,
-    },
+    metrics,
+    beforeStoryCompletionMetrics,
+    postStoryPreCreditsMetrics,
+    postStoryPreCreditsIds: availability.postStoryPreCredits.map((council) => council.id),
   });
 }
 
@@ -440,37 +513,32 @@ function inspectReceipt(receipt) {
   });
 }
 
-function quantitiesForEstimate(base, witness, campConversation, partyCouncil, archiveRecord, includeFiniteQuests) {
-  const campMetrics = includeFiniteQuests ? campConversation.metrics : Object.fromEntries(
-    DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]),
-  );
-  const archiveMetrics = includeFiniteQuests ? archiveRecord.metrics : Object.fromEntries(
-    DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]),
-  );
-  const councilMetrics = includeFiniteQuests ? partyCouncil.metrics : Object.fromEntries(
-    DURATION_WITNESS_METRIC_KEYS.map((key) => [key, 0]),
-  );
-  const additions = Object.fromEntries(DURATION_WITNESS_METRIC_KEYS.map((key) => [
-    key,
-    witness.metrics[key] + campMetrics[key] + councilMetrics[key] + archiveMetrics[key],
-  ]));
+function quantitiesForEstimate(base, additions = []) {
+  const combined = combineDurationMetrics(...additions);
   return deepFreeze({
-    dialogueWords: base.dialogueWordCount
-      + additions.dialogueWords
-      + (includeFiniteQuests ? base.finiteQuestRuntimeTextWordCount : 0),
-    dialogueLines: base.dialogueLineCount + additions.dialogueLines,
-    choices: base.canonicalChoiceCount + additions.choices,
-    fieldMoves: base.fieldMoveCount + additions.fieldMoves,
-    interactions: base.interactionCount + additions.interactions,
-    exits: base.exitCount + additions.exits,
-    playerCommands: base.playerCommandCount + additions.playerCommands,
-    enemyActivations: base.enemyActivationCount + additions.enemyActivations,
-    campRests: base.campRestCount + additions.campRests,
-    finiteEncounterCount: base.firstClearEncounterCount + additions.finiteEncounterCount,
-    finiteQuestCount: (includeFiniteQuests ? base.finiteQuestCount : 0) + additions.finiteQuestCount,
-    finiteQuestObjectiveCount: (includeFiniteQuests ? base.finiteQuestObjectiveCount : 0)
-      + additions.finiteQuestObjectiveCount,
+    dialogueWords: base.dialogueWordCount + combined.dialogueWords,
+    dialogueLines: base.dialogueLineCount + combined.dialogueLines,
+    choices: base.canonicalChoiceCount + combined.choices,
+    fieldMoves: base.fieldMoveCount + combined.fieldMoves,
+    interactions: base.interactionCount + combined.interactions,
+    exits: base.exitCount + combined.exits,
+    playerCommands: base.playerCommandCount + combined.playerCommands,
+    enemyActivations: base.enemyActivationCount + combined.enemyActivations,
+    campRests: base.campRestCount + combined.campRests,
+    finiteEncounterCount: base.firstClearEncounterCount + combined.finiteEncounterCount,
+    finiteQuestCount: combined.finiteQuestCount,
+    finiteQuestObjectiveCount: combined.finiteQuestObjectiveCount,
   });
+}
+
+function subtractQuantities(total, subset) {
+  return deepFreeze(Object.fromEntries(Object.keys(total).map((key) => {
+    const difference = total[key] - subset[key];
+    if (!Number.isFinite(difference) || difference < 0) {
+      throw new Error(`Duration quantity ${key} cannot be subtracted safely.`);
+    }
+    return [key, difference];
+  })));
 }
 
 function estimateSeconds(quantities, assumptions) {
@@ -496,32 +564,91 @@ function estimateSeconds(quantities, assumptions) {
   });
 }
 
-function estimateScenario(name, assumptions, criticalQuantities, allFiniteQuantities) {
-  const criticalSeconds = estimateSeconds(criticalQuantities, assumptions);
-  const allFiniteSeconds = estimateSeconds(allFiniteQuantities, assumptions);
-  const allFiniteMinutes = allFiniteSeconds.total / 60;
+function estimateBucket(quantities, assumptions, requiredRepeatPresentationMs = 0) {
+  const seconds = estimateSeconds(quantities, assumptions);
+  if (!Number.isSafeInteger(requiredRepeatPresentationMs) || requiredRepeatPresentationMs < 0) {
+    throw new RangeError('Required repeat presentation must be a non-negative safe integer number of milliseconds.');
+  }
+  const requiredRepeatPresentation = requiredRepeatPresentationMs / 1_000;
+  return {
+    quantities,
+    breakdownMinutes: Object.fromEntries(Object.entries(seconds)
+      .filter(([key]) => key !== 'total')
+      .map(([key, value]) => [key, rounded(value / 60)])
+      .concat([['requiredRepeatPresentation', rounded(requiredRepeatPresentation / 60)]])),
+    requiredRepeatPresentationMs,
+    estimatedSeconds: seconds.total + requiredRepeatPresentation,
+    estimatedMinutes: rounded((seconds.total + requiredRepeatPresentation) / 60),
+  };
+}
+
+function estimateScenario(name, assumptions, {
+  canonicalQuantities,
+  optionalQuantities,
+  allFiniteBeforeStoryCompletionQuantities,
+  allFiniteQuantities,
+  postStoryPreCreditsQuantities,
+  requiredRepeatScheduleMsBySpeed,
+}) {
+  const canonicalOnly = estimateBucket(canonicalQuantities, assumptions);
+  const optionalInclusive = estimateBucket(optionalQuantities, assumptions);
+  const allFiniteBeforeStoryCompletion = estimateBucket(
+    allFiniteBeforeStoryCompletionQuantities,
+    assumptions,
+    requiredRepeatScheduleMsBySpeed[1],
+  );
+  const repeatSpeedVariants = deepFreeze(Object.fromEntries(REPEAT_BATTLE_SPEEDS.map((speedMultiplier) => {
+    const bucket = estimateBucket(allFiniteQuantities, assumptions, requiredRepeatScheduleMsBySpeed[speedMultiplier]);
+    const minutes = bucket.estimatedSeconds / 60;
+    return [speedMultiplier, {
+      speedMultiplier,
+      scheduledRepeatPresentationMs: requiredRepeatScheduleMsBySpeed[speedMultiplier],
+      estimatedSeconds: bucket.estimatedSeconds,
+      estimatedMinutes: bucket.estimatedMinutes,
+      exactModelGapSecondsTo20Hours: Math.max(0, (DURATION_TARGET_MINUTES * 60) - bucket.estimatedSeconds),
+      modelGapMinutesTo20Hours: rounded(Math.max(0, DURATION_TARGET_MINUTES - minutes)),
+      modelSurplusMinutesOver20Hours: rounded(Math.max(0, minutes - DURATION_TARGET_MINUTES)),
+      reaches20HoursUnderModel: minutes >= DURATION_TARGET_MINUTES,
+    }];
+  })));
+  const allFiniteContent = estimateBucket(allFiniteQuantities, assumptions, requiredRepeatScheduleMsBySpeed[1]);
+  const postStoryPreCredits = estimateBucket(postStoryPreCreditsQuantities, assumptions);
+  const eligibleMinutes = allFiniteContent.estimatedSeconds / 60;
   return deepFreeze({
     scenario: name,
     assumptions,
     estimateIsProof: false,
-    criticalPath: {
-      quantities: criticalQuantities,
-      breakdownMinutes: Object.fromEntries(Object.entries(criticalSeconds)
-        .filter(([key]) => key !== 'total')
-        .map(([key, seconds]) => [key, rounded(seconds / 60)])),
-      estimatedSeconds: criticalSeconds.total,
-      estimatedMinutes: rounded(criticalSeconds.total / 60),
+    canonicalOnly: {
+      ...canonicalOnly,
+      scope: 'Canonical dialogue, choices, required field route, first-clear battles, and canonical rests only.',
+      eligibleBeforeCreditsSeal: true,
+    },
+    optionalInclusive: {
+      ...optionalInclusive,
+      scope: 'Canonical route plus finite side quests and supplied witness chronicles.',
+      eligibleBeforeCreditsSeal: true,
+    },
+    allFiniteBeforeStoryCompletion: {
+      ...allFiniteBeforeStoryCompletion,
+      scope: 'Every finite shipped item available before the final canonical story beat completes.',
+      eligibleBeforeCreditsSeal: true,
     },
     allFiniteContent: {
-      quantities: allFiniteQuantities,
-      breakdownMinutes: Object.fromEntries(Object.entries(allFiniteSeconds)
-        .filter(([key]) => key !== 'total')
-        .map(([key, seconds]) => [key, rounded(seconds / 60)])),
-      estimatedSeconds: allFiniteSeconds.total,
-      estimatedMinutes: rounded(allFiniteMinutes),
-      exactModelGapSecondsTo20Hours: Math.max(0, (DURATION_TARGET_MINUTES * 60) - allFiniteSeconds.total),
-      modelGapMinutesTo20Hours: rounded(Math.max(0, DURATION_TARGET_MINUTES - allFiniteMinutes)),
-      reaches20HoursUnderModel: allFiniteMinutes >= DURATION_TARGET_MINUTES,
+      ...allFiniteContent,
+      scope: 'The complete finite catalogue on the intended route, including final-beat unlocks consumed before explicit credits completion.',
+      eligibleBeforeCreditsSeal: true,
+      requiredRepeatSpeedMultiplier: 1,
+      repeatSpeedVariants,
+      exactModelGapSecondsTo20Hours: Math.max(0, (DURATION_TARGET_MINUTES * 60) - allFiniteContent.estimatedSeconds),
+      modelGapMinutesTo20Hours: rounded(Math.max(0, DURATION_TARGET_MINUTES - eligibleMinutes)),
+      modelSurplusMinutesOver20Hours: rounded(Math.max(0, eligibleMinutes - DURATION_TARGET_MINUTES)),
+      reaches20HoursUnderModel: eligibleMinutes >= DURATION_TARGET_MINUTES,
+    },
+    postStoryPreCredits: {
+      ...postStoryPreCredits,
+      scope: 'Finite items unlocked by the final story beat and consumed while the receipt remains active, before explicit credits completion.',
+      eligibleBeforeCreditsSeal: true,
+      includedInAllFiniteContent: true,
     },
   });
 }
@@ -535,6 +662,7 @@ function getShippedEvidence() {
   const campConversationRun = runCampConversationCompletion();
   const partyCouncilRun = runPartyCouncilCompletion();
   const archiveRecordRun = runArchiveRecordCompletion();
+  const requiredRouteRun = runRequiredRouteCompletion();
   if (finiteContentRun.canonical.signature !== canonicalRun.signature) {
     throw new Error('Finite-content evidence was not seeded from the current canonical campaign signature.');
   }
@@ -546,6 +674,17 @@ function getShippedEvidence() {
   }
   if (partyCouncilRun.canonical.signature !== canonicalRun.signature) {
     throw new Error('Party-council evidence was not seeded from the current canonical campaign signature.');
+  }
+  if (requiredRouteRun.canonical.signature !== canonicalRun.signature) {
+    throw new Error('Required-route evidence was not seeded from the current canonical campaign signature.');
+  }
+  if (!requiredRouteRun.completionProof.valid
+    || !requiredRouteRun.completionProof.grindMilestonesComplete
+    || !requiredRouteRun.completionProof.repeatDecisionsAndRewardsSpeedInvariant
+    || requiredRouteRun.repeatScheduleAudit.schedules.length !== 4
+    || requiredRouteRun.repeatScheduleAudit.scheduleOnly !== true
+    || requiredRouteRun.repeatScheduleAudit.elapsedTimeRecordedMs !== 0) {
+    throw new Error('Required-route scheduler evidence is incomplete or claims elapsed time.');
   }
   shippedEvidenceCache = deepFreeze({
     canonicalEvidence: {
@@ -582,6 +721,14 @@ function getShippedEvidence() {
       catalogueMetrics: archiveRecordRun.catalogueMetrics,
       durationEvidence: archiveRecordRun.durationEvidence,
     },
+    requiredRouteEvidence: {
+      signature: requiredRouteRun.signature,
+      contractSignature: requiredRouteRun.contractSignature,
+      summary: requiredRouteRun.summary,
+      completionProof: requiredRouteRun.completionProof,
+      durationEvidence: requiredRouteRun.durationEvidence,
+      repeatScheduleAudit: requiredRouteRun.repeatScheduleAudit,
+    },
     content: campaignContentMetrics(canonicalRun),
     repeatBattle: repeatCircuitMetrics(),
   });
@@ -605,13 +752,72 @@ export function createDurationAudit({
   const partyCouncil = shippedPartyCouncilMetrics();
   const archiveRecord = shippedArchiveRecordMetrics();
   const shipped = getShippedEvidence();
-  const { content, repeatBattle } = shipped;
+  const { content, repeatBattle, requiredRouteEvidence } = shipped;
   const receipt = inspectReceipt(runReceipt);
-  const criticalQuantities = quantitiesForEstimate(content, witnessChronicle, campConversation, partyCouncil, archiveRecord, false);
-  const allFiniteQuantities = quantitiesForEstimate(content, witnessChronicle, campConversation, partyCouncil, archiveRecord, true);
+
+  const beforeStoryCompletionSideQuests = SIDE_QUESTS.filter((quest) => (
+    quest.prerequisites?.opensAfterBeatId !== FINAL_CANONICAL_BEAT_ID
+  ));
+  const postStoryPreCreditsSideQuests = SIDE_QUESTS.filter((quest) => (
+    quest.prerequisites?.opensAfterBeatId === FINAL_CANONICAL_BEAT_ID
+  ));
+  const postStoryPreCreditsWitnessChronicles = WITNESS_CHRONICLES.filter((chronicle) => (
+    chronicle.opensAfterBeatId === FINAL_CANONICAL_BEAT_ID
+  ));
+  if (postStoryPreCreditsWitnessChronicles.length) {
+    throw new Error('Witness metrics cannot be partitioned into the before-story-completion bucket while a chronicle unlocks after the final beat.');
+  }
+
+  const allSideQuestMetrics = sideQuestDurationMetrics(SIDE_QUESTS);
+  const beforeStoryCompletionSideQuestMetrics = sideQuestDurationMetrics(beforeStoryCompletionSideQuests);
+  const postStoryPreCreditsSideQuestMetrics = sideQuestDurationMetrics(postStoryPreCreditsSideQuests);
+  const canonicalQuantities = quantitiesForEstimate(content);
+  const optionalQuantities = quantitiesForEstimate(content, [
+    allSideQuestMetrics,
+    witnessChronicle.metrics,
+  ]);
+  const allFiniteBeforeStoryCompletionQuantities = quantitiesForEstimate(content, [
+    beforeStoryCompletionSideQuestMetrics,
+    witnessChronicle.metrics,
+    campConversation.beforeStoryCompletionMetrics,
+    partyCouncil.beforeStoryCompletionMetrics,
+    archiveRecord.beforeStoryCompletionMetrics,
+  ]);
+  const allFiniteQuantities = quantitiesForEstimate(content, [
+    allSideQuestMetrics,
+    witnessChronicle.metrics,
+    campConversation.metrics,
+    partyCouncil.metrics,
+    archiveRecord.metrics,
+  ]);
+  const postStoryPreCreditsQuantities = subtractQuantities(allFiniteQuantities, allFiniteBeforeStoryCompletionQuantities);
+  const postStoryPreCreditsContent = deepFreeze({
+    finalBeatId: FINAL_CANONICAL_BEAT_ID,
+    receiptRemainsActiveAfterFinalBeat: true,
+    creditsCompletionSealsReceipt: true,
+    includedInAllFiniteContent: true,
+    sideQuestIds: postStoryPreCreditsSideQuests.map((quest) => quest.id),
+    witnessChronicleIds: postStoryPreCreditsWitnessChronicles.map((chronicle) => chronicle.id),
+    campConversationIds: campConversation.postStoryPreCreditsIds,
+    partyCouncilIds: partyCouncil.postStoryPreCreditsIds,
+    archiveRecordIds: archiveRecord.postStoryPreCreditsIds,
+    metrics: combineDurationMetrics(
+      postStoryPreCreditsSideQuestMetrics,
+      campConversation.postStoryPreCreditsMetrics,
+      partyCouncil.postStoryPreCreditsMetrics,
+      archiveRecord.postStoryPreCreditsMetrics,
+    ),
+  });
   const estimates = Object.fromEntries(Object.entries(assumptions).map(([name, scenarioAssumptions]) => [
     name,
-    estimateScenario(name, scenarioAssumptions, criticalQuantities, allFiniteQuantities),
+    estimateScenario(name, scenarioAssumptions, {
+      canonicalQuantities,
+      optionalQuantities,
+      allFiniteBeforeStoryCompletionQuantities,
+      allFiniteQuantities,
+      postStoryPreCreditsQuantities,
+      requiredRepeatScheduleMsBySpeed: requiredRouteEvidence.repeatScheduleAudit.aggregateScheduledMsBySpeed,
+    }),
   ]));
 
   return deepFreeze({
@@ -630,6 +836,7 @@ export function createDurationAudit({
     campConversationEvidence: shipped.campConversationEvidence,
     partyCouncilEvidence: shipped.partyCouncilEvidence,
     archiveRecordEvidence: shipped.archiveRecordEvidence,
+    requiredRouteEvidence,
     content,
     authoredDurationDeclarations: {
       campaignChapterMinutes: sum(CAMPAIGN.chapters.map((chapter) => chapter.estimatedMinutes ?? 0)),
@@ -643,6 +850,7 @@ export function createDurationAudit({
     campConversation,
     partyCouncil,
     archiveRecord,
+    postStoryPreCreditsContent,
     repeatBattle,
     estimates,
     estimateMethod: {
@@ -654,7 +862,7 @@ export function createDurationAudit({
       unit: 'seconds',
     },
     finiteContentGapTo20Hours: {
-      basis: 'All canonical finite content, all finite side-quest objectives, supplied witness metrics, all finite camp conversations, all finite party councils, and all finite public archive readings; repeatable loops and authored minute declarations excluded.',
+      basis: 'The complete all-finite intended route through post-story camp and explicit credits completion, including four required repeat milestones at measured 1x scheduler duration; authored minute declarations excluded.',
       arithmeticIsExactUnderEachAssumptionSet: true,
       isObservedPlaytime: false,
       lowSeconds: estimates.low.allFiniteContent.exactModelGapSecondsTo20Hours,
@@ -663,6 +871,9 @@ export function createDurationAudit({
       lowMinutes: estimates.low.allFiniteContent.modelGapMinutesTo20Hours,
       referenceMinutes: estimates.reference.allFiniteContent.modelGapMinutesTo20Hours,
       highMinutes: estimates.high.allFiniteContent.modelGapMinutesTo20Hours,
+      lowSurplusMinutes: estimates.low.allFiniteContent.modelSurplusMinutesOver20Hours,
+      referenceSurplusMinutes: estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours,
+      highSurplusMinutes: estimates.high.allFiniteContent.modelSurplusMinutesOver20Hours,
     },
     proofReceipt: receipt,
     limitations: [
@@ -673,8 +884,9 @@ export function createDurationAudit({
       'Camp-conversation words include the title, theme, prompt, both visible option labels, the chosen first response, and its visible consequence; the unseen alternative response is excluded.',
       'Party-council words include each title, theme, prompt, both visible option labels, every multi-character main line, the chosen first response, and its visible consequence; unseen alternative responses are excluded.',
       'Public-archive words include only the player-visible title, record type, custodian, access note, and acknowledged paragraphs; the records grant no rewards or authored minutes.',
+      'Final-beat unlocks are reported as postStoryPreCredits and remain countable only before the player explicitly completes credits and seals the receipt.',
       'Side-quest setup and resolution prose exists in data but is not exposed by the current campaign runtime, so those words are reported but excluded.',
-      'The canonical completion requires no repeat battles; repeat timing is an optional presentation schedule and is excluded from finite content.',
+      'The canonical-only route requires no repeat battles; the all-finite intended route adds exactly four one-win grind milestones using engine scheduler output at 1x, with 2x/4x variants reported separately.',
       'Only proofReceipt.report.durationProven from a valid completed clean-start run can make durationProven true.',
     ],
   });

@@ -23,7 +23,7 @@ test('Auto-Grind start is rejected during an animation and every terminal hold',
   assert.equal(canStartAutoGrindPresentation({ unlocked: true, settling: true }), false);
 });
 
-test('manual enemy intent always owns a complete readable delay after an animation', () => {
+test('manual and automated enemy intent always own a readable delay', () => {
   const animationEndsAt = 10_000;
   const schedule = createEnemyIntentSchedule(animationEndsAt, 1);
   assert.deepEqual(schedule, {
@@ -52,6 +52,21 @@ test('manual enemy intent always owns a complete readable delay after an animati
     nextIsEnemy: false,
     speed: 2,
   }), 10_500, 'a later authored step delay remains authoritative');
+
+  assert.equal(getNextBattleActionAt({
+    nowMs: 9_000,
+    stepDelayMs: 100,
+    animationEndsAt: null,
+    nextIsEnemy: true,
+    speed: 2,
+  }), 9_000 + (ENEMY_INTENT_BASE_DELAY_MS / 2), 'a non-animated action still earns a fresh enemy-intent window');
+  assert.equal(getNextBattleActionAt({
+    nowMs: 9_000,
+    stepDelayMs: 500,
+    animationEndsAt: null,
+    nextIsEnemy: false,
+    speed: 4,
+  }), 9_500, 'party follow-ups do not gain an unrelated enemy-intent delay');
 });
 
 test('speed changes preserve elapsed intent progress instead of restarting the wait', () => {
@@ -155,7 +170,19 @@ test('manual terminal playtime settles only after the final animation', () => {
 });
 
 test('browser controller wires locks, ghosts, fresh intent scheduling, and complete restart cleanup', async () => {
-  const source = await readFile(new URL('../battle.js', import.meta.url), 'utf8');
+  const [source, markup] = await Promise.all([
+    readFile(new URL('../battle.js', import.meta.url), 'utf8'),
+    readFile(new URL('../battle.html', import.meta.url), 'utf8'),
+  ]);
+  assert.deepEqual(
+    [...markup.matchAll(/data-speed="(\d+)"/g)].map((match) => Number(match[1])),
+    [1, 2, 4],
+    'the visible selector exposes every supported speed exactly once',
+  );
+  assert.doesNotMatch(source, /query\.get\(['"]speed['"]\)/, 'URL parameters cannot override the saved speed authority');
+  assert.match(source, /resolveBattlePresentationSpeed\(encounterWinsAtLoad, advancementState\.speedMultiplier\)/);
+  assert.match(source, /const nextSpeed = Number\(button\.dataset\.speed\);/);
+  assert.match(source, /advancementState = setSpeedMultiplier\(advancementState, speedMultiplier\);\s+advancementAdapter\.save\(advancementState\);/);
   assert.match(source, /canStartAutoGrindPresentation\(\{/);
   assert.ok(source.indexOf('if (animationActive)') < source.indexOf('activeBattleAnimation = null;', source.indexOf('function toggleAutoGrind')));
   assert.match(source, /retainedActors: Object\.freeze\(\[attacker, target\]\)/);
@@ -179,7 +206,10 @@ test('browser controller wires locks, ghosts, fresh intent scheduling, and compl
     'battleEnemyPoseByActor.clear();',
     'battleEnemyPoseUntil.clear();',
     'activeBattleAnimation = null;',
+    'victoryPersistenceError = null;',
+    'victorySaveRetryAt = 0;',
   ]) assert.match(restart, new RegExp(requiredReset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 
-  assert.match(source, /if \(snapshot\.result !== 'victory' \|\| rewardRecorded\) return;/, 'reward remains exactly-once guarded');
+  assert.match(source, /if \(snapshot\.result !== 'victory'\) return false;/, 'non-victories cannot record rewards');
+  assert.match(source, /if \(rewardRecorded\) return true;/, 'a durable reward remains exactly-once guarded');
 });

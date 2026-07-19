@@ -7,6 +7,7 @@
 
 import { PARTY_MEMBER_IDS } from './advancement.mjs';
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 
 export const LOADOUT_SCHEMA_VERSION = 1;
 export const DEFAULT_LOADOUT_SAVE_KEY = `${CAMPAIGN.id}.loadout.v${LOADOUT_SCHEMA_VERSION}`;
@@ -294,7 +295,7 @@ export function hydrateLoadoutState(payload) {
 }
 
 /** Small injectable adapter for localStorage or any compatible key/value store. */
-export function createLoadoutStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_LOADOUT_SAVE_KEY) {
+export function createLoadoutStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_LOADOUT_SAVE_KEY) {
   if (!storage || typeof storage.getItem !== 'function' || typeof storage.setItem !== 'function' || typeof storage.removeItem !== 'function') {
     throw new TypeError('Storage must implement getItem, setItem, and removeItem.');
   }

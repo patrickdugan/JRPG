@@ -26,8 +26,8 @@ import {
 } from './playtime.mjs';
 import {
   advanceQuestObjective,
-  createQuestState,
   createQuestStorageAdapter,
+  getQuestProgress,
 } from './quest-runtime.mjs';
 import {
   createFieldStorageAdapter,
@@ -44,6 +44,7 @@ import {
 import {
   chooseRepeatBattleCommand,
   getRepeatStepDelayMs,
+  resolveBattlePresentationSpeed,
 } from './repeat-battle.mjs';
 import {
   createRunReceiptStorageAdapter,
@@ -78,9 +79,10 @@ import {
 } from './battle-animation.mjs';
 import {
   advanceWitnessChronicle,
-  createWitnessChronicleState,
   createWitnessChronicleStorageAdapter,
+  getWitnessChronicleProgress,
 } from './witness-chronicle-runtime.mjs';
+import { commitPersistenceTransaction, stateSaveStep } from './persistence-transaction.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -137,8 +139,9 @@ const advancementLoad = advancementAdapter.load();
 let advancementState = advancementLoad.ok ? advancementLoad.state : createAdvancementState();
 advancementState = preparePartyForEncounter(advancementState, encounter.id);
 advancementAdapter.save(advancementState);
-const repeatBattleAtLoad = getEncounterWinCount(advancementState, encounter.id) > 0;
-let speedMultiplier = repeatBattleAtLoad ? advancementState.speedMultiplier : 1;
+const encounterWinsAtLoad = getEncounterWinCount(advancementState, encounter.id);
+const repeatBattleAtLoad = encounterWinsAtLoad > 0;
+let speedMultiplier = resolveBattlePresentationSpeed(encounterWinsAtLoad, advancementState.speedMultiplier);
 let battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
 const playtimeAdapter = createPlaytimeStorageAdapter();
 const playtimeLoad = playtimeAdapter.load();
@@ -165,7 +168,8 @@ if (syncedLoadout.ok) {
 let selectedCommand = 'attack';
 let selectedTargetId = '';
 let rewardRecorded = false;
-let vitalsRecorded = false;
+let victoryPersistenceError = null;
+let victorySaveRetryAt = 0;
 let enemyIntentSchedule = null;
 let autoGrindActive = false;
 let autoActionAt = null;
@@ -215,9 +219,9 @@ function clearPendingRunReceiptPlaytime() {
 function flushRunReceiptPlaytime() {
   if (!runReceiptState || runReceiptState.status !== 'active') {
     clearPendingRunReceiptPlaytime();
-    return false;
+    return true;
   }
-  if (runReceiptPendingMs === 0) return false;
+  if (runReceiptPendingMs === 0) return true;
   const result = recordRunPlaytime(
     runReceiptState,
     runReceiptState.runId,
@@ -226,9 +230,10 @@ function flushRunReceiptPlaytime() {
     { chapterId: encounter.chapterId },
   );
   if (!result.ok) return false;
+  const saved = runReceiptAdapter.save(result.state);
+  if (!saved.ok) return false;
   runReceiptState = result.state;
   clearPendingRunReceiptPlaytime();
-  runReceiptAdapter.save(runReceiptState);
   return true;
 }
 
@@ -824,79 +829,144 @@ function renderObjective(snapshot) {
 }
 
 function recordVictoryIfNeeded(snapshot) {
-  if (snapshot.result !== 'victory' || rewardRecorded) return;
+  if (snapshot.result !== 'victory') return false;
+  if (rewardRecorded) return true;
+  if (victoryPersistenceError && performance.now() < victorySaveRetryAt) return false;
   const priorWins = getEncounterWinCount(advancementState, encounter.id);
   const reward = getEncounterRewardPreview(encounter.id, priorWins);
-  flushRunReceiptPlaytime();
+  const failSettlement = (message) => {
+    if (victoryPersistenceError !== message) addMessage(message);
+    victoryPersistenceError = message;
+    victorySaveRetryAt = performance.now() + 1000;
+    return false;
+  };
+  if (!flushRunReceiptPlaytime()) {
+    return failSettlement('Victory is earned, but active clean-run time could not be saved. Continue remains locked while the battle retries the write.');
+  }
+
+  let nextRunReceiptState = runReceiptState;
   if (priorWins === 0 && runReceiptState?.status === 'active') {
     const receiptResult = recordRunFirstClear(runReceiptState, runReceiptState.runId, encounter.id);
-    if (receiptResult.ok) {
-      runReceiptState = receiptResult.state;
-      runReceiptAdapter.save(runReceiptState);
+    if (!receiptResult.ok) {
+      return failSettlement(`Victory is earned, but first-clear evidence was rejected (${receiptResult.code ?? 'unknown receipt error'}). Continue remains locked.`);
     }
+    nextRunReceiptState = receiptResult.state;
   }
-  advancementState = recordEncounterWin(advancementState, encounter.id, { partyIds: encounter.party?.roster });
-  advancementAdapter.save(advancementState);
+
+  const nextAdvancementState = recordEncounterWin(advancementState, encounter.id, { partyIds: encounter.party?.roster });
   const loadoutReward = grantInventory(loadoutState, { currency: reward.currency, items: reward.items });
-  if (loadoutReward.ok) {
-    loadoutState = loadoutReward.state;
-    loadoutAdapter.save(loadoutState);
+  if (!loadoutReward.ok) {
+    return failSettlement(`Victory is earned, but its camp reward could not be prepared: ${loadoutReward.reason}`);
   }
+  let nextLoadoutState = loadoutReward.state;
+  for (const actor of snapshot.actors.filter((entry) => entry.faction === 'party')) {
+    const vitals = setMemberVitals(nextLoadoutState, actor.templateId, { hp: Math.max(1, actor.hp) });
+    if (!vitals.ok) return failSettlement(`Victory is earned, but ${actor.name}'s camp vitals could not be prepared.`);
+    nextLoadoutState = vitals.state;
+  }
+
+  const changes = [
+    { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: nextAdvancementState },
+    { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: nextLoadoutState },
+  ];
+  let questCompletionMessage = null;
   if (requestedQuestId && requestedQuestObjectiveId) {
     const loadedQuestState = questAdapter.load();
+    if (!loadedQuestState.ok) {
+      return failSettlement('Victory is earned, but the side-story save could not be read. Continue remains locked.');
+    }
     const questResult = advanceQuestObjective(
-      loadedQuestState.ok ? loadedQuestState.state : createQuestState(),
+      loadedQuestState.state,
       requestedQuestId,
       requestedQuestObjectiveId,
     );
     if (questResult.ok) {
-      questAdapter.save(questResult.state);
-      addMessage(`Side-story objective recorded: ${requestedQuestObjectiveId}.`);
+      changes.push({ id: 'quest', adapter: questAdapter, previousState: loadedQuestState.state, nextState: questResult.state });
+      questCompletionMessage = `Side-story objective recorded: ${requestedQuestObjectiveId}.`;
+    } else {
+      const progress = getQuestProgress(loadedQuestState.state, requestedQuestId);
+      const requestedIndex = progress?.quest.objectives.findIndex((objective, index) => (
+        (objective.id ?? `objective-${index + 1}`) === requestedQuestObjectiveId
+      )) ?? -1;
+      if (requestedIndex < 0 || progress.objectiveIndex <= requestedIndex) {
+        return failSettlement(`Victory is earned, but side-story evidence was rejected: ${questResult.reason}`);
+      }
     }
   }
+
+  let witnessCompletionMessage = null;
   if (requestedChronicleId && requestedChronicleStageId) {
     const loadedWitnessState = witnessAdapter.load();
+    if (!loadedWitnessState.ok) {
+      return failSettlement('Victory is earned, but the witness-chronicle save could not be read. Continue remains locked.');
+    }
     const evidence = {
       encounterId: encounter.id,
       victory: true,
       ...(requestedChronicleChoiceId ? { choiceId: requestedChronicleChoiceId } : {}),
     };
     const witnessResult = advanceWitnessChronicle(
-      loadedWitnessState.ok ? loadedWitnessState.state : createWitnessChronicleState(),
+      loadedWitnessState.state,
       requestedChronicleId,
       requestedChronicleStageId,
       evidence,
     );
     if (witnessResult.ok) {
-      witnessAdapter.save(witnessResult.state);
-      addMessage(`Witness chronicle stage recorded: ${requestedChronicleStageId}.`);
+      changes.push({ id: 'witness', adapter: witnessAdapter, previousState: loadedWitnessState.state, nextState: witnessResult.state });
+      witnessCompletionMessage = `Witness chronicle stage recorded: ${requestedChronicleStageId}.`;
     } else {
-      addMessage(`Witness chronicle evidence was not recorded: ${witnessResult.reason}`);
-    }
-  }
-  if (requestedFieldTriggerId) {
-    const loadedFieldState = fieldAdapter.load();
-    if (loadedFieldState.ok && loadedFieldState.found) {
-      const fieldResult = resolveFieldEncounter(loadedFieldState.state, requestedFieldTriggerId);
-      if (fieldResult.ok) {
-        fieldAdapter.save(fieldResult.state);
-        addMessage(`Field encounter ${requestedFieldTriggerId} resolved for the route.`);
+      const progress = getWitnessChronicleProgress(loadedWitnessState.state, requestedChronicleId);
+      const requestedIndex = progress?.chronicle.stages.findIndex(({ id }) => id === requestedChronicleStageId) ?? -1;
+      if (requestedIndex < 0 || progress.stageIndex <= requestedIndex) {
+        return failSettlement(`Victory is earned, but witness evidence was rejected: ${witnessResult.reason}`);
       }
     }
   }
-  speedMultiplier = advancementState.speedMultiplier;
+
+  let fieldCompletionMessage = null;
+  if (requestedFieldTriggerId) {
+    const loadedFieldState = fieldAdapter.load();
+    if (!loadedFieldState.ok || !loadedFieldState.found) {
+      return failSettlement('Victory is earned, but its field route could not be read. Continue remains locked.');
+    }
+    const fieldResult = resolveFieldEncounter(loadedFieldState.state, requestedFieldTriggerId);
+    if (!fieldResult.ok) {
+      return failSettlement(`Victory is earned, but its field trigger was rejected (${fieldResult.code}). Continue remains locked.`);
+    }
+    if (fieldResult.state !== loadedFieldState.state) {
+      changes.push({ id: 'field', adapter: fieldAdapter, previousState: loadedFieldState.state, nextState: fieldResult.state });
+    }
+    fieldCompletionMessage = `Field encounter ${requestedFieldTriggerId} resolved for the route.`;
+  }
+
+  if (nextRunReceiptState !== runReceiptState) {
+    changes.push({ id: 'run-receipt', adapter: runReceiptAdapter, previousState: runReceiptState, nextState: nextRunReceiptState });
+  }
+  const persisted = commitPersistenceTransaction(changes.map(({ id, adapter, previousState, nextState }) => (
+    stateSaveStep(id, adapter, previousState, nextState, { supportsOverwriteRollback: true })
+  )));
+  if (!persisted.ok) {
+    const rollback = persisted.rollbackComplete
+      ? 'Earlier writes were restored.'
+      : `Rollback also failed for ${persisted.rollbackFailedIds.join(', ')}; reload before continuing.`;
+    return failSettlement(`Victory is earned, but ${persisted.failedId} could not be saved. ${rollback} Continue remains locked while the battle retries.`);
+  }
+
+  advancementState = nextAdvancementState;
+  loadoutState = nextLoadoutState;
+  runReceiptState = nextRunReceiptState;
+  victoryPersistenceError = null;
+  victorySaveRetryAt = 0;
+  if (questCompletionMessage) addMessage(questCompletionMessage);
+  if (witnessCompletionMessage) addMessage(witnessCompletionMessage);
+  if (fieldCompletionMessage) addMessage(fieldCompletionMessage);
+  speedMultiplier = resolveBattlePresentationSpeed(
+    getEncounterWinCount(advancementState, encounter.id),
+    advancementState.speedMultiplier,
+  );
   rewardRecorded = true;
   addMessage(`Victory reward: ${reward.xpPerMember} XP per active member, ${reward.currency} mon${reward.repeat ? ' (repeat grind reward)' : ' plus first-clear loot'}.`);
-}
-
-function recordBattleVitalsIfNeeded(snapshot) {
-  if (snapshot.result !== 'victory' || vitalsRecorded) return;
-  for (const actor of snapshot.actors.filter((entry) => entry.faction === 'party')) {
-    const result = setMemberVitals(loadoutState, actor.templateId, { hp: Math.max(1, actor.hp) });
-    if (result.ok) loadoutState = result.state;
-  }
-  loadoutAdapter.save(loadoutState);
-  vitalsRecorded = true;
+  return true;
 }
 
 function renderSpeedControls() {
@@ -934,8 +1004,7 @@ function render() {
   });
   // Auto-Grind may delay the terminal reveal, but an earned victory must be
   // durable before the player can restart, leave, reload, or enter BFCache.
-  recordVictoryIfNeeded(snapshot);
-  recordBattleVitalsIfNeeded(snapshot);
+  const durableVictory = recordVictoryIfNeeded(snapshot);
   encounterTitle.textContent = encounter.name;
   encounterSubtitle.textContent = `${encounter.chapterId} · ${engine.level.name} · ${encounter.format}`;
   document.title = `${encounter.name} — Bells Battle`;
@@ -951,8 +1020,8 @@ function render() {
   renderSpeedControls();
   renderObjective(snapshot);
   renderLog(snapshot);
-  continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady;
-  if (snapshot.result === 'victory' && settlementReady) continueCampaign.focus({ preventScroll: true });
+  continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady || !durableVictory;
+  if (snapshot.result === 'victory' && settlementReady && durableVictory) continueCampaign.focus({ preventScroll: true });
   drawBattle();
   if (!autoInputLocked() && !battleAnimationActive() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyIntentSchedule === null) {
     scheduleEnemyIntent();
@@ -1154,7 +1223,8 @@ restartBattle.addEventListener('click', () => {
   battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, encounter.id));
   engine = createEngine();
   rewardRecorded = false;
-  vitalsRecorded = false;
+  victoryPersistenceError = null;
+  victorySaveRetryAt = 0;
   selectedTargetId = '';
   clearEnemyIntentSchedule();
   battleFacingByActor.clear();

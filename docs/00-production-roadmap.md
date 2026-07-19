@@ -88,15 +88,15 @@ Current execution order:
 
 - preserve the mechanically complete 11-chapter campaign and its deterministic completion receipt;
 - preserve the completed finite expansion: exact-route operations, witness fieldwork, 90 companion conversations, 30 party councils, and 60 public archive readings;
-- keep first-clear and repeat combat rewards separate while tuning the optional 1×/2×/4× grind circuit;
+- keep first-clear and repeat combat rewards separate while requiring one circuit of each of four contracts and leaving later 1×/2×/4× grinding optional;
 - replace provisional generated production atlases selectively after animation and readability review;
 - run chapter timing, cultural review, accessibility, browser/device, and full clean-start playtests before release.
 
 ### 6. Campaign completeness and duration proof — active gate
 
-The shipped browser build now has a complete canonical state path, all required first clears, finite optional arcs, versioned cross-page saves, and bounded zero-time completion witnesses. Its explicit reference quantity model crosses 1,200 finite minutes, but content-volume estimates remain planning evidence only.
+The shipped browser build now has a complete canonical state path, all required first clears, finite narrative catalogues, versioned cross-page saves, and bounded zero-time completion witnesses. The intended first-play contract interleaves 215 activities at their exact story unlocks: 13 finite side quests, 18 witness chronicles, 90 companion talks, 30 party councils, 60 public archive records, and one circuit of each of four repeat contracts. Its v8 all-finite quantity model reaches 1,231.686 reference minutes at 1×, but the canonical-only reference estimate is 308.680 minutes and neither estimate is observed playtime.
 
-**Exit criterion:** one clean-start human run completes the canonical story and all required first clears, records at least 1,200 active minutes in the UUID-bound receipt, and is accompanied by chapter timing notes. Optional finite content must remain replay-refusing, while the clearly labeled repeat-battle circuit may use the saved speed multiplier. No authored minute declaration or deterministic zero-time runner may substitute for this gate.
+**Exit criterion:** one clean-start human run completes the canonical story, all 23 first clears, and all 215 required-route activities, then explicitly completes credits to seal the UUID-bound receipt after at least 1,200 active minutes, accompanied by chapter timing notes. Finite content must remain replay-refusing after completion; only the four required one-circuit repeat milestones may use the saved 1×/2×/4× presentation speed. No authored minute declaration, uncontrolled repeat treadmill, or deterministic zero-time runner may substitute for this gate.
 
 ## Scope-control rule
 

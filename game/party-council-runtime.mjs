@@ -1,6 +1,7 @@
 /** Immutable finite progress for authored multi-character party councils. */
 
 import { CAMPAIGN } from './content/campaign.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import {
   PARTY_COUNCILS,
   getPartyCouncil,
@@ -324,7 +325,7 @@ export function loadPartyCouncilState(serialized) {
   }
 }
 
-export function createPartyCouncilStorageAdapter(storage = globalThis.localStorage, key = DEFAULT_PARTY_COUNCIL_SAVE_KEY) {
+export function createPartyCouncilStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_PARTY_COUNCIL_SAVE_KEY) {
   let hasObservedStorage = false;
   let lastObservedSerialized = null;
   let hasObservedRunId = false;
