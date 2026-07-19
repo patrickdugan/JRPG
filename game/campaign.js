@@ -59,6 +59,7 @@ import {
   resolveFieldEncounter,
   useFieldExit,
 } from './field-runtime.mjs';
+import { selectNearbyFieldInteractable } from './field-interaction-priority.mjs';
 import {
   createLoadoutState,
   createLoadoutStorageAdapter,
@@ -1391,7 +1392,7 @@ function updateFieldDashboard(level) {
   const witnessNearby = witnessMarker && onExactFieldPosition(status.position, witnessMarker.position);
   const marker = getActiveQuestMarker(level);
   const markerNearby = marker && inInteractionRange(status.position, marker.position);
-  const authored = status.nearbyInteractables.find((item) => !item.consumed) ?? status.nearbyInteractables[0] ?? null;
+  const authored = selectNearbyFieldInteractable(status);
   mapCanvas.dataset.beatId = getBeat().id;
   mapCanvas.dataset.levelId = level.id;
   mapCanvas.dataset.fieldX = String(status.position.x);
@@ -2207,7 +2208,7 @@ interactFieldButton.addEventListener('click', () => {
     return;
   }
   const status = getFieldStatus(fieldRuntimeState, { flags: externalFieldFlags() });
-  const nearby = status.nearbyInteractables.find((item) => !item.consumed) ?? status.nearbyInteractables[0];
+  const nearby = selectNearbyFieldInteractable(status);
   if (nearby) {
     let result = performFieldInteraction(fieldRuntimeState, nearby.id, { flags: externalFieldFlags() });
     if (!result.ok && result.code === 'choice-required') {

@@ -65,6 +65,12 @@ test('the rendered map publishes the next incomplete field interaction or ready 
   }
 });
 
+test('dashboard and field action share ready-exit interaction priority', () => {
+  assert.match(campaignSource, /from '\.\/field-interaction-priority\.mjs'/);
+  assert.match(campaignSource, /const authored = selectNearbyFieldInteractable\(status\)/);
+  assert.match(campaignSource, /const nearby = selectNearbyFieldInteractable\(status\)/);
+});
+
 test('unfinished story operations cannot be abandoned through a route exit', () => {
   assert.match(campaignSource, /fieldRuntimeState\.current\.beatId === beat\.id && !currentSceneOperationComplete\(beat\)/);
   assert.match(campaignSource, /ordered scene operation must be completed before leaving/);
