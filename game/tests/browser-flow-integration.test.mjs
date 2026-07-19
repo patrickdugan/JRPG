@@ -146,6 +146,13 @@ test('the intended-route ledger blocks story frontiers and credits from real sav
   assert.match(camp.source, /new URLSearchParams\(window\.location\.search\)/);
   assert.match(camp.source, /applyRequestedRouteFocus\(\)/);
   assert.match(camp.source, /target\.click\(\)/);
+  assert.match(campaign.source, /unlockPartyMembers\(advancementState, getCurrentChapter\(nextCampaignState\)\.party\)/);
+  assert.match(campaign.source, /const pristineAdvancementState = createAdvancementState\(\)/);
+  assert.match(campaign.source, /unlockPartyMembers\(pristineAdvancementState, getCurrentChapter\(nextCampaignState\)\.party\)/);
+  assert.match(campaign.source, /advancementState: pristineAdvancementState/);
+  assert.match(campaign.source, /getEncounterWinCount\(advancementState, stage\.encounterId\) > 0/);
+  assert.match(campaign.source, /Witness canonical battle evidence/);
+  assert.match(campaign.source, /victory satisfies this witness stage without a duplicate battle/);
 });
 
 test('New Game does not depend exclusively on randomUUID support', () => {

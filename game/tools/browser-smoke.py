@@ -107,6 +107,10 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             page.wait_for_url("**/camp.html")
             page.locator("#memberName").wait_for()
             require(page.locator("#memberName").inner_text() == "Ren Ishikawa", "Camp party failed.")
+            require(
+                page.locator('[data-member-id="aya"]').is_visible(),
+                "New Game did not unlock the authored Prologue party member Aya.",
+            )
             require(page.locator("#campConversationSummary").inner_text() == "0 / 90 complete", "Camp talk frontier drifted.")
             require(page.locator("#partyCouncilSummary").inner_text() == "0 / 30 complete", "Council frontier drifted.")
             require(page.locator("#archiveRecordSummary").inner_text() == "0 / 60 read", "Archive frontier drifted.")
@@ -337,6 +341,91 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "unattributedMs": exported_report["playtime"]["unattributedMs"],
             }
             context.close()
+
+            recovery_context = browser.new_context(viewport={"width": 1280, "height": 900})
+            recovery_page = recovery_context.new_page()
+            recovery_page.set_default_timeout(20_000)
+            recovery_page.set_default_navigation_timeout(45_000)
+            recovery_page.on(
+                "console",
+                lambda message: console_errors.append({"text": message.text, "url": message.location.get("url", "")})
+                if message.type == "error"
+                else None,
+            )
+            recovery_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            recovery_page.on("dialog", lambda dialog: dialog.accept())
+            recovery_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            recovery_page.locator("#resetCampaign").click()
+            recovery_page.locator("#exportRecovery").wait_for()
+            original_run_id = recovery_page.evaluate(
+                """async () => {
+                  const receipt = await import('./run-receipt.mjs');
+                  const loaded = receipt.createRunReceiptStorageAdapter().load();
+                  if (!loaded.ok || !loaded.found) throw new Error('Recovery smoke has no clean run.');
+                  return loaded.state.runId;
+                }"""
+            )
+            with recovery_page.expect_download() as recovery_download_info:
+                recovery_page.locator("#exportRecovery").click()
+            recovery_download = recovery_download_info.value
+            recovery_download_path = recovery_download.path()
+            require(
+                recovery_download.failure() is None and recovery_download_path is not None,
+                "Recovery checkpoint download failed.",
+            )
+            recovery_checkpoint = json.loads(Path(recovery_download_path).read_text(encoding="utf-8"))
+            require(recovery_checkpoint.get("schemaVersion") == 1, "Recovery checkpoint schema drifted.")
+            require(recovery_checkpoint.get("recoveryOnly") is True, "Recovery checkpoint lost its recovery-only label.")
+            require(len(recovery_checkpoint.get("records", [])) == 13, "Recovery checkpoint omitted an authority.")
+            require(
+                recovery_checkpoint.get("summary", {}).get("runId") == original_run_id,
+                "Recovery checkpoint summary is not bound to the exported run.",
+            )
+            require(
+                "not playtest proof" in recovery_page.locator("#recoveryStatus").inner_text(),
+                "Recovery export status does not distinguish recovery from proof.",
+            )
+            expected_raw_records = {
+                record["key"]: record["serialized"] for record in recovery_checkpoint["records"]
+            }
+            recovery_page.locator("#resetCampaign").click()
+            replacement_run_id = recovery_page.evaluate(
+                """async () => {
+                  const receipt = await import('./run-receipt.mjs');
+                  return receipt.createRunReceiptStorageAdapter().load().state.runId;
+                }"""
+            )
+            require(replacement_run_id != original_run_id, "New Game did not replace the recovery smoke run.")
+            with recovery_page.expect_navigation(wait_until="domcontentloaded"):
+                recovery_page.locator("#recoveryFile").set_input_files(recovery_download_path)
+            recovery_page.locator("#runProofStatus").wait_for()
+            restored = recovery_page.evaluate(
+                """async ({ expected, originalRunId }) => {
+                  const receipt = await import('./run-receipt.mjs');
+                  const loaded = receipt.createRunReceiptStorageAdapter().load();
+                  const mismatches = Object.entries(expected)
+                    .filter(([key, serialized]) => localStorage.getItem(key) !== serialized)
+                    .map(([key]) => key);
+                  return {
+                    runId: loaded.state.runId,
+                    mismatches,
+                    proof: receipt.getRunProofReport(loaded.state),
+                    expectedRun: originalRunId,
+                  };
+                }""",
+                {"expected": expected_raw_records, "originalRunId": original_run_id},
+            )
+            require(restored["runId"] == original_run_id, "Recovery import did not restore the exported run.")
+            require(not restored["mismatches"], f"Recovery import changed exact authority strings: {restored['mismatches']}.")
+            require(restored["proof"]["durationProven"] is False, "Recovery import fabricated duration proof.")
+            recovery_result = {
+                "filename": recovery_download.suggested_filename,
+                "authorityRecords": len(recovery_checkpoint["records"]),
+                "exactStringsRestored": True,
+                "runRestored": original_run_id,
+                "durationProven": restored["proof"]["durationProven"],
+            }
+            recovery_context.close()
 
             route_context = browser.new_context(viewport={"width": 1280, "height": 900})
             route_page = route_context.new_page()
@@ -695,6 +784,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         credits_seed=credits_seed,
         credits_final=credits_final,
         evidence_export=evidence_export,
+        recovery_checkpoint=recovery_result,
         route_action=route_action,
         catalog_seed=catalog_seed,
         catalog_browser=catalog_browser,

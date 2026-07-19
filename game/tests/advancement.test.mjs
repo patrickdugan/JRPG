@@ -24,6 +24,7 @@ import {
   serializeAdvancementState,
   setSpeedMultiplier,
   unlockPartyMember,
+  unlockPartyMembers,
   validateAdvancementPayload,
   xpForNextLevel,
   xpToReachLevel,
@@ -78,6 +79,12 @@ test('unlocking a party member is immutable and idempotent', () => {
   assert.deepEqual(unchanged, unlocked);
   assert.equal(unchanged.revision, unlocked.revision);
   assert.throws(() => unlockPartyMember(unlocked, 'unknown'), /Unknown party member/);
+
+  const roster = unlockPartyMembers(fresh, ['ren', 'aya', 'lise']);
+  assert.deepEqual(getParty(roster, { unlockedOnly: true }).map(({ id }) => id), ['ren', 'aya', 'lise']);
+  assert.equal(unlockPartyMembers(roster, ['ren', 'aya', 'lise']), roster);
+  assert.throws(() => unlockPartyMembers(fresh, []), /non-empty array/);
+  assert.throws(() => unlockPartyMembers(fresh, ['ren', 'ren']), /must be unique/);
 });
 
 test('first clear awards authored loot while repeats diminish XP and cannot duplicate key items', () => {

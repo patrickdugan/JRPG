@@ -72,6 +72,9 @@ h1 {
 .run-proof-status[data-proof="active"] { border-color: #537f7b; color: #bfe8e3; }
 .run-proof-status[data-proof="proven"] { border-color: #8f7c43; color: #fff0b5; }
 .run-proof-status[data-proof="failed"] { border-color: #744b55; color: #e6b7be; }
+.recovery-status { flex-basis: 100%; color: #9daac6; font-size: .59rem; line-height: 1.4; text-align: right; }
+.recovery-status[data-state="error"] { color: #efb9b9; }
+.recovery-status[data-state="ready"] { color: #bfe8d8; }
 
 .battle-link, .subtle-button, .scene-controls button, .story-choice {
   border: 1px solid var(--line);
@@ -252,6 +255,7 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
   .campaign-shell { width: min(100% - 16px, 1540px); padding-top: 14px; }
   .campaign-masthead { align-items: start; flex-direction: column; gap: 12px; }
   .masthead-actions { justify-content: start; }
+  .recovery-status { text-align: left; }
   .campaign-layout { grid-template-columns: 1fr; }
   .chapter-rail { overflow-x: auto; }
   .chapter-list { display: flex; min-width: max-content; }

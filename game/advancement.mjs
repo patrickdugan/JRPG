@@ -311,6 +311,22 @@ export function unlockPartyMember(state, memberId) {
   return buildState({ ...snapshot, party, revision: snapshot.revision + 1 });
 }
 
+/** Unlock an authored campaign roster atomically in its declared order. */
+export function unlockPartyMembers(state, memberIds) {
+  if (!Array.isArray(memberIds) || memberIds.length === 0) {
+    throw new TypeError('Party member IDs must be a non-empty array.');
+  }
+  if (new Set(memberIds).size !== memberIds.length) {
+    throw new RangeError('Party member IDs must be unique.');
+  }
+  const snapshot = assertValidState(state);
+  for (const memberId of memberIds) {
+    if (!PARTY_BY_ID.has(memberId)) throw new RangeError(`Unknown party member ID: ${memberId}`);
+  }
+  if (memberIds.every((memberId) => snapshot.party.find((member) => member.id === memberId).unlocked)) return state;
+  return memberIds.reduce((next, memberId) => unlockPartyMember(next, memberId), state);
+}
+
 export function setSpeedMultiplier(state, speedMultiplier) {
   const snapshot = assertValidState(state);
   if (!SPEED_MULTIPLIERS.includes(speedMultiplier)) throw new RangeError('Speed multiplier must be 1, 2, or 4.');

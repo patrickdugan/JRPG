@@ -18,8 +18,12 @@
         </div>
         <div class="masthead-actions">
           <span id="runProofStatus" class="run-proof-status" role="status">Unverified save</span>
+          <span id="recoveryStatus" class="recovery-status" role="status">Recovery checkpoints are separate from playtest proof.</span>
           <a class="subtle-button" href="camp.html">Camp &amp; Loadout</a>
           <a class="battle-link" href="index.html">Training Court</a>
+          <button id="exportRecovery" class="subtle-button" type="button">Export recovery checkpoint</button>
+          <button id="importRecovery" class="subtle-button" type="button">Restore checkpoint…</button>
+          <input id="recoveryFile" type="file" accept="application/json,.json" hidden>
           <button id="resetCampaign" class="subtle-button" type="button">New Game / clear all saves</button>
         </div>
       </header>

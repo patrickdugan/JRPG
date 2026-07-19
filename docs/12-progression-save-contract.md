@@ -153,6 +153,30 @@ The frozen adapter has `key`, `available`, `save(state)`, `load()`, and `clear()
 - Failures are no-throw results with `code`: `storage-unavailable`, `storage-read-failed`, `storage-write-failed`, `storage-clear-failed`, `invalid-state`, or `invalid-save`.
 - A corrupted save is never deleted automatically. The save-slot UI should show recovery/reset options after displaying the failure.
 
+## Portable all-authority recovery
+
+`game/recovery-checkpoint.mjs` is the recovery boundary for long human playtests. Campaign's **Export recovery** control samples current playtime, flushes the run receipt, persists the current in-memory states, and downloads one signed, recovery-only JSON envelope. It contains the exact serialized values of these 13 authorities, in canonical order:
+
+1. campaign progression;
+2. advancement;
+3. general playtime;
+4. clean-run receipt;
+5. quests;
+6. narrative dialogue;
+7. witness chronicles;
+8. scene operations;
+9. field state;
+10. loadout;
+11. camp conversations;
+12. party councils;
+13. archive records.
+
+Import is whole-bundle replacement, not merge. Before the first write, `validateRecoveryCheckpoint()` requires the exact schema and authority list, a valid signature, valid module payloads, exact campaign/receipt beat agreement, advancement evidence for every receipt first clear, one clean-run UUID across all three run-bound finite ledgers, a reconciled required-route summary, and the current route-contract signature. Unknown, missing, reordered, mixed-run, corrupted, or stale-contract records fail closed.
+
+`restoreRecoveryCheckpoint()` captures the raw current values, writes all 13 recovered strings, and restores every touched raw value if any write fails. The test suite injects failure at each write boundary. Campaign suppresses lifecycle saves during the successful restore reload so stale in-memory state cannot overwrite the recovered bundle. Close other game tabs before import because another live tab can still write its own cached state afterward.
+
+A checkpoint is explicitly `recoveryOnly: true`. It preserves whatever valid evidence the run already owned; export/import does not add route activities, active milliseconds, first clears, beats, credits, or a duration verdict. The signed schema-v2 Credits evidence report remains the auditable playtest artifact.
+
 ## Campaign UI integration surface
 
 `game/campaign.js` currently owns a renderer-local object with `chapterIndex`, `beatIndex`, `flags`, `picks`, and `completed`. Replace that local ownership during integration; do not maintain a second source of truth.

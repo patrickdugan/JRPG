@@ -60,6 +60,15 @@ const deepFreeze = (value) => {
   return Object.freeze(value);
 };
 
+function fnv1a32(value) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
 function exactKeys(value, expected) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const actual = Object.keys(value).sort();
@@ -247,6 +256,7 @@ export function validateRequiredRouteContract(candidate) {
 }
 
 export const REQUIRED_ROUTE_CONTRACT = buildContract();
+export const REQUIRED_ROUTE_CONTRACT_SIGNATURE = `fnv1a32:${fnv1a32(JSON.stringify(REQUIRED_ROUTE_CONTRACT))}`;
 export const REQUIRED_ROUTE_METRICS = REQUIRED_ROUTE_CONTRACT.metrics;
 export const REQUIRED_ROUTE_GRIND_MILESTONES = deepFreeze(
   REQUIRED_ROUTE_CONTRACT.stages.flatMap((stage) => stage.activities)

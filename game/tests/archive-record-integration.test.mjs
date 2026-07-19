@@ -87,6 +87,5 @@ test('archive mutations persist synchronously, cached pages reload, and New Game
     "resetCampaign.addEventListener('click'",
     "window.addEventListener('keydown'",
   );
-  assert.match(campaignSource, /import \{ DEFAULT_ARCHIVE_RECORD_SAVE_KEY \} from '\.\/archive-record-contract\.mjs'/);
-  assert.match(reset, /localStorage\?\.removeItem\(DEFAULT_ARCHIVE_RECORD_SAVE_KEY\)/);
+  assert.match(reset, /archiveRecordAdapter\.clear\(\)/);
 });

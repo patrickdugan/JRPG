@@ -102,6 +102,5 @@ test('camp-talk mutations persist synchronously, cached pages reload, and New Ga
     "resetCampaign.addEventListener('click'",
     "window.addEventListener('keydown'",
   );
-  assert.match(campaignSource, /import \{ DEFAULT_CAMP_CONVERSATION_SAVE_KEY \} from '\.\/camp-conversation-contract\.mjs'/);
-  assert.match(reset, /localStorage\?\.removeItem\(DEFAULT_CAMP_CONVERSATION_SAVE_KEY\)/);
+  assert.match(reset, /campConversationAdapter\.clear\(\)/);
 });

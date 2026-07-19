@@ -13,19 +13,23 @@ import { getSceneOperation } from './content/scene-operations.mjs';
 import { getCampConversation } from './content/camp-conversations.mjs';
 import { getPartyCouncil } from './content/party-councils.mjs';
 import { getArchiveRecord } from './content/archive-records.mjs';
-import { DEFAULT_CAMP_CONVERSATION_SAVE_KEY } from './camp-conversation-contract.mjs';
-import { DEFAULT_PARTY_COUNCIL_SAVE_KEY } from './party-council-contract.mjs';
-import { DEFAULT_ARCHIVE_RECORD_SAVE_KEY } from './archive-record-contract.mjs';
 import { createBrowserRunUuid } from './browser-runtime.mjs';
 import { commitPersistenceTransaction, stateSaveStep } from './persistence-transaction.mjs';
 import { getRequiredRouteActivity } from './required-route-contract.mjs';
 import { deriveRequiredRouteProgress } from './required-route-progress.mjs';
+import {
+  createRecoveryCheckpoint,
+  restoreRecoveryCheckpoint,
+  serializeRecoveryCheckpoint,
+  validateRecoveryCheckpoint,
+} from './recovery-checkpoint.mjs';
 import {
   createAdvancementState,
   createAdvancementStorageAdapter,
   grantRewardBundle,
   getAdvancementSummary,
   getEncounterWinCount,
+  unlockPartyMembers,
 } from './advancement.mjs';
 import {
   appendChoice,
@@ -163,6 +167,10 @@ const progressLabel = document.querySelector('#progressLabel');
 const progressFill = document.querySelector('#progressFill');
 const resetCampaign = document.querySelector('#resetCampaign');
 const runProofStatus = document.querySelector('#runProofStatus');
+const recoveryStatus = document.querySelector('#recoveryStatus');
+const exportRecovery = document.querySelector('#exportRecovery');
+const importRecovery = document.querySelector('#importRecovery');
+const recoveryFile = document.querySelector('#recoveryFile');
 const encounterName = document.querySelector('#encounterName');
 const encounterObjective = document.querySelector('#encounterObjective');
 const encounterLesson = document.querySelector('#encounterLesson');
@@ -203,6 +211,10 @@ let campaignState = loadedSave.ok ? loadedSave.state : createCampaignState();
 const advancementAdapter = createAdvancementStorageAdapter();
 const loadedAdvancement = advancementAdapter.load();
 let advancementState = loadedAdvancement.ok ? loadedAdvancement.state : createAdvancementState();
+const frontierPartyState = unlockPartyMembers(advancementState, getCurrentChapter(campaignState).party);
+if (frontierPartyState !== advancementState && advancementAdapter.save(frontierPartyState).ok) {
+  advancementState = frontierPartyState;
+}
 const playtimeAdapter = createPlaytimeStorageAdapter();
 const loadedPlaytime = playtimeAdapter.load();
 let playtimeState = loadedPlaytime.ok ? loadedPlaytime.state : createPlaytimeState();
@@ -240,6 +252,7 @@ let playtimeUnsavedMs = 0;
 let runReceiptPendingMs = 0;
 let runReceiptPendingCategory = null;
 let runReceiptPendingChapterId = null;
+let recoveryReloadPending = false;
 let animationNow = 0;
 let fieldFacing = 'south';
 let fieldWalkUntil = 0;
@@ -1725,6 +1738,9 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
     return false;
   }
   const nextCampaignState = completeCurrentBeat(campaignState);
+  const nextAdvancementState = isCampaignComplete(nextCampaignState)
+    ? advancementState
+    : unlockPartyMembers(advancementState, getCurrentChapter(nextCampaignState).party);
   let persistedFieldState = nextFieldState ?? fieldRuntimeState;
   if (!isCampaignComplete(nextCampaignState)) {
     const nextChapter = getCurrentChapter(nextCampaignState);
@@ -1746,6 +1762,9 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
       { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: persistedFieldState },
     ] : []),
     { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
+    ...(nextAdvancementState !== advancementState ? [
+      { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: nextAdvancementState },
+    ] : []),
     ...(nextRunReceiptState !== runReceiptState ? [
       { id: 'run-receipt', adapter: runReceiptAdapter, previousState: runReceiptState, nextState: nextRunReceiptState },
     ] : []),
@@ -1753,6 +1772,7 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
   if (!commitStateChanges(action, changes).ok) return false;
   fieldRuntimeState = persistedFieldState;
   campaignState = nextCampaignState;
+  advancementState = nextAdvancementState;
   runReceiptState = nextRunReceiptState;
   render();
   return true;
@@ -2034,6 +2054,23 @@ interactFieldButton.addEventListener('click', () => {
       return;
     }
     if (stage.encounterId) {
+      if (getEncounterWinCount(advancementState, stage.encounterId) > 0) {
+        const evidence = { encounterId: stage.encounterId, victory: true };
+        if (selectedWitnessChoiceId) evidence.choiceId = selectedWitnessChoiceId;
+        const advanced = advanceWitnessChronicle(witnessChronicleState, chronicle.id, stage.id, evidence);
+        if (!advanced.ok) {
+          fieldFeedback.textContent = advanced.reason;
+          return;
+        }
+        if (!commitStateChanges('Witness canonical battle evidence', [
+          { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: advanced.state },
+        ]).ok) return;
+        witnessChronicleState = advanced.state;
+        selectedWitnessChoiceId = null;
+        render();
+        fieldFeedback.textContent = `${chronicle.title}: the recorded ${stage.encounterId} victory satisfies this witness stage without a duplicate battle.`;
+        return;
+      }
       const parameters = new URLSearchParams({
         encounter: stage.encounterId,
         return: 'campaign.html',
@@ -2172,7 +2209,8 @@ nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
   if (!window.confirm('Start a clean New Game? This clears story, scene operations, battles, quests, companion conversations, party councils, public archive readings, camp inventory, field positions, playtime, and the prior run receipt.')) return;
   const nextCampaignState = resetCampaignState();
-  const nextAdvancementState = createAdvancementState();
+  const pristineAdvancementState = createAdvancementState();
+  const nextAdvancementState = unlockPartyMembers(pristineAdvancementState, getCurrentChapter(nextCampaignState).party);
   const nextQuestState = createQuestState();
   const nextNarrativeState = createNarrativeState();
   const nextWitnessState = createWitnessChronicleState();
@@ -2184,7 +2222,7 @@ resetCampaign.addEventListener('click', () => {
   const receipt = createRunReceipt({
     runId: createBrowserRunUuid(),
     campaignState: nextCampaignState,
-    advancementState: nextAdvancementState,
+    advancementState: pristineAdvancementState,
   });
   if (!receipt.ok) {
     fieldFeedback.textContent = 'The verified run receipt could not be created; the current game was left intact.';
@@ -2216,21 +2254,9 @@ resetCampaign.addEventListener('click', () => {
   loadoutState = nextLoadoutState;
   playtimeState = nextPlaytimeState;
   fieldRuntimeState = nextFieldState;
-  try {
-    globalThis.localStorage?.removeItem(DEFAULT_CAMP_CONVERSATION_SAVE_KEY);
-  } catch {
-    // The other adapters preserve this same best-effort reset behavior when storage is unavailable.
-  }
-  try {
-    globalThis.localStorage?.removeItem(DEFAULT_PARTY_COUNCIL_SAVE_KEY);
-  } catch {
-    // Party councils use an independent finite-progress namespace.
-  }
-  try {
-    globalThis.localStorage?.removeItem(DEFAULT_ARCHIVE_RECORD_SAVE_KEY);
-  } catch {
-    // Independent save namespaces are cleared independently so one failure cannot mask another.
-  }
+  campConversationAdapter.clear();
+  partyCouncilAdapter.clear();
+  archiveRecordAdapter.clear();
   campConversationState = createCampConversationState(receipt.state.runId);
   partyCouncilState = createPartyCouncilState(receipt.state.runId);
   archiveRecordState = createArchiveRecordState(receipt.state.runId);
@@ -2275,6 +2301,106 @@ window.addEventListener('keydown', (event) => {
   if (choiceNumber > 0 && choiceNumber <= (getBeat().choices ?? []).length) {
     choose(getBeat().choices[choiceNumber - 1].id);
   }
+});
+
+function persistRecoveryAuthorities() {
+  sampleCampaignPlaytime(performance.now());
+  const flushed = flushRunReceiptPlaytime();
+  if (!flushed.ok || !runReceiptState) {
+    return { ok: false, reason: 'A valid clean-run receipt is required before exporting recovery.' };
+  }
+  const saves = [
+    saveAdapter.save(campaignState),
+    advancementAdapter.save(advancementState),
+    playtimeAdapter.save(playtimeState),
+    runReceiptAdapter.save(runReceiptState),
+    questAdapter.save(questState),
+    narrativeAdapter.save(narrativeState),
+    witnessAdapter.save(witnessChronicleState),
+    sceneOperationAdapter.save(sceneOperationState),
+    fieldAdapter.save(fieldRuntimeState),
+    loadoutAdapter.save(loadoutState),
+    campConversationAdapter.save(campConversationState),
+    partyCouncilAdapter.save(partyCouncilState),
+    archiveRecordAdapter.save(archiveRecordState),
+  ];
+  const failed = saves.find((entry) => !entry?.ok);
+  return failed
+    ? { ok: false, reason: failed.reason ?? failed.code ?? 'One recovery authority could not be saved.' }
+    : { ok: true };
+}
+
+function downloadRecoveryCheckpoint(checkpoint) {
+  const blob = new Blob([serializeRecoveryCheckpoint(checkpoint)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `bells-recovery-${checkpoint.summary.runId}-${checkpoint.createdAtEpochMs}.json`;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+exportRecovery.addEventListener('click', () => {
+  recoveryStatus.dataset.state = '';
+  const persisted = persistRecoveryAuthorities();
+  if (!persisted.ok) {
+    recoveryStatus.dataset.state = 'error';
+    recoveryStatus.textContent = persisted.reason;
+    return;
+  }
+  const created = createRecoveryCheckpoint(globalThis.localStorage);
+  if (!created.ok) {
+    recoveryStatus.dataset.state = 'error';
+    recoveryStatus.textContent = `Recovery export refused: ${created.errors.join(' ')}`;
+    return;
+  }
+  downloadRecoveryCheckpoint(created.checkpoint);
+  recoveryStatus.dataset.state = 'ready';
+  recoveryStatus.textContent = `Recovery-only checkpoint exported for run ${created.checkpoint.summary.runId.slice(0, 8)} at ${formatPlaytime(created.checkpoint.summary.activePlaytimeMs)}. It is not playtest proof.`;
+});
+
+importRecovery.addEventListener('click', () => {
+  recoveryFile.value = '';
+  recoveryFile.click();
+});
+
+recoveryFile.addEventListener('change', async () => {
+  const file = recoveryFile.files?.[0];
+  if (!file) return;
+  let serialized;
+  try {
+    serialized = await file.text();
+  } catch {
+    recoveryStatus.dataset.state = 'error';
+    recoveryStatus.textContent = 'Recovery file could not be read.';
+    return;
+  }
+  const validation = validateRecoveryCheckpoint(serialized);
+  if (!validation.ok) {
+    recoveryStatus.dataset.state = 'error';
+    recoveryStatus.textContent = `Recovery restore refused before writing: ${validation.errors.join(' ')}`;
+    return;
+  }
+  const { summary } = validation.checkpoint;
+  const confirmed = window.confirm(
+    `Restore the complete recovery-only checkpoint for run ${summary.runId.slice(0, 8)}?\n\n`
+      + `${summary.completedBeatCount}/60 scenes · ${summary.routeCompletedActivityCount}/${summary.routeRequiredActivityCount} route activities · ${formatPlaytime(summary.activePlaytimeMs)} active play.\n\n`
+      + 'This replaces all thirteen current save records. Close other game tabs first. This is recovery, not independent playtest proof.',
+  );
+  if (!confirmed) return;
+  recoveryReloadPending = true;
+  const restored = restoreRecoveryCheckpoint(globalThis.localStorage, validation.checkpoint);
+  if (!restored.ok) {
+    recoveryReloadPending = false;
+    recoveryStatus.dataset.state = 'error';
+    recoveryStatus.textContent = `Recovery restore failed; rollback ${restored.rollbackComplete ? 'completed' : 'was incomplete'}: ${restored.errors.join(' ')}`;
+    return;
+  }
+  recoveryStatus.dataset.state = 'ready';
+  recoveryStatus.textContent = 'All thirteen save records restored exactly. Reloading the recovered run…';
+  window.location.reload();
 });
 
 function animate(now) {
@@ -2327,6 +2453,7 @@ window.addEventListener('pageshow', (event) => {
 });
 
 window.addEventListener('pagehide', () => {
+  if (recoveryReloadPending) return;
   flushRunReceiptPlaytime();
   playtimeAdapter.save(playtimeState);
   if (runReceiptState) runReceiptAdapter.save(runReceiptState);
@@ -2339,6 +2466,7 @@ document.addEventListener('visibilitychange', () => {
   playtimeLastSample = performance.now();
   fieldTickLast = performance.now();
   if (document.visibilityState === 'hidden') {
+    if (recoveryReloadPending) return;
     flushRunReceiptPlaytime();
     playtimeAdapter.save(playtimeState);
     if (runReceiptState) runReceiptAdapter.save(runReceiptState);

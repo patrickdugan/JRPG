@@ -122,6 +122,5 @@ test('party-council mutations persist synchronously, cached pages reload, and Ne
     "resetCampaign.addEventListener('click'",
     "window.addEventListener('keydown'",
   );
-  assert.match(campaignSource, /import \{ DEFAULT_PARTY_COUNCIL_SAVE_KEY \} from '\.\/party-council-contract\.mjs'/);
-  assert.match(reset, /localStorage\?\.removeItem\(DEFAULT_PARTY_COUNCIL_SAVE_KEY\)/);
+  assert.match(reset, /partyCouncilAdapter\.clear\(\)/);
 });
