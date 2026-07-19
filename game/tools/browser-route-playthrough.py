@@ -566,7 +566,7 @@ class PlayerDriver:
         return used
 
     def return_from_camp(self) -> None:
-        self.page.locator('a[href="campaign.html"]').first.click()
+        self.page.locator('a[href="campaign.html"]').first.click(no_wait_after=True)
         self.controls += 1
         self.page.wait_for_url("**/campaign.html")
         self.page.locator("#sceneTitle").wait_for()

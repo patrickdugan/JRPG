@@ -54,6 +54,7 @@ test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () 
   assert.match(routeSource, /self\.page\.locator\("#restParty"\)/);
   assert.match(routeSource, /self\.page\.locator\("#inventoryList \[data-use-item\]"\)/);
   assert.match(routeSource, /self\.return_from_camp\(\)/);
+  assert.match(routeSource, /locator\('a\[href="campaign\.html"\]'\)\.first\.click\(no_wait_after=True\)/);
   assert.match(routeSource, /def play_battle_and_resume_scene\(self, scene_key: str\)/);
   assert.match(routeSource, /if self\.scene_key\(\) == scene_key:\s+self\.finish_story_scene\(\)/);
 });
