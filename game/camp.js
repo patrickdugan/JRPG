@@ -175,6 +175,9 @@ let selectedCampConversationId = campConversationState.records.find((record) => 
 let selectedPartyCouncilId = partyCouncilState.records.find((record) => record.status === 'active')?.id ?? null;
 let selectedArchiveRecordId = archiveRecordState.records.find((record) => record.status === 'active')?.id ?? null;
 let archiveReviewParagraphIndex = null;
+let activeNarrativeSurface = selectedCampConversationId
+  ? 'camp-conversation'
+  : selectedPartyCouncilId ? 'party-council' : selectedArchiveRecordId ? 'archive-record' : null;
 const routeParameters = new URLSearchParams(window.location.search);
 const requestedRouteType = routeParameters.get('routeType');
 const requestedRouteId = routeParameters.get('routeId');
@@ -656,6 +659,7 @@ function applyRequestedRouteFocus() {
     return;
   }
   target.classList.add('is-route-focus');
+  activeNarrativeSurface = requestedRouteType;
   target.scrollIntoView({ block: 'center', behavior: 'smooth' });
   target.focus();
   target.click();
@@ -733,6 +737,7 @@ campConversationList.addEventListener('click', (event) => {
   const conversation = CAMP_CONVERSATIONS.conversations.find((entry) => entry.id === button.dataset.campConversationId);
   if (!conversation) return;
   selectedCampConversationId = conversation.id;
+  activeNarrativeSurface = 'camp-conversation';
   const record = getCampConversationRecord(campConversationState, conversation.id);
   if (!record) {
     const result = beginCampConversation(campConversationState, conversation.id, campConversationContext());
@@ -805,6 +810,7 @@ partyCouncilList.addEventListener('click', (event) => {
   const council = PARTY_COUNCILS.councils.find((entry) => entry.id === button.dataset.partyCouncilId);
   if (!council) return;
   selectedPartyCouncilId = council.id;
+  activeNarrativeSurface = 'party-council';
   const record = getPartyCouncilRecord(partyCouncilState, council.id);
   if (!record) {
     const result = beginPartyCouncil(partyCouncilState, council.id, partyCouncilContext());
@@ -886,6 +892,7 @@ archiveRecordList.addEventListener('click', (event) => {
   const record = ARCHIVE_RECORDS.records.find((entry) => entry.id === button.dataset.archiveRecordId);
   if (!record) return;
   selectedArchiveRecordId = record.id;
+  activeNarrativeSurface = 'archive-record';
   const progressRecord = getArchiveRecordProgressRecord(archiveRecordState, record.id);
   if (progressRecord?.status === 'completed') {
     archiveReviewParagraphIndex = 0;
@@ -1009,7 +1016,32 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 window.addEventListener('pointerdown', () => { playtimeLastActivity = performance.now(); }, { passive: true });
-window.addEventListener('keydown', () => { playtimeLastActivity = performance.now(); }, { passive: true });
+function handleNarrativeKeyboard(event) {
+  playtimeLastActivity = performance.now();
+  if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey
+    || event.target instanceof Element && event.target.closest('input, select, textarea, [contenteditable="true"]')) return;
+  const surfaces = {
+    'camp-conversation': { stage: campConversationStage, advance: advanceCampConversation, choices: campConversationChoices },
+    'party-council': { stage: partyCouncilStage, advance: advancePartyCouncil, choices: partyCouncilChoices },
+    'archive-record': { stage: archiveRecordStage, advance: advanceArchiveRecord, choices: null },
+  };
+  const surface = surfaces[activeNarrativeSurface];
+  if (!surface || surface.stage.hidden) return;
+  if (event.key.toLowerCase() === 'n' && !surface.advance.hidden && !surface.advance.disabled) {
+    event.preventDefault();
+    surface.advance.click();
+    return;
+  }
+  if ((event.key === '1' || event.key === '2') && surface.choices) {
+    const choice = surface.choices.querySelectorAll('button')[Number(event.key) - 1];
+    if (choice && !choice.disabled) {
+      event.preventDefault();
+      choice.click();
+    }
+  }
+}
+
+window.addEventListener('keydown', handleNarrativeKeyboard);
 window.addEventListener('pageshow', (event) => {
   if (!event.persisted) return;
   const refreshedAdvancement = advancementAdapter.load();

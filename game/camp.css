@@ -16,6 +16,7 @@
 * { box-sizing: border-box; }
 body { min-width: 320px; min-height: 100vh; margin: 0; color: var(--paper); background: radial-gradient(circle at 48% -12%, #453a36 0, #171a2d 34%, #070912 76%); font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
 button, select, a { font: inherit; }
+kbd { padding: 1px 4px; border: 1px solid #596783; border-radius: 3px; color: #f4dd94; background: #11172a; font: inherit; }
 button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 h1, h2, h3, p { margin-top: 0; }
 h1 { margin-bottom: 6px; color: #fff0d1; font-size: clamp(1.55rem, 3vw, 2.35rem); letter-spacing: -0.055em; }

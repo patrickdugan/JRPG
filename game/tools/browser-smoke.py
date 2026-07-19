@@ -367,11 +367,21 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 route_record == {"id": route_activity_id, "status": "active"},
                 "One-click route guide did not begin the requested archive record.",
             )
+            route_page.keyboard.press("n")
+            route_page.wait_for_function(
+                """async id => {
+                  const archive = await import('./archive-record-runtime.mjs');
+                  const loaded = archive.createArchiveRecordStorageAdapter().load();
+                  return loaded.state?.records.find(entry => entry.id === id)?.paragraphIndex === 1;
+                }""",
+                arg=route_activity_id,
+            )
             route_action = {
                 "beatId": first_route_beat,
                 "activityId": route_activity_id,
                 "activityType": route_activity_type,
                 "status": route_record["status"],
+                "keyboardParagraphIndex": 1,
             }
             route_context.close()
 

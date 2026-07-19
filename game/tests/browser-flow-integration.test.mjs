@@ -100,6 +100,17 @@ test('all player-facing clean-run timers attach their samples to a canonical cha
   assert.match(credits, /recordRunPlaytime\([\s\S]*?chapterId: campaignState\.current\.chapterId/);
 });
 
+test('Camp narrative surfaces expose deterministic keyboard reading controls', () => {
+  const camp = pageRecords.find(({ sourceName }) => sourceName === 'camp.js');
+  assert.match(camp.html, /<kbd>N<\/kbd> next line/);
+  assert.match(camp.source, /function handleNarrativeKeyboard\(event\)/);
+  assert.match(camp.source, /event\.key\.toLowerCase\(\) === 'n'/);
+  assert.match(camp.source, /event\.key === '1' \|\| event\.key === '2'/);
+  assert.match(camp.source, /surface\.advance\.click\(\)/);
+  assert.match(camp.source, /choice\.click\(\)/);
+  assert.match(camp.source, /event\.repeat/);
+});
+
 test('the intended-route ledger blocks story frontiers and credits from real save evidence', () => {
   const campaign = pageRecords.find(({ sourceName }) => sourceName === 'campaign.js');
   const credits = pageRecords.find(({ sourceName }) => sourceName === 'credits.js');
