@@ -88,7 +88,11 @@ test('credits are an explicit durable seal boundary after story completion', () 
   assert.match(creditsSource, /chapterId: campaignState\.current\.chapterId/);
   assert.match(creditsSource, /renderTimingLedger\(report\)/);
   assert.match(creditsSource, /CAMPAIGN\.chapters\.map/);
+  assert.match(creditsSource, /CHAPTER_PACING_CHECKPOINTS\.aggregateTargetMs/);
+  assert.match(creditsSource, /chapterTimingRow\(chapter, chapterMs\[chapter\.id\] \?\? 0, completedBeatIds\)/);
+  assert.match(creditsSource, /diagnostic model, not observed proof/);
   assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']chapterTimingList["']/);
+  assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']pacingBasis["']/);
   assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']exportEvidence["']/);
 });
 

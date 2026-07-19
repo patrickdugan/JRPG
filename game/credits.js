@@ -6,6 +6,7 @@ import {
 } from './run-receipt.mjs';
 import { formatPlaytime, isPlaytimeInactive, PLAYTIME_CATEGORIES } from './playtime.mjs';
 import { CAMPAIGN } from './content/campaign.mjs';
+import { CHAPTER_PACING_CHECKPOINTS } from './chapter-pacing.mjs';
 import { createCampaignState, createLocalStorageAdapter } from './progression.mjs';
 import { createAdvancementState, createAdvancementStorageAdapter } from './advancement.mjs';
 import { createQuestState, createQuestStorageAdapter } from './quest-runtime.mjs';
@@ -41,6 +42,7 @@ const evidenceExportHint = document.querySelector('#evidenceExportHint');
 const categoryTimingList = document.querySelector('#categoryTimingList');
 const chapterTimingList = document.querySelector('#chapterTimingList');
 const timingAttribution = document.querySelector('#timingAttribution');
+const pacingBasis = document.querySelector('#pacingBasis');
 const receiptAdapter = createRunReceiptStorageAdapter();
 const campaignAdapter = createLocalStorageAdapter();
 const loadedCampaign = campaignAdapter.load();
@@ -89,15 +91,40 @@ function timingRow(label, milliseconds) {
   return row;
 }
 
+function chapterTimingRow(chapter, actualMs, completedBeatIds) {
+  const checkpoint = CHAPTER_PACING_CHECKPOINTS.chapters.find(({ chapterId }) => chapterId === chapter.id);
+  if (!checkpoint) throw new Error(`No pacing checkpoint exists for ${chapter.id}.`);
+  const row = document.createElement('li');
+  const copy = document.createElement('span');
+  const name = document.createElement('span');
+  const status = document.createElement('small');
+  const value = document.createElement('strong');
+  const completed = chapter.beats.every((beat) => completedBeatIds.has(beat.id));
+  const started = actualMs > 0 || chapter.beats.some((beat) => completedBeatIds.has(beat.id));
+  const percent = checkpoint.targetMs === 0 ? 100 : (actualMs / checkpoint.targetMs) * 100;
+  const gapMs = actualMs - checkpoint.targetMs;
+  name.textContent = `${chapter.number ?? '—'} · ${chapter.title}`;
+  status.textContent = completed
+    ? `${percent.toFixed(1)}% · ${gapMs >= 0 ? 'over' : 'short'} by ${formatPlaytime(Math.abs(gapMs))}`
+    : started ? `${percent.toFixed(1)}% · in progress` : 'not started';
+  value.textContent = `${formatPlaytime(actualMs)} / ${formatPlaytime(checkpoint.targetMs)}`;
+  value.setAttribute('aria-label', `${formatPlaytime(actualMs)} actual of ${formatPlaytime(checkpoint.targetMs)} reference checkpoint`);
+  copy.append(name, status);
+  row.append(copy, value);
+  return row;
+}
+
 function renderTimingLedger(report = null) {
   const categories = report?.categories ?? Object.fromEntries(PLAYTIME_CATEGORIES.map((category) => [category, 0]));
   const chapterMs = report?.chapterMs ?? Object.fromEntries(CAMPAIGN.chapters.map((chapter) => [chapter.id, 0]));
   categoryTimingList.replaceChildren(...PLAYTIME_CATEGORIES.map((category) => (
     timingRow(CATEGORY_LABELS[category], categories[category] ?? 0)
   )));
+  const completedBeatIds = new Set(report?.completedBeatIds ?? []);
   chapterTimingList.replaceChildren(...CAMPAIGN.chapters.map((chapter) => (
-    timingRow(`${chapter.number ?? '—'} · ${chapter.title}`, chapterMs[chapter.id] ?? 0)
+    chapterTimingRow(chapter, chapterMs[chapter.id] ?? 0, completedBeatIds)
   )));
+  pacingBasis.textContent = `Reference checkpoint total ${formatPlaytime(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs)} · complete 215-activity route at 1× · diagnostic model, not observed proof.`;
   const totalMs = report?.totalMs ?? 0;
   const attributedMs = Object.values(chapterMs).reduce((sum, value) => sum + value, 0);
   const unattributedMs = totalMs - attributedMs;

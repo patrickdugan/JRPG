@@ -163,8 +163,28 @@ The versioned run receipt begins only beside pristine campaign and advancement s
 
 A story-complete receipt remains active, allowing final-beat talks, council, and archive reading to accrue before the player explicitly completes credits. A deterministic completion trace cannot satisfy the time requirement because it calls no playtime transition. Campaign, Battle, Camp, and Credits attach their clean-run samples to the current canonical chapter. Credits exposes the live five-category and eleven-chapter ledger before sealing, then can export a signed, versioned JSON snapshot with run identity, receipt revision, category/chapter timing, story and first-clear evidence, all six required-route activity types, remaining IDs, and a fail-closed release-target verdict. All three run-bound narrative ledgers must carry the receipt UUID and attributed chapter time must equal total time, or the combined verdict remains false. The signature detects accidental report drift but is not cryptographic or independent attestation. A release claim still needs a witnessed human playthrough; the ledger and export supply its chapter-level timing record.
 
+### Chapter pacing checkpoints
+
+The build audit re-attributes the reference scenario's shipped quantities to their canonical chapter: dialogue by scene or unlock beat, exact canonical and witness movement by trace, interactions and exits by beat, first-clear commands/activations/rests by encounter trace, finite content by chapter, and each of the four required 1× repeat schedules by milestone beat. Authored `estimatedMinutes` fields and observed elapsed time are excluded. Whole milliseconds use largest-remainder reconciliation, so the eleven checkpoints sum exactly to 73,901,133 ms (1,231.686 displayed minutes).
+
+| Chapter | Reference checkpoint |
+|---|---:|
+| Prologue — The Night Census | 54.571 min |
+| 1 — River of Names | 59.416 min |
+| 2 — Bell at Takamine | 88.813 min |
+| 3 — Sodegaura Lanterns | 122.137 min |
+| 4 — The Sea Keeps No Ledger | 141.264 min |
+| 5 — Ash in Kagura Pass | 149.717 min |
+| 6 — The Court of Masks | 95.216 min |
+| 7 — The Road of the Dead | 108.410 min |
+| 8 — Lanterns Unhidden | 92.593 min |
+| 9 — The Black Chrysanthemum | 186.126 min |
+| Epilogue — Names at Daybreak | 133.425 min |
+
+Credits displays actual/reference values throughout a run. An unfinished chapter is labeled not started or in progress; a completed chapter shows its percentage and over/short gap. These are tuning checkpoints only. They do not change the 1,200-minute receipt threshold and cannot make `durationProven` or `releaseTargetProven` true.
+
 ## Remaining proof and production gap
 
-The intended all-finite route clears the arithmetic reference target by 31.686 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. Exact witness-fieldwork traversal is now confirmed; the remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
+The intended all-finite route clears the arithmetic reference target by 31.686 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. Exact witness-fieldwork traversal and chapter-level model attribution are now confirmed; the remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
 
 Until a clean receipt meets the gate, all documentation must say **20-hour target unproven**.

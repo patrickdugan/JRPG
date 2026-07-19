@@ -274,6 +274,12 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             page.locator("#sealCredits").wait_for()
             require(page.locator("#categoryTimingList > li").count() == 5, "Credits activity timing ledger is incomplete.")
             require(page.locator("#chapterTimingList > li").count() == 11, "Credits chapter timing ledger is incomplete.")
+            chapter_timing_text = page.locator("#chapterTimingList").inner_text()
+            require(" / " in chapter_timing_text, "Credits chapter timing rows omit actual/reference values.")
+            require("short by" in chapter_timing_text, "Completed short-run chapters omit their checkpoint gaps.")
+            pacing_basis_text = page.locator("#pacingBasis").inner_text()
+            require("20:31:41" in pacing_basis_text, "Credits pacing total drifted from the reference checkpoint.")
+            require("not observed proof" in pacing_basis_text, "Credits pacing checkpoint is not clearly labeled diagnostic.")
             require(
                 page.locator("#timingAttribution").get_attribute("data-state") == "complete",
                 "Credits timing ledger contains unattributed active play.",
