@@ -272,6 +272,12 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             page.goto(f"{base}/credits.html", wait_until="domcontentloaded")
             page.locator("#sealCredits").wait_for()
+            require(page.locator("#categoryTimingList > li").count() == 5, "Credits activity timing ledger is incomplete.")
+            require(page.locator("#chapterTimingList > li").count() == 11, "Credits chapter timing ledger is incomplete.")
+            require(
+                page.locator("#timingAttribution").get_attribute("data-state") == "complete",
+                "Credits timing ledger contains unattributed active play.",
+            )
             require(
                 not page.locator("#sealCredits").is_disabled(),
                 "Credits seal stayed disabled after story completion: "

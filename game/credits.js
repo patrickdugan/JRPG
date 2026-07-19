@@ -4,7 +4,8 @@ import {
   getRunProofReport,
   recordRunPlaytime,
 } from './run-receipt.mjs';
-import { formatPlaytime, isPlaytimeInactive } from './playtime.mjs';
+import { formatPlaytime, isPlaytimeInactive, PLAYTIME_CATEGORIES } from './playtime.mjs';
+import { CAMPAIGN } from './content/campaign.mjs';
 import { createCampaignState, createLocalStorageAdapter } from './progression.mjs';
 import { createAdvancementState, createAdvancementStorageAdapter } from './advancement.mjs';
 import { createQuestState, createQuestStorageAdapter } from './quest-runtime.mjs';
@@ -37,6 +38,9 @@ const creditsActionHint = document.querySelector('#creditsActionHint');
 const sealCredits = document.querySelector('#sealCredits');
 const exportEvidence = document.querySelector('#exportEvidence');
 const evidenceExportHint = document.querySelector('#evidenceExportHint');
+const categoryTimingList = document.querySelector('#categoryTimingList');
+const chapterTimingList = document.querySelector('#chapterTimingList');
+const timingAttribution = document.querySelector('#timingAttribution');
 const receiptAdapter = createRunReceiptStorageAdapter();
 const campaignAdapter = createLocalStorageAdapter();
 const loadedCampaign = campaignAdapter.load();
@@ -67,6 +71,44 @@ function loadRequiredRouteProgress() {
 
 let requiredRouteProgress = loadRequiredRouteProgress();
 
+const CATEGORY_LABELS = Object.freeze({
+  narrative: 'Narrative',
+  exploration: 'Exploration',
+  firstClearCombat: 'First-clear combat',
+  grind: 'Repeat grind',
+  menusAndRest: 'Camp, menus & rest',
+});
+
+function timingRow(label, milliseconds) {
+  const row = document.createElement('li');
+  const name = document.createElement('span');
+  const value = document.createElement('strong');
+  name.textContent = label;
+  value.textContent = formatPlaytime(milliseconds);
+  row.append(name, value);
+  return row;
+}
+
+function renderTimingLedger(report = null) {
+  const categories = report?.categories ?? Object.fromEntries(PLAYTIME_CATEGORIES.map((category) => [category, 0]));
+  const chapterMs = report?.chapterMs ?? Object.fromEntries(CAMPAIGN.chapters.map((chapter) => [chapter.id, 0]));
+  categoryTimingList.replaceChildren(...PLAYTIME_CATEGORIES.map((category) => (
+    timingRow(CATEGORY_LABELS[category], categories[category] ?? 0)
+  )));
+  chapterTimingList.replaceChildren(...CAMPAIGN.chapters.map((chapter) => (
+    timingRow(`${chapter.number ?? '—'} · ${chapter.title}`, chapterMs[chapter.id] ?? 0)
+  )));
+  const totalMs = report?.totalMs ?? 0;
+  const attributedMs = Object.values(chapterMs).reduce((sum, value) => sum + value, 0);
+  const unattributedMs = totalMs - attributedMs;
+  timingAttribution.dataset.state = unattributedMs === 0 ? 'complete' : 'incomplete';
+  timingAttribution.textContent = report
+    ? unattributedMs === 0
+      ? `All ${formatPlaytime(totalMs)} is assigned to a canonical chapter.`
+      : `${formatPlaytime(unattributedMs)} is not assigned to a chapter; combined release proof remains unavailable.`
+    : 'No valid clean-run timing receipt is attached.';
+}
+
 function render() {
   const routeTotals = requiredRouteProgress.metrics.total;
   const routeReady = requiredRouteProgress.creditsGate.creditsReady;
@@ -75,6 +117,7 @@ function render() {
     ? `${routeTotals.completedActivityCount}/${routeTotals.requiredActivityCount} intended-route activities complete · credits gate ready`
     : `${routeTotals.completedActivityCount}/${routeTotals.requiredActivityCount} intended-route activities complete · ${routeTotals.remainingActivityCount} remain`;
   if (!receiptState) {
+    renderTimingLedger();
     creditsStatus.dataset.state = 'error';
     creditsStatus.textContent = loadedReceipt.ok
       ? 'No clean-run receipt is attached to this save.'
@@ -88,6 +131,7 @@ function render() {
   }
 
   const report = getRunProofReport(receiptState);
+  renderTimingLedger(report);
   exportEvidence.disabled = false;
   evidenceExportHint.textContent = report.durationProven && routeReady
     ? 'The export contains a signed release-target proof with category, chapter, story, combat, and 215-activity evidence.'
