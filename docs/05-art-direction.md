@@ -4,6 +4,8 @@
 **Audience:** art director, environment artists, character artists, UI/UX, VFX, animation, technical art<br>
 **Scope:** 2D pixel-art JRPG, 320 x 180 logical pixels, integer-scaled; the first playable and the 20-25 hour production target.
 
+**Runtime note (2026-07-20):** the current Campaign reuses its original 84-frame party field atlas for visible formation followers. Only successful persisted departures enter a bounded presentation trail; followers disappear on context changes and never imply collision, hazard, interaction, or save authority. Campaign Battle also uses code-native typed damage flyouts for exact values and WEAK/RESIST/IMMUNE/ABSORB/GUARD/WARD reads. These are production-foundation implementations, not final subjective readability approval.
+
 ## 1. Visual thesis
 
 *Bells of the Black Chrysanthemum* is a Gothic early-Edo fantasy of rain, records, bells, and mutual aid. Its image should feel like a remembered place rather than a collage of familiar genre signals: wet cedar outside a household, paper windows glowing through a curfew, a registry seal on a door, and an impossible black-lacquer court above it all.

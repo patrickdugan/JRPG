@@ -48,6 +48,8 @@ The core shape is intentionally small:
 
 All player-visible text belongs in the data. Consumers may add presentation-only properties at runtime, but must not rewrite canonical dialogue, names, choices, or reward descriptions.
 
+Field interactables use a separate exact presentation layer in `game/content/field-interaction-copy.mjs`. Its schema-v1 catalogue covers all 113 `(levelId, interactableId)` pairs in canonical level order and supplies an English copy key, label, completion, repeat, blocked text, and exact choice rows where required. Runtime interaction IDs, choice IDs, actions, flags, rewards, and save records remain unchanged. Lookup never derives visible copy from an ID, action, result slug, requirement, reward, or prose fragment; an unknown pair fails closed to neutral human text instead of exposing a machine identifier. Save-stable `temple-charm-chest` and `reliquary-lock` therefore remain internal while the browser publishes the corrected Tampered Registry Cache / Defaced Registry Token and Varga Strongbox language.
+
 `party` is the ordered roster available by the chapter's conclusion; `partyMeta` records its start state, joins, guest support, and camp availability. This keeps simple UI consumption (`chapter.party`) separate from progression metadata.
 
 ## How to consume it

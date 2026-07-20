@@ -21,6 +21,7 @@ Status: **provisional internal correction pass; external consultant review remai
 - Save-stable identifiers remain unchanged when display language is corrected.
 - `temple-charm` / `temple-charm-chest` display as **Defaced Registry Token**; the legacy item-name alias remains solely for compatibility.
 - `reliquary-lock` identifies the existing interaction internally but displays **Varga Strongbox**.
+- The schema-v1 field-interaction presentation catalogue now covers all 113 exact level/interactable pairs. Campaign buttons, native choice prompts, completions, blocked states, and replay text consume that authored copy; unknown pairs use neutral language and never expose legacy IDs or infer wording from rewards, actions, or flags.
 - Takamine is described as an **experimental local bell registry**, never as a normal nationwide “temple system” in 1622.
 
 ## Review still required
