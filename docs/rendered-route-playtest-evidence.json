@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "campaignId": "bells-black-chrysanthemum",
-  "runId": "3163d10c-efff-4bcb-9de7-0f91e045ea7e",
-  "receiptRevision": 2348,
+  "runId": "ec3182b2-73b3-4b83-90b1-79a740e036ed",
+  "receiptRevision": 2329,
   "status": "complete",
   "cleanStart": true,
   "story": {
@@ -119,9 +119,9 @@
       "advancement": true
     },
     "runBinding": {
-      "campConversations": "3163d10c-efff-4bcb-9de7-0f91e045ea7e",
-      "partyCouncils": "3163d10c-efff-4bcb-9de7-0f91e045ea7e",
-      "archiveRecords": "3163d10c-efff-4bcb-9de7-0f91e045ea7e"
+      "campConversations": "ec3182b2-73b3-4b83-90b1-79a740e036ed",
+      "partyCouncils": "ec3182b2-73b3-4b83-90b1-79a740e036ed",
+      "archiveRecords": "ec3182b2-73b3-4b83-90b1-79a740e036ed"
     },
     "complete": true,
     "creditsGateReady": true,
@@ -375,35 +375,35 @@
     "remainingActivityIds": []
   },
   "playtime": {
-    "totalMs": 1725037,
-    "totalMinutes": 28.750616666666666,
+    "totalMs": 1693181,
+    "totalMinutes": 28.219683333333332,
     "targetMs": 72000000,
-    "percentOfTarget": 2.395884722222222,
-    "remainingMs": 70274963,
-    "fixedActualMs": 1680334,
+    "percentOfTarget": 2.351640277777778,
+    "remainingMs": 70306819,
+    "fixedActualMs": 1644357,
     "fixedTargetMs": 61200000,
-    "grindMs": 44703,
+    "grindMs": 48824,
     "categories": {
-      "narrative": 238609,
-      "exploration": 822278,
-      "firstClearCombat": 338753,
-      "grind": 44703,
-      "menusAndRest": 280694
+      "narrative": 212134,
+      "exploration": 774599,
+      "firstClearCombat": 388436,
+      "grind": 48824,
+      "menusAndRest": 269188
     },
     "chapterMs": {
-      "prologue": 67407,
-      "chapter-1": 157911,
-      "chapter-2": 244446,
-      "chapter-3": 132004,
-      "chapter-4": 144516,
-      "chapter-5": 164412,
-      "chapter-6": 145149,
-      "chapter-7": 123009,
-      "chapter-8": 214261,
-      "chapter-9": 209212,
-      "epilogue": 122710
+      "prologue": 65718,
+      "chapter-1": 156524,
+      "chapter-2": 236696,
+      "chapter-3": 131241,
+      "chapter-4": 140049,
+      "chapter-5": 164314,
+      "chapter-6": 139288,
+      "chapter-7": 117603,
+      "chapter-8": 207283,
+      "chapter-9": 215096,
+      "epilogue": 119369
     },
-    "attributedChapterMs": 1725037,
+    "attributedChapterMs": 1693181,
     "unattributedMs": 0
   },
   "pacing": {
@@ -417,90 +417,90 @@
       {
         "chapterId": "prologue",
         "complete": true,
-        "actualMs": 67407,
+        "actualMs": 65718,
         "referenceTargetMs": 3274233,
-        "deltaMs": -3206826,
-        "percentOfReference": 2.059
+        "deltaMs": -3208515,
+        "percentOfReference": 2.007
       },
       {
         "chapterId": "chapter-1",
         "complete": true,
-        "actualMs": 157911,
+        "actualMs": 156524,
         "referenceTargetMs": 3565267,
-        "deltaMs": -3407356,
-        "percentOfReference": 4.429
+        "deltaMs": -3408743,
+        "percentOfReference": 4.39
       },
       {
         "chapterId": "chapter-2",
         "complete": true,
-        "actualMs": 244446,
+        "actualMs": 236696,
         "referenceTargetMs": 5355784,
-        "deltaMs": -5111338,
-        "percentOfReference": 4.564
+        "deltaMs": -5119088,
+        "percentOfReference": 4.419
       },
       {
         "chapterId": "chapter-3",
         "complete": true,
-        "actualMs": 132004,
+        "actualMs": 131241,
         "referenceTargetMs": 7328193,
-        "deltaMs": -7196189,
-        "percentOfReference": 1.801
+        "deltaMs": -7196952,
+        "percentOfReference": 1.791
       },
       {
         "chapterId": "chapter-4",
         "complete": true,
-        "actualMs": 144516,
+        "actualMs": 140049,
         "referenceTargetMs": 8475817,
-        "deltaMs": -8331301,
-        "percentOfReference": 1.705
+        "deltaMs": -8335768,
+        "percentOfReference": 1.652
       },
       {
         "chapterId": "chapter-5",
         "complete": true,
-        "actualMs": 164412,
+        "actualMs": 164314,
         "referenceTargetMs": 8983030,
-        "deltaMs": -8818618,
-        "percentOfReference": 1.83
+        "deltaMs": -8818716,
+        "percentOfReference": 1.829
       },
       {
         "chapterId": "chapter-6",
         "complete": true,
-        "actualMs": 145149,
+        "actualMs": 139288,
         "referenceTargetMs": 5712950,
-        "deltaMs": -5567801,
-        "percentOfReference": 2.541
+        "deltaMs": -5573662,
+        "percentOfReference": 2.438
       },
       {
         "chapterId": "chapter-7",
         "complete": true,
-        "actualMs": 123009,
+        "actualMs": 117603,
         "referenceTargetMs": 6504610,
-        "deltaMs": -6381601,
-        "percentOfReference": 1.891
+        "deltaMs": -6387007,
+        "percentOfReference": 1.808
       },
       {
         "chapterId": "chapter-8",
         "complete": true,
-        "actualMs": 214261,
+        "actualMs": 207283,
         "referenceTargetMs": 5555550,
-        "deltaMs": -5341289,
-        "percentOfReference": 3.857
+        "deltaMs": -5348267,
+        "percentOfReference": 3.731
       },
       {
         "chapterId": "chapter-9",
         "complete": true,
-        "actualMs": 209212,
+        "actualMs": 215096,
         "referenceTargetMs": 11167550,
-        "deltaMs": -10958338,
-        "percentOfReference": 1.873
+        "deltaMs": -10952454,
+        "percentOfReference": 1.926
       },
       {
         "chapterId": "epilogue",
         "complete": true,
-        "actualMs": 122710,
+        "actualMs": 119369,
         "referenceTargetMs": 8005483,
-        "deltaMs": -7882773,
-        "percentOfReference": 1.533
+        "deltaMs": -7886114,
+        "percentOfReference": 1.491
       }
     ]
   },
@@ -512,5 +512,5 @@
     "durationProven": false,
     "releaseTargetProven": false
   },
-  "signature": "fnv1a32:90b7f4c8"
+  "signature": "fnv1a32:31d04d74"
 }
