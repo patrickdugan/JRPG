@@ -1,0 +1,1860 @@
+{
+  "schemaVersion": 1,
+  "assetId": "vfx_battle-delivery-essence_v01",
+  "runtimeStatus": "current-browser-impact-overlay",
+  "generator": {
+    "path": "build_battle_vfx.py",
+    "python": "3.x",
+    "pillow": "11.3.0",
+    "determinism": "two independent in-process renders are byte-identical"
+  },
+  "sources": [
+    {
+      "path": "battle-vfx-suite.source.json",
+      "sha256": "4c1385f1b3e433a6aa83bf2e4d67cfde92a4e04001232caa1ce3524a4182c816"
+    },
+    {
+      "path": "build_battle_vfx.py",
+      "sha256": "bdd9e2cfb95ef3881c26ee30651e1b2f47fa518665ded11275d48a7e2fc4afa0"
+    }
+  ],
+  "exports": [
+    {
+      "id": "runtime-atlas",
+      "path": "battle-vfx-suite-atlas.png",
+      "sha256": "9f8a95d51d400c2b16f04ca88c2312b9ea324c74fee9a8ae4332b40ff1f26964",
+      "ihdr": {
+        "width": 384,
+        "height": 576,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "transparent": true,
+      "runtimeCandidate": true
+    },
+    {
+      "id": "labeled-contact-sheet",
+      "path": "battle-vfx-suite-contact-sheet.png",
+      "sha256": "03d62b2b9e2c8832c16abf139b44f0bf01917281d03275030a87088df9eed6a7",
+      "ihdr": {
+        "width": 822,
+        "height": 864,
+        "bitDepth": 8,
+        "colorType": 2,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "transparent": false,
+      "runtimeCandidate": false
+    }
+  ],
+  "logicalFrame": [
+    64,
+    64
+  ],
+  "atlasGrid": [
+    6,
+    9
+  ],
+  "anchor": [
+    32,
+    32
+  ],
+  "fps": 60,
+  "eventFrameSemantics": "zero-based; activeEnd is inclusive and complete is exclusive",
+  "palette": {
+    "ink": "#0B1020",
+    "rain": "#27466B",
+    "rainBright": "#88B9D6",
+    "paper": "#F6E8B9",
+    "brass": "#A08B58",
+    "stone": "#637462",
+    "stoneBright": "#B4C2B1",
+    "violet": "#66507B",
+    "violetBright": "#B9A5D5",
+    "ember": "#B34A3E",
+    "emberBright": "#F2A25C",
+    "frost": "#88C8C5",
+    "frostBright": "#D7F0D5",
+    "storm": "#4F7392",
+    "stormBright": "#E7F4EE",
+    "radiance": "#88C8C5",
+    "radianceBright": "#F6E8B9",
+    "umbral": "#781E39",
+    "umbralBright": "#B65A78"
+  },
+  "safety": {
+    "authenticReligiousSymbols": false,
+    "authenticHeraldicSymbols": false,
+    "forbiddenMotifs": [
+      "cross",
+      "interlocking-triangle star",
+      "real mon or crest",
+      "scripture or liturgical text",
+      "identifiable sacred implement"
+    ],
+    "constructionNote": "All signs are invented combat pictograms: asymmetric brackets, broken rings, irregular shards, and directional marks."
+  },
+  "targetObscuration": {
+    "sourceContracts": [
+      "docs/05-art-direction.md",
+      "docs/10-animation-bible.md"
+    ],
+    "ordinaryImpactFocalSpreadPx": [
+      12,
+      24
+    ],
+    "maximumActiveBounds": [
+      24,
+      24
+    ],
+    "transparentGutterPx": 20,
+    "maximumCellCoverage": 0.1
+  },
+  "validation": {
+    "binaryAlpha": true,
+    "minimumTransparentGutterPx": 20,
+    "maximumObservedActiveBounds": [
+      24,
+      24
+    ],
+    "maximumObservedCellCoverage": 0.067383,
+    "distinctFrameCount": 54
+  },
+  "animations": [
+    {
+      "id": "vfx_delivery-cut_v01",
+      "label": "Cut",
+      "category": "delivery",
+      "shapeId": "diagonal-cleft",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 18,
+      "durationMs": 300.0,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 7,
+        "activeEnd": 8,
+        "impact": 7,
+        "recoveryStart": 12,
+        "complete": 18
+      },
+      "frameIds": [
+        "vfx_delivery-cut_v01:windup-1",
+        "vfx_delivery-cut_v01:windup-2",
+        "vfx_delivery-cut_v01:active",
+        "vfx_delivery-cut_v01:follow-through",
+        "vfx_delivery-cut_v01:recovery-1",
+        "vfx_delivery-cut_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_delivery-pierce_v01",
+      "label": "Pierce",
+      "category": "delivery",
+      "shapeId": "line-diamond",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 18,
+      "durationMs": 300.0,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 8,
+        "activeEnd": 9,
+        "impact": 8,
+        "recoveryStart": 12,
+        "complete": 18
+      },
+      "frameIds": [
+        "vfx_delivery-pierce_v01:windup-1",
+        "vfx_delivery-pierce_v01:windup-2",
+        "vfx_delivery-pierce_v01:active",
+        "vfx_delivery-pierce_v01:follow-through",
+        "vfx_delivery-pierce_v01:recovery-1",
+        "vfx_delivery-pierce_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_delivery-crush_v01",
+      "label": "Crush",
+      "category": "delivery",
+      "shapeId": "square-impact",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 28,
+      "durationMs": 466.667,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 12,
+        "activeEnd": 14,
+        "impact": 12,
+        "recoveryStart": 20,
+        "complete": 28
+      },
+      "frameIds": [
+        "vfx_delivery-crush_v01:windup-1",
+        "vfx_delivery-crush_v01:windup-2",
+        "vfx_delivery-crush_v01:impact",
+        "vfx_delivery-crush_v01:follow-through",
+        "vfx_delivery-crush_v01:recovery-1",
+        "vfx_delivery-crush_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_delivery-arcane_v01",
+      "label": "Arcane",
+      "category": "delivery",
+      "shapeId": "asymmetric-angle-seal",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 32,
+      "durationMs": 533.333,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 14,
+        "activeEnd": 17,
+        "impact": 14,
+        "recoveryStart": 22,
+        "complete": 32
+      },
+      "frameIds": [
+        "vfx_delivery-arcane_v01:windup-1",
+        "vfx_delivery-arcane_v01:windup-2",
+        "vfx_delivery-arcane_v01:active",
+        "vfx_delivery-arcane_v01:follow-through",
+        "vfx_delivery-arcane_v01:recovery-1",
+        "vfx_delivery-arcane_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_essence-ember_v01",
+      "label": "Ember",
+      "category": "essence",
+      "shapeId": "three-prong-flame",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 8,
+      "durationMs": 133.333,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 3,
+        "activeEnd": 4,
+        "impact": 3,
+        "recoveryStart": 6,
+        "complete": 8
+      },
+      "frameIds": [
+        "vfx_essence-ember_v01:windup-1",
+        "vfx_essence-ember_v01:windup-2",
+        "vfx_essence-ember_v01:impact",
+        "vfx_essence-ember_v01:follow-through",
+        "vfx_essence-ember_v01:recovery-1",
+        "vfx_essence-ember_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_essence-frost_v01",
+      "label": "Frost",
+      "category": "essence",
+      "shapeId": "irregular-six-point-shard",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 8,
+      "durationMs": 133.333,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 3,
+        "activeEnd": 4,
+        "impact": 3,
+        "recoveryStart": 6,
+        "complete": 8
+      },
+      "frameIds": [
+        "vfx_essence-frost_v01:windup-1",
+        "vfx_essence-frost_v01:windup-2",
+        "vfx_essence-frost_v01:impact",
+        "vfx_essence-frost_v01:follow-through",
+        "vfx_essence-frost_v01:recovery-1",
+        "vfx_essence-frost_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_essence-storm_v01",
+      "label": "Storm",
+      "category": "essence",
+      "shapeId": "split-zigzag",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 8,
+      "durationMs": 133.333,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 3,
+        "activeEnd": 4,
+        "impact": 3,
+        "recoveryStart": 6,
+        "complete": 8
+      },
+      "frameIds": [
+        "vfx_essence-storm_v01:windup-1",
+        "vfx_essence-storm_v01:windup-2",
+        "vfx_essence-storm_v01:impact",
+        "vfx_essence-storm_v01:follow-through",
+        "vfx_essence-storm_v01:recovery-1",
+        "vfx_essence-storm_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_essence-radiance_v01",
+      "label": "Radiance",
+      "category": "essence",
+      "shapeId": "broken-eight-ray-disc",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 8,
+      "durationMs": 133.333,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 3,
+        "activeEnd": 4,
+        "impact": 3,
+        "recoveryStart": 6,
+        "complete": 8
+      },
+      "frameIds": [
+        "vfx_essence-radiance_v01:windup-1",
+        "vfx_essence-radiance_v01:windup-2",
+        "vfx_essence-radiance_v01:impact",
+        "vfx_essence-radiance_v01:follow-through",
+        "vfx_essence-radiance_v01:recovery-1",
+        "vfx_essence-radiance_v01:recovery-2"
+      ]
+    },
+    {
+      "id": "vfx_essence-umbral_v01",
+      "label": "Umbral",
+      "category": "essence",
+      "shapeId": "broken-thorn-arc",
+      "anchor": [
+        32,
+        32
+      ],
+      "fps": 60,
+      "loop": false,
+      "durationFrames": 8,
+      "durationMs": 133.333,
+      "events": {
+        "windupStart": 0,
+        "activeStart": 3,
+        "activeEnd": 4,
+        "impact": 3,
+        "recoveryStart": 6,
+        "complete": 8
+      },
+      "frameIds": [
+        "vfx_essence-umbral_v01:windup-1",
+        "vfx_essence-umbral_v01:windup-2",
+        "vfx_essence-umbral_v01:impact",
+        "vfx_essence-umbral_v01:follow-through",
+        "vfx_essence-umbral_v01:recovery-1",
+        "vfx_essence-umbral_v01:recovery-2"
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "id": "vfx_delivery-cut_v01:windup-1",
+      "effectId": "vfx_delivery-cut_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        29,
+        31,
+        35,
+        37
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 8,
+      "cellCoverage": 0.001953,
+      "rgbaSha256": "55c3cb6f98e6f1a51e797c5d9f09ec9c99b97072f8092a1f568f8ab54a5199dc"
+    },
+    {
+      "id": "vfx_delivery-cut_v01:windup-2",
+      "effectId": "vfx_delivery-cut_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        0,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        28,
+        38,
+        41
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 33,
+      "cellCoverage": 0.008057,
+      "rgbaSha256": "24c5689957216f076fb2ca4a508da10ecef22ace08c02f392962e8d9c420edcf"
+    },
+    {
+      "id": "vfx_delivery-cut_v01:active",
+      "effectId": "vfx_delivery-cut_v01",
+      "label": "active",
+      "phase": "active",
+      "rect": [
+        128,
+        0,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        20,
+        21,
+        43,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 87,
+      "cellCoverage": 0.02124,
+      "rgbaSha256": "8e9548a7574f6fc3729eecd913c81aa671370a0e8c3c1259a0e54f71c6461258"
+    },
+    {
+      "id": "vfx_delivery-cut_v01:follow-through",
+      "effectId": "vfx_delivery-cut_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        0,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        21,
+        21,
+        43,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 74,
+      "cellCoverage": 0.018066,
+      "rgbaSha256": "d2414fe5e13528712ef81b2d9539759f34b4b65b1dc3823f1356f4d13ea82b97"
+    },
+    {
+      "id": "vfx_delivery-cut_v01:recovery-1",
+      "effectId": "vfx_delivery-cut_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        0,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        24,
+        24,
+        41,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 15,
+      "cellCoverage": 0.003662,
+      "rgbaSha256": "462f37ec0e6f3d1094a35ba46cf5134260fb3397e43f600c0bd16ac469c1df9e"
+    },
+    {
+      "id": "vfx_delivery-cut_v01:recovery-2",
+      "effectId": "vfx_delivery-cut_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        0,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        29,
+        23,
+        42,
+        39
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 6,
+      "cellCoverage": 0.001465,
+      "rgbaSha256": "353ba37845ce3736b2d06012732228cf8e7ec9ad618d2af55fbfbf2a2dd98b8c"
+    },
+    {
+      "id": "vfx_delivery-pierce_v01:windup-1",
+      "effectId": "vfx_delivery-pierce_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        64,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        27,
+        32,
+        35,
+        33
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 7,
+      "cellCoverage": 0.001709,
+      "rgbaSha256": "843402a53cc91da28931a017b023f7b7d524cce9109a5e9b3472606e5c3ed3cd"
+    },
+    {
+      "id": "vfx_delivery-pierce_v01:windup-2",
+      "effectId": "vfx_delivery-pierce_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        24,
+        29,
+        42,
+        36
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 48,
+      "cellCoverage": 0.011719,
+      "rgbaSha256": "b1f6d38698d661fc705df8f05539dda6375c5226a0ace3baef00bb5ce6eb4a52"
+    },
+    {
+      "id": "vfx_delivery-pierce_v01:active",
+      "effectId": "vfx_delivery-pierce_v01",
+      "label": "active",
+      "phase": "active",
+      "rect": [
+        128,
+        64,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        20,
+        28,
+        44,
+        37
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 81,
+      "cellCoverage": 0.019775,
+      "rgbaSha256": "a31c5c98655bb84dcb24f8f15f1448134f74ef88e025c3263e54ef0b0ad4a478"
+    },
+    {
+      "id": "vfx_delivery-pierce_v01:follow-through",
+      "effectId": "vfx_delivery-pierce_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        64,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        21,
+        29,
+        44,
+        36
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 56,
+      "cellCoverage": 0.013672,
+      "rgbaSha256": "2923ef29c4c87a430e349427d4fbd609eeb69d8028407d877277fe740dd76406"
+    },
+    {
+      "id": "vfx_delivery-pierce_v01:recovery-1",
+      "effectId": "vfx_delivery-pierce_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        64,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        28,
+        30,
+        42,
+        35
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 22,
+      "cellCoverage": 0.005371,
+      "rgbaSha256": "0e5fb1088784f7bea62d9a23f0005669dd9f48d8e992d3fe62754ebab2c8358e"
+    },
+    {
+      "id": "vfx_delivery-pierce_v01:recovery-2",
+      "effectId": "vfx_delivery-pierce_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        64,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        32,
+        32,
+        42,
+        34
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 6,
+      "cellCoverage": 0.001465,
+      "rgbaSha256": "42253e298b67f2f554edac960a70ca4a8622e29f9173638f4971d81f4770f1ce"
+    },
+    {
+      "id": "vfx_delivery-crush_v01:windup-1",
+      "effectId": "vfx_delivery-crush_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        128,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        30,
+        25,
+        35,
+        35
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 6,
+      "durationMs": 100.0,
+      "opaquePixels": 29,
+      "cellCoverage": 0.00708,
+      "rgbaSha256": "a361e84fc7a1aec909e06892a0aa48ab8a139ad58ed21fe00e212b8ba570a404"
+    },
+    {
+      "id": "vfx_delivery-crush_v01:windup-2",
+      "effectId": "vfx_delivery-crush_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        128,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        28,
+        22,
+        37,
+        38
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 6,
+      "durationMs": 100.0,
+      "opaquePixels": 72,
+      "cellCoverage": 0.017578,
+      "rgbaSha256": "d3145e9539882b9dacbaab59cc521bac4d1550540a0b5f81eb60f5c46f614f58"
+    },
+    {
+      "id": "vfx_delivery-crush_v01:impact",
+      "effectId": "vfx_delivery-crush_v01",
+      "label": "impact",
+      "phase": "active",
+      "rect": [
+        128,
+        128,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        22,
+        22,
+        44,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 3,
+      "durationMs": 50.0,
+      "opaquePixels": 261,
+      "cellCoverage": 0.063721,
+      "rgbaSha256": "490d4a6b7cb21de681d67514f021e2ff5c24787ab741398e57b0fa56399b46ab"
+    },
+    {
+      "id": "vfx_delivery-crush_v01:follow-through",
+      "effectId": "vfx_delivery-crush_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        128,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        22,
+        27,
+        44,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 5,
+      "durationMs": 83.333,
+      "opaquePixels": 136,
+      "cellCoverage": 0.033203,
+      "rgbaSha256": "b5b40f29dd323b985b54c17e5818f558dd2799757279d2465a1a2e4352b78d76"
+    },
+    {
+      "id": "vfx_delivery-crush_v01:recovery-1",
+      "effectId": "vfx_delivery-crush_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        128,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        24,
+        35,
+        42,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 23,
+      "cellCoverage": 0.005615,
+      "rgbaSha256": "f999cc53de79dc62aef3dd1643657de0fb7c035c5c66d180a8d4d23d03ad98f7"
+    },
+    {
+      "id": "vfx_delivery-crush_v01:recovery-2",
+      "effectId": "vfx_delivery-crush_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        128,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        27,
+        37,
+        40,
+        41
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 9,
+      "cellCoverage": 0.002197,
+      "rgbaSha256": "3ff89b90aaf5743723d6006ab646f9a0a5b4173121ff994b02c8604933931a4d"
+    },
+    {
+      "id": "vfx_delivery-arcane_v01:windup-1",
+      "effectId": "vfx_delivery-arcane_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        192,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        28,
+        29,
+        37,
+        36
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 7,
+      "durationMs": 116.667,
+      "opaquePixels": 25,
+      "cellCoverage": 0.006104,
+      "rgbaSha256": "5d5412579f65c2c89ae9d6cc8278f854527101497366cbae211afd85712c418f"
+    },
+    {
+      "id": "vfx_delivery-arcane_v01:windup-2",
+      "effectId": "vfx_delivery-arcane_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        192,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        24,
+        23,
+        43,
+        38
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 7,
+      "durationMs": 116.667,
+      "opaquePixels": 58,
+      "cellCoverage": 0.01416,
+      "rgbaSha256": "38d201a64f04888f48e6ee98cddbe845432818f52e0aefa52724922fc7e9cdb3"
+    },
+    {
+      "id": "vfx_delivery-arcane_v01:active",
+      "effectId": "vfx_delivery-arcane_v01",
+      "label": "active",
+      "phase": "active",
+      "rect": [
+        128,
+        192,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        20,
+        21,
+        44,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 184,
+      "cellCoverage": 0.044922,
+      "rgbaSha256": "d74150e3ec106bd2ed1edfb11120acd4ec246cb59cafe28db377f69ea05ee7bb"
+    },
+    {
+      "id": "vfx_delivery-arcane_v01:follow-through",
+      "effectId": "vfx_delivery-arcane_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        192,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        21,
+        24,
+        44,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 4,
+      "durationMs": 66.667,
+      "opaquePixels": 101,
+      "cellCoverage": 0.024658,
+      "rgbaSha256": "157dde7c04b780c2feaaf82b2ddc0556a942a7dc4589c3db85e67733639f534d"
+    },
+    {
+      "id": "vfx_delivery-arcane_v01:recovery-1",
+      "effectId": "vfx_delivery-arcane_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        192,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        26,
+        26,
+        41,
+        40
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 5,
+      "durationMs": 83.333,
+      "opaquePixels": 53,
+      "cellCoverage": 0.012939,
+      "rgbaSha256": "d6becc82b5ac4bcb0828d82c9f1f404339fb21a949d42cc4e15ec2258493d698"
+    },
+    {
+      "id": "vfx_delivery-arcane_v01:recovery-2",
+      "effectId": "vfx_delivery-arcane_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        192,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        28,
+        41,
+        39
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 5,
+      "durationMs": 83.333,
+      "opaquePixels": 26,
+      "cellCoverage": 0.006348,
+      "rgbaSha256": "c66ab3d975a9095e5a7342a5e5b73a3b2f275ddeeec4177abfd7182f68f3d283"
+    },
+    {
+      "id": "vfx_essence-ember_v01:windup-1",
+      "effectId": "vfx_essence-ember_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        256,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        31,
+        34,
+        36,
+        40
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 10,
+      "cellCoverage": 0.002441,
+      "rgbaSha256": "b2ad7a6cc8175aab6831ed15267544b8f6aba90dc087a9de8c6430786df651cd"
+    },
+    {
+      "id": "vfx_essence-ember_v01:windup-2",
+      "effectId": "vfx_essence-ember_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        256,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        27,
+        26,
+        41,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 129,
+      "cellCoverage": 0.031494,
+      "rgbaSha256": "7146d98455b2066d144a59a4646e094fd2f6121ece9a27fe99d324bbcf9fcd0a"
+    },
+    {
+      "id": "vfx_essence-ember_v01:impact",
+      "effectId": "vfx_essence-ember_v01",
+      "label": "impact",
+      "phase": "active",
+      "rect": [
+        128,
+        256,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        23,
+        20,
+        43,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 276,
+      "cellCoverage": 0.067383,
+      "rgbaSha256": "8e388f641fa3b704c961871e17ff38492467a75d8abc5ddbb7a7cf617fd942f0"
+    },
+    {
+      "id": "vfx_essence-ember_v01:follow-through",
+      "effectId": "vfx_essence-ember_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        256,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        23,
+        43,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 129,
+      "cellCoverage": 0.031494,
+      "rgbaSha256": "ba1117e95910d2e8e589f0eda16ca95b337676df6987642ebeb44548ae2acb23"
+    },
+    {
+      "id": "vfx_essence-ember_v01:recovery-1",
+      "effectId": "vfx_essence-ember_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        256,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        26,
+        25,
+        42,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 66,
+      "cellCoverage": 0.016113,
+      "rgbaSha256": "6062f720b78f36c6847b0792b12b6809db56308c832da8f4240a7e6c6fdee963"
+    },
+    {
+      "id": "vfx_essence-ember_v01:recovery-2",
+      "effectId": "vfx_essence-ember_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        256,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        28,
+        25,
+        40,
+        41
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 7,
+      "cellCoverage": 0.001709,
+      "rgbaSha256": "c0db821dfa24fddc659ba062bf28120a2a42b89c47844540184379313e84de54"
+    },
+    {
+      "id": "vfx_essence-frost_v01:windup-1",
+      "effectId": "vfx_essence-frost_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        320,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        29,
+        28,
+        36,
+        38
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 36,
+      "cellCoverage": 0.008789,
+      "rgbaSha256": "5d5d4c94d5b1e4ac48ade3fac6d7b0704ebbc4b671063a5c7b4fb078419da962"
+    },
+    {
+      "id": "vfx_essence-frost_v01:windup-2",
+      "effectId": "vfx_essence-frost_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        320,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        24,
+        23,
+        42,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 155,
+      "cellCoverage": 0.037842,
+      "rgbaSha256": "bf6a594a2aecaf56bfbe856c9e92bf95516326c8b00fb6f977f65f1b0b87b9db"
+    },
+    {
+      "id": "vfx_essence-frost_v01:impact",
+      "effectId": "vfx_essence-frost_v01",
+      "label": "impact",
+      "phase": "active",
+      "rect": [
+        128,
+        320,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        21,
+        20,
+        44,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 222,
+      "cellCoverage": 0.054199,
+      "rgbaSha256": "db7d7b14ffe7dcc068302d9053200ce2ffded2839ab35ef4ff018c8e9d97ed77"
+    },
+    {
+      "id": "vfx_essence-frost_v01:follow-through",
+      "effectId": "vfx_essence-frost_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        320,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        22,
+        21,
+        44,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 174,
+      "cellCoverage": 0.04248,
+      "rgbaSha256": "33ff5cc4172a5e58fb56564ac4e39ff34561278dbe1ae70daaeae9e7f62afdbd"
+    },
+    {
+      "id": "vfx_essence-frost_v01:recovery-1",
+      "effectId": "vfx_essence-frost_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        320,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        23,
+        24,
+        43,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 104,
+      "cellCoverage": 0.025391,
+      "rgbaSha256": "7e0628026bbb0401db40caa5a9114be7933ab2449112746c90f4fd6dbd321ef2"
+    },
+    {
+      "id": "vfx_essence-frost_v01:recovery-2",
+      "effectId": "vfx_essence-frost_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        320,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        25,
+        42,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 15,
+      "cellCoverage": 0.003662,
+      "rgbaSha256": "90ff310a99ebcc42a564a80a608e42bd2a921d2a0141d5621f9866d6e3822211"
+    },
+    {
+      "id": "vfx_essence-storm_v01:windup-1",
+      "effectId": "vfx_essence-storm_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        384,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        31,
+        28,
+        36,
+        36
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 18,
+      "cellCoverage": 0.004395,
+      "rgbaSha256": "32708a7c961e9f5f009aca59bc14b9b6add5231a2c85d32e66e54654b8926939"
+    },
+    {
+      "id": "vfx_essence-storm_v01:windup-2",
+      "effectId": "vfx_essence-storm_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        384,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        23,
+        39,
+        41
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 53,
+      "cellCoverage": 0.012939,
+      "rgbaSha256": "c4640d336126743af5c0bb95b24a1536782d4bed5859d4aa445bd0def3c0bd6e"
+    },
+    {
+      "id": "vfx_essence-storm_v01:impact",
+      "effectId": "vfx_essence-storm_v01",
+      "label": "impact",
+      "phase": "active",
+      "rect": [
+        128,
+        384,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        22,
+        20,
+        44,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 117,
+      "cellCoverage": 0.028564,
+      "rgbaSha256": "61689ddb19a27fdbbb80ae5561aa9fc1039524868697a9cb53758c27c747f398"
+    },
+    {
+      "id": "vfx_essence-storm_v01:follow-through",
+      "effectId": "vfx_essence-storm_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        384,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        23,
+        22,
+        43,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 73,
+      "cellCoverage": 0.017822,
+      "rgbaSha256": "f7eba3418fe30eeeea74c2571c52ea97cd93c52567c2f62da187a45d4be3f196"
+    },
+    {
+      "id": "vfx_essence-storm_v01:recovery-1",
+      "effectId": "vfx_essence-storm_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        384,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        26,
+        42,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 44,
+      "cellCoverage": 0.010742,
+      "rgbaSha256": "594925054f417559e95fba57eb110f7e083d555c42df7939cdca22f519538e3a"
+    },
+    {
+      "id": "vfx_essence-storm_v01:recovery-2",
+      "effectId": "vfx_essence-storm_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        384,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        26,
+        28,
+        40,
+        40
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 10,
+      "cellCoverage": 0.002441,
+      "rgbaSha256": "f7a9b871c00b0d67cc25bc54eb0029bb89f1c4c2659cdeb10477c3578eb83df5"
+    },
+    {
+      "id": "vfx_essence-radiance_v01:windup-1",
+      "effectId": "vfx_essence-radiance_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        448,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        30,
+        27,
+        35,
+        35
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 26,
+      "cellCoverage": 0.006348,
+      "rgbaSha256": "ca22f7f8619f0f6cb8ba5a2944b5b276d3d92f3d8cc471abcfa4bfd5723ee3b6"
+    },
+    {
+      "id": "vfx_essence-radiance_v01:windup-2",
+      "effectId": "vfx_essence-radiance_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        448,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        27,
+        27,
+        40,
+        39
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 69,
+      "cellCoverage": 0.016846,
+      "rgbaSha256": "74045903e0ca4966cdb65270944cc9cd07fb0c2519e1858a02ac1cdc80bf8c75"
+    },
+    {
+      "id": "vfx_essence-radiance_v01:impact",
+      "effectId": "vfx_essence-radiance_v01",
+      "label": "impact",
+      "phase": "active",
+      "rect": [
+        128,
+        448,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        20,
+        20,
+        44,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 162,
+      "cellCoverage": 0.039551,
+      "rgbaSha256": "723a0177b4dd976be2856e983f951d9a4606cac286c526c0ed53ae827c6222f8"
+    },
+    {
+      "id": "vfx_essence-radiance_v01:follow-through",
+      "effectId": "vfx_essence-radiance_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        448,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        21,
+        21,
+        43,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 82,
+      "cellCoverage": 0.02002,
+      "rgbaSha256": "f3a1178555d98d01eac70623640f5fa231882165016e04ce81fdd6647fa0728f"
+    },
+    {
+      "id": "vfx_essence-radiance_v01:recovery-1",
+      "effectId": "vfx_essence-radiance_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        448,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        26,
+        27,
+        39,
+        39
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 48,
+      "cellCoverage": 0.011719,
+      "rgbaSha256": "92da455ed4c216957bfbae1dd0f4a93d4a4d29e11a616632e68518fd49d32a76"
+    },
+    {
+      "id": "vfx_essence-radiance_v01:recovery-2",
+      "effectId": "vfx_essence-radiance_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        448,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        27,
+        27,
+        39,
+        39
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 8,
+      "cellCoverage": 0.001953,
+      "rgbaSha256": "970b2379aed07695962219be9c59b1e17e3b43b6df79862792b36a05e80631f9"
+    },
+    {
+      "id": "vfx_essence-umbral_v01:windup-1",
+      "effectId": "vfx_essence-umbral_v01",
+      "label": "windup-1",
+      "phase": "windup",
+      "rect": [
+        0,
+        512,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        29,
+        27,
+        36,
+        39
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 26,
+      "cellCoverage": 0.006348,
+      "rgbaSha256": "e0d9d17ddddb3ff2f084a64a623344eefc5ff8bf6dca531458c40b08329f736a"
+    },
+    {
+      "id": "vfx_essence-umbral_v01:windup-2",
+      "effectId": "vfx_essence-umbral_v01",
+      "label": "windup-2",
+      "phase": "windup",
+      "rect": [
+        64,
+        512,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        25,
+        23,
+        39,
+        43
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 77,
+      "cellCoverage": 0.018799,
+      "rgbaSha256": "d5008358b25d8a7ca129e52d2a26eda3015e12ced2f4774e19c939e7938da649"
+    },
+    {
+      "id": "vfx_essence-umbral_v01:impact",
+      "effectId": "vfx_essence-umbral_v01",
+      "label": "impact",
+      "phase": "active",
+      "rect": [
+        128,
+        512,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        20,
+        20,
+        42,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 2,
+      "durationMs": 33.333,
+      "opaquePixels": 139,
+      "cellCoverage": 0.033936,
+      "rgbaSha256": "d77bd8014150ac126a62b7f461a195b739feea6c7c09bf366a78461c27085b70"
+    },
+    {
+      "id": "vfx_essence-umbral_v01:follow-through",
+      "effectId": "vfx_essence-umbral_v01",
+      "label": "follow-through",
+      "phase": "followThrough",
+      "rect": [
+        192,
+        512,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        22,
+        22,
+        41,
+        44
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 93,
+      "cellCoverage": 0.022705,
+      "rgbaSha256": "6caa6b7b2576d795354dfcd2d85bcc65c0890a26312a7033a0db6aba327d901d"
+    },
+    {
+      "id": "vfx_essence-umbral_v01:recovery-1",
+      "effectId": "vfx_essence-umbral_v01",
+      "label": "recovery-1",
+      "phase": "recovery",
+      "rect": [
+        256,
+        512,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        27,
+        25,
+        40,
+        42
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 52,
+      "cellCoverage": 0.012695,
+      "rgbaSha256": "f3b17975485a0cd2327b33aa5d5496c1020ccdec5333e3541670432d163c544b"
+    },
+    {
+      "id": "vfx_essence-umbral_v01:recovery-2",
+      "effectId": "vfx_essence-umbral_v01",
+      "label": "recovery-2",
+      "phase": "recovery",
+      "rect": [
+        320,
+        512,
+        64,
+        64
+      ],
+      "localAlphaBounds": [
+        29,
+        29,
+        39,
+        38
+      ],
+      "anchor": [
+        32,
+        32
+      ],
+      "durationFrames": 1,
+      "durationMs": 16.667,
+      "opaquePixels": 16,
+      "cellCoverage": 0.003906,
+      "rgbaSha256": "be43447904101e1b545b3caa69f4678cbfa12d5254b554a01f7fd25343cdee0e"
+    }
+  ]
+}

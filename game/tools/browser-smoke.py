@@ -216,7 +216,13 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(stage_response is not None and stage_response.status == 200, "Takamine stage failed delivery.")
             stage_page.wait_for_function(
-                "() => document.querySelector('#battleCanvas')?.dataset.stageArtState === 'ready'",
+                """() => {
+                  const state = document.querySelector('#battleCanvas')?.dataset;
+                  return state?.stageArtState === 'ready'
+                    && state?.partyArtState === 'ready'
+                    && state?.enemyArtState === 'ready'
+                    && state?.vfxArtState === 'ready';
+                }""",
             )
             stage_art = stage_page.evaluate(
                 """async () => {
@@ -230,6 +236,9 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     height: art.sourceHeight,
                     sourceCell: art.sourceCell,
                     url: art.url,
+                    partyState: canvas.dataset.partyArtState,
+                    enemyState: canvas.dataset.enemyArtState,
+                    vfxState: canvas.dataset.vfxArtState,
                   };
                 }"""
             )
@@ -241,6 +250,9 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     "height": 224,
                     "sourceCell": 32,
                     "url": "./assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
+                    "partyState": "ready",
+                    "enemyState": "ready",
+                    "vfxState": "ready",
                 },
                 f"Takamine runtime art contract drifted: {stage_art}.",
             )
@@ -251,6 +263,15 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "**/assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
                 lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-fallback-qa"),
             )
+            for failed_art_url in (
+                "**/assets/art/party-field-suite/party-field-foundation.png",
+                "**/assets/art/enemy-combat-suite/enemy-combat-atlas.png",
+                "**/assets/art/battle-vfx-suite/battle-vfx-suite-atlas.png",
+            ):
+                fallback_context.route(
+                    failed_art_url,
+                    lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-fallback-qa"),
+                )
             fallback_page = fallback_context.new_page()
             fallback_page.set_default_timeout(20_000)
             fallback_page.set_default_navigation_timeout(45_000)
@@ -261,7 +282,13 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(fallback_response is not None and fallback_response.status == 200, "Takamine fallback page failed delivery.")
             fallback_page.wait_for_function(
-                "() => document.querySelector('#battleCanvas')?.dataset.stageArtState === 'error'",
+                """() => {
+                  const state = document.querySelector('#battleCanvas')?.dataset;
+                  return state?.stageArtState === 'error'
+                    && state?.partyArtState === 'error'
+                    && state?.enemyArtState === 'error'
+                    && state?.vfxArtState === 'error';
+                }""",
             )
             fallback_colors = fallback_page.locator("#battleCanvas").evaluate(
                 """canvas => {

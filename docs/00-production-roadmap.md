@@ -89,8 +89,8 @@ Current execution order:
 - preserve the mechanically complete 11-chapter campaign and its deterministic completion receipt;
 - preserve the completed finite expansion: exact-route operations, witness fieldwork, 90 companion conversations, 30 party councils, and 60 public archive readings;
 - keep first-clear and repeat combat rewards separate while requiring one circuit of each of four contracts and leaving later 1×/2×/4× grinding optional;
-- preserve the manifested, editable Takamine Bell-Chamber board and exact 2x runtime geometry as the first authored environment pipeline; never substitute its rejected generated concept pixels, and extend the pipeline to later stages only after subjective readability review;
-- replace provisional generated production atlases selectively after animation and readability review, beginning with complete party, enemy/boss, and VFX suites;
+- preserve the manifested, editable Takamine Bell-Chamber board and exact 2x runtime geometry as the first authored environment pipeline; never substitute its rejected generated concept pixels, and extend the same contract to later stages while retaining subjective readability review as an art-lock gate;
+- preserve the integrated editable party idle/walk foundation, eight-family enemy key-pose atlas, and nine-family battle-VFX overlay; complete the missing party/combat in-betweens, portraits, enemy defeats/variants, bespoke boss phases, and status/system effects before final art lock;
 - resolve the provisional findings in the [historical and cultural audit note](20-historical-cultural-audit.md), then run external cultural review, accessibility, browser/device, chapter-timing, and full clean-start playtests before release.
 
 ### 6. Campaign completeness and duration proof — active gate

@@ -62,9 +62,11 @@ import {
   PARTY_ATLAS,
   atlasDirectionForMovement,
   getPartyAtlasFrame,
+  partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
 import {
   ENEMY_ATLAS,
+  enemyAtlasImageHasExpectedSize,
   getEnemyAtlasFrame,
 } from './enemy-atlas.mjs';
 import {
@@ -100,6 +102,11 @@ import {
   battleStageImageHasExpectedSize,
   getBattleStageArt,
 } from './battle-stage-art.mjs';
+import {
+  BATTLE_VFX_ATLAS,
+  battleVfxImageHasExpectedSize,
+  getBattleVfxFrame,
+} from './battle-vfx-atlas.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -141,9 +148,37 @@ const mateusSurrender = document.querySelector('#mateusSurrender');
 
 context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
-battlePartyAtlasImage.src = PARTY_ATLAS.url;
 const battleEnemyAtlasImage = new Image();
-battleEnemyAtlasImage.src = ENEMY_ATLAS.url;
+function loadCombatAtlas(image, { url, width, height, datasetKey }) {
+  canvas.dataset[datasetKey] = 'loading';
+  image.decoding = 'async';
+  image.addEventListener('load', () => {
+    canvas.dataset[datasetKey] = image.naturalWidth === width && image.naturalHeight === height ? 'ready' : 'error';
+    if (engine) drawBattle(performance.now());
+  }, { once: true });
+  image.addEventListener('error', () => {
+    canvas.dataset[datasetKey] = 'error';
+    if (engine) drawBattle(performance.now());
+  }, { once: true });
+  image.src = url;
+}
+loadCombatAtlas(battlePartyAtlasImage, { ...PARTY_ATLAS, datasetKey: 'partyArtState' });
+loadCombatAtlas(battleEnemyAtlasImage, { ...ENEMY_ATLAS, datasetKey: 'enemyArtState' });
+const battleVfxAtlasImage = new Image();
+let battleVfxAtlasState = 'loading';
+battleVfxAtlasImage.decoding = 'async';
+battleVfxAtlasImage.addEventListener('load', () => {
+  battleVfxAtlasState = battleVfxImageHasExpectedSize(battleVfxAtlasImage) ? 'ready' : 'error';
+  canvas.dataset.vfxArtState = battleVfxAtlasState;
+  if (engine) drawBattle(performance.now());
+}, { once: true });
+battleVfxAtlasImage.addEventListener('error', () => {
+  battleVfxAtlasState = 'error';
+  canvas.dataset.vfxArtState = battleVfxAtlasState;
+  if (engine) drawBattle(performance.now());
+}, { once: true });
+canvas.dataset.vfxArtState = battleVfxAtlasState;
+battleVfxAtlasImage.src = BATTLE_VFX_ATLAS.url;
 
 const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
@@ -211,6 +246,7 @@ const battleFacingByActor = new Map();
 const battleMotionUntil = new Map();
 const battleEnemyPoseByActor = new Map();
 const battleEnemyPoseUntil = new Map();
+const VFX_TARGET_PHASES = new Set(['impact', 'stagger', 'status-glyph', 'recovery']);
 let activeBattleAnimation = null;
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
@@ -565,6 +601,33 @@ function drawBattleAnimationFx(animation, geometry) {
     context.lineWidth = Math.max(2, geometry.cell * 0.06);
     context.stroke();
   }
+  if (battleVfxAtlasState === 'ready' && battleVfxImageHasExpectedSize(battleVfxAtlasImage)) {
+    const vfx = getBattleVfxFrame({
+      delivery: animation.timeline.action.delivery,
+      essence: animation.timeline.action.essence,
+      phase: frame.phase,
+      phaseProgress: frame.phaseProgress,
+    });
+    if (vfx) {
+      const anchorTile = frame.emission?.headTile
+        ?? (VFX_TARGET_PHASES.has(frame.phase) ? animation.timeline.motion.targetTile : frame.actor?.renderTile)
+        ?? animation.timeline.motion.sourceTile;
+      const at = battleCanvasPoint(anchorTile, geometry);
+      const drawSize = geometry.cell;
+      context.globalAlpha = 0.96;
+      context.drawImage(
+        battleVfxAtlasImage,
+        vfx.x,
+        vfx.y,
+        vfx.width,
+        vfx.height,
+        Math.round(at.x - drawSize / 2),
+        Math.round(at.y - drawSize / 2),
+        drawSize,
+        drawSize,
+      );
+    }
+  }
   for (const glyph of [frame.statusGlyph, frame.selfStatusGlyph].filter(Boolean)) {
     const at = battleCanvasPoint(glyph.tile, geometry);
     context.globalAlpha = glyph.opacity;
@@ -697,7 +760,7 @@ function drawBattle(now = performance.now()) {
       context.lineWidth = 2;
       context.strokeRect(centerX - cell * 0.3, centerY - cell * 0.34, cell * 0.6, cell * 0.68);
     }
-    if (party && battlePartyAtlasImage.complete && battlePartyAtlasImage.naturalWidth > 0) {
+    if (party && canvas.dataset.partyArtState === 'ready' && partyAtlasImageHasExpectedSize(battlePartyAtlasImage)) {
       const nearestEnemy = snapshot.actors
         .filter((candidate) => candidate.faction === 'enemy' && candidate.hp > 0 && candidate.active !== false)
         .sort((left, right) => Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
@@ -728,7 +791,7 @@ function drawBattle(now = performance.now()) {
         drawWidth,
         drawHeight,
       );
-    } else if (!party && battleEnemyAtlasImage.complete && battleEnemyAtlasImage.naturalWidth > 0) {
+    } else if (!party && canvas.dataset.enemyArtState === 'ready' && enemyAtlasImageHasExpectedSize(battleEnemyAtlasImage)) {
       const animationPose = animatedActor?.pose ?? animatedTarget?.pose;
       const transientPose = !reducedMotion.matches && now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)
         ? battleEnemyPoseByActor.get(actor.instanceId)

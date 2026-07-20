@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "assetId": "vfx_battle-delivery-essence_v01",
+  "purpose": "Original deterministic battle effect keys for the four delivery and five essence reads.",
+  "logicalFrame": [64, 64],
+  "atlasGrid": [6, 9],
+  "anchor": [32, 32],
+  "fps": 60,
+  "transparentGutterPx": 20,
+  "maxActiveBounds": [24, 24],
+  "alphaPolicy": "binary-only",
+  "eventFrameSemantics": "zero-based; activeEnd is inclusive and complete is exclusive",
+  "palette": {
+    "ink": "#0B1020",
+    "rain": "#27466B",
+    "rainBright": "#88B9D6",
+    "paper": "#F6E8B9",
+    "brass": "#A08B58",
+    "stone": "#637462",
+    "stoneBright": "#B4C2B1",
+    "violet": "#66507B",
+    "violetBright": "#B9A5D5",
+    "ember": "#B34A3E",
+    "emberBright": "#F2A25C",
+    "frost": "#88C8C5",
+    "frostBright": "#D7F0D5",
+    "storm": "#4F7392",
+    "stormBright": "#E7F4EE",
+    "radiance": "#88C8C5",
+    "radianceBright": "#F6E8B9",
+    "umbral": "#781E39",
+    "umbralBright": "#B65A78"
+  },
+  "safety": {
+    "authenticReligiousSymbols": false,
+    "authenticHeraldicSymbols": false,
+    "forbiddenMotifs": [
+      "cross",
+      "interlocking-triangle star",
+      "real mon or crest",
+      "scripture or liturgical text",
+      "identifiable sacred implement"
+    ],
+    "constructionNote": "All signs are invented combat pictograms: asymmetric brackets, broken rings, irregular shards, and directional marks."
+  },
+  "effects": [
+    {
+      "id": "vfx_delivery-cut_v01",
+      "category": "delivery",
+      "label": "Cut",
+      "shapeId": "diagonal-cleft",
+      "colors": ["rain", "rainBright", "paper"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 4, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 3, "step": 1},
+        {"label": "active", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 3, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 3, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 3, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_delivery-pierce_v01",
+      "category": "delivery",
+      "label": "Pierce",
+      "shapeId": "line-diamond",
+      "colors": ["rain", "brass", "paper"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 4, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 4, "step": 1},
+        {"label": "active", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 2, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 3, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 3, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_delivery-crush_v01",
+      "category": "delivery",
+      "label": "Crush",
+      "shapeId": "square-impact",
+      "colors": ["ink", "stone", "stoneBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 6, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 6, "step": 1},
+        {"label": "impact", "phase": "active", "duration": 3, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 5, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 4, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 4, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_delivery-arcane_v01",
+      "category": "delivery",
+      "label": "Arcane",
+      "shapeId": "asymmetric-angle-seal",
+      "colors": ["ink", "violet", "violetBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 7, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 7, "step": 1},
+        {"label": "active", "phase": "active", "duration": 4, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 4, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 5, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 5, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_essence-ember_v01",
+      "category": "essence",
+      "label": "Ember",
+      "shapeId": "three-prong-flame",
+      "colors": ["ink", "ember", "emberBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 1, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 2, "step": 1},
+        {"label": "impact", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 1, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 1, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 1, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_essence-frost_v01",
+      "category": "essence",
+      "label": "Frost",
+      "shapeId": "irregular-six-point-shard",
+      "colors": ["rain", "frost", "frostBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 1, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 2, "step": 1},
+        {"label": "impact", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 1, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 1, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 1, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_essence-storm_v01",
+      "category": "essence",
+      "label": "Storm",
+      "shapeId": "split-zigzag",
+      "colors": ["rain", "storm", "stormBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 1, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 2, "step": 1},
+        {"label": "impact", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 1, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 1, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 1, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_essence-radiance_v01",
+      "category": "essence",
+      "label": "Radiance",
+      "shapeId": "broken-eight-ray-disc",
+      "colors": ["rain", "radiance", "radianceBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 1, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 2, "step": 1},
+        {"label": "impact", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 1, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 1, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 1, "step": 5}
+      ]
+    },
+    {
+      "id": "vfx_essence-umbral_v01",
+      "category": "essence",
+      "label": "Umbral",
+      "shapeId": "broken-thorn-arc",
+      "colors": ["ink", "umbral", "umbralBright"],
+      "frames": [
+        {"label": "windup-1", "phase": "windup", "duration": 1, "step": 0},
+        {"label": "windup-2", "phase": "windup", "duration": 2, "step": 1},
+        {"label": "impact", "phase": "active", "duration": 2, "step": 2},
+        {"label": "follow-through", "phase": "followThrough", "duration": 1, "step": 3},
+        {"label": "recovery-1", "phase": "recovery", "duration": 1, "step": 4},
+        {"label": "recovery-2", "phase": "recovery", "duration": 1, "step": 5}
+      ]
+    }
+  ]
+}

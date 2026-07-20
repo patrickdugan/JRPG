@@ -1,0 +1,1115 @@
+{
+  "assetId": "party-field-suite-v1",
+  "status": "production-foundation-review",
+  "authorship": "original-code-native-pixel-primitives",
+  "geometry": {
+    "frameWidth": 32,
+    "frameHeight": 48,
+    "columns": 8,
+    "rows": 6,
+    "sheetWidth": 256,
+    "sheetHeight": 288,
+    "pivot": [
+      16,
+      44
+    ],
+    "footPoint": [
+      16,
+      44
+    ],
+    "transparentGutter": 1,
+    "alphaBoundingBox": [
+      2,
+      4,
+      254,
+      285
+    ]
+  },
+  "layerOrder": [
+    "rear-tools",
+    "feet",
+    "body-and-cloth",
+    "front-tools",
+    "head-and-face",
+    "one-pixel-material-highlights"
+  ],
+  "rowOrder": [
+    "ren",
+    "aya",
+    "lise",
+    "mateus",
+    "genta",
+    "kiku"
+  ],
+  "columnOrder": [
+    "north-idle",
+    "north-walk",
+    "east-idle",
+    "east-walk",
+    "south-idle",
+    "south-walk",
+    "west-idle",
+    "west-walk"
+  ],
+  "paletteIds": {
+    "ren": "party-ren-cedar-rain-v1",
+    "aya": "party-aya-paper-teal-v1",
+    "lise": "party-lise-sea-brass-v1",
+    "mateus": "party-mateus-charcoal-wine-v1",
+    "genta": "party-genta-earth-metal-v1",
+    "kiku": "party-kiku-herb-candle-v1"
+  },
+  "frames": [
+    {
+      "id": "ren-north-idle",
+      "characterId": "ren",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-north-walk",
+      "characterId": "ren",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-east-idle",
+      "characterId": "ren",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-east-walk",
+      "characterId": "ren",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-south-idle",
+      "characterId": "ren",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-south-walk",
+      "characterId": "ren",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-west-idle",
+      "characterId": "ren",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "ren-west-walk",
+      "characterId": "ren",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-north-idle",
+      "characterId": "aya",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-north-walk",
+      "characterId": "aya",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-east-idle",
+      "characterId": "aya",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-east-walk",
+      "characterId": "aya",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-south-idle",
+      "characterId": "aya",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-south-walk",
+      "characterId": "aya",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-west-idle",
+      "characterId": "aya",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "aya-west-walk",
+      "characterId": "aya",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-north-idle",
+      "characterId": "lise",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-north-walk",
+      "characterId": "lise",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-east-idle",
+      "characterId": "lise",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-east-walk",
+      "characterId": "lise",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-south-idle",
+      "characterId": "lise",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-south-walk",
+      "characterId": "lise",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-west-idle",
+      "characterId": "lise",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "lise-west-walk",
+      "characterId": "lise",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        96,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-north-idle",
+      "characterId": "mateus",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-north-walk",
+      "characterId": "mateus",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-east-idle",
+      "characterId": "mateus",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-east-walk",
+      "characterId": "mateus",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-south-idle",
+      "characterId": "mateus",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-south-walk",
+      "characterId": "mateus",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-west-idle",
+      "characterId": "mateus",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "mateus-west-walk",
+      "characterId": "mateus",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        144,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-north-idle",
+      "characterId": "genta",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-north-walk",
+      "characterId": "genta",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-east-idle",
+      "characterId": "genta",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-east-walk",
+      "characterId": "genta",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-south-idle",
+      "characterId": "genta",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-south-walk",
+      "characterId": "genta",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-west-idle",
+      "characterId": "genta",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "genta-west-walk",
+      "characterId": "genta",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        192,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-north-idle",
+      "characterId": "kiku",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-north-walk",
+      "characterId": "kiku",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-east-idle",
+      "characterId": "kiku",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-east-walk",
+      "characterId": "kiku",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-south-idle",
+      "characterId": "kiku",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-south-walk",
+      "characterId": "kiku",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-west-idle",
+      "characterId": "kiku",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    },
+    {
+      "id": "kiku-west-walk",
+      "characterId": "kiku",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        240,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "path": "party-field-suite.source.json",
+      "format": "json",
+      "sha256": "548623d253501404e2e3f1ddf915207ed60791701c91313695f905140a4e72eb"
+    },
+    {
+      "path": "build_party_field_suite.py",
+      "format": "python",
+      "sha256": "a43ca68c3c907afc7da81fac5ec2cf52c200c18d766e7680fc6006c9df30a00b"
+    }
+  ],
+  "exports": [
+    {
+      "path": "party-field-foundation.png",
+      "purpose": "transparent-runtime-candidate",
+      "width": 256,
+      "height": 288,
+      "mode": "RGBA",
+      "sha256": "e403715771dc61b137d212eb9525551e44c98381900d73f3fc5eac7ebc3a160e"
+    },
+    {
+      "path": "party-field-foundation-contact-sheet.png",
+      "purpose": "labeled-review-only-not-runtime",
+      "width": 1120,
+      "height": 1210,
+      "mode": "RGBA",
+      "sha256": "d78703f0ea8fc2ab883ac18c1b3fbae60769e18cecdd7502a53e5fffee649e5b"
+    }
+  ],
+  "validation": {
+    "frameCount": 48,
+    "uniqueRgbaValues": 33,
+    "allOuterFrameBordersTransparent": true,
+    "bottomTransparentRowsPerFrame": 3,
+    "deterministicCommand": "python build_party_field_suite.py --check"
+  },
+  "review": {
+    "internalArtDirectionConstraints": "applied",
+    "externalCulturalReview": "pending",
+    "runtimeIntegration": "current-browser-field-and-battle-idle-walk",
+    "fullAnimationExpansion": "pending"
+  }
+}

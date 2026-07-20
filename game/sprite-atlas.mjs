@@ -1,31 +1,24 @@
-/** DOM-free frame addressing for the provisional six-by-eight party atlas. */
+/** DOM-free frame addressing for the authored six-by-eight party field atlas. */
 
-const PARTY_SOURCE_INSET = 4;
-const PARTY_CELL_WIDTH = 192;
-const PARTY_CELL_HEIGHT = 172;
+const PARTY_SOURCE_INSET = 0;
+const PARTY_CELL_WIDTH = 32;
+const PARTY_CELL_HEIGHT = 48;
 const PARTY_SOURCE_WIDTH = PARTY_CELL_WIDTH - PARTY_SOURCE_INSET * 2;
 const PARTY_SOURCE_HEIGHT = PARTY_CELL_HEIGHT - PARTY_SOURCE_INSET * 2;
 
-/*
- * The generated bitmap is 1024px high, which cannot be divided into six
- * integer rows. These measured, integer-authored cells follow the transparent
- * gaps between character families instead of allowing drawImage to resample a
- * fractional boundary. Some cells overlap only in known-transparent margin;
- * their inset source rectangles contain at most one authored character row.
- */
 const PARTY_ROW_CELLS = Object.freeze([
-  Object.freeze({ y: 12, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 174, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 334, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 494, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 655, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 821, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 0, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 48, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 96, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 144, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 192, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 240, height: PARTY_CELL_HEIGHT }),
 ]);
 
 export const PARTY_ATLAS = Object.freeze({
-  url: 'assets/production/bells-party-field-atlas-v1.png',
-  width: 1536,
-  height: 1024,
+  url: './assets/art/party-field-suite/party-field-foundation.png',
+  width: 256,
+  height: 288,
   columns: 8,
   rows: 6,
   cellWidth: PARTY_CELL_WIDTH,
@@ -88,4 +81,10 @@ export function atlasDirectionForMovement(dx, dy, fallback = 'south') {
   if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? 'east' : 'west';
   if (dy !== 0) return dy > 0 ? 'south' : 'north';
   return dx > 0 ? 'east' : 'west';
+}
+
+export function partyAtlasImageHasExpectedSize(image) {
+  return Boolean(image)
+    && image.naturalWidth === PARTY_ATLAS.width
+    && image.naturalHeight === PARTY_ATLAS.height;
 }

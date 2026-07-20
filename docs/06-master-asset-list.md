@@ -6,6 +6,8 @@
 
 This list is the art-production authority. Quantity is a planned final count, not a promise that every item must be unique. Reuse a carefully bounded kit aggressively; create bespoke assets only where story, navigation, or battle readability requires it.
 
+**Current authored-runtime status (2026-07-20):** the six-member party's four-facing idle/walk foundation (6 rows × 8 columns), eight enemy families' neutral/wind-up/attack/stagger key poses (8 × 4), and nine delivery/essence VFX with six phase frames each (9 × 6) are original editable suites integrated into the browser runtime. The VFX overlay retains the procedural impact beneath it as a load/error fallback. This integration does not complete the planned packages: party animation/action/portrait coverage; enemy in-betweens, defeats, variants, portraits, and boss phases; and human readability plus external cultural review all remain pending before Accepted/art lock.
+
 ## 1. Asset states, priorities, and naming
 
 | Code | Meaning |
@@ -16,6 +18,7 @@ This list is the art-production authority. Quantity is a planned final count, no
 | P3 | Post-vertical-slice variation; never blocks core path. |
 | Briefed | reference, use case, collision/animation purpose, and acceptance rule are approved. |
 | Produced | source and export exist; not yet accepted in engine. |
+| Integrated | authored export is wired into the runtime with automated addressing/fallback checks; human review may still prevent Accepted/art lock. |
 | Accepted | reviewed in-engine at logical resolution with UI/lighting enabled. |
 
 **ID convention:** `CAT-REGION-NNN` (for example `ENV-TAK-014`). Animation sheets append `_anim`; variants append `_v02`. Every sheet records source path, palette ID, pivot/foot point, collision class, frame tags, and owner.

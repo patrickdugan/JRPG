@@ -1,5 +1,5 @@
 /**
- * Addressing contract for the provisional 8 x 4 enemy combat atlas.
+ * Addressing contract for the authored 8 x 4 enemy combat key-pose atlas.
  *
  * Rows are reusable silhouette families rather than one-off encounter IDs.
  * Columns are neutral, wind-up, attack, and stagger poses. Combat rules never
@@ -12,33 +12,27 @@ function deepFreeze(value) {
   return Object.freeze(value);
 }
 
-const ENEMY_SOURCE_INSET = 4;
-const ENEMY_CELL_WIDTH = 224;
-const ENEMY_CELL_HEIGHT = 224;
+const ENEMY_SOURCE_INSET = 0;
+const ENEMY_CELL_WIDTH = 64;
+const ENEMY_CELL_HEIGHT = 80;
 const ENEMY_SOURCE_WIDTH = ENEMY_CELL_WIDTH - ENEMY_SOURCE_INSET * 2;
 const ENEMY_SOURCE_HEIGHT = ENEMY_CELL_HEIGHT - ENEMY_SOURCE_INSET * 2;
 
-/*
- * The visual rows are not aligned to y = row * 224 in the generated bitmap.
- * These measured, integer-authored cells keep each inset source window on its
- * own silhouette family. Overlap between raw cells is confined to transparent
- * margin; drawImage receives only the inset 216px source window.
- */
 const ENEMY_ROW_CELLS = deepFreeze([
   { y: 0, height: ENEMY_CELL_HEIGHT },
-  { y: 197, height: ENEMY_CELL_HEIGHT },
-  { y: 404, height: ENEMY_CELL_HEIGHT },
-  { y: 629, height: ENEMY_CELL_HEIGHT },
-  { y: 856, height: ENEMY_CELL_HEIGHT },
-  { y: 1094, height: ENEMY_CELL_HEIGHT },
-  { y: 1316, height: ENEMY_CELL_HEIGHT },
-  { y: 1545, height: ENEMY_CELL_HEIGHT },
+  { y: 80, height: ENEMY_CELL_HEIGHT },
+  { y: 160, height: ENEMY_CELL_HEIGHT },
+  { y: 240, height: ENEMY_CELL_HEIGHT },
+  { y: 320, height: ENEMY_CELL_HEIGHT },
+  { y: 400, height: ENEMY_CELL_HEIGHT },
+  { y: 480, height: ENEMY_CELL_HEIGHT },
+  { y: 560, height: ENEMY_CELL_HEIGHT },
 ]);
 
 export const ENEMY_ATLAS = deepFreeze({
-  url: './assets/production/bells-enemy-combat-atlas-v1.png',
-  width: 896,
-  height: 1792,
+  url: './assets/art/enemy-combat-suite/enemy-combat-atlas.png',
+  width: 256,
+  height: 640,
   columns: 4,
   rows: 8,
   cellWidth: ENEMY_CELL_WIDTH,
@@ -102,4 +96,10 @@ export function getEnemyAtlasFrame(templateId, pose = 'neutral') {
 
 export function hasAuthoredEnemyFamily(templateId) {
   return FAMILY_BY_TEMPLATE.has(templateId);
+}
+
+export function enemyAtlasImageHasExpectedSize(image) {
+  return Boolean(image)
+    && image.naturalWidth === ENEMY_ATLAS.width
+    && image.naturalHeight === ENEMY_ATLAS.height;
 }

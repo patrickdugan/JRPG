@@ -5,18 +5,19 @@ import { ENCOUNTERS } from '../content/encounters.mjs';
 import {
   ENEMY_ATLAS,
   ENEMY_FAMILIES,
+  enemyAtlasImageHasExpectedSize,
   getEnemyAtlasFrame,
   getEnemyFamily,
   hasAuthoredEnemyFamily,
 } from '../enemy-atlas.mjs';
 
-test('enemy atlas exposes exhaustive integer 8 by 4 inset source frames', () => {
+test('enemy atlas exposes exhaustive integer 8 by 4 authored source frames', () => {
   assert.equal(ENEMY_ATLAS.rows, 8);
   assert.equal(ENEMY_ATLAS.columns, 4);
   assert.equal(ENEMY_ATLAS.width, ENEMY_ATLAS.cellWidth * ENEMY_ATLAS.columns);
   assert.deepEqual(ENEMY_FAMILIES.map(({ row }) => row), [0, 1, 2, 3, 4, 5, 6, 7]);
   assert.equal(ENEMY_ATLAS.rowCells.length, ENEMY_ATLAS.rows);
-  assert.deepEqual(ENEMY_ATLAS.rowCells.map(({ y }) => y), [0, 197, 404, 629, 856, 1094, 1316, 1545]);
+  assert.deepEqual(ENEMY_ATLAS.rowCells.map(({ y }) => y), [0, 80, 160, 240, 320, 400, 480, 560]);
 
   const rectangles = new Set();
   for (const family of ENEMY_FAMILIES) {
@@ -29,10 +30,8 @@ test('enemy atlas exposes exhaustive integer 8 by 4 inset source frames', () => 
 
       assert.ok(frame.cellX >= 0 && frame.cellX + frame.cellWidth <= ENEMY_ATLAS.width);
       assert.ok(frame.cellY >= 0 && frame.cellY + frame.cellHeight <= ENEMY_ATLAS.height);
-      assert.ok(frame.x - frame.cellX >= 4);
-      assert.ok(frame.y - frame.cellY >= 4);
-      assert.ok((frame.cellX + frame.cellWidth) - (frame.x + frame.width) >= 4);
-      assert.ok((frame.cellY + frame.cellHeight) - (frame.y + frame.height) >= 4);
+      assert.equal(frame.x, frame.cellX);
+      assert.equal(frame.y, frame.cellY);
       assert.equal(frame.width, ENEMY_ATLAS.sourceWidth);
       assert.equal(frame.height, ENEMY_ATLAS.sourceHeight);
       assert.equal(frame.familyId, family.id);
@@ -47,6 +46,13 @@ test('enemy atlas exposes exhaustive integer 8 by 4 inset source frames', () => 
     }
   }
   assert.equal(rectangles.size, 32);
+});
+
+test('enemy atlas image validation rejects decodable wrong-size rasters', () => {
+  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 256, naturalHeight: 640 }), true);
+  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 255, naturalHeight: 640 }), false);
+  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 256, naturalHeight: 639 }), false);
+  assert.equal(enemyAtlasImageHasExpectedSize(null), false);
 });
 
 test('every enemy family template keeps a stable identity and pose mapping at one source scale', () => {
@@ -66,8 +72,8 @@ test('every enemy family template keeps a stable identity and pose mapping at on
       }
     }
   }
-  assert.deepEqual([...widths], [216]);
-  assert.deepEqual([...heights], [216]);
+  assert.deepEqual([...widths], [64]);
+  assert.deepEqual([...heights], [80]);
 });
 
 test('every canonical enemy template has an authored family mapping', () => {

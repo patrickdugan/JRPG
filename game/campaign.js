@@ -101,6 +101,7 @@ import {
   PARTY_ATLAS,
   atlasDirectionForMovement,
   getPartyAtlasFrame,
+  partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
 import {
   acknowledgeWitnessChronicleLine,
@@ -142,8 +143,20 @@ const mapCanvas = document.querySelector('#mapCanvas');
 const mapCtx = mapCanvas.getContext('2d');
 mapCtx.imageSmoothingEnabled = false;
 const partyAtlasImage = new Image();
+let partyAtlasState = 'loading';
+mapCanvas.dataset.partyArtState = partyAtlasState;
+partyAtlasImage.decoding = 'async';
+partyAtlasImage.addEventListener('load', () => {
+  partyAtlasState = partyAtlasImageHasExpectedSize(partyAtlasImage) ? 'ready' : 'error';
+  mapCanvas.dataset.partyArtState = partyAtlasState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+partyAtlasImage.addEventListener('error', () => {
+  partyAtlasState = 'error';
+  mapCanvas.dataset.partyArtState = partyAtlasState;
+  renderSceneDirection(getBeat());
+}, { once: true });
 partyAtlasImage.src = PARTY_ATLAS.url;
-partyAtlasImage.addEventListener('load', () => renderSceneDirection(getBeat()), { once: true });
 const mapName = document.querySelector('#mapName');
 const mapLegend = document.querySelector('#mapLegend');
 const sceneNumber = document.querySelector('#sceneNumber');
@@ -1082,7 +1095,7 @@ function drawMap(level, encounter, now) {
   mapCtx.beginPath();
   mapCtx.ellipse(partyX, partyY + cell * 0.27, cell * 0.25, cell * 0.09, 0, 0, Math.PI * 2);
   mapCtx.fill();
-  if (partyAtlasImage.complete && partyAtlasImage.naturalWidth > 0) {
+  if (partyAtlasState === 'ready' && partyAtlasImageHasExpectedSize(partyAtlasImage)) {
     const moving = now < fieldWalkUntil;
     const phase = moving ? Math.floor(now / 110) % 2 : 0;
     const frame = getPartyAtlasFrame('ren', fieldFacing, phase);
@@ -1193,7 +1206,7 @@ function renderSceneDirection(beat) {
   sceneTransitionCue.textContent = direction.transitionCue;
   sceneFocusPortrait.setAttribute('aria-label', `${direction.gestureCue.speaker} scene focus portrait`);
   scenePortraitCtx.clearRect(0, 0, sceneFocusPortrait.width, sceneFocusPortrait.height);
-  if (partyAtlasImage.complete && partyAtlasImage.naturalWidth > 0) {
+  if (partyAtlasState === 'ready' && partyAtlasImageHasExpectedSize(partyAtlasImage)) {
     const frame = getPartyAtlasFrame(direction.gestureCue.speaker.toLowerCase(), 'south', 0);
     scenePortraitCtx.drawImage(
       partyAtlasImage,
@@ -1206,6 +1219,13 @@ function renderSceneDirection(beat) {
       sceneFocusPortrait.width,
       sceneFocusPortrait.height,
     );
+  } else {
+    scenePortraitCtx.fillStyle = '#10152a';
+    scenePortraitCtx.fillRect(0, 0, sceneFocusPortrait.width, sceneFocusPortrait.height);
+    scenePortraitCtx.fillStyle = '#e0bf78';
+    scenePortraitCtx.fillRect(34, 17, 28, 28);
+    scenePortraitCtx.fillStyle = '#243951';
+    scenePortraitCtx.fillRect(25, 49, 46, 39);
   }
 }
 

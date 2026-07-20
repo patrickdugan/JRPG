@@ -42,6 +42,7 @@ import {
   createCampaignState,
   createLocalStorageAdapter,
 } from './progression.mjs';
+import { PARTY_ATLAS, partyAtlasImageHasExpectedSize } from './sprite-atlas.mjs';
 import { CAMP_CONVERSATIONS } from './content/camp-conversations.mjs';
 import { getCampConversationPlan } from './camp-conversation-contract.mjs';
 import {
@@ -190,6 +191,21 @@ const ROUTE_FOCUS_SELECTORS = Object.freeze({
 });
 let routeFocusPending = Boolean(ROUTE_FOCUS_SELECTORS[requestedRouteType] && requestedRouteId);
 const reducedMotionPreference = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
+const campPartyAtlasImage = new Image();
+let campPartyAtlasState = 'loading';
+portraitToken.dataset.artState = campPartyAtlasState;
+campPartyAtlasImage.decoding = 'async';
+campPartyAtlasImage.addEventListener('load', () => {
+  campPartyAtlasState = partyAtlasImageHasExpectedSize(campPartyAtlasImage) ? 'ready' : 'error';
+  portraitToken.dataset.artState = campPartyAtlasState;
+  renderMember();
+}, { once: true });
+campPartyAtlasImage.addEventListener('error', () => {
+  campPartyAtlasState = 'error';
+  portraitToken.dataset.artState = campPartyAtlasState;
+  renderMember();
+}, { once: true });
+campPartyAtlasImage.src = PARTY_ATLAS.url;
 
 const ROLES = Object.freeze({
   ren: 'Courier Vanguard', aya: 'Ledger Arcanist', lise: 'Dawn Hunter',
@@ -268,10 +284,17 @@ function renderMember() {
   memberRole.textContent = ROLES[selectedMemberId];
   memberName.textContent = member.name;
   const atlasRow = Math.max(0, PARTY_MEMBER_IDS.indexOf(selectedMemberId));
-  portraitToken.classList.add('has-atlas');
-  portraitToken.style.backgroundImage = "url('assets/production/bells-party-field-atlas-v1.png')";
-  portraitToken.style.backgroundSize = '540px 360px';
-  portraitToken.style.backgroundPosition = `-278px -${atlasRow * 60}px`;
+  const useAtlas = campPartyAtlasState === 'ready' && partyAtlasImageHasExpectedSize(campPartyAtlasImage);
+  portraitToken.classList.toggle('has-atlas', useAtlas);
+  if (useAtlas) {
+    portraitToken.style.backgroundImage = `url('${PARTY_ATLAS.url}')`;
+    portraitToken.style.backgroundSize = '320px 360px';
+    portraitToken.style.backgroundPosition = `-154px -${atlasRow * 60}px`;
+  } else {
+    portraitToken.style.removeProperty('background-image');
+    portraitToken.style.removeProperty('background-size');
+    portraitToken.style.removeProperty('background-position');
+  }
   memberLevel.textContent = `LV ${member.level}`;
   memberVitals.textContent = `HP ${summary.vitals.hp}/${summary.vitals.maxHp} · MP ${summary.vitals.mp}/${summary.vitals.maxMp} · Spirit ${summary.vitals.spirit}/${summary.vitals.maxSpirit}${summary.vitals.statuses.length ? ` · ${summary.vitals.statuses.join(', ')}` : ''}`;
   memberStats.replaceChildren(...['hp', 'mp', 'power', 'guard', 'arcana', 'speed'].map((key) => {

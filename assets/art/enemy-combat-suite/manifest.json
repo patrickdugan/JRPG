@@ -1,0 +1,1689 @@
+{
+  "assetId": "enemy-combat-suite",
+  "status": "editable-production-key-pose-suite",
+  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger",
+  "canonicalSource": "enemy-combat-suite.source.json",
+  "builder": "build_enemy_combat_suite.py",
+  "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",
+  "geometry": {
+    "columns": 4,
+    "rows": 8,
+    "cellWidth": 64,
+    "cellHeight": 80,
+    "minimumTransparentGutter": 4,
+    "coordinateOrigin": "top-left"
+  },
+  "poseOrder": [
+    "neutral",
+    "windup",
+    "attack",
+    "stagger"
+  ],
+  "familyOrder": [
+    "hound",
+    "wisp",
+    "ashen-oni",
+    "court-retainer",
+    "widow",
+    "furnace",
+    "bell-warden",
+    "black-court"
+  ],
+  "paletteSets": {
+    "PAL-ENM-HOUND-01": {
+      "shade": "#0B1020",
+      "body": "#5A3A2C",
+      "light": "#8B6043",
+      "accent": "#B34A3E",
+      "metal": "#D7C99A"
+    },
+    "PAL-ENM-WISP-01": {
+      "shade": "#16233A",
+      "body": "#27466B",
+      "light": "#88C8C5",
+      "accent": "#D7F0D5",
+      "metal": "#4F7392"
+    },
+    "PAL-ENM-ONI-01": {
+      "shade": "#0B1020",
+      "body": "#303C44",
+      "light": "#637462",
+      "accent": "#B34A3E",
+      "metal": "#A08B58"
+    },
+    "PAL-ENM-RETAINER-01": {
+      "shade": "#0B1020",
+      "body": "#762B32",
+      "light": "#B34A3E",
+      "accent": "#D7C99A",
+      "metal": "#637462"
+    },
+    "PAL-ENM-WIDOW-01": {
+      "shade": "#0B1020",
+      "body": "#27466B",
+      "light": "#4F7392",
+      "accent": "#88C8C5",
+      "metal": "#401D42"
+    },
+    "PAL-ENM-FURNACE-01": {
+      "shade": "#0B1020",
+      "body": "#5A3A2C",
+      "light": "#A08B58",
+      "accent": "#B34A3E",
+      "metal": "#F6E8B9"
+    },
+    "PAL-ENM-WARDEN-01": {
+      "shade": "#0B1020",
+      "body": "#637462",
+      "light": "#A08B58",
+      "accent": "#D7C99A",
+      "metal": "#27466B"
+    },
+    "PAL-ENM-COURT-01": {
+      "shade": "#0B1020",
+      "body": "#401D42",
+      "light": "#781E39",
+      "accent": "#B34A3E",
+      "metal": "#D7C99A"
+    }
+  },
+  "familyMappings": [
+    {
+      "id": "hound",
+      "row": 0,
+      "label": "CINDER HOUND",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "scaleClass": "standard-low",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ]
+    },
+    {
+      "id": "wisp",
+      "row": 1,
+      "label": "ASH WISP",
+      "paletteId": "PAL-ENM-WISP-01",
+      "scaleClass": "standard-hover",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ]
+    },
+    {
+      "id": "ashen-oni",
+      "row": 2,
+      "label": "ASHEN BAILIFF",
+      "paletteId": "PAL-ENM-ONI-01",
+      "scaleClass": "broad",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ]
+    },
+    {
+      "id": "court-retainer",
+      "row": 3,
+      "label": "COURT RETAINER",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "scaleClass": "standard-tall",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ]
+    },
+    {
+      "id": "widow",
+      "row": 4,
+      "label": "WIDOW OF FOG",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "scaleClass": "broad-hover",
+      "templateIds": [
+        "widow-of-fog"
+      ]
+    },
+    {
+      "id": "furnace",
+      "row": 5,
+      "label": "ASH FURNACE",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "scaleClass": "broad",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ]
+    },
+    {
+      "id": "bell-warden",
+      "row": 6,
+      "label": "BELL WARDEN",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "scaleClass": "broad-tall",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ]
+    },
+    {
+      "id": "black-court",
+      "row": 7,
+      "label": "BLACK COURT",
+      "paletteId": "PAL-ENM-COURT-01",
+      "scaleClass": "boss-tall",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "path": "enemy-combat-suite.source.json",
+      "format": "json",
+      "sha256": "fcea156225e97a8fe72b0753d3a3daab8a9e337f70084e8371ed1401bc099df2"
+    },
+    {
+      "path": "build_enemy_combat_suite.py",
+      "format": "python",
+      "sha256": "7ffbf27e5b442061d03506eaf2a0ef9f4329a9488f51de9b1ce4b51363ef14ba"
+    }
+  ],
+  "exports": [
+    {
+      "path": "enemy-combat-atlas.png",
+      "role": "transparent-runtime-atlas",
+      "runtime": true,
+      "sha256": "9c0b06b298b3176cc3d73bec2466f87259b914ed0ecf08a4ac0ed8ff2d0d92bc",
+      "ihdr": {
+        "width": 256,
+        "height": 640,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      }
+    },
+    {
+      "path": "enemy-combat-contact-sheet.png",
+      "role": "labeled-review-contact-sheet",
+      "runtime": false,
+      "sha256": "37acb036c73c57377a0d2d6f9913c7668fd9a30961702198dbb5c7752b97a441",
+      "ihdr": {
+        "width": 560,
+        "height": 1500,
+        "bitDepth": 8,
+        "colorType": 2,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      }
+    }
+  ],
+  "frames": [
+    {
+      "id": "hound:neutral",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        64
+      ],
+      "ground": [
+        29,
+        72
+      ],
+      "contact": [
+        49,
+        51
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 36,
+        "width": 53,
+        "height": 39
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 36,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 957,
+      "rgbaSha256": "9f9352d745b9af0d6b63fb5acd0a4ff5bb5eb562ff6dc3da2b0775e8f5b0c902"
+    },
+    {
+      "id": "hound:windup",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 64,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        66
+      ],
+      "ground": [
+        27,
+        72
+      ],
+      "contact": [
+        45,
+        58
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 44,
+        "width": 51,
+        "height": 31
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 44,
+        "right": 7,
+        "bottom": 5
+      },
+      "opaquePixelCount": 865,
+      "rgbaSha256": "38b762da1821049af32854efb45f8583764d9c9e0a05e4e92cfbf82baa5c668f"
+    },
+    {
+      "id": "hound:attack",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 128,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        34,
+        65
+      ],
+      "ground": [
+        34,
+        72
+      ],
+      "contact": [
+        58,
+        48
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 36,
+        "width": 55,
+        "height": 39
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 36,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1019,
+      "rgbaSha256": "12c2f2365508a98b93b9ce13b667a4148a7e88e9d5962b158983bceeaddf8b90"
+    },
+    {
+      "id": "hound:stagger",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 192,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        25,
+        65
+      ],
+      "ground": [
+        25,
+        72
+      ],
+      "contact": [
+        13,
+        48
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 35,
+        "width": 47,
+        "height": 40
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 35,
+        "right": 12,
+        "bottom": 5
+      },
+      "opaquePixelCount": 901,
+      "rgbaSha256": "2bb7b64b951e811f7ac6e04258e16b21e9e19283f29069dac9fec6af38a76b8e"
+    },
+    {
+      "id": "wisp:neutral",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 0,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        31,
+        51
+      ],
+      "ground": [
+        31,
+        72
+      ],
+      "contact": [
+        44,
+        42
+      ],
+      "alphaBounds": {
+        "x": 12,
+        "y": 24,
+        "width": 42,
+        "height": 51
+      },
+      "transparentGutter": {
+        "left": 12,
+        "top": 24,
+        "right": 10,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1042,
+      "rgbaSha256": "ee53ef8edd03c17fd061d302868870d9adb45f9aa819ab89d4649be7f7050da6"
+    },
+    {
+      "id": "wisp:windup",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 64,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        28,
+        54
+      ],
+      "ground": [
+        28,
+        72
+      ],
+      "contact": [
+        36,
+        50
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 32,
+        "width": 35,
+        "height": 43
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 32,
+        "right": 18,
+        "bottom": 5
+      },
+      "opaquePixelCount": 779,
+      "rgbaSha256": "617896847bf375d5ad2a26f3c3bf339f8471d2b6158e80fdb7be7809cdeda841"
+    },
+    {
+      "id": "wisp:attack",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 128,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        36,
+        49
+      ],
+      "ground": [
+        36,
+        72
+      ],
+      "contact": [
+        58,
+        42
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 21,
+        "width": 51,
+        "height": 54
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 21,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1078,
+      "rgbaSha256": "5a24e24ffbcd43268c7729c35001a27b2857a7f52d815c8db79c9aa378beb68d"
+    },
+    {
+      "id": "wisp:stagger",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 192,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        26,
+        52
+      ],
+      "ground": [
+        26,
+        72
+      ],
+      "contact": [
+        12,
+        38
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 23,
+        "width": 45,
+        "height": 52
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 23,
+        "right": 14,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1018,
+      "rgbaSha256": "85c07cc7db7417926af30632ee470eee689668f1ac13bdbdc7bad1e864ca936b"
+    },
+    {
+      "id": "ashen-oni:neutral",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 0,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        31,
+        63
+      ],
+      "ground": [
+        31,
+        73
+      ],
+      "contact": [
+        51,
+        43
+      ],
+      "alphaBounds": {
+        "x": 10,
+        "y": 18,
+        "width": 46,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 10,
+        "top": 18,
+        "right": 8,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1685,
+      "rgbaSha256": "28d54caefad11c6742007eab026373ff3fe29a8a972f4ff6186c21d6d3b329f4"
+    },
+    {
+      "id": "ashen-oni:windup",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 64,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        64
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        17,
+        25
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 18,
+        "width": 43,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 18,
+        "right": 13,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1739,
+      "rgbaSha256": "6820e20f41a0db09bff048b694b398f10f8e5a56d5e398b67dad679e493b94d0"
+    },
+    {
+      "id": "ashen-oni:attack",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 128,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        34,
+        64
+      ],
+      "ground": [
+        34,
+        73
+      ],
+      "contact": [
+        55,
+        66
+      ],
+      "alphaBounds": {
+        "x": 13,
+        "y": 18,
+        "width": 47,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 13,
+        "top": 18,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1696,
+      "rgbaSha256": "64b333a86572bd05db7fbff272609142028e75c4d39ba84c207571fdbc7a014b"
+    },
+    {
+      "id": "ashen-oni:stagger",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 192,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        26,
+        64
+      ],
+      "ground": [
+        26,
+        73
+      ],
+      "contact": [
+        13,
+        42
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 18,
+        "width": 43,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 18,
+        "right": 16,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1671,
+      "rgbaSha256": "f30050e418a9b1d0cfb549356e0fbe70a93a27a0fb999f426b9d6ffc0073a533"
+    },
+    {
+      "id": "court-retainer:neutral",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 0,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        62
+      ],
+      "ground": [
+        30,
+        72
+      ],
+      "contact": [
+        50,
+        44
+      ],
+      "alphaBounds": {
+        "x": 14,
+        "y": 18,
+        "width": 42,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 14,
+        "top": 18,
+        "right": 8,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1255,
+      "rgbaSha256": "95f26370f57cfbcf5b592a5c67c42587d4fc9585da17aab36af52469b43de7b2"
+    },
+    {
+      "id": "court-retainer:windup",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 64,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        28,
+        63
+      ],
+      "ground": [
+        28,
+        72
+      ],
+      "contact": [
+        14,
+        31
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 18,
+        "width": 36,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 18,
+        "right": 17,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1266,
+      "rgbaSha256": "901699754c70da5b47a2b44a7d1d22261748a47fa0522dc20447aec712d539af"
+    },
+    {
+      "id": "court-retainer:attack",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 128,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        34,
+        62
+      ],
+      "ground": [
+        34,
+        72
+      ],
+      "contact": [
+        58,
+        48
+      ],
+      "alphaBounds": {
+        "x": 18,
+        "y": 18,
+        "width": 42,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 18,
+        "top": 18,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1274,
+      "rgbaSha256": "a0feb43a8ea7ef4e2fe4d5a5565065deee664537186600ab28df1c73c3d2b83f"
+    },
+    {
+      "id": "court-retainer:stagger",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 192,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        25,
+        63
+      ],
+      "ground": [
+        25,
+        72
+      ],
+      "contact": [
+        13,
+        39
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 18,
+        "width": 37,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 18,
+        "right": 20,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1236,
+      "rgbaSha256": "bad222a278fc6772e270564ea2198961febad296166ce0d08ffccda1381fa548"
+    },
+    {
+      "id": "widow:neutral",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 0,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        31,
+        55
+      ],
+      "ground": [
+        31,
+        72
+      ],
+      "contact": [
+        49,
+        47
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 20,
+        "width": 44,
+        "height": 55
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 20,
+        "right": 11,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1416,
+      "rgbaSha256": "7c59835aceb8aac50d9e347cd7695bb8ef1b28a89a40926dee23b07103bc4403"
+    },
+    {
+      "id": "widow:windup",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 64,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        56
+      ],
+      "ground": [
+        29,
+        72
+      ],
+      "contact": [
+        18,
+        32
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 20,
+        "width": 44,
+        "height": 55
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 20,
+        "right": 13,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1485,
+      "rgbaSha256": "a724d45b685ff05edfefc4879085e5985f0cbdfe952e0f46f7b0c378c5075e87"
+    },
+    {
+      "id": "widow:attack",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 128,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        35,
+        53
+      ],
+      "ground": [
+        35,
+        72
+      ],
+      "contact": [
+        58,
+        39
+      ],
+      "alphaBounds": {
+        "x": 13,
+        "y": 20,
+        "width": 47,
+        "height": 55
+      },
+      "transparentGutter": {
+        "left": 13,
+        "top": 20,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1489,
+      "rgbaSha256": "aca0642e4ecd9f3921b41fedf843c6b91ff28ba72dd793741460a447d3a62126"
+    },
+    {
+      "id": "widow:stagger",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 192,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        25,
+        56
+      ],
+      "ground": [
+        25,
+        72
+      ],
+      "contact": [
+        10,
+        42
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 20,
+        "width": 44,
+        "height": 55
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 20,
+        "right": 16,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1459,
+      "rgbaSha256": "7c82ccef27d85a53c6cd73000b4bf3b43a2b7cf7aaba96fcd10b29c3998c31df"
+    },
+    {
+      "id": "furnace:neutral",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 0,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        31,
+        62
+      ],
+      "ground": [
+        31,
+        73
+      ],
+      "contact": [
+        50,
+        48
+      ],
+      "alphaBounds": {
+        "x": 10,
+        "y": 16,
+        "width": 47,
+        "height": 59
+      },
+      "transparentGutter": {
+        "left": 10,
+        "top": 16,
+        "right": 7,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1794,
+      "rgbaSha256": "d1c7a2a78c71950b003e9dcf3e53e3b2bc7de8fa04b922b41c358d7bf670ee67"
+    },
+    {
+      "id": "furnace:windup",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 64,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        63
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        17,
+        25
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 16,
+        "width": 44,
+        "height": 59
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 16,
+        "right": 12,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1874,
+      "rgbaSha256": "d5469be1c3c802ac9bcc48954c021e1cf7abf1b83c52b00357ce9ee1a6c12089"
+    },
+    {
+      "id": "furnace:attack",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 128,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        35,
+        62
+      ],
+      "ground": [
+        35,
+        73
+      ],
+      "contact": [
+        58,
+        62
+      ],
+      "alphaBounds": {
+        "x": 14,
+        "y": 16,
+        "width": 46,
+        "height": 59
+      },
+      "transparentGutter": {
+        "left": 14,
+        "top": 16,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1798,
+      "rgbaSha256": "867e7ac5ba9673979c22bcdfd5489cc86078877409166c0b2a48f95e6b487c3c"
+    },
+    {
+      "id": "furnace:stagger",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 192,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        25,
+        63
+      ],
+      "ground": [
+        25,
+        73
+      ],
+      "contact": [
+        13,
+        38
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 16,
+        "width": 44,
+        "height": 59
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 16,
+        "right": 15,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1796,
+      "rgbaSha256": "805786a3876bdedcc7de82964efcf5399c8c275b3ea63d528c8a9fc6758629ba"
+    },
+    {
+      "id": "bell-warden:neutral",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 0,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        31,
+        62
+      ],
+      "ground": [
+        31,
+        73
+      ],
+      "contact": [
+        50,
+        43
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 15,
+        "width": 45,
+        "height": 60
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 15,
+        "right": 8,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1889,
+      "rgbaSha256": "19e83fbd19f7042a80765e397d9e543ba3590eb34968858fb543f5a5dac2f089"
+    },
+    {
+      "id": "bell-warden:windup",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 64,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        63
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        18,
+        24
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 15,
+        "width": 42,
+        "height": 60
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 15,
+        "right": 13,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1852,
+      "rgbaSha256": "4b6bdc20cb193811bbadad6b18a0d1c525a4b017e9f11d5896903b904927206a"
+    },
+    {
+      "id": "bell-warden:attack",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 128,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        35,
+        62
+      ],
+      "ground": [
+        35,
+        73
+      ],
+      "contact": [
+        57,
+        55
+      ],
+      "alphaBounds": {
+        "x": 15,
+        "y": 15,
+        "width": 45,
+        "height": 60
+      },
+      "transparentGutter": {
+        "left": 15,
+        "top": 15,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1875,
+      "rgbaSha256": "ad968391fb87d80247daa1a634de33ece0e3444a44e2af66ef4ebaaf29d6f61e"
+    },
+    {
+      "id": "bell-warden:stagger",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 192,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        25,
+        63
+      ],
+      "ground": [
+        25,
+        73
+      ],
+      "contact": [
+        12,
+        40
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 15,
+        "width": 43,
+        "height": 60
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 15,
+        "right": 16,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1856,
+      "rgbaSha256": "1775ebfc57971eec50a513dd90f7ddea2516e1fed094f0b20752c33eebfba701"
+    },
+    {
+      "id": "black-court:neutral",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "neutral",
+      "tag": "combat-idle",
+      "event": "ready",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 0,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        31,
+        61
+      ],
+      "ground": [
+        31,
+        73
+      ],
+      "contact": [
+        50,
+        42
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 12,
+        "width": 43,
+        "height": 63
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 12,
+        "right": 10,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1553,
+      "rgbaSha256": "45467dac0b1a0a5381e6b9da763c4e0d699af3d46ee4d83c1401440269ee764a"
+    },
+    {
+      "id": "black-court:windup",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "windup",
+      "tag": "attack-load",
+      "event": "windupStart",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 64,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        62
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        17,
+        27
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 12,
+        "width": 43,
+        "height": 63
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 12,
+        "right": 12,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1577,
+      "rgbaSha256": "af00eeff07194e4dd6ea3a98866de9adf352f3be05a8766c4b6a45f93ec65a9c"
+    },
+    {
+      "id": "black-court:attack",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "attack",
+      "tag": "attack-active",
+      "event": "activeStart",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 128,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        35,
+        61
+      ],
+      "ground": [
+        35,
+        73
+      ],
+      "contact": [
+        58,
+        43
+      ],
+      "alphaBounds": {
+        "x": 15,
+        "y": 12,
+        "width": 45,
+        "height": 63
+      },
+      "transparentGutter": {
+        "left": 15,
+        "top": 12,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1606,
+      "rgbaSha256": "ea253c14ce27ca59abb87950182a0e4efad0eb1c59e06f06d2ea1ce0c6a44925"
+    },
+    {
+      "id": "black-court:stagger",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "stagger",
+      "tag": "hit-recoil",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 192,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        25,
+        62
+      ],
+      "ground": [
+        25,
+        73
+      ],
+      "contact": [
+        12,
+        37
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 12,
+        "width": 43,
+        "height": 63
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 12,
+        "right": 16,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1562,
+      "rgbaSha256": "267f533dae675fcde1f4f1192e80b3a8f4fb5fb7748ef5e2207018f503ee4a49"
+    }
+  ]
+}

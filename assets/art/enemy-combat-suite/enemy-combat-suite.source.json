@@ -1,0 +1,127 @@
+{
+  "assetId": "enemy-combat-suite",
+  "status": "editable-production-source",
+  "license": "Original project artwork; code-authored without external raster references.",
+  "geometry": {
+    "columns": 4,
+    "rows": 8,
+    "cellWidth": 64,
+    "cellHeight": 80,
+    "minimumTransparentGutter": 4,
+    "coordinateOrigin": "top-left"
+  },
+  "poses": [
+    { "id": "neutral", "column": 0, "tag": "combat-idle", "event": "ready" },
+    { "id": "windup", "column": 1, "tag": "attack-load", "event": "windupStart" },
+    { "id": "attack", "column": 2, "tag": "attack-active", "event": "activeStart" },
+    { "id": "stagger", "column": 3, "tag": "hit-recoil", "event": "recoveryStart" }
+  ],
+  "paletteSets": {
+    "PAL-ENM-HOUND-01": { "shade": "#0B1020", "body": "#5A3A2C", "light": "#8B6043", "accent": "#B34A3E", "metal": "#D7C99A" },
+    "PAL-ENM-WISP-01": { "shade": "#16233A", "body": "#27466B", "light": "#88C8C5", "accent": "#D7F0D5", "metal": "#4F7392" },
+    "PAL-ENM-ONI-01": { "shade": "#0B1020", "body": "#303C44", "light": "#637462", "accent": "#B34A3E", "metal": "#A08B58" },
+    "PAL-ENM-RETAINER-01": { "shade": "#0B1020", "body": "#762B32", "light": "#B34A3E", "accent": "#D7C99A", "metal": "#637462" },
+    "PAL-ENM-WIDOW-01": { "shade": "#0B1020", "body": "#27466B", "light": "#4F7392", "accent": "#88C8C5", "metal": "#401D42" },
+    "PAL-ENM-FURNACE-01": { "shade": "#0B1020", "body": "#5A3A2C", "light": "#A08B58", "accent": "#B34A3E", "metal": "#F6E8B9" },
+    "PAL-ENM-WARDEN-01": { "shade": "#0B1020", "body": "#637462", "light": "#A08B58", "accent": "#D7C99A", "metal": "#27466B" },
+    "PAL-ENM-COURT-01": { "shade": "#0B1020", "body": "#401D42", "light": "#781E39", "accent": "#B34A3E", "metal": "#D7C99A" }
+  },
+  "families": [
+    {
+      "id": "hound", "row": 0, "label": "CINDER HOUND", "paletteId": "PAL-ENM-HOUND-01", "scaleClass": "standard-low",
+      "motif": "Low cinder-tracking quadruped with a split tail and rectangular collar gauge.",
+      "detailPass": "Jointed forelegs and hocks, jaw and ear planes, two-prong tail, collar band, gauge light, paw contacts.",
+      "templateIds": ["cinder-hound", "tithe-hound"],
+      "anchors": {
+        "neutral": { "pivot": [29, 64], "ground": [29, 72], "contact": [49, 51] },
+        "windup": { "pivot": [27, 66], "ground": [27, 72], "contact": [45, 58] },
+        "attack": { "pivot": [34, 65], "ground": [34, 72], "contact": [58, 48] },
+        "stagger": { "pivot": [25, 65], "ground": [25, 72], "contact": [13, 48] }
+      }
+    },
+    {
+      "id": "wisp", "row": 1, "label": "ASH WISP", "paletteId": "PAL-ENM-WISP-01", "scaleClass": "standard-hover",
+      "motif": "Angular vapor shards orbit a square dark core; gaps imply unstable air rather than blur.",
+      "detailPass": "Nested hard-value core, broken vapor facets, directional orbit shards, square emission notch.",
+      "templateIds": ["ash-wisp", "bell-moth", "fog-skimmer", "unfiled-testimony"],
+      "anchors": {
+        "neutral": { "pivot": [31, 51], "ground": [31, 72], "contact": [44, 42] },
+        "windup": { "pivot": [28, 54], "ground": [28, 72], "contact": [36, 50] },
+        "attack": { "pivot": [36, 49], "ground": [36, 72], "contact": [58, 42] },
+        "stagger": { "pivot": [26, 52], "ground": [26, 72], "contact": [12, 38] }
+      }
+    },
+    {
+      "id": "ashen-oni", "row": 2, "label": "ASHEN BAILIFF", "paletteId": "PAL-ENM-ONI-01", "scaleClass": "broad",
+      "motif": "Heavy ash bailiff with an offset slab brow, ledger plates, and a square-headed maul.",
+      "detailPass": "Layered shoulder anatomy, three ledger plates with rivets, articulated grip, maul socket and square face.",
+      "templateIds": ["ashen-bailiff", "tithe-seal", "tithe-enforcer", "blood-ward-west", "blood-ward-east", "bound-ashen-oni", "bound-ashen-patrol", "ashen-garrison", "archive-warden"],
+      "anchors": {
+        "neutral": { "pivot": [31, 63], "ground": [31, 73], "contact": [51, 43] },
+        "windup": { "pivot": [29, 64], "ground": [29, 73], "contact": [17, 25] },
+        "attack": { "pivot": [34, 64], "ground": [34, 73], "contact": [55, 66] },
+        "stagger": { "pivot": [26, 64], "ground": [26, 73], "contact": [13, 42] }
+      }
+    },
+    {
+      "id": "court-retainer", "row": 3, "label": "COURT RETAINER", "paletteId": "PAL-ENM-RETAINER-01", "scaleClass": "standard-tall",
+      "motif": "Narrow split visor, layered travel coat, and an invented hooked docket blade.",
+      "detailPass": "Split visor glint, coat lapels and seam weights, docket clip, wrapped grip, two-step hooked blade edge.",
+      "templateIds": ["mateus", "dock-retainer", "captain-kaji", "masked-clerk", "ujiro"],
+      "anchors": {
+        "neutral": { "pivot": [30, 62], "ground": [30, 72], "contact": [50, 44] },
+        "windup": { "pivot": [28, 63], "ground": [28, 72], "contact": [14, 31] },
+        "attack": { "pivot": [34, 62], "ground": [34, 72], "contact": [58, 48] },
+        "stagger": { "pivot": [25, 63], "ground": [25, 72], "contact": [13, 39] }
+      }
+    },
+    {
+      "id": "widow", "row": 4, "label": "WIDOW OF FOG", "paletteId": "PAL-ENM-WIDOW-01", "scaleClass": "broad-hover",
+      "motif": "Hollow hood and net-spindle limbs break into stepped fog ribbons above the floor.",
+      "detailPass": "Hood planes, central spindle, crossed net threads, segmented ribbon ends, fingertip bobbins.",
+      "templateIds": ["widow-of-fog"],
+      "anchors": {
+        "neutral": { "pivot": [31, 55], "ground": [31, 72], "contact": [49, 47] },
+        "windup": { "pivot": [29, 56], "ground": [29, 72], "contact": [18, 32] },
+        "attack": { "pivot": [35, 53], "ground": [35, 72], "contact": [58, 39] },
+        "stagger": { "pivot": [25, 56], "ground": [25, 72], "contact": [10, 42] }
+      }
+    },
+    {
+      "id": "furnace", "row": 5, "label": "ASH FURNACE", "paletteId": "PAL-ENM-FURNACE-01", "scaleClass": "broad",
+      "motif": "Riveted heat mantle with a broken chimney crown and long clinker rake.",
+      "detailPass": "Panel seams and rivets, chimney lips, grate teeth, articulated side sleeves, rake socket and clinker edge.",
+      "templateIds": ["furnace-abbot", "lady-enma"],
+      "anchors": {
+        "neutral": { "pivot": [31, 62], "ground": [31, 73], "contact": [50, 48] },
+        "windup": { "pivot": [29, 63], "ground": [29, 73], "contact": [17, 25] },
+        "attack": { "pivot": [35, 62], "ground": [35, 73], "contact": [58, 62] },
+        "stagger": { "pivot": [25, 63], "ground": [25, 73], "contact": [13, 38] }
+      }
+    },
+    {
+      "id": "bell-warden", "row": 6, "label": "BELL WARDEN", "paletteId": "PAL-ENM-WARDEN-01", "scaleClass": "broad-tall",
+      "motif": "Asymmetric resonator yoke, square dampers, and a short calibration hammer.",
+      "detailPass": "Offset stepped yoke, separate damper blocks, cable joints, face aperture, segmented hammer head and grip.",
+      "templateIds": ["bell-warden-chiyo", "yearless-bell"],
+      "anchors": {
+        "neutral": { "pivot": [31, 62], "ground": [31, 73], "contact": [50, 43] },
+        "windup": { "pivot": [29, 63], "ground": [29, 73], "contact": [18, 24] },
+        "attack": { "pivot": [35, 62], "ground": [35, 73], "contact": [57, 55] },
+        "stagger": { "pivot": [25, 63], "ground": [25, 73], "contact": [12, 40] }
+      }
+    },
+    {
+      "id": "black-court", "row": 7, "label": "BLACK COURT", "paletteId": "PAL-ENM-COURT-01", "scaleClass": "boss-tall",
+      "motif": "Tall decree-bearer with a broken stepped mantle and thin seal-breaking blade.",
+      "detailPass": "Stepped mantle tiers, narrow face plane, segmented breast panels, hand and guard, blade spine and breaking tip.",
+      "templateIds": ["kurozane", "court-clone"],
+      "anchors": {
+        "neutral": { "pivot": [31, 61], "ground": [31, 73], "contact": [50, 42] },
+        "windup": { "pivot": [29, 62], "ground": [29, 73], "contact": [17, 27] },
+        "attack": { "pivot": [35, 61], "ground": [35, 73], "contact": [58, 43] },
+        "stagger": { "pivot": [25, 62], "ground": [25, 73], "contact": [12, 37] }
+      }
+    }
+  ]
+}

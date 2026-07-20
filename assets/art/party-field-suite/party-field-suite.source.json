@@ -1,0 +1,82 @@
+{
+  "assetId": "party-field-suite-v1",
+  "formatVersion": 1,
+  "authorship": "original-code-native-pixel-primitives",
+  "frame": {
+    "width": 32,
+    "height": 48,
+    "pivot": [16, 44],
+    "footPoint": [16, 44],
+    "transparentGutter": 1
+  },
+  "sheet": {
+    "columns": [
+      "north-idle",
+      "north-walk",
+      "east-idle",
+      "east-walk",
+      "south-idle",
+      "south-walk",
+      "west-idle",
+      "west-walk"
+    ],
+    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku"]
+  },
+  "sharedPalette": {
+    "outline": "#0b1020",
+    "deep": "#16233a",
+    "skinShadow": "#8b6043",
+    "skin": "#c58b63",
+    "skinLight": "#d7b080",
+    "paper": "#d7c99a",
+    "candle": "#f6e8b9",
+    "metalDark": "#394b59",
+    "metal": "#637462",
+    "brass": "#a08b58"
+  },
+  "characters": [
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "paletteId": "party-ren-cedar-rain-v1",
+      "silhouette": "forward coat, courier satchel, short spear",
+      "colors": {"primary": "#5a3a2c", "secondary": "#27466b", "light": "#8b6043", "accent": "#a08b58", "hair": "#17202a"}
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "paletteId": "party-aya-paper-teal-v1",
+      "silhouette": "layered sleeves, square archive case, folded record fan",
+      "colors": {"primary": "#547675", "secondary": "#d7c99a", "light": "#88a8a0", "accent": "#b34a3e", "hair": "#171b24"}
+    },
+    {
+      "id": "lise",
+      "name": "Lise Varga",
+      "paletteId": "party-lise-sea-brass-v1",
+      "silhouette": "travel coat, sea cape, compact crossbow and rapier",
+      "colors": {"primary": "#355775", "secondary": "#263e59", "light": "#61809a", "accent": "#a08b58", "hair": "#8f7b55"}
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "paletteId": "party-mateus-charcoal-wine-v1",
+      "silhouette": "narrow long coat, high collar, ring of keys",
+      "colors": {"primary": "#252a35", "secondary": "#3b2732", "light": "#4b4e59", "accent": "#762b32", "hair": "#21181b"},
+      "likenessPolicy": "original fictional face and proportions"
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "paletteId": "party-genta-earth-metal-v1",
+      "silhouette": "broad shoulder mantle, heavy shield and tetsubo mass",
+      "colors": {"primary": "#4b4b43", "secondary": "#5a3a2c", "light": "#6f6d5c", "accent": "#a08b58", "hair": "#20232a"}
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "paletteId": "party-kiku-herb-candle-v1",
+      "silhouette": "short cloak, medicine box, bottles and packets",
+      "colors": {"primary": "#496b55", "secondary": "#d7c99a", "light": "#779274", "accent": "#88c8c5", "hair": "#24201f"}
+    }
+  ]
+}

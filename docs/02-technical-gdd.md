@@ -10,7 +10,7 @@ The first playable is a dependency-free HTML5 Canvas build. This workspace has N
 
 Rules live in `game/engine.mjs`, which is DOM-free and covered by Node tests. `game/game.js` is a replaceable input/rendering adapter. The same data and tests can move to a future Godot/Unity/custom runtime after the hook is proven.
 
-All prototype artwork is original procedural pixel art: hard-edged, authored clusters and stepped palette values rather than imported sprites, filters, or AI-derived third-party imagery. It is a visual implementation aid, not final production art.
+Prototype fallback artwork remains original procedural pixel art. The first production replacements are deterministic editable pixel suites: the Takamine Bell-Chamber board, six-member directional field foundation, eight-family enemy key-pose atlas, and nine-family battle-VFX overlay. Generated concept sheets remain reference-only and are not shipped as runtime pixels; broader environment, animation, portrait, boss-phase, and effect coverage is still production work.
 
 ## 2. First-playable boundary
 
