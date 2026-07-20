@@ -63,7 +63,7 @@ test('boss suite is byte-identical across repeated deterministic checks', () => 
 
 test('boss runtime candidate and review sheet have exact manifested PNG contracts', () => {
   assert.deepEqual(manifest.geometry, {
-    columns: 6,
+    columns: 7,
     rows: 10,
     cellWidth: 112,
     cellHeight: 128,
@@ -83,7 +83,7 @@ test('boss runtime candidate and review sheet have exact manifested PNG contract
   assert.deepEqual(pngIhdr(atlas), atlasExport.ihdr);
   assert.deepEqual(pngIhdr(contact), contactExport.ihdr);
   assert.deepEqual(atlasExport.ihdr, {
-    width: 672,
+    width: 784,
     height: 1280,
     bitDepth: 8,
     colorType: 6,
@@ -91,18 +91,18 @@ test('boss runtime candidate and review sheet have exact manifested PNG contract
     filter: 0,
     interlace: 0,
   });
-  assert.deepEqual([contactExport.ihdr.width, contactExport.ihdr.height, contactExport.ihdr.colorType], [720, 1528, 2]);
+  assert.deepEqual([contactExport.ihdr.width, contactExport.ihdr.height, contactExport.ihdr.colorType], [838, 1528, 2]);
   assert.equal(manifest.status, 'integrated-current-browser-boss-priority');
 });
 
-test('all ten bosses expose six distinct anchored production frames', () => {
-  assert.deepEqual(manifest.poseOrder, ['neutral', 'telegraph', 'active', 'break', 'transition', 'defeat']);
-  assert.equal(manifest.frames.length, 60);
+test('all ten bosses expose seven distinct anchored production frames', () => {
+  assert.deepEqual(manifest.poseOrder, ['neutral', 'telegraph', 'active', 'break', 'transition', 'defeat', 'recovery']);
+  assert.equal(manifest.frames.length, 70);
   const rects = new Set();
   for (const boss of source.bosses) {
     const frames = manifest.frames.filter(({ bossId }) => boss.id === bossId);
     assert.deepEqual(frames.map(({ pose }) => pose), manifest.poseOrder);
-    assert.equal(new Set(frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 6, boss.id);
+    assert.equal(new Set(frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 7, boss.id);
     for (const [column, frame] of frames.entries()) {
       assert.deepEqual(frame.rect, {
         x: column * 112,
@@ -122,7 +122,7 @@ test('all ten bosses expose six distinct anchored production frames', () => {
       }
     }
   }
-  assert.equal(rects.size, 60);
+  assert.equal(rects.size, 70);
 });
 
 test('boss source enforces original non-gory fictional design guardrails', () => {

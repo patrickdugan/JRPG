@@ -18,7 +18,7 @@ SOURCE_PATH = ROOT / "boss-combat-suite.source.json"
 ATLAS_PATH = ROOT / "boss-combat-atlas.png"
 CONTACT_PATH = ROOT / "boss-combat-contact-sheet.png"
 MANIFEST_PATH = ROOT / "manifest.json"
-POSES = ("neutral", "telegraph", "active", "break", "transition", "defeat")
+POSES = ("neutral", "telegraph", "active", "break", "transition", "defeat", "recovery")
 BOSSES = (
     "tithe-hound", "mateus", "captain-kaji", "widow-of-fog", "furnace-abbot",
     "ujiro", "bell-warden-chiyo", "lady-enma", "yearless-bell", "kurozane",
@@ -41,7 +41,7 @@ def load_source() -> dict:
         raise ValueError("Canonical boss encounter-format rule changed")
     geometry = source["geometry"]
     expected = {
-        "columns": 6, "rows": 10, "cellWidth": 112, "cellHeight": 128,
+        "columns": len(POSES), "rows": len(BOSSES), "cellWidth": 112, "cellHeight": 128,
         "minimumTransparentGutter": 6, "coordinateOrigin": "top-left",
     }
     if geometry != expected:
@@ -99,6 +99,7 @@ class Surface:
 POSE_OFFSET = {
     "neutral": (0, 0), "telegraph": (-3, 0), "active": (8, 1),
     "break": (-8, 7), "transition": (0, -5), "defeat": (-7, 21),
+    "recovery": (-2, 4),
 }
 
 
@@ -143,6 +144,8 @@ def humanoid_base(s: Surface, pose: str, broad: int = 0) -> dict:
                   (cx + 18 + broad, 51 + dy), (cx + 29 + broad, 73 + dy)),
         "transition": ((cx - 18 - broad, 50 + dy), (cx - 33 - broad, 37 + dy),
                        (cx + 18 + broad, 50 + dy), (cx + 34 + broad, 35 + dy)),
+        "recovery": ((cx - 18 - broad, 50 + dy), (cx - 25 - broad, 82 + dy),
+                     (cx + 18 + broad, 51 + dy), (cx + 24 + broad, 88 + dy)),
     }[pose]
     ls, lh, rs, rh = arms
     s.line([ls, lh], "ink", 9)
@@ -173,7 +176,8 @@ def phase_brackets(s: Surface, pose: str, cx: int, top: int = 12):
 
 def draw_tithe_hound(s: Surface, pose: str):
     dx, dy = {"neutral": (0, 0), "telegraph": (-4, 4), "active": (8, -1),
-              "break": (-10, 8), "transition": (1, -7), "defeat": (-7, 19)}[pose]
+              "break": (-10, 8), "transition": (1, -7), "defeat": (-7, 19),
+              "recovery": (-2, 5)}[pose]
     cx = 53 + dx
     if pose == "defeat":
         s.shadow(16, 91, 118)
@@ -228,7 +232,8 @@ def draw_mateus(s: Surface, pose: str):
         s.line([(cx - 11, 54), (cx + 8, 76)], "accent", 3)
     hand = g["right"]
     tips = {"neutral": (83, 91), "telegraph": (25, 27), "active": (100, 57),
-            "break": (22, 89), "transition": (91, 20), "defeat": (81, 111)}
+            "break": (22, 89), "transition": (91, 20), "defeat": (81, 111),
+            "recovery": (82, 112)}
     tip = tips[pose]
     s.line([hand, tip], "ink", 5)
     s.line([hand, tip], "metal", 3)
@@ -251,7 +256,8 @@ def draw_kaji(s: Surface, pose: str):
         s.line([(cx - 12, 71), g["right"]], "accent", 2)
     hand = g["right"]
     hook = {"neutral": (89, 96), "telegraph": (22, 27), "active": (100, 64),
-            "break": (18, 92), "transition": (94, 26), "defeat": (80, 108)}[pose]
+            "break": (18, 92), "transition": (94, 26), "defeat": (80, 108),
+            "recovery": (86, 105)}[pose]
     s.line([hand, hook], "ink", 5)
     s.line([hand, hook], "metal", 3)
     s.line([(hook[0], hook[1]), (hook[0] - 7, hook[1] + 8), (hook[0] + 2, hook[1] + 12)], "spark", 3)
@@ -283,7 +289,7 @@ def draw_widow(s: Surface, pose: str):
     s.rect((50 + dx, 63 + dy, 61 + dx, 82 + dy), "ink")
     s.rect((53 + dx, 65 + dy, 58 + dx, 80 + dy), "metal")
     s.rect((48 + dx, 70 + dy, 63 + dx, 75 + dy), "accent")
-    spread = 8 if pose == "telegraph" else 18 if pose == "active" else 3 if pose == "break" else 13
+    spread = 8 if pose == "telegraph" else 18 if pose == "active" else 3 if pose == "break" else 6 if pose == "recovery" else 13
     left = (max(7, 19 + dx - spread), 65 + dy)
     right = (min(104, 91 + dx + spread), 62 + dy)
     s.line([(48 + dx, 66 + dy), left], "metal", 3)
@@ -329,7 +335,7 @@ def draw_furnace(s: Surface, pose: str):
         phase_brackets(s, pose, cx, 7)
     hand = (87 + dx, 67 + dy)
     tip = {"neutral": (99, 110), "telegraph": (21, 18), "active": (98, 94),
-           "break": (18, 107), "transition": (98, 24)}[pose]
+           "break": (18, 107), "transition": (98, 24), "recovery": (94, 113)}[pose]
     s.line([hand, tip], "ink", 8)
     s.line([hand, tip], "metal", 5)
     s.line([hand, tip], "spark", 1)
@@ -345,7 +351,8 @@ def draw_ujiro(s: Surface, pose: str):
     s.rect((cx - 19, 65 if pose != "defeat" else 96, cx - 14, 69 if pose != "defeat" else 100), "spark")
     hand = g["right"]
     tip = {"neutral": (88, 91), "telegraph": (25, 25), "active": (100, 59),
-           "break": (17, 96), "transition": (92, 22), "defeat": (83, 113)}[pose]
+           "break": (17, 96), "transition": (92, 22), "defeat": (83, 113),
+           "recovery": (84, 113)}[pose]
     s.line([hand, tip], "ink", 7)
     s.line([hand, tip], "metal", 4)
     s.rect((tip[0] - 4, tip[1] - 4, tip[0] + 4, tip[1] + 4), "accent")
@@ -372,7 +379,8 @@ def draw_chiyo(s: Surface, pose: str):
             s.line([(px + 6, 81), (px + 6, 105)], "metal", 2)
     hand = g["right"]
     tip = {"neutral": (96, 95), "telegraph": (23, 21), "active": (100, 71),
-           "break": (17, 96), "transition": (96, 23), "defeat": (84, 113)}[pose]
+           "break": (17, 96), "transition": (96, 23), "defeat": (84, 113),
+           "recovery": (86, 113)}[pose]
     s.line([hand, tip], "ink", 7)
     s.line([hand, tip], "metal", 4)
     s.rect((tip[0] - 7, tip[1] - 5, tip[0] + 5, tip[1] + 5), "accent")
@@ -405,7 +413,7 @@ def draw_enma(s: Surface, pose: str):
     s.rect((46 + dx, 66 + dy, 68 + dx, 88 + dy), "ink")
     s.rect((51 + dx, 71 + dy, 63 + dx, 83 + dy), "accent")
     s.rect((54 + dx, 74 + dy, 60 + dx, 80 + dy), "spark")
-    spread = 32 if pose in {"active", "transition"} else 24
+    spread = 32 if pose in {"active", "transition"} else 18 if pose == "recovery" else 24
     s.poly([(36 + dx, 61 + dy), (max(9, 18 + dx - spread // 3), 48 + dy),
             (max(7, 11 + dx), 61 + dy), (29 + dx, 74 + dy)], "metal")
     s.poly([(75 + dx, 60 + dy), (min(101, 94 + dx + spread // 4), 46 + dy),
@@ -469,7 +477,8 @@ def draw_kurozane(s: Surface, pose: str):
         s.line([(cx, 62), (cx, 77)], "spark", 2)
     hand = g["right"]
     tip = {"neutral": (92, 99), "telegraph": (24, 17), "active": (100, 54),
-           "break": (16, 99), "transition": (96, 18), "defeat": (85, 114)}[pose]
+           "break": (16, 99), "transition": (96, 18), "defeat": (85, 114),
+           "recovery": (86, 114)}[pose]
     s.line([hand, tip], "ink", 7)
     s.line([hand, tip], "metal", 4)
     s.line([hand, tip], "spark", 1)
@@ -512,8 +521,8 @@ def ihdr(data: bytes) -> dict:
 
 
 def contact_sheet(atlas: Image.Image) -> Image.Image:
-    width, row_height = 720, 150
-    sheet = Image.new("RGB", (width, 28 + row_height * 10), (11, 16, 32))
+    width, row_height = 12 + 118 * len(POSES), 150
+    sheet = Image.new("RGB", (width, 28 + row_height * len(BOSSES)), (11, 16, 32))
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default()
     draw.text((8, 7), "CANONICAL BOSS KEY POSES - REVIEW ONLY / NOT RUNTIME", fill=(215, 201, 154), font=font)
@@ -530,7 +539,7 @@ def contact_sheet(atlas: Image.Image) -> Image.Image:
 
 
 def build_artifacts() -> dict[str, bytes]:
-    atlas = Image.new("RGBA", (672, 1280), (0, 0, 0, 0))
+    atlas = Image.new("RGBA", (112 * len(POSES), 128 * len(BOSSES)), (0, 0, 0, 0))
     frames = []
     for boss in SOURCE["bosses"]:
         seen_masks = set()

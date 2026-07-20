@@ -21,7 +21,7 @@ import {
   mergeBossTerminalPresentationRecord,
 } from '../boss-combat-atlas.mjs';
 
-test('boss combat atlas maps every canonical primary boss to all six exact key poses', () => {
+test('boss combat atlas maps every canonical primary boss to all seven exact key poses', () => {
   const canonicalBosses = ENCOUNTERS.filter(isBossEncounter).map(({ enemies }) => enemies[0].id);
   assert.deepEqual(BOSS_COMBAT_BOSSES.map(({ id }) => id), canonicalBosses);
   const rectangles = new Set();
@@ -39,7 +39,7 @@ test('boss combat atlas maps every canonical primary boss to all six exact key p
       rectangles.add(`${frame.x},${frame.y},${frame.width},${frame.height}`);
     }
   }
-  assert.equal(rectangles.size, 60);
+  assert.equal(rectangles.size, 70);
   assert.equal(BOSS_COMBAT_ATLAS.width, BOSS_COMBAT_ATLAS.columns * BOSS_COMBAT_ATLAS.cellWidth);
   assert.equal(BOSS_COMBAT_ATLAS.height, BOSS_COMBAT_ATLAS.rows * BOSS_COMBAT_ATLAS.cellHeight);
   assert.equal(hasBossCombatTemplate('court-clone'), false);
@@ -55,10 +55,13 @@ test('boss presentation states use only an explicit phase signal for transitions
   assert.equal(getBossCombatPresentationPose({ phase: 'status-glyph' }), 'neutral');
   assert.equal(getBossCombatPresentationPose({ hp: 0, transitionActive: true, targetPose: 'stagger' }), 'defeat');
   assert.equal(getBossCombatPresentationPose({ transitionActive: true, targetPose: 'stagger', phase: 'windup', actorPose: 'windup' }), 'transition');
-  assert.equal(getBossCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'neutral');
+  assert.equal(getBossCombatPresentationPose({ transitionActive: true, phase: 'recovery', actorPose: 'attack' }), 'transition');
+  assert.equal(getBossCombatPresentationPose({ targetPose: 'stagger', phase: 'recovery', actorPose: 'attack' }), 'break');
+  assert.equal(getBossCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'recovery');
   assert.equal(getBossCombatPresentationPose({ actorPose: 'attack' }), 'active');
   assert.equal(getBossCombatPresentationPose({}), 'neutral');
   assert.ok(BOSS_COMBAT_POSES.includes('transition'), 'the authored frame stays reserved in the atlas contract');
+  assert.ok(BOSS_COMBAT_POSES.includes('recovery'), 'post-action recovery owns a dedicated authored frame');
   assert.ok(BOSS_TRANSITION_HOLD_MS > 0 && BOSS_TRANSITION_HOLD_MS < BOSS_DEFEAT_HOLD_MS);
   assert.ok(BOSS_DEFEAT_HOLD_MS > 0 && BOSS_DEFEAT_HOLD_MS <= 500, 'terminal presentation is deliberately bounded');
 });
@@ -229,8 +232,8 @@ test('runtime frame anchors match the authored source contract and keep every po
 });
 
 test('boss atlas image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(bossCombatImageHasExpectedSize({ naturalWidth: 672, naturalHeight: 1280 }), true);
-  assert.equal(bossCombatImageHasExpectedSize({ naturalWidth: 671, naturalHeight: 1280 }), false);
-  assert.equal(bossCombatImageHasExpectedSize({ naturalWidth: 672, naturalHeight: 1279 }), false);
+  assert.equal(bossCombatImageHasExpectedSize({ naturalWidth: 784, naturalHeight: 1280 }), true);
+  assert.equal(bossCombatImageHasExpectedSize({ naturalWidth: 783, naturalHeight: 1280 }), false);
+  assert.equal(bossCombatImageHasExpectedSize({ naturalWidth: 784, naturalHeight: 1279 }), false);
   assert.equal(bossCombatImageHasExpectedSize(null), false);
 });

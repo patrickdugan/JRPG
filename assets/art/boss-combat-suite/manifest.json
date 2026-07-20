@@ -15,7 +15,7 @@
     "selection": "The first enemy template in each canonical encounter is the distinct boss; temporary weak points, wards, clerks, and clones remain supporting actors."
   },
   "geometry": {
-    "columns": 6,
+    "columns": 7,
     "rows": 10,
     "cellWidth": 112,
     "cellHeight": 128,
@@ -28,7 +28,8 @@
     "active",
     "break",
     "transition",
-    "defeat"
+    "defeat",
+    "recovery"
   ],
   "bossOrder": [
     "tithe-hound",
@@ -145,12 +146,12 @@
     {
       "path": "boss-combat-suite.source.json",
       "format": "json",
-      "sha256": "a31b192d7a1e936b5b30ab292e5aa00742667ea4c759cc510b05820ef5bc9833"
+      "sha256": "bf86135c017c360978e4795182a72cc53cbbf4dc67a009fc9535e51e80205d52"
     },
     {
       "path": "build_boss_combat_suite.py",
       "format": "python",
-      "sha256": "b644e937707861ab19142e0013317b5b20f550b8aaf0a4b373347bc281fe1385"
+      "sha256": "4e049679da4cf83216afb33810a132294f2a3fcebf6c35b1b538d29e248519be"
     }
   ],
   "exports": [
@@ -158,9 +159,9 @@
       "path": "boss-combat-atlas.png",
       "role": "transparent-runtime-candidate",
       "runtimeCandidate": true,
-      "sha256": "ac7ee69d7b65e1663ec116dda3566e8faa90c9bf4170eb81ea6f4530d9162d79",
+      "sha256": "b0c2796d7abe3efec5d0e9ac9254568e87ac960502691be2b159f98e1e3419ca",
       "ihdr": {
-        "width": 672,
+        "width": 784,
         "height": 1280,
         "bitDepth": 8,
         "colorType": 6,
@@ -173,9 +174,9 @@
       "path": "boss-combat-contact-sheet.png",
       "role": "labeled-review-contact-sheet",
       "runtimeCandidate": false,
-      "sha256": "e08c388c06bd31e7da4b7fb970d5701d406a578834c131f7de183021aa705b45",
+      "sha256": "624d03caf714277ce23f1944c0c7c6de2ec13d2d1f94f8a18f843971ed7541cd",
       "ihdr": {
-        "width": 720,
+        "width": 838,
         "height": 1528,
         "bitDepth": 8,
         "colorType": 2,
@@ -457,6 +458,51 @@
       "rgbaSha256": "8ca851df5a8abd5cb1e0b0e123276419281cb70ce66ad5ad5e54a45bb6fe78c2"
     },
     {
+      "id": "tithe-hound:recovery",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 672,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        51,
+        108
+      ],
+      "ground": [
+        51,
+        116
+      ],
+      "hitAnchor": [
+        59,
+        76
+      ],
+      "phaseAnchor": [
+        52,
+        52
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 50,
+        "width": 85,
+        "height": 70
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 50,
+        "right": 16,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3879,
+      "rgbaSha256": "fd7d391289abab77652f98a72215411d9c07e0190705c911eb416e08d0e4abc2"
+    },
+    {
       "id": "mateus:neutral",
       "bossId": "mateus",
       "encounterId": "fp1-mateus",
@@ -725,6 +771,51 @@
       },
       "opaquePixelCount": 2222,
       "rgbaSha256": "62fd0967cdad873e98be70327e6fa35ebf11adf35d37196aaf1bb120ae1ca9c0"
+    },
+    {
+      "id": "mateus:recovery",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 672,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        112
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        60
+      ],
+      "phaseAnchor": [
+        54,
+        32
+      ],
+      "alphaBounds": {
+        "x": 22,
+        "y": 24,
+        "width": 65,
+        "height": 96
+      },
+      "transparentGutter": {
+        "left": 22,
+        "top": 24,
+        "right": 25,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4046,
+      "rgbaSha256": "61921b7a6345d7edc316674c235d519297ea3c22f11044e4e0d4f6a1c6c4fd4e"
     },
     {
       "id": "captain-kaji:neutral",
@@ -997,6 +1088,51 @@
       "rgbaSha256": "f8d5011076ceaf9fbe4230745fa663c0d1c7f75dd33bc62f2221a42a50958f0f"
     },
     {
+      "id": "captain-kaji:recovery",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 672,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        112
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        60
+      ],
+      "phaseAnchor": [
+        54,
+        32
+      ],
+      "alphaBounds": {
+        "x": 22,
+        "y": 24,
+        "width": 67,
+        "height": 96
+      },
+      "transparentGutter": {
+        "left": 22,
+        "top": 24,
+        "right": 23,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4071,
+      "rgbaSha256": "35d062dc0b8fb380d356a7259553ee6e007af3940c3651ba2dbb46991bb65df6"
+    },
+    {
       "id": "widow-of-fog:neutral",
       "bossId": "widow-of-fog",
       "encounterId": "c4-widow-of-fog",
@@ -1265,6 +1401,51 @@
       },
       "opaquePixelCount": 1488,
       "rgbaSha256": "1bb90927e667bcc4c82fe0ddb0fb5c4aa200f4f5f1c2320a30da8239f6cd824f"
+    },
+    {
+      "id": "widow-of-fog:recovery",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 672,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        86
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        65
+      ],
+      "phaseAnchor": [
+        54,
+        31
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 20,
+        "width": 85,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 20,
+        "right": 16,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4627,
+      "rgbaSha256": "ca198a3f75c11734127b92a7faa52461c48b833fd8a8d3870573d5ca230a15e6"
     },
     {
       "id": "furnace-abbot:neutral",
@@ -1537,6 +1718,51 @@
       "rgbaSha256": "e0e91f9206b711eac2d12bd6ff19d12eb225057d621542c4c712abdb34571e62"
     },
     {
+      "id": "furnace-abbot:recovery",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 672,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        112
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        60
+      ],
+      "phaseAnchor": [
+        54,
+        32
+      ],
+      "alphaBounds": {
+        "x": 15,
+        "y": 12,
+        "width": 86,
+        "height": 110
+      },
+      "transparentGutter": {
+        "left": 15,
+        "top": 12,
+        "right": 11,
+        "bottom": 6
+      },
+      "opaquePixelCount": 6118,
+      "rgbaSha256": "8aaa8f33677e5ec9037aceae14feaed13373ad5718634156fa571b2c4cac2738"
+    },
+    {
       "id": "ujiro:neutral",
       "bossId": "ujiro",
       "encounterId": "c6-ujiro",
@@ -1805,6 +2031,51 @@
       },
       "opaquePixelCount": 2407,
       "rgbaSha256": "726f83285375ae41976165cc91870c0e584e4460c999ca83cb96f13f00878279"
+    },
+    {
+      "id": "ujiro:recovery",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 672,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        112
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        60
+      ],
+      "phaseAnchor": [
+        54,
+        32
+      ],
+      "alphaBounds": {
+        "x": 22,
+        "y": 24,
+        "width": 67,
+        "height": 96
+      },
+      "transparentGutter": {
+        "left": 22,
+        "top": 24,
+        "right": 23,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3948,
+      "rgbaSha256": "73342059a11d2f99d1a0ed61158d1dbde069a34ce1f8429d8d6245aef4c3b02a"
     },
     {
       "id": "bell-warden-chiyo:neutral",
@@ -2077,6 +2348,51 @@
       "rgbaSha256": "dd4ed8cfabef688f10e2d7268d8b35aa401cd4f2238165d12373d4e3985b83ef"
     },
     {
+      "id": "bell-warden-chiyo:recovery",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 672,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        112
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        60
+      ],
+      "phaseAnchor": [
+        54,
+        32
+      ],
+      "alphaBounds": {
+        "x": 19,
+        "y": 8,
+        "width": 74,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 19,
+        "top": 8,
+        "right": 19,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5518,
+      "rgbaSha256": "00e3d01c54e8627745a9a451cf4d7f9a5f5cea92bd5296ed5969928876287baa"
+    },
+    {
       "id": "lady-enma:neutral",
       "bossId": "lady-enma",
       "encounterId": "c8-lady-enma",
@@ -2345,6 +2661,51 @@
       },
       "opaquePixelCount": 2470,
       "rgbaSha256": "9dab017a65c71104ab65556db201adb93dd06e1e6eb61f4ed0b1cb42aeb89889"
+    },
+    {
+      "id": "lady-enma:recovery",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 672,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        86
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        65
+      ],
+      "phaseAnchor": [
+        54,
+        31
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 23,
+        "width": 92,
+        "height": 97
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 23,
+        "right": 11,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4815,
+      "rgbaSha256": "4db697c39880a4e7190d103190994426baee651b226009759c04a68f80acd03f"
     },
     {
       "id": "yearless-bell:neutral",
@@ -2617,6 +2978,51 @@
       "rgbaSha256": "71e210cef888b56e381aa251d51391e5bee752767039bba159dcb800908a11e3"
     },
     {
+      "id": "yearless-bell:recovery",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 672,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        96
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        68
+      ],
+      "phaseAnchor": [
+        54,
+        30
+      ],
+      "alphaBounds": {
+        "x": 14,
+        "y": 22,
+        "width": 81,
+        "height": 98
+      },
+      "transparentGutter": {
+        "left": 14,
+        "top": 22,
+        "right": 17,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5734,
+      "rgbaSha256": "068df798921e152222857e5e9ba484c69a7e462910a0396f55b0b16749742fd6"
+    },
+    {
       "id": "kurozane:neutral",
       "bossId": "kurozane",
       "encounterId": "c9-kurozane",
@@ -2885,6 +3291,51 @@
       },
       "opaquePixelCount": 2286,
       "rgbaSha256": "009d0126b138f71cddc4d592cab7f333fb9f77d985a12ba0b492c9f8fd1cb787"
+    },
+    {
+      "id": "kurozane:recovery",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "recovery",
+      "tag": "boss-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 672,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        54,
+        112
+      ],
+      "ground": [
+        54,
+        116
+      ],
+      "hitAnchor": [
+        54,
+        60
+      ],
+      "phaseAnchor": [
+        54,
+        32
+      ],
+      "alphaBounds": {
+        "x": 10,
+        "y": 24,
+        "width": 90,
+        "height": 96
+      },
+      "transparentGutter": {
+        "left": 10,
+        "top": 24,
+        "right": 12,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4908,
+      "rgbaSha256": "5f32d23a699fa0458ff80d873f1277050f26f91af60bcbc0483457d817cd0094"
     }
   ]
 }

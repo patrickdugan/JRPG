@@ -7,7 +7,7 @@
     "selection": "The first enemy template in each canonical encounter is the distinct boss; temporary weak points, wards, clerks, and clones remain supporting actors."
   },
   "geometry": {
-    "columns": 6,
+    "columns": 7,
     "rows": 10,
     "cellWidth": 112,
     "cellHeight": 128,
@@ -20,7 +20,8 @@
     { "id": "active", "column": 2, "tag": "boss-active", "event": "activeStart" },
     { "id": "break", "column": 3, "tag": "boss-stagger-break", "event": "breakStart" },
     { "id": "transition", "column": 4, "tag": "boss-phase-transition", "event": "phaseStart" },
-    { "id": "defeat", "column": 5, "tag": "boss-defeat-retreat", "event": "complete" }
+    { "id": "defeat", "column": 5, "tag": "boss-defeat-retreat", "event": "complete" },
+    { "id": "recovery", "column": 6, "tag": "boss-recovery", "event": "recoveryStart" }
   ],
   "anchorProfiles": {
     "grounded": {
@@ -29,7 +30,8 @@
       "active": { "pivot": [63, 110], "ground": [63, 116], "hit": [72, 55], "phase": [61, 28] },
       "break": { "pivot": [48, 112], "ground": [48, 116], "hit": [43, 64], "phase": [49, 36] },
       "transition": { "pivot": [56, 106], "ground": [56, 116], "hit": [56, 48], "phase": [56, 20] },
-      "defeat": { "pivot": [48, 114], "ground": [48, 118], "hit": [46, 83], "phase": [48, 54] }
+      "defeat": { "pivot": [48, 114], "ground": [48, 118], "hit": [46, 83], "phase": [48, 54] },
+      "recovery": { "pivot": [54, 112], "ground": [54, 116], "hit": [54, 60], "phase": [54, 32] }
     },
     "low": {
       "neutral": { "pivot": [53, 105], "ground": [53, 116], "hit": [60, 72], "phase": [54, 50] },
@@ -37,7 +39,8 @@
       "active": { "pivot": [63, 106], "ground": [63, 116], "hit": [89, 68], "phase": [65, 45] },
       "break": { "pivot": [44, 110], "ground": [44, 116], "hit": [37, 81], "phase": [45, 57] },
       "transition": { "pivot": [55, 102], "ground": [55, 116], "hit": [62, 66], "phase": [55, 38] },
-      "defeat": { "pivot": [48, 114], "ground": [48, 118], "hit": [54, 96], "phase": [48, 68] }
+      "defeat": { "pivot": [48, 114], "ground": [48, 118], "hit": [54, 96], "phase": [48, 68] },
+      "recovery": { "pivot": [51, 108], "ground": [51, 116], "hit": [59, 76], "phase": [52, 52] }
     },
     "hover": {
       "neutral": { "pivot": [56, 82], "ground": [56, 116], "hit": [56, 59], "phase": [56, 25] },
@@ -45,7 +48,8 @@
       "active": { "pivot": [63, 78], "ground": [63, 116], "hit": [75, 51], "phase": [64, 19] },
       "break": { "pivot": [47, 87], "ground": [47, 116], "hit": [42, 68], "phase": [47, 36] },
       "transition": { "pivot": [56, 74], "ground": [56, 116], "hit": [56, 47], "phase": [56, 14] },
-      "defeat": { "pivot": [49, 103], "ground": [49, 118], "hit": [49, 89], "phase": [49, 61] }
+      "defeat": { "pivot": [49, 103], "ground": [49, 118], "hit": [49, 89], "phase": [49, 61] },
+      "recovery": { "pivot": [54, 86], "ground": [54, 116], "hit": [54, 65], "phase": [54, 31] }
     },
     "object": {
       "neutral": { "pivot": [56, 92], "ground": [56, 116], "hit": [56, 63], "phase": [56, 24] },
@@ -53,7 +57,8 @@
       "active": { "pivot": [60, 88], "ground": [60, 116], "hit": [66, 57], "phase": [60, 14] },
       "break": { "pivot": [50, 99], "ground": [50, 116], "hit": [48, 75], "phase": [50, 38] },
       "transition": { "pivot": [56, 83], "ground": [56, 116], "hit": [56, 50], "phase": [56, 11] },
-      "defeat": { "pivot": [49, 112], "ground": [49, 118], "hit": [49, 95], "phase": [49, 63] }
+      "defeat": { "pivot": [49, 112], "ground": [49, 118], "hit": [49, 95], "phase": [49, 63] },
+      "recovery": { "pivot": [54, 96], "ground": [54, 116], "hit": [54, 68], "phase": [54, 30] }
     }
   },
   "palettes": {

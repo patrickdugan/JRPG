@@ -5,6 +5,7 @@ export const BOSS_COMBAT_POSES = Object.freeze([
   'break',
   'transition',
   'defeat',
+  'recovery',
 ]);
 
 export const BOSS_DEFEAT_HOLD_MS = 420;
@@ -22,6 +23,7 @@ export const BOSS_COMBAT_ANCHOR_PROFILES = Object.freeze({
     break: Object.freeze({ pivot: point(48, 112), ground: point(48, 116) }),
     transition: Object.freeze({ pivot: point(56, 106), ground: point(56, 116) }),
     defeat: Object.freeze({ pivot: point(48, 114), ground: point(48, 118) }),
+    recovery: Object.freeze({ pivot: point(54, 112), ground: point(54, 116) }),
   }),
   low: Object.freeze({
     neutral: Object.freeze({ pivot: point(53, 105), ground: point(53, 116) }),
@@ -30,6 +32,7 @@ export const BOSS_COMBAT_ANCHOR_PROFILES = Object.freeze({
     break: Object.freeze({ pivot: point(44, 110), ground: point(44, 116) }),
     transition: Object.freeze({ pivot: point(55, 102), ground: point(55, 116) }),
     defeat: Object.freeze({ pivot: point(48, 114), ground: point(48, 118) }),
+    recovery: Object.freeze({ pivot: point(51, 108), ground: point(51, 116) }),
   }),
   hover: Object.freeze({
     neutral: Object.freeze({ pivot: point(56, 82), ground: point(56, 116) }),
@@ -38,6 +41,7 @@ export const BOSS_COMBAT_ANCHOR_PROFILES = Object.freeze({
     break: Object.freeze({ pivot: point(47, 87), ground: point(47, 116) }),
     transition: Object.freeze({ pivot: point(56, 74), ground: point(56, 116) }),
     defeat: Object.freeze({ pivot: point(49, 103), ground: point(49, 118) }),
+    recovery: Object.freeze({ pivot: point(54, 86), ground: point(54, 116) }),
   }),
   object: Object.freeze({
     neutral: Object.freeze({ pivot: point(56, 92), ground: point(56, 116) }),
@@ -46,6 +50,7 @@ export const BOSS_COMBAT_ANCHOR_PROFILES = Object.freeze({
     break: Object.freeze({ pivot: point(50, 99), ground: point(50, 116) }),
     transition: Object.freeze({ pivot: point(56, 83), ground: point(56, 116) }),
     defeat: Object.freeze({ pivot: point(49, 112), ground: point(49, 118) }),
+    recovery: Object.freeze({ pivot: point(54, 96), ground: point(54, 116) }),
   }),
 });
 
@@ -64,9 +69,9 @@ export const BOSS_COMBAT_BOSSES = Object.freeze([
 
 export const BOSS_COMBAT_ATLAS = Object.freeze({
   url: './assets/art/boss-combat-suite/boss-combat-atlas.png',
-  width: 672,
+  width: 784,
   height: 1280,
-  columns: 6,
+  columns: 7,
   rows: 10,
   cellWidth: 112,
   cellHeight: 128,
@@ -136,7 +141,7 @@ export function getBossCombatPresentationPose({
   if (transitionActive) return 'transition';
   if (targetPose === 'stagger') return 'break';
   if (phase === 'windup' || actorPose === 'windup') return 'telegraph';
-  if (phase === 'recovery') return 'neutral';
+  if (phase === 'recovery') return 'recovery';
   if (actorPose === 'attack') return 'active';
   return 'neutral';
 }
