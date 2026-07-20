@@ -100,9 +100,25 @@ test('Crimson Litany publishes a four-tile answer window before resolving into R
   assert.equal(mechanic.recovery.recoveryPulses, 3);
   const resolved = engine.log.find(({ type }) => type === 'intent-resolved');
   assert.equal(resolved.answerActivations, 1);
+  assert.deepEqual(resolved.avoidedTargetIds, []);
   assert.equal(resolved.aftermath.recoveryPulses, 3);
   const answered = engine.log.find(({ type }) => type === 'intent-answered');
   assert.equal(answered.answerActivationsRequired, 1);
+});
+
+test('Crimson Litany records exact published targets that cleared the line without inventing stance Dodge', () => {
+  const engine = enterPhaseTwo();
+  const intent = advanceToPublishedLitany(engine);
+  assert.deepEqual(intent.targetIdsAtPublish, ['lise']);
+  const lise = engine.getActor('lise');
+  lise.pos = { x: 3, y: 4 };
+  const hpBefore = lise.hp;
+  assert.equal(engine.guard(engine.activeActorId).ok, true);
+  const resolved = engine.log.find(({ type }) => type === 'intent-resolved');
+  assert.deepEqual(resolved.hitTargetIds, []);
+  assert.deepEqual(resolved.avoidedTargetIds, ['lise']);
+  assert.equal(lise.hp, hpBefore);
+  assert.equal(engine.log.some(({ type }) => type === 'attack-evaded'), false);
 });
 
 test('breaking both active wards resolves FP-1 as a nonlethal surrender at 20 percent HP', () => {

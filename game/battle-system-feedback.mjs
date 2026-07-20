@@ -6,6 +6,7 @@ export const BATTLE_SYSTEM_FEEDBACK_MS = Object.freeze({
   'move-destination': 320,
   'move-blocked': 480,
   'recovery-lock': 560,
+  'telegraph-evaded': 720,
   heal: 720,
 });
 
@@ -275,6 +276,77 @@ export function sampleBattleHealFeedback(record, nowMs, { reducedMotion = false 
     pulse: round(pulse),
     opacity: round(reducedMotion ? 0.94 : 0.62 + (pulse * 0.34)),
     routeProgress: round(reducedMotion ? 1 : Math.min(1, progress * 2.5)),
+    reducedMotion: Boolean(reducedMotion),
+  });
+}
+
+/** Exact spatial evasion of a published boss telegraph; never a stance Dodge. */
+export function createBattleTelegraphEvadeFeedback({
+  beforeSnapshot,
+  afterSnapshot,
+  startedAt = 0,
+  speed = 1,
+} = {}) {
+  if (!BATTLE_SYSTEM_FEEDBACK_SPEEDS.includes(speed)) {
+    throw new RangeError('Battle system feedback speed must be 1, 2, or 4.');
+  }
+  if (!Array.isArray(beforeSnapshot?.actors) || !Array.isArray(afterSnapshot?.actors)) {
+    throw new TypeError('beforeSnapshot and afterSnapshot actors must be arrays.');
+  }
+  const beforeLog = Array.isArray(beforeSnapshot.log) ? beforeSnapshot.log : [];
+  const afterLog = Array.isArray(afterSnapshot.log) ? afterSnapshot.log : [];
+  if (!logsShareExactPrefix(beforeLog, afterLog)) return null;
+  const event = afterLog.slice(beforeLog.length).find((entry) => entry?.type === 'intent-resolved'
+    && Array.isArray(entry.avoidedTargetIds) && entry.avoidedTargetIds.length > 0);
+  if (!event) return null;
+  const uniqueIds = [...new Set(event.avoidedTargetIds.map(String))];
+  if (uniqueIds.length !== event.avoidedTargetIds.length || uniqueIds.some((id) => !id)) return null;
+  const targets = uniqueIds.map((actorId) => {
+    const actor = afterSnapshot.actors.find((candidate) => candidate.instanceId === actorId)
+      ?? beforeSnapshot.actors.find((candidate) => candidate.instanceId === actorId);
+    if (!actor || actor.faction !== 'party') return null;
+    return {
+      actorId,
+      actorName: String(actor.name ?? actorId),
+      tile: exactTile(actor.pos, 'actor.pos'),
+    };
+  });
+  if (targets.some((target) => target === null)) return null;
+  const baseDurationMs = BATTLE_SYSTEM_FEEDBACK_MS['telegraph-evaded'];
+  const durationMs = baseDurationMs / speed;
+  const safeStartedAt = safeTime(startedAt);
+  const names = targets.map((target) => target.actorName).join(', ');
+  return deepFreeze({
+    kind: 'telegraph-evaded',
+    intentId: String(event.intentId ?? ''),
+    targets,
+    announcement: `${names} cleared the published Crimson Litany tiles. Telegraph evaded.`,
+    baseDurationMs,
+    durationMs,
+    startedAt: safeStartedAt,
+    endsAt: safeStartedAt + durationMs,
+    presentationSpeed: speed,
+  });
+}
+
+export function sampleBattleTelegraphEvadeFeedback(record, nowMs, { reducedMotion = false } = {}) {
+  if (!record || record.kind !== 'telegraph-evaded') return null;
+  const now = safeTime(nowMs);
+  if (now < record.startedAt || now >= record.endsAt) return null;
+  const progress = Math.max(0, Math.min(1, (now - record.startedAt) / record.durationMs));
+  const pulse = reducedMotion ? 1 : Math.sin(progress * Math.PI);
+  return deepFreeze({
+    kind: record.kind,
+    intentId: record.intentId,
+    targets: record.targets.map((target, index) => ({
+      actorId: target.actorId,
+      tile: target.tile,
+      direction: index % 2 === 0 ? 1 : -1,
+    })),
+    progress: round(reducedMotion ? 0.5 : progress),
+    pulse: round(pulse),
+    opacity: round(reducedMotion ? 0.94 : 0.58 + (pulse * 0.36)),
+    sidestep: round(reducedMotion ? 0 : pulse * 0.18),
     reducedMotion: Boolean(reducedMotion),
   });
 }

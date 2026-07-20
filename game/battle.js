@@ -143,12 +143,14 @@ import {
   createBattleDefeatAccent,
   createBattleHealFeedback,
   createBattleMoveFeedback,
+  createBattleTelegraphEvadeFeedback,
   createBattleTempoPresentation,
   createBattleVictoryAccent,
   createRecoveryLockFeedback,
   createSelectedTargetFeedback,
   sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
+  sampleBattleTelegraphEvadeFeedback,
   sampleRecoveryLockFeedback,
 } from './battle-system-feedback.mjs';
 import {
@@ -640,6 +642,17 @@ function startBattleMoveSystemFeedback({
   return activeBattleSystemFeedback;
 }
 
+function startBattleTelegraphEvadeSystemFeedback(beforeSnapshot, afterSnapshot, {
+  startedAt = performance.now(),
+  speed = 1,
+} = {}) {
+  const feedback = createBattleTelegraphEvadeFeedback({ beforeSnapshot, afterSnapshot, startedAt, speed });
+  if (!feedback) return null;
+  activeBattleSystemFeedback = feedback;
+  announcements.textContent = feedback.announcement;
+  return feedback;
+}
+
 function startRecoveryLockSystemFeedback(actor, snapshot = engine.snapshot(), startedAt = performance.now()) {
   const feedback = createRecoveryLockFeedback({
     actor,
@@ -1084,6 +1097,38 @@ function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
   }
 
   if (!moveFrame) return;
+  if (moveFrame.kind === 'telegraph-evaded') {
+    context.save();
+    context.lineWidth = Math.max(2, geometry.cell * 0.055);
+    context.lineCap = 'square';
+    for (const marker of moveFrame.targets) {
+      const px = geometry.originX + marker.tile.x * geometry.cell;
+      const py = geometry.originY + marker.tile.y * geometry.cell;
+      const center = battleCanvasPoint(marker.tile, geometry);
+      const offset = marker.direction * moveFrame.sidestep * geometry.cell;
+      const span = Math.max(6, geometry.cell * 0.2);
+      context.globalAlpha = moveFrame.opacity;
+      context.fillStyle = 'rgba(105, 225, 218, 0.16)';
+      context.fillRect(px + 4, py + 4, geometry.cell - 8, geometry.cell - 8);
+      context.strokeStyle = '#9af3e8';
+      context.setLineDash(moveFrame.reducedMotion ? [] : [Math.max(3, geometry.cell * 0.1), Math.max(2, geometry.cell * 0.06)]);
+      context.strokeRect(px + 5, py + 5, geometry.cell - 10, geometry.cell - 10);
+      context.setLineDash([]);
+      context.beginPath();
+      context.moveTo(center.x - span + offset, center.y - span);
+      context.lineTo(center.x - offset, center.y);
+      context.lineTo(center.x - span + offset, center.y + span);
+      context.moveTo(center.x + span + offset, center.y - span);
+      context.lineTo(center.x + offset, center.y);
+      context.lineTo(center.x + span + offset, center.y + span);
+      context.stroke();
+      context.fillStyle = '#d9fffa';
+      const notch = Math.max(2, geometry.cell * 0.055);
+      context.fillRect(center.x - notch + offset, center.y - span * 0.22, notch * 2, span * 0.44);
+    }
+    context.restore();
+    return;
+  }
   if (moveFrame.kind === 'heal') {
     const source = battleCanvasPoint(moveFrame.sourceTile, geometry);
     const target = battleCanvasPoint(moveFrame.targetTile, geometry);
@@ -1333,6 +1378,8 @@ function drawBattle(now = performance.now()) {
   const commandPresentation = sampleBattleCommandPresentation(activeCommandPresentation, now, { reducedMotion: reducedMotion.matches });
   const moveFeedback = activeBattleSystemFeedback?.kind === 'heal'
     ? sampleBattleHealFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
+    : activeBattleSystemFeedback?.kind === 'telegraph-evaded'
+      ? sampleBattleTelegraphEvadeFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
     : activeBattleSystemFeedback?.kind === 'recovery-lock'
       ? sampleRecoveryLockFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
       : sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
@@ -1890,7 +1937,10 @@ function formatEngineLog(entry, actors) {
   if (entry.type === 'damage-mitigated') return `Blood Ward limits ${name(entry.targetId)}'s incoming damage to ${Math.round(entry.incomingDamageMultiplier * 100)}% (${entry.unmitigatedDamage} becomes ${entry.finalDamage}).`;
   if (entry.type === 'intent-published') return `${name(entry.sourceActorId)} declares Crimson Litany across ${entry.tiles.join(' / ')}. Answer: ${entry.answer}`;
   if (entry.type === 'intent-answered') return `${name(entry.actorId)} answers ${entry.intentId} (${entry.answerActivations}/${entry.answerActivationsRequired}).`;
-  if (entry.type === 'intent-resolved') return `${entry.intentId} resolves on ${entry.hitTargetIds.length} target${entry.hitTargetIds.length === 1 ? '' : 's'}; Mateus enters Recovery ${entry.aftermath.recoveryPulses}.`;
+  if (entry.type === 'intent-resolved') {
+    const avoided = Array.isArray(entry.avoidedTargetIds) ? entry.avoidedTargetIds.length : 0;
+    return `${entry.intentId} resolves on ${entry.hitTargetIds.length} target${entry.hitTargetIds.length === 1 ? '' : 's'}${avoided ? `; ${avoided} cleared the published line` : ''}; Mateus enters Recovery ${entry.aftermath.recoveryPulses}.`;
+  }
   if (entry.type === 'ward-broken') return `${name(entry.targetId)} is broken by ${name(entry.sourceActorId)}.`;
   if (entry.type === 'surrender') return `${name(entry.actorId)} yields without death at ${entry.hp} HP; both Blood Wards broken: ${entry.bothWardsBroken ? 'yes' : 'no'}.`;
   if (entry.type === 'boss-phase-warning') return `${name(entry.bossId)} signals a phase shift from ${readableBossPhaseId(entry.fromPhaseId)} to ${readableBossPhaseId(entry.toPhaseId)} after ${entry.remainingBossActivations} boss activation${entry.remainingBossActivations === 1 ? '' : 's'}.`;
@@ -2289,6 +2339,7 @@ function executeAutoGrindStep(now) {
     return;
   }
   const after = engine.snapshot();
+  startBattleTelegraphEvadeSystemFeedback(before, after, { startedAt: now, speed: speedMultiplier });
   announceBossPhaseLogDelta(before, after);
   activeBattleAnimation = mergeBossTerminalPresentationRecord(
     activeBattleAnimation,
@@ -2434,6 +2485,7 @@ function executeSelectedCommand() {
     });
   }
   if (result?.ok) {
+    startBattleTelegraphEvadeSystemFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
     activeBattleAnimation = mergeBossTerminalPresentationRecord(
       activeBattleAnimation,
       snapshot.actors,

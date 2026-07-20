@@ -924,6 +924,9 @@ export class CampaignCombatEngine {
     const skill = mateus?.skills.find((candidate) => candidate.id === intent.skillId);
     const targets = living(this.actors, 'party').filter((candidate) => intent.tiles.includes(keyOf(candidate.pos)));
     const hits = skill ? targets.map((target) => this._resolveAttack(mateus, target, skill)) : [];
+    const hitTargetIds = hits.map((hit) => hit.targetId);
+    const hitTargetSet = new Set(hitTargetIds);
+    const avoidedTargetIds = intent.targetIdsAtPublish.filter((targetId) => !hitTargetSet.has(targetId));
     const recovery = {
       sourceSkillId: 'crimson-litany',
       recoveryPulses: intent.recoveryPulses,
@@ -932,8 +935,16 @@ export class CampaignCombatEngine {
     };
     this.mateusMechanic.pendingIntent = null;
     this.mateusMechanic.recovery = recovery;
-    this.log.push({ type: 'intent-resolved', intentId: intent.id, answerActivations: intent.answerActivations, hitTargetIds: hits.map((hit) => hit.targetId), aftermath: clone(recovery), pulse: this.nowPulse });
-    return { intentId: intent.id, hits, aftermath: clone(recovery) };
+    this.log.push({
+      type: 'intent-resolved',
+      intentId: intent.id,
+      answerActivations: intent.answerActivations,
+      hitTargetIds,
+      avoidedTargetIds,
+      aftermath: clone(recovery),
+      pulse: this.nowPulse,
+    });
+    return { intentId: intent.id, hits, avoidedTargetIds: clone(avoidedTargetIds), aftermath: clone(recovery) };
   }
 
   _breakMateusWard(ward, sourceActorId, source) {

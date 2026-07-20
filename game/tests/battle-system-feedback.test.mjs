@@ -7,12 +7,14 @@ import {
   createBattleDefeatAccent,
   createBattleHealFeedback,
   createBattleMoveFeedback,
+  createBattleTelegraphEvadeFeedback,
   createBattleTempoPresentation,
   createBattleVictoryAccent,
   createRecoveryLockFeedback,
   createSelectedTargetFeedback,
   sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
+  sampleBattleTelegraphEvadeFeedback,
   sampleRecoveryLockFeedback,
 } from '../battle-system-feedback.mjs';
 
@@ -266,6 +268,68 @@ test('heal feedback cannot be inferred from a divergent snapshot log suffix', ()
   }), null);
 });
 
+test('telegraph evasion requires an exact typed resolved-intent delta and party targets', () => {
+  const published = {
+    type: 'intent-published', intentId: 'crimson-litany-1', targetIdsAtPublish: ['lise'], pulse: 3,
+  };
+  const beforeSnapshot = {
+    actors: [{ instanceId: 'lise', name: 'Lise Varga', faction: 'party', hp: 108, pos: { x: 3, y: 3 } }],
+    log: [published],
+  };
+  const resolved = {
+    type: 'intent-resolved', intentId: 'crimson-litany-1', hitTargetIds: [],
+    avoidedTargetIds: ['lise'], aftermath: { recoveryPulses: 3 }, pulse: 4,
+  };
+  const afterSnapshot = {
+    actors: [{ instanceId: 'lise', name: 'Lise Varga', faction: 'party', hp: 108, pos: { x: 3, y: 4 } }],
+    log: [published, resolved],
+  };
+  const record = createBattleTelegraphEvadeFeedback({
+    beforeSnapshot, afterSnapshot, startedAt: 200, speed: 2,
+  });
+  assert.equal(record.kind, 'telegraph-evaded');
+  assert.equal(record.intentId, 'crimson-litany-1');
+  assert.equal(record.durationMs, BATTLE_SYSTEM_FEEDBACK_MS['telegraph-evaded'] / 2);
+  assert.deepEqual(record.targets, [{ actorId: 'lise', actorName: 'Lise Varga', tile: { x: 3, y: 4 } }]);
+  assert.match(record.announcement, /Telegraph evaded/);
+  assert.equal(Object.isFrozen(record.targets[0].tile), true);
+
+  assert.equal(createBattleTelegraphEvadeFeedback({
+    beforeSnapshot,
+    afterSnapshot: { ...afterSnapshot, log: [{ ...published, pulse: 99 }, resolved] },
+  }), null, 'a divergent log prefix cannot authorize presentation');
+  assert.equal(createBattleTelegraphEvadeFeedback({
+    beforeSnapshot,
+    afterSnapshot: { ...afterSnapshot, log: [published, { ...resolved, avoidedTargetIds: [] }] },
+  }), null, 'a fully hit line is not evasion');
+  assert.equal(createBattleTelegraphEvadeFeedback({
+    beforeSnapshot,
+    afterSnapshot: {
+      actors: [{ ...afterSnapshot.actors[0], faction: 'enemy' }],
+      log: [published, resolved],
+    },
+  }), null, 'enemy IDs cannot masquerade as party telegraph evasion');
+});
+
+test('telegraph evasion expires exactly and freezes its exact-tile cue for reduced motion', () => {
+  const record = {
+    kind: 'telegraph-evaded', intentId: 'crimson-litany-1',
+    targets: [{ actorId: 'lise', tile: { x: 3, y: 4 } }],
+    startedAt: 100, durationMs: 720, endsAt: 820,
+  };
+  assert.equal(sampleBattleTelegraphEvadeFeedback(record, 99), null);
+  const frame = sampleBattleTelegraphEvadeFeedback(record, 460);
+  assert.equal(frame.kind, 'telegraph-evaded');
+  assert.equal(frame.pulse, 1);
+  assert.equal(frame.sidestep, 0.18);
+  assert.deepEqual(frame.targets, [{ actorId: 'lise', tile: { x: 3, y: 4 }, direction: 1 }]);
+  assert.equal(sampleBattleTelegraphEvadeFeedback(record, 820), null);
+  assert.deepEqual(
+    sampleBattleTelegraphEvadeFeedback(record, 101, { reducedMotion: true }),
+    sampleBattleTelegraphEvadeFeedback(record, 819, { reducedMotion: true }),
+  );
+});
+
 test('victory accent follows only the actual terminal victory result and freezes for reduced motion', () => {
   assert.equal(createBattleVictoryAccent({ result: null, bossMechanic: { resolution: { kind: 'nonlethal-surrender' } } }), null);
   assert.equal(createBattleVictoryAccent({ result: 'defeat', log: [{ type: 'surrender' }] }), null);
@@ -314,6 +378,12 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
   assert.match(source, /drawBattleTempoPresentation\(tempoPresentation, geometry\)/);
   assert.match(source, /createBattleHealFeedback\(\{/);
   assert.match(source, /sampleBattleHealFeedback\(activeBattleSystemFeedback, now, \{ reducedMotion: reducedMotion\.matches \}\)/);
+  assert.match(source, /createBattleTelegraphEvadeFeedback\(\{ beforeSnapshot, afterSnapshot, startedAt, speed \}\)/);
+  assert.match(source, /sampleBattleTelegraphEvadeFeedback\(activeBattleSystemFeedback, now, \{ reducedMotion: reducedMotion\.matches \}\)/);
+  assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(before, after, \{ startedAt: now, speed: speedMultiplier \}\)/,
+    'Auto-Grind consumes the same exact typed telegraph delta');
+  assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(snapshot, afterSnapshot, \{ startedAt: performance\.now\(\), speed: 1 \}\)/,
+    'manual commands consume the same exact typed telegraph delta');
   const combatAnimationSource = source.slice(
     source.indexOf('function startCombatAnimation('),
     source.indexOf('function currentBattleAnimationFrame('),
@@ -353,4 +423,6 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
     'victory accent cannot extend the terminal hold or settlement boundary');
   assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*defeatAccent/,
     'defeat accent cannot extend the terminal hold or settlement boundary');
+  assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*telegraph/,
+    'telegraph evasion feedback cannot extend intent, Recovery, or Auto-Grind timing');
 });
