@@ -6,6 +6,7 @@ export const BATTLE_SYSTEM_FEEDBACK_MS = Object.freeze({
   'move-destination': 320,
   'move-blocked': 480,
   'recovery-lock': 560,
+  heal: 720,
 });
 
 function deepFreeze(value) {
@@ -174,6 +175,126 @@ export function sampleRecoveryLockFeedback(record, nowMs, { reducedMotion = fals
     pulse: round(pulse),
     opacity: round(reducedMotion ? 0.92 : 0.66 + (pulse * 0.3)),
     reducedMotion: Boolean(reducedMotion),
+  });
+}
+
+function explicitHealResolution(resolution) {
+  if (!resolution || resolution.absorbed === true) return false;
+  const kind = String(resolution.type ?? resolution.kind ?? resolution.resolutionType ?? '').toLowerCase();
+  return kind === 'heal' || kind === 'healing';
+}
+
+function logsShareExactPrefix(beforeLog, afterLog) {
+  if (beforeLog.length > afterLog.length) return false;
+  return beforeLog.every((entry, index) => JSON.stringify(entry) === JSON.stringify(afterLog[index]));
+}
+
+/**
+ * Build feedback only when an explicit heal resolution is corroborated by an
+ * exact positive HP delta. Negative absorbed damage is deliberately excluded.
+ */
+export function createBattleHealFeedback({
+  resolution,
+  beforeSnapshot,
+  afterSnapshot,
+  startedAt = 0,
+  speed = 1,
+} = {}) {
+  if (!BATTLE_SYSTEM_FEEDBACK_SPEEDS.includes(speed)) {
+    throw new RangeError('Battle system feedback speed must be 1, 2, or 4.');
+  }
+  if (!Array.isArray(beforeSnapshot?.actors) || !Array.isArray(afterSnapshot?.actors)) {
+    throw new TypeError('beforeSnapshot and afterSnapshot actors must be arrays.');
+  }
+  const beforeLog = Array.isArray(beforeSnapshot.log) ? beforeSnapshot.log : [];
+  const afterLog = Array.isArray(afterSnapshot.log) ? afterSnapshot.log : [];
+  const newEvents = logsShareExactPrefix(beforeLog, afterLog)
+    ? afterLog.slice(beforeLog.length)
+    : [];
+  const healResolution = explicitHealResolution(resolution)
+    ? resolution
+    : newEvents.find(explicitHealResolution);
+  if (!healResolution) return null;
+
+  const sourceId = String(healResolution.sourceActorId
+    ?? healResolution.attackerId
+    ?? healResolution.actorId
+    ?? '');
+  const targetId = String(healResolution.targetId ?? '');
+  if (!sourceId || !targetId) return null;
+  const source = beforeSnapshot.actors.find((actor) => actor.instanceId === sourceId)
+    ?? afterSnapshot.actors.find((actor) => actor.instanceId === sourceId);
+  const beforeTarget = beforeSnapshot.actors.find((actor) => actor.instanceId === targetId);
+  const afterTarget = afterSnapshot.actors.find((actor) => actor.instanceId === targetId);
+  if (!source || !beforeTarget || !afterTarget
+    || !Number.isFinite(beforeTarget.hp) || !Number.isFinite(afterTarget.hp)) return null;
+  const amount = afterTarget.hp - beforeTarget.hp;
+  if (!Number.isSafeInteger(amount) || amount <= 0) return null;
+
+  const sourceName = String(source.name ?? sourceId);
+  const targetName = String(afterTarget.name ?? targetId);
+  const sourceTile = exactTile(source.pos, 'source.pos');
+  const targetTile = exactTile(afterTarget.pos, 'afterTarget.pos');
+  const baseDurationMs = BATTLE_SYSTEM_FEEDBACK_MS.heal;
+  const durationMs = baseDurationMs / speed;
+  const safeStartedAt = safeTime(startedAt);
+  return deepFreeze({
+    kind: 'heal',
+    sourceId,
+    sourceName,
+    targetId,
+    targetName,
+    sourceTile,
+    targetTile,
+    amount,
+    targetHpBefore: beforeTarget.hp,
+    targetHpAfter: afterTarget.hp,
+    announcement: `${sourceName} restores ${amount} HP to ${targetName} at ${targetTile.x},${targetTile.y}.`,
+    baseDurationMs,
+    durationMs,
+    startedAt: safeStartedAt,
+    endsAt: safeStartedAt + durationMs,
+    presentationSpeed: speed,
+  });
+}
+
+export function sampleBattleHealFeedback(record, nowMs, { reducedMotion = false } = {}) {
+  if (!record || record.kind !== 'heal') return null;
+  const now = safeTime(nowMs);
+  if (now < record.startedAt || now >= record.endsAt) return null;
+  const progress = Math.max(0, Math.min(1, (now - record.startedAt) / record.durationMs));
+  const pulse = reducedMotion ? 1 : 1 - Math.abs((progress * 2) - 1);
+  return deepFreeze({
+    kind: record.kind,
+    sourceId: record.sourceId,
+    targetId: record.targetId,
+    sourceTile: record.sourceTile,
+    targetTile: record.targetTile,
+    amount: record.amount,
+    progress: round(reducedMotion ? 0.5 : progress),
+    pulse: round(pulse),
+    opacity: round(reducedMotion ? 0.94 : 0.62 + (pulse * 0.34)),
+    routeProgress: round(reducedMotion ? 1 : Math.min(1, progress * 2.5)),
+    reducedMotion: Boolean(reducedMotion),
+  });
+}
+
+/** Persistent result accent; it owns no terminal hold or settlement timing. */
+export function createBattleVictoryAccent(snapshot, {
+  visualNowMs = 0,
+  reducedMotion = false,
+} = {}) {
+  if (snapshot?.result !== 'victory') return null;
+  const cycle = (safeTime(visualNowMs) % 1200) / 1200;
+  const pulse = reducedMotion ? 1 : 1 - Math.abs((cycle * 2) - 1);
+  return deepFreeze({
+    kind: 'victory-accent',
+    result: 'victory',
+    pulse: round(pulse),
+    opacity: round(reducedMotion ? 0.9 : 0.62 + (pulse * 0.28)),
+    sweep: round(reducedMotion ? 0.5 : cycle),
+    reducedMotion: Boolean(reducedMotion),
+    announcement: 'Victory secured.',
   });
 }
 

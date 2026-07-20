@@ -4,10 +4,13 @@ import test from 'node:test';
 
 import {
   BATTLE_SYSTEM_FEEDBACK_MS,
+  createBattleHealFeedback,
   createBattleMoveFeedback,
   createBattleTempoPresentation,
+  createBattleVictoryAccent,
   createRecoveryLockFeedback,
   createSelectedTargetFeedback,
+  sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
   sampleRecoveryLockFeedback,
 } from '../battle-system-feedback.mjs';
@@ -166,6 +169,120 @@ test('Tempo readiness refuses to invent a percentage without a matching commit',
   assert.equal(frame.readiness, 0);
 });
 
+test('heal feedback requires an explicit heal plus a corroborating exact HP increase', () => {
+  const beforeSnapshot = Object.freeze({
+    actors: Object.freeze([
+      Object.freeze({ instanceId: 'aya', name: 'Aya', hp: 80, pos: Object.freeze({ x: 2, y: 3 }) }),
+      Object.freeze({ instanceId: 'ren', name: 'Ren', hp: 31, pos: Object.freeze({ x: 3, y: 3 }) }),
+    ]),
+    log: Object.freeze([]),
+  });
+  const afterSnapshot = Object.freeze({
+    actors: Object.freeze([
+      Object.freeze({ instanceId: 'aya', name: 'Aya', hp: 80, pos: Object.freeze({ x: 2, y: 3 }) }),
+      Object.freeze({ instanceId: 'ren', name: 'Ren', hp: 49, pos: Object.freeze({ x: 3, y: 3 }) }),
+    ]),
+    log: Object.freeze([
+      Object.freeze({ type: 'heal', sourceActorId: 'aya', targetId: 'ren', amount: 18 }),
+    ]),
+  });
+  const record = createBattleHealFeedback({
+    resolution: { ok: true, type: 'heal', sourceActorId: 'aya', targetId: 'ren' },
+    beforeSnapshot,
+    afterSnapshot,
+    startedAt: 500,
+    speed: 2,
+  });
+  assert.equal(record.kind, 'heal');
+  assert.equal(record.amount, 18);
+  assert.deepEqual(record.sourceTile, { x: 2, y: 3 });
+  assert.deepEqual(record.targetTile, { x: 3, y: 3 });
+  assert.equal(record.targetHpBefore, 31);
+  assert.equal(record.targetHpAfter, 49);
+  assert.equal(record.durationMs, BATTLE_SYSTEM_FEEDBACK_MS.heal / 2);
+  assert.equal(record.announcement, 'Aya restores 18 HP to Ren at 3,3.');
+  assert.equal(Object.isFrozen(record), true);
+
+  const frame = sampleBattleHealFeedback(record, 680);
+  assert.equal(frame.progress, 0.5);
+  assert.equal(frame.routeProgress, 1);
+  assert.equal(sampleBattleHealFeedback(record, record.endsAt), null);
+  assert.deepEqual(
+    sampleBattleHealFeedback(record, 501, { reducedMotion: true }),
+    sampleBattleHealFeedback(record, 859, { reducedMotion: true }),
+  );
+});
+
+test('absorption and generic positive status never masquerade as heal feedback', () => {
+  const beforeSnapshot = {
+    actors: [
+      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
+      { instanceId: 'furnace', name: 'Furnace Abbot', hp: 100, pos: { x: 6, y: 2 } },
+    ],
+    log: [],
+  };
+  const afterSnapshot = {
+    actors: [
+      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
+      { instanceId: 'furnace', name: 'Furnace Abbot', hp: 118, pos: { x: 6, y: 2 } },
+    ],
+    log: [{ type: 'damage', attackerId: 'aya', targetId: 'furnace', absorbed: true, finalDamage: -18 }],
+  };
+  assert.equal(createBattleHealFeedback({
+    resolution: { ok: true, attackerId: 'aya', targetId: 'furnace', absorbed: true, finalDamage: -18 },
+    beforeSnapshot,
+    afterSnapshot,
+  }), null);
+  assert.equal(createBattleHealFeedback({
+    resolution: { ok: true, type: 'status-applied', sourceActorId: 'aya', targetId: 'furnace', statusId: 'ward' },
+    beforeSnapshot,
+    afterSnapshot,
+  }), null);
+});
+
+test('heal feedback cannot be inferred from a divergent snapshot log suffix', () => {
+  const beforeSnapshot = {
+    actors: [
+      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
+      { instanceId: 'ren', name: 'Ren', hp: 31, pos: { x: 3, y: 3 } },
+    ],
+    log: [{ type: 'unrelated-before', pulse: 1 }],
+  };
+  const afterSnapshot = {
+    actors: [
+      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
+      { instanceId: 'ren', name: 'Ren', hp: 49, pos: { x: 3, y: 3 } },
+    ],
+    log: [
+      { type: 'different-prefix', pulse: 1 },
+      { type: 'heal', sourceActorId: 'aya', targetId: 'ren', amount: 18 },
+    ],
+  };
+  assert.equal(createBattleHealFeedback({
+    resolution: { ok: true, type: 'status-applied', sourceActorId: 'aya', targetId: 'ren' },
+    beforeSnapshot,
+    afterSnapshot,
+  }), null);
+});
+
+test('victory accent follows only the actual terminal victory result and freezes for reduced motion', () => {
+  assert.equal(createBattleVictoryAccent({ result: null, bossMechanic: { resolution: { kind: 'nonlethal-surrender' } } }), null);
+  assert.equal(createBattleVictoryAccent({ result: 'defeat', log: [{ type: 'surrender' }] }), null);
+  const ordinary = createBattleVictoryAccent({ result: 'victory' }, { visualNowMs: 300 });
+  assert.equal(ordinary.kind, 'victory-accent');
+  assert.equal(ordinary.result, 'victory');
+  assert.equal(Object.isFrozen(ordinary), true);
+  const nonlethalVictory = createBattleVictoryAccent({
+    result: 'victory',
+    bossMechanic: { resolution: { kind: 'nonlethal-surrender' } },
+  });
+  assert.equal(nonlethalVictory.kind, 'victory-accent', 'a surrender only qualifies once current rules resolve it as player victory');
+  assert.deepEqual(
+    createBattleVictoryAccent({ result: 'victory' }, { visualNowMs: 1, reducedMotion: true }),
+    createBattleVictoryAccent({ result: 'victory' }, { visualNowMs: 1_199, reducedMotion: true }),
+  );
+});
+
 test('browser wires move feedback through manual and Auto-Grind without joining simulation timing', async () => {
   const source = await readFile(new URL('../battle.js', import.meta.url), 'utf8');
   assert.match(source, /createBattleMoveFeedback\(\{/);
@@ -176,6 +293,26 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
   assert.match(source, /createBattleTempoPresentation\(snapshot, \{/);
   assert.match(source, /function drawBattleTempoPresentation\(/);
   assert.match(source, /drawBattleTempoPresentation\(tempoPresentation, geometry\)/);
+  assert.match(source, /createBattleHealFeedback\(\{/);
+  assert.match(source, /sampleBattleHealFeedback\(activeBattleSystemFeedback, now, \{ reducedMotion: reducedMotion\.matches \}\)/);
+  const combatAnimationSource = source.slice(
+    source.indexOf('function startCombatAnimation('),
+    source.indexOf('function currentBattleAnimationFrame('),
+  );
+  assert.ok(
+    combatAnimationSource.indexOf('const startedAt = performance.now();')
+      > combatAnimationSource.indexOf('const timeline ='),
+    'animation timing begins only after timeline preparation',
+  );
+  assert.ok(
+    combatAnimationSource.indexOf('const healFeedback = createBattleHealFeedback({')
+      > combatAnimationSource.indexOf('const startedAt = performance.now();'),
+    'heal presentation shares the restored post-preparation animation timestamp',
+  );
+  assert.match(source, /function drawBattleVictoryAccent\(/);
+  assert.match(source, /drawBattleVictoryAccent\(victoryAccent, geometry\)/);
+  assert.doesNotMatch(source, /result\.finalDamage < 0[^\n]*combatHeal/,
+    'absorbed damage cannot trigger the heal cue');
   assert.match(source, /partyPanel\.addEventListener\('click'/);
   const partyAttemptWiring = source.slice(
     source.indexOf("partyPanel.addEventListener('click'"),
@@ -188,4 +325,6 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
   assert.match(source, /activeBattleSystemFeedback = null/);
   assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*activeBattleSystemFeedback/,
     'system feedback cannot delay commands, Recovery, intent, or Auto-Grind');
+  assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*victoryAccent/,
+    'victory accent cannot extend the terminal hold or settlement boundary');
 });

@@ -1,0 +1,780 @@
+{
+  "assetId": "status-vfx-suite",
+  "status": "production-resolver-ready",
+  "runtimeIntegration": "battle-runtime-apply-active-expire-with-generic-fallback",
+  "canonicalSource": "status-vfx-suite.source.json",
+  "builder": "build_status_vfx_suite.py",
+  "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",
+  "geometry": {
+    "columns": 3,
+    "rows": 6,
+    "cellWidth": 32,
+    "cellHeight": 32,
+    "minimumTransparentGutter": 3,
+    "coordinateOrigin": "top-left"
+  },
+  "stateOrder": [
+    "apply",
+    "active",
+    "expire"
+  ],
+  "statusOrder": [
+    "dread",
+    "chill",
+    "shock",
+    "scorch",
+    "bound",
+    "overheated"
+  ],
+  "signalContract": {
+    "apply": {
+      "events": [
+        "status-applied",
+        "status-refreshed"
+      ],
+      "animation": "status-glyph"
+    },
+    "active": {
+      "snapshot": "actor.statuses"
+    },
+    "expire": {
+      "events": [
+        "status-expired"
+      ]
+    },
+    "cleanse": null
+  },
+  "unsupportedSignals": [
+    "Campaign combat emits no status-cleanse event; no cleanse frame is authored."
+  ],
+  "sources": [
+    {
+      "path": "status-vfx-suite.source.json",
+      "format": "json",
+      "sha256": "978048513fbcee3d26b685f736a3da65e6c772146b499922c2e3a735d8c4d06d"
+    },
+    {
+      "path": "build_status_vfx_suite.py",
+      "format": "python",
+      "sha256": "15eed088c1ad501a73d0262779499230dd4718ee9c07f77367b389d3dc35f74d"
+    }
+  ],
+  "exports": [
+    {
+      "path": "status-vfx-atlas.png",
+      "role": "transparent-runtime-atlas",
+      "runtime": true,
+      "sha256": "b05c0376e5ed60ef53579cbbc9e56da090bb2c70c0cbb922fec54d4e1d4d0232",
+      "ihdr": {
+        "width": 96,
+        "height": 192,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      }
+    },
+    {
+      "path": "status-vfx-contact-sheet.png",
+      "role": "labeled-review-contact-sheet",
+      "runtime": false,
+      "sha256": "9c10395db8aebcb771e7968ea088e5717a8e8b607d2cfc5f9272208eb5fbf0e9",
+      "ihdr": {
+        "width": 424,
+        "height": 964,
+        "bitDepth": 8,
+        "colorType": 2,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      }
+    }
+  ],
+  "frames": [
+    {
+      "id": "dread:apply",
+      "statusId": "dread",
+      "statusName": "Dread",
+      "state": "apply",
+      "tag": "status-application-pulse",
+      "row": 0,
+      "column": 0,
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 5,
+        "width": 24,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 5,
+        "right": 4,
+        "bottom": 4
+      },
+      "opaquePixelCount": 277,
+      "rgbaSha256": "1aa15c3ca7954874fc60f061f2e0d3c9e5fb5e4ecac0d4e21a5a3152dfd43927",
+      "alphaSha256": "7accdecea7d4564b2cdebe74fa8c5694aa0fde9c7ab1c29026b988b13d1bce2f"
+    },
+    {
+      "id": "dread:active",
+      "statusId": "dread",
+      "statusName": "Dread",
+      "state": "active",
+      "tag": "persistent-status-marker",
+      "row": 0,
+      "column": 1,
+      "rect": {
+        "x": 32,
+        "y": 0,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 7,
+        "width": 15,
+        "height": 20
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 7,
+        "right": 8,
+        "bottom": 5
+      },
+      "opaquePixelCount": 197,
+      "rgbaSha256": "82b5401b963fa0768731b2b5c2178a86327d1e28235896208a23ae961f600dbd",
+      "alphaSha256": "55eeba15531cfb04f14506d6fd52aa12725409ffef817c263d0154767b2e73ba"
+    },
+    {
+      "id": "dread:expire",
+      "statusId": "dread",
+      "statusName": "Dread",
+      "state": "expire",
+      "tag": "status-expiry-release",
+      "row": 0,
+      "column": 2,
+      "rect": {
+        "x": 64,
+        "y": 0,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 6,
+        "width": 23,
+        "height": 22
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 6,
+        "right": 4,
+        "bottom": 4
+      },
+      "opaquePixelCount": 200,
+      "rgbaSha256": "0c543773d516cf2874d9581a0f5c5f30b120ec7747d9f956b7ead985e59cd975",
+      "alphaSha256": "f94a59dbf288a5459aa2dce2afb5ece1440c8e7e2ce4a3c0f119a7a2670c9604"
+    },
+    {
+      "id": "chill:apply",
+      "statusId": "chill",
+      "statusName": "Chill",
+      "state": "apply",
+      "tag": "status-application-pulse",
+      "row": 1,
+      "column": 0,
+      "rect": {
+        "x": 0,
+        "y": 32,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 4,
+        "width": 23,
+        "height": 25
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 4,
+        "right": 4,
+        "bottom": 3
+      },
+      "opaquePixelCount": 251,
+      "rgbaSha256": "955820d4dad1892889d2c5099c676288bac8292659a6d0a344a5b93634c80823",
+      "alphaSha256": "6fdc5163527730d64917469e6582a4292693d4776241c4482b97f3b778b4edcd"
+    },
+    {
+      "id": "chill:active",
+      "statusId": "chill",
+      "statusName": "Chill",
+      "state": "active",
+      "tag": "persistent-status-marker",
+      "row": 1,
+      "column": 1,
+      "rect": {
+        "x": 32,
+        "y": 32,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 6,
+        "width": 14,
+        "height": 22
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 6,
+        "right": 9,
+        "bottom": 4
+      },
+      "opaquePixelCount": 158,
+      "rgbaSha256": "4c170f5fc78909807c2807a5e8aae710b7ecd0590d084edf7f8af55431ef66e2",
+      "alphaSha256": "cb8abaceae1ad6dcebc018fa5a91bb12f7b8da43756c2d88a693e309d233db02"
+    },
+    {
+      "id": "chill:expire",
+      "statusId": "chill",
+      "statusName": "Chill",
+      "state": "expire",
+      "tag": "status-expiry-release",
+      "row": 1,
+      "column": 2,
+      "rect": {
+        "x": 64,
+        "y": 32,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 5,
+        "width": 23,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 5,
+        "right": 4,
+        "bottom": 4
+      },
+      "opaquePixelCount": 220,
+      "rgbaSha256": "e5d856656b2b7917e53f9529584a13a259c0ec0bc7d8883ec645737afcfb631a",
+      "alphaSha256": "109e46ec8cc80fb40838363638f1c2964bb7ada829113de5356e3cb1db5cef17"
+    },
+    {
+      "id": "shock:apply",
+      "statusId": "shock",
+      "statusName": "Shock",
+      "state": "apply",
+      "tag": "status-application-pulse",
+      "row": 2,
+      "column": 0,
+      "rect": {
+        "x": 0,
+        "y": 64,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 4,
+        "width": 24,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 175,
+      "rgbaSha256": "99df6a54b9a7d8d56ed62efdf37831039eb5c001c54a53132e940ce0faa1c882",
+      "alphaSha256": "ee54c46f5ee712dc5acb6aa47413c820d1d609053c51efddc82413a3b01b0e6c"
+    },
+    {
+      "id": "shock:active",
+      "statusId": "shock",
+      "statusName": "Shock",
+      "state": "active",
+      "tag": "persistent-status-marker",
+      "row": 2,
+      "column": 1,
+      "rect": {
+        "x": 32,
+        "y": 64,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 6,
+        "width": 17,
+        "height": 20
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 6,
+        "right": 7,
+        "bottom": 6
+      },
+      "opaquePixelCount": 124,
+      "rgbaSha256": "0095c378d147d4f65e4f0f87f77bda7506073c7abab83ee73bb06a4ffb01aea2",
+      "alphaSha256": "ecba962d751df312c5683ffc5025884cf4f855401192e47b733dcd1b99037efb"
+    },
+    {
+      "id": "shock:expire",
+      "statusId": "shock",
+      "statusName": "Shock",
+      "state": "expire",
+      "tag": "status-expiry-release",
+      "row": 2,
+      "column": 2,
+      "rect": {
+        "x": 64,
+        "y": 64,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 5,
+        "width": 24,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 5,
+        "right": 4,
+        "bottom": 4
+      },
+      "opaquePixelCount": 197,
+      "rgbaSha256": "fe26120c9db769712b95eb53c06d3c596e1b4600cdc74f0baf60cf9acfe2b606",
+      "alphaSha256": "2302c123afdd784038a97b401ff7a4e4524a7c950e324f9ff3095d70346971b5"
+    },
+    {
+      "id": "scorch:apply",
+      "statusId": "scorch",
+      "statusName": "Scorch",
+      "state": "apply",
+      "tag": "status-application-pulse",
+      "row": 3,
+      "column": 0,
+      "rect": {
+        "x": 0,
+        "y": 96,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 4,
+        "width": 23,
+        "height": 25
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 4,
+        "right": 4,
+        "bottom": 3
+      },
+      "opaquePixelCount": 284,
+      "rgbaSha256": "665946647f47bf6f5a8f9ec0d5eaa9acba03bb7fc9b6c5d74c26034333434535",
+      "alphaSha256": "3ab949ebbc0e34c0b057517c0b9f60c5f2a7067717b65324d6bcac52bb0a0fd6"
+    },
+    {
+      "id": "scorch:active",
+      "statusId": "scorch",
+      "statusName": "Scorch",
+      "state": "active",
+      "tag": "persistent-status-marker",
+      "row": 3,
+      "column": 1,
+      "rect": {
+        "x": 32,
+        "y": 96,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 7,
+        "width": 14,
+        "height": 21
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 7,
+        "right": 9,
+        "bottom": 4
+      },
+      "opaquePixelCount": 172,
+      "rgbaSha256": "45fc7567ec5a67d781418273b81ff6ea61a8ec135de8d07e910fd2421547a2df",
+      "alphaSha256": "ad7095da01991492f708395c771fd472c938736d01f3fc3e179ec67b76feb38e"
+    },
+    {
+      "id": "scorch:expire",
+      "statusId": "scorch",
+      "statusName": "Scorch",
+      "state": "expire",
+      "tag": "status-expiry-release",
+      "row": 3,
+      "column": 2,
+      "rect": {
+        "x": 64,
+        "y": 96,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 5,
+        "width": 24,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 5,
+        "right": 4,
+        "bottom": 4
+      },
+      "opaquePixelCount": 225,
+      "rgbaSha256": "3807ebd738fd614c0951069e4b395fd0aa154ffea26260101a2b655e1a06acd3",
+      "alphaSha256": "49df95f32dea8948c630de97237533cd267c992022a259028639a5505a9253e1"
+    },
+    {
+      "id": "bound:apply",
+      "statusId": "bound",
+      "statusName": "Bound",
+      "state": "apply",
+      "tag": "status-application-pulse",
+      "row": 4,
+      "column": 0,
+      "rect": {
+        "x": 0,
+        "y": 128,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 5,
+        "width": 25,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 5,
+        "right": 3,
+        "bottom": 4
+      },
+      "opaquePixelCount": 374,
+      "rgbaSha256": "6ee46778ffa14bf9947028cd6b499591a9c7f92a88d2854881bc30781e172307",
+      "alphaSha256": "964ccabe30a30b96e69102ae1134ce260e28ac74968e3d17613ced1278443918"
+    },
+    {
+      "id": "bound:active",
+      "statusId": "bound",
+      "statusName": "Bound",
+      "state": "active",
+      "tag": "persistent-status-marker",
+      "row": 4,
+      "column": 1,
+      "rect": {
+        "x": 32,
+        "y": 128,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 8,
+        "width": 19,
+        "height": 17
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 8,
+        "right": 6,
+        "bottom": 7
+      },
+      "opaquePixelCount": 302,
+      "rgbaSha256": "5c16c9ab8fbc699d0aae793014cc11781f4b603c754fb492671c8a2a97733e52",
+      "alphaSha256": "0c6ea032c0186b9feee90a25eda3533bc325b24a9d05ec83aa249307bebd8c89"
+    },
+    {
+      "id": "bound:expire",
+      "statusId": "bound",
+      "statusName": "Bound",
+      "state": "expire",
+      "tag": "status-expiry-release",
+      "row": 4,
+      "column": 2,
+      "rect": {
+        "x": 64,
+        "y": 128,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 6,
+        "width": 25,
+        "height": 22
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 6,
+        "right": 3,
+        "bottom": 4
+      },
+      "opaquePixelCount": 307,
+      "rgbaSha256": "3a8b8e1bde891a5d62820b740dca2a01faa2cca520b2cde78e2af20c3b5e82fb",
+      "alphaSha256": "c29b6da177ade4f074446ffe4c1672c528261c828a616530f3e8f86a308fd332"
+    },
+    {
+      "id": "overheated:apply",
+      "statusId": "overheated",
+      "statusName": "Overheated",
+      "state": "apply",
+      "tag": "status-application-pulse",
+      "row": 5,
+      "column": 0,
+      "rect": {
+        "x": 0,
+        "y": 160,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 4,
+        "width": 23,
+        "height": 23
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 4,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 327,
+      "rgbaSha256": "67959d9c74fe82051a164b72a4b776e247ea95856d3bf227d710c81769b16c87",
+      "alphaSha256": "39329718d9070fc9bbc69d3f069ef20167aa36f7edf00bcd44d4e19dd0178571"
+    },
+    {
+      "id": "overheated:active",
+      "statusId": "overheated",
+      "statusName": "Overheated",
+      "state": "active",
+      "tag": "persistent-status-marker",
+      "row": 5,
+      "column": 1,
+      "rect": {
+        "x": 32,
+        "y": 160,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 5,
+        "width": 15,
+        "height": 22
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 5,
+        "right": 8,
+        "bottom": 5
+      },
+      "opaquePixelCount": 282,
+      "rgbaSha256": "ed20698060d101b2811a56b73fcce747fa4d7367c3b9601aaaf7b87328f605ee",
+      "alphaSha256": "c179b9985e6850ba0ed848ce86910c0b92fabce439cfc5e6051f0bbf1afb1b5d"
+    },
+    {
+      "id": "overheated:expire",
+      "statusId": "overheated",
+      "statusName": "Overheated",
+      "state": "expire",
+      "tag": "status-expiry-release",
+      "row": 5,
+      "column": 2,
+      "rect": {
+        "x": 64,
+        "y": 160,
+        "width": 32,
+        "height": 32
+      },
+      "pivot": [
+        16,
+        16
+      ],
+      "actorAnchor": [
+        16,
+        24
+      ],
+      "alphaBounds": {
+        "x": 4,
+        "y": 5,
+        "width": 24,
+        "height": 22
+      },
+      "transparentGutter": {
+        "left": 4,
+        "top": 5,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 264,
+      "rgbaSha256": "103d8b92a55d210366d4f5bb01f21ae47009c282d0af0a2f2a8fb7e9c0c7d7f0",
+      "alphaSha256": "88fd8e3ee37e4b1388eb65824b9d59a28b5c7eaee07c868438303e53ba8e078a"
+    }
+  ]
+}

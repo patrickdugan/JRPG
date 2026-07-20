@@ -1,0 +1,111 @@
+{
+  "assetId": "status-vfx-suite",
+  "status": "editable-production-source",
+  "license": "Original project artwork; code-authored without external raster references.",
+  "geometry": {
+    "columns": 3,
+    "rows": 6,
+    "cellWidth": 32,
+    "cellHeight": 32,
+    "minimumTransparentGutter": 3,
+    "coordinateOrigin": "top-left"
+  },
+  "states": [
+    {
+      "id": "apply",
+      "column": 0,
+      "tag": "status-application-pulse",
+      "eventTypes": ["status-applied", "status-refreshed"],
+      "animationSignal": "status-glyph"
+    },
+    {
+      "id": "active",
+      "column": 1,
+      "tag": "persistent-status-marker",
+      "snapshotSignal": "actor.statuses"
+    },
+    {
+      "id": "expire",
+      "column": 2,
+      "tag": "status-expiry-release",
+      "eventTypes": ["status-expired"]
+    }
+  ],
+  "unsupportedSignals": [
+    "Campaign combat emits no status-cleanse event; no cleanse frame is authored."
+  ],
+  "statuses": [
+    {
+      "id": "dread",
+      "name": "Dread",
+      "row": 0,
+      "palette": { "shade": "#1B1428", "body": "#50315F", "bright": "#B784CE", "pale": "#D8B9E5" },
+      "motif": "An inward-notched pressure kite and offset warning chips; an invented anxiety-pressure shape, not an emblem.",
+      "anchors": {
+        "apply": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "active": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "expire": { "pivot": [16, 16], "actorAnchor": [16, 24] }
+      }
+    },
+    {
+      "id": "chill",
+      "name": "Chill",
+      "row": 1,
+      "palette": { "shade": "#10243A", "body": "#2F7194", "bright": "#83D2EC", "pale": "#D2F5FF" },
+      "motif": "Split stepped cold facets with unequal tips; an original thermal-fracture marker without a snowflake symbol.",
+      "anchors": {
+        "apply": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "active": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "expire": { "pivot": [16, 16], "actorAnchor": [16, 24] }
+      }
+    },
+    {
+      "id": "shock",
+      "name": "Shock",
+      "row": 2,
+      "palette": { "shade": "#302E16", "body": "#847E25", "bright": "#E5DF55", "pale": "#FFF6AA" },
+      "motif": "A broken conductive zig and square charge nodes with deliberately uneven spacing.",
+      "anchors": {
+        "apply": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "active": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "expire": { "pivot": [16, 16], "actorAnchor": [16, 24] }
+      }
+    },
+    {
+      "id": "scorch",
+      "name": "Scorch",
+      "row": 3,
+      "palette": { "shade": "#3B1711", "body": "#9C3E24", "bright": "#F2773F", "pale": "#FFC18A" },
+      "motif": "Three offset ember tiers around a hollow heat notch; no wound, gore, or devotional flame device.",
+      "anchors": {
+        "apply": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "active": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "expire": { "pivot": [16, 16], "actorAnchor": [16, 24] }
+      }
+    },
+    {
+      "id": "bound",
+      "name": "Bound",
+      "row": 4,
+      "palette": { "shade": "#271E17", "body": "#66513A", "bright": "#C3A577", "pale": "#EAD8AE" },
+      "motif": "Offset rectangular clamp bars and open corner stops; no chain, seal, crest, or sacred binding motif.",
+      "anchors": {
+        "apply": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "active": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "expire": { "pivot": [16, 16], "actorAnchor": [16, 24] }
+      }
+    },
+    {
+      "id": "overheated",
+      "name": "Overheated",
+      "row": 5,
+      "palette": { "shade": "#3B1612", "body": "#AA462D", "bright": "#FF9B54", "pale": "#FFD0A0" },
+      "motif": "A square vent core and two asymmetric rising heat steps, distinct from the Scorch ember tiers.",
+      "anchors": {
+        "apply": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "active": { "pivot": [16, 16], "actorAnchor": [16, 24] },
+        "expire": { "pivot": [16, 16], "actorAnchor": [16, 24] }
+      }
+    }
+  ]
+}

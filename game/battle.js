@@ -140,13 +140,26 @@ import {
   sampleBattleCommandPresentation,
 } from './battle-command-presentation.mjs';
 import {
+  createBattleHealFeedback,
   createBattleMoveFeedback,
   createBattleTempoPresentation,
+  createBattleVictoryAccent,
   createRecoveryLockFeedback,
   createSelectedTargetFeedback,
+  sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
   sampleRecoveryLockFeedback,
 } from './battle-system-feedback.mjs';
+import {
+  STATUS_VFX_ATLAS,
+  getPersistentStatusVfxMarkers,
+  resolveStatusGlyphVfx,
+  statusVfxImageHasExpectedSize,
+} from './status-vfx-atlas.mjs';
+import {
+  createStatusVfxExpiryPresentations,
+  sampleStatusVfxExpiryPresentations,
+} from './battle-status-vfx-presentation.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -221,6 +234,21 @@ battleVfxAtlasImage.addEventListener('error', () => {
 }, { once: true });
 canvas.dataset.vfxArtState = battleVfxAtlasState;
 battleVfxAtlasImage.src = BATTLE_VFX_ATLAS.url;
+const battleStatusVfxAtlasImage = new Image();
+let battleStatusVfxAtlasState = 'loading';
+battleStatusVfxAtlasImage.decoding = 'async';
+battleStatusVfxAtlasImage.addEventListener('load', () => {
+  battleStatusVfxAtlasState = statusVfxImageHasExpectedSize(battleStatusVfxAtlasImage) ? 'ready' : 'error';
+  canvas.dataset.statusVfxArtState = battleStatusVfxAtlasState;
+  if (engine) drawBattle(performance.now());
+}, { once: true });
+battleStatusVfxAtlasImage.addEventListener('error', () => {
+  battleStatusVfxAtlasState = 'error';
+  canvas.dataset.statusVfxArtState = battleStatusVfxAtlasState;
+  if (engine) drawBattle(performance.now());
+}, { once: true });
+canvas.dataset.statusVfxArtState = battleStatusVfxAtlasState;
+battleStatusVfxAtlasImage.src = STATUS_VFX_ATLAS.url;
 
 const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
@@ -291,6 +319,8 @@ const battleEnemyPoseUntil = new Map();
 let activeBattleAnimation = null;
 let activeCommandPresentation = null;
 let activeBattleSystemFeedback = null;
+let statusVfxProofSnapshot = null;
+let activeStatusExpiryVfx = Object.freeze([]);
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
 
@@ -433,14 +463,11 @@ function scheduleEnemyIntent(now = performance.now()) {
 
 function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapshot()) {
   if (!result?.ok || !attackerId || !result.targetId || !result.skillId) return null;
-  if (result.finalDamage < 0 || Object.is(result.finalDamage, -0)) pageAudio.playCue('combatHeal');
-  else if (result.guarded) pageAudio.playCue('combatGuard');
-  else if (result.deliveryMultiplier * result.essenceMultiplier > 1) pageAudio.playCue('combatCritical');
-  else if (Number.isFinite(result.finalDamage)) pageAudio.playCue('combatHit');
   const attacker = beforeSnapshot.actors.find((actor) => actor.instanceId === attackerId);
   const target = beforeSnapshot.actors.find((actor) => actor.instanceId === result.targetId);
   if (!attacker || !target) return null;
   const speed = autoGrindActive ? speedMultiplier : 1;
+  const afterSnapshot = engine.snapshot();
   const sourceTile = attacker.pos;
   const targetTile = target.pos;
   const skill = attacker.skills?.find((candidate) => candidate.id === result.skillId) ?? {
@@ -450,7 +477,6 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     effect: result.statusApplied ? { status: result.statusId } : undefined,
   };
   const selfStatusId = skill.effect?.selfStatus ?? null;
-  const afterSnapshot = engine.snapshot();
   const afterAttacker = afterSnapshot.actors.find((actor) => actor.instanceId === attackerId);
   const selfStatusApplied = Boolean(selfStatusId && afterAttacker?.statuses?.some((status) => status.id === selfStatusId));
   const animationOptions = {
@@ -466,6 +492,20 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     ? createPartySkillTimeline(result.skillId, animationOptions)
     : createEnemyFamilyTimeline(attacker.templateId, { ...animationOptions, skill });
   const startedAt = performance.now();
+  const healFeedback = createBattleHealFeedback({
+    resolution: result,
+    beforeSnapshot,
+    afterSnapshot,
+    startedAt,
+    speed,
+  });
+  if (healFeedback) {
+    activeBattleSystemFeedback = healFeedback;
+    announcements.textContent = healFeedback.announcement;
+    pageAudio.playCue('combatHeal');
+  } else if (result.guarded) pageAudio.playCue('combatGuard');
+  else if (result.deliveryMultiplier * result.essenceMultiplier > 1) pageAudio.playCue('combatCritical');
+  else if (Number.isFinite(result.finalDamage)) pageAudio.playCue('combatHit');
   const timelineEndsAt = startedAt + timeline.durationMs;
   const terminalPartyActors = getNewlyTerminalPartyCombatActors(beforeSnapshot.actors, afterSnapshot.actors);
   const terminalBossActors = getNewlyTerminalBossCombatActors(beforeSnapshot.actors, afterSnapshot.actors);
@@ -787,6 +827,108 @@ function battleCanvasPoint(tile, geometry) {
   return tileCenter(tile, geometry);
 }
 
+function drawStatusVfxAtlasFrame(frame, tile, geometry, {
+  opacity = 1,
+  scale = 1,
+  anchor = frame.pivot,
+  offsetX = 0,
+  offsetY = 0,
+} = {}) {
+  const at = battleCanvasPoint(tile, geometry);
+  const drawSize = geometry.cell * scale;
+  const anchorX = Number.isFinite(anchor?.x) ? anchor.x : frame.width / 2;
+  const anchorY = Number.isFinite(anchor?.y) ? anchor.y : frame.height / 2;
+  context.save();
+  context.imageSmoothingEnabled = false;
+  context.globalAlpha = opacity;
+  context.drawImage(
+    battleStatusVfxAtlasImage,
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height,
+    Math.round(at.x - (drawSize * anchorX / frame.width) + offsetX),
+    Math.round(at.y - (drawSize * anchorY / frame.height) + offsetY),
+    Math.round(drawSize),
+    Math.round(drawSize),
+  );
+  context.restore();
+}
+
+function drawGenericStatusGlyph(glyph, geometry) {
+  const at = battleCanvasPoint(glyph.tile, geometry);
+  context.globalAlpha = glyph.opacity;
+  context.fillStyle = glyph.color;
+  context.font = `${Math.max(12, Math.round(geometry.cell * 0.36 * glyph.scale))}px monospace`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(glyph.glyph, Math.round(at.x), Math.round(at.y));
+}
+
+function drawPersistentStatusVfx(snapshot, geometry) {
+  if (battleStatusVfxAtlasState !== 'ready'
+    || !statusVfxImageHasExpectedSize(battleStatusVfxAtlasImage)) return;
+  for (const marker of getPersistentStatusVfxMarkers(snapshot)) {
+    if (!marker.actorTile) continue;
+    const offsetX = marker.ordinal * Math.max(4, geometry.cell * 0.16);
+    drawStatusVfxAtlasFrame(marker.frame, marker.actorTile, geometry, {
+      opacity: 0.92,
+      scale: 0.66,
+      anchor: marker.frame.actorAnchor,
+      offsetX,
+      offsetY: -geometry.cell * 0.04,
+    });
+  }
+}
+
+function drawStatusExpiryVfx(frames, geometry) {
+  if (battleStatusVfxAtlasState !== 'ready'
+    || !statusVfxImageHasExpectedSize(battleStatusVfxAtlasImage)) return;
+  for (const frame of frames) {
+    drawStatusVfxAtlasFrame(frame.frame, frame.tile, geometry, {
+      opacity: frame.opacity,
+      scale: frame.scale,
+      anchor: frame.frame.actorAnchor,
+    });
+  }
+}
+
+function captureStatusVfxLifecycle(afterSnapshot, startedAt = performance.now()) {
+  const beforeSnapshot = statusVfxProofSnapshot ?? { actors: [], log: [] };
+  const speed = activeBattleAnimation?.timeline?.presentationSpeed
+    ?? activeCommandPresentation?.presentationSpeed
+    ?? (autoGrindActive ? speedMultiplier : 1);
+  const appended = createStatusVfxExpiryPresentations({
+    beforeSnapshot,
+    afterSnapshot,
+    startedAt,
+    speed,
+  });
+  const unexpired = activeStatusExpiryVfx.filter((record) => record.endsAt > startedAt);
+  activeStatusExpiryVfx = Object.freeze([...unexpired, ...appended]);
+  statusVfxProofSnapshot = afterSnapshot;
+}
+
+function drawBattleStatusApplicationVfx(frame, geometry) {
+  if (!frame) return;
+  context.save();
+  context.imageSmoothingEnabled = false;
+  for (const glyph of [frame.statusGlyph, frame.selfStatusGlyph].filter(Boolean)) {
+    const authored = battleStatusVfxAtlasState === 'ready'
+      && statusVfxImageHasExpectedSize(battleStatusVfxAtlasImage)
+      ? resolveStatusGlyphVfx(glyph)
+      : null;
+    if (authored) {
+      drawStatusVfxAtlasFrame(authored.frame, authored.tile, geometry, {
+        opacity: authored.opacity,
+        scale: authored.scale,
+        anchor: authored.frame.pivot,
+      });
+    } else drawGenericStatusGlyph(glyph, geometry);
+  }
+  context.restore();
+}
+
 function drawBattleAnimationFx(animation, geometry) {
   const frame = animation?.frame;
   if (!frame) return;
@@ -849,15 +991,7 @@ function drawBattleAnimationFx(animation, geometry) {
       }
     }
   }
-  for (const glyph of [frame.statusGlyph, frame.selfStatusGlyph].filter(Boolean)) {
-    const at = battleCanvasPoint(glyph.tile, geometry);
-    context.globalAlpha = glyph.opacity;
-    context.fillStyle = glyph.color;
-    context.font = `${Math.max(12, Math.round(geometry.cell * 0.36 * glyph.scale))}px monospace`;
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.fillText(glyph.glyph, Math.round(at.x), Math.round(at.y));
-  }
+  drawBattleStatusApplicationVfx(frame, geometry);
   context.restore();
 }
 
@@ -949,6 +1083,40 @@ function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
   }
 
   if (!moveFrame) return;
+  if (moveFrame.kind === 'heal') {
+    const source = battleCanvasPoint(moveFrame.sourceTile, geometry);
+    const target = battleCanvasPoint(moveFrame.targetTile, geometry);
+    const routeX = source.x + ((target.x - source.x) * moveFrame.routeProgress);
+    const routeY = source.y + ((target.y - source.y) * moveFrame.routeProgress);
+    const px = geometry.originX + moveFrame.targetTile.x * geometry.cell;
+    const py = geometry.originY + moveFrame.targetTile.y * geometry.cell;
+    const glyphSize = Math.max(5, geometry.cell * 0.13);
+    context.save();
+    context.globalAlpha = moveFrame.opacity;
+    context.strokeStyle = '#9df0c3';
+    context.fillStyle = 'rgba(94, 207, 147, 0.23)';
+    context.lineWidth = Math.max(2, geometry.cell * 0.05);
+    if (moveFrame.sourceId !== moveFrame.targetId) {
+      context.setLineDash([Math.max(3, geometry.cell * 0.1), Math.max(2, geometry.cell * 0.07)]);
+      context.beginPath();
+      context.moveTo(source.x, source.y);
+      context.lineTo(routeX, routeY);
+      context.stroke();
+      context.setLineDash([]);
+    }
+    context.fillRect(px + 4, py + 4, geometry.cell - 8, geometry.cell - 8);
+    context.strokeRect(px + 5, py + 5, geometry.cell - 10, geometry.cell - 10);
+    context.translate(target.x, target.y - geometry.cell * 0.06);
+    context.fillStyle = '#d8ffe9';
+    context.fillRect(-glyphSize * 0.28, -glyphSize, glyphSize * 0.56, glyphSize * 2);
+    context.fillRect(-glyphSize, -glyphSize * 0.28, glyphSize * 2, glyphSize * 0.56);
+    context.font = `bold ${Math.max(9, Math.round(geometry.cell * 0.18))}px monospace`;
+    context.textAlign = 'center';
+    context.textBaseline = 'top';
+    context.fillText(`+${moveFrame.amount}`, 0, glyphSize * 1.08);
+    context.restore();
+    return;
+  }
   if (moveFrame.kind === 'recovery-lock') {
     const center = battleCanvasPoint(moveFrame.tile, geometry);
     const px = geometry.originX + moveFrame.tile.x * geometry.cell;
@@ -1047,6 +1215,36 @@ function drawBattleTempoPresentation(frames, geometry) {
   }
 }
 
+function drawBattleVictoryAccent(frame, geometry) {
+  if (!frame) return;
+  const inset = Math.max(3, geometry.cell * 0.08);
+  const left = geometry.originX + inset;
+  const top = geometry.originY + inset;
+  const width = geometry.boardWidth - inset * 2;
+  const height = geometry.boardHeight - inset * 2;
+  const corner = Math.max(12, geometry.cell * (0.36 + frame.pulse * 0.06));
+  context.save();
+  context.globalAlpha = frame.opacity;
+  context.strokeStyle = '#f5d77e';
+  context.fillStyle = '#fff1b7';
+  context.lineWidth = Math.max(2, geometry.cell * 0.045);
+  context.strokeRect(left, top, width, height);
+  context.globalAlpha *= 0.62;
+  context.strokeRect(left + inset, top + inset, width - inset * 2, height - inset * 2);
+  context.globalAlpha = frame.opacity;
+  context.beginPath();
+  context.moveTo(left, top + corner); context.lineTo(left, top); context.lineTo(left + corner, top);
+  context.moveTo(left + width - corner, top); context.lineTo(left + width, top); context.lineTo(left + width, top + corner);
+  context.moveTo(left, top + height - corner); context.lineTo(left, top + height); context.lineTo(left + corner, top + height);
+  context.moveTo(left + width - corner, top + height); context.lineTo(left + width, top + height); context.lineTo(left + width, top + height - corner);
+  context.stroke();
+  const sweepX = left + (width * frame.sweep);
+  context.globalAlpha = frame.reducedMotion ? 0.72 : 0.46;
+  context.fillRect(sweepX - 1, top, 2, Math.max(3, geometry.cell * 0.1));
+  context.fillRect(sweepX - 1, top + height - Math.max(3, geometry.cell * 0.1), 2, Math.max(3, geometry.cell * 0.1));
+  context.restore();
+}
+
 function drawBossIntent(snapshot, geometry) {
   const intent = snapshot.bossMechanic?.pendingIntent;
   if (!intent) return;
@@ -1079,12 +1277,25 @@ function drawBattle(now = performance.now()) {
   const visualNow = reducedMotion.matches ? 0 : now;
   const sampledAnimation = currentBattleAnimationFrame(now);
   const animation = reducedMotion.matches && !sampledAnimation?.terminalDefeatWindow ? null : sampledAnimation;
+  const reducedStatusApplicationFrame = reducedMotion.matches && sampledAnimation
+    && !sampledAnimation.terminalDefeatWindow
+    ? activeBattleAnimation?.timeline.frames.find((frame) => frame.statusGlyph || frame.selfStatusGlyph) ?? null
+    : null;
   const commandPresentation = sampleBattleCommandPresentation(activeCommandPresentation, now, { reducedMotion: reducedMotion.matches });
-  const moveFeedback = activeBattleSystemFeedback?.kind === 'recovery-lock'
-    ? sampleRecoveryLockFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
-    : sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
+  const moveFeedback = activeBattleSystemFeedback?.kind === 'heal'
+    ? sampleBattleHealFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
+    : activeBattleSystemFeedback?.kind === 'recovery-lock'
+      ? sampleRecoveryLockFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
+      : sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
   const tempoPresentation = createBattleTempoPresentation(snapshot, {
     visualNowMs: now,
+    reducedMotion: reducedMotion.matches,
+  });
+  const victoryAccent = createBattleVictoryAccent(snapshot, {
+    visualNowMs: now,
+    reducedMotion: reducedMotion.matches,
+  });
+  const statusExpiryFrames = sampleStatusVfxExpiryPresentations(activeStatusExpiryVfx, now, {
     reducedMotion: reducedMotion.matches,
   });
   const selectedTargetFeedback = selectedBattleTargetFeedback(snapshot, now);
@@ -1333,10 +1544,14 @@ function drawBattle(now = performance.now()) {
       context.fillRect(centerX - cell * 0.12, centerY - cell * 0.12, cell * 0.24, cell * 0.17);
     }
   }
+  drawPersistentStatusVfx(snapshot, geometry);
   drawBattleTempoPresentation(tempoPresentation, geometry);
   drawBattleAnimationFx(animation, geometry);
+  if (reducedStatusApplicationFrame) drawBattleStatusApplicationVfx(reducedStatusApplicationFrame, geometry);
+  drawStatusExpiryVfx(statusExpiryFrames, geometry);
   drawBattleCommandPresentationFx(commandPresentation, geometry);
   drawBattleSystemFeedback(moveFeedback, selectedTargetFeedback, geometry);
+  drawBattleVictoryAccent(victoryAccent, geometry);
 }
 
 function createCombatantCard(actor, selected = false, targetable = true, partyCommandAttempt = false) {
@@ -1609,6 +1824,7 @@ function formatEngineLog(entry, actors) {
   if (entry.type === 'analyze') return `${name(entry.actorId)} analyzes ${name(entry.targetId)}.`;
   if (entry.type === 'spirit-change' && entry.delta !== 0) return `${name(entry.actorId)} Spirit ${entry.delta > 0 ? '+' : ''}${entry.delta} (${entry.after}/${entry.maxSpirit}).`;
   if (entry.type === 'status-applied' || entry.type === 'status-refreshed') return `${name(entry.targetId)}: ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} ${entry.type === 'status-refreshed' ? 'refreshed' : 'applied'} for ${entry.durationActivations} activation${entry.durationActivations === 1 ? '' : 's'}.`;
+  if (entry.type === 'status-expired') return `${name(entry.actorId)}: ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} expired.`;
   if (entry.type === 'status-effect') return `${name(entry.actorId)}: ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} changes ${entry.effect} by ${entry.delta}.`;
   if (entry.type === 'status-damage') return `${name(entry.targetId)} takes ${entry.finalDamage} ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} damage.`;
   if (entry.type === 'objective') {
@@ -1879,6 +2095,7 @@ function renderSpeedControls() {
 
 function render() {
   const snapshot = engine.snapshot();
+  captureStatusVfxLifecycle(snapshot);
   const targets = livingEnemies(snapshot);
   if (!targets.some((target) => target.instanceId === selectedTargetId)) {
     selectedTargetId = targets[0]?.instanceId ?? null;
@@ -2084,6 +2301,7 @@ function toggleAutoGrind() {
   activeBattleAnimation = null;
   activeCommandPresentation = null;
   activeBattleSystemFeedback = null;
+  activeStatusExpiryVfx = Object.freeze([]);
   clearEnemyIntentSchedule();
   autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind started for ${repeatGrindQueue.plannedWins} win${repeatGrindQueue.plannedWins === 1 ? '' : 's'} at ${speedMultiplier}×. Every reward saves before the next repeat.`);
@@ -2106,6 +2324,8 @@ function restartQueuedAutoGrind(now) {
   activeBattleAnimation = null;
   activeCommandPresentation = null;
   activeBattleSystemFeedback = null;
+  statusVfxProofSnapshot = null;
+  activeStatusExpiryVfx = Object.freeze([]);
   autoGrindActive = true;
   autoActionAt = now + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind starting win ${repeatGrindQueue.completedWins + 1}/${repeatGrindQueue.plannedWins} at ${speedMultiplier}×.`);
@@ -2267,6 +2487,8 @@ restartBattle.addEventListener('click', () => {
   activeBattleAnimation = null;
   activeCommandPresentation = null;
   activeBattleSystemFeedback = null;
+  statusVfxProofSnapshot = null;
+  activeStatusExpiryVfx = Object.freeze([]);
   uiMessages = [`Restarted ${encounter.name}. First-clear rewards remain saved; victories can be replayed for grind XP.`];
   render();
 });
