@@ -135,6 +135,7 @@ export function getBossCombatPresentationPose({
   if (phase === 'windup' || actorPose === 'windup') return 'telegraph';
   // `transition` remains reserved until the simulation publishes an explicit,
   // reliable boss phase-boundary signal. A generic status glyph is not one.
+  if (phase === 'recovery') return 'neutral';
   if (actorPose === 'attack') return 'active';
   return 'neutral';
 }
@@ -149,6 +150,78 @@ export function getNewlyTerminalBossCombatActors(beforeActors = [], afterActors 
     const isTerminal = actor.hp <= 0 || actor.active === false;
     return wasPresent && isTerminal;
   }));
+}
+
+const BOSS_TERMINAL_PRESENTATION_SPEEDS = Object.freeze([1, 2, 4]);
+const EMPTY_TERMINAL_ACTORS = Object.freeze([]);
+const BOSS_TERMINAL_ONLY_TIMELINE = Object.freeze({
+  durationMs: 0,
+  frames: Object.freeze([]),
+});
+
+function terminalPresentationClock(value) {
+  return Number.isFinite(value) && value >= 0 ? value : 0;
+}
+
+function terminalPresentationSpeed(value) {
+  const numeric = Number(value);
+  return BOSS_TERMINAL_PRESENTATION_SPEEDS.includes(numeric) ? numeric : 1;
+}
+
+/**
+ * Add newly terminal bosses to an existing skill presentation, or create the
+ * inert zero-duration record needed by an objective-only surrender/deactivation.
+ */
+export function mergeBossTerminalPresentationRecord(
+  presentationRecord = null,
+  beforeActors = [],
+  afterActors = [],
+  { startedAt = 0, speed = 1 } = {},
+) {
+  const newlyTerminal = getNewlyTerminalBossCombatActors(beforeActors, afterActors);
+  if (!newlyTerminal.length) return presentationRecord;
+
+  const existingTerminal = presentationRecord?.terminalBossActors ?? [];
+  const terminalById = new Map(existingTerminal.map((actor) => [actor.instanceId, actor]));
+  for (const actor of newlyTerminal) terminalById.set(actor.instanceId, actor);
+  const terminalBossActors = Object.freeze([...terminalById.values()]);
+  const recordStart = presentationRecord
+    ? terminalPresentationClock(presentationRecord.startedAt)
+    : terminalPresentationClock(startedAt);
+  const timelineEndsAt = presentationRecord
+    ? terminalPresentationClock(presentationRecord.timelineEndsAt)
+    : recordStart;
+  const holdEndsAt = timelineEndsAt + (BOSS_DEFEAT_HOLD_MS / terminalPresentationSpeed(speed));
+
+  if (presentationRecord) {
+    return Object.freeze({
+      ...presentationRecord,
+      terminalBossActors,
+      endsAt: Math.max(terminalPresentationClock(presentationRecord.endsAt), holdEndsAt),
+    });
+  }
+
+  return Object.freeze({
+    attackerId: null,
+    targetId: null,
+    retainedActors: Object.freeze([]),
+    terminalPartyActors: EMPTY_TERMINAL_ACTORS,
+    terminalEnemyActors: EMPTY_TERMINAL_ACTORS,
+    terminalBossActors,
+    timeline: BOSS_TERMINAL_ONLY_TIMELINE,
+    startedAt: recordStart,
+    timelineEndsAt,
+    endsAt: holdEndsAt,
+  });
+}
+
+/** Create a bounded terminal hold without requiring a skill resolution. */
+export function createBossTerminalPresentationRecord(
+  beforeActors = [],
+  afterActors = [],
+  options = {},
+) {
+  return mergeBossTerminalPresentationRecord(null, beforeActors, afterActors, options);
 }
 
 /** Replace a pre-action ghost with its post-resolution boss during the hold. */

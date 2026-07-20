@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { STATUS_GLYPH_PRESENTATION } from '../battle-animation.mjs';
+import { COMBAT_STATUS_DEFINITIONS } from '../campaign-combat.mjs';
 import { CAMPAIGN, getAllChapters, getChapter } from '../content/campaign.mjs';
 import { LEVELS, getLevel, getLevelForChapter } from '../content/levels.mjs';
 import { ENCOUNTERS, getEncounterForChapter } from '../content/encounters.mjs';
@@ -66,4 +68,31 @@ test('every runtime encounter is bound to exactly one canonical story beat', () 
     assert.ok(binding, `${encounter.id} needs a story-beat binding`);
     assert.equal(binding.chapterId, encounter.chapterId, `${encounter.id} must be bound inside ${encounter.chapterId}`);
   }
+});
+
+test('every authored combat status resolves to engine mechanics and presentation vocabulary', () => {
+  const authored = new Map();
+  for (const encounter of ENCOUNTERS) {
+    for (const enemy of encounter.enemies) {
+      for (const skill of enemy.skills ?? []) {
+        for (const field of ['status', 'selfStatus']) {
+          const statusId = skill.effect?.[field];
+          if (statusId) authored.set(statusId, `${encounter.id}/${enemy.id}/${skill.id}/${field}`);
+        }
+      }
+    }
+  }
+  assert.ok(authored.size > 0);
+  for (const [statusId, source] of authored) {
+    assert.ok(COMBAT_STATUS_DEFINITIONS[statusId], `${source} references undefined status ${statusId}`);
+    assert.ok(STATUS_GLYPH_PRESENTATION[statusId], `${source} has no presentation glyph for ${statusId}`);
+  }
+
+  const kurozane = ENCOUNTERS.find(({ id }) => id === 'c9-kurozane')
+    .enemies.find(({ id }) => id === 'kurozane');
+  const window = kurozane.skills.find(({ id }) => id === 'black-chrysanthemum');
+  assert.equal(window.effect.selfStatus, 'final-ward-open');
+  assert.equal(window.recoveryPulses, 3);
+  assert.equal(kurozane.resistances.essence.radiance, 1.25);
+  assert.equal(COMBAT_STATUS_DEFINITIONS['final-ward-open'].kind, 'tactical-marker');
 });

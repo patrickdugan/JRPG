@@ -16,6 +16,7 @@ export const PARTY_COMBAT_POSES = Object.freeze([
   'basic-strike-active',
   'signature-a',
   'signature-b',
+  'recovery',
   'defeat',
 ]);
 
@@ -23,9 +24,9 @@ export const PARTY_DEFEAT_HOLD_MS = 420;
 
 export const PARTY_COMBAT_ATLAS = Object.freeze({
   url: './assets/art/party-combat-suite/party-combat-actions.png',
-  width: 432,
+  width: 480,
   height: 384,
-  columns: 9,
+  columns: 10,
   rows: 6,
   cellWidth: 48,
   cellHeight: 64,
@@ -77,7 +78,7 @@ export function getPartyCombatPresentationPose({
   if (targetPose === 'stagger') return 'hit';
   if (phase === 'windup' || actorPose === 'windup') return 'basic-strike-windup';
   if (phase === 'movement' || moving) return 'move';
-  if (phase === 'recovery') return 'idle';
+  if (phase === 'recovery') return 'recovery';
   if (actorPose === 'attack') {
     return PARTY_COMBAT_SKILL_POSES[actionId] ?? 'basic-strike-active';
   }

@@ -14,10 +14,13 @@ import {
   rescaleEnemyIntentSchedule,
 } from '../battle-animation.mjs';
 import {
+  BOSS_DEFEAT_HOLD_MS,
+  createBossTerminalPresentationRecord,
   getBossCombatPresentationPose,
   getNewlyTerminalBossCombatActors,
   mergeBossTerminalPresentationActors,
 } from '../boss-combat-atlas.mjs';
+import { CAMPAIGN_COMBAT_PHASES, createCampaignCombat } from '../campaign-combat.mjs';
 import {
   getNewlyTerminalPartyCombatActors,
   getPartyCombatPresentationPose,
@@ -197,6 +200,70 @@ test('nonlethal boss deactivation is appended for defeat presentation even when 
   assert.equal(getBossCombatPresentationPose({ hp: presentedBoss.hp, active: presentedBoss.active }), 'defeat');
 });
 
+test('Mateus objective-only ward resolution creates a bounded terminal-only defeat hold', () => {
+  const engine = createCampaignCombat('fp1-mateus');
+  for (const wardId of ['blood-ward-west-1', 'blood-ward-east-1']) {
+    const ward = engine.getActor(wardId);
+    ward.active = true;
+    ward.hp = ward.maxHp;
+  }
+
+  const advanceToPlayer = () => {
+    let snapshot = engine.snapshot();
+    while (!snapshot.result && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
+      const result = engine.resolveEnemyActivation();
+      assert.equal(result.ok, true);
+      snapshot = engine.snapshot();
+    }
+    return snapshot;
+  };
+
+  let snapshot = advanceToPlayer();
+  const firstBreak = engine.performObjectiveAction(snapshot.activeActorId, {
+    type: 'breakObject',
+    targetId: 'blood-ward-west',
+  });
+  assert.equal(firstBreak.ok, true);
+
+  snapshot = advanceToPlayer();
+  const before = snapshot;
+  const secondBreak = engine.performObjectiveAction(before.activeActorId, {
+    type: 'breakObject',
+    targetId: 'blood-ward-east',
+  });
+  const after = engine.snapshot();
+  assert.equal(secondBreak.ok, true);
+  assert.equal(secondBreak.complete, true);
+  assert.equal(Object.hasOwn(secondBreak, 'targetId'), false, 'objective result is not a skill resolution');
+  assert.equal(Object.hasOwn(secondBreak, 'skillId'), false, 'objective result is not a skill resolution');
+  assert.equal(after.result, 'victory');
+
+  const beforeMateus = before.actors.find(({ instanceId }) => instanceId === 'mateus-1');
+  const afterMateus = after.actors.find(({ instanceId }) => instanceId === 'mateus-1');
+  assert.equal(beforeMateus.active, true);
+  assert.equal(afterMateus.active, false);
+  assert.equal(afterMateus.hp > 0, true, 'surrender remains explicitly nonlethal');
+
+  const record = createBossTerminalPresentationRecord(before.actors, after.actors, {
+    startedAt: 5_000,
+    speed: 1,
+  });
+  assert.equal(record.timeline.durationMs, 0);
+  assert.deepEqual(record.timeline.frames, []);
+  assert.equal(record.attackerId, null);
+  assert.equal(record.targetId, null);
+  assert.deepEqual(record.terminalPartyActors, []);
+  assert.deepEqual(record.terminalEnemyActors, []);
+  assert.equal(record.endsAt - record.timelineEndsAt, BOSS_DEFEAT_HOLD_MS);
+  assert.deepEqual(record.terminalBossActors.map(({ instanceId }) => instanceId), ['mateus-1']);
+
+  const visible = getBattlePresentationActors(after.actors, record.retainedActors);
+  const held = mergeBossTerminalPresentationActors(visible, record.terminalBossActors, true);
+  const presentedMateus = held.find(({ instanceId }) => instanceId === 'mateus-1');
+  assert.equal(presentedMateus, afterMateus);
+  assert.equal(getBossCombatPresentationPose(presentedMateus), 'defeat');
+});
+
 test('target status glyph requires actual application and self-status is anchored to source', () => {
   const skill = {
     id: 'forge-sermon',
@@ -290,6 +357,8 @@ test('browser controller wires locks, ghosts, fresh intent scheduling, and compl
   assert.match(source, /endsAt: timelineEndsAt \+ defeatHoldMs/);
   assert.match(source, /now >= activeBattleAnimation\.timelineEndsAt/);
   assert.match(source, /mergeBossTerminalPresentationActors\(/);
+  assert.equal((source.match(/mergeBossTerminalPresentationRecord\(/g) ?? []).length, 2,
+    'manual and Auto-Grind mutations both merge objective-only boss terminal records');
   assert.match(source, /mergePartyTerminalPresentationActors\(/);
   assert.match(source, /mergeEnemyTerminalPresentationActors\(/);
   assert.match(source, /getBossCombatDrawPlacement\(frame, \{/);

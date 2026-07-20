@@ -3,12 +3,14 @@ import test from 'node:test';
 
 import {
   CAMPAIGN_COMBAT_SNAPSHOT_VERSION,
+  CAMPAIGN_COMBAT_PHASES,
   COMBAT_STATUS_DEFINITIONS,
   CampaignCombatEngine,
   PARTY_PROFILES,
   PARTY_SKILLS,
   SPIRIT_RULES,
 } from '../campaign-combat.mjs';
+import { getEncounter } from '../content/encounters.mjs';
 
 function testLevel() {
   return {
@@ -266,6 +268,84 @@ test('Scorch and status-bearing hits preserve exact auditable damage and status 
     hpBefore: 114,
     targetHp: 109,
     pulse: 1,
+  });
+});
+
+test('Final Ward Open is a one-activation marker with no invented damage or stat modifier', () => {
+  const canonicalEncounter = getEncounter('c9-kurozane');
+  const canonicalKurozane = canonicalEncounter.enemies.find(({ id }) => id === 'kurozane');
+  const blackChrysanthemum = canonicalKurozane.skills.find(({ id }) => id === 'black-chrysanthemum');
+  const yearlessThrust = canonicalKurozane.skills.find(({ id }) => id === 'yearless-thrust');
+  const fixture = statusEncounter(null, {
+    id: 'final-ward-open-lifecycle',
+    enemies: [{
+      id: 'kurozane',
+      name: canonicalKurozane.name,
+      count: 1,
+      positions: ['2,3'],
+      ledger: canonicalKurozane.ledger,
+      stats: { ...canonicalKurozane.stats, speed: 10 },
+      resistances: canonicalKurozane.resistances,
+      skills: [blackChrysanthemum],
+    }],
+  });
+  const engine = new CampaignCombatEngine({ encounter: fixture, level: testLevel() });
+  const definition = COMBAT_STATUS_DEFINITIONS['final-ward-open'];
+  assert.deepEqual(definition, {
+    id: 'final-ward-open',
+    name: 'Final Ward Open',
+    kind: 'tactical-marker',
+  });
+
+  assert.equal(engine.guard('ren').ok, true);
+  assert.equal(engine.phase, CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND);
+  const appliedAttack = engine.resolveEnemyActivation();
+  assert.equal(appliedAttack.ok, true);
+  assert.equal(appliedAttack.resolution.skillId, 'black-chrysanthemum');
+  const kurozane = engine.getActor('kurozane-1');
+  assert.deepEqual(kurozane.statuses, [{
+    id: 'final-ward-open',
+    sourceActorId: 'kurozane-1',
+    sourceSkillId: 'black-chrysanthemum',
+    appliedAtPulse: 0,
+    durationActivations: 1,
+    remainingActivations: 1,
+    activeThisActivation: false,
+  }]);
+  assert.deepEqual(engine.log.find((entry) => entry.type === 'status-applied' && entry.statusId === 'final-ward-open'), {
+    type: 'status-applied',
+    statusId: 'final-ward-open',
+    targetId: 'kurozane-1',
+    sourceActorId: 'kurozane-1',
+    sourceSkillId: 'black-chrysanthemum',
+    durationActivations: 1,
+    pulse: 0,
+  });
+  assert.equal(engine.log.some((entry) => entry.type === 'status-effect' && entry.statusId === 'final-ward-open'), false);
+  assert.equal(engine.log.some((entry) => entry.type === 'status-damage' && entry.statusId === 'final-ward-open'), false);
+
+  kurozane.skills = [yearlessThrust];
+  while (engine.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND) {
+    assert.equal(engine.guard(engine.activeActorId).ok, true);
+  }
+  assert.deepEqual(engine.log.find((entry) => entry.type === 'status-triggered' && entry.statusId === 'final-ward-open'), {
+    type: 'status-triggered',
+    statusId: 'final-ward-open',
+    actorId: 'kurozane-1',
+    sourceActorId: 'kurozane-1',
+    sourceSkillId: 'black-chrysanthemum',
+    remainingActivations: 1,
+    pulse: 3,
+  });
+  assert.equal(engine.resolveEnemyActivation().ok, true);
+  assert.deepEqual(kurozane.statuses, []);
+  assert.deepEqual(engine.log.find((entry) => entry.type === 'status-expired' && entry.statusId === 'final-ward-open'), {
+    type: 'status-expired',
+    statusId: 'final-ward-open',
+    actorId: 'kurozane-1',
+    sourceActorId: 'kurozane-1',
+    sourceSkillId: 'black-chrysanthemum',
+    pulse: 3,
   });
 });
 

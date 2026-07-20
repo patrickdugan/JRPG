@@ -10,10 +10,12 @@ import {
   BOSS_COMBAT_POSES,
   BOSS_DEFEAT_HOLD_MS,
   bossCombatImageHasExpectedSize,
+  createBossTerminalPresentationRecord,
   getBossCombatDrawPlacement,
   getBossCombatFrame,
   getBossCombatPresentationPose,
   hasBossCombatTemplate,
+  mergeBossTerminalPresentationRecord,
 } from '../boss-combat-atlas.mjs';
 
 test('boss combat atlas maps every canonical primary boss to all six exact key poses', () => {
@@ -48,10 +50,78 @@ test('boss presentation states reserve transitions until an explicit live signal
   assert.equal(getBossCombatPresentationPose({ phase: 'windup' }), 'telegraph');
   assert.equal(getBossCombatPresentationPose({ phase: 'status-glyph', actorPose: 'attack' }), 'active');
   assert.equal(getBossCombatPresentationPose({ phase: 'status-glyph' }), 'neutral');
+  assert.equal(getBossCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'neutral');
   assert.equal(getBossCombatPresentationPose({ actorPose: 'attack' }), 'active');
   assert.equal(getBossCombatPresentationPose({}), 'neutral');
   assert.ok(BOSS_COMBAT_POSES.includes('transition'), 'the authored frame stays reserved in the atlas contract');
   assert.ok(BOSS_DEFEAT_HOLD_MS > 0 && BOSS_DEFEAT_HOLD_MS <= 500, 'terminal presentation is deliberately bounded');
+});
+
+test('pure terminal record composition supports objective-only holds and preserves skill timelines', () => {
+  const party = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 40, active: true };
+  const livingBoss = { instanceId: 'mateus-1', templateId: 'mateus', faction: 'enemy', hp: 152, active: true };
+  const surrenderedBoss = { ...livingBoss, active: false };
+  const beforeActors = [party, livingBoss];
+  const afterActors = [party, surrenderedBoss];
+
+  const objectiveRecord = createBossTerminalPresentationRecord(beforeActors, afterActors, {
+    startedAt: 1_000,
+    speed: 2,
+  });
+  assert.deepEqual({
+    attackerId: objectiveRecord.attackerId,
+    targetId: objectiveRecord.targetId,
+    retainedActors: objectiveRecord.retainedActors,
+    timelineDurationMs: objectiveRecord.timeline.durationMs,
+    timelineFrames: objectiveRecord.timeline.frames,
+    startedAt: objectiveRecord.startedAt,
+    timelineEndsAt: objectiveRecord.timelineEndsAt,
+    endsAt: objectiveRecord.endsAt,
+  }, {
+    attackerId: null,
+    targetId: null,
+    retainedActors: [],
+    timelineDurationMs: 0,
+    timelineFrames: [],
+    startedAt: 1_000,
+    timelineEndsAt: 1_000,
+    endsAt: 1_000 + (BOSS_DEFEAT_HOLD_MS / 2),
+  });
+  assert.deepEqual(objectiveRecord.terminalBossActors, [surrenderedBoss]);
+  assert.equal(Object.isFrozen(objectiveRecord), true);
+  assert.equal(Object.isFrozen(objectiveRecord.retainedActors), true);
+  assert.equal(Object.isFrozen(objectiveRecord.terminalPartyActors), true);
+  assert.equal(Object.isFrozen(objectiveRecord.terminalEnemyActors), true);
+  assert.equal(Object.isFrozen(objectiveRecord.terminalBossActors), true);
+  assert.equal(createBossTerminalPresentationRecord(beforeActors, beforeActors), null);
+
+  const timeline = Object.freeze({ actionId: 'courier-cut' });
+  const retainedActors = Object.freeze([party, livingBoss]);
+  const skillRecord = Object.freeze({
+    attackerId: party.instanceId,
+    targetId: livingBoss.instanceId,
+    retainedActors,
+    terminalBossActors: Object.freeze([]),
+    timeline,
+    startedAt: 2_000,
+    timelineEndsAt: 3_000,
+    endsAt: 3_000,
+  });
+  const merged = mergeBossTerminalPresentationRecord(
+    skillRecord,
+    beforeActors,
+    afterActors,
+    { startedAt: 9_999, speed: 2 },
+  );
+  assert.equal(merged.timeline, timeline);
+  assert.equal(merged.retainedActors, retainedActors);
+  assert.equal(merged.attackerId, skillRecord.attackerId);
+  assert.equal(merged.targetId, skillRecord.targetId);
+  assert.equal(merged.startedAt, skillRecord.startedAt);
+  assert.equal(merged.timelineEndsAt, skillRecord.timelineEndsAt);
+  assert.equal(merged.endsAt, skillRecord.timelineEndsAt + (BOSS_DEFEAT_HOLD_MS / 2));
+  assert.deepEqual(merged.terminalBossActors, [surrenderedBoss]);
+  assert.equal(mergeBossTerminalPresentationRecord(skillRecord, beforeActors, beforeActors), skillRecord);
 });
 
 test('runtime frame anchors match the authored source contract and keep every pose grounded', () => {

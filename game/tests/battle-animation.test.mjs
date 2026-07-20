@@ -17,6 +17,7 @@ import {
   sampleBattleAnimation,
 } from '../battle-animation.mjs';
 import { COMBAT_STATUS_DEFINITIONS, PARTY_SKILLS } from '../campaign-combat.mjs';
+import { getEncounter } from '../content/encounters.mjs';
 import { ENEMY_FAMILIES } from '../enemy-atlas.mjs';
 
 const PARTY_IDS = Object.keys(PARTY_SKILLS);
@@ -90,6 +91,25 @@ test('all combat statuses have an immutable glyph pulse using the exact live sta
     assert.ok(pulses.every((frame) => frame.statusGlyph.id === statusId));
     assert.ok(pulses.every((frame) => frame.statusGlyph.name === COMBAT_STATUS_DEFINITIONS[statusId].name));
   }
+});
+
+test('Black Chrysanthemum publishes its tactical marker as a source-anchored self-status glyph', () => {
+  const kurozane = getEncounter('c9-kurozane').enemies.find(({ id }) => id === 'kurozane');
+  const skill = kurozane.skills.find(({ id }) => id === 'black-chrysanthemum');
+  const timeline = createEnemyFamilyTimeline('kurozane', {
+    sourceTile: { x: 8, y: 3 },
+    targetTile: { x: 2, y: 3 },
+    skill,
+    selfStatusApplied: true,
+  });
+
+  assert.equal(timeline.action.selfStatusId, 'final-ward-open');
+  assert.ok(timeline.simulationOrder.includes('status-glyph'));
+  const glyphs = timeline.frames.filter(({ selfStatusGlyph }) => selfStatusGlyph);
+  assert.equal(glyphs.length, 5);
+  assert.ok(glyphs.every(({ selfStatusGlyph }) => selfStatusGlyph.id === 'final-ward-open'));
+  assert.ok(glyphs.every(({ selfStatusGlyph }) => selfStatusGlyph.placement === 'source'));
+  assert.ok(glyphs.every(({ selfStatusGlyph }) => selfStatusGlyph.tile.x === 8));
 });
 
 test('phases preserve windup, exact-grid movement, appropriate emission, impact, stagger, status, and recovery order', () => {

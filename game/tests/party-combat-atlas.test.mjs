@@ -15,7 +15,7 @@ import {
   partyCombatImageHasExpectedSize,
 } from '../party-combat-atlas.mjs';
 
-test('party combat atlas exposes all 54 exact authored cells', () => {
+test('party combat atlas exposes all 60 exact authored cells', () => {
   const rectangles = new Set();
   for (const [row, memberId] of PARTY_COMBAT_MEMBERS.entries()) {
     for (const [column, pose] of PARTY_COMBAT_POSES.entries()) {
@@ -36,7 +36,7 @@ test('party combat atlas exposes all 54 exact authored cells', () => {
       rectangles.add(`${frame.x},${frame.y},${frame.width},${frame.height}`);
     }
   }
-  assert.equal(rectangles.size, 54);
+  assert.equal(rectangles.size, 60);
   assert.equal(PARTY_COMBAT_ATLAS.width, PARTY_COMBAT_ATLAS.columns * PARTY_COMBAT_ATLAS.cellWidth);
   assert.equal(PARTY_COMBAT_ATLAS.height, PARTY_COMBAT_ATLAS.rows * PARTY_COMBAT_ATLAS.cellHeight);
   assert.throws(() => getPartyCombatFrame('unknown', 'idle'), /Unknown party combat member/);
@@ -100,7 +100,7 @@ test('live animation phases resolve to authored party combat keys', () => {
   assert.equal(getPartyCombatPresentationPose({ actorPose: 'attack', actionId: 'courier-cut' }), 'signature-a');
   assert.equal(getPartyCombatPresentationPose({ actorPose: 'attack', actionId: 'cinder-route' }), 'signature-b');
   assert.equal(getPartyCombatPresentationPose({ actorPose: 'attack', actionId: 'future-skill' }), 'basic-strike-active');
-  assert.equal(getPartyCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'idle');
+  assert.equal(getPartyCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'recovery');
   assert.equal(getPartyCombatPresentationPose({ targetPose: 'stagger', phase: 'windup' }), 'hit');
   assert.equal(getPartyCombatPresentationPose({ hp: 0, targetPose: 'stagger' }), 'defeat');
   assert.equal(getPartyCombatPresentationPose({ active: false, actorPose: 'attack' }), 'defeat');
@@ -122,8 +122,8 @@ test('newly terminal party members replace pre-action ghosts only during their b
 });
 
 test('party combat image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 432, naturalHeight: 384 }), true);
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 431, naturalHeight: 384 }), false);
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 432, naturalHeight: 383 }), false);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 480, naturalHeight: 384 }), true);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 479, naturalHeight: 384 }), false);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 480, naturalHeight: 383 }), false);
   assert.equal(partyCombatImageHasExpectedSize(null), false);
 });

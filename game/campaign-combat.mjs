@@ -87,6 +87,11 @@ export const COMBAT_STATUS_DEFINITIONS = deepFreeze({
     name: 'Overheated',
     recoveryPulsesDelta: 1,
   },
+  'final-ward-open': {
+    id: 'final-ward-open',
+    name: 'Final Ward Open',
+    kind: 'tactical-marker',
+  },
 });
 
 const neutralResistances = Object.freeze({

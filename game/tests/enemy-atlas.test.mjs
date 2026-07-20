@@ -64,6 +64,7 @@ test('enemy presentation selects authored defeat first and holds newly terminal 
   assert.equal(getEnemyCombatPresentationPose({ windingUp: true }), 'windup');
   assert.equal(getEnemyCombatPresentationPose({ transientPose: 'stagger' }), 'stagger');
   assert.equal(getEnemyCombatPresentationPose({ animationPose: 'attack', transientPose: 'stagger' }), 'attack');
+  assert.equal(getEnemyCombatPresentationPose({ phase: 'recovery', animationPose: 'attack' }), 'neutral');
   assert.equal(getEnemyCombatPresentationPose({ hp: 0, animationPose: 'attack' }), 'defeat');
   assert.equal(getEnemyCombatPresentationPose({ active: false, transientPose: 'stagger' }), 'defeat');
 

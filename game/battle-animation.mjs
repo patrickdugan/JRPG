@@ -56,6 +56,7 @@ export const STATUS_GLYPH_PRESENTATION = deepFreeze({
   scorch: { id: 'scorch', name: COMBAT_STATUS_DEFINITIONS.scorch.name, glyph: '^', color: '#f2773f' },
   bound: { id: 'bound', name: COMBAT_STATUS_DEFINITIONS.bound.name, glyph: '#', color: '#c3a577' },
   overheated: { id: 'overheated', name: COMBAT_STATUS_DEFINITIONS.overheated.name, glyph: '++', color: '#ff9b54' },
+  'final-ward-open': { id: 'final-ward-open', name: COMBAT_STATUS_DEFINITIONS['final-ward-open'].name, glyph: '<>', color: '#f4e59a' },
 });
 
 function deepFreeze(value) {

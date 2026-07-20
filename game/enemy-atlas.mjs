@@ -103,11 +103,13 @@ export function hasAuthoredEnemyFamily(templateId) {
 export function getEnemyCombatPresentationPose({
   hp = 1,
   active = true,
+  phase = null,
   animationPose = null,
   transientPose = null,
   windingUp = false,
 } = {}) {
   if (!active || hp <= 0) return 'defeat';
+  if (phase === 'recovery') return 'neutral';
   if (ENEMY_ATLAS.poses.includes(animationPose)) return animationPose;
   if (ENEMY_ATLAS.poses.includes(transientPose)) return transientPose;
   return windingUp ? 'windup' : 'neutral';

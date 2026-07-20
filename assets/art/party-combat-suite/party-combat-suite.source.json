@@ -21,6 +21,7 @@
       "basic-strike-active",
       "signature-a",
       "signature-b",
+      "recovery",
       "defeat"
     ]
   },
@@ -33,6 +34,7 @@
     "basic-strike-active": {"phase": "active", "event": "damage", "hitAnchor": [42, 31], "rule": "single authored damage-event key"},
     "signature-a": {"phase": "active-key", "event": "skill-a", "hitAnchor": [37, 28], "rule": "character-specific primary signature key"},
     "signature-b": {"phase": "active-key", "event": "skill-b", "hitAnchor": [35, 27], "rule": "character-specific secondary signature key"},
+    "recovery": {"phase": "recovery", "event": "none", "hitAnchor": [31, 42], "rule": "braced post-action hold; recovery timer owns duration and no damage event fires"},
     "defeat": {"phase": "terminal-hold", "event": "none", "hitAnchor": [24, 50], "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell"}
   },
   "characters": [

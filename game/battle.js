@@ -89,6 +89,7 @@ import {
   getNewlyTerminalBossCombatActors,
   hasBossCombatTemplate,
   mergeBossTerminalPresentationActors,
+  mergeBossTerminalPresentationRecord,
 } from './boss-combat-atlas.mjs';
 import {
   formatObjectiveRequirement,
@@ -920,6 +921,7 @@ function drawBattle(now = performance.now()) {
       const pose = getEnemyCombatPresentationPose({
         hp: actor.hp,
         active: actor.active !== false,
+        phase: animatedActor ? animation?.frame.phase : null,
         animationPose,
         transientPose,
         windingUp: snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND
@@ -1577,6 +1579,12 @@ function executeAutoGrindStep(now) {
     return;
   }
   const after = engine.snapshot();
+  activeBattleAnimation = mergeBossTerminalPresentationRecord(
+    activeBattleAnimation,
+    before.actors,
+    after.actors,
+    { startedAt: now, speed: speedMultiplier },
+  );
   const recoveredPulses = Math.max(0, after.nowPulse - beforePulse);
   const stepDelay = getRepeatStepDelayMs(stepType, speedMultiplier, recoveredPulses);
   const animationEnd = activeBattleAnimation?.endsAt ?? 0;
@@ -1681,12 +1689,21 @@ function executeSelectedCommand() {
       ? engine.performObjectiveAction(actor.instanceId, { type: requirement.action, targetId: requirement.targetId, amount: 1 })
       : { ok: false, reason: 'No objective action is pending.' };
   }
+  const afterSnapshot = engine.snapshot();
   if (!result?.ok) addMessage(result?.reason ?? 'Command failed.');
   else if (result.readout) addMessage(`${targetSelect.options[targetSelect.selectedIndex]?.text ?? 'Target'} Ledger: ${result.readout.ledger || 'No note.'}`);
-  else announceEngineLogDelta(snapshot, engine.snapshot());
+  else announceEngineLogDelta(snapshot, afterSnapshot);
   if (selectedCommand === 'attack' || selectedCommand === 'skill') {
     markCombatResolutionPose(result);
     startCombatAnimation(result, actor.instanceId, snapshot);
+  }
+  if (result?.ok) {
+    activeBattleAnimation = mergeBossTerminalPresentationRecord(
+      activeBattleAnimation,
+      snapshot.actors,
+      afterSnapshot.actors,
+      { startedAt: performance.now(), speed: 1 },
+    );
   }
   clearEnemyIntentSchedule();
   render();

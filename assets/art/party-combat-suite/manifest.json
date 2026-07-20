@@ -4,11 +4,11 @@
   "runtimeIntegration": "current-browser-battle-key-poses",
   "authorship": "original-code-native-pixel-primitives",
   "geometry": {
-    "columns": 9,
+    "columns": 10,
     "rows": 6,
     "cellWidth": 48,
     "cellHeight": 64,
-    "sheetWidth": 432,
+    "sheetWidth": 480,
     "sheetHeight": 384,
     "pivot": [
       24,
@@ -37,6 +37,7 @@
     "basic-strike-active",
     "signature-a",
     "signature-b",
+    "recovery",
     "defeat"
   ],
   "paletteAndSilhouetteReuse": {
@@ -179,6 +180,15 @@
         27
       ],
       "rule": "character-specific secondary signature key"
+    },
+    "recovery": {
+      "phase": "recovery",
+      "event": "none",
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires"
     },
     "defeat": {
       "phase": "terminal-hold",
@@ -477,11 +487,45 @@
       "rgbaSha256": "4d1e48de06a7a1eacee37355e1dac613dc0300f28c2a8db714ec1a8242c7660b"
     },
     {
+      "id": "ren:recovery",
+      "characterId": "ren",
+      "action": "recovery",
+      "rect": [
+        384,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        9,
+        9,
+        39,
+        59
+      ],
+      "rgbaSha256": "5f13f3580ad3eed6f0701dff01c9cfb388a5abbf6e583e5fd50178baab6fc32a"
+    },
+    {
       "id": "ren:defeat",
       "characterId": "ren",
       "action": "defeat",
       "rect": [
-        384,
+        432,
         0,
         48,
         64
@@ -797,11 +841,45 @@
       "rgbaSha256": "7a3eccc5786a710dade971c45c1e80aeeccae07de0e23d5d397e1ad26e5559d6"
     },
     {
+      "id": "aya:recovery",
+      "characterId": "aya",
+      "action": "recovery",
+      "rect": [
+        384,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        11,
+        40,
+        59
+      ],
+      "rgbaSha256": "f9b06a475f70a1c0f157ab49c77cd01d6e1439bdb5a15f0aa03c951eb91b609d"
+    },
+    {
       "id": "aya:defeat",
       "characterId": "aya",
       "action": "defeat",
       "rect": [
-        384,
+        432,
         64,
         48,
         64
@@ -1116,11 +1194,45 @@
       "rgbaSha256": "f7388bfe51869f2f9de7a5b6cf8f779833fc43433a73fe6e320081f3b0b2de9b"
     },
     {
+      "id": "lise:recovery",
+      "characterId": "lise",
+      "action": "recovery",
+      "rect": [
+        384,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        11,
+        41,
+        59
+      ],
+      "rgbaSha256": "0c6fe84eae5612cc89d28be580f68f0422ee1fcbd4923f41a9e334b18f9d99f3"
+    },
+    {
       "id": "lise:defeat",
       "characterId": "lise",
       "action": "defeat",
       "rect": [
-        384,
+        432,
         128,
         48,
         64
@@ -1436,11 +1548,45 @@
       "rgbaSha256": "10a142ee9e97d15fc9a8994b8f84b9330f910dfb69e01e105726c0cb2e237766"
     },
     {
+      "id": "mateus:recovery",
+      "characterId": "mateus",
+      "action": "recovery",
+      "rect": [
+        384,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        10,
+        11,
+        39,
+        59
+      ],
+      "rgbaSha256": "1c07e07b3f6f8a129a866861a0ed0aebcb06e667fff9d1905439ea47f7ccfda4"
+    },
+    {
       "id": "mateus:defeat",
       "characterId": "mateus",
       "action": "defeat",
       "rect": [
-        384,
+        432,
         192,
         48,
         64
@@ -1754,11 +1900,45 @@
       "rgbaSha256": "e3a43dfe60e83535c9fd8e9e095f70c942ef8c0b76c56f4541516b00e4cc8b54"
     },
     {
+      "id": "genta:recovery",
+      "characterId": "genta",
+      "action": "recovery",
+      "rect": [
+        384,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        11,
+        43,
+        59
+      ],
+      "rgbaSha256": "e7519aabc4ff4a5de03f549c7775a7fe5df319c51a259241ad27b8cf1efb888c"
+    },
+    {
       "id": "genta:defeat",
       "characterId": "genta",
       "action": "defeat",
       "rect": [
-        384,
+        432,
         256,
         48,
         64
@@ -2074,11 +2254,45 @@
       "rgbaSha256": "a0f39f38bff14c0f659280f6e8120c080777267f4643df11fda37f05561ddc1e"
     },
     {
+      "id": "kiku:recovery",
+      "characterId": "kiku",
+      "action": "recovery",
+      "rect": [
+        384,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        11,
+        40,
+        59
+      ],
+      "rgbaSha256": "75f374a5d11382d46f2a0b27b837895a790ef82913fc38d6229b1609ec764a12"
+    },
+    {
       "id": "kiku:defeat",
       "characterId": "kiku",
       "action": "defeat",
       "rect": [
-        384,
+        432,
         320,
         48,
         64
@@ -2112,7 +2326,7 @@
     {
       "path": "party-combat-suite.source.json",
       "role": "editable-combat-contract",
-      "sha256": "7a2088be170477e7449cb66e5d61543e402e258bdafa08e7d0541c88ab0d4300"
+      "sha256": "680b8e3e50404dfd88ae671ff36877e19bed7f0139df8dcd80cf7c493c272a69"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
@@ -2122,30 +2336,30 @@
     {
       "path": "build_party_combat_suite.py",
       "role": "deterministic-builder",
-      "sha256": "1953b4fb2df17277f5791ea0c6c009f0a4de397ec9c42a3f6f2745e14fc9393c"
+      "sha256": "b71d2056d938d865539ab9176ba168bce59bc668289ef7d7fb9b95f68d46677e"
     }
   ],
   "exports": [
     {
       "path": "party-combat-actions.png",
       "role": "transparent-runtime-candidate",
-      "width": 432,
+      "width": 480,
       "height": 384,
       "mode": "RGBA",
-      "sha256": "3f16d1ce7922facc2b8a63f40a4d3d712dbc8d17a8f4523513eee5dcd578185a"
+      "sha256": "9639b71f568f4b172dc57144640ff33c19d6ab456585b93fd24b7bbd2fa7092c"
     },
     {
       "path": "party-combat-actions-contact-sheet.png",
       "role": "labeled-review-only-not-runtime",
-      "width": 1412,
+      "width": 1556,
       "height": 1222,
       "mode": "RGBA",
-      "sha256": "aedeb8c7d4f98f2fd6d31926c3bc2016141d7fa5850a12a6722b6530a586b212"
+      "sha256": "c8eb38e41a39e81effa20c00f86f315ccedae7c3bb9f970fe1e7113ec73edb52"
     }
   ],
   "validation": {
-    "frameCount": 54,
-    "distinctRgbaFrameHashes": 54,
+    "frameCount": 60,
+    "distinctRgbaFrameHashes": 60,
     "binaryTransparency": true,
     "minimumObservedGutter": 4,
     "deterministicCommand": "python build_party_combat_suite.py --check"
