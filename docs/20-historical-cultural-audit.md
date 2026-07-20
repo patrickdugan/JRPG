@@ -23,9 +23,10 @@ Status: **provisional internal correction pass; external consultant review remai
 - `reliquary-lock` identifies the existing interaction internally but displays **Varga Strongbox**.
 - The schema-v1 field-interaction presentation catalogue now covers all 113 exact level/interactable pairs. Campaign buttons, native choice prompts, completions, blocked states, and replay text consume that authored copy; unknown pairs use neutral language and never expose legacy IDs or infer wording from rewards, actions, or flags.
 - Takamine is described as an **experimental local bell registry**, never as a normal nationwide “temple system” in 1622.
+- The Integrated 20-frame scene-panorama suite uses only original deterministic integer-coordinate primitives. Its source forbids actors, readable records, sacred/devotional objects, authentic heraldry, ceremonial masks, clean radial floral emblems, historical victims/methods, real-person likenesses, imported concept pixels, and borrowed film/game compositions. Kurozane's authority uses asymmetrical broken ledger-tab geometry; Takamine uses invented registry machinery without temple-bell ornament. Visual QA corrected one cross-like lantern read and one calm-band violation before integration. These internal constraints reduce risk but do not satisfy the external-review gate.
 
 ## Review still required
 
-Before dialogue, costume, religious practice, regional detail, or marketing copy is locked, external reviewers must assess Japanese Kirishitan agency, shrine–temple relationships, titles and names, the Ashen Oni synthesis, the Black Chrysanthemum usurpation, and the material design of Christian prayer spaces. Findings must be logged here with reviewer scope, date, requested changes, and disposition.
+Before dialogue, costume, religious practice, regional detail, scene panoramas, or marketing copy is locked, external reviewers must assess Japanese Kirishitan agency, shrine–temple relationships, titles and names, the Ashen Oni synthesis, the Black Chrysanthemum usurpation, and the material design of Christian prayer spaces. Findings must be logged here with reviewer scope, date, requested changes, and disposition.
 
 Official source links and the chronology claims above were spot-checked on 2026-07-20; that check does not satisfy the external-consultant requirement.
