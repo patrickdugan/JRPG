@@ -10,7 +10,7 @@ The first playable is a dependency-free HTML5 Canvas build. This workspace has N
 
 Rules live in `game/engine.mjs`, which is DOM-free and covered by Node tests. `game/game.js` is a replaceable input/rendering adapter. The same data and tests can move to a future Godot/Unity/custom runtime after the hook is proven.
 
-Prototype fallback artwork remains original procedural pixel art. The current production replacements are deterministic editable pixel suites: all 19 combat boards; six-member directional field, ten-key combat, and eight-expression portrait atlases; eight regular-enemy families with defeat/recovery keys; ten primary bosses with transition/defeat/recovery keys; and nine battle-VFX families. Generated concept sheets remain reference-only and are not shipped as runtime pixels. Full animation in-betweens, alternate combat facings, variants, remaining system effects, and human review are still production work.
+Prototype fallback artwork remains original procedural pixel art. The current production replacements are deterministic editable pixel suites: all 19 combat boards; six-member ten-pose field atlases with live interact/hurt keys, ten-key combat atlases, and eight-expression portrait atlases; eight regular-enemy families with defeat/recovery/hurt keys; ten primary bosses with transition/defeat/recovery keys; and nine battle-VFX families. Generated concept sheets remain reference-only and are not shipped as runtime pixels. Full animation in-betweens, alternate action facings, variants, remaining status/system effects, and human review are still production work.
 
 ## 2. First-playable boundary
 
