@@ -39,5 +39,6 @@ Release verification covers byte-exact localhost delivery for all 93 shipped bro
 - [Party council bible](docs/18-party-council-bible.md)
 - [Human full-route playtest protocol](docs/19-human-playtest-protocol.md)
 - [Historical and cultural audit note](docs/20-historical-cultural-audit.md)
+- [Takamine battle-environment production brief](docs/21-takamine-battle-environment-brief.md)
 
 Run [`game/`](game/README.md) and open `http://localhost:8080/` for the FP-0 battle proof, `http://localhost:8080/campaign.html` for the Campaign Atlas, `http://localhost:8080/camp.html` for Camp & Loadout, or `http://localhost:8080/credits.html` for the explicit end-of-run credits boundary. Production-reference art and its reproducible prompt record are in [`assets/production/`](assets/production/README.md).

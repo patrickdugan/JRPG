@@ -29,12 +29,12 @@ The generated concepts successfully establish atmosphere and macro-composition. 
 
 | Element | Production specification |
 | --- | --- |
-| Logical screen | 320 x 180, 16:9. Full-screen art is authored at logical resolution or in modules that resolve cleanly to it. |
-| Display | Integer scale only (4x, 5x, or platform-appropriate equivalent); nearest-neighbor sampling; no fractional camera zoom. |
+| Logical screen | Field/story production target: 320 x 180, 16:9. The current browser battle canvas is a separate 960 x 540 presentation surface whose exact grid geometry is defined below; do not scale a field screenshot into it. |
+| Display | Integer scale with nearest-neighbor sampling is the final-art target; the current responsive browser prototype does not yet satisfy it at every viewport and must not be cited as final pixel-scale proof. |
 | Field terrain | 16 x 16 base modules; 16 x 32, 32 x 32, and 32 x 48 overlays for walls, roof edges, trees, and foreground masking. |
 | Field actor | 32 x 48 nominal body box, with a 12 x 10 foot collision box supplied by design. Taller hats/hair/cloaks may exceed the frame upward only. |
 | Combat actor | 48 x 64 standard; 64 x 80 for broad silhouettes; named bosses 96 x 96 to 128 x 128. |
-| Combat board | Simulation is a 12 x 7 grid of 32-pixel spaces. Art must leave the floor plane unobstructed; the board overlay is presentation-only and aligns exactly to it. |
+| Combat board | Simulation uses a 12 x 7 integer grid; level data carries nominal `spacePx: 32` authoring metadata, but the prototype renderer does not consume it. The 960 x 540 backing store currently derives 77-pixel cells, centers a 924 x 539 board at `(18,0)`, and leaves one unused bottom row. A production floor must be authored as an exact flat 12 x 7 module or as collision-matched cell modules; perspective paving may not imply a different grid. |
 | UI | Nine-slice panels and icon cells on an 8-pixel rhythm. UI text uses a purpose-made bitmap font; never ask generated art to supply lettering. |
 
 ### Pixel construction
@@ -180,7 +180,7 @@ Animation timing communicates game rules. A heavy action must visibly commit bef
 2. **Black-and-white thumbnail:** validate route, focal shape, and party silhouette before palette work.
 3. **Palette key and module sheet:** approve terrain modules, depth bands, and material ramps before a full map.
 4. **Animation key poses:** approve wind-up, active, and recovery on a contact sheet before in-betweens.
-5. **In-engine review:** inspect at 320 x 180, at intended integer scale, with UI and weather enabled.
+5. **In-engine review:** inspect field/story work at 320 x 180 and battle work on the current 960 x 540 canvas with its exact 12 x 7 overlay, UI, telegraphs, and weather enabled.
 6. **Cultural/sensitivity pass:** review final costume, religious context, wording on signs/records, and fictionalization boundaries before locking.
 
 Reject an asset if it: breaks the grid; relies on blur; makes a collectible of a sacred object; obscures combat geometry; makes all Japanese civilians visually identical; turns a real faith or ethnicity into a monster class; or needs a franchise/celebrity comparison to explain its appeal.
