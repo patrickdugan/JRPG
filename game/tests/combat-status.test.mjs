@@ -228,6 +228,88 @@ test('Shock extends exact command Recovery while Bound caps movement Pace', () =
   });
 });
 
+test('Shock and loadout timing both apply to Dodge before the status expires', () => {
+  const engine = new CampaignCombatEngine({
+    encounter: statusEncounter('shock'),
+    level: testLevel(),
+    partyProfiles: {
+      ren: {
+        ...profileWithSpirit(20),
+        loadout: { recoveryPulsesDelta: 1 },
+      },
+    },
+  });
+  assert.equal(engine.guard('ren').ok, true);
+  assert.equal(engine.advanceUntilPlayerCommand().enemyActivations, 1);
+  const commandPulse = engine.nowPulse;
+  const spiritBefore = engine.getActor('ren').spirit;
+  assert.deepEqual(engine.dodge('ren'), { ok: true, stance: 'dodge', recoveryPulses: 1 });
+  assert.equal(engine.getActor('ren').readyAtPulse, commandPulse + 3);
+  assert.equal(engine.getActor('ren').spirit, spiritBefore);
+  assert.deepEqual(engine.getActor('ren').statuses, []);
+  assert.deepEqual(engine.log.findLast((entry) => entry.type === 'status-effect' && entry.statusId === 'shock'), {
+    type: 'status-effect',
+    statusId: 'shock',
+    actorId: 'ren',
+    effect: 'recovery',
+    baseRecovery: 1,
+    loadoutDelta: 1,
+    statusDelta: 1,
+    totalStatusDelta: 1,
+    finalRecovery: 3,
+    readyAtPulse: commandPulse + 3,
+    pulse: commandPulse,
+  });
+  assert.equal(engine.log.findLast(({ type }) => type === 'commit').command, 'dodge');
+});
+
+test('Dodge suppresses target status while preserving a source self-status', () => {
+  const encounter = statusEncounter('bound');
+  encounter.enemies[0].skills[0].dodgeable = true;
+  encounter.enemies[0].skills[0].effect.selfStatus = 'overheated';
+  const engine = new CampaignCombatEngine({ encounter, level: testLevel() });
+  const hpBefore = engine.getActor('ren').hp;
+  assert.equal(engine.dodge('ren').ok, true);
+  const activation = engine.resolveEnemyActivation();
+  assert.equal(activation.ok, true);
+  assert.equal(activation.resolution.hit, false);
+  assert.equal(activation.resolution.dodged, true);
+  assert.equal(activation.resolution.finalDamage, 0);
+  assert.equal(activation.resolution.statusId, 'bound');
+  assert.equal(activation.resolution.statusApplied, false);
+  assert.equal(engine.getActor('ren').hp, hpBefore);
+  assert.deepEqual(engine.getActor('ren').statuses, []);
+  assert.deepEqual(engine.getActor('status-attacker-1').statuses, [{
+    id: 'overheated',
+    sourceActorId: 'status-attacker-1',
+    sourceSkillId: 'apply-bound',
+    appliedAtPulse: 0,
+    durationActivations: 1,
+    remainingActivations: 1,
+    activeThisActivation: false,
+  }]);
+  assert.equal(engine.log.some(({ type }) => type === 'damage'), false);
+  assert.equal(engine.log.some(({ type, statusId, targetId }) => type === 'status-applied' && statusId === 'bound' && targetId === 'ren'), false);
+  assert.equal(engine.log.some(({ type, statusId, targetId }) => type === 'status-applied' && statusId === 'overheated' && targetId === 'status-attacker-1'), true);
+});
+
+test('a non-dodgeable hit and its later status damage leave Dodge armed', () => {
+  const engine = new CampaignCombatEngine({
+    encounter: statusEncounter('scorch'),
+    level: testLevel(),
+  });
+  assert.equal(engine.dodge('ren').ok, true);
+  const activation = engine.resolveEnemyActivation();
+  assert.equal(activation.ok, true);
+  assert.equal(activation.resolution.skillId, 'apply-scorch');
+  assert.equal(activation.resolution.finalDamage > 0, true);
+  assert.equal(engine.getActor('ren').stance, 'dodge');
+  assert.equal(engine.log.some(({ type }) => type === 'dodge-resolved'), false);
+  assert.equal(engine.log.some(({ type, statusId }) => type === 'status-applied' && statusId === 'scorch'), true);
+  assert.equal(engine.log.some(({ type, statusId }) => type === 'status-damage' && statusId === 'scorch'), true);
+  assert.equal(engine.getActor('ren').stance, 'dodge', 'status damage cannot consume a stance');
+});
+
 test('Scorch and status-bearing hits preserve exact auditable damage and status logs', () => {
   const engine = triggerStatus('scorch');
   const damage = engine.log.find((entry) => entry.type === 'damage');

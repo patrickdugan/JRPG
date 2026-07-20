@@ -106,6 +106,35 @@ test('Crimson Litany publishes a four-tile answer window before resolving into R
   assert.equal(answered.answerActivationsRequired, 1);
 });
 
+test('Dodge answers Crimson Litany but cannot consume against its non-dodgeable hit', () => {
+  const engine = enterPhaseTwo();
+  const intent = advanceToPublishedLitany(engine);
+  assert.ok(intent);
+  const answerActor = engine.activeActor;
+  const [x, y] = intent.tiles[0].split(',').map(Number);
+  answerActor.pos = { x, y };
+  const hpBefore = answerActor.hp;
+  assert.deepEqual(engine.dodge(answerActor.instanceId), {
+    ok: true,
+    stance: 'dodge',
+    recoveryPulses: 1,
+  });
+
+  const resolved = engine.log.find(({ type }) => type === 'intent-resolved');
+  assert.ok(resolved);
+  assert.equal(resolved.hitTargetIds.includes(answerActor.instanceId), true);
+  assert.equal(engine.log.some(({ type, skillId, targetId }) => (
+    type === 'damage' && skillId === 'crimson-litany' && targetId === answerActor.instanceId
+  )), true);
+  assert.equal(engine.log.some(({ type, skillId, targetId }) => (
+    type === 'dodge-resolved' && skillId === 'crimson-litany' && targetId === answerActor.instanceId
+  )), false);
+  assert.equal(answerActor.hp < hpBefore, true);
+  assert.equal(answerActor.stance, 'dodge');
+  assert.equal(engine.getBossMechanicStatus().pendingIntent, null);
+  assert.equal(engine.log.find(({ type }) => type === 'intent-answered').actorId, answerActor.instanceId);
+});
+
 test('Crimson Litany records exact published targets that cleared the line without inventing stance Dodge', () => {
   const engine = enterPhaseTwo();
   const intent = advanceToPublishedLitany(engine);

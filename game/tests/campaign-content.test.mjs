@@ -4,7 +4,7 @@ import { STATUS_GLYPH_PRESENTATION } from '../battle-animation.mjs';
 import { COMBAT_STATUS_DEFINITIONS } from '../campaign-combat.mjs';
 import { CAMPAIGN, getAllChapters, getChapter } from '../content/campaign.mjs';
 import { LEVELS, getLevel, getLevelForChapter } from '../content/levels.mjs';
-import { ENCOUNTERS, getEncounterForChapter } from '../content/encounters.mjs';
+import { ENCOUNTERS, getEncounterForChapter, validateEncounter } from '../content/encounters.mjs';
 
 test('campaign declares the full prologue-to-epilogue chapter spine', () => {
   const chapters = getAllChapters();
@@ -95,4 +95,27 @@ test('every authored combat status resolves to engine mechanics and presentation
   assert.equal(window.recoveryPulses, 3);
   assert.equal(kurozane.resistances.essence.radiance, 1.25);
   assert.equal(COMBAT_STATUS_DEFINITIONS['final-ward-open'].kind, 'tactical-marker');
+});
+
+test('all 47 enemy skills own an exact authored Dodge contract', () => {
+  const skills = ENCOUNTERS.flatMap((encounter) => encounter.enemies.flatMap((enemy) => (
+    (enemy.skills ?? []).map((skill) => ({ encounterId: encounter.id, enemyId: enemy.id, skill }))
+  )));
+  assert.equal(skills.length, 47);
+  assert.equal(skills.filter(({ skill }) => skill.dodgeable === true).length, 20);
+  assert.equal(skills.filter(({ skill }) => skill.dodgeable === false).length, 27);
+  for (const { encounterId, enemyId, skill } of skills) {
+    assert.equal(typeof skill.dodgeable, 'boolean', `${encounterId}/${enemyId}/${skill.id}`);
+  }
+
+  const malformed = structuredClone(ENCOUNTERS[0]);
+  delete malformed.enemies[0].skills[0].dodgeable;
+  assert.match(validateEncounter(malformed).join(' '), /exact dodgeable boolean/);
+
+  const mateus = skills.find(({ skill }) => skill.id === 'sanguine-step').skill;
+  const kurozane = skills.find(({ skill }) => skill.id === 'yearless-thrust').skill;
+  assert.equal(mateus.delivery, 'cut');
+  assert.equal(mateus.dodgeable, false, 'physical delivery alone cannot infer Dodge eligibility');
+  assert.equal(kurozane.essence, 'umbral');
+  assert.equal(kurozane.dodgeable, true, 'essence alone cannot remove an authored Dodge flag');
 });

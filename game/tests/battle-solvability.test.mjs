@@ -80,6 +80,7 @@ test('all canonical encounters have a deterministic valid first-clear victory tr
     await t.test(encounter.id, () => {
       assert.equal(first.solved, true, failureSummary(first));
       assert.ok(first.trace.some((entry) => ['skill', 'objective', 'guard'].includes(entry.type)), 'trace must contain an accepted committing command');
+      assert.equal(first.trace.some((entry) => entry.type === 'dodge'), false, 'the canonical solver policy remains aggressive and trace-stable');
       assert.deepEqual(replay.trace, first.trace, 'solver trace must be deterministic');
       assert.equal(replay.result, 'victory');
     });
@@ -91,4 +92,3 @@ test('all canonical encounters have a deterministic valid first-clear victory tr
     loadoutState = granted.state;
   }
 });
-

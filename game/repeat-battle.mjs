@@ -20,6 +20,7 @@ export const REPEAT_LOOP_PRESENTATION_MS = Object.freeze({
   move: 240,
   skill: 480,
   guard: 400,
+  dodge: 400,
   analyze: 480,
   objective: 480,
   enemyActivation: 800,
@@ -66,12 +67,13 @@ export function chooseRepeatBattleCommand(engine) {
   return chooseCampaignCombatCommand(engine);
 }
 
-function executePlayerCommand(engine, actorId, command) {
+export function executeRepeatBattleCommand(engine, actorId, command) {
   switch (command.type) {
     case 'move': return engine.move(actorId, command.dx, command.dy);
     case 'skill': return engine.useSkill(actorId, command.skillId, command.targetId);
     case 'objective': return engine.performObjectiveAction(actorId, command.action);
     case 'guard': return engine.guard(actorId);
+    case 'dodge': return engine.dodge(actorId);
     case 'analyze': return engine.analyze(actorId, command.targetId);
     default: return { ok: false, reason: `Unsupported repeat command ${command.type}.` };
   }
@@ -105,7 +107,7 @@ export function runRepeatBattle({
       const actorId = engine.activeActorId;
       const command = chooseRepeatBattleCommand(engine);
       if (!command) throw new Error('Repeat policy could not produce a party command.');
-      const result = executePlayerCommand(engine, actorId, command);
+      const result = executeRepeatBattleCommand(engine, actorId, command);
       if (!result.ok) throw new Error(`Repeat command failed: ${result.reason}`);
       decisions.push(canonicalDecision(actorId, command));
       timeline.push({ type: command.type, baseMs: REPEAT_LOOP_PRESENTATION_MS[command.type] });

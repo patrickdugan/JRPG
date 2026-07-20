@@ -530,7 +530,7 @@ export class CampaignCombatEngine {
   getAvailableCommands(actorId = this.activeActorId) {
     const actor = this.getActor(actorId);
     if (!actor || actor.faction !== 'party' || actor.hp <= 0 || actorId !== this.activeActorId || this.result) return [];
-    return ['move', 'guard', 'analyze', 'skill', ...(this.objectiveRequirements.some((item) => !item.automatic && (this.objectiveProgress[item.key] ?? 0) < item.count) ? ['objective'] : [])];
+    return ['move', 'guard', 'dodge', 'analyze', 'skill', ...(this.objectiveRequirements.some((item) => !item.automatic && (this.objectiveProgress[item.key] ?? 0) < item.count) ? ['objective'] : [])];
   }
 
   _occupied(exceptId) {
@@ -609,6 +609,17 @@ export class CampaignCombatEngine {
     const spirit = this._changeSpirit(actor, SPIRIT_RULES.guardGain, 'guard');
     this._commit(actor, 1, 'guard');
     return { ok: true, spirit };
+  }
+
+  dodge(actorId) {
+    const invalid = this._validatePartyCommand(actorId);
+    if (invalid) return invalid;
+    const actor = this.getActor(actorId);
+    actor.stance = 'dodge';
+    const recoveryPulses = 1;
+    this.log.push({ type: 'dodge', actorId, recoveryPulses, pulse: this.nowPulse });
+    this._commit(actor, recoveryPulses, 'dodge');
+    return { ok: true, stance: 'dodge', recoveryPulses };
   }
 
   analyze(actorId, targetId) {
@@ -778,6 +789,27 @@ export class CampaignCombatEngine {
 
   _resolveAttack(attacker, target, skill) {
     const calculation = calculateTypedDamage(attacker, target, skill);
+    const statusId = skill.effect?.status ?? null;
+    const selfStatusId = skill.effect?.selfStatus ?? null;
+    if (target.stance === 'dodge' && skill.dodgeable === true) {
+      target.stance = 'neutral';
+      const resolution = {
+        attackerId: attacker.instanceId,
+        targetId: target.instanceId,
+        skillId: skill.id,
+        ...calculation,
+        hit: false,
+        dodged: true,
+        guarded: false,
+        finalDamage: 0,
+        targetHp: target.hp,
+        statusId,
+        statusApplied: false,
+      };
+      this.log.push({ type: 'dodge-resolved', ...resolution, pulse: this.nowPulse });
+      if (selfStatusId) this._applyStatus(attacker, attacker, selfStatusId, skill.id, skill.effect?.selfDuration ?? skill.effect?.duration);
+      return resolution;
+    }
     const guarded = target.stance === 'guard';
     let finalDamage = guarded && calculation.typedDamage > 0 ? Math.max(1, Math.round(calculation.typedDamage * GUARD_MULTIPLIER)) : calculation.typedDamage;
     const incomingDamageMultiplier = this._mateusIncomingDamageMultiplier(target);
@@ -806,7 +838,6 @@ export class CampaignCombatEngine {
       target.hp = Math.max(mateusFloor, hpBefore - finalDamage);
       finalDamage = hpBefore - target.hp;
     }
-    const statusId = skill.effect?.status ?? null;
     const statusApplied = Boolean(statusId && COMBAT_STATUS_DEFINITIONS[statusId] && finalDamage > 0 && target.hp > 0);
     const resolution = {
       attackerId: attacker.instanceId,
@@ -825,7 +856,6 @@ export class CampaignCombatEngine {
       this._breakMateusWard(target, attacker.instanceId, 'damage');
     }
     if (statusApplied) this._applyStatus(attacker, target, statusId, skill.id, skill.effect?.duration);
-    const selfStatusId = skill.effect?.selfStatus;
     if (selfStatusId) this._applyStatus(attacker, attacker, selfStatusId, skill.id, skill.effect?.selfDuration ?? skill.effect?.duration);
     if (target.instanceId === this.bossPhaseState?.bossId) this._updateBossPhase('damage');
     if (this.mateusMechanic && target.templateId === 'mateus') this._resolveMateusSurrenderIfReady('hp-threshold');

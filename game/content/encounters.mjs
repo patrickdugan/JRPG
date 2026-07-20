@@ -901,6 +901,9 @@ export function validateEncounter(encounter) {
   for (const enemy of encounter?.enemies ?? []) {
     if (!enemy.id || !enemy.name) errors.push(`incomplete enemy in ${encounter.id}`);
     if (!enemy.resistances?.delivery || !enemy.resistances?.essence) errors.push(`missing ledger resistances for ${enemy.id}`);
+    for (const skill of enemy.skills ?? []) {
+      if (typeof skill.dodgeable !== 'boolean') errors.push(`skill ${skill.id ?? '(missing)'} in ${enemy.id} needs an exact dodgeable boolean`);
+    }
   }
   validateBossPhases(encounter, errors);
   return errors;

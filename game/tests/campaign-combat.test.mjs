@@ -109,6 +109,32 @@ test('each legal move spends one Pace without committing the activation', () => 
   assert.equal(engine.move('ren', 0, -1).ok, false);
 });
 
+test('Dodge is an exact one-pulse party command with no Spirit transaction', () => {
+  const engine = new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel() });
+  assert.equal(engine.getAvailableCommands('ren').includes('dodge'), true);
+  const spiritBefore = engine.getActor('ren').spirit;
+  engine.getActor('ren').stance = 'guard';
+  assert.deepEqual(engine.dodge('ren'), { ok: true, stance: 'dodge', recoveryPulses: 1 });
+  assert.equal(engine.getActor('ren').stance, 'dodge', 'Dodge replaces Guard');
+  assert.equal(engine.getActor('ren').readyAtPulse, 1);
+  assert.equal(engine.getActor('ren').spirit, spiritBefore);
+  assert.deepEqual(engine.log.find(({ type }) => type === 'dodge'), {
+    type: 'dodge', actorId: 'ren', recoveryPulses: 1, pulse: 0,
+  });
+  assert.deepEqual(engine.log.find(({ type, actorId }) => type === 'commit' && actorId === 'ren'), {
+    type: 'commit', actorId: 'ren', command: 'dodge', readyAtPulse: 1, pulse: 0,
+  });
+  assert.equal(engine.log.some(({ type, reason }) => type === 'spirit-change' && reason === 'dodge'), false);
+  const logLength = engine.log.length;
+  assert.equal(engine.dodge('ren').ok, false, 'an actor without command authority cannot re-arm Dodge');
+  assert.equal(engine.log.length, logLength);
+
+  const guard = new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel() });
+  guard.getActor('ren').stance = 'dodge';
+  assert.equal(guard.guard('ren').ok, true);
+  assert.equal(guard.getActor('ren').stance, 'guard', 'Guard replaces Dodge');
+});
+
 test('delivery and essence multipliers stack, including absorption', () => {
   const target = { guard: 3, hp: 10, maxHp: 40, resistances: { delivery: { arcane: 0.5 }, essence: { ember: 1.25, umbral: -1 } } };
   const attacker = { power: 10 };
@@ -129,6 +155,71 @@ test('Guard reduces and consumes the next positive hit', () => {
   assert.equal(engine.getActor('ren').stance, 'neutral');
   const hit = engine.log.find((entry) => entry.type === 'damage');
   assert.equal(hit.guarded, true);
+});
+
+test('Dodge deterministically consumes only on an explicitly dodgeable attack', () => {
+  const encounter = simpleEncounter({
+    party: { roster: ['ren'], deployment: [{ actorId: 'ren', at: '1,3' }] },
+    enemies: [{
+      ...simpleEncounter().enemies[0],
+      positions: ['2,3'],
+      skills: [{
+        id: 'binding-poke', name: 'Binding Poke', delivery: 'pierce', power: 4,
+        range: 1, recoveryPulses: 2, dodgeable: true,
+        effect: { status: 'bound', duration: 'one-activation' },
+      }],
+    }],
+  });
+  const engine = new CampaignCombatEngine({ encounter, level: simpleLevel() });
+  const hpBefore = engine.getActor('ren').hp;
+  assert.equal(engine.dodge('ren').ok, true);
+  const activation = engine.resolveEnemyActivation();
+  assert.equal(activation.ok, true);
+  assert.deepEqual(activation.resolution, {
+    attackerId: 'dummy-1',
+    targetId: 'ren',
+    skillId: 'binding-poke',
+    base: 7,
+    deliveryMultiplier: 1,
+    essenceMultiplier: 1,
+    typedDamage: 7,
+    absorbed: false,
+    hit: false,
+    dodged: true,
+    guarded: false,
+    finalDamage: 0,
+    targetHp: hpBefore,
+    statusId: 'bound',
+    statusApplied: false,
+  });
+  assert.equal(engine.getActor('ren').hp, hpBefore);
+  assert.equal(engine.getActor('ren').stance, 'neutral');
+  assert.deepEqual(engine.getActor('ren').statuses, []);
+  assert.deepEqual(engine.log.find(({ type }) => type === 'dodge-resolved'), {
+    type: 'dodge-resolved',
+    ...activation.resolution,
+    pulse: 0,
+  });
+  assert.equal(engine.log.some(({ type }) => type === 'damage'), false);
+  assert.equal(engine.log.some(({ type }) => type === 'status-applied'), false);
+});
+
+test('an attack against another party member leaves Dodge armed', () => {
+  const encounter = simpleEncounter({
+    enemies: [{
+      ...simpleEncounter().enemies[0],
+      positions: ['2,4'],
+      skills: [{ id: 'marked-poke', name: 'Marked Poke', delivery: 'pierce', power: 4, range: 1, recoveryPulses: 2, dodgeable: true }],
+    }],
+  });
+  const engine = new CampaignCombatEngine({ encounter, level: simpleLevel() });
+  assert.equal(engine.dodge('ren').ok, true);
+  assert.equal(engine.guard('aya').ok, true);
+  const activation = engine.resolveEnemyActivation();
+  assert.equal(activation.ok, true);
+  assert.equal(activation.resolution.targetId, 'aya');
+  assert.equal(engine.getActor('ren').stance, 'dodge');
+  assert.equal(engine.log.some(({ type }) => type === 'dodge-resolved'), false);
 });
 
 test('Analyze reveals the full authored Ledger and resistance table', () => {

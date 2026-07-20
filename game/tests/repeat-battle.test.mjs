@@ -3,12 +3,15 @@ import test from 'node:test';
 
 import {
   benchmarkRepeatBattleSpeeds,
+  chooseRepeatBattleCommand,
+  executeRepeatBattleCommand,
   getRepeatStepDelayMs,
+  REPEAT_LOOP_PRESENTATION_MS,
   REPEAT_BATTLE_SPEEDS,
   resolveBattlePresentationSpeed,
   runRepeatBattle,
 } from '../repeat-battle.mjs';
-import { PARTY_PROFILES } from '../campaign-combat.mjs';
+import { CampaignCombatEngine, PARTY_PROFILES } from '../campaign-combat.mjs';
 import { ENCOUNTERS } from '../content/encounters.mjs';
 import {
   createAdvancementState,
@@ -71,6 +74,27 @@ test('a deterministic repeat policy clears an authored grind encounter', () => {
   assert.equal(run.simulatedDurationMs, run.baseDurationMs);
 });
 
+test('repeat automation can execute bounded Dodge without selecting it in the aggressive policy', () => {
+  const engine = new CampaignCombatEngine({ encounterId: 'c1-cinder-hounds' });
+  const actorId = engine.activeActorId;
+  assert.notEqual(chooseRepeatBattleCommand(engine)?.type, 'dodge');
+  assert.equal(REPEAT_LOOP_PRESENTATION_MS.dodge, 400);
+  assert.equal(getRepeatStepDelayMs('dodge', 1), 400);
+  assert.equal(getRepeatStepDelayMs('dodge', 4), 100);
+
+  const result = executeRepeatBattleCommand(engine, actorId, { type: 'dodge' });
+  assert.deepEqual(result, { ok: true, stance: 'dodge', recoveryPulses: 1 });
+  assert.equal(engine.getActor(actorId).stance, 'dodge');
+  assert.equal(engine.log.some((entry) => entry.type === 'dodge'
+    && entry.actorId === actorId && entry.recoveryPulses === 1), true);
+  assert.equal(engine.log.some((entry) => entry.type === 'commit'
+    && entry.actorId === actorId && entry.command === 'dodge'), true);
+  assert.match(
+    executeRepeatBattleCommand(engine, actorId, { type: 'unsupported' }).reason,
+    /Unsupported repeat command/,
+  );
+});
+
 test('1x, 2x, and 4x schedule the whole identical repeat loop at proven ratios', () => {
   const benchmark = benchmarkRepeatBattleSpeeds({ encounterId: ENCOUNTER_ID, priorWins: 2 });
   assert.deepEqual(REPEAT_BATTLE_SPEEDS, [1, 2, 4]);
@@ -114,7 +138,7 @@ function canonicalRestedProfiles(encounter, advancementState, loadoutState) {
   }));
 }
 
-test('Auto-Grind clears every canonical encounter from its leveled full-rest repeat state', async (t) => {
+test('Auto-Grind clears every canonical encounter with exact 1x/2x/4x invariance', async (t) => {
   let advancementState = createAdvancementState();
   let loadoutState = createLoadoutState();
   for (const encounter of ENCOUNTERS) {
@@ -129,12 +153,19 @@ test('Auto-Grind clears every canonical encounter from its leveled full-rest rep
       priorWins: 1,
       partyProfiles: canonicalRestedProfiles(encounter, advancementState, loadoutState),
     };
-    const first = runRepeatBattle(options);
-    const replay = runRepeatBattle(options);
+    const benchmark = benchmarkRepeatBattleSpeeds(options);
+    const [normal, double, quadruple] = benchmark.runs;
     await t.test(encounter.id, () => {
-      assert.equal(first.result, 'victory');
-      assert.deepEqual(replay.decisions, first.decisions);
-      assert.deepEqual(replay.reward, first.reward);
+      assert.equal(benchmark.verified, true);
+      assert.equal(benchmark.decisionsAndRewardsInvariant, true);
+      assert.equal(benchmark.timingVerified, true);
+      assert.deepEqual(benchmark.ratios, { 1: 1, 2: 2, 4: 4 });
+      assert.equal(normal.result, 'victory');
+      assert.equal(double.result, 'victory');
+      assert.equal(quadruple.result, 'victory');
+      assert.deepEqual(double.decisions, normal.decisions);
+      assert.deepEqual(quadruple.combatLog, normal.combatLog);
+      assert.deepEqual(quadruple.reward, normal.reward);
     });
   }
 });
