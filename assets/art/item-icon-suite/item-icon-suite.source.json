@@ -1,0 +1,45 @@
+{
+  "assetId": "item-icon-suite-v1",
+  "authorship": "original-code-native-pixel-primitives",
+  "frame": {
+    "width": 16,
+    "height": 16,
+    "transparentGutter": 1
+  },
+  "sheet": {
+    "columns": 5,
+    "rows": 5
+  },
+  "restrictions": [
+    "No real-world sacred, devotional, heraldic, or military insignia.",
+    "Icons are decorative; the item name and description remain authoritative.",
+    "Reward evidence is shown as paper or secular route hardware, never as a sacred collectible."
+  ],
+  "items": [
+    {"id":"courier-saber","motif":"saber","palette":{"outline":"#111827","shadow":"#48566d","body":"#aeb8c5","light":"#edf2f3","accent":"#c78a42"}},
+    {"id":"warding-brush","motif":"brush","palette":{"outline":"#111827","shadow":"#4b2e2a","body":"#8b5a3c","light":"#d9b27c","accent":"#5aa6a6"}},
+    {"id":"salt-etched-rapier","motif":"rapier","palette":{"outline":"#111827","shadow":"#526375","body":"#c8d2da","light":"#f3f4e8","accent":"#71a5b8"}},
+    {"id":"dusk-censer","motif":"censer","palette":{"outline":"#111827","shadow":"#4b3e5c","body":"#806b8f","light":"#c7b7d5","accent":"#a45f72"}},
+    {"id":"cedar-maul","motif":"maul","palette":{"outline":"#111827","shadow":"#4a3325","body":"#80583a","light":"#bd8651","accent":"#5d6b53"}},
+    {"id":"pilgrim-knife","motif":"knife","palette":{"outline":"#111827","shadow":"#505b65","body":"#aeb5b8","light":"#e4e4d5","accent":"#6f4b32"}},
+    {"id":"dawnsteel-blade","motif":"greatsword","palette":{"outline":"#111827","shadow":"#6c5b38","body":"#d9b85c","light":"#fff1a0","accent":"#76b5b8"}},
+    {"id":"bellglass-focus","motif":"focus","palette":{"outline":"#111827","shadow":"#44547c","body":"#6f88b8","light":"#c5e8ed","accent":"#d4a758"}},
+    {"id":"quilted-haori","motif":"haori","palette":{"outline":"#111827","shadow":"#394a5f","body":"#58708a","light":"#8da4b6","accent":"#c99b55"}},
+    {"id":"river-silk-robe","motif":"robe","palette":{"outline":"#111827","shadow":"#31585b","body":"#4f8582","light":"#8ebbb2","accent":"#b9d6cf"}},
+    {"id":"bell-iron-lamellar","motif":"lamellar","palette":{"outline":"#111827","shadow":"#3e4650","body":"#68737d","light":"#a4adb0","accent":"#8d6042"}},
+    {"id":"ash-lacquer-coat","motif":"coat","palette":{"outline":"#111827","shadow":"#4c2825","body":"#7a3d34","light":"#b35f45","accent":"#d78b4c"}},
+    {"id":"dawn-thread-mantle","motif":"mantle","palette":{"outline":"#111827","shadow":"#654c58","body":"#936c79","light":"#d6a69a","accent":"#f0d879"}},
+    {"id":"road-sandals","motif":"sandals","palette":{"outline":"#111827","shadow":"#533922","body":"#8b6138","light":"#c49459","accent":"#dcc18d"}},
+    {"id":"lantern-bead-cord","motif":"beads","palette":{"outline":"#111827","shadow":"#5a3c2a","body":"#a66b3d","light":"#dba95c","accent":"#f0d879"}},
+    {"id":"frostglass-pin","motif":"pin","palette":{"outline":"#111827","shadow":"#3e6b87","body":"#65a9bd","light":"#c8f1ed","accent":"#ecffff"}},
+    {"id":"storm-kite-toggle","motif":"toggle","palette":{"outline":"#111827","shadow":"#4d4d75","body":"#7473aa","light":"#b1afe0","accent":"#e5cf69"}},
+    {"id":"iron-knot","motif":"knot","palette":{"outline":"#111827","shadow":"#3f4950","body":"#68747a","light":"#a5afb0","accent":"#7d6248"}},
+    {"id":"cedar-route-note","motif":"note","palette":{"outline":"#111827","shadow":"#8b744e","body":"#d2b77d","light":"#f3ddb0","accent":"#4d6f62"}},
+    {"id":"temple-charm","motif":"registry-token","palette":{"outline":"#111827","shadow":"#545a60","body":"#878d8b","light":"#c3c3b5","accent":"#7b493e"}},
+    {"id":"river-salve","motif":"salve","palette":{"outline":"#111827","shadow":"#3f6a61","body":"#65a58b","light":"#aee2be","accent":"#d4c58a"}},
+    {"id":"ward-tonic","motif":"tonic","palette":{"outline":"#111827","shadow":"#3e4f85","body":"#647ac0","light":"#aabcf1","accent":"#d3d9ea"}},
+    {"id":"spirit-tea","motif":"tea","palette":{"outline":"#111827","shadow":"#6a482b","body":"#a87843","light":"#dcb36e","accent":"#88a66f"}},
+    {"id":"dawn-salt","motif":"packet","palette":{"outline":"#111827","shadow":"#8a6b45","body":"#d0a95f","light":"#f4e0a1","accent":"#e7f0dc"}},
+    {"id":"traveler-plum","motif":"plum","palette":{"outline":"#111827","shadow":"#562f5b","body":"#8c4e86","light":"#cb79a8","accent":"#68905e"}}
+  ]
+}

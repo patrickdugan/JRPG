@@ -65,6 +65,11 @@ h2, h3 { color: #fff0d1; }
 .equipment-section, .vow-section { margin-top: 15px; padding-top: 13px; border-top: 1px solid #36415e; }
 .equipment-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
 .equipment-slot, .vow-card, .inventory-entry, .shop-entry { display: grid; gap: 5px; padding: 9px; border: 1px solid #3c4864; background: rgba(8,11,23,.62); }
+.inventory-entry.has-item-icon, .shop-entry.has-item-icon { grid-template-columns: 36px minmax(0, 1fr); align-items: start; }
+.has-item-icon > small, .has-item-icon > strong, .has-item-icon > span:not(.item-icon) { grid-column: 2; }
+.item-icon { grid-column: 1; grid-row: 1 / span 3; width: 32px; height: 32px; image-rendering: pixelated; background-repeat: no-repeat; border: 1px solid #4a5877; box-shadow: inset 0 0 0 1px #111827; }
+.item-icon-fallback { background: repeating-linear-gradient(135deg, #263044 0 4px, #344058 4px 8px); }
+.has-item-icon > .inventory-entry-actions, .has-item-icon > .shop-entry-actions { grid-column: 1 / -1; }
 .equipment-slot label, .vow-card small, .inventory-entry small, .shop-entry small { color: var(--gold); font-size: .54rem; text-transform: uppercase; letter-spacing: .06em; }
 .equipment-slot select, .equipment-slot button, .vow-card button, .inventory-entry button, .shop-entry button { width: 100%; padding: 7px; border: 1px solid #4a5877; color: var(--paper); background: #151c31; font-size: .59rem; cursor: pointer; }
 .equipped-vows, .vow-catalogue { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }

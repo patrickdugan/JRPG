@@ -1,0 +1,490 @@
+{
+  "assetId": "item-icon-suite-v1",
+  "status": "production-foundation-review",
+  "authorship": "original-code-native-pixel-primitives",
+  "runtimeIntegration": "camp-inventory-and-shop-decorative-icons-with-text-fallback",
+  "geometry": {
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "columns": 5,
+    "rows": 5,
+    "sheetWidth": 80,
+    "sheetHeight": 80,
+    "transparentGutter": 1
+  },
+  "itemOrder": [
+    "courier-saber",
+    "warding-brush",
+    "salt-etched-rapier",
+    "dusk-censer",
+    "cedar-maul",
+    "pilgrim-knife",
+    "dawnsteel-blade",
+    "bellglass-focus",
+    "quilted-haori",
+    "river-silk-robe",
+    "bell-iron-lamellar",
+    "ash-lacquer-coat",
+    "dawn-thread-mantle",
+    "road-sandals",
+    "lantern-bead-cord",
+    "frostglass-pin",
+    "storm-kite-toggle",
+    "iron-knot",
+    "cedar-route-note",
+    "temple-charm",
+    "river-salve",
+    "ward-tonic",
+    "spirit-tea",
+    "dawn-salt",
+    "traveler-plum"
+  ],
+  "frames": [
+    {
+      "id": "courier-saber",
+      "motif": "saber",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        15,
+        15
+      ],
+      "rgbaSha256": "cd7653ea404762736002ed0a290a6d415dbd5f76c9815f658d1c205b7e651cd6"
+    },
+    {
+      "id": "warding-brush",
+      "motif": "brush",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        2,
+        14,
+        15
+      ],
+      "rgbaSha256": "90364bb7b4577c45d4f5ae2ce9ff900d27b5f229522c38c3a352c1bd60eacfd2"
+    },
+    {
+      "id": "salt-etched-rapier",
+      "motif": "rapier",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        1,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "6009586946180bd18b4bf4f407283f3ac34c0151c125bb8a26a2b32d2cd92f2b"
+    },
+    {
+      "id": "dusk-censer",
+      "motif": "censer",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "bb19926aba2c864a9cd00f20766a824826a508a3bb387b7d5bb340e31e15e405"
+    },
+    {
+      "id": "cedar-maul",
+      "motif": "maul",
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "ab2f5500ee4c54694dfebefbfe6eec0084a8fe9e1ad56eed6bccc313cedfe0be"
+    },
+    {
+      "id": "pilgrim-knife",
+      "motif": "knife",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        14,
+        15
+      ],
+      "rgbaSha256": "b5ec7c16c6887c81ef2beeeb6d437f6940841b9c166524569f3fc300f36a05ff"
+    },
+    {
+      "id": "dawnsteel-blade",
+      "motif": "greatsword",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "585c80c2ed030f38a7d6d350da0e462290fde8aba2584458e26f7bea645f9bdb"
+    },
+    {
+      "id": "bellglass-focus",
+      "motif": "focus",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        14,
+        15
+      ],
+      "rgbaSha256": "f1b251674e47cc448bf52a83ca209bcdc926c4f06fcfa90f089e44f11812dac6"
+    },
+    {
+      "id": "quilted-haori",
+      "motif": "haori",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "ef3836b4e2d1b965bce5e77bd896a0ac2d7f3c6e0de424f66dbea915d8b4bc6f"
+    },
+    {
+      "id": "river-silk-robe",
+      "motif": "robe",
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "244fe42a5ee6c50f902475f0c77b170f18e21f823bdac6462fc9d6a3ed980405"
+    },
+    {
+      "id": "bell-iron-lamellar",
+      "motif": "lamellar",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "56ce14bfc72fbe0020207d38b1e35a0456438820a3ff54a688c9eab4d944cfde"
+    },
+    {
+      "id": "ash-lacquer-coat",
+      "motif": "coat",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        14,
+        15
+      ],
+      "rgbaSha256": "8c992e1b33aa239fbb4c674f12e53b1727fd917d70f07312a2c39194838c7ae1"
+    },
+    {
+      "id": "dawn-thread-mantle",
+      "motif": "mantle",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "18382491ad45c73bf1dd743d9e773669e3a1ef431e402aa18e590486b72d4779"
+    },
+    {
+      "id": "road-sandals",
+      "motif": "sandals",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        1,
+        3,
+        15,
+        14
+      ],
+      "rgbaSha256": "3ddfce05b8875f9e406357e64623c83ddfff269f3b53871aa016b142e2a7926e"
+    },
+    {
+      "id": "lantern-bead-cord",
+      "motif": "beads",
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "a08226d85d1437ba4db1512b4860d08a94acf9b4de8adbca2afb91441a026e55"
+    },
+    {
+      "id": "frostglass-pin",
+      "motif": "pin",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        14,
+        15
+      ],
+      "rgbaSha256": "2763f543bcce2175b5f98101a55d589117a158491a26790f7720a0c95e5aa531"
+    },
+    {
+      "id": "storm-kite-toggle",
+      "motif": "toggle",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "f783d2067b76d5c11429b70bf62fc1cadd7d5ef1fcc04f71b4c910a341c0a443"
+    },
+    {
+      "id": "iron-knot",
+      "motif": "knot",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        14,
+        15
+      ],
+      "rgbaSha256": "39fc1d0869efe8243ec5e10558db06e8a47fd6efb938d66ef04cf66c581a2c42"
+    },
+    {
+      "id": "cedar-route-note",
+      "motif": "note",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "3de88a12e12c52457df43052cfcd6eaa0fc492e6d58c48db4d2170d6b25b7880"
+    },
+    {
+      "id": "temple-charm",
+      "motif": "registry-token",
+      "rect": [
+        64,
+        48,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "bb235e1892254240d1e2e91f7ec5a4f6e14b34069cdb1f454fa750535e0f09db"
+    },
+    {
+      "id": "river-salve",
+      "motif": "salve",
+      "rect": [
+        0,
+        64,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "7af2fb55934ff8baa576c89032b825d3e11a96121c8e2a91bc545008ab0132ed"
+    },
+    {
+      "id": "ward-tonic",
+      "motif": "tonic",
+      "rect": [
+        16,
+        64,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        3,
+        1,
+        14,
+        15
+      ],
+      "rgbaSha256": "438dffc40e8ca3a0b11a0f431c62ebc6cbb16e4b87d4b7251106588c437e1f6d"
+    },
+    {
+      "id": "spirit-tea",
+      "motif": "tea",
+      "rect": [
+        32,
+        64,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "45bbcfdcd7b10e27aeafad7ec5464fb9da37b77eae2c19af49519d1eecc6ae23"
+    },
+    {
+      "id": "dawn-salt",
+      "motif": "packet",
+      "rect": [
+        48,
+        64,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        1,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "7566975600e802a0d79aef110ae7ce513e2e59284b6e6436902a5d14f6f7bcbf"
+    },
+    {
+      "id": "traveler-plum",
+      "motif": "plum",
+      "rect": [
+        64,
+        64,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        2,
+        1,
+        15,
+        15
+      ],
+      "rgbaSha256": "b6c5fe3ec95a1429fd29f50ade2be5a3369f826f1e27665e321fb5ce76bda132"
+    }
+  ],
+  "exports": [
+    {
+      "file": "item-icon-atlas.png",
+      "purpose": "transparent-runtime-atlas",
+      "width": 80,
+      "height": 80,
+      "sha256": "33ed882e230d01aa4755c1f09c76baed5700e380155543f1d1274a397fbee471"
+    },
+    {
+      "file": "item-icon-contact-sheet.png",
+      "purpose": "labeled-review-only-not-runtime",
+      "width": 644,
+      "height": 754,
+      "sha256": "02d84aa6f45ab27eba63fc7ac57bae65f9156a976e1f0e19bebb089d63bee2f1"
+    }
+  ],
+  "restrictions": [
+    "No real-world sacred, devotional, heraldic, or military insignia.",
+    "Icons are decorative; the item name and description remain authoritative.",
+    "Reward evidence is shown as paper or secular route hardware, never as a sacred collectible."
+  ]
+}

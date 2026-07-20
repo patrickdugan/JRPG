@@ -47,6 +47,11 @@ import {
   getPartyPortraitFrame,
   partyPortraitImageHasExpectedSize,
 } from './party-portrait-atlas.mjs';
+import {
+  ITEM_ICON_ATLAS,
+  getItemIconFrame,
+  itemIconImageHasExpectedSize,
+} from './item-icon-atlas.mjs';
 import { CAMP_CONVERSATIONS } from './content/camp-conversations.mjs';
 import { getCampConversationPlan } from './camp-conversation-contract.mjs';
 import {
@@ -211,6 +216,27 @@ campPartyAtlasImage.addEventListener('error', () => {
 }, { once: true });
 campPartyAtlasImage.src = PARTY_PORTRAIT_ATLAS.url;
 
+const itemIconAtlasImage = new Image();
+let itemIconAtlasState = 'loading';
+inventoryList.dataset.itemArtState = itemIconAtlasState;
+shopList.dataset.itemArtState = itemIconAtlasState;
+itemIconAtlasImage.decoding = 'async';
+itemIconAtlasImage.addEventListener('load', () => {
+  itemIconAtlasState = itemIconImageHasExpectedSize(itemIconAtlasImage) ? 'ready' : 'error';
+  inventoryList.dataset.itemArtState = itemIconAtlasState;
+  shopList.dataset.itemArtState = itemIconAtlasState;
+  renderInventory();
+  renderShop();
+}, { once: true });
+itemIconAtlasImage.addEventListener('error', () => {
+  itemIconAtlasState = 'error';
+  inventoryList.dataset.itemArtState = itemIconAtlasState;
+  shopList.dataset.itemArtState = itemIconAtlasState;
+  renderInventory();
+  renderShop();
+}, { once: true });
+itemIconAtlasImage.src = ITEM_ICON_ATLAS.url;
+
 const ROLES = Object.freeze({
   ren: 'Courier Vanguard', aya: 'Ledger Arcanist', lise: 'Dawn Hunter',
   mateus: 'Penitent Censer', genta: 'Bridge Warden', kiku: 'Cold Remedy Keeper',
@@ -223,6 +249,22 @@ function castName(memberId) {
 
 function itemName(itemId) {
   return ITEM_CATALOGUE[itemId]?.name ?? itemId;
+}
+
+function itemIconElement(itemId) {
+  const icon = element('span', 'item-icon');
+  icon.setAttribute('aria-hidden', 'true');
+  icon.dataset.itemId = itemId;
+  const frame = getItemIconFrame(itemId);
+  if (itemIconAtlasState !== 'ready' || !frame) {
+    icon.classList.add('item-icon-fallback');
+    return icon;
+  }
+  const scale = 2;
+  icon.style.backgroundImage = `url("${ITEM_ICON_ATLAS.url}")`;
+  icon.style.backgroundSize = `${ITEM_ICON_ATLAS.width * scale}px ${ITEM_ICON_ATLAS.height * scale}px`;
+  icon.style.backgroundPosition = `${-frame.x * scale}px ${-frame.y * scale}px`;
+  return icon;
 }
 
 function resultMessage(result) {
@@ -380,8 +422,8 @@ function renderInventory() {
     .filter(({ item }) => inventoryFilter === 'all' || (inventoryFilter === 'gear' ? item.kind === 'equipment' : item.kind === inventoryFilter));
   inventoryCount.textContent = `${Object.values(loadoutState.inventory).reduce((sum, count) => sum + count, 0)} stored`;
   inventoryList.replaceChildren(...(entries.length ? entries.map(({ item, quantity }) => {
-    const card = element('article', 'inventory-entry');
-    card.append(element('small', '', `${item.kind} · ${quantity} held`), element('strong', '', item.name), element('span', '', item.description));
+    const card = element('article', 'inventory-entry has-item-icon');
+    card.append(itemIconElement(item.id), element('small', '', `${item.kind} · ${quantity} held`), element('strong', '', item.name), element('span', '', item.description));
     const actions = element('div', 'inventory-entry-actions');
     if (item.kind === 'consumable') {
       const use = element('button', '', `Use on ${castName(selectedMemberId).split(' ')[0]}`);
@@ -405,9 +447,9 @@ function renderInventory() {
 
 function renderShop() {
   shopList.replaceChildren(...Object.values(ITEM_CATALOGUE).filter((item) => !item.rewardOnly && item.price > 0).map((item) => {
-    const card = element('article', 'shop-entry');
+    const card = element('article', 'shop-entry has-item-icon');
     const upgrade = loadoutState.upgrades[item.id] ?? 0;
-    card.append(element('small', '', `${item.kind}${item.slot ? ` · ${item.slot}` : ''}${upgrade ? ` · forge ${upgrade}` : ''}`), element('strong', '', item.name), element('span', '', item.description));
+    card.append(itemIconElement(item.id), element('small', '', `${item.kind}${item.slot ? ` · ${item.slot}` : ''}${upgrade ? ` · forge ${upgrade}` : ''}`), element('strong', '', item.name), element('span', '', item.description));
     const actions = element('div', 'shop-entry-actions');
     const buy = element('button', '', `Buy · ${item.price}`);
     buy.type = 'button'; buy.dataset.buyItem = item.id;

@@ -123,11 +123,15 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             page.wait_for_url("**/camp.html")
             page.locator("#memberName").wait_for()
             page.wait_for_function(
-                "() => document.querySelector('#portraitToken')?.dataset.artState === 'ready'"
+                """() => document.querySelector('#portraitToken')?.dataset.artState === 'ready'
+                  && document.querySelector('#inventoryList')?.dataset.itemArtState === 'ready'
+                  && document.querySelector('#shopList')?.dataset.itemArtState === 'ready'"""
             )
             camp_party_art = page.locator("#portraitToken").evaluate(
                 """token => ({
                   portrait: token.dataset.artState,
+                  inventoryItems: document.querySelector('#inventoryList').dataset.itemArtState,
+                  shopItems: document.querySelector('#shopList').dataset.itemArtState,
                   usesAtlas: token.classList.contains('has-atlas'),
                   memberId: token.dataset.memberId,
                   expression: token.dataset.expression,
@@ -141,7 +145,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(
                 camp_party_art == {
-                    "portrait": "ready", "usesAtlas": True, "memberId": "ren", "expression": "neutral",
+                    "portrait": "ready", "inventoryItems": "ready", "shopItems": "ready",
+                    "usesAtlas": True, "memberId": "ren", "expression": "neutral",
                     "row": "0", "column": "0", "x": "0", "y": "0", "width": "64", "height": "64",
                 },
                 f"Camp Ren portrait frame contract drifted: {camp_party_art}.",
