@@ -3,7 +3,7 @@
   "status": "editable-production-source",
   "license": "Original project artwork; code-authored without external raster references.",
   "geometry": {
-    "columns": 5,
+    "columns": 6,
     "rows": 8,
     "cellWidth": 64,
     "cellHeight": 80,
@@ -15,7 +15,8 @@
     { "id": "windup", "column": 1, "tag": "attack-load", "event": "windupStart" },
     { "id": "attack", "column": 2, "tag": "attack-active", "event": "activeStart" },
     { "id": "stagger", "column": 3, "tag": "hit-recoil", "event": "recoveryStart" },
-    { "id": "defeat", "column": 4, "tag": "defeat-release", "event": "complete" }
+    { "id": "defeat", "column": 4, "tag": "defeat-release", "event": "complete" },
+    { "id": "recovery", "column": 5, "tag": "attack-recovery", "event": "recoveryStart" }
   ],
   "paletteSets": {
     "PAL-ENM-HOUND-01": { "shade": "#0B1020", "body": "#5A3A2C", "light": "#8B6043", "accent": "#B34A3E", "metal": "#D7C99A" },
@@ -38,7 +39,8 @@
         "windup": { "pivot": [27, 66], "ground": [27, 72], "contact": [45, 58] },
         "attack": { "pivot": [34, 65], "ground": [34, 72], "contact": [58, 48] },
         "stagger": { "pivot": [25, 65], "ground": [25, 72], "contact": [13, 48] },
-        "defeat": { "pivot": [30, 67], "ground": [30, 73], "contact": [49, 63] }
+        "defeat": { "pivot": [30, 67], "ground": [30, 73], "contact": [49, 63] },
+        "recovery": { "pivot": [30, 65], "ground": [30, 72], "contact": [50, 55] }
       }
     },
     {
@@ -51,7 +53,8 @@
         "windup": { "pivot": [28, 54], "ground": [28, 72], "contact": [36, 50] },
         "attack": { "pivot": [36, 49], "ground": [36, 72], "contact": [58, 42] },
         "stagger": { "pivot": [26, 52], "ground": [26, 72], "contact": [12, 38] },
-        "defeat": { "pivot": [30, 59], "ground": [30, 72], "contact": [43, 56] }
+        "defeat": { "pivot": [30, 59], "ground": [30, 72], "contact": [43, 56] },
+        "recovery": { "pivot": [32, 54], "ground": [32, 72], "contact": [48, 50] }
       }
     },
     {
@@ -64,7 +67,8 @@
         "windup": { "pivot": [29, 64], "ground": [29, 73], "contact": [17, 25] },
         "attack": { "pivot": [34, 64], "ground": [34, 73], "contact": [55, 66] },
         "stagger": { "pivot": [26, 64], "ground": [26, 73], "contact": [13, 42] },
-        "defeat": { "pivot": [29, 65], "ground": [29, 73], "contact": [51, 67] }
+        "defeat": { "pivot": [29, 65], "ground": [29, 73], "contact": [51, 67] },
+        "recovery": { "pivot": [30, 64], "ground": [30, 73], "contact": [49, 55] }
       }
     },
     {
@@ -77,7 +81,8 @@
         "windup": { "pivot": [28, 63], "ground": [28, 72], "contact": [14, 31] },
         "attack": { "pivot": [34, 62], "ground": [34, 72], "contact": [58, 48] },
         "stagger": { "pivot": [25, 63], "ground": [25, 72], "contact": [13, 39] },
-        "defeat": { "pivot": [29, 64], "ground": [29, 72], "contact": [50, 67] }
+        "defeat": { "pivot": [29, 64], "ground": [29, 72], "contact": [50, 67] },
+        "recovery": { "pivot": [29, 63], "ground": [29, 72], "contact": [49, 54] }
       }
     },
     {
@@ -90,7 +95,8 @@
         "windup": { "pivot": [29, 56], "ground": [29, 72], "contact": [18, 32] },
         "attack": { "pivot": [35, 53], "ground": [35, 72], "contact": [58, 39] },
         "stagger": { "pivot": [25, 56], "ground": [25, 72], "contact": [10, 42] },
-        "defeat": { "pivot": [30, 60], "ground": [30, 72], "contact": [48, 59] }
+        "defeat": { "pivot": [30, 60], "ground": [30, 72], "contact": [48, 59] },
+        "recovery": { "pivot": [30, 56], "ground": [30, 72], "contact": [48, 52] }
       }
     },
     {
@@ -103,7 +109,8 @@
         "windup": { "pivot": [29, 63], "ground": [29, 73], "contact": [17, 25] },
         "attack": { "pivot": [35, 62], "ground": [35, 73], "contact": [58, 62] },
         "stagger": { "pivot": [25, 63], "ground": [25, 73], "contact": [13, 38] },
-        "defeat": { "pivot": [29, 65], "ground": [29, 73], "contact": [51, 67] }
+        "defeat": { "pivot": [29, 65], "ground": [29, 73], "contact": [51, 67] },
+        "recovery": { "pivot": [30, 63], "ground": [30, 73], "contact": [49, 56] }
       }
     },
     {
@@ -116,7 +123,8 @@
         "windup": { "pivot": [29, 63], "ground": [29, 73], "contact": [18, 24] },
         "attack": { "pivot": [35, 62], "ground": [35, 73], "contact": [57, 55] },
         "stagger": { "pivot": [25, 63], "ground": [25, 73], "contact": [12, 40] },
-        "defeat": { "pivot": [29, 65], "ground": [29, 73], "contact": [50, 67] }
+        "defeat": { "pivot": [29, 65], "ground": [29, 73], "contact": [50, 67] },
+        "recovery": { "pivot": [30, 63], "ground": [30, 73], "contact": [49, 54] }
       }
     },
     {
@@ -129,7 +137,8 @@
         "windup": { "pivot": [29, 62], "ground": [29, 73], "contact": [17, 27] },
         "attack": { "pivot": [35, 61], "ground": [35, 73], "contact": [58, 43] },
         "stagger": { "pivot": [25, 62], "ground": [25, 73], "contact": [12, 37] },
-        "defeat": { "pivot": [29, 64], "ground": [29, 73], "contact": [51, 67] }
+        "defeat": { "pivot": [29, 64], "ground": [29, 73], "contact": [51, 67] },
+        "recovery": { "pivot": [30, 62], "ground": [30, 73], "contact": [49, 53] }
       }
     }
   ]

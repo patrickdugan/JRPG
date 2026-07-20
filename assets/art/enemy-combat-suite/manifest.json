@@ -1,12 +1,12 @@
 {
   "assetId": "enemy-combat-suite",
   "status": "editable-production-key-pose-suite",
-  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat",
+  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat-recovery",
   "canonicalSource": "enemy-combat-suite.source.json",
   "builder": "build_enemy_combat_suite.py",
   "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",
   "geometry": {
-    "columns": 5,
+    "columns": 6,
     "rows": 8,
     "cellWidth": 64,
     "cellHeight": 80,
@@ -18,7 +18,8 @@
     "windup",
     "attack",
     "stagger",
-    "defeat"
+    "defeat",
+    "recovery"
   ],
   "familyOrder": [
     "hound",
@@ -193,12 +194,12 @@
     {
       "path": "enemy-combat-suite.source.json",
       "format": "json",
-      "sha256": "8916f09d12057f61374575411ea3a7454c80152b0d506b53327cc60f245b4b80"
+      "sha256": "f34f5827a60cf4acccdbfa2ed3dc74c6423841089b2c42421a353c8a8a5a201e"
     },
     {
       "path": "build_enemy_combat_suite.py",
       "format": "python",
-      "sha256": "3ac6561ea5a1abcbd2748545f59c6ead193eb93844f4f8d0560e5c2ae9727a32"
+      "sha256": "4fe7f9380730b4ed929321f4cdb71476c3904aaf2e98a4ee29049a7326e48dfa"
     }
   ],
   "exports": [
@@ -206,9 +207,9 @@
       "path": "enemy-combat-atlas.png",
       "role": "transparent-runtime-atlas",
       "runtime": true,
-      "sha256": "c1fe889a553397c3f2cd116e3280f278adae5ab831271f41127e77acec384872",
+      "sha256": "fcac5d3df2960322ce1bcc52891b04560a3ca290c1234a50682916f81c874a95",
       "ihdr": {
-        "width": 320,
+        "width": 384,
         "height": 640,
         "bitDepth": 8,
         "colorType": 6,
@@ -221,9 +222,9 @@
       "path": "enemy-combat-contact-sheet.png",
       "role": "labeled-review-contact-sheet",
       "runtime": false,
-      "sha256": "b8387d4f21eb3f5f253ed78dea3378bd6c68ca6db25bae9160248edc62c43c7c",
+      "sha256": "13335c0597eb3214909e0e06eb92a56cd341eef257c8383d9d777685d06616e6",
       "ihdr": {
-        "width": 696,
+        "width": 832,
         "height": 1500,
         "bitDepth": 8,
         "colorType": 2,
@@ -455,6 +456,50 @@
       "rgbaSha256": "e6b52f5619eb14cfe76c3cd3167217adff4d6c78cbf5f3c7124d2aad0b19594d"
     },
     {
+      "id": "hound:recovery",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 320,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        65
+      ],
+      "ground": [
+        30,
+        72
+      ],
+      "contact": [
+        50,
+        55
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 40,
+        "width": 52,
+        "height": 35
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 40,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 985,
+      "rgbaSha256": "f041065c321c68885f1028c4e298678a07a00fd17526e36f5685b14a7a828df1"
+    },
+    {
       "id": "wisp:neutral",
       "familyId": "wisp",
       "templateIds": [
@@ -683,6 +728,52 @@
       },
       "opaquePixelCount": 856,
       "rgbaSha256": "b9617ac3dc9e9878e2901bd2abc377d8dddf7d794916092b1a3fc86e1d77723a"
+    },
+    {
+      "id": "wisp:recovery",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 320,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        32,
+        54
+      ],
+      "ground": [
+        32,
+        72
+      ],
+      "contact": [
+        48,
+        50
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 29,
+        "width": 49,
+        "height": 46
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 29,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1240,
+      "rgbaSha256": "b22704f6297eaf100c1717d44d567e3dd9ccb0857b7af649a9519d453b8b2e81"
     },
     {
       "id": "ashen-oni:neutral",
@@ -940,6 +1031,57 @@
       "rgbaSha256": "393a1ffb87165baea4b0a29e04f65e23eb20848724c03ea1aaa9c893c25ec110"
     },
     {
+      "id": "ashen-oni:recovery",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 320,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        64
+      ],
+      "ground": [
+        30,
+        73
+      ],
+      "contact": [
+        49,
+        55
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 19,
+        "width": 50,
+        "height": 56
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 19,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1686,
+      "rgbaSha256": "5ae752e2f7cea268b87e38b45367e3424cd78a2bdbbd0a7ce646056cd6bb5e4f"
+    },
+    {
       "id": "court-retainer:neutral",
       "familyId": "court-retainer",
       "templateIds": [
@@ -1175,6 +1317,53 @@
       "rgbaSha256": "09dc8a213812083152d9567e50547c6eddaacb973e2f5901e11c68177ec4ef7a"
     },
     {
+      "id": "court-retainer:recovery",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 320,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        63
+      ],
+      "ground": [
+        29,
+        72
+      ],
+      "contact": [
+        49,
+        54
+      ],
+      "alphaBounds": {
+        "x": 11,
+        "y": 18,
+        "width": 47,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 11,
+        "top": 18,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1423,
+      "rgbaSha256": "13316913d59c910110d7b936552c4c1f5ae35d8728139f2a9fb33ce5967262e8"
+    },
+    {
       "id": "widow:neutral",
       "familyId": "widow",
       "templateIds": [
@@ -1388,6 +1577,49 @@
       },
       "opaquePixelCount": 1084,
       "rgbaSha256": "3d89d995f1375ea7b36ed41a4a4c200b70955bbff116feca722fec917b445e4e"
+    },
+    {
+      "id": "widow:recovery",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 320,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        56
+      ],
+      "ground": [
+        30,
+        72
+      ],
+      "contact": [
+        48,
+        52
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 23,
+        "width": 50,
+        "height": 52
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 23,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1299,
+      "rgbaSha256": "56755d4dcac583173e2eb1730c4ed3ea9a3dce9d85a460af7fda0ca91b379a00"
     },
     {
       "id": "furnace:neutral",
@@ -1610,6 +1842,50 @@
       "rgbaSha256": "574503485a108905d20d864eddbe137e31d9decfb7a2a346a65f66e94d84176b"
     },
     {
+      "id": "furnace:recovery",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 320,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        63
+      ],
+      "ground": [
+        30,
+        73
+      ],
+      "contact": [
+        49,
+        56
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 18,
+        "width": 50,
+        "height": 57
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 18,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1847,
+      "rgbaSha256": "3bcef8040baddf03a864cfd4ab248e8ad02bdc4fd9af412caf362debe3963f8f"
+    },
+    {
       "id": "bell-warden:neutral",
       "familyId": "bell-warden",
       "templateIds": [
@@ -1830,6 +2106,50 @@
       "rgbaSha256": "1dae986f9acdb6c2ba5c7ed84215567f5729ebe67684c619c5a0f2917705ce0e"
     },
     {
+      "id": "bell-warden:recovery",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 320,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        63
+      ],
+      "ground": [
+        30,
+        73
+      ],
+      "contact": [
+        49,
+        54
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 19,
+        "width": 51,
+        "height": 56
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 19,
+        "right": 5,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1797,
+      "rgbaSha256": "3564bbe423c72c21b8e509db7b8995cb0056b9cf04d8808d0f9894610a75dbff"
+    },
+    {
       "id": "black-court:neutral",
       "familyId": "black-court",
       "templateIds": [
@@ -2048,6 +2368,50 @@
       },
       "opaquePixelCount": 1448,
       "rgbaSha256": "ba0af71b2eb8c7fa0a095c550e31e951ec1de36ebe2d03302e4ad120117b05fc"
+    },
+    {
+      "id": "black-court:recovery",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "recovery",
+      "tag": "attack-recovery",
+      "event": "recoveryStart",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 320,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        62
+      ],
+      "ground": [
+        30,
+        73
+      ],
+      "contact": [
+        49,
+        53
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 13,
+        "width": 49,
+        "height": 62
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 13,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1547,
+      "rgbaSha256": "9572d80ca781561de35074802300e5d89d34af1087b973ba19deaa6006baa364"
     }
   ]
 }
