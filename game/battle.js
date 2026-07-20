@@ -139,6 +139,11 @@ import {
   getBattlePresentationBoundary,
   sampleBattleCommandPresentation,
 } from './battle-command-presentation.mjs';
+import {
+  createBattleMoveFeedback,
+  createSelectedTargetFeedback,
+  sampleBattleMoveFeedback,
+} from './battle-system-feedback.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -282,6 +287,7 @@ const battleEnemyPoseByActor = new Map();
 const battleEnemyPoseUntil = new Map();
 let activeBattleAnimation = null;
 let activeCommandPresentation = null;
+let activeBattleSystemFeedback = null;
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
 
@@ -564,6 +570,48 @@ function publishActiveCommandAnnouncement(now = performance.now()) {
   if (!announcements.textContent.includes(commandText)) {
     announcements.textContent = `${commandText} ${announcements.textContent}`.trim();
   }
+}
+
+function startBattleMoveSystemFeedback({
+  result,
+  actor,
+  dx,
+  dy,
+  startedAt = performance.now(),
+  speed = autoGrindActive ? speedMultiplier : 1,
+} = {}) {
+  if (!actor || !result) return null;
+  activeBattleSystemFeedback = createBattleMoveFeedback({
+    result,
+    actorId: actor.instanceId,
+    actorName: actor.name,
+    sourceTile: actor.pos,
+    dx,
+    dy,
+    board: { width: engine.level.width, height: engine.level.height },
+    startedAt,
+    speed,
+  });
+  announcements.textContent = activeBattleSystemFeedback.announcement;
+  return activeBattleSystemFeedback;
+}
+
+function selectedBattleTargetFeedback(snapshot = engine.snapshot(), now = performance.now()) {
+  const target = snapshot.actors.find((actor) => actor.instanceId === selectedTargetId
+    && actor.faction === 'enemy' && actor.hp > 0 && actor.active !== false);
+  if (!target) return null;
+  return createSelectedTargetFeedback({
+    targetId: target.instanceId,
+    targetName: target.name,
+    targetTile: target.pos,
+    nowMs: now,
+    reducedMotion: reducedMotion.matches,
+  });
+}
+
+function announceSelectedBattleTarget(snapshot = engine.snapshot()) {
+  const feedback = selectedBattleTargetFeedback(snapshot);
+  if (feedback) announcements.textContent = feedback.announcement;
 }
 
 function markBattleMotion(actorId, dx, dy) {
@@ -856,6 +904,75 @@ function drawBattleCommandPresentationFx(frame, geometry) {
   context.restore();
 }
 
+function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
+  if (targetFrame) {
+    const px = geometry.originX + targetFrame.targetTile.x * geometry.cell;
+    const py = geometry.originY + targetFrame.targetTile.y * geometry.cell;
+    const inset = Math.max(3, geometry.cell * 0.08);
+    const corner = Math.max(5, geometry.cell * 0.22);
+    context.save();
+    context.globalAlpha = targetFrame.opacity;
+    context.fillStyle = 'rgba(255, 230, 154, 0.12)';
+    context.fillRect(px + inset, py + inset, geometry.cell - inset * 2, geometry.cell - inset * 2);
+    context.strokeStyle = '#fff2ab';
+    context.lineWidth = Math.max(2, geometry.cell * 0.055);
+    context.strokeRect(px + inset, py + inset, geometry.cell - inset * 2, geometry.cell - inset * 2);
+    context.beginPath();
+    context.moveTo(px + inset, py + inset + corner); context.lineTo(px + inset, py + inset); context.lineTo(px + inset + corner, py + inset);
+    context.moveTo(px + geometry.cell - inset - corner, py + inset); context.lineTo(px + geometry.cell - inset, py + inset); context.lineTo(px + geometry.cell - inset, py + inset + corner);
+    context.moveTo(px + inset, py + geometry.cell - inset - corner); context.lineTo(px + inset, py + geometry.cell - inset); context.lineTo(px + inset + corner, py + geometry.cell - inset);
+    context.moveTo(px + geometry.cell - inset - corner, py + geometry.cell - inset); context.lineTo(px + geometry.cell - inset, py + geometry.cell - inset); context.lineTo(px + geometry.cell - inset, py + geometry.cell - inset - corner);
+    context.stroke();
+    context.fillStyle = '#fff2ab';
+    const diamond = Math.max(3, geometry.cell * (0.08 + targetFrame.pulse * 0.025));
+    context.translate(px + geometry.cell / 2, py + inset);
+    context.rotate(Math.PI / 4);
+    context.fillRect(-diamond, -diamond, diamond * 2, diamond * 2);
+    context.restore();
+  }
+
+  if (!moveFrame) return;
+  const source = battleCanvasPoint(moveFrame.sourceTile, geometry);
+  const destination = battleCanvasPoint(moveFrame.displayTile, geometry);
+  const px = geometry.originX + moveFrame.displayTile.x * geometry.cell;
+  const py = geometry.originY + moveFrame.displayTile.y * geometry.cell;
+  context.save();
+  context.globalAlpha = moveFrame.opacity;
+  context.lineWidth = Math.max(2, geometry.cell * 0.06);
+  context.lineCap = 'square';
+  if (moveFrame.kind === 'move-destination') {
+    const routeX = source.x + ((destination.x - source.x) * moveFrame.routeProgress);
+    const routeY = source.y + ((destination.y - source.y) * moveFrame.routeProgress);
+    context.strokeStyle = '#8ce1d7';
+    context.setLineDash([Math.max(3, geometry.cell * 0.12), Math.max(2, geometry.cell * 0.08)]);
+    context.beginPath();
+    context.moveTo(source.x, source.y);
+    context.lineTo(routeX, routeY);
+    context.stroke();
+    context.setLineDash([]);
+    context.fillStyle = 'rgba(119, 215, 207, 0.2)';
+    context.fillRect(px + 4, py + 4, geometry.cell - 8, geometry.cell - 8);
+    context.translate(destination.x, destination.y);
+    context.rotate(Math.PI / 4);
+    const size = Math.max(5, geometry.cell * (0.17 + moveFrame.pulse * 0.035));
+    context.strokeRect(-size, -size, size * 2, size * 2);
+  } else {
+    context.fillStyle = 'rgba(218, 73, 88, 0.22)';
+    context.fillRect(px + 3, py + 3, geometry.cell - 6, geometry.cell - 6);
+    context.strokeStyle = '#ff8a98';
+    context.beginPath();
+    context.moveTo(px + geometry.cell * 0.25, py + geometry.cell * 0.25);
+    context.lineTo(px + geometry.cell * 0.75, py + geometry.cell * 0.75);
+    context.moveTo(px + geometry.cell * 0.75, py + geometry.cell * 0.25);
+    context.lineTo(px + geometry.cell * 0.25, py + geometry.cell * 0.75);
+    context.stroke();
+    if (moveFrame.outOfBounds) {
+      context.strokeRect(px + 2, py + 2, geometry.cell - 4, geometry.cell - 4);
+    }
+  }
+  context.restore();
+}
+
 function drawBossIntent(snapshot, geometry) {
   const intent = snapshot.bossMechanic?.pendingIntent;
   if (!intent) return;
@@ -889,6 +1006,8 @@ function drawBattle(now = performance.now()) {
   const sampledAnimation = currentBattleAnimationFrame(now);
   const animation = reducedMotion.matches && !sampledAnimation?.terminalDefeatWindow ? null : sampledAnimation;
   const commandPresentation = sampleBattleCommandPresentation(activeCommandPresentation, now, { reducedMotion: reducedMotion.matches });
+  const moveFeedback = sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
+  const selectedTargetFeedback = selectedBattleTargetFeedback(snapshot, now);
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
@@ -1133,14 +1252,10 @@ function drawBattle(now = performance.now()) {
       context.fillStyle = party ? '#102b39' : '#321824';
       context.fillRect(centerX - cell * 0.12, centerY - cell * 0.12, cell * 0.24, cell * 0.17);
     }
-    if (actor.instanceId === selectedTargetId) {
-      context.strokeStyle = '#fff2ab';
-      context.lineWidth = 2;
-      context.strokeRect(centerX - cell * 0.31, centerY - cell * 0.33, cell * 0.62, cell * 0.66);
-    }
   }
   drawBattleAnimationFx(animation, geometry);
   drawBattleCommandPresentationFx(commandPresentation, geometry);
+  drawBattleSystemFeedback(moveFeedback, selectedTargetFeedback, geometry);
 }
 
 function createCombatantCard(actor, selected = false, targetable = true) {
@@ -1706,7 +1821,11 @@ function render() {
 
 function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.snapshot(), startedAt = performance.now()) {
   if (command.type === 'move') {
+    const actor = beforeSnapshot.actors.find((candidate) => candidate.instanceId === actorId);
     const result = engine.move(actorId, command.dx, command.dy);
+    startBattleMoveSystemFeedback({
+      result, actor, dx: command.dx, dy: command.dy, startedAt, speed: speedMultiplier,
+    });
     if (result.ok) markBattleMotion(actorId, command.dx, command.dy);
     return result;
   }
@@ -1784,7 +1903,10 @@ function executeAutoGrindStep(now) {
     return;
   }
   if (!result?.ok) {
-    cancelQueuedAutoGrind(`Auto-Grind stopped: ${result?.reason ?? 'a deterministic command failed.'}`);
+    const feedback = activeBattleSystemFeedback?.kind === 'move-blocked'
+      ? `${activeBattleSystemFeedback.announcement} `
+      : '';
+    cancelQueuedAutoGrind(`${feedback}Auto-Grind stopped: ${result?.reason ?? 'a deterministic command failed.'}`);
     render();
     return;
   }
@@ -1854,6 +1976,7 @@ function toggleAutoGrind() {
   autoGrindActive = true;
   activeBattleAnimation = null;
   activeCommandPresentation = null;
+  activeBattleSystemFeedback = null;
   clearEnemyIntentSchedule();
   autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind started for ${repeatGrindQueue.plannedWins} win${repeatGrindQueue.plannedWins === 1 ? '' : 's'} at ${speedMultiplier}×. Every reward saves before the next repeat.`);
@@ -1875,6 +1998,7 @@ function restartQueuedAutoGrind(now) {
   battleEnemyPoseUntil.clear();
   activeBattleAnimation = null;
   activeCommandPresentation = null;
+  activeBattleSystemFeedback = null;
   autoGrindActive = true;
   autoActionAt = now + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind starting win ${repeatGrindQueue.completedWins + 1}/${repeatGrindQueue.plannedWins} at ${speedMultiplier}×.`);
@@ -1953,11 +2077,13 @@ function moveActive(dx, dy) {
   if (!actor) return;
   selectedCommand = 'move';
   const result = engine.move(actor.instanceId, dx, dy);
+  const feedback = startBattleMoveSystemFeedback({ result, actor, dx, dy });
   if (result.ok) {
     markBattleMotion(actor.instanceId, dx, dy);
     announceEngineLogDelta(snapshot, engine.snapshot());
+    if (feedback) announcements.textContent = feedback.announcement;
   }
-  if (!result.ok) addMessage(result.reason);
+  if (!result.ok) addMessage(feedback?.announcement ?? result.reason);
   render();
 }
 
@@ -1966,6 +2092,7 @@ confirmCommand.addEventListener('click', executeSelectedCommand);
 targetSelect.addEventListener('change', () => {
   selectedTargetId = targetSelect.value;
   drawBattle();
+  announceSelectedBattleTarget();
 });
 enemyPanel.addEventListener('click', (event) => {
   if (manualInputLocked()) return;
@@ -1975,6 +2102,7 @@ enemyPanel.addEventListener('click', (event) => {
   selectedTargetId = actorId;
   targetSelect.value = selectedTargetId;
   render();
+  announceSelectedBattleTarget();
   enemyPanel.querySelector(`[data-actor-id="${CSS.escape(actorId)}"]`)?.focus({ preventScroll: true });
 });
 
@@ -2014,6 +2142,7 @@ restartBattle.addEventListener('click', () => {
   battleEnemyPoseUntil.clear();
   activeBattleAnimation = null;
   activeCommandPresentation = null;
+  activeBattleSystemFeedback = null;
   uiMessages = [`Restarted ${encounter.name}. First-clear rewards remain saved; victories can be replayed for grind XP.`];
   render();
 });
@@ -2070,6 +2199,7 @@ canvas.addEventListener('click', (event) => {
     selectedTargetId = enemy.instanceId;
     targetSelect.value = selectedTargetId;
     render();
+    announceSelectedBattleTarget();
     return;
   }
   moveActive(tile.x - actor.pos.x, tile.y - actor.pos.y);
@@ -2109,6 +2239,10 @@ function tick(now) {
     activeCommandPresentation = null;
     clearEnemyIntentSchedule();
     render();
+  }
+  if (activeBattleSystemFeedback && now >= activeBattleSystemFeedback.endsAt) {
+    activeBattleSystemFeedback = null;
+    drawBattle(now);
   }
   if (autoSettleAt !== null && now >= autoSettleAt) {
     autoSettleAt = null;
