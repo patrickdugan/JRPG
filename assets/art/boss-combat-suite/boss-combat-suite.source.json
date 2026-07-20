@@ -1,0 +1,90 @@
+{
+  "assetId": "boss-combat-suite-v1",
+  "status": "editable-production-runtime-candidate",
+  "authorship": "original-code-native-pixel-primitives",
+  "bossInclusionRule": {
+    "encounterFormats": ["boss", "boss-rescue", "boss-phase", "final-boss"],
+    "selection": "The first enemy template in each canonical encounter is the distinct boss; temporary weak points, wards, clerks, and clones remain supporting actors."
+  },
+  "geometry": {
+    "columns": 6,
+    "rows": 10,
+    "cellWidth": 112,
+    "cellHeight": 128,
+    "minimumTransparentGutter": 6,
+    "coordinateOrigin": "top-left"
+  },
+  "poses": [
+    { "id": "neutral", "column": 0, "tag": "boss-ready", "event": "ready" },
+    { "id": "telegraph", "column": 1, "tag": "boss-telegraph", "event": "telegraphStart" },
+    { "id": "active", "column": 2, "tag": "boss-active", "event": "activeStart" },
+    { "id": "break", "column": 3, "tag": "boss-stagger-break", "event": "breakStart" },
+    { "id": "transition", "column": 4, "tag": "boss-phase-transition", "event": "phaseStart" },
+    { "id": "defeat", "column": 5, "tag": "boss-defeat-retreat", "event": "complete" }
+  ],
+  "anchorProfiles": {
+    "grounded": {
+      "neutral": { "pivot": [56, 110], "ground": [56, 116], "hit": [56, 55], "phase": [56, 28] },
+      "telegraph": { "pivot": [53, 110], "ground": [53, 116], "hit": [51, 53], "phase": [54, 25] },
+      "active": { "pivot": [63, 110], "ground": [63, 116], "hit": [72, 55], "phase": [61, 28] },
+      "break": { "pivot": [48, 112], "ground": [48, 116], "hit": [43, 64], "phase": [49, 36] },
+      "transition": { "pivot": [56, 106], "ground": [56, 116], "hit": [56, 48], "phase": [56, 20] },
+      "defeat": { "pivot": [48, 114], "ground": [48, 118], "hit": [46, 83], "phase": [48, 54] }
+    },
+    "low": {
+      "neutral": { "pivot": [53, 105], "ground": [53, 116], "hit": [60, 72], "phase": [54, 50] },
+      "telegraph": { "pivot": [50, 108], "ground": [50, 116], "hit": [65, 77], "phase": [51, 53] },
+      "active": { "pivot": [63, 106], "ground": [63, 116], "hit": [89, 68], "phase": [65, 45] },
+      "break": { "pivot": [44, 110], "ground": [44, 116], "hit": [37, 81], "phase": [45, 57] },
+      "transition": { "pivot": [55, 102], "ground": [55, 116], "hit": [62, 66], "phase": [55, 38] },
+      "defeat": { "pivot": [48, 114], "ground": [48, 118], "hit": [54, 96], "phase": [48, 68] }
+    },
+    "hover": {
+      "neutral": { "pivot": [56, 82], "ground": [56, 116], "hit": [56, 59], "phase": [56, 25] },
+      "telegraph": { "pivot": [53, 84], "ground": [53, 116], "hit": [50, 56], "phase": [53, 22] },
+      "active": { "pivot": [63, 78], "ground": [63, 116], "hit": [75, 51], "phase": [64, 19] },
+      "break": { "pivot": [47, 87], "ground": [47, 116], "hit": [42, 68], "phase": [47, 36] },
+      "transition": { "pivot": [56, 74], "ground": [56, 116], "hit": [56, 47], "phase": [56, 14] },
+      "defeat": { "pivot": [49, 103], "ground": [49, 118], "hit": [49, 89], "phase": [49, 61] }
+    },
+    "object": {
+      "neutral": { "pivot": [56, 92], "ground": [56, 116], "hit": [56, 63], "phase": [56, 24] },
+      "telegraph": { "pivot": [56, 92], "ground": [56, 116], "hit": [56, 61], "phase": [56, 18] },
+      "active": { "pivot": [60, 88], "ground": [60, 116], "hit": [66, 57], "phase": [60, 14] },
+      "break": { "pivot": [50, 99], "ground": [50, 116], "hit": [48, 75], "phase": [50, 38] },
+      "transition": { "pivot": [56, 83], "ground": [56, 116], "hit": [56, 50], "phase": [56, 11] },
+      "defeat": { "pivot": [49, 112], "ground": [49, 118], "hit": [49, 95], "phase": [49, 63] }
+    }
+  },
+  "palettes": {
+    "PAL-BOS-HOUND": { "ink": "#0B1020", "deep": "#2C2025", "body": "#5A3A2C", "light": "#8B6043", "metal": "#A08B58", "accent": "#B34A3E", "spark": "#F6E8B9" },
+    "PAL-BOS-MATEUS": { "ink": "#0B1020", "deep": "#20223A", "body": "#3B4056", "light": "#63708A", "metal": "#A08B58", "accent": "#781E39", "spark": "#D7C99A" },
+    "PAL-BOS-KAJI": { "ink": "#0B1020", "deep": "#183047", "body": "#27466B", "light": "#4F7392", "metal": "#A08B58", "accent": "#B34A3E", "spark": "#D7C99A" },
+    "PAL-BOS-WIDOW": { "ink": "#0B1020", "deep": "#16233A", "body": "#27466B", "light": "#4F7392", "metal": "#88C8C5", "accent": "#401D42", "spark": "#D7F0D5" },
+    "PAL-BOS-FURNACE": { "ink": "#0B1020", "deep": "#332528", "body": "#5A3A2C", "light": "#8B6043", "metal": "#A08B58", "accent": "#B34A3E", "spark": "#F6E8B9" },
+    "PAL-BOS-UJIRO": { "ink": "#0B1020", "deep": "#43232B", "body": "#762B32", "light": "#B34A3E", "metal": "#637462", "accent": "#A08B58", "spark": "#D7C99A" },
+    "PAL-BOS-CHIYO": { "ink": "#0B1020", "deep": "#26323A", "body": "#637462", "light": "#82917C", "metal": "#A08B58", "accent": "#27466B", "spark": "#D7C99A" },
+    "PAL-BOS-ENMA": { "ink": "#0B1020", "deep": "#401D42", "body": "#762B32", "light": "#B34A3E", "metal": "#A08B58", "accent": "#781E39", "spark": "#F2A25C" },
+    "PAL-BOS-BELL": { "ink": "#0B1020", "deep": "#1B252E", "body": "#303C44", "light": "#637462", "metal": "#A08B58", "accent": "#401D42", "spark": "#88C8C5" },
+    "PAL-BOS-KUROZANE": { "ink": "#0B1020", "deep": "#25162F", "body": "#401D42", "light": "#781E39", "metal": "#637462", "accent": "#B34A3E", "spark": "#D7C99A" }
+  },
+  "bosses": [
+    { "id": "tithe-hound", "row": 0, "label": "TITHE HOUND", "encounterId": "c1-tithe-hound", "encounterFormat": "boss", "paletteId": "PAL-BOS-HOUND", "anchorProfile": "low", "resolution": "collapse-and-containment", "motif": "Oversized ledger predator with rib plates, split chain-tail, jaw gauge, and exposed rectangular docket latch.", "phaseRead": "Latch opens and rib plates flare during the frantic transition." },
+    { "id": "mateus", "row": 1, "label": "FATHER MATEUS AVELAR", "encounterId": "fp1-mateus", "encounterFormat": "boss", "paletteId": "PAL-BOS-MATEUS", "anchorProfile": "grounded", "resolution": "nonlethal-surrender", "likenessPolicy": "Original fictional face and proportions; no actor or celebrity likeness.", "motif": "Long court coat, split key-ring guard, narrow docket blade, and restrained angular shadow panels.", "phaseRead": "The coat opens around a broken court key as the final nonlethal phase begins." },
+    { "id": "captain-kaji", "row": 2, "label": "CAPTAIN KAJI", "encounterId": "c3-captain-kaji", "encounterFormat": "boss", "paletteId": "PAL-BOS-KAJI", "anchorProfile": "grounded", "resolution": "disarmed-and-taken-alive", "motif": "Weather coat, mechanical cable spool, broad deck boots, and an invented two-step cargo hook.", "phaseRead": "Spool brake releases into an open warning frame before the final pull." },
+    { "id": "widow-of-fog", "row": 3, "label": "WIDOW OF FOG", "encounterId": "c4-widow-of-fog", "encounterFormat": "boss", "paletteId": "PAL-BOS-WIDOW", "anchorProfile": "hover", "resolution": "fog-dispersal", "motif": "Hollow hood, central net spindle, crossed filament arms, and segmented tide ribbons.", "phaseRead": "Ribbons invert between high- and low-tide silhouettes." },
+    { "id": "furnace-abbot", "row": 4, "label": "FURNACE ABBOT", "encounterId": "c5-furnace-abbot", "encounterFormat": "boss", "paletteId": "PAL-BOS-FURNACE", "anchorProfile": "grounded", "resolution": "construct-deactivation", "motif": "Riveted furnace mantle, uneven chimney bank, vent jaw, heat plates, and long clinker rake.", "phaseRead": "Overheat opens three vent plates and buckles the rake-side shoulder." },
+    { "id": "ujiro", "row": 5, "label": "MAGISTRATE UJIRO", "encounterId": "c6-ujiro", "encounterFormat": "boss", "paletteId": "PAL-BOS-UJIRO", "anchorProfile": "grounded", "resolution": "documented-retreat", "motif": "Layered official travel coat, plain docket case, command baton, and split paper clamp with no emblem.", "phaseRead": "The command case opens and the baton line breaks when orders are interrupted." },
+    { "id": "bell-warden-chiyo", "row": 6, "label": "BELL WARDEN CHIYO", "encounterId": "c7-bell-warden-chiyo", "encounterFormat": "boss-rescue", "paletteId": "PAL-BOS-CHIYO", "anchorProfile": "grounded", "resolution": "chain-release-and-rescue", "motif": "Asymmetric resonator yoke, separate square dampers, rescue-chain reels, and calibration hammer.", "phaseRead": "Yoke dampers separate and the binding reels expose their break pins." },
+    { "id": "lady-enma", "row": 7, "label": "LADY ENMA OF ASH", "encounterId": "c8-lady-enma", "encounterFormat": "boss", "paletteId": "PAL-BOS-ENMA", "anchorProfile": "hover", "resolution": "non-gory-defeat", "motif": "Layered ash mantle, paired invented heat vanes, square ember reservoir, and broken lane pointer.", "phaseRead": "Paired vane colors divide around the reservoir before converging." },
+    { "id": "yearless-bell", "row": 8, "label": "YEARLESS BELL", "encounterId": "c9-yearless-bell", "encounterFormat": "boss-phase", "paletteId": "PAL-BOS-BELL", "anchorProfile": "object", "resolution": "node-release-and-deactivation", "motif": "Fictional registry resonator: rectangular chime plates, offset braces, black core, and four node sockets.", "phaseRead": "Sockets open in a square sequence as the protected nodes fall." },
+    { "id": "kurozane", "row": 9, "label": "SHOGUN KUROZANE", "encounterId": "c9-kurozane", "encounterFormat": "final-boss", "paletteId": "PAL-BOS-KUROZANE", "anchorProfile": "grounded", "resolution": "non-gory-final-collapse", "motif": "Tall stepped court mantle, broken lattice panels, narrow spear-decree blade, and angular network keys; no floral emblem.", "phaseRead": "Court panels split, network keys rise, and the final dawn break exposes the central seam." }
+  ],
+  "safety": {
+    "gore": false,
+    "realEmblems": false,
+    "devotionalProps": false,
+    "actorLikeness": false,
+    "construction": "Invented mechanical, docket, cable, lattice, ash, and fog geometry only."
+  }
+}

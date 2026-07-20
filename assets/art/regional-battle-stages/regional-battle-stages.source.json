@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "assetId": "regional-battle-stages-v01",
+  "geometry": {"width": 384, "height": 224, "columns": 12, "rows": 7, "cellSize": 32},
+  "renderPolicy": {
+    "collisionAuthority": "game/content/levels.mjs",
+    "presentationOnly": true,
+    "bakeTelegraphs": false,
+    "bakeActors": false,
+    "bakeObjectives": false,
+    "bakeInteractableIcons": false,
+    "authenticReligiousSymbols": false,
+    "authenticHeraldicSymbols": false,
+    "note": "Only quiet floor materials, collision-matched blocked architecture, and static terrain footing are rendered. Special cells are audit snapshots, never drawing commands."
+  },
+  "kits": [
+    {
+      "id": "rain-v01", "paletteId": "takamine-rain", "signature": "wet inland stone and cedar",
+      "palette": {"base0":"#1b2936","base1":"#213341","seam":"#31495a","edge":"#536c78","blocked":"#111a22","mass":"#3b302d","accent":"#70604a","water":"#285269","dry":"#675b42","paper":"#968b6c"}
+    },
+    {
+      "id": "archive-v01", "paletteId": "archive-indigo", "signature": "indigo archive stone, paper, and waterworks",
+      "palette": {"base0":"#202937","base1":"#263444","seam":"#34485a","edge":"#596b76","blocked":"#121821","mass":"#302b2d","accent":"#756c55","water":"#28556c","dry":"#655a40","paper":"#9d9270"}
+    },
+    {
+      "id": "coast-v01", "paletteId": "coast-fog", "signature": "salt timber, reef stone, and cold tide",
+      "palette": {"base0":"#1d3039","base1":"#263b43","seam":"#38515a","edge":"#657982","blocked":"#111c22","mass":"#3d3531","accent":"#7d7058","water":"#286078","dry":"#756545","paper":"#a59878"}
+    },
+    {
+      "id": "ash-v01", "paletteId": "kagura-ash", "signature": "volcanic earth, furnace brick, and drainage",
+      "palette": {"base0":"#29282b","base1":"#343135","seam":"#494349","edge":"#6b6262","blocked":"#17161a","mass":"#49332d","accent":"#806044","water":"#35515a","dry":"#68523d","paper":"#99876a"}
+    },
+    {
+      "id": "court-v01", "paletteId": "court-vermilion", "signature": "invented black-lacquer administration and archive floors",
+      "palette": {"base0":"#211f2b","base1":"#2b2633","seam":"#443747","edge":"#665361","blocked":"#111017","mass":"#3d252d","accent":"#795246","water":"#304d5d","dry":"#695a42","paper":"#9b8868"}
+    }
+  ],
+  "boards": [
+    {
+      "id":"hsh-census-square","chapterId":"prologue","name":"Hoshigawa Census Square","kitId":"rain-v01","style":"census-stone","width":12,"height":7,"spacePx":32,"paletteId":"takamine-rain",
+      "blocked":["4,0","5,0","6,0","7,0","4,1","7,1","5,2","6,2","0,3","11,3","0,4","11,4"],
+      "terrain":[{"at":"1,5","tag":"wet-stone"},{"at":"2,5","tag":"wet-stone"},{"at":"8,4","tag":"wet-stone"},{"at":"10,5","tag":"shallow-puddle"}],
+      "specialCells":{"exits":[{"id":"river-exit","at":"11,5"}],"interactables":[{"id":"fractured-bell","at":"6,1"}],"hazards":[{"id":"census-bell-sweep","tiles":["3,4","4,4","5,4","6,4","7,4"]}],"spawn":{"x":1,"y":5}}
+    },
+    {
+      "id":"c1-flooded-cedars","chapterId":"chapter-1","name":"Flooded Cedar Route","kitId":"rain-v01","style":"flooded-cedar","width":12,"height":7,"spacePx":32,"paletteId":"takamine-rain",
+      "blocked":["0,0","1,0","10,0","11,0","0,1","11,1","3,2","8,2","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"4,3","tag":"shallow-puddle"},{"at":"5,3","tag":"shallow-puddle"},{"at":"6,3","tag":"shallow-puddle"},{"at":"7,3","tag":"shallow-puddle"},{"at":"2,5","tag":"dry-lantern"}],
+      "specialCells":{"exits":[{"id":"storehouse-trail","at":"11,3"}],"interactables":[{"id":"dry-ledge-chest","at":"2,5"}],"hazards":[],"spawn":{"x":4,"y":5}}
+    },
+    {
+      "id":"fp1-wet-cedar-stage","chapterId":"chapter-2","name":"Wet Cedar Path Battle Stage","kitId":"rain-v01","style":"cedar-service","width":12,"height":7,"spacePx":32,"paletteId":"takamine-rain",
+      "blocked":["0,0","1,0","2,0","9,0","10,0","11,0","0,1","11,1","0,5","11,5","0,6","1,6","10,6","11,6","4,2","7,2"],
+      "terrain":[{"at":"4,3","tag":"shallow-puddle"},{"at":"7,3","tag":"shallow-puddle"},{"at":"5,4","tag":"wet-stone"},{"at":"6,4","tag":"wet-stone"}],
+      "specialCells":{"exits":[{"id":"continue-path","at":"6,0"}],"interactables":[],"hazards":[],"spawn":{"x":5,"y":5}}
+    },
+    {
+      "id":"c1-tax-storehouse","chapterId":"chapter-1","name":"Abandoned Tax Storehouse","kitId":"archive-v01","style":"tax-storehouse","width":12,"height":7,"spacePx":32,"paletteId":"archive-indigo",
+      "blocked":["0,0","1,0","2,0","9,0","10,0","11,0","2,2","3,2","8,2","9,2","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"4,1","tag":"paper-litter"},{"at":"5,1","tag":"paper-litter"},{"at":"6,1","tag":"paper-litter"},{"at":"5,4","tag":"paper-litter"},{"at":"6,4","tag":"paper-litter"}],
+      "specialCells":{"exits":[{"id":"clerk-room","at":"10,4"}],"interactables":[{"id":"copy-table","at":"1,4"},{"id":"ledger-brazier","at":"10,2"}],"hazards":[{"id":"consumed-ink-line","tiles":["3,3","4,3","5,3","6,3","7,3"]}],"spawn":{"x":5,"y":5}}
+    },
+    {
+      "id":"fp1-flooded-archive-stage","chapterId":"chapter-2","name":"Flooded Archive Battle Stage","kitId":"archive-v01","style":"flooded-archive","width":12,"height":7,"spacePx":32,"paletteId":"archive-indigo",
+      "blocked":["0,0","1,0","2,0","9,0","10,0","11,0","1,1","2,1","3,1","8,1","9,1","10,1","0,4","11,4","0,5","11,5"],
+      "terrain":[{"at":"4,2","tag":"water"},{"at":"5,2","tag":"water"},{"at":"6,2","tag":"water"},{"at":"7,2","tag":"water"},{"at":"4,3","tag":"water"},{"at":"7,3","tag":"water"},{"at":"1,4","tag":"dry-lantern"},{"at":"10,4","tag":"dry-lantern"}],
+      "specialCells":{"exits":[{"id":"bell-door","at":"6,0"}],"interactables":[],"hazards":[{"id":"archive-storm-water","tiles":["4,2","5,2","6,2","7,2","4,3","7,3"]}],"spawn":{"x":5,"y":6}}
+    },
+    {
+      "id":"hsh-prison-ferry","chapterId":"chapter-7","name":"Hushroad Prison Ferry","kitId":"archive-v01","style":"prison-ferry","width":12,"height":7,"spacePx":32,"paletteId":"archive-indigo",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,1","6,1","5,5","6,5"],
+      "terrain":[{"at":"2,1","tag":"flowing-water"},{"at":"3,1","tag":"flowing-water"},{"at":"8,1","tag":"flowing-water"},{"at":"9,1","tag":"flowing-water"},{"at":"2,5","tag":"flowing-water"},{"at":"3,5","tag":"flowing-water"},{"at":"8,5","tag":"flowing-water"},{"at":"9,5","tag":"flowing-water"}],
+      "specialCells":{"exits":[{"id":"aqueduct-gate","at":"11,3"}],"interactables":[{"id":"carried-name-slip","at":"5,3"},{"id":"north-current","at":"2,1"}],"hazards":[{"id":"ferry-chain-wall","tiles":[]}],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"hsh-bell-aqueduct","chapterId":"chapter-7","name":"Hushroad Bell Aqueduct","kitId":"archive-v01","style":"bell-aqueduct","width":12,"height":7,"spacePx":32,"paletteId":"archive-indigo",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","4,2","7,2","4,4","7,4"],
+      "terrain":[{"at":"2,1","tag":"flowing-water"},{"at":"3,1","tag":"flowing-water"},{"at":"8,1","tag":"flowing-water"},{"at":"9,1","tag":"flowing-water"},{"at":"2,5","tag":"flowing-water"},{"at":"3,5","tag":"flowing-water"},{"at":"8,5","tag":"flowing-water"},{"at":"9,5","tag":"flowing-water"}],
+      "specialCells":{"exits":[{"id":"prison-ferry","at":"11,3"}],"interactables":[{"id":"rescue-space-north","at":"2,1"},{"id":"rescue-space-south","at":"2,5"},{"id":"name-slip-water","at":"9,1"}],"hazards":[{"id":"prisoner-chain-lanes","tiles":[]}],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"sdg-rain-docks","chapterId":"chapter-3","name":"Sodegaura Rain Docks","kitId":"coast-v01","style":"rain-docks","width":12,"height":7,"spacePx":32,"paletteId":"coast-fog",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","4,1","7,1","4,5","7,5"],
+      "terrain":[{"at":"5,1","tag":"storm-water"},{"at":"6,1","tag":"storm-water"},{"at":"5,5","tag":"storm-water"},{"at":"6,5","tag":"storm-water"},{"at":"1,2","tag":"dry-lantern"},{"at":"1,5","tag":"dry-lantern"}],
+      "specialCells":{"exits":[{"id":"lantern-boat","at":"11,3"}],"interactables":[{"id":"lantern-boat-signal","at":"11,3"}],"hazards":[{"id":"dock-patrol-hook-lane","tiles":[]}],"spawn":{"x":2,"y":4}}
+    },
+    {
+      "id":"sdg-salt-warehouse","chapterId":"chapter-3","name":"Sodegaura Salt Warehouse Platform","kitId":"coast-v01","style":"salt-warehouse","width":12,"height":7,"spacePx":32,"paletteId":"coast-fog",
+      "blocked":["0,0","1,0","10,0","11,0","2,2","3,2","8,2","9,2","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"4,1","tag":"storm-water"},{"at":"5,1","tag":"storm-water"},{"at":"6,1","tag":"storm-water"},{"at":"7,1","tag":"storm-water"},{"at":"4,5","tag":"storm-water"},{"at":"5,5","tag":"storm-water"},{"at":"6,5","tag":"storm-water"},{"at":"7,5","tag":"storm-water"}],
+      "specialCells":{"exits":[{"id":"key-crane","at":"10,3"}],"interactables":[{"id":"first-bell-key-crane","at":"10,3"}],"hazards":[{"id":"charged-dock-water","tiles":["4,1","5,1","6,1","7,1","4,5","5,5","6,5","7,5"]}],"spawn":{"x":2,"y":4}}
+    },
+    {
+      "id":"ngi-tide-caves","chapterId":"chapter-4","name":"Nagi Tide Caves","kitId":"coast-v01","style":"tide-caves","width":12,"height":7,"spacePx":32,"paletteId":"coast-fog",
+      "blocked":["0,0","1,0","10,0","11,0","2,1","9,1","0,3","11,3","2,5","9,5","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"4,1","tag":"cold-pool"},{"at":"5,1","tag":"cold-pool"},{"at":"6,1","tag":"cold-pool"},{"at":"7,1","tag":"cold-pool"},{"at":"4,5","tag":"cold-pool"},{"at":"5,5","tag":"cold-pool"},{"at":"6,5","tag":"cold-pool"},{"at":"7,5","tag":"cold-pool"},{"at":"2,3","tag":"dry-lantern"}],
+      "specialCells":{"exits":[{"id":"wreck-passage","at":"10,3"}],"interactables":[{"id":"net-anchor-a","at":"8,2"},{"id":"net-anchor-b","at":"8,3"},{"id":"net-anchor-c","at":"8,4"}],"hazards":[{"id":"cold-wake-lane","tiles":[]}],"spawn":{"x":2,"y":4}}
+    },
+    {
+      "id":"ngi-storm-reef","chapterId":"chapter-4","name":"Nagi Storm-Broken Reef","kitId":"coast-v01","style":"storm-reef","width":12,"height":7,"spacePx":32,"paletteId":"coast-fog",
+      "blocked":["0,0","1,0","10,0","11,0","3,1","8,1","1,3","10,3","3,5","8,5","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"4,1","tag":"cold-pool"},{"at":"5,1","tag":"cold-pool"},{"at":"6,1","tag":"cold-pool"},{"at":"7,1","tag":"cold-pool"},{"at":"4,5","tag":"cold-pool"},{"at":"5,5","tag":"cold-pool"},{"at":"6,5","tag":"cold-pool"},{"at":"7,5","tag":"cold-pool"},{"at":"2,3","tag":"dry-lantern"},{"at":"9,3","tag":"dry-lantern"}],
+      "specialCells":{"exits":[{"id":"wreck-hold","at":"10,2"}],"interactables":[{"id":"second-bell-key","at":"6,3"}],"hazards":[{"id":"tide-switch","tiles":[]}],"spawn":{"x":2,"y":4}}
+    },
+    {
+      "id":"kgr-ash-fields","chapterId":"chapter-5","name":"Kagura Ash Fields","kitId":"ash-v01","style":"ash-fields","width":12,"height":7,"spacePx":32,"paletteId":"kagura-ash",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","4,1","7,1","4,5","7,5"],
+      "terrain":[{"at":"2,2","tag":"ash-field"},{"at":"3,2","tag":"ash-field"},{"at":"8,2","tag":"ash-field"},{"at":"9,2","tag":"ash-field"},{"at":"2,4","tag":"ash-field"},{"at":"3,4","tag":"ash-field"},{"at":"8,4","tag":"ash-field"},{"at":"9,4","tag":"ash-field"},{"at":"5,3","tag":"flowing-water"},{"at":"6,3","tag":"flowing-water"}],
+      "specialCells":{"exits":[{"id":"furnace-road","at":"11,3"}],"interactables":[{"id":"name-slip","at":"6,2"},{"id":"release-channel","at":"5,3"}],"hazards":[],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"kgr-archive-furnace","chapterId":"chapter-5","name":"Kagura Archive Furnace","kitId":"ash-v01","style":"archive-furnace","width":12,"height":7,"spacePx":32,"paletteId":"kagura-ash",
+      "blocked":["0,0","1,0","10,0","11,0","4,1","5,1","6,1","7,1","5,2","6,2","5,3","6,3","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"3,2","tag":"furnace-grate"},{"at":"4,2","tag":"furnace-grate"},{"at":"7,2","tag":"furnace-grate"},{"at":"8,2","tag":"furnace-grate"},{"at":"3,4","tag":"furnace-grate"},{"at":"4,4","tag":"furnace-grate"},{"at":"7,4","tag":"furnace-grate"},{"at":"8,4","tag":"furnace-grate"},{"at":"2,3","tag":"ash-field"},{"at":"9,3","tag":"ash-field"}],
+      "specialCells":{"exits":[{"id":"prison-locks","at":"10,3"}],"interactables":[{"id":"forge-directives","at":"2,4"},{"id":"court-sigil-lock","at":"9,3"}],"hazards":[{"id":"forge-vent","tiles":["3,2","4,2","7,2","8,2","3,4","4,4","7,4","8,4"]}],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"kzu-archive-roof","chapterId":"chapter-6","name":"Kozui Archive Roof","kitId":"court-v01","style":"archive-roof","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,0","6,0","5,6","6,6"],
+      "terrain":[{"at":"1,2","tag":"archive-floor"},{"at":"1,3","tag":"archive-floor"},{"at":"1,4","tag":"archive-floor"},{"at":"4,2","tag":"legal-seal"},{"at":"7,2","tag":"legal-seal"},{"at":"4,4","tag":"legal-seal"},{"at":"7,4","tag":"legal-seal"}],
+      "specialCells":{"exits":[{"id":"canal-rope","at":"11,3"}],"interactables":[{"id":"courier","at":"2,3"},{"id":"print-block-a","at":"1,2"},{"id":"print-block-b","at":"1,3"},{"id":"print-block-c","at":"1,4"}],"hazards":[{"id":"copy-seizure-mark","tiles":[]}],"spawn":{"x":3,"y":4}}
+    },
+    {
+      "id":"kzu-public-tribunal","chapterId":"chapter-6","name":"Kozui Public Tribunal","kitId":"court-v01","style":"public-tribunal","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "blocked":["0,0","1,0","10,0","11,0","2,1","3,1","8,1","9,1","2,5","3,5","8,5","9,5","0,6","1,6","10,6","11,6"],
+      "terrain":[{"at":"4,2","tag":"legal-seal"},{"at":"7,2","tag":"legal-seal"},{"at":"4,4","tag":"legal-seal"},{"at":"7,4","tag":"legal-seal"},{"at":"1,3","tag":"archive-floor"},{"at":"10,3","tag":"archive-floor"}],
+      "specialCells":{"exits":[{"id":"canal-lock","at":"11,3"}],"interactables":[{"id":"print-block-a","at":"1,3"},{"id":"print-block-b","at":"2,4"},{"id":"print-block-c","at":"2,2"}],"hazards":[{"id":"seizure-order","tiles":[]}],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"c8-black-gate","chapterId":"chapter-8","name":"Black Gate Causeway","kitId":"court-v01","style":"black-gate","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
+      "terrain":[{"at":"2,1","tag":"ember-ash"},{"at":"3,1","tag":"ember-ash"},{"at":"8,1","tag":"umbral-ash"},{"at":"9,1","tag":"umbral-ash"},{"at":"2,5","tag":"umbral-ash"},{"at":"3,5","tag":"umbral-ash"},{"at":"8,5","tag":"ember-ash"},{"at":"9,5","tag":"ember-ash"},{"at":"4,3","tag":"dry-lantern"},{"at":"7,3","tag":"dry-lantern"}],
+      "specialCells":{"exits":[{"id":"kurohana-gate","at":"11,3"}],"interactables":[{"id":"lantern-relay-west","at":"4,3"},{"id":"lantern-relay-east","at":"7,3"}],"hazards":[{"id":"ash-lane-pair","tiles":[]}],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"krh-outer-archive","chapterId":"chapter-9","name":"Kurohana Outer Archive","kitId":"court-v01","style":"outer-archive","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
+      "terrain":[{"at":"2,1","tag":"bell-node"},{"at":"9,1","tag":"bell-node"},{"at":"2,5","tag":"bell-node"},{"at":"9,5","tag":"bell-node"},{"at":"4,3","tag":"archive-floor"},{"at":"7,3","tag":"archive-floor"}],
+      "specialCells":{"exits":[{"id":"observatory-stair","at":"11,3"}],"interactables":[{"id":"archive-node-a","at":"2,1"},{"id":"archive-node-b","at":"9,1"},{"id":"archive-node-c","at":"9,5"}],"hazards":[{"id":"catalogue-line","tiles":[]}],"spawn":{"x":2,"y":3}}
+    },
+    {
+      "id":"krh-observatory","chapterId":"chapter-9","name":"Kurohana Throne Observatory","kitId":"court-v01","style":"throne-observatory","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
+      "terrain":[{"at":"2,1","tag":"bell-node"},{"at":"9,1","tag":"bell-node"},{"at":"2,5","tag":"bell-node"},{"at":"9,5","tag":"bell-node"},{"at":"4,3","tag":"archive-floor"},{"at":"7,3","tag":"archive-floor"}],
+      "specialCells":{"exits":[{"id":"archive-evacuation","at":"11,3"}],"interactables":[{"id":"north-node","at":"2,1"},{"id":"east-node","at":"9,1"},{"id":"south-node","at":"9,5"},{"id":"west-node","at":"2,5"}],"hazards":[{"id":"yearless-ring","tiles":[]},{"id":"dawn-window","tiles":["1,3","2,3","3,3"]}],"spawn":{"x":2,"y":3}}
+    }
+  ]
+}

@@ -1,0 +1,2145 @@
+{
+  "schemaVersion": 1,
+  "assetId": "regional-battle-stages-v01",
+  "status": "integrated-current-browser",
+  "geometry": {
+    "width": 384,
+    "height": 224,
+    "columns": 12,
+    "rows": 7,
+    "cellSize": 32
+  },
+  "renderPolicy": {
+    "collisionAuthority": "game/content/levels.mjs",
+    "presentationOnly": true,
+    "bakeTelegraphs": false,
+    "bakeActors": false,
+    "bakeObjectives": false,
+    "bakeInteractableIcons": false,
+    "authenticReligiousSymbols": false,
+    "authenticHeraldicSymbols": false,
+    "note": "Only quiet floor materials, collision-matched blocked architecture, and static terrain footing are rendered. Special cells are audit snapshots, never drawing commands."
+  },
+  "generator": {
+    "path": "build_regional_battle_stages.py",
+    "pillow": "11.3.0",
+    "determinism": "two independent in-process renders are byte-identical"
+  },
+  "sources": [
+    {
+      "path": "regional-battle-stages.source.json",
+      "sha256": "29b648f44fe530afc931a9b866ecb8e00b581962a2d5c99e519e70f62f524c4f"
+    },
+    {
+      "path": "build_regional_battle_stages.py",
+      "sha256": "1dd316158bcf52b800ab5bae9ceab73725d1a9328593ab624499e289ff9f6e56"
+    }
+  ],
+  "kits": [
+    {
+      "id": "rain-v01",
+      "paletteId": "takamine-rain",
+      "signature": "wet inland stone and cedar",
+      "boardIds": [
+        "hsh-census-square",
+        "c1-flooded-cedars",
+        "fp1-wet-cedar-stage"
+      ]
+    },
+    {
+      "id": "archive-v01",
+      "paletteId": "archive-indigo",
+      "signature": "indigo archive stone, paper, and waterworks",
+      "boardIds": [
+        "c1-tax-storehouse",
+        "fp1-flooded-archive-stage",
+        "hsh-prison-ferry",
+        "hsh-bell-aqueduct"
+      ]
+    },
+    {
+      "id": "coast-v01",
+      "paletteId": "coast-fog",
+      "signature": "salt timber, reef stone, and cold tide",
+      "boardIds": [
+        "sdg-rain-docks",
+        "sdg-salt-warehouse",
+        "ngi-tide-caves",
+        "ngi-storm-reef"
+      ]
+    },
+    {
+      "id": "ash-v01",
+      "paletteId": "kagura-ash",
+      "signature": "volcanic earth, furnace brick, and drainage",
+      "boardIds": [
+        "kgr-ash-fields",
+        "kgr-archive-furnace"
+      ]
+    },
+    {
+      "id": "court-v01",
+      "paletteId": "court-vermilion",
+      "signature": "invented black-lacquer administration and archive floors",
+      "boardIds": [
+        "kzu-archive-roof",
+        "kzu-public-tribunal",
+        "c8-black-gate",
+        "krh-outer-archive",
+        "krh-observatory"
+      ]
+    }
+  ],
+  "exports": [
+    {
+      "id": "hsh-census-square-board-v01",
+      "boardId": "hsh-census-square",
+      "path": "hsh-census-square-board-v01.png",
+      "format": "png",
+      "sha256": "6c37abb6981dad8a8bc04e9424233cdfb757ffe26b7f93f0b7692362fed51b2f",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "c1-flooded-cedars-board-v01",
+      "boardId": "c1-flooded-cedars",
+      "path": "c1-flooded-cedars-board-v01.png",
+      "format": "png",
+      "sha256": "d0a758cd8ace54311f3bff3f64beee871d6f7f8753180b9967e0243a2facf8cb",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "fp1-wet-cedar-stage-board-v01",
+      "boardId": "fp1-wet-cedar-stage",
+      "path": "fp1-wet-cedar-stage-board-v01.png",
+      "format": "png",
+      "sha256": "aeac0b41524fa9956d4b863a50a650f4f1b11a2f4bddb027534255c056ad24cc",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "c1-tax-storehouse-board-v01",
+      "boardId": "c1-tax-storehouse",
+      "path": "c1-tax-storehouse-board-v01.png",
+      "format": "png",
+      "sha256": "901f0733890553a82a4994690aa590528845c337f33b4e3a373ef72f0b736a8d",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "fp1-flooded-archive-stage-board-v01",
+      "boardId": "fp1-flooded-archive-stage",
+      "path": "fp1-flooded-archive-stage-board-v01.png",
+      "format": "png",
+      "sha256": "e5d5178c58ddbbab5213abe99bd1ff4acf512316739763c704dc248a767974f0",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "hsh-prison-ferry-board-v01",
+      "boardId": "hsh-prison-ferry",
+      "path": "hsh-prison-ferry-board-v01.png",
+      "format": "png",
+      "sha256": "88ee4f53d64b2ae1cb914be3ec0491c955f76425c3cf1a6363b66541378700fd",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "hsh-bell-aqueduct-board-v01",
+      "boardId": "hsh-bell-aqueduct",
+      "path": "hsh-bell-aqueduct-board-v01.png",
+      "format": "png",
+      "sha256": "3b37b8ea120273ecdb414ce1562a5af9876462a70abaf280bb2ab7bfd36520a6",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "sdg-rain-docks-board-v01",
+      "boardId": "sdg-rain-docks",
+      "path": "sdg-rain-docks-board-v01.png",
+      "format": "png",
+      "sha256": "f195ae17b51b84837d6b6a789f332f2c69cdf6328c554b7650d5636757b6e1c9",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "sdg-salt-warehouse-board-v01",
+      "boardId": "sdg-salt-warehouse",
+      "path": "sdg-salt-warehouse-board-v01.png",
+      "format": "png",
+      "sha256": "a3625044ec3870e831b8a72520786a8640d3a9a69e16606cb8e2d8e3f1ba9e83",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "ngi-tide-caves-board-v01",
+      "boardId": "ngi-tide-caves",
+      "path": "ngi-tide-caves-board-v01.png",
+      "format": "png",
+      "sha256": "70dc229ab54da2a9187ef6416bc19fe9dcf024c0c35fab4acddc9704339ee267",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "ngi-storm-reef-board-v01",
+      "boardId": "ngi-storm-reef",
+      "path": "ngi-storm-reef-board-v01.png",
+      "format": "png",
+      "sha256": "7828feebfc4dcab937b61d793b6b224e0268b05b15e1a192a38c161ea80c60aa",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "kgr-ash-fields-board-v01",
+      "boardId": "kgr-ash-fields",
+      "path": "kgr-ash-fields-board-v01.png",
+      "format": "png",
+      "sha256": "a25897ab0461e8bdfd584bb13a1db2bc38e6836ba05e138f86ea1d88a9dc525d",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "kgr-archive-furnace-board-v01",
+      "boardId": "kgr-archive-furnace",
+      "path": "kgr-archive-furnace-board-v01.png",
+      "format": "png",
+      "sha256": "6ad5c417dc71280c2ab0a666ad9c55e349ef1563e130e908538e69f310f3498e",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "kzu-archive-roof-board-v01",
+      "boardId": "kzu-archive-roof",
+      "path": "kzu-archive-roof-board-v01.png",
+      "format": "png",
+      "sha256": "b789c3a96261d739855ab8096adfd7c3ace590a3ecc5ace2bc89a832c0077eb6",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "kzu-public-tribunal-board-v01",
+      "boardId": "kzu-public-tribunal",
+      "path": "kzu-public-tribunal-board-v01.png",
+      "format": "png",
+      "sha256": "b8aa87164733de1b6fdb948fb671dd609e8db3cc3100ec864346114cfb601a04",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "c8-black-gate-board-v01",
+      "boardId": "c8-black-gate",
+      "path": "c8-black-gate-board-v01.png",
+      "format": "png",
+      "sha256": "aae4f7e99b6642938511dbfa46a07e3afcca25a676afd122a7238f34d2cb82ab",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "krh-outer-archive-board-v01",
+      "boardId": "krh-outer-archive",
+      "path": "krh-outer-archive-board-v01.png",
+      "format": "png",
+      "sha256": "f6388fef513a4563904c8893e9879d6c5d91c58682535a939449337f0e1e0f42",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "krh-observatory-board-v01",
+      "boardId": "krh-observatory",
+      "path": "krh-observatory-board-v01.png",
+      "format": "png",
+      "sha256": "5a78ecfb699fb34fb4c072624ba4db2e86cc1e092ed4e3a2e810f00e75050990",
+      "ihdr": {
+        "width": 384,
+        "height": 224,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": true
+    },
+    {
+      "id": "regional-module-sheet",
+      "path": "regional-battle-stage-modules.png",
+      "format": "png",
+      "sha256": "c072a4d5a163051868e098cbe203e3f334c155db95b93b88cbb4d5e6fe84c228",
+      "ihdr": {
+        "width": 640,
+        "height": 128,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": false
+    },
+    {
+      "id": "labeled-contact-sheet",
+      "path": "regional-battle-stages-contact-sheet.png",
+      "format": "png",
+      "sha256": "d93a73340b588138714dc1ea8c26826b33184850e85d9419a75497e1bd5da244",
+      "ihdr": {
+        "width": 768,
+        "height": 640,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      },
+      "runtimeCandidate": false
+    }
+  ],
+  "boards": [
+    {
+      "id": "hsh-census-square",
+      "name": "Hoshigawa Census Square",
+      "chapterId": "prologue",
+      "kitId": "rain-v01",
+      "style": "census-stone",
+      "export": "hsh-census-square-board-v01.png",
+      "occupancySha256": "d7532c4098345a00953a0df2dcf0f062aa41ac55ba3a59c3685b25cf5b564d71",
+      "snapshot": {
+        "id": "hsh-census-square",
+        "chapterId": "prologue",
+        "name": "Hoshigawa Census Square",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "takamine-rain",
+        "blocked": [
+          "4,0",
+          "5,0",
+          "6,0",
+          "7,0",
+          "4,1",
+          "7,1",
+          "5,2",
+          "6,2",
+          "0,3",
+          "11,3",
+          "0,4",
+          "11,4"
+        ],
+        "terrain": [
+          {
+            "at": "1,5",
+            "tag": "wet-stone"
+          },
+          {
+            "at": "2,5",
+            "tag": "wet-stone"
+          },
+          {
+            "at": "8,4",
+            "tag": "wet-stone"
+          },
+          {
+            "at": "10,5",
+            "tag": "shallow-puddle"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "river-exit",
+              "at": "11,5"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "fractured-bell",
+              "at": "6,1"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "census-bell-sweep",
+              "tiles": [
+                "3,4",
+                "4,4",
+                "5,4",
+                "6,4",
+                "7,4"
+              ]
+            }
+          ],
+          "spawn": {
+            "x": 1,
+            "y": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "c1-flooded-cedars",
+      "name": "Flooded Cedar Route",
+      "chapterId": "chapter-1",
+      "kitId": "rain-v01",
+      "style": "flooded-cedar",
+      "export": "c1-flooded-cedars-board-v01.png",
+      "occupancySha256": "bc94584560653b5583d9f5778bb256e67f25830cc99abda7d0184d8c3130bbee",
+      "snapshot": {
+        "id": "c1-flooded-cedars",
+        "chapterId": "chapter-1",
+        "name": "Flooded Cedar Route",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "takamine-rain",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,1",
+          "11,1",
+          "3,2",
+          "8,2",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "4,3",
+            "tag": "shallow-puddle"
+          },
+          {
+            "at": "5,3",
+            "tag": "shallow-puddle"
+          },
+          {
+            "at": "6,3",
+            "tag": "shallow-puddle"
+          },
+          {
+            "at": "7,3",
+            "tag": "shallow-puddle"
+          },
+          {
+            "at": "2,5",
+            "tag": "dry-lantern"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "storehouse-trail",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "dry-ledge-chest",
+              "at": "2,5"
+            }
+          ],
+          "hazards": [],
+          "spawn": {
+            "x": 4,
+            "y": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "fp1-wet-cedar-stage",
+      "name": "Wet Cedar Path Battle Stage",
+      "chapterId": "chapter-2",
+      "kitId": "rain-v01",
+      "style": "cedar-service",
+      "export": "fp1-wet-cedar-stage-board-v01.png",
+      "occupancySha256": "c29282ccdae28e483e85d4885dcf57f4bf367b1c6c54fa7afa6f444d5a0d0d94",
+      "snapshot": {
+        "id": "fp1-wet-cedar-stage",
+        "chapterId": "chapter-2",
+        "name": "Wet Cedar Path Battle Stage",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "takamine-rain",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "2,0",
+          "9,0",
+          "10,0",
+          "11,0",
+          "0,1",
+          "11,1",
+          "0,5",
+          "11,5",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "4,2",
+          "7,2"
+        ],
+        "terrain": [
+          {
+            "at": "4,3",
+            "tag": "shallow-puddle"
+          },
+          {
+            "at": "7,3",
+            "tag": "shallow-puddle"
+          },
+          {
+            "at": "5,4",
+            "tag": "wet-stone"
+          },
+          {
+            "at": "6,4",
+            "tag": "wet-stone"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "continue-path",
+              "at": "6,0"
+            }
+          ],
+          "interactables": [],
+          "hazards": [],
+          "spawn": {
+            "x": 5,
+            "y": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "c1-tax-storehouse",
+      "name": "Abandoned Tax Storehouse",
+      "chapterId": "chapter-1",
+      "kitId": "archive-v01",
+      "style": "tax-storehouse",
+      "export": "c1-tax-storehouse-board-v01.png",
+      "occupancySha256": "3c79450e2f487a86f1ae1d4d423c5e9b77eff19d301c5d249b6b1542cbf37635",
+      "snapshot": {
+        "id": "c1-tax-storehouse",
+        "chapterId": "chapter-1",
+        "name": "Abandoned Tax Storehouse",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "archive-indigo",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "2,0",
+          "9,0",
+          "10,0",
+          "11,0",
+          "2,2",
+          "3,2",
+          "8,2",
+          "9,2",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "4,1",
+            "tag": "paper-litter"
+          },
+          {
+            "at": "5,1",
+            "tag": "paper-litter"
+          },
+          {
+            "at": "6,1",
+            "tag": "paper-litter"
+          },
+          {
+            "at": "5,4",
+            "tag": "paper-litter"
+          },
+          {
+            "at": "6,4",
+            "tag": "paper-litter"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "clerk-room",
+              "at": "10,4"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "copy-table",
+              "at": "1,4"
+            },
+            {
+              "id": "ledger-brazier",
+              "at": "10,2"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "consumed-ink-line",
+              "tiles": [
+                "3,3",
+                "4,3",
+                "5,3",
+                "6,3",
+                "7,3"
+              ]
+            }
+          ],
+          "spawn": {
+            "x": 5,
+            "y": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "fp1-flooded-archive-stage",
+      "name": "Flooded Archive Battle Stage",
+      "chapterId": "chapter-2",
+      "kitId": "archive-v01",
+      "style": "flooded-archive",
+      "export": "fp1-flooded-archive-stage-board-v01.png",
+      "occupancySha256": "2c469d4bc49e3e8ae81660945c12d0165d4707990910eba902e59eca43e0fee9",
+      "snapshot": {
+        "id": "fp1-flooded-archive-stage",
+        "chapterId": "chapter-2",
+        "name": "Flooded Archive Battle Stage",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "archive-indigo",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "2,0",
+          "9,0",
+          "10,0",
+          "11,0",
+          "1,1",
+          "2,1",
+          "3,1",
+          "8,1",
+          "9,1",
+          "10,1",
+          "0,4",
+          "11,4",
+          "0,5",
+          "11,5"
+        ],
+        "terrain": [
+          {
+            "at": "4,2",
+            "tag": "water"
+          },
+          {
+            "at": "5,2",
+            "tag": "water"
+          },
+          {
+            "at": "6,2",
+            "tag": "water"
+          },
+          {
+            "at": "7,2",
+            "tag": "water"
+          },
+          {
+            "at": "4,3",
+            "tag": "water"
+          },
+          {
+            "at": "7,3",
+            "tag": "water"
+          },
+          {
+            "at": "1,4",
+            "tag": "dry-lantern"
+          },
+          {
+            "at": "10,4",
+            "tag": "dry-lantern"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "bell-door",
+              "at": "6,0"
+            }
+          ],
+          "interactables": [],
+          "hazards": [
+            {
+              "id": "archive-storm-water",
+              "tiles": [
+                "4,2",
+                "5,2",
+                "6,2",
+                "7,2",
+                "4,3",
+                "7,3"
+              ]
+            }
+          ],
+          "spawn": {
+            "x": 5,
+            "y": 6
+          }
+        }
+      }
+    },
+    {
+      "id": "hsh-prison-ferry",
+      "name": "Hushroad Prison Ferry",
+      "chapterId": "chapter-7",
+      "kitId": "archive-v01",
+      "style": "prison-ferry",
+      "export": "hsh-prison-ferry-board-v01.png",
+      "occupancySha256": "883a8e35510a8087db2af4f3e8629ca0df30c2f7653003ee84de0547599f74de",
+      "snapshot": {
+        "id": "hsh-prison-ferry",
+        "chapterId": "chapter-7",
+        "name": "Hushroad Prison Ferry",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "archive-indigo",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "5,1",
+          "6,1",
+          "5,5",
+          "6,5"
+        ],
+        "terrain": [
+          {
+            "at": "2,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "3,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "8,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "9,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "2,5",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "3,5",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "8,5",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "9,5",
+            "tag": "flowing-water"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "aqueduct-gate",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "carried-name-slip",
+              "at": "5,3"
+            },
+            {
+              "id": "north-current",
+              "at": "2,1"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "ferry-chain-wall",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "hsh-bell-aqueduct",
+      "name": "Hushroad Bell Aqueduct",
+      "chapterId": "chapter-7",
+      "kitId": "archive-v01",
+      "style": "bell-aqueduct",
+      "export": "hsh-bell-aqueduct-board-v01.png",
+      "occupancySha256": "007d294a55ab1681bab84f9a91bc858bc3535b33a9c34911dc07baa68a3a9b71",
+      "snapshot": {
+        "id": "hsh-bell-aqueduct",
+        "chapterId": "chapter-7",
+        "name": "Hushroad Bell Aqueduct",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "archive-indigo",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "4,2",
+          "7,2",
+          "4,4",
+          "7,4"
+        ],
+        "terrain": [
+          {
+            "at": "2,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "3,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "8,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "9,1",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "2,5",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "3,5",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "8,5",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "9,5",
+            "tag": "flowing-water"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "prison-ferry",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "rescue-space-north",
+              "at": "2,1"
+            },
+            {
+              "id": "rescue-space-south",
+              "at": "2,5"
+            },
+            {
+              "id": "name-slip-water",
+              "at": "9,1"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "prisoner-chain-lanes",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "sdg-rain-docks",
+      "name": "Sodegaura Rain Docks",
+      "chapterId": "chapter-3",
+      "kitId": "coast-v01",
+      "style": "rain-docks",
+      "export": "sdg-rain-docks-board-v01.png",
+      "occupancySha256": "7b202eba030e67b96ee749bf05a740d1dbb2c961c96f632270139056b65d6d09",
+      "snapshot": {
+        "id": "sdg-rain-docks",
+        "chapterId": "chapter-3",
+        "name": "Sodegaura Rain Docks",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "coast-fog",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "4,1",
+          "7,1",
+          "4,5",
+          "7,5"
+        ],
+        "terrain": [
+          {
+            "at": "5,1",
+            "tag": "storm-water"
+          },
+          {
+            "at": "6,1",
+            "tag": "storm-water"
+          },
+          {
+            "at": "5,5",
+            "tag": "storm-water"
+          },
+          {
+            "at": "6,5",
+            "tag": "storm-water"
+          },
+          {
+            "at": "1,2",
+            "tag": "dry-lantern"
+          },
+          {
+            "at": "1,5",
+            "tag": "dry-lantern"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "lantern-boat",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "lantern-boat-signal",
+              "at": "11,3"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "dock-patrol-hook-lane",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "sdg-salt-warehouse",
+      "name": "Sodegaura Salt Warehouse Platform",
+      "chapterId": "chapter-3",
+      "kitId": "coast-v01",
+      "style": "salt-warehouse",
+      "export": "sdg-salt-warehouse-board-v01.png",
+      "occupancySha256": "2ef18ef5f2f03a3531604e84c6d7bbcf00e23e5870cfb513094974c6d1bc8ee4",
+      "snapshot": {
+        "id": "sdg-salt-warehouse",
+        "chapterId": "chapter-3",
+        "name": "Sodegaura Salt Warehouse Platform",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "coast-fog",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "2,2",
+          "3,2",
+          "8,2",
+          "9,2",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "4,1",
+            "tag": "storm-water"
+          },
+          {
+            "at": "5,1",
+            "tag": "storm-water"
+          },
+          {
+            "at": "6,1",
+            "tag": "storm-water"
+          },
+          {
+            "at": "7,1",
+            "tag": "storm-water"
+          },
+          {
+            "at": "4,5",
+            "tag": "storm-water"
+          },
+          {
+            "at": "5,5",
+            "tag": "storm-water"
+          },
+          {
+            "at": "6,5",
+            "tag": "storm-water"
+          },
+          {
+            "at": "7,5",
+            "tag": "storm-water"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "key-crane",
+              "at": "10,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "first-bell-key-crane",
+              "at": "10,3"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "charged-dock-water",
+              "tiles": [
+                "4,1",
+                "5,1",
+                "6,1",
+                "7,1",
+                "4,5",
+                "5,5",
+                "6,5",
+                "7,5"
+              ]
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "ngi-tide-caves",
+      "name": "Nagi Tide Caves",
+      "chapterId": "chapter-4",
+      "kitId": "coast-v01",
+      "style": "tide-caves",
+      "export": "ngi-tide-caves-board-v01.png",
+      "occupancySha256": "1f88f0dc45dc03a0417df291f1498a6077917058d871b38688b8d68ae658dc61",
+      "snapshot": {
+        "id": "ngi-tide-caves",
+        "chapterId": "chapter-4",
+        "name": "Nagi Tide Caves",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "coast-fog",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "2,1",
+          "9,1",
+          "0,3",
+          "11,3",
+          "2,5",
+          "9,5",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "4,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "5,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "6,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "7,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "4,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "5,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "6,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "7,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "2,3",
+            "tag": "dry-lantern"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "wreck-passage",
+              "at": "10,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "net-anchor-a",
+              "at": "8,2"
+            },
+            {
+              "id": "net-anchor-b",
+              "at": "8,3"
+            },
+            {
+              "id": "net-anchor-c",
+              "at": "8,4"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "cold-wake-lane",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "ngi-storm-reef",
+      "name": "Nagi Storm-Broken Reef",
+      "chapterId": "chapter-4",
+      "kitId": "coast-v01",
+      "style": "storm-reef",
+      "export": "ngi-storm-reef-board-v01.png",
+      "occupancySha256": "43ef7f3f7b1d47126cfb0e97ffe19b60cb0b0ab9d3409b9c1289125974124bdb",
+      "snapshot": {
+        "id": "ngi-storm-reef",
+        "chapterId": "chapter-4",
+        "name": "Nagi Storm-Broken Reef",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "coast-fog",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "3,1",
+          "8,1",
+          "1,3",
+          "10,3",
+          "3,5",
+          "8,5",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "4,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "5,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "6,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "7,1",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "4,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "5,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "6,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "7,5",
+            "tag": "cold-pool"
+          },
+          {
+            "at": "2,3",
+            "tag": "dry-lantern"
+          },
+          {
+            "at": "9,3",
+            "tag": "dry-lantern"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "wreck-hold",
+              "at": "10,2"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "second-bell-key",
+              "at": "6,3"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "tide-switch",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "kgr-ash-fields",
+      "name": "Kagura Ash Fields",
+      "chapterId": "chapter-5",
+      "kitId": "ash-v01",
+      "style": "ash-fields",
+      "export": "kgr-ash-fields-board-v01.png",
+      "occupancySha256": "31b9e311063d36e4c7a98b31cb62d1d8e1ec53ba491f04e242f2e9d0345da4f7",
+      "snapshot": {
+        "id": "kgr-ash-fields",
+        "chapterId": "chapter-5",
+        "name": "Kagura Ash Fields",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "kagura-ash",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "4,1",
+          "7,1",
+          "4,5",
+          "7,5"
+        ],
+        "terrain": [
+          {
+            "at": "2,2",
+            "tag": "ash-field"
+          },
+          {
+            "at": "3,2",
+            "tag": "ash-field"
+          },
+          {
+            "at": "8,2",
+            "tag": "ash-field"
+          },
+          {
+            "at": "9,2",
+            "tag": "ash-field"
+          },
+          {
+            "at": "2,4",
+            "tag": "ash-field"
+          },
+          {
+            "at": "3,4",
+            "tag": "ash-field"
+          },
+          {
+            "at": "8,4",
+            "tag": "ash-field"
+          },
+          {
+            "at": "9,4",
+            "tag": "ash-field"
+          },
+          {
+            "at": "5,3",
+            "tag": "flowing-water"
+          },
+          {
+            "at": "6,3",
+            "tag": "flowing-water"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "furnace-road",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "name-slip",
+              "at": "6,2"
+            },
+            {
+              "id": "release-channel",
+              "at": "5,3"
+            }
+          ],
+          "hazards": [],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "kgr-archive-furnace",
+      "name": "Kagura Archive Furnace",
+      "chapterId": "chapter-5",
+      "kitId": "ash-v01",
+      "style": "archive-furnace",
+      "export": "kgr-archive-furnace-board-v01.png",
+      "occupancySha256": "2ee28844d9073c3f21072eb746e85138ccb07c4e9aa9b1e1f38bb623153fe023",
+      "snapshot": {
+        "id": "kgr-archive-furnace",
+        "chapterId": "chapter-5",
+        "name": "Kagura Archive Furnace",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "kagura-ash",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "4,1",
+          "5,1",
+          "6,1",
+          "7,1",
+          "5,2",
+          "6,2",
+          "5,3",
+          "6,3",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "3,2",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "4,2",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "7,2",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "8,2",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "3,4",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "4,4",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "7,4",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "8,4",
+            "tag": "furnace-grate"
+          },
+          {
+            "at": "2,3",
+            "tag": "ash-field"
+          },
+          {
+            "at": "9,3",
+            "tag": "ash-field"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "prison-locks",
+              "at": "10,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "forge-directives",
+              "at": "2,4"
+            },
+            {
+              "id": "court-sigil-lock",
+              "at": "9,3"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "forge-vent",
+              "tiles": [
+                "3,2",
+                "4,2",
+                "7,2",
+                "8,2",
+                "3,4",
+                "4,4",
+                "7,4",
+                "8,4"
+              ]
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "kzu-archive-roof",
+      "name": "Kozui Archive Roof",
+      "chapterId": "chapter-6",
+      "kitId": "court-v01",
+      "style": "archive-roof",
+      "export": "kzu-archive-roof-board-v01.png",
+      "occupancySha256": "6211fcaee1084ea9664d31e3e38ca37313f4a6c7f3d9214e8cbc5ca0265add29",
+      "snapshot": {
+        "id": "kzu-archive-roof",
+        "chapterId": "chapter-6",
+        "name": "Kozui Archive Roof",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "court-vermilion",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "5,0",
+          "6,0",
+          "5,6",
+          "6,6"
+        ],
+        "terrain": [
+          {
+            "at": "1,2",
+            "tag": "archive-floor"
+          },
+          {
+            "at": "1,3",
+            "tag": "archive-floor"
+          },
+          {
+            "at": "1,4",
+            "tag": "archive-floor"
+          },
+          {
+            "at": "4,2",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "7,2",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "4,4",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "7,4",
+            "tag": "legal-seal"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "canal-rope",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "courier",
+              "at": "2,3"
+            },
+            {
+              "id": "print-block-a",
+              "at": "1,2"
+            },
+            {
+              "id": "print-block-b",
+              "at": "1,3"
+            },
+            {
+              "id": "print-block-c",
+              "at": "1,4"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "copy-seizure-mark",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 3,
+            "y": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "kzu-public-tribunal",
+      "name": "Kozui Public Tribunal",
+      "chapterId": "chapter-6",
+      "kitId": "court-v01",
+      "style": "public-tribunal",
+      "export": "kzu-public-tribunal-board-v01.png",
+      "occupancySha256": "dc0006561de340cab630b1c7e17c62f66d674ce65fe6ec37d5a1fb57708a441d",
+      "snapshot": {
+        "id": "kzu-public-tribunal",
+        "chapterId": "chapter-6",
+        "name": "Kozui Public Tribunal",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "court-vermilion",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "2,1",
+          "3,1",
+          "8,1",
+          "9,1",
+          "2,5",
+          "3,5",
+          "8,5",
+          "9,5",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6"
+        ],
+        "terrain": [
+          {
+            "at": "4,2",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "7,2",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "4,4",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "7,4",
+            "tag": "legal-seal"
+          },
+          {
+            "at": "1,3",
+            "tag": "archive-floor"
+          },
+          {
+            "at": "10,3",
+            "tag": "archive-floor"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "canal-lock",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "print-block-a",
+              "at": "1,3"
+            },
+            {
+              "id": "print-block-b",
+              "at": "2,4"
+            },
+            {
+              "id": "print-block-c",
+              "at": "2,2"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "seizure-order",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "c8-black-gate",
+      "name": "Black Gate Causeway",
+      "chapterId": "chapter-8",
+      "kitId": "court-v01",
+      "style": "black-gate",
+      "export": "c8-black-gate-board-v01.png",
+      "occupancySha256": "81cff94de03551b06b8e1ebbcafe2605f3891e9a241e1077ce4be0eba389275e",
+      "snapshot": {
+        "id": "c8-black-gate",
+        "chapterId": "chapter-8",
+        "name": "Black Gate Causeway",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "court-vermilion",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "5,2",
+          "6,2",
+          "5,3",
+          "6,3",
+          "5,4",
+          "6,4"
+        ],
+        "terrain": [
+          {
+            "at": "2,1",
+            "tag": "ember-ash"
+          },
+          {
+            "at": "3,1",
+            "tag": "ember-ash"
+          },
+          {
+            "at": "8,1",
+            "tag": "umbral-ash"
+          },
+          {
+            "at": "9,1",
+            "tag": "umbral-ash"
+          },
+          {
+            "at": "2,5",
+            "tag": "umbral-ash"
+          },
+          {
+            "at": "3,5",
+            "tag": "umbral-ash"
+          },
+          {
+            "at": "8,5",
+            "tag": "ember-ash"
+          },
+          {
+            "at": "9,5",
+            "tag": "ember-ash"
+          },
+          {
+            "at": "4,3",
+            "tag": "dry-lantern"
+          },
+          {
+            "at": "7,3",
+            "tag": "dry-lantern"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "kurohana-gate",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "lantern-relay-west",
+              "at": "4,3"
+            },
+            {
+              "id": "lantern-relay-east",
+              "at": "7,3"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "ash-lane-pair",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "krh-outer-archive",
+      "name": "Kurohana Outer Archive",
+      "chapterId": "chapter-9",
+      "kitId": "court-v01",
+      "style": "outer-archive",
+      "export": "krh-outer-archive-board-v01.png",
+      "occupancySha256": "7e3d3b822c6062f542c6bd48f3faf370e4f3e960d68faa931b3d4816a14a5bae",
+      "snapshot": {
+        "id": "krh-outer-archive",
+        "chapterId": "chapter-9",
+        "name": "Kurohana Outer Archive",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "court-vermilion",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "5,2",
+          "6,2",
+          "5,3",
+          "6,3",
+          "5,4",
+          "6,4"
+        ],
+        "terrain": [
+          {
+            "at": "2,1",
+            "tag": "bell-node"
+          },
+          {
+            "at": "9,1",
+            "tag": "bell-node"
+          },
+          {
+            "at": "2,5",
+            "tag": "bell-node"
+          },
+          {
+            "at": "9,5",
+            "tag": "bell-node"
+          },
+          {
+            "at": "4,3",
+            "tag": "archive-floor"
+          },
+          {
+            "at": "7,3",
+            "tag": "archive-floor"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "observatory-stair",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "archive-node-a",
+              "at": "2,1"
+            },
+            {
+              "id": "archive-node-b",
+              "at": "9,1"
+            },
+            {
+              "id": "archive-node-c",
+              "at": "9,5"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "catalogue-line",
+              "tiles": []
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "krh-observatory",
+      "name": "Kurohana Throne Observatory",
+      "chapterId": "chapter-9",
+      "kitId": "court-v01",
+      "style": "throne-observatory",
+      "export": "krh-observatory-board-v01.png",
+      "occupancySha256": "436fdfcec19949c115c3f11ca0bb82471774707d9856d6f191c8aa396960972d",
+      "snapshot": {
+        "id": "krh-observatory",
+        "chapterId": "chapter-9",
+        "name": "Kurohana Throne Observatory",
+        "width": 12,
+        "height": 7,
+        "spacePx": 32,
+        "paletteId": "court-vermilion",
+        "blocked": [
+          "0,0",
+          "1,0",
+          "10,0",
+          "11,0",
+          "0,6",
+          "1,6",
+          "10,6",
+          "11,6",
+          "5,2",
+          "6,2",
+          "5,3",
+          "6,3",
+          "5,4",
+          "6,4"
+        ],
+        "terrain": [
+          {
+            "at": "2,1",
+            "tag": "bell-node"
+          },
+          {
+            "at": "9,1",
+            "tag": "bell-node"
+          },
+          {
+            "at": "2,5",
+            "tag": "bell-node"
+          },
+          {
+            "at": "9,5",
+            "tag": "bell-node"
+          },
+          {
+            "at": "4,3",
+            "tag": "archive-floor"
+          },
+          {
+            "at": "7,3",
+            "tag": "archive-floor"
+          }
+        ],
+        "specialCells": {
+          "exits": [
+            {
+              "id": "archive-evacuation",
+              "at": "11,3"
+            }
+          ],
+          "interactables": [
+            {
+              "id": "north-node",
+              "at": "2,1"
+            },
+            {
+              "id": "east-node",
+              "at": "9,1"
+            },
+            {
+              "id": "south-node",
+              "at": "9,5"
+            },
+            {
+              "id": "west-node",
+              "at": "2,5"
+            }
+          ],
+          "hazards": [
+            {
+              "id": "yearless-ring",
+              "tiles": []
+            },
+            {
+              "id": "dawn-window",
+              "tiles": [
+                "1,3",
+                "2,3",
+                "3,3"
+              ]
+            }
+          ],
+          "spawn": {
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    }
+  ],
+  "validation": {
+    "boardCount": 18,
+    "distinctBoardHashes": 18,
+    "allBoardsRgba": true,
+    "allBoardsOpaque": true,
+    "allBoardIhdrExact": true,
+    "moduleSheetDimensions": [
+      640,
+      128
+    ],
+    "contactSheetDimensions": [
+      768,
+      640
+    ],
+    "twoIndependentRendersByteIdentical": true
+  },
+  "review": {
+    "internalSymbolConstraints": "applied",
+    "visualContactSheetReview": "passed-after-observatory-floor-revision",
+    "externalCulturalReview": "pending",
+    "artLock": false
+  }
+}

@@ -59,16 +59,30 @@ import {
   recordRunPlaytime,
 } from './run-receipt.mjs';
 import {
-  PARTY_ATLAS,
   atlasDirectionForMovement,
-  getPartyAtlasFrame,
-  partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
+import {
+  PARTY_COMBAT_ATLAS,
+  getPartyCombatFrame,
+  getPartyCombatPresentationPose,
+  partyCombatImageHasExpectedSize,
+} from './party-combat-atlas.mjs';
 import {
   ENEMY_ATLAS,
   enemyAtlasImageHasExpectedSize,
   getEnemyAtlasFrame,
 } from './enemy-atlas.mjs';
+import {
+  BOSS_COMBAT_ATLAS,
+  BOSS_DEFEAT_HOLD_MS,
+  bossCombatImageHasExpectedSize,
+  getBossCombatDrawPlacement,
+  getBossCombatFrame,
+  getBossCombatPresentationPose,
+  getNewlyTerminalBossCombatActors,
+  hasBossCombatTemplate,
+  mergeBossTerminalPresentationActors,
+} from './boss-combat-atlas.mjs';
 import {
   formatObjectiveRequirement,
   getObjectiveActionPresentation,
@@ -149,6 +163,7 @@ const mateusSurrender = document.querySelector('#mateusSurrender');
 context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
 const battleEnemyAtlasImage = new Image();
+const battleBossAtlasImage = new Image();
 function loadCombatAtlas(image, { url, width, height, datasetKey }) {
   canvas.dataset[datasetKey] = 'loading';
   image.decoding = 'async';
@@ -162,8 +177,9 @@ function loadCombatAtlas(image, { url, width, height, datasetKey }) {
   }, { once: true });
   image.src = url;
 }
-loadCombatAtlas(battlePartyAtlasImage, { ...PARTY_ATLAS, datasetKey: 'partyArtState' });
+loadCombatAtlas(battlePartyAtlasImage, { ...PARTY_COMBAT_ATLAS, datasetKey: 'partyArtState' });
 loadCombatAtlas(battleEnemyAtlasImage, { ...ENEMY_ATLAS, datasetKey: 'enemyArtState' });
+loadCombatAtlas(battleBossAtlasImage, { ...BOSS_COMBAT_ATLAS, datasetKey: 'bossArtState' });
 const battleVfxAtlasImage = new Image();
 let battleVfxAtlasState = 'loading';
 battleVfxAtlasImage.decoding = 'async';
@@ -395,7 +411,8 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     effect: result.statusApplied ? { status: result.statusId } : undefined,
   };
   const selfStatusId = skill.effect?.selfStatus ?? null;
-  const afterAttacker = engine.snapshot().actors.find((actor) => actor.instanceId === attackerId);
+  const afterSnapshot = engine.snapshot();
+  const afterAttacker = afterSnapshot.actors.find((actor) => actor.instanceId === attackerId);
   const selfStatusApplied = Boolean(selfStatusId && afterAttacker?.statuses?.some((status) => status.id === selfStatusId));
   const animationOptions = {
     sourceTile,
@@ -410,14 +427,19 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     ? createPartySkillTimeline(result.skillId, animationOptions)
     : createEnemyFamilyTimeline(attacker.templateId, { ...animationOptions, skill });
   const startedAt = performance.now();
+  const timelineEndsAt = startedAt + timeline.durationMs;
+  const terminalBossActors = getNewlyTerminalBossCombatActors(beforeSnapshot.actors, afterSnapshot.actors);
+  const defeatHoldMs = terminalBossActors.length ? BOSS_DEFEAT_HOLD_MS / speed : 0;
   clearEnemyIntentSchedule();
   activeBattleAnimation = Object.freeze({
     attackerId,
     targetId: result.targetId,
     retainedActors: Object.freeze([attacker, target]),
+    terminalBossActors,
     timeline,
     startedAt,
-    endsAt: startedAt + timeline.durationMs,
+    timelineEndsAt,
+    endsAt: timelineEndsAt + defeatHoldMs,
   });
   return activeBattleAnimation;
 }
@@ -427,7 +449,12 @@ function currentBattleAnimationFrame(now = performance.now()) {
   if (now >= activeBattleAnimation.endsAt) return null;
   return {
     ...activeBattleAnimation,
-    frame: sampleBattleAnimation(activeBattleAnimation.timeline, now - activeBattleAnimation.startedAt),
+    terminalBossWindow: activeBattleAnimation.terminalBossActors.length > 0
+      && now >= activeBattleAnimation.timelineEndsAt,
+    frame: sampleBattleAnimation(
+      activeBattleAnimation.timeline,
+      Math.min(now - activeBattleAnimation.startedAt, activeBattleAnimation.timeline.durationMs),
+    ),
   };
 }
 
@@ -670,7 +697,8 @@ function drawBattle(now = performance.now()) {
   const geometry = mapGeometry();
   const { cell, originX, originY } = geometry;
   const visualNow = reducedMotion.matches ? 0 : now;
-  const animation = reducedMotion.matches ? null : currentBattleAnimationFrame(now);
+  const sampledAnimation = currentBattleAnimationFrame(now);
+  const animation = reducedMotion.matches && !sampledAnimation?.terminalBossWindow ? null : sampledAnimation;
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
@@ -747,7 +775,12 @@ function drawBattle(now = performance.now()) {
   drawBossIntent(snapshot, geometry);
 
   const presentationActors = getBattlePresentationActors(snapshot.actors, animation?.retainedActors ?? []);
-  for (const actor of presentationActors) {
+  const resolvedPresentationActors = mergeBossTerminalPresentationActors(
+    presentationActors,
+    animation?.terminalBossActors ?? [],
+    animation?.terminalBossWindow,
+  );
+  for (const actor of resolvedPresentationActors) {
     const animatedActor = animation && actor.instanceId === animation.attackerId ? animation.frame.actor : null;
     const animatedTarget = animation && actor.instanceId === animation.targetId ? animation.frame.target : null;
     const renderTile = animatedActor?.renderTile ?? animatedTarget?.renderTile ?? actor.pos;
@@ -760,7 +793,7 @@ function drawBattle(now = performance.now()) {
       context.lineWidth = 2;
       context.strokeRect(centerX - cell * 0.3, centerY - cell * 0.34, cell * 0.6, cell * 0.68);
     }
-    if (party && canvas.dataset.partyArtState === 'ready' && partyAtlasImageHasExpectedSize(battlePartyAtlasImage)) {
+    if (party && canvas.dataset.partyArtState === 'ready' && partyCombatImageHasExpectedSize(battlePartyAtlasImage)) {
       const nearestEnemy = snapshot.actors
         .filter((candidate) => candidate.faction === 'enemy' && candidate.hp > 0 && candidate.active !== false)
         .sort((left, right) => Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
@@ -773,24 +806,73 @@ function drawBattle(now = performance.now()) {
         ? atlasDirectionForMovement(animatedActor.facing.x, animatedActor.facing.y, fallbackFacing)
         : null;
       const facing = animationFacing ?? battleFacingByActor.get(actor.instanceId) ?? fallbackFacing;
-      const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
-      const phase = !reducedMotion.matches && now < (battleMotionUntil.get(actor.instanceId) ?? 0)
-        ? Math.floor((now * presentationSpeed) / 110) % 2
-        : 0;
-      const frame = getPartyAtlasFrame(actor.templateId, facing, phase);
-      const drawHeight = cell * 1.18 * animationScale;
+      const moving = !reducedMotion.matches && now < (battleMotionUntil.get(actor.instanceId) ?? 0);
+      const pose = getPartyCombatPresentationPose({
+        actionId: animatedActor ? animation?.timeline.actionId : null,
+        phase: animatedActor ? animation?.frame.phase : null,
+        actorPose: animatedActor?.pose,
+        targetPose: animatedTarget?.pose,
+        stance: actor.stance,
+        moving,
+      });
+      const frame = getPartyCombatFrame(actor.templateId, pose);
+      const drawHeight = cell * 1.28 * animationScale;
       const drawWidth = drawHeight * (frame.width / frame.height);
+      const faceLeft = facing === 'west';
+      context.save();
+      context.translate(centerX, 0);
+      context.scale(faceLeft ? -1 : 1, 1);
       context.drawImage(
         battlePartyAtlasImage,
         frame.x,
         frame.y,
         frame.width,
         frame.height,
-        centerX - drawWidth / 2,
+        -drawWidth / 2,
         centerY - drawHeight * 0.57,
         drawWidth,
         drawHeight,
       );
+      context.restore();
+    } else if (!party && hasBossCombatTemplate(actor.templateId)
+      && canvas.dataset.bossArtState === 'ready' && bossCombatImageHasExpectedSize(battleBossAtlasImage)) {
+      const pose = getBossCombatPresentationPose({
+        hp: actor.hp,
+        active: actor.active !== false,
+        phase: animatedActor ? animation?.frame.phase : null,
+        actorPose: animatedActor?.pose,
+        targetPose: animatedTarget?.pose,
+      });
+      const frame = getBossCombatFrame(actor.templateId, pose);
+      const drawHeight = cell * frame.scale * animationScale;
+      const placement = getBossCombatDrawPlacement(frame, {
+        anchorX: 0,
+        groundY: centerY + (cell / 2),
+        drawHeight,
+      });
+      const nearestParty = snapshot.actors
+        .filter((candidate) => candidate.faction === 'party' && candidate.hp > 0 && candidate.active !== false)
+        .sort((left, right) => Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
+          - Math.max(Math.abs(right.pos.x - actor.pos.x), Math.abs(right.pos.y - actor.pos.y))
+          || left.instanceId.localeCompare(right.instanceId))[0];
+      const faceLeft = animatedActor?.facing?.x
+        ? animatedActor.facing.x < 0
+        : !nearestParty || nearestParty.pos.x <= actor.pos.x;
+      context.save();
+      context.translate(centerX, 0);
+      context.scale(faceLeft ? -1 : 1, 1);
+      context.drawImage(
+        battleBossAtlasImage,
+        frame.x,
+        frame.y,
+        frame.width,
+        frame.height,
+        placement.x,
+        placement.y,
+        placement.width,
+        placement.height,
+      );
+      context.restore();
     } else if (!party && canvas.dataset.enemyArtState === 'ready' && enemyAtlasImageHasExpectedSize(battleEnemyAtlasImage)) {
       const animationPose = animatedActor?.pose ?? animatedTarget?.pose;
       const transientPose = !reducedMotion.matches && now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)

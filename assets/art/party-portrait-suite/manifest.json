@@ -1,0 +1,1116 @@
+{
+  "assetId": "party-portrait-expression-suite-v1",
+  "status": "editable-production-portrait-expression-suite",
+  "runtimeIntegration": "current-browser-camp-and-scene-focus",
+  "authorship": "original-code-native-pixel-primitives",
+  "geometry": {
+    "columns": 4,
+    "rows": 6,
+    "cellWidth": 64,
+    "cellHeight": 64,
+    "contentWidth": 256,
+    "contentHeight": 384,
+    "sheetWidth": 384,
+    "sheetHeight": 384,
+    "transparentRightPadding": 128,
+    "minimumTransparentGutter": 4
+  },
+  "rowOrder": [
+    "ren",
+    "aya",
+    "lise",
+    "mateus",
+    "genta",
+    "kiku"
+  ],
+  "columnOrder": [
+    "neutral",
+    "resolve",
+    "strain",
+    "soften"
+  ],
+  "expressionSemantics": {
+    "neutral": {
+      "affect": "attentive restraint",
+      "brow": "level",
+      "eyes": "open",
+      "mouth": "closed",
+      "semantic": "listening or awaiting a command"
+    },
+    "resolve": {
+      "affect": "deliberate commitment",
+      "brow": "inward-down",
+      "eyes": "focused",
+      "mouth": "firm",
+      "semantic": "decision made without triumphal posing"
+    },
+    "strain": {
+      "affect": "cost or pressure",
+      "brow": "uneven-raised",
+      "eyes": "tight",
+      "mouth": "parted",
+      "semantic": "pain, fatigue, or difficult admission without caricature"
+    },
+    "soften": {
+      "affect": "guarded warmth",
+      "brow": "relaxed",
+      "eyes": "gentle",
+      "mouth": "small-upturn",
+      "semantic": "relief or care without glamour pose"
+    }
+  },
+  "paletteCostumeReuse": {
+    "ren": {
+      "paletteId": "party-ren-cedar-rain-v1",
+      "colors": {
+        "primary": "#5a3a2c",
+        "secondary": "#27466b",
+        "light": "#8b6043",
+        "accent": "#a08b58",
+        "hair": "#17202a"
+      },
+      "silhouette": "forward coat, courier satchel, short spear"
+    },
+    "aya": {
+      "paletteId": "party-aya-paper-teal-v1",
+      "colors": {
+        "primary": "#547675",
+        "secondary": "#d7c99a",
+        "light": "#88a8a0",
+        "accent": "#b34a3e",
+        "hair": "#171b24"
+      },
+      "silhouette": "layered sleeves, square archive case, folded record fan"
+    },
+    "lise": {
+      "paletteId": "party-lise-sea-brass-v1",
+      "colors": {
+        "primary": "#355775",
+        "secondary": "#263e59",
+        "light": "#61809a",
+        "accent": "#a08b58",
+        "hair": "#8f7b55"
+      },
+      "silhouette": "travel coat, sea cape, compact crossbow and rapier"
+    },
+    "mateus": {
+      "paletteId": "party-mateus-charcoal-wine-v1",
+      "colors": {
+        "primary": "#252a35",
+        "secondary": "#3b2732",
+        "light": "#4b4e59",
+        "accent": "#762b32",
+        "hair": "#21181b"
+      },
+      "silhouette": "narrow long coat, high collar, ring of keys"
+    },
+    "genta": {
+      "paletteId": "party-genta-earth-metal-v1",
+      "colors": {
+        "primary": "#4b4b43",
+        "secondary": "#5a3a2c",
+        "light": "#6f6d5c",
+        "accent": "#a08b58",
+        "hair": "#20232a"
+      },
+      "silhouette": "broad shoulder mantle, heavy shield and tetsubo mass"
+    },
+    "kiku": {
+      "paletteId": "party-kiku-herb-candle-v1",
+      "colors": {
+        "primary": "#496b55",
+        "secondary": "#d7c99a",
+        "light": "#779274",
+        "accent": "#88c8c5",
+        "hair": "#24201f"
+      },
+      "silhouette": "short cloak, medicine box, bottles and packets"
+    }
+  },
+  "frames": [
+    {
+      "id": "ren:neutral",
+      "characterId": "ren",
+      "expression": "neutral",
+      "rect": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "2eb5d76a9ef47a3801cd03a601baf452ddd403779b7d1b7be89b6be7f4936aa5"
+    },
+    {
+      "id": "ren:resolve",
+      "characterId": "ren",
+      "expression": "resolve",
+      "rect": [
+        64,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "db52cf0167e46c2cf16d89bf2b1bde5f7e10d8ca901b799780af40e16ba1e004"
+    },
+    {
+      "id": "ren:strain",
+      "characterId": "ren",
+      "expression": "strain",
+      "rect": [
+        128,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "ac4a76c134773393d79e09f96f4102d903bb08f6e08b6bc2b13b5ab96b2bb168"
+    },
+    {
+      "id": "ren:soften",
+      "characterId": "ren",
+      "expression": "soften",
+      "rect": [
+        192,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "d165a45970d38137cd04fa6d465d29d39ccb7352ff0bda923e3261bd1bb5ab55"
+    },
+    {
+      "id": "aya:neutral",
+      "characterId": "aya",
+      "expression": "neutral",
+      "rect": [
+        0,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "93fe1e37c6441e301000284108a099a2b92a035149a874aae9f763364f938bdd"
+    },
+    {
+      "id": "aya:resolve",
+      "characterId": "aya",
+      "expression": "resolve",
+      "rect": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "d6aea13322f249a82432a379c2a52bf4962881c567b9bd08d0bab99f26ff0cc9"
+    },
+    {
+      "id": "aya:strain",
+      "characterId": "aya",
+      "expression": "strain",
+      "rect": [
+        128,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "740dd0d8acacc80345a3a5feb1312db00a94ff9be1630355ac77317df991c34a"
+    },
+    {
+      "id": "aya:soften",
+      "characterId": "aya",
+      "expression": "soften",
+      "rect": [
+        192,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "a4423e6a4d13a5b38dc0da267b6059418c70af0431da01438766bb09f9c14f26"
+    },
+    {
+      "id": "lise:neutral",
+      "characterId": "lise",
+      "expression": "neutral",
+      "rect": [
+        0,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "362dc33a0bd7dc5624f943206282735dab45a838f6b7555570fec1947cbafcf5"
+    },
+    {
+      "id": "lise:resolve",
+      "characterId": "lise",
+      "expression": "resolve",
+      "rect": [
+        64,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "69e5b0558077498bbf73d968fb51b61c20943b1577edcfe1b6136fa87ead6c76"
+    },
+    {
+      "id": "lise:strain",
+      "characterId": "lise",
+      "expression": "strain",
+      "rect": [
+        128,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "e71615066443260279b33f368c4a6f97470c84da8454d78f6c641a1735ab184f"
+    },
+    {
+      "id": "lise:soften",
+      "characterId": "lise",
+      "expression": "soften",
+      "rect": [
+        192,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "6895906074a4eb47165eec60318cce15eae388ac5f99328dce5d2973ea4170fa"
+    },
+    {
+      "id": "mateus:neutral",
+      "characterId": "mateus",
+      "expression": "neutral",
+      "rect": [
+        0,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "9e828f68d0fb814b475bdbca32bbd9c4a3af92fc7683fa0c612603e915af2621"
+    },
+    {
+      "id": "mateus:resolve",
+      "characterId": "mateus",
+      "expression": "resolve",
+      "rect": [
+        64,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "5f8b64496c9157b6fee407ad8a414a6084fafa98d980e29dd2bc549359259ed5"
+    },
+    {
+      "id": "mateus:strain",
+      "characterId": "mateus",
+      "expression": "strain",
+      "rect": [
+        128,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "60cddb38d77028e7cb7747a1f7c6e91bd561533449a2a21bc4406c0fe39fab35"
+    },
+    {
+      "id": "mateus:soften",
+      "characterId": "mateus",
+      "expression": "soften",
+      "rect": [
+        192,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "6d1d4c94056df58b49386a687335af59dbbb39432a77e6eff6f69e139741df70"
+    },
+    {
+      "id": "genta:neutral",
+      "characterId": "genta",
+      "expression": "neutral",
+      "rect": [
+        0,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "3211951fc869fbba24622309c888ec9a1145699b075dc6c4c673cc806e11cea8"
+    },
+    {
+      "id": "genta:resolve",
+      "characterId": "genta",
+      "expression": "resolve",
+      "rect": [
+        64,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "1496af871d3c4d26dc4e90ff5825534aecb7c1abe1a5775f6968f36524720039"
+    },
+    {
+      "id": "genta:strain",
+      "characterId": "genta",
+      "expression": "strain",
+      "rect": [
+        128,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "05f367d18dbcc4f47293eab600df307c4c1a5f7f01287a7dfe1d234e1a02a099"
+    },
+    {
+      "id": "genta:soften",
+      "characterId": "genta",
+      "expression": "soften",
+      "rect": [
+        192,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "4b8876d81b571e535c3aac2d852a980124e2be49e488ac885d697c18afe251e3"
+    },
+    {
+      "id": "kiku:neutral",
+      "characterId": "kiku",
+      "expression": "neutral",
+      "rect": [
+        0,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "4fff480be2869777ae143ec1bc43e1435f67dbf32d3ec486abbfb3bc665c07aa"
+    },
+    {
+      "id": "kiku:resolve",
+      "characterId": "kiku",
+      "expression": "resolve",
+      "rect": [
+        64,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "bb638400ca1958a69d7c0ed3329eb01cbd636ef1639f5bda44103949d095ea68"
+    },
+    {
+      "id": "kiku:strain",
+      "characterId": "kiku",
+      "expression": "strain",
+      "rect": [
+        128,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "3c11143437de6c5834efdf4e5884bc2e76af0d28c3f5c53ca3dbb1fcd5bf1ddc"
+    },
+    {
+      "id": "kiku:soften",
+      "characterId": "kiku",
+      "expression": "soften",
+      "rect": [
+        192,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "0f33064b2af624db52268de8130e8456bf402c4c86f46f580d405a3a63e93aab"
+    }
+  ],
+  "sources": [
+    {
+      "path": "party-portrait-suite.source.json",
+      "role": "editable-portrait-contract",
+      "sha256": "611a6c808f5000d2011b5d8a18f4e5713214cd486f882facdc6ed53f571297e3"
+    },
+    {
+      "path": "../party-field-suite/party-field-suite.source.json",
+      "role": "canonical-palette-costume-contract",
+      "sha256": "548623d253501404e2e3f1ddf915207ed60791701c91313695f905140a4e72eb"
+    },
+    {
+      "path": "build_party_portrait_suite.py",
+      "role": "deterministic-builder",
+      "sha256": "cac03bf4ebab9bc7b8810f6e2514607afbc97f619211b482666059bcbce9c129"
+    }
+  ],
+  "exports": [
+    {
+      "path": "party-portrait-expressions.png",
+      "role": "transparent-runtime-candidate",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "sha256": "025c04b4522a9156b525fe797d1158eade766747b9b5712fe648c52ec4897a77"
+    },
+    {
+      "path": "party-portrait-expressions-contact-sheet.png",
+      "role": "labeled-review-only-not-runtime",
+      "width": 880,
+      "height": 1220,
+      "mode": "RGBA",
+      "sha256": "0a80f4c4d2968d2ee227f7b7060c99acf3c3e92b8460ae5ad18550555db5a4d0"
+    }
+  ],
+  "validation": {
+    "frameCount": 24,
+    "distinctRgbaFrameHashes": 24,
+    "binaryTransparency": true,
+    "minimumObservedGutter": 4,
+    "deterministicCommand": "python build_party_portrait_suite.py --check"
+  },
+  "review": {
+    "visualInspection": "pending",
+    "humanExpressionReadability": "pending",
+    "externalCulturalReview": "pending",
+    "mateusOriginalityConstraint": "applied"
+  }
+}

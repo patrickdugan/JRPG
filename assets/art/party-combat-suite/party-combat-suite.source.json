@@ -1,0 +1,44 @@
+{
+  "assetId": "party-combat-action-suite-v1",
+  "formatVersion": 1,
+  "authorship": "original-code-native-pixel-primitives",
+  "canonicalFieldSource": "../party-field-suite/party-field-suite.source.json",
+  "frame": {
+    "width": 48,
+    "height": 64,
+    "pivot": [24, 58],
+    "footPoint": [24, 58],
+    "minimumTransparentGutter": 4
+  },
+  "sheet": {
+    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku"],
+    "columns": [
+      "idle",
+      "move",
+      "guard",
+      "hit",
+      "basic-strike-windup",
+      "basic-strike-active",
+      "signature-a",
+      "signature-b"
+    ]
+  },
+  "actions": {
+    "idle": {"phase": "neutral", "event": "none", "hitAnchor": [31, 34], "rule": "held combat stance"},
+    "move": {"phase": "movement", "event": "none", "hitAnchor": [33, 43], "rule": "visual root motion only; simulation owns destination"},
+    "guard": {"phase": "commit", "event": "guard", "hitAnchor": [34, 36], "rule": "protected side faces threat"},
+    "hit": {"phase": "reaction", "event": "none", "hitAnchor": [18, 32], "rule": "recoil does not move resolved cell"},
+    "basic-strike-windup": {"phase": "windup", "event": "none", "hitAnchor": [14, 31], "rule": "commitment must read before impact"},
+    "basic-strike-active": {"phase": "active", "event": "damage", "hitAnchor": [42, 31], "rule": "single authored damage-event key"},
+    "signature-a": {"phase": "active-key", "event": "skill-a", "hitAnchor": [37, 28], "rule": "character-specific primary signature key"},
+    "signature-b": {"phase": "active-key", "event": "skill-b", "hitAnchor": [35, 27], "rule": "character-specific secondary signature key"}
+  },
+  "characters": [
+    {"id": "ren", "basicDelivery": "cut", "signatureA": {"id": "courier-cut", "name": "Courier's Cut", "delivery": "cut"}, "signatureB": {"id": "cinder-route", "name": "Cinder Route", "delivery": "arcane", "essence": "ember"}},
+    {"id": "aya", "basicDelivery": "arcane", "signatureA": {"id": "warding-script", "name": "Warding Script", "delivery": "arcane", "essence": "radiance"}, "signatureB": {"id": "witnessing-ink", "name": "Witnessing Ink", "delivery": "arcane", "essence": "radiance"}},
+    {"id": "lise", "basicDelivery": "pierce", "signatureA": {"id": "hunter-thrust", "name": "Hunter Thrust", "delivery": "pierce"}, "signatureB": {"id": "dawn-bolt", "name": "Dawn Bolt", "delivery": "arcane", "essence": "radiance"}},
+    {"id": "mateus", "basicDelivery": "cut", "signatureA": {"id": "penitent-night", "name": "Penitent Night", "delivery": "arcane", "essence": "umbral"}, "signatureB": {"id": "returned-name", "name": "Returned Name", "delivery": "arcane", "essence": "radiance"}, "likenessPolicy": "original fictional face and proportions; no real-person reference"},
+    {"id": "genta", "basicDelivery": "crush", "signatureA": {"id": "pilgrim-maul", "name": "Pilgrim Maul", "delivery": "crush"}, "signatureB": {"id": "standing-bridge", "name": "Standing Bridge", "delivery": "guard"}},
+    {"id": "kiku", "basicDelivery": "arcane", "signatureA": {"id": "cold-medicine", "name": "Cold Medicine", "delivery": "arcane", "essence": "frost"}, "signatureB": {"id": "terrain-remedy", "name": "Terrain Remedy", "delivery": "arcane", "essence": "radiance"}}
+  ]
+}

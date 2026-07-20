@@ -10,7 +10,7 @@ The first playable is a dependency-free HTML5 Canvas build. This workspace has N
 
 Rules live in `game/engine.mjs`, which is DOM-free and covered by Node tests. `game/game.js` is a replaceable input/rendering adapter. The same data and tests can move to a future Godot/Unity/custom runtime after the hook is proven.
 
-Prototype fallback artwork remains original procedural pixel art. The first production replacements are deterministic editable pixel suites: the Takamine Bell-Chamber board, six-member directional field foundation, eight-family enemy key-pose atlas, and nine-family battle-VFX overlay. Generated concept sheets remain reference-only and are not shipped as runtime pixels; broader environment, animation, portrait, boss-phase, and effect coverage is still production work.
+Prototype fallback artwork remains original procedural pixel art. The current production replacements are deterministic editable pixel suites: all 19 combat boards; six-member directional field, combat-key, and portrait-expression atlases; eight regular-enemy families; ten primary bosses; and nine battle-VFX families. Generated concept sheets remain reference-only and are not shipped as runtime pixels. Full animation in-betweens, recovery/defeat coverage, alternate combat facings, the planned eight-expression speaking set, variants, remaining system effects, and human review are still production work.
 
 ## 2. First-playable boundary
 
@@ -157,7 +157,7 @@ The Canvas is rendered at 320 × 180 logical pixels and integer-scaled with `ima
 - Right ledger: HP, stance, distance, and delivery/essence multipliers.
 - Footer: command buttons with range/recovery labels, combat log, explicit keyboard controls, restart/end card.
 
-Original procedural pixel primitives create rain, cedar, lacquer, paper-screen glow, bell silhouette, Ren, and the Ashen Oni. The purpose is visual readability of silhouettes/value/material; final art remains the art-production deliverable.
+Original procedural pixel primitives remain the resilient load/error fallback. Live presentation uses the authored board, actor, portrait, boss, and VFX suites described above. Their current key poses validate silhouette, value, material, exact addressing, and deterministic fallback behavior; complete animation and human readability approval remain art-production deliverables.
 
 ## 9. Acceptance and automated verification
 

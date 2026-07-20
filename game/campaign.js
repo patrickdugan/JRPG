@@ -104,6 +104,13 @@ import {
   partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
 import {
+  PARTY_PORTRAIT_ATLAS,
+  getPartyPortraitFrame,
+  hasPartyPortraitMember,
+  partyPortraitImageHasExpectedSize,
+  portraitExpressionForGesture,
+} from './party-portrait-atlas.mjs';
+import {
   acknowledgeWitnessChronicleLine,
   acceptWitnessChronicle,
   advanceWitnessChronicle,
@@ -167,6 +174,21 @@ const sceneAtmosphere = document.querySelector('#sceneAtmosphere');
 const sceneFocusPortrait = document.querySelector('#sceneFocusPortrait');
 const scenePortraitCtx = sceneFocusPortrait.getContext('2d');
 scenePortraitCtx.imageSmoothingEnabled = false;
+const partyPortraitImage = new Image();
+let partyPortraitState = 'loading';
+sceneFocusPortrait.dataset.artState = partyPortraitState;
+partyPortraitImage.decoding = 'async';
+partyPortraitImage.addEventListener('load', () => {
+  partyPortraitState = partyPortraitImageHasExpectedSize(partyPortraitImage) ? 'ready' : 'error';
+  sceneFocusPortrait.dataset.artState = partyPortraitState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+partyPortraitImage.addEventListener('error', () => {
+  partyPortraitState = 'error';
+  sceneFocusPortrait.dataset.artState = partyPortraitState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+partyPortraitImage.src = PARTY_PORTRAIT_ATLAS.url;
 const sceneMusicCue = document.querySelector('#sceneMusicCue');
 const sceneCameraCue = document.querySelector('#sceneCameraCue');
 const sceneEntranceCue = document.querySelector('#sceneEntranceCue');
@@ -1206,10 +1228,15 @@ function renderSceneDirection(beat) {
   sceneTransitionCue.textContent = direction.transitionCue;
   sceneFocusPortrait.setAttribute('aria-label', `${direction.gestureCue.speaker} scene focus portrait`);
   scenePortraitCtx.clearRect(0, 0, sceneFocusPortrait.width, sceneFocusPortrait.height);
-  if (partyAtlasState === 'ready' && partyAtlasImageHasExpectedSize(partyAtlasImage)) {
-    const frame = getPartyAtlasFrame(direction.gestureCue.speaker.toLowerCase(), 'south', 0);
+  const portraitMemberId = direction.gestureCue.speaker.toLowerCase();
+  if (partyPortraitState === 'ready' && partyPortraitImageHasExpectedSize(partyPortraitImage)
+    && hasPartyPortraitMember(portraitMemberId)) {
+    const frame = getPartyPortraitFrame(
+      portraitMemberId,
+      portraitExpressionForGesture(direction.gestureCue.action),
+    );
     scenePortraitCtx.drawImage(
-      partyAtlasImage,
+      partyPortraitImage,
       frame.x,
       frame.y,
       frame.width,

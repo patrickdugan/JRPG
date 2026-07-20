@@ -1,0 +1,1945 @@
+{
+  "assetId": "party-combat-action-suite-v1",
+  "status": "editable-production-combat-key-pose-suite",
+  "runtimeIntegration": "current-browser-battle-key-poses",
+  "authorship": "original-code-native-pixel-primitives",
+  "geometry": {
+    "columns": 8,
+    "rows": 6,
+    "cellWidth": 48,
+    "cellHeight": 64,
+    "sheetWidth": 384,
+    "sheetHeight": 384,
+    "pivot": [
+      24,
+      58
+    ],
+    "footPoint": [
+      24,
+      58
+    ],
+    "minimumTransparentGutter": 4
+  },
+  "rowOrder": [
+    "ren",
+    "aya",
+    "lise",
+    "mateus",
+    "genta",
+    "kiku"
+  ],
+  "columnOrder": [
+    "idle",
+    "move",
+    "guard",
+    "hit",
+    "basic-strike-windup",
+    "basic-strike-active",
+    "signature-a",
+    "signature-b"
+  ],
+  "paletteAndSilhouetteReuse": {
+    "ren": {
+      "paletteId": "party-ren-cedar-rain-v1",
+      "silhouette": "forward coat, courier satchel, short spear",
+      "colors": {
+        "primary": "#5a3a2c",
+        "secondary": "#27466b",
+        "light": "#8b6043",
+        "accent": "#a08b58",
+        "hair": "#17202a"
+      }
+    },
+    "aya": {
+      "paletteId": "party-aya-paper-teal-v1",
+      "silhouette": "layered sleeves, square archive case, folded record fan",
+      "colors": {
+        "primary": "#547675",
+        "secondary": "#d7c99a",
+        "light": "#88a8a0",
+        "accent": "#b34a3e",
+        "hair": "#171b24"
+      }
+    },
+    "lise": {
+      "paletteId": "party-lise-sea-brass-v1",
+      "silhouette": "travel coat, sea cape, compact crossbow and rapier",
+      "colors": {
+        "primary": "#355775",
+        "secondary": "#263e59",
+        "light": "#61809a",
+        "accent": "#a08b58",
+        "hair": "#8f7b55"
+      }
+    },
+    "mateus": {
+      "paletteId": "party-mateus-charcoal-wine-v1",
+      "silhouette": "narrow long coat, high collar, ring of keys",
+      "colors": {
+        "primary": "#252a35",
+        "secondary": "#3b2732",
+        "light": "#4b4e59",
+        "accent": "#762b32",
+        "hair": "#21181b"
+      }
+    },
+    "genta": {
+      "paletteId": "party-genta-earth-metal-v1",
+      "silhouette": "broad shoulder mantle, heavy shield and tetsubo mass",
+      "colors": {
+        "primary": "#4b4b43",
+        "secondary": "#5a3a2c",
+        "light": "#6f6d5c",
+        "accent": "#a08b58",
+        "hair": "#20232a"
+      }
+    },
+    "kiku": {
+      "paletteId": "party-kiku-herb-candle-v1",
+      "silhouette": "short cloak, medicine box, bottles and packets",
+      "colors": {
+        "primary": "#496b55",
+        "secondary": "#d7c99a",
+        "light": "#779274",
+        "accent": "#88c8c5",
+        "hair": "#24201f"
+      }
+    }
+  },
+  "actionSemantics": {
+    "idle": {
+      "phase": "neutral",
+      "event": "none",
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "rule": "held combat stance"
+    },
+    "move": {
+      "phase": "movement",
+      "event": "none",
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "rule": "visual root motion only; simulation owns destination"
+    },
+    "guard": {
+      "phase": "commit",
+      "event": "guard",
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "rule": "protected side faces threat"
+    },
+    "hit": {
+      "phase": "reaction",
+      "event": "none",
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "rule": "recoil does not move resolved cell"
+    },
+    "basic-strike-windup": {
+      "phase": "windup",
+      "event": "none",
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "rule": "commitment must read before impact"
+    },
+    "basic-strike-active": {
+      "phase": "active",
+      "event": "damage",
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "rule": "single authored damage-event key"
+    },
+    "signature-a": {
+      "phase": "active-key",
+      "event": "skill-a",
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "rule": "character-specific primary signature key"
+    },
+    "signature-b": {
+      "phase": "active-key",
+      "event": "skill-b",
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "rule": "character-specific secondary signature key"
+    }
+  },
+  "frames": [
+    {
+      "id": "ren:idle",
+      "characterId": "ren",
+      "action": "idle",
+      "rect": [
+        0,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        9,
+        8,
+        34,
+        59
+      ],
+      "rgbaSha256": "52fde827b62cc180bb05753978fdcad6cb9803d8fe078a70c8b7083cedc21c81"
+    },
+    {
+      "id": "ren:move",
+      "characterId": "ren",
+      "action": "move",
+      "rect": [
+        48,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        12,
+        8,
+        37,
+        59
+      ],
+      "rgbaSha256": "d3de7c8bfabfc51685da2e8a0b998e516d50600ab3d4338586193ba9ad39f7ce"
+    },
+    {
+      "id": "ren:guard",
+      "characterId": "ren",
+      "action": "guard",
+      "rect": [
+        96,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        10,
+        8,
+        37,
+        59
+      ],
+      "rgbaSha256": "a2ed8d1bd6b1c2fa8aabf9c82c7f749f1920390318540ca2351b1f6a27962871"
+    },
+    {
+      "id": "ren:hit",
+      "characterId": "ren",
+      "action": "hit",
+      "rect": [
+        144,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        8,
+        32,
+        60
+      ],
+      "rgbaSha256": "bf5a705c4e7dfceb004916227c10d85c912cb16ccf9e6af93efa01add83b060a"
+    },
+    {
+      "id": "ren:basic-strike-windup",
+      "characterId": "ren",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "cut"
+      },
+      "localAlphaBounds": [
+        5,
+        9,
+        31,
+        59
+      ],
+      "rgbaSha256": "c9d580554452af9ed47dda2548b2ae2a0b4b627f1d8509f5b376de587be06791"
+    },
+    {
+      "id": "ren:basic-strike-active",
+      "characterId": "ren",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "cut"
+      },
+      "localAlphaBounds": [
+        13,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "da82db1485c6edb8dacc6fa6f33a8ea2df517e400400739c98d7f5a72ec5dfd5"
+    },
+    {
+      "id": "ren:signature-a",
+      "characterId": "ren",
+      "action": "signature-a",
+      "rect": [
+        288,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "courier-cut",
+        "name": "Courier's Cut",
+        "delivery": "cut"
+      },
+      "localAlphaBounds": [
+        10,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "51b9bf18046afb5013601a865030123b61e18fa90018d308795883b5b47a10bf"
+    },
+    {
+      "id": "ren:signature-b",
+      "characterId": "ren",
+      "action": "signature-b",
+      "rect": [
+        336,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "cinder-route",
+        "name": "Cinder Route",
+        "delivery": "arcane",
+        "essence": "ember"
+      },
+      "localAlphaBounds": [
+        9,
+        8,
+        41,
+        59
+      ],
+      "rgbaSha256": "4d1e48de06a7a1eacee37355e1dac613dc0300f28c2a8db714ec1a8242c7660b"
+    },
+    {
+      "id": "aya:idle",
+      "characterId": "aya",
+      "action": "idle",
+      "rect": [
+        0,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        9,
+        8,
+        38,
+        59
+      ],
+      "rgbaSha256": "1bc973a75b9dd6d65b5b29d2ce825b8c991c11b33c0fe7d99f9251c0af48c611"
+    },
+    {
+      "id": "aya:move",
+      "characterId": "aya",
+      "action": "move",
+      "rect": [
+        48,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        12,
+        9,
+        41,
+        59
+      ],
+      "rgbaSha256": "c0a38f17d838527dd7d714dd858be2f541e044f2218a28510a43f7f55cf0bf60"
+    },
+    {
+      "id": "aya:guard",
+      "characterId": "aya",
+      "action": "guard",
+      "rect": [
+        96,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        10,
+        10,
+        39,
+        59
+      ],
+      "rgbaSha256": "76bfe96bdfcf66420dabc2e911211fab42c4b22a1794cd6dd91d1a43464f5973"
+    },
+    {
+      "id": "aya:hit",
+      "characterId": "aya",
+      "action": "hit",
+      "rect": [
+        144,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        10,
+        34,
+        60
+      ],
+      "rgbaSha256": "fa282f948be5ea7d72247c8d6a27b547c14657a3cf1030fcca1430b24023587c"
+    },
+    {
+      "id": "aya:basic-strike-windup",
+      "characterId": "aya",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "arcane"
+      },
+      "localAlphaBounds": [
+        7,
+        9,
+        31,
+        59
+      ],
+      "rgbaSha256": "2cd0f4993ffcc03446439dd8ff6354a820275231b551dae1482a3972ab012856"
+    },
+    {
+      "id": "aya:basic-strike-active",
+      "characterId": "aya",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "arcane"
+      },
+      "localAlphaBounds": [
+        13,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "a20df226b62e827a0c0d0b99627543c5080542c5cf3ab71a9bdeb1ab4578f817"
+    },
+    {
+      "id": "aya:signature-a",
+      "characterId": "aya",
+      "action": "signature-a",
+      "rect": [
+        288,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "warding-script",
+        "name": "Warding Script",
+        "delivery": "arcane",
+        "essence": "radiance"
+      },
+      "localAlphaBounds": [
+        10,
+        8,
+        43,
+        59
+      ],
+      "rgbaSha256": "8b4b6ce948cc7ca6d472c074684ee54d3f0c27673ffbe793b4ac9ec1d3baa5db"
+    },
+    {
+      "id": "aya:signature-b",
+      "characterId": "aya",
+      "action": "signature-b",
+      "rect": [
+        336,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "witnessing-ink",
+        "name": "Witnessing Ink",
+        "delivery": "arcane",
+        "essence": "radiance"
+      },
+      "localAlphaBounds": [
+        9,
+        9,
+        42,
+        59
+      ],
+      "rgbaSha256": "7a3eccc5786a710dade971c45c1e80aeeccae07de0e23d5d397e1ad26e5559d6"
+    },
+    {
+      "id": "lise:idle",
+      "characterId": "lise",
+      "action": "idle",
+      "rect": [
+        0,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        8,
+        36,
+        59
+      ],
+      "rgbaSha256": "2e17958a8f89cfa4db2bf1a61db8458e6f9df72640f743f0d507b6a964b5b960"
+    },
+    {
+      "id": "lise:move",
+      "characterId": "lise",
+      "action": "move",
+      "rect": [
+        48,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        11,
+        9,
+        39,
+        59
+      ],
+      "rgbaSha256": "47d42278cd70c11ffa87b0941077ae97e608c7ba5bc638618089e9cc71164652"
+    },
+    {
+      "id": "lise:guard",
+      "characterId": "lise",
+      "action": "guard",
+      "rect": [
+        96,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        9,
+        10,
+        40,
+        59
+      ],
+      "rgbaSha256": "015c26ea264c87f20a76955a5d3268590984705f4d4e4cba90645835e70a673a"
+    },
+    {
+      "id": "lise:hit",
+      "characterId": "lise",
+      "action": "hit",
+      "rect": [
+        144,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        4,
+        10,
+        32,
+        60
+      ],
+      "rgbaSha256": "45b30f12ff9cc8337c8d9daa95201bb373081ba9f98ce3622ddfa36ec37cfbd7"
+    },
+    {
+      "id": "lise:basic-strike-windup",
+      "characterId": "lise",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "pierce"
+      },
+      "localAlphaBounds": [
+        6,
+        9,
+        30,
+        59
+      ],
+      "rgbaSha256": "b127f259bb9caea4e6adea8c3c62e3359829e7cb208eb9cd69de8e5ea8d9b53c"
+    },
+    {
+      "id": "lise:basic-strike-active",
+      "characterId": "lise",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "pierce"
+      },
+      "localAlphaBounds": [
+        12,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "5293e5db885a550551fcc44aac6239ac61e05d19c25fd9402eceee77a5657560"
+    },
+    {
+      "id": "lise:signature-a",
+      "characterId": "lise",
+      "action": "signature-a",
+      "rect": [
+        288,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "hunter-thrust",
+        "name": "Hunter Thrust",
+        "delivery": "pierce"
+      },
+      "localAlphaBounds": [
+        9,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "91bb7f7ea140ddb0b1d8507fb438a8348082000138548e21206b795e9776e029"
+    },
+    {
+      "id": "lise:signature-b",
+      "characterId": "lise",
+      "action": "signature-b",
+      "rect": [
+        336,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "dawn-bolt",
+        "name": "Dawn Bolt",
+        "delivery": "arcane",
+        "essence": "radiance"
+      },
+      "localAlphaBounds": [
+        8,
+        9,
+        43,
+        59
+      ],
+      "rgbaSha256": "f7388bfe51869f2f9de7a5b6cf8f779833fc43433a73fe6e320081f3b0b2de9b"
+    },
+    {
+      "id": "mateus:idle",
+      "characterId": "mateus",
+      "action": "idle",
+      "rect": [
+        0,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        12,
+        8,
+        36,
+        59
+      ],
+      "rgbaSha256": "0f4aa939c1f63bad416473f04094da33d60b178b047255bb7dd31a17f20c205d"
+    },
+    {
+      "id": "mateus:move",
+      "characterId": "mateus",
+      "action": "move",
+      "rect": [
+        48,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        14,
+        9,
+        39,
+        59
+      ],
+      "rgbaSha256": "6e7f55b6fa77f52c208aafa08c29171d6ed31ddffdf9b9824687da485639be22"
+    },
+    {
+      "id": "mateus:guard",
+      "characterId": "mateus",
+      "action": "guard",
+      "rect": [
+        96,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        13,
+        10,
+        37,
+        59
+      ],
+      "rgbaSha256": "97be56b1ecde05d4aa601d25d40e050fba55ae1f35df368eb8b96074c8ecccd6"
+    },
+    {
+      "id": "mateus:hit",
+      "characterId": "mateus",
+      "action": "hit",
+      "rect": [
+        144,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        10,
+        32,
+        60
+      ],
+      "rgbaSha256": "42edfa0ff8bf5109aec8cda73ff918a22ea44370b339e37927560ef8c04057ee"
+    },
+    {
+      "id": "mateus:basic-strike-windup",
+      "characterId": "mateus",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "cut"
+      },
+      "localAlphaBounds": [
+        9,
+        9,
+        34,
+        59
+      ],
+      "rgbaSha256": "08e4f6f990a8990a2b4a8865a8b3e25d5c3202757180bd6ca98b2b5d4d956911"
+    },
+    {
+      "id": "mateus:basic-strike-active",
+      "characterId": "mateus",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "cut"
+      },
+      "localAlphaBounds": [
+        16,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "81f0b90333a1f4abc62ff6c15db98b806cc44c7d275154328e163cfbb17e952c"
+    },
+    {
+      "id": "mateus:signature-a",
+      "characterId": "mateus",
+      "action": "signature-a",
+      "rect": [
+        288,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "penitent-night",
+        "name": "Penitent Night",
+        "delivery": "arcane",
+        "essence": "umbral"
+      },
+      "localAlphaBounds": [
+        13,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "825b12068b4ea4d90525d6801c8bc6afd635fa20c83f60a8d43552eafc38f47a"
+    },
+    {
+      "id": "mateus:signature-b",
+      "characterId": "mateus",
+      "action": "signature-b",
+      "rect": [
+        336,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "returned-name",
+        "name": "Returned Name",
+        "delivery": "arcane",
+        "essence": "radiance"
+      },
+      "localAlphaBounds": [
+        12,
+        9,
+        42,
+        59
+      ],
+      "rgbaSha256": "10a142ee9e97d15fc9a8994b8f84b9330f910dfb69e01e105726c0cb2e237766"
+    },
+    {
+      "id": "genta:idle",
+      "characterId": "genta",
+      "action": "idle",
+      "rect": [
+        0,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        8,
+        38,
+        59
+      ],
+      "rgbaSha256": "2f64ecb7337d83075934eed4eeb0828a6614e48d3d9ef4d2d4bf5e624c3dd68a"
+    },
+    {
+      "id": "genta:move",
+      "characterId": "genta",
+      "action": "move",
+      "rect": [
+        48,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        9,
+        41,
+        59
+      ],
+      "rgbaSha256": "aff24c29503ac8d88c685434bac0a271eaa82e92e2b9a7a5ce9610d3d497590f"
+    },
+    {
+      "id": "genta:guard",
+      "characterId": "genta",
+      "action": "guard",
+      "rect": [
+        96,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        10,
+        10,
+        39,
+        59
+      ],
+      "rgbaSha256": "ba03b5abfd22a2130312df667a076edf38c907c9dfb9eb6a7fb66dd26d5fc816"
+    },
+    {
+      "id": "genta:hit",
+      "characterId": "genta",
+      "action": "hit",
+      "rect": [
+        144,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        4,
+        10,
+        34,
+        60
+      ],
+      "rgbaSha256": "6af2e0602244673bd278915e15bac96a157329c54934b938f37e943adbffe57c"
+    },
+    {
+      "id": "genta:basic-strike-windup",
+      "characterId": "genta",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "crush"
+      },
+      "localAlphaBounds": [
+        4,
+        9,
+        35,
+        59
+      ],
+      "rgbaSha256": "2f9539ec22ea76670fc3b1e0d77db40b575a5e9caf2b236c47432e52ce82d338"
+    },
+    {
+      "id": "genta:basic-strike-active",
+      "characterId": "genta",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "crush"
+      },
+      "localAlphaBounds": [
+        9,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "7320e5514db7ae535552adcee0174bd7ef5d302c14d8a457d8fec5d7e5b5a548"
+    },
+    {
+      "id": "genta:signature-a",
+      "characterId": "genta",
+      "action": "signature-a",
+      "rect": [
+        288,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "pilgrim-maul",
+        "name": "Pilgrim Maul",
+        "delivery": "crush"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "2f85b342d267dde86d47890919609352ce1527c592f70bcf7454a811cebb45a1"
+    },
+    {
+      "id": "genta:signature-b",
+      "characterId": "genta",
+      "action": "signature-b",
+      "rect": [
+        336,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "standing-bridge",
+        "name": "Standing Bridge",
+        "delivery": "guard"
+      },
+      "localAlphaBounds": [
+        5,
+        9,
+        42,
+        59
+      ],
+      "rgbaSha256": "e3a43dfe60e83535c9fd8e9e095f70c942ef8c0b76c56f4541516b00e4cc8b54"
+    },
+    {
+      "id": "kiku:idle",
+      "characterId": "kiku",
+      "action": "idle",
+      "rect": [
+        0,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        8,
+        33,
+        59
+      ],
+      "rgbaSha256": "ce2ced91846c445f33b5c6a6c56571b4e9f865472a8b5a2b7c8cb4365ba1446f"
+    },
+    {
+      "id": "kiku:move",
+      "characterId": "kiku",
+      "action": "move",
+      "rect": [
+        48,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        11,
+        9,
+        37,
+        59
+      ],
+      "rgbaSha256": "dd48052540b5f0bcadada02fd6571b1a732cb036defe7ab0deb8a2eda846e42e"
+    },
+    {
+      "id": "kiku:guard",
+      "characterId": "kiku",
+      "action": "guard",
+      "rect": [
+        96,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        9,
+        10,
+        38,
+        59
+      ],
+      "rgbaSha256": "b30ca88c933ccf9d845586f4c60eb64152246d53cac54d20c438eea5fbfb6552"
+    },
+    {
+      "id": "kiku:hit",
+      "characterId": "kiku",
+      "action": "hit",
+      "rect": [
+        144,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        4,
+        10,
+        32,
+        60
+      ],
+      "rgbaSha256": "a0f98c44aa13b504c0141b5c19ddd9ac8be975001a315cced598817dd51bfde8"
+    },
+    {
+      "id": "kiku:basic-strike-windup",
+      "characterId": "kiku",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "arcane"
+      },
+      "localAlphaBounds": [
+        6,
+        9,
+        31,
+        59
+      ],
+      "rgbaSha256": "2bdd246c8d4a1688158339c34ca38e75ac4531844e93e660cc5bc4c365549e09"
+    },
+    {
+      "id": "kiku:basic-strike-active",
+      "characterId": "kiku",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "arcane"
+      },
+      "localAlphaBounds": [
+        12,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "cb936fcc6b3e1cbe0ad786c2feace0d03ae80e9d80dbaf66d878a60e0fce52a2"
+    },
+    {
+      "id": "kiku:signature-a",
+      "characterId": "kiku",
+      "action": "signature-a",
+      "rect": [
+        288,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "cold-medicine",
+        "name": "Cold Medicine",
+        "delivery": "arcane",
+        "essence": "frost"
+      },
+      "localAlphaBounds": [
+        9,
+        8,
+        43,
+        59
+      ],
+      "rgbaSha256": "209f7847e9e4636e6fb242eb866b56ada14bc26f535a570a015424722196cc66"
+    },
+    {
+      "id": "kiku:signature-b",
+      "characterId": "kiku",
+      "action": "signature-b",
+      "rect": [
+        336,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "terrain-remedy",
+        "name": "Terrain Remedy",
+        "delivery": "arcane",
+        "essence": "radiance"
+      },
+      "localAlphaBounds": [
+        8,
+        9,
+        44,
+        59
+      ],
+      "rgbaSha256": "a0f39f38bff14c0f659280f6e8120c080777267f4643df11fda37f05561ddc1e"
+    }
+  ],
+  "sources": [
+    {
+      "path": "party-combat-suite.source.json",
+      "role": "editable-combat-contract",
+      "sha256": "e86a368e301d473e5b0b73c7b32e54405fe63fe77a0c9ade646758e450b974cd"
+    },
+    {
+      "path": "../party-field-suite/party-field-suite.source.json",
+      "role": "canonical-palette-and-silhouette-contract",
+      "sha256": "548623d253501404e2e3f1ddf915207ed60791701c91313695f905140a4e72eb"
+    },
+    {
+      "path": "build_party_combat_suite.py",
+      "role": "deterministic-builder",
+      "sha256": "ff2757caad74e0391effda0998abe9776475134ae091739f9b2bf88e71736c7d"
+    }
+  ],
+  "exports": [
+    {
+      "path": "party-combat-actions.png",
+      "role": "transparent-runtime-candidate",
+      "width": 384,
+      "height": 384,
+      "mode": "RGBA",
+      "sha256": "8decef09a94f3b7da71eb6c67bcf7c04e254a48bb6ede24e0434e10bd0943196"
+    },
+    {
+      "path": "party-combat-actions-contact-sheet.png",
+      "role": "labeled-review-only-not-runtime",
+      "width": 1268,
+      "height": 1222,
+      "mode": "RGBA",
+      "sha256": "300ecfe18338a7cebe539b1475945a5a60eab4cdb07aaa225c933c6c8a7f96d4"
+    }
+  ],
+  "validation": {
+    "frameCount": 48,
+    "distinctRgbaFrameHashes": 48,
+    "binaryTransparency": true,
+    "minimumObservedGutter": 4,
+    "deterministicCommand": "python build_party_combat_suite.py --check"
+  },
+  "review": {
+    "visualInspection": "pending",
+    "externalCulturalReview": "pending",
+    "fullInbetweens": "pending",
+    "portraits": "not-in-this-suite"
+  }
+}

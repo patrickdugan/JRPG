@@ -13,6 +13,11 @@ import {
   getNextBattleActionAt,
   rescaleEnemyIntentSchedule,
 } from '../battle-animation.mjs';
+import {
+  getBossCombatPresentationPose,
+  getNewlyTerminalBossCombatActors,
+  mergeBossTerminalPresentationActors,
+} from '../boss-combat-atlas.mjs';
 
 test('Auto-Grind start is rejected during an animation and every terminal hold', () => {
   assert.equal(canStartAutoGrindPresentation({ unlocked: true }), true);
@@ -98,6 +103,54 @@ test('pre-action target remains a presentation ghost through a lethal terminal t
   assert.equal(presented[0], currentAttacker, 'living simulation actor stays authoritative');
   assert.equal(presented[1], retainedTarget, 'lethal target uses its frozen pre-action visual record');
   assert.equal(Object.isFrozen(current), false, 'helper does not freeze or mutate caller state');
+});
+
+test('lethal boss resolution swaps the pre-action ghost to a defeat pose only in the terminal hold', () => {
+  const party = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 40, active: true, pos: { x: 1, y: 1 } };
+  const livingBoss = { instanceId: 'kurozane-1', templateId: 'kurozane', faction: 'enemy', hp: 12, active: true, pos: { x: 5, y: 1 } };
+  const defeatedBoss = { ...livingBoss, hp: 0 };
+  const beforeActors = [party, livingBoss];
+  const afterActors = [party, defeatedBoss];
+  const terminal = getNewlyTerminalBossCombatActors(beforeActors, afterActors);
+  assert.deepEqual(terminal, [defeatedBoss]);
+
+  const preActionPresentation = getBattlePresentationActors(afterActors, [party, livingBoss]);
+  assert.equal(preActionPresentation[1], livingBoss);
+  assert.equal(mergeBossTerminalPresentationActors(preActionPresentation, terminal, false), preActionPresentation);
+  assert.equal(getBossCombatPresentationPose({
+    hp: preActionPresentation[1].hp,
+    active: preActionPresentation[1].active,
+    targetPose: 'stagger',
+  }), 'break');
+
+  const terminalPresentation = mergeBossTerminalPresentationActors(preActionPresentation, terminal, true);
+  assert.equal(terminalPresentation[1], defeatedBoss);
+  assert.equal(getBossCombatPresentationPose({
+    hp: terminalPresentation[1].hp,
+    active: terminalPresentation[1].active,
+    targetPose: 'stagger',
+  }), 'defeat');
+  assert.equal(livingBoss.hp, 12, 'presentation composition does not mutate the pre-action snapshot');
+  assert.equal(defeatedBoss.hp, 0, 'presentation composition does not mutate simulation output');
+});
+
+test('nonlethal boss deactivation is appended for defeat presentation even when a ward was targeted', () => {
+  const party = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 40, active: true, pos: { x: 1, y: 1 } };
+  const livingBoss = { instanceId: 'mateus-1', templateId: 'mateus', faction: 'enemy', hp: 18, active: true, pos: { x: 5, y: 1 } };
+  const activeWard = { instanceId: 'ward-1', templateId: 'blood-ward-west', faction: 'enemy', hp: 6, active: true, pos: { x: 4, y: 1 } };
+  const surrenderedBoss = { ...livingBoss, active: false };
+  const brokenWard = { ...activeWard, hp: 0, active: false };
+  const beforeActors = [party, livingBoss, activeWard];
+  const afterActors = [party, surrenderedBoss, brokenWard];
+  const terminal = getNewlyTerminalBossCombatActors(beforeActors, afterActors);
+  assert.deepEqual(terminal, [surrenderedBoss], 'supporting actors never enter the primary boss terminal suite');
+
+  const wardTargetPresentation = getBattlePresentationActors(afterActors, [party, activeWard]);
+  assert.equal(wardTargetPresentation.some(({ instanceId }) => instanceId === livingBoss.instanceId), false);
+  const terminalPresentation = mergeBossTerminalPresentationActors(wardTargetPresentation, terminal, true);
+  const presentedBoss = terminalPresentation.find(({ instanceId }) => instanceId === livingBoss.instanceId);
+  assert.equal(presentedBoss, surrenderedBoss);
+  assert.equal(getBossCombatPresentationPose({ hp: presentedBoss.hp, active: presentedBoss.active }), 'defeat');
 });
 
 test('target status glyph requires actual application and self-status is anchored to source', () => {
@@ -187,6 +240,11 @@ test('browser controller wires locks, ghosts, fresh intent scheduling, and compl
   assert.ok(source.indexOf('if (animationActive)') < source.indexOf('activeBattleAnimation = null;', source.indexOf('function toggleAutoGrind')));
   assert.match(source, /retainedActors: Object\.freeze\(\[attacker, target\]\)/);
   assert.match(source, /getBattlePresentationActors\(snapshot\.actors, animation\?\.retainedActors \?\? \[\]\)/);
+  assert.match(source, /getNewlyTerminalBossCombatActors\(beforeSnapshot\.actors, afterSnapshot\.actors\)/);
+  assert.match(source, /endsAt: timelineEndsAt \+ defeatHoldMs/);
+  assert.match(source, /now >= activeBattleAnimation\.timelineEndsAt/);
+  assert.match(source, /mergeBossTerminalPresentationActors\(/);
+  assert.match(source, /getBossCombatDrawPlacement\(frame, \{/);
   assert.match(source, /activeBattleAnimation = null;\s+clearEnemyIntentSchedule\(\);\s+render\(\);/);
   assert.match(source, /scheduleEnemyIntent\(\);/);
   assert.match(source, /rescaleEnemyIntentSchedule\(enemyIntentSchedule, performance\.now\(\), nextSpeed\)/);

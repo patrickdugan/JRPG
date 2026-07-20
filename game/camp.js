@@ -1,7 +1,6 @@
 import { CAMPAIGN } from './content/campaign.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
 import {
-  PARTY_MEMBER_IDS,
   createAdvancementState,
   createAdvancementStorageAdapter,
   getParty,
@@ -42,7 +41,12 @@ import {
   createCampaignState,
   createLocalStorageAdapter,
 } from './progression.mjs';
-import { PARTY_ATLAS, partyAtlasImageHasExpectedSize } from './sprite-atlas.mjs';
+import {
+  PARTY_PORTRAIT_ATLAS,
+  getPartyPortraitBackgroundPlacement,
+  getPartyPortraitFrame,
+  partyPortraitImageHasExpectedSize,
+} from './party-portrait-atlas.mjs';
 import { CAMP_CONVERSATIONS } from './content/camp-conversations.mjs';
 import { getCampConversationPlan } from './camp-conversation-contract.mjs';
 import {
@@ -196,7 +200,7 @@ let campPartyAtlasState = 'loading';
 portraitToken.dataset.artState = campPartyAtlasState;
 campPartyAtlasImage.decoding = 'async';
 campPartyAtlasImage.addEventListener('load', () => {
-  campPartyAtlasState = partyAtlasImageHasExpectedSize(campPartyAtlasImage) ? 'ready' : 'error';
+  campPartyAtlasState = partyPortraitImageHasExpectedSize(campPartyAtlasImage) ? 'ready' : 'error';
   portraitToken.dataset.artState = campPartyAtlasState;
   renderMember();
 }, { once: true });
@@ -205,12 +209,13 @@ campPartyAtlasImage.addEventListener('error', () => {
   portraitToken.dataset.artState = campPartyAtlasState;
   renderMember();
 }, { once: true });
-campPartyAtlasImage.src = PARTY_ATLAS.url;
+campPartyAtlasImage.src = PARTY_PORTRAIT_ATLAS.url;
 
 const ROLES = Object.freeze({
   ren: 'Courier Vanguard', aya: 'Ledger Arcanist', lise: 'Dawn Hunter',
   mateus: 'Penitent Censer', genta: 'Bridge Warden', kiku: 'Cold Remedy Keeper',
 });
+const CAMP_PORTRAIT_CROP = Object.freeze({ width: 52, height: 60 });
 
 function castName(memberId) {
   return CAMPAIGN.cast?.[memberId]?.name ?? getPartyMember(advancementState, memberId).name;
@@ -283,13 +288,25 @@ function renderMember() {
   const stats = combinedStats(member, summary.modifiers);
   memberRole.textContent = ROLES[selectedMemberId];
   memberName.textContent = member.name;
-  const atlasRow = Math.max(0, PARTY_MEMBER_IDS.indexOf(selectedMemberId));
-  const useAtlas = campPartyAtlasState === 'ready' && partyAtlasImageHasExpectedSize(campPartyAtlasImage);
+  const portraitFrame = getPartyPortraitFrame(selectedMemberId, 'neutral');
+  const portraitPlacement = getPartyPortraitBackgroundPlacement(portraitFrame, {
+    cropWidth: CAMP_PORTRAIT_CROP.width,
+    cropHeight: CAMP_PORTRAIT_CROP.height,
+  });
+  portraitToken.dataset.memberId = portraitFrame.memberId;
+  portraitToken.dataset.expression = portraitFrame.expression;
+  portraitToken.dataset.frameRow = String(portraitFrame.row);
+  portraitToken.dataset.frameColumn = String(portraitFrame.column);
+  portraitToken.dataset.frameX = String(portraitFrame.x);
+  portraitToken.dataset.frameY = String(portraitFrame.y);
+  portraitToken.dataset.frameWidth = String(portraitFrame.width);
+  portraitToken.dataset.frameHeight = String(portraitFrame.height);
+  const useAtlas = campPartyAtlasState === 'ready' && partyPortraitImageHasExpectedSize(campPartyAtlasImage);
   portraitToken.classList.toggle('has-atlas', useAtlas);
   if (useAtlas) {
-    portraitToken.style.backgroundImage = `url('${PARTY_ATLAS.url}')`;
-    portraitToken.style.backgroundSize = '320px 360px';
-    portraitToken.style.backgroundPosition = `-154px -${atlasRow * 60}px`;
+    portraitToken.style.backgroundImage = `url('${PARTY_PORTRAIT_ATLAS.url}')`;
+    portraitToken.style.backgroundSize = portraitPlacement.backgroundSize;
+    portraitToken.style.backgroundPosition = portraitPlacement.backgroundPosition;
   } else {
     portraitToken.style.removeProperty('background-image');
     portraitToken.style.removeProperty('background-size');

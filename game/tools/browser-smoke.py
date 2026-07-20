@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import functools
 import json
 import sys
@@ -20,6 +21,9 @@ except ImportError as error:  # pragma: no cover
 
 
 GAME_DIR = Path(__file__).resolve().parents[1]
+WRONG_SIZE_PNG = base64.b64decode(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+)
 CHROMIUM_CANDIDATES = (
     Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
     Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
@@ -89,6 +93,16 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             response = page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
             page.locator("#resetCampaign").wait_for()
             require(response is not None and response.status == 200, "Campaign did not return HTTP 200.")
+            page.wait_for_function(
+                """() => document.querySelector('#mapCanvas')?.dataset.partyArtState === 'ready'
+                  && document.querySelector('#sceneFocusPortrait')?.dataset.artState === 'ready'"""
+            )
+            campaign_party_art = page.evaluate(
+                """() => ({
+                  field: document.querySelector('#mapCanvas').dataset.partyArtState,
+                  portrait: document.querySelector('#sceneFocusPortrait').dataset.artState,
+                })"""
+            )
             require(
                 page.locator("#runProofStatus").inner_text().startswith("Unverified save"),
                 "Fresh context did not begin unverified.",
@@ -106,10 +120,45 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             page.get_by_role("link", name="Camp & Loadout").click()
             page.wait_for_url("**/camp.html")
             page.locator("#memberName").wait_for()
+            page.wait_for_function(
+                "() => document.querySelector('#portraitToken')?.dataset.artState === 'ready'"
+            )
+            camp_party_art = page.locator("#portraitToken").evaluate(
+                """token => ({
+                  portrait: token.dataset.artState,
+                  usesAtlas: token.classList.contains('has-atlas'),
+                  memberId: token.dataset.memberId,
+                  expression: token.dataset.expression,
+                  row: token.dataset.frameRow,
+                  column: token.dataset.frameColumn,
+                  x: token.dataset.frameX,
+                  y: token.dataset.frameY,
+                  width: token.dataset.frameWidth,
+                  height: token.dataset.frameHeight,
+                })"""
+            )
+            require(
+                camp_party_art == {
+                    "portrait": "ready", "usesAtlas": True, "memberId": "ren", "expression": "neutral",
+                    "row": "0", "column": "0", "x": "0", "y": "0", "width": "64", "height": "64",
+                },
+                f"Camp Ren portrait frame contract drifted: {camp_party_art}.",
+            )
             require(page.locator("#memberName").inner_text() == "Ren Ishikawa", "Camp party failed.")
             require(
                 page.locator('[data-member-id="aya"]').is_visible(),
                 "New Game did not unlock the authored Prologue party member Aya.",
+            )
+            page.locator('[data-member-id="aya"]').click()
+            page.wait_for_function(
+                "() => document.querySelector('#portraitToken')?.dataset.memberId === 'aya'"
+            )
+            aya_portrait_art = page.locator("#portraitToken").evaluate(
+                "token => ({ memberId: token.dataset.memberId, expression: token.dataset.expression, row: token.dataset.frameRow, column: token.dataset.frameColumn, x: token.dataset.frameX, y: token.dataset.frameY })"
+            )
+            require(
+                aya_portrait_art == {"memberId": "aya", "expression": "neutral", "row": "1", "column": "0", "x": "0", "y": "64"},
+                f"Camp Aya portrait frame contract drifted: {aya_portrait_art}.",
             )
             require(page.locator("#campConversationSummary").inner_text() == "0 / 90 complete", "Camp talk frontier drifted.")
             require(page.locator("#partyCouncilSummary").inner_text() == "0 / 30 complete", "Council frontier drifted.")
@@ -221,6 +270,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   return state?.stageArtState === 'ready'
                     && state?.partyArtState === 'ready'
                     && state?.enemyArtState === 'ready'
+                    && state?.bossArtState === 'ready'
                     && state?.vfxArtState === 'ready';
                 }""",
             )
@@ -238,6 +288,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     url: art.url,
                     partyState: canvas.dataset.partyArtState,
                     enemyState: canvas.dataset.enemyArtState,
+                    bossState: canvas.dataset.bossArtState,
                     vfxState: canvas.dataset.vfxArtState,
                   };
                 }"""
@@ -252,11 +303,103 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     "url": "./assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
                     "partyState": "ready",
                     "enemyState": "ready",
+                    "bossState": "ready",
                     "vfxState": "ready",
                 },
                 f"Takamine runtime art contract drifted: {stage_art}.",
             )
+            regional_stage_art = []
+            for regional_encounter_id, regional_level_id in (
+                ("prologue-ashen-bailiff", "hsh-census-square"),
+                ("c1-cinder-hounds", "c1-flooded-cedars"),
+                ("c1-tithe-hound", "c1-tax-storehouse"),
+                ("fp1-cedar-path", "fp1-wet-cedar-stage"),
+                ("fp1-flooded-archive", "fp1-flooded-archive-stage"),
+                ("c3-dock-patrol", "sdg-rain-docks"),
+                ("c3-captain-kaji", "sdg-salt-warehouse"),
+                ("c4-fog-nets", "ngi-tide-caves"),
+                ("c4-widow-of-fog", "ngi-storm-reef"),
+                ("c5-ashen-release", "kgr-ash-fields"),
+                ("c5-furnace-abbot", "kgr-archive-furnace"),
+                ("c6-masked-clerks", "kzu-archive-roof"),
+                ("c6-ujiro", "kzu-public-tribunal"),
+                ("c7-name-slip-release", "hsh-prison-ferry"),
+                ("c7-bell-warden-chiyo", "hsh-bell-aqueduct"),
+                ("c8-lady-enma", "c8-black-gate"),
+                ("c9-archive-nodes", "krh-outer-archive"),
+                ("c9-yearless-bell", "krh-observatory"),
+            ):
+                regional_response = stage_page.goto(
+                    f"{base}/battle.html?encounter={regional_encounter_id}",
+                    wait_until="domcontentloaded",
+                )
+                require(
+                    regional_response is not None and regional_response.status == 200,
+                    f"Regional stage {regional_level_id} failed delivery.",
+                )
+                stage_page.wait_for_function(
+                    """() => {
+                      const state = document.querySelector('#battleCanvas')?.dataset;
+                      return state?.stageArtState === 'ready'
+                        && state?.partyArtState === 'ready'
+                        && state?.enemyArtState === 'ready'
+                        && state?.bossArtState === 'ready'
+                        && state?.vfxArtState === 'ready';
+                    }""",
+                )
+                regional_art = stage_page.locator("#battleCanvas").evaluate(
+                    "canvas => ({ state: canvas.dataset.stageArtState, id: canvas.dataset.stageArtId })"
+                )
+                require(
+                    regional_art == {"state": "ready", "id": f"{regional_level_id}-board-v01"},
+                    f"Regional stage contract drifted for {regional_level_id}: {regional_art}.",
+                )
+                regional_stage_art.append({"levelId": regional_level_id, **regional_art})
+            require(len(regional_stage_art) == 18, "Browser smoke did not decode all 18 regional boards.")
+            kurozane_response = stage_page.goto(
+                f"{base}/battle.html?encounter=c9-kurozane", wait_until="domcontentloaded"
+            )
+            require(kurozane_response is not None and kurozane_response.status == 200, "Kurozane boss art failed delivery.")
+            stage_page.wait_for_function(
+                "() => document.querySelector('#battleCanvas')?.dataset.bossArtState === 'ready'"
+            )
             stage_context.close()
+
+            boss_fallback_context = browser.new_context(viewport={"width": 1440, "height": 1000})
+            boss_fallback_context.route(
+                "**/assets/art/boss-combat-suite/boss-combat-atlas.png",
+                lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-boss-fallback-qa"),
+            )
+            boss_fallback_page = boss_fallback_context.new_page()
+            boss_fallback_page.set_default_timeout(20_000)
+            boss_fallback_page.set_default_navigation_timeout(45_000)
+            boss_fallback_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            boss_fallback_response = boss_fallback_page.goto(
+                f"{base}/battle.html?encounter=fp1-mateus", wait_until="domcontentloaded"
+            )
+            require(boss_fallback_response is not None and boss_fallback_response.status == 200, "Boss-only fallback page failed delivery.")
+            boss_fallback_page.wait_for_function(
+                """() => {
+                  const state = document.querySelector('#battleCanvas')?.dataset;
+                  return state?.stageArtState === 'ready'
+                    && state?.partyArtState === 'ready'
+                    && state?.enemyArtState === 'ready'
+                    && state?.bossArtState === 'error'
+                    && state?.vfxArtState === 'ready';
+                }"""
+            )
+            boss_fallback_colors = boss_fallback_page.locator("#battleCanvas").evaluate(
+                """canvas => {
+                  const pixels = canvas.getContext('2d').getImageData(448, 78, 128, 128).data;
+                  const colors = new Set();
+                  for (let index = 0; index < pixels.length; index += 4) {
+                    colors.add(`${pixels[index]},${pixels[index + 1]},${pixels[index + 2]},${pixels[index + 3]}`);
+                  }
+                  return colors.size;
+                }"""
+            )
+            require(boss_fallback_colors >= 3, "Boss-only image failure left the boss region blank.")
+            boss_fallback_context.close()
 
             fallback_context = browser.new_context(viewport={"width": 1440, "height": 1000})
             fallback_context.route(
@@ -264,8 +407,9 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-fallback-qa"),
             )
             for failed_art_url in (
-                "**/assets/art/party-field-suite/party-field-foundation.png",
+                "**/assets/art/party-combat-suite/party-combat-actions.png",
                 "**/assets/art/enemy-combat-suite/enemy-combat-atlas.png",
+                "**/assets/art/boss-combat-suite/boss-combat-atlas.png",
                 "**/assets/art/battle-vfx-suite/battle-vfx-suite-atlas.png",
             ):
                 fallback_context.route(
@@ -287,6 +431,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   return state?.stageArtState === 'error'
                     && state?.partyArtState === 'error'
                     && state?.enemyArtState === 'error'
+                    && state?.bossArtState === 'error'
                     && state?.vfxArtState === 'error';
                 }""",
             )
@@ -305,6 +450,81 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(fallback_colors >= 3, f"Takamine image failure left a blank board: {fallback_colors} colors.")
             fallback_context.close()
+
+            wrong_size_context = browser.new_context(viewport={"width": 1024, "height": 768})
+            for wrong_size_url in (
+                "**/assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
+                "**/assets/art/party-combat-suite/party-combat-actions.png",
+                "**/assets/art/enemy-combat-suite/enemy-combat-atlas.png",
+                "**/assets/art/boss-combat-suite/boss-combat-atlas.png",
+                "**/assets/art/battle-vfx-suite/battle-vfx-suite-atlas.png",
+                "**/assets/art/party-portrait-suite/party-portrait-expressions.png",
+            ):
+                wrong_size_context.route(
+                    wrong_size_url,
+                    lambda route: route.fulfill(status=200, content_type="image/png", body=WRONG_SIZE_PNG),
+                )
+            wrong_size_page = wrong_size_context.new_page()
+            wrong_size_page.set_default_timeout(20_000)
+            wrong_size_page.set_default_navigation_timeout(45_000)
+            wrong_size_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            wrong_size_response = wrong_size_page.goto(
+                f"{base}/battle.html?encounter=fp1-mateus", wait_until="domcontentloaded"
+            )
+            require(wrong_size_response is not None and wrong_size_response.status == 200, "Wrong-size art page failed delivery.")
+            wrong_size_page.wait_for_function(
+                """() => {
+                  const state = document.querySelector('#battleCanvas')?.dataset;
+                  return state?.stageArtState === 'error'
+                    && state?.partyArtState === 'error'
+                    && state?.enemyArtState === 'error'
+                    && state?.bossArtState === 'error'
+                    && state?.vfxArtState === 'error';
+                }"""
+            )
+            wrong_size_page.goto(f"{base}/camp.html", wait_until="domcontentloaded")
+            wrong_size_page.wait_for_function(
+                "() => document.querySelector('#portraitToken')?.dataset.artState === 'error'"
+            )
+            require(
+                not wrong_size_page.locator("#portraitToken").evaluate("token => token.classList.contains('has-atlas')"),
+                "Wrong-size Camp portrait hid the procedural fallback.",
+            )
+            wrong_size_context.close()
+
+            portrait_fallback_context = browser.new_context(viewport={"width": 1024, "height": 768})
+            portrait_fallback_context.route(
+                "**/assets/art/party-portrait-suite/party-portrait-expressions.png",
+                lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-portrait-fallback-qa"),
+            )
+            portrait_fallback_page = portrait_fallback_context.new_page()
+            portrait_fallback_page.set_default_timeout(20_000)
+            portrait_fallback_page.set_default_navigation_timeout(45_000)
+            portrait_fallback_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            portrait_fallback_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            portrait_fallback_page.wait_for_function(
+                "() => document.querySelector('#sceneFocusPortrait')?.dataset.artState === 'error'"
+            )
+            portrait_fallback_colors = portrait_fallback_page.locator("#sceneFocusPortrait").evaluate(
+                """canvas => {
+                  const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+                  const colors = new Set();
+                  for (let index = 0; index < pixels.length; index += 4) {
+                    colors.add(`${pixels[index]},${pixels[index + 1]},${pixels[index + 2]},${pixels[index + 3]}`);
+                  }
+                  return colors.size;
+                }"""
+            )
+            require(portrait_fallback_colors >= 3, "Campaign portrait failure left a blank fallback.")
+            portrait_fallback_page.goto(f"{base}/camp.html", wait_until="domcontentloaded")
+            portrait_fallback_page.wait_for_function(
+                "() => document.querySelector('#portraitToken')?.dataset.artState === 'error'"
+            )
+            require(
+                not portrait_fallback_page.locator("#portraitToken").evaluate("token => token.classList.contains('has-atlas')"),
+                "Camp portrait failure hid the procedural fallback.",
+            )
+            portrait_fallback_context.close()
 
             page.locator("body").focus()
             focus_trace: list[str] = []
@@ -1118,7 +1338,11 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         repeat_queue_wins=5,
         repeat_final=final,
         takamine_stage_art=stage_art,
+        regional_stage_art=regional_stage_art,
         takamine_fallback_colors=fallback_colors,
+        boss_fallback_colors=boss_fallback_colors,
+        wrong_size_art_fallback=True,
+        party_portrait_art={"campaign": campaign_party_art, "camp": camp_party_art, "aya": aya_portrait_art, "fallbackColors": portrait_fallback_colors},
         keyboard_terminal_link=True,
         credits_seed=credits_seed,
         credits_final=credits_final,

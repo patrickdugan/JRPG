@@ -1,0 +1,2890 @@
+{
+  "schemaVersion": 1,
+  "assetId": "boss-combat-suite-v1",
+  "status": "integrated-current-browser-boss-priority",
+  "authorship": "original-code-native-pixel-primitives",
+  "canonicalSource": "boss-combat-suite.source.json",
+  "builder": "build_boss_combat_suite.py",
+  "bossInclusionRule": {
+    "encounterFormats": [
+      "boss",
+      "boss-rescue",
+      "boss-phase",
+      "final-boss"
+    ],
+    "selection": "The first enemy template in each canonical encounter is the distinct boss; temporary weak points, wards, clerks, and clones remain supporting actors."
+  },
+  "geometry": {
+    "columns": 6,
+    "rows": 10,
+    "cellWidth": 112,
+    "cellHeight": 128,
+    "minimumTransparentGutter": 6,
+    "coordinateOrigin": "top-left"
+  },
+  "poseOrder": [
+    "neutral",
+    "telegraph",
+    "active",
+    "break",
+    "transition",
+    "defeat"
+  ],
+  "bossOrder": [
+    "tithe-hound",
+    "mateus",
+    "captain-kaji",
+    "widow-of-fog",
+    "furnace-abbot",
+    "ujiro",
+    "bell-warden-chiyo",
+    "lady-enma",
+    "yearless-bell",
+    "kurozane"
+  ],
+  "encounterMappings": [
+    {
+      "id": "tithe-hound",
+      "row": 0,
+      "label": "TITHE HOUND",
+      "encounterId": "c1-tithe-hound",
+      "encounterFormat": "boss",
+      "resolution": "collapse-and-containment",
+      "phaseRead": "Latch opens and rib plates flare during the frantic transition."
+    },
+    {
+      "id": "mateus",
+      "row": 1,
+      "label": "FATHER MATEUS AVELAR",
+      "encounterId": "fp1-mateus",
+      "encounterFormat": "boss",
+      "resolution": "nonlethal-surrender",
+      "phaseRead": "The coat opens around a broken court key as the final nonlethal phase begins."
+    },
+    {
+      "id": "captain-kaji",
+      "row": 2,
+      "label": "CAPTAIN KAJI",
+      "encounterId": "c3-captain-kaji",
+      "encounterFormat": "boss",
+      "resolution": "disarmed-and-taken-alive",
+      "phaseRead": "Spool brake releases into an open warning frame before the final pull."
+    },
+    {
+      "id": "widow-of-fog",
+      "row": 3,
+      "label": "WIDOW OF FOG",
+      "encounterId": "c4-widow-of-fog",
+      "encounterFormat": "boss",
+      "resolution": "fog-dispersal",
+      "phaseRead": "Ribbons invert between high- and low-tide silhouettes."
+    },
+    {
+      "id": "furnace-abbot",
+      "row": 4,
+      "label": "FURNACE ABBOT",
+      "encounterId": "c5-furnace-abbot",
+      "encounterFormat": "boss",
+      "resolution": "construct-deactivation",
+      "phaseRead": "Overheat opens three vent plates and buckles the rake-side shoulder."
+    },
+    {
+      "id": "ujiro",
+      "row": 5,
+      "label": "MAGISTRATE UJIRO",
+      "encounterId": "c6-ujiro",
+      "encounterFormat": "boss",
+      "resolution": "documented-retreat",
+      "phaseRead": "The command case opens and the baton line breaks when orders are interrupted."
+    },
+    {
+      "id": "bell-warden-chiyo",
+      "row": 6,
+      "label": "BELL WARDEN CHIYO",
+      "encounterId": "c7-bell-warden-chiyo",
+      "encounterFormat": "boss-rescue",
+      "resolution": "chain-release-and-rescue",
+      "phaseRead": "Yoke dampers separate and the binding reels expose their break pins."
+    },
+    {
+      "id": "lady-enma",
+      "row": 7,
+      "label": "LADY ENMA OF ASH",
+      "encounterId": "c8-lady-enma",
+      "encounterFormat": "boss",
+      "resolution": "non-gory-defeat",
+      "phaseRead": "Paired vane colors divide around the reservoir before converging."
+    },
+    {
+      "id": "yearless-bell",
+      "row": 8,
+      "label": "YEARLESS BELL",
+      "encounterId": "c9-yearless-bell",
+      "encounterFormat": "boss-phase",
+      "resolution": "node-release-and-deactivation",
+      "phaseRead": "Sockets open in a square sequence as the protected nodes fall."
+    },
+    {
+      "id": "kurozane",
+      "row": 9,
+      "label": "SHOGUN KUROZANE",
+      "encounterId": "c9-kurozane",
+      "encounterFormat": "final-boss",
+      "resolution": "non-gory-final-collapse",
+      "phaseRead": "Court panels split, network keys rise, and the final dawn break exposes the central seam."
+    }
+  ],
+  "safety": {
+    "gore": false,
+    "realEmblems": false,
+    "devotionalProps": false,
+    "actorLikeness": false,
+    "construction": "Invented mechanical, docket, cable, lattice, ash, and fog geometry only."
+  },
+  "sources": [
+    {
+      "path": "boss-combat-suite.source.json",
+      "format": "json",
+      "sha256": "a31b192d7a1e936b5b30ab292e5aa00742667ea4c759cc510b05820ef5bc9833"
+    },
+    {
+      "path": "build_boss_combat_suite.py",
+      "format": "python",
+      "sha256": "b644e937707861ab19142e0013317b5b20f550b8aaf0a4b373347bc281fe1385"
+    }
+  ],
+  "exports": [
+    {
+      "path": "boss-combat-atlas.png",
+      "role": "transparent-runtime-candidate",
+      "runtimeCandidate": true,
+      "sha256": "ac7ee69d7b65e1663ec116dda3566e8faa90c9bf4170eb81ea6f4530d9162d79",
+      "ihdr": {
+        "width": 672,
+        "height": 1280,
+        "bitDepth": 8,
+        "colorType": 6,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      }
+    },
+    {
+      "path": "boss-combat-contact-sheet.png",
+      "role": "labeled-review-contact-sheet",
+      "runtimeCandidate": false,
+      "sha256": "e08c388c06bd31e7da4b7fb970d5701d406a578834c131f7de183021aa705b45",
+      "ihdr": {
+        "width": 720,
+        "height": 1528,
+        "bitDepth": 8,
+        "colorType": 2,
+        "compression": 0,
+        "filter": 0,
+        "interlace": 0
+      }
+    }
+  ],
+  "frames": [
+    {
+      "id": "tithe-hound:neutral",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        105
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        60,
+        72
+      ],
+      "phaseAnchor": [
+        54,
+        50
+      ],
+      "alphaBounds": {
+        "x": 13,
+        "y": 45,
+        "width": 85,
+        "height": 75
+      },
+      "transparentGutter": {
+        "left": 13,
+        "top": 45,
+        "right": 14,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4032,
+      "rgbaSha256": "b79ea07ea97f5d9be004d8981c3675868d22c9473fff84dc161d027df27e59a5"
+    },
+    {
+      "id": "tithe-hound:telegraph",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 112,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        50,
+        108
+      ],
+      "ground": [
+        50,
+        116
+      ],
+      "hitAnchor": [
+        65,
+        77
+      ],
+      "phaseAnchor": [
+        51,
+        53
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 49,
+        "width": 85,
+        "height": 71
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 49,
+        "right": 18,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3907,
+      "rgbaSha256": "8a5a472b792e2f8ba3c22aeb8d4f5b4b369600b7ff3c83b9855ee594aab43877"
+    },
+    {
+      "id": "tithe-hound:active",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 224,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        106
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        89,
+        68
+      ],
+      "phaseAnchor": [
+        65,
+        45
+      ],
+      "alphaBounds": {
+        "x": 21,
+        "y": 44,
+        "width": 85,
+        "height": 76
+      },
+      "transparentGutter": {
+        "left": 21,
+        "top": 44,
+        "right": 6,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4061,
+      "rgbaSha256": "3a266f0123db819b2d357381d9920e03cf9c1c24361bcbaf20344438fae2ecad"
+    },
+    {
+      "id": "tithe-hound:break",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 336,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        44,
+        110
+      ],
+      "ground": [
+        44,
+        116
+      ],
+      "hitAnchor": [
+        37,
+        81
+      ],
+      "phaseAnchor": [
+        45,
+        57
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 53,
+        "width": 81,
+        "height": 67
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 53,
+        "right": 25,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3431,
+      "rgbaSha256": "20697633fa551958f850e664bf50354c570a6a75727bda8a887b83ffa77fd0ee"
+    },
+    {
+      "id": "tithe-hound:transition",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 448,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        55,
+        102
+      ],
+      "ground": [
+        55,
+        116
+      ],
+      "hitAnchor": [
+        62,
+        66
+      ],
+      "phaseAnchor": [
+        55,
+        38
+      ],
+      "alphaBounds": {
+        "x": 14,
+        "y": 14,
+        "width": 85,
+        "height": 106
+      },
+      "transparentGutter": {
+        "left": 14,
+        "top": 14,
+        "right": 13,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4490,
+      "rgbaSha256": "b6f814b20c42861c35eca86750a19c6e819fcd65fde7daeb915bfb2ed00a64cf"
+    },
+    {
+      "id": "tithe-hound:defeat",
+      "bossId": "tithe-hound",
+      "encounterId": "c1-tithe-hound",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-HOUND",
+      "rect": {
+        "x": 560,
+        "y": 0,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        54,
+        96
+      ],
+      "phaseAnchor": [
+        48,
+        68
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 80,
+        "width": 79,
+        "height": 42
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 80,
+        "right": 17,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2495,
+      "rgbaSha256": "8ca851df5a8abd5cb1e0b0e123276419281cb70ce66ad5ad5e54a45bb6fe78c2"
+    },
+    {
+      "id": "mateus:neutral",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 0,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        110
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        55
+      ],
+      "phaseAnchor": [
+        56,
+        28
+      ],
+      "alphaBounds": {
+        "x": 24,
+        "y": 20,
+        "width": 65,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 24,
+        "top": 20,
+        "right": 23,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4286,
+      "rgbaSha256": "872895f5c99a9cd639ccee86b4830f47686e43a21dbf2e6a4ba3b9cd3a558b0b"
+    },
+    {
+      "id": "mateus:telegraph",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 112,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        110
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        51,
+        53
+      ],
+      "phaseAnchor": [
+        54,
+        25
+      ],
+      "alphaBounds": {
+        "x": 18,
+        "y": 20,
+        "width": 68,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 18,
+        "top": 20,
+        "right": 26,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4233,
+      "rgbaSha256": "a73f17cf02884110d5ec2788595cccbc86fe6d0e95e0464ae3fe492600deed46"
+    },
+    {
+      "id": "mateus:active",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 224,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        110
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        72,
+        55
+      ],
+      "phaseAnchor": [
+        61,
+        28
+      ],
+      "alphaBounds": {
+        "x": 32,
+        "y": 21,
+        "width": 72,
+        "height": 99
+      },
+      "transparentGutter": {
+        "left": 32,
+        "top": 21,
+        "right": 8,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4109,
+      "rgbaSha256": "0765bc5b67590f8c0cd344183af721a84221a297e7b4c8efdd5f231b19a4f320"
+    },
+    {
+      "id": "mateus:break",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 336,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        112
+      ],
+      "ground": [
+        48,
+        116
+      ],
+      "hitAnchor": [
+        43,
+        64
+      ],
+      "phaseAnchor": [
+        49,
+        36
+      ],
+      "alphaBounds": {
+        "x": 13,
+        "y": 27,
+        "width": 69,
+        "height": 93
+      },
+      "transparentGutter": {
+        "left": 13,
+        "top": 27,
+        "right": 30,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3976,
+      "rgbaSha256": "8f617c5aa93d0bd343eee5b738340afaf9568ca86719509776e3f4eb49eaa04d"
+    },
+    {
+      "id": "mateus:transition",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 448,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        106
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        48
+      ],
+      "phaseAnchor": [
+        56,
+        20
+      ],
+      "alphaBounds": {
+        "x": 20,
+        "y": 12,
+        "width": 75,
+        "height": 108
+      },
+      "transparentGutter": {
+        "left": 20,
+        "top": 12,
+        "right": 17,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4514,
+      "rgbaSha256": "1f786f6f4dbcb5d0a507ffb23b562cf94d303f7815e8c8cdd3f185b6c8cc66eb"
+    },
+    {
+      "id": "mateus:defeat",
+      "bossId": "mateus",
+      "encounterId": "fp1-mateus",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-MATEUS",
+      "rect": {
+        "x": 560,
+        "y": 128,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        46,
+        83
+      ],
+      "phaseAnchor": [
+        48,
+        54
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 56,
+        "width": 68,
+        "height": 66
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 56,
+        "right": 28,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2222,
+      "rgbaSha256": "62fd0967cdad873e98be70327e6fa35ebf11adf35d37196aaf1bb120ae1ca9c0"
+    },
+    {
+      "id": "captain-kaji:neutral",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 0,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        110
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        55
+      ],
+      "phaseAnchor": [
+        56,
+        28
+      ],
+      "alphaBounds": {
+        "x": 22,
+        "y": 20,
+        "width": 70,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 22,
+        "top": 20,
+        "right": 20,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4126,
+      "rgbaSha256": "8f492ae963b8cbdcefcd879826a545e46c413c134008223b126e520aa58bbd8a"
+    },
+    {
+      "id": "captain-kaji:telegraph",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 112,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        110
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        51,
+        53
+      ],
+      "phaseAnchor": [
+        54,
+        25
+      ],
+      "alphaBounds": {
+        "x": 14,
+        "y": 20,
+        "width": 74,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 14,
+        "top": 20,
+        "right": 24,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3996,
+      "rgbaSha256": "7b14f64639b4c0a13e62f6d99162c0ce7d48dd4a92e46a23857cc1d1adb2d493"
+    },
+    {
+      "id": "captain-kaji:active",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 224,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        110
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        72,
+        55
+      ],
+      "phaseAnchor": [
+        61,
+        28
+      ],
+      "alphaBounds": {
+        "x": 27,
+        "y": 21,
+        "width": 76,
+        "height": 99
+      },
+      "transparentGutter": {
+        "left": 27,
+        "top": 21,
+        "right": 9,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3933,
+      "rgbaSha256": "566e66e4b8f6570f4241134695bbe967140e1d6782bf9f920907154142b135e0"
+    },
+    {
+      "id": "captain-kaji:break",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 336,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        112
+      ],
+      "ground": [
+        48,
+        116
+      ],
+      "hitAnchor": [
+        43,
+        64
+      ],
+      "phaseAnchor": [
+        49,
+        36
+      ],
+      "alphaBounds": {
+        "x": 10,
+        "y": 27,
+        "width": 75,
+        "height": 93
+      },
+      "transparentGutter": {
+        "left": 10,
+        "top": 27,
+        "right": 27,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3836,
+      "rgbaSha256": "ede02bd414df6a575585d5ecf6b3c606bc472273a467626bb7b10ae4bf7feb37"
+    },
+    {
+      "id": "captain-kaji:transition",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 448,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        106
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        48
+      ],
+      "phaseAnchor": [
+        56,
+        20
+      ],
+      "alphaBounds": {
+        "x": 17,
+        "y": 15,
+        "width": 80,
+        "height": 105
+      },
+      "transparentGutter": {
+        "left": 17,
+        "top": 15,
+        "right": 15,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4127,
+      "rgbaSha256": "6bd85e9c58891a10c0144565e03d618e4e6837769c34f0a4a4a119869fd66036"
+    },
+    {
+      "id": "captain-kaji:defeat",
+      "bossId": "captain-kaji",
+      "encounterId": "c3-captain-kaji",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-KAJI",
+      "rect": {
+        "x": 560,
+        "y": 256,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        46,
+        83
+      ],
+      "phaseAnchor": [
+        48,
+        54
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 56,
+        "width": 67,
+        "height": 66
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 56,
+        "right": 29,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2207,
+      "rgbaSha256": "f8d5011076ceaf9fbe4230745fa663c0d1c7f75dd33bc62f2221a42a50958f0f"
+    },
+    {
+      "id": "widow-of-fog:neutral",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 0,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        82
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        59
+      ],
+      "phaseAnchor": [
+        56,
+        25
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 16,
+        "width": 98,
+        "height": 104
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 16,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4738,
+      "rgbaSha256": "e57d2ff03a8ef5727ec81b9a715c19430b375d2b03d5019f05d77ddc280e6210"
+    },
+    {
+      "id": "widow-of-fog:telegraph",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 112,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        84
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        50,
+        56
+      ],
+      "phaseAnchor": [
+        53,
+        22
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 16,
+        "width": 89,
+        "height": 104
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 16,
+        "right": 15,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4712,
+      "rgbaSha256": "a404d25872a1df10efc50898e7172774e7b51d7c88e63f124a883dc8f03d5c4f"
+    },
+    {
+      "id": "widow-of-fog:active",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 224,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        78
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        75,
+        51
+      ],
+      "phaseAnchor": [
+        64,
+        19
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 17,
+        "width": 96,
+        "height": 103
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 17,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4692,
+      "rgbaSha256": "da7939ac039ff3a11bf4c8cdec0219a3a3d20970667485d24770f925aac79d2b"
+    },
+    {
+      "id": "widow-of-fog:break",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 336,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        47,
+        87
+      ],
+      "ground": [
+        47,
+        116
+      ],
+      "hitAnchor": [
+        42,
+        68
+      ],
+      "phaseAnchor": [
+        47,
+        36
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 23,
+        "width": 80,
+        "height": 97
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 23,
+        "right": 24,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4593,
+      "rgbaSha256": "256b79bfd2add418b695a3cabf9cf2db94a280a8bf3e89ee95a403ee147fa8f3"
+    },
+    {
+      "id": "widow-of-fog:transition",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 448,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        74
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        47
+      ],
+      "phaseAnchor": [
+        56,
+        14
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 8,
+        "width": 98,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 8,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5022,
+      "rgbaSha256": "8b1aa17281521fc69d90075587b2b99562808c51557d650482eea93eb4419822"
+    },
+    {
+      "id": "widow-of-fog:defeat",
+      "bossId": "widow-of-fog",
+      "encounterId": "c4-widow-of-fog",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-WIDOW",
+      "rect": {
+        "x": 560,
+        "y": 384,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        49,
+        103
+      ],
+      "ground": [
+        49,
+        118
+      ],
+      "hitAnchor": [
+        49,
+        89
+      ],
+      "phaseAnchor": [
+        49,
+        61
+      ],
+      "alphaBounds": {
+        "x": 20,
+        "y": 84,
+        "width": 67,
+        "height": 38
+      },
+      "transparentGutter": {
+        "left": 20,
+        "top": 84,
+        "right": 25,
+        "bottom": 6
+      },
+      "opaquePixelCount": 1488,
+      "rgbaSha256": "1bb90927e667bcc4c82fe0ddb0fb5c4aa200f4f5f1c2320a30da8239f6cd824f"
+    },
+    {
+      "id": "furnace-abbot:neutral",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 0,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        110
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        55
+      ],
+      "phaseAnchor": [
+        56,
+        28
+      ],
+      "alphaBounds": {
+        "x": 17,
+        "y": 8,
+        "width": 89,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 17,
+        "top": 8,
+        "right": 6,
+        "bottom": 8
+      },
+      "opaquePixelCount": 6151,
+      "rgbaSha256": "b3cfef465a188603f5c708af231b5a52716184f3da1023f3e5a1f3cb6411e0f1"
+    },
+    {
+      "id": "furnace-abbot:telegraph",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 112,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        110
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        51,
+        53
+      ],
+      "phaseAnchor": [
+        54,
+        25
+      ],
+      "alphaBounds": {
+        "x": 12,
+        "y": 8,
+        "width": 81,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 12,
+        "top": 8,
+        "right": 19,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5892,
+      "rgbaSha256": "67b52956bb26b9a44425d216e32145b4a58c6ea27687f0fc84868ff4f9736916"
+    },
+    {
+      "id": "furnace-abbot:active",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 224,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        110
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        72,
+        55
+      ],
+      "phaseAnchor": [
+        61,
+        28
+      ],
+      "alphaBounds": {
+        "x": 25,
+        "y": 9,
+        "width": 80,
+        "height": 111
+      },
+      "transparentGutter": {
+        "left": 25,
+        "top": 9,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5940,
+      "rgbaSha256": "323d326da2e556292fa84f880caf90c27f15f3805816d2e138b76b650ced50db"
+    },
+    {
+      "id": "furnace-abbot:break",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 336,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        112
+      ],
+      "ground": [
+        48,
+        116
+      ],
+      "hitAnchor": [
+        43,
+        64
+      ],
+      "phaseAnchor": [
+        49,
+        36
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 15,
+        "width": 79,
+        "height": 105
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 15,
+        "right": 24,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5840,
+      "rgbaSha256": "0bd8015963e176e846d3ee4c028cb3fdb4a715f009856f8d9614a35fb1bacce5"
+    },
+    {
+      "id": "furnace-abbot:transition",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 448,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        106
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        48
+      ],
+      "phaseAnchor": [
+        56,
+        20
+      ],
+      "alphaBounds": {
+        "x": 17,
+        "y": 6,
+        "width": 88,
+        "height": 114
+      },
+      "transparentGutter": {
+        "left": 17,
+        "top": 6,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 6116,
+      "rgbaSha256": "dae816c3b276bdc23a71962b1251a178c3d6024880f129ce15d52f573c09e3ce"
+    },
+    {
+      "id": "furnace-abbot:defeat",
+      "bossId": "furnace-abbot",
+      "encounterId": "c5-furnace-abbot",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-FURNACE",
+      "rect": {
+        "x": 560,
+        "y": 512,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        46,
+        83
+      ],
+      "phaseAnchor": [
+        48,
+        54
+      ],
+      "alphaBounds": {
+        "x": 17,
+        "y": 78,
+        "width": 84,
+        "height": 44
+      },
+      "transparentGutter": {
+        "left": 17,
+        "top": 78,
+        "right": 11,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2634,
+      "rgbaSha256": "e0e91f9206b711eac2d12bd6ff19d12eb225057d621542c4c712abdb34571e62"
+    },
+    {
+      "id": "ujiro:neutral",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 0,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        110
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        55
+      ],
+      "phaseAnchor": [
+        56,
+        28
+      ],
+      "alphaBounds": {
+        "x": 24,
+        "y": 20,
+        "width": 69,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 24,
+        "top": 20,
+        "right": 19,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3998,
+      "rgbaSha256": "fa5484ba22bda92e307aaecca2fae08d24b64a1db13406701451f2b3e0712990"
+    },
+    {
+      "id": "ujiro:telegraph",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 112,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        110
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        51,
+        53
+      ],
+      "phaseAnchor": [
+        54,
+        25
+      ],
+      "alphaBounds": {
+        "x": 18,
+        "y": 20,
+        "width": 68,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 18,
+        "top": 20,
+        "right": 26,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4032,
+      "rgbaSha256": "a1abc65ffd9465bb6867e799d0f2cecc7cf8ffa079ef8e22d393384c9914140f"
+    },
+    {
+      "id": "ujiro:active",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 224,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        110
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        72,
+        55
+      ],
+      "phaseAnchor": [
+        61,
+        28
+      ],
+      "alphaBounds": {
+        "x": 32,
+        "y": 21,
+        "width": 73,
+        "height": 99
+      },
+      "transparentGutter": {
+        "left": 32,
+        "top": 21,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3758,
+      "rgbaSha256": "c93a1317a041faf0e3db28e6881786459b8f4316b48efad40b7259b97d81d68d"
+    },
+    {
+      "id": "ujiro:break",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 336,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        112
+      ],
+      "ground": [
+        48,
+        116
+      ],
+      "hitAnchor": [
+        43,
+        64
+      ],
+      "phaseAnchor": [
+        49,
+        36
+      ],
+      "alphaBounds": {
+        "x": 13,
+        "y": 27,
+        "width": 69,
+        "height": 93
+      },
+      "transparentGutter": {
+        "left": 13,
+        "top": 27,
+        "right": 30,
+        "bottom": 8
+      },
+      "opaquePixelCount": 3856,
+      "rgbaSha256": "dea00ee6400decf0d8d62c2adbfe4fc7b1fa5e0e3bd43ac563a1cbbcacfd2d20"
+    },
+    {
+      "id": "ujiro:transition",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 448,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        106
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        48
+      ],
+      "phaseAnchor": [
+        56,
+        20
+      ],
+      "alphaBounds": {
+        "x": 20,
+        "y": 12,
+        "width": 77,
+        "height": 108
+      },
+      "transparentGutter": {
+        "left": 20,
+        "top": 12,
+        "right": 15,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4243,
+      "rgbaSha256": "4b2e6e77c8d03b2d15c69deae801f106b4ecd2763c7037fbc38ce35bc2d0a139"
+    },
+    {
+      "id": "ujiro:defeat",
+      "bossId": "ujiro",
+      "encounterId": "c6-ujiro",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-UJIRO",
+      "rect": {
+        "x": 560,
+        "y": 640,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        46,
+        83
+      ],
+      "phaseAnchor": [
+        48,
+        54
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 56,
+        "width": 72,
+        "height": 66
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 56,
+        "right": 24,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2407,
+      "rgbaSha256": "726f83285375ae41976165cc91870c0e584e4460c999ca83cb96f13f00878279"
+    },
+    {
+      "id": "bell-warden-chiyo:neutral",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 0,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        110
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        55
+      ],
+      "phaseAnchor": [
+        56,
+        28
+      ],
+      "alphaBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 81,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 21,
+        "top": 8,
+        "right": 10,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5541,
+      "rgbaSha256": "51d59c5c9720d6331071f1f4c09bb5a8bef8fc65b136b4381c00c2aaeafe21be"
+    },
+    {
+      "id": "bell-warden-chiyo:telegraph",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 112,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        110
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        51,
+        53
+      ],
+      "phaseAnchor": [
+        54,
+        25
+      ],
+      "alphaBounds": {
+        "x": 14,
+        "y": 8,
+        "width": 78,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 14,
+        "top": 8,
+        "right": 20,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5251,
+      "rgbaSha256": "1e80577ee496fe0ecd290dbaddbeb5bd0cbcf2cd4fdce6fc90379b9f78df2c49"
+    },
+    {
+      "id": "bell-warden-chiyo:active",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 224,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        110
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        72,
+        55
+      ],
+      "phaseAnchor": [
+        61,
+        28
+      ],
+      "alphaBounds": {
+        "x": 29,
+        "y": 8,
+        "width": 77,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 29,
+        "top": 8,
+        "right": 6,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5301,
+      "rgbaSha256": "7b2fa2bb4222a92772a842237da67473f26545a59b67059cec115335b1b6abfa"
+    },
+    {
+      "id": "bell-warden-chiyo:break",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 336,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        112
+      ],
+      "ground": [
+        48,
+        116
+      ],
+      "hitAnchor": [
+        43,
+        64
+      ],
+      "phaseAnchor": [
+        49,
+        36
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 8,
+        "width": 78,
+        "height": 112
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 8,
+        "right": 25,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5309,
+      "rgbaSha256": "b6a313cb711f7b1e5cb3fa6a225daf4bb68e50be76e7d716441b9891666f5229"
+    },
+    {
+      "id": "bell-warden-chiyo:transition",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 448,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        106
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        48
+      ],
+      "phaseAnchor": [
+        56,
+        20
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 6,
+        "width": 86,
+        "height": 114
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 6,
+        "right": 10,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5476,
+      "rgbaSha256": "0ac61002e7948dec4e3aebf859ccb83fd1a4c762e7b2d5dafb443d5a7781328d"
+    },
+    {
+      "id": "bell-warden-chiyo:defeat",
+      "bossId": "bell-warden-chiyo",
+      "encounterId": "c7-bell-warden-chiyo",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-CHIYO",
+      "rect": {
+        "x": 560,
+        "y": 768,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        46,
+        83
+      ],
+      "phaseAnchor": [
+        48,
+        54
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 56,
+        "width": 74,
+        "height": 66
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 56,
+        "right": 22,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2339,
+      "rgbaSha256": "dd4ed8cfabef688f10e2d7268d8b35aa401cd4f2238165d12373d4e3985b83ef"
+    },
+    {
+      "id": "lady-enma:neutral",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 0,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        82
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        59
+      ],
+      "phaseAnchor": [
+        56,
+        25
+      ],
+      "alphaBounds": {
+        "x": 10,
+        "y": 19,
+        "width": 93,
+        "height": 101
+      },
+      "transparentGutter": {
+        "left": 10,
+        "top": 19,
+        "right": 9,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4820,
+      "rgbaSha256": "bd768b8698bbfc5a5d85aaa884007fcb9b6c9d7b19edcbe743c5d354bf4a8b13"
+    },
+    {
+      "id": "lady-enma:telegraph",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 112,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        84
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        50,
+        56
+      ],
+      "phaseAnchor": [
+        53,
+        22
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 19,
+        "width": 92,
+        "height": 101
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 19,
+        "right": 12,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4818,
+      "rgbaSha256": "a2f44279d59dedfd092e0afff6c0363ab9e8d03f3be9de511601a905c33ae6e6"
+    },
+    {
+      "id": "lady-enma:active",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 224,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        78
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        75,
+        51
+      ],
+      "phaseAnchor": [
+        64,
+        19
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 20,
+        "width": 89,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 20,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4723,
+      "rgbaSha256": "f86ce12848f9eb9ba403148efeffb282951c80a2de25435fa8adb7fce133ea33"
+    },
+    {
+      "id": "lady-enma:break",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 336,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        47,
+        87
+      ],
+      "ground": [
+        47,
+        116
+      ],
+      "hitAnchor": [
+        42,
+        68
+      ],
+      "phaseAnchor": [
+        47,
+        36
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 26,
+        "width": 88,
+        "height": 94
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 26,
+        "right": 17,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4760,
+      "rgbaSha256": "186bfd3c48f832f9ae39661bd7b522bb5cec92c0fefab1c31b68c31fd44a0c6b"
+    },
+    {
+      "id": "lady-enma:transition",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 448,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        74
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        47
+      ],
+      "phaseAnchor": [
+        56,
+        14
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 7,
+        "width": 94,
+        "height": 113
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 7,
+        "right": 9,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5030,
+      "rgbaSha256": "e6c1d3adf38917f8e300b0e8919d1d8daaac06e583e638f095882c9bd9a05b8e"
+    },
+    {
+      "id": "lady-enma:defeat",
+      "bossId": "lady-enma",
+      "encounterId": "c8-lady-enma",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-ENMA",
+      "rect": {
+        "x": 560,
+        "y": 896,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        49,
+        103
+      ],
+      "ground": [
+        49,
+        118
+      ],
+      "hitAnchor": [
+        49,
+        89
+      ],
+      "phaseAnchor": [
+        49,
+        61
+      ],
+      "alphaBounds": {
+        "x": 15,
+        "y": 70,
+        "width": 81,
+        "height": 52
+      },
+      "transparentGutter": {
+        "left": 15,
+        "top": 70,
+        "right": 16,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2470,
+      "rgbaSha256": "9dab017a65c71104ab65556db201adb93dd06e1e6eb61f4ed0b1cb42aeb89889"
+    },
+    {
+      "id": "yearless-bell:neutral",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 0,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        92
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        63
+      ],
+      "phaseAnchor": [
+        56,
+        24
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 18,
+        "width": 81,
+        "height": 102
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 18,
+        "right": 15,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5734,
+      "rgbaSha256": "22c92818c43731b3eea76af5222688a698ea61fac44098b66192080a62195fa6"
+    },
+    {
+      "id": "yearless-bell:telegraph",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 112,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        92
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        61
+      ],
+      "phaseAnchor": [
+        56,
+        18
+      ],
+      "alphaBounds": {
+        "x": 13,
+        "y": 18,
+        "width": 81,
+        "height": 102
+      },
+      "transparentGutter": {
+        "left": 13,
+        "top": 18,
+        "right": 18,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5734,
+      "rgbaSha256": "e8ff7efd77e690867cd261e330556e60442fe42f080e98e830a7072c66edb258"
+    },
+    {
+      "id": "yearless-bell:active",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 224,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        60,
+        88
+      ],
+      "ground": [
+        60,
+        116
+      ],
+      "hitAnchor": [
+        66,
+        57
+      ],
+      "phaseAnchor": [
+        60,
+        14
+      ],
+      "alphaBounds": {
+        "x": 12,
+        "y": 19,
+        "width": 93,
+        "height": 101
+      },
+      "transparentGutter": {
+        "left": 12,
+        "top": 19,
+        "right": 7,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5788,
+      "rgbaSha256": "eb39b4cd9e63672b19454f104fdeca073f6c9ac93fecfbf8c10fa57a583b7234"
+    },
+    {
+      "id": "yearless-bell:break",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 336,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        50,
+        99
+      ],
+      "ground": [
+        50,
+        116
+      ],
+      "hitAnchor": [
+        48,
+        75
+      ],
+      "phaseAnchor": [
+        50,
+        38
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 25,
+        "width": 81,
+        "height": 95
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 25,
+        "right": 23,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5734,
+      "rgbaSha256": "5b67ab1e0c98a77a655b9dadf32444ab999d5ff908be9feca2e89f02efc24c24"
+    },
+    {
+      "id": "yearless-bell:transition",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 448,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        83
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        50
+      ],
+      "phaseAnchor": [
+        56,
+        11
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 6,
+        "width": 84,
+        "height": 114
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 6,
+        "right": 12,
+        "bottom": 8
+      },
+      "opaquePixelCount": 6037,
+      "rgbaSha256": "c39fb73ef312013c61fc033fa2f9cfdc07d92657f2e3343697b4fa4038126d99"
+    },
+    {
+      "id": "yearless-bell:defeat",
+      "bossId": "yearless-bell",
+      "encounterId": "c9-yearless-bell",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-BELL",
+      "rect": {
+        "x": 560,
+        "y": 1024,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        49,
+        112
+      ],
+      "ground": [
+        49,
+        118
+      ],
+      "hitAnchor": [
+        49,
+        95
+      ],
+      "phaseAnchor": [
+        49,
+        63
+      ],
+      "alphaBounds": {
+        "x": 15,
+        "y": 79,
+        "width": 82,
+        "height": 43
+      },
+      "transparentGutter": {
+        "left": 15,
+        "top": 79,
+        "right": 15,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2240,
+      "rgbaSha256": "71e210cef888b56e381aa251d51391e5bee752767039bba159dcb800908a11e3"
+    },
+    {
+      "id": "kurozane:neutral",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "neutral",
+      "tag": "boss-ready",
+      "event": "ready",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 0,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        110
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        55
+      ],
+      "phaseAnchor": [
+        56,
+        28
+      ],
+      "alphaBounds": {
+        "x": 12,
+        "y": 20,
+        "width": 90,
+        "height": 100
+      },
+      "transparentGutter": {
+        "left": 12,
+        "top": 20,
+        "right": 10,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4857,
+      "rgbaSha256": "75494e1429ba6010bad1109410554828fd4180788ffd2e91409f8027d40243b2"
+    },
+    {
+      "id": "kurozane:telegraph",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "telegraph",
+      "tag": "boss-telegraph",
+      "event": "telegraphStart",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 112,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        53,
+        110
+      ],
+      "ground": [
+        53,
+        116
+      ],
+      "hitAnchor": [
+        51,
+        53
+      ],
+      "phaseAnchor": [
+        54,
+        25
+      ],
+      "alphaBounds": {
+        "x": 9,
+        "y": 11,
+        "width": 90,
+        "height": 109
+      },
+      "transparentGutter": {
+        "left": 9,
+        "top": 11,
+        "right": 13,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5071,
+      "rgbaSha256": "16d3fa52623752e93c7a9bbab12ab0a2339e490aed92d6d58d7f5da8ccd7786e"
+    },
+    {
+      "id": "kurozane:active",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "active",
+      "tag": "boss-active",
+      "event": "activeStart",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 224,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        63,
+        110
+      ],
+      "ground": [
+        63,
+        116
+      ],
+      "hitAnchor": [
+        72,
+        55
+      ],
+      "phaseAnchor": [
+        61,
+        28
+      ],
+      "alphaBounds": {
+        "x": 20,
+        "y": 21,
+        "width": 86,
+        "height": 99
+      },
+      "transparentGutter": {
+        "left": 20,
+        "top": 21,
+        "right": 6,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4686,
+      "rgbaSha256": "1ada01036d155d907d585a9786ab1f846a2520a4cc0ea5c9b353e88bafca940e"
+    },
+    {
+      "id": "kurozane:break",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "break",
+      "tag": "boss-stagger-break",
+      "event": "breakStart",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 336,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        112
+      ],
+      "ground": [
+        48,
+        116
+      ],
+      "hitAnchor": [
+        43,
+        64
+      ],
+      "phaseAnchor": [
+        49,
+        36
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 27,
+        "width": 88,
+        "height": 93
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 27,
+        "right": 18,
+        "bottom": 8
+      },
+      "opaquePixelCount": 4665,
+      "rgbaSha256": "6230fcb7b65bb515fd2f268716a8f53547233e2603de2079b4d1dd3037461faa"
+    },
+    {
+      "id": "kurozane:transition",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "transition",
+      "tag": "boss-phase-transition",
+      "event": "phaseStart",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 448,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        56,
+        106
+      ],
+      "ground": [
+        56,
+        116
+      ],
+      "hitAnchor": [
+        56,
+        48
+      ],
+      "phaseAnchor": [
+        56,
+        20
+      ],
+      "alphaBounds": {
+        "x": 12,
+        "y": 6,
+        "width": 90,
+        "height": 114
+      },
+      "transparentGutter": {
+        "left": 12,
+        "top": 6,
+        "right": 10,
+        "bottom": 8
+      },
+      "opaquePixelCount": 5762,
+      "rgbaSha256": "78fa4e822d6d1eb9807f5d83fce3d0e7dda4ed24a5b892b0e5771c3b7e473a1e"
+    },
+    {
+      "id": "kurozane:defeat",
+      "bossId": "kurozane",
+      "encounterId": "c9-kurozane",
+      "pose": "defeat",
+      "tag": "boss-defeat-retreat",
+      "event": "complete",
+      "paletteId": "PAL-BOS-KUROZANE",
+      "rect": {
+        "x": 560,
+        "y": 1152,
+        "width": 112,
+        "height": 128
+      },
+      "pivot": [
+        48,
+        114
+      ],
+      "ground": [
+        48,
+        118
+      ],
+      "hitAnchor": [
+        46,
+        83
+      ],
+      "phaseAnchor": [
+        48,
+        54
+      ],
+      "alphaBounds": {
+        "x": 16,
+        "y": 56,
+        "width": 75,
+        "height": 66
+      },
+      "transparentGutter": {
+        "left": 16,
+        "top": 56,
+        "right": 21,
+        "bottom": 6
+      },
+      "opaquePixelCount": 2286,
+      "rgbaSha256": "009d0126b138f71cddc4d592cab7f333fb9f77d985a12ba0b492c9f8fd1cb787"
+    }
+  ]
+}
