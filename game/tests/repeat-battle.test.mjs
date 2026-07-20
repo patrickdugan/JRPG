@@ -93,6 +93,7 @@ test('unsupported speed multipliers are rejected instead of silently approximate
     /must be 1, 2, or 4/,
   );
   assert.equal(getRepeatStepDelayMs('skill', 4, 2), 520);
+  assert.equal(getRepeatStepDelayMs('analyze', 4), 120);
   assert.throws(() => getRepeatStepDelayMs('unknown', 1), /Unknown repeat presentation step/);
 });
 

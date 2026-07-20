@@ -131,6 +131,13 @@ import {
   getBattleVfxFrame,
   resolveBattleVfxAnchors,
 } from './battle-vfx-atlas.mjs';
+import {
+  battleCommandPresentationIsActive,
+  createBattleCommandPresentation,
+  getBattleObjectiveCommandTile,
+  getBattlePresentationBoundary,
+  sampleBattleCommandPresentation,
+} from './battle-command-presentation.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -273,6 +280,7 @@ const battleMotionUntil = new Map();
 const battleEnemyPoseByActor = new Map();
 const battleEnemyPoseUntil = new Map();
 let activeBattleAnimation = null;
+let activeCommandPresentation = null;
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
 
@@ -388,8 +396,20 @@ function battleAnimationActive(now = performance.now()) {
   return Boolean(activeBattleAnimation && now < activeBattleAnimation.endsAt);
 }
 
+function commandPresentationActive(now = performance.now()) {
+  return battleCommandPresentationIsActive(activeCommandPresentation, now);
+}
+
+function battlePresentationActive(now = performance.now()) {
+  return battleAnimationActive(now) || commandPresentationActive(now);
+}
+
+function battlePresentationEndsAt() {
+  return getBattlePresentationBoundary(activeBattleAnimation, activeCommandPresentation);
+}
+
 function manualInputLocked(now = performance.now()) {
-  return autoInputLocked() || battleAnimationActive(now);
+  return autoInputLocked() || battlePresentationActive(now);
 }
 
 function clearEnemyIntentSchedule() {
@@ -479,6 +499,67 @@ function currentBattleAnimationFrame(now = performance.now()) {
       Math.min(now - activeBattleAnimation.startedAt, activeBattleAnimation.timeline.durationMs),
     ),
   };
+}
+
+function objectiveCommandPresentationTile(snapshot, actor, requirement) {
+  return getBattleObjectiveCommandTile({
+    level: engine.level,
+    requirement,
+    actors: snapshot.actors,
+    fallbackTile: actor.pos,
+  });
+}
+
+function startBattleCommandPresentation({
+  type,
+  actorId,
+  targetId = null,
+  requirement = null,
+  result = null,
+  beforeSnapshot = engine.snapshot(),
+  startedAt = performance.now(),
+  speed = autoGrindActive ? speedMultiplier : 1,
+} = {}) {
+  if (!result?.ok) return null;
+  const actor = beforeSnapshot.actors.find((candidate) => candidate.instanceId === actorId);
+  if (!actor) return null;
+  const target = type === 'analyze'
+    ? beforeSnapshot.actors.find((candidate) => candidate.instanceId === targetId)
+    : null;
+  if (type === 'analyze' && !target) return null;
+  const objectivePresentation = type === 'objective'
+    ? getObjectiveActionPresentation(requirement ?? { action: 'objective' })
+    : null;
+  const objectiveTile = type === 'objective'
+    ? objectiveCommandPresentationTile(beforeSnapshot, actor, requirement)
+    : null;
+  activeCommandPresentation = createBattleCommandPresentation({
+    type,
+    actorId: actor.instanceId,
+    actorName: actor.name,
+    actorTile: actor.pos,
+    targetId: type === 'objective' ? requirement?.targetId ?? requirement?.key : target?.instanceId,
+    targetName: type === 'objective' ? objectivePresentation.targetName : target?.name,
+    targetTile: type === 'objective' ? objectiveTile : target?.pos,
+    objectiveAction: requirement?.action,
+    label: objectivePresentation?.label,
+    marker: objectivePresentation?.marker,
+    color: objectivePresentation?.color,
+    detail: type === 'analyze' && result.readout?.ledger ? `Ledger: ${result.readout.ledger}` : null,
+    startedAt,
+    speed,
+  });
+  clearEnemyIntentSchedule();
+  announcements.textContent = activeCommandPresentation.announcement;
+  return activeCommandPresentation;
+}
+
+function publishActiveCommandAnnouncement(now = performance.now()) {
+  if (!commandPresentationActive(now)) return;
+  const commandText = activeCommandPresentation.announcement;
+  if (!announcements.textContent.includes(commandText)) {
+    announcements.textContent = `${commandText} ${announcements.textContent}`.trim();
+  }
 }
 
 function markBattleMotion(actorId, dx, dy) {
@@ -695,6 +776,66 @@ function drawBattleAnimationFx(animation, geometry) {
   context.restore();
 }
 
+function drawBattleCommandPresentationFx(frame, geometry) {
+  if (!frame) return;
+  const actor = battleCanvasPoint(frame.actorTile, geometry);
+  const target = battleCanvasPoint(frame.targetTile, geometry);
+  const radius = Math.max(5, geometry.cell * 0.3 * frame.radiusScale);
+  context.save();
+  context.globalAlpha = frame.opacity;
+  context.strokeStyle = frame.color;
+  context.fillStyle = frame.color;
+  context.lineWidth = Math.max(2, geometry.cell * 0.055);
+  context.lineCap = 'square';
+
+  if (frame.linkProgress > 0) {
+    const endX = actor.x + ((target.x - actor.x) * frame.linkProgress);
+    const endY = actor.y + ((target.y - actor.y) * frame.linkProgress);
+    context.setLineDash([Math.max(3, geometry.cell * 0.12), Math.max(2, geometry.cell * 0.08)]);
+    context.beginPath();
+    context.moveTo(actor.x, actor.y);
+    context.lineTo(endX, endY);
+    context.stroke();
+    context.setLineDash([]);
+  }
+
+  if (frame.type === 'guard') {
+    context.translate(actor.x, actor.y);
+    context.globalAlpha = Math.min(1, frame.opacity * 0.28);
+    context.beginPath();
+    context.arc(0, 0, radius * 1.35, 0, Math.PI * 2);
+    context.fill();
+    context.globalAlpha = frame.opacity;
+    context.strokeStyle = frame.accentColor;
+    traceObjectiveMarker('shield', radius);
+    context.stroke();
+  } else if (frame.type === 'analyze') {
+    context.translate(target.x, target.y);
+    context.strokeStyle = frame.accentColor;
+    const corner = radius * 0.48;
+    for (const [x, y, dx, dy] of [
+      [-radius, -radius, corner, corner], [radius, -radius, -corner, corner],
+      [-radius, radius, corner, -corner], [radius, radius, -corner, -corner],
+    ]) {
+      context.beginPath();
+      context.moveTo(x + dx, y); context.lineTo(x, y); context.lineTo(x, y + dy);
+      context.stroke();
+    }
+    context.fillRect(-Math.max(1, geometry.cell * 0.04), -Math.max(1, geometry.cell * 0.04), Math.max(2, geometry.cell * 0.08), Math.max(2, geometry.cell * 0.08));
+  } else {
+    context.translate(target.x, target.y);
+    context.globalAlpha = Math.min(1, frame.opacity * 0.24);
+    context.beginPath();
+    context.arc(0, 0, radius * 1.4, 0, Math.PI * 2);
+    context.fill();
+    context.globalAlpha = frame.opacity;
+    context.strokeStyle = frame.accentColor;
+    traceObjectiveMarker(frame.marker, radius);
+    context.stroke();
+  }
+  context.restore();
+}
+
 function drawBossIntent(snapshot, geometry) {
   const intent = snapshot.bossMechanic?.pendingIntent;
   if (!intent) return;
@@ -727,6 +868,7 @@ function drawBattle(now = performance.now()) {
   const visualNow = reducedMotion.matches ? 0 : now;
   const sampledAnimation = currentBattleAnimationFrame(now);
   const animation = reducedMotion.matches && !sampledAnimation?.terminalDefeatWindow ? null : sampledAnimation;
+  const commandPresentation = sampleBattleCommandPresentation(activeCommandPresentation, now, { reducedMotion: reducedMotion.matches });
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
@@ -976,6 +1118,7 @@ function drawBattle(now = performance.now()) {
     }
   }
   drawBattleAnimationFx(animation, geometry);
+  drawBattleCommandPresentationFx(commandPresentation, geometry);
 }
 
 function createCombatantCard(actor, selected = false, targetable = true) {
@@ -1153,7 +1296,7 @@ function renderCommands(snapshot) {
   const inputLocked = manualInputLocked();
   const available = new Set(actor ? engine.getAvailableCommands(actor.instanceId) : []);
   activeActorLabel.textContent = actor
-    ? `${actor.name} · space ${actor.pos.x},${actor.pos.y} · ${snapshot.pace} Pace · ${actor.spirit}/${actor.maxSpirit} Spirit${autoInputLocked() ? ' · AUTO' : battleAnimationActive() ? ' · ANIMATING' : ''}`
+    ? `${actor.name} · space ${actor.pos.x},${actor.pos.y} · ${snapshot.pace} Pace · ${actor.spirit}/${actor.maxSpirit} Spirit${autoInputLocked() ? ' · AUTO' : battlePresentationActive() ? ' · PRESENTING' : ''}`
     : 'Waiting for the next activation';
   commandButtons.forEach((button) => {
     const command = button.dataset.command;
@@ -1441,7 +1584,7 @@ function renderSpeedControls() {
   const grindAvailable = getEncounterWinCount(advancementState, encounter.id) > 0;
   const snapshot = engine.snapshot();
   const settling = autoSettleAt !== null;
-  const manualAnimation = !autoGrindActive && !settling && battleAnimationActive();
+  const manualAnimation = !autoGrindActive && !settling && battlePresentationActive();
   const queueInProgress = repeatGrindQueue.active;
   speedButtons.forEach((button) => {
     button.disabled = !grindAvailable || queueInProgress || settling || manualAnimation || Boolean(snapshot.result);
@@ -1477,7 +1620,7 @@ function render() {
   }
   const settlementReady = isBattlePresentationSettled({
     result: snapshot.result,
-    animationActive: battleAnimationActive(),
+    animationActive: battlePresentationActive(),
     settling: autoSettleAt !== null,
   });
   // Auto-Grind may delay the terminal reveal, but an earned victory must be
@@ -1508,15 +1651,16 @@ function render() {
   renderObjective(snapshot);
   renderBossMechanic(snapshot);
   renderLog(snapshot);
+  publishActiveCommandAnnouncement();
   continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady || !durableVictory;
   if (snapshot.result === 'victory' && settlementReady && durableVictory) continueCampaign.focus({ preventScroll: true });
   drawBattle();
-  if (!autoInputLocked() && !battleAnimationActive() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyIntentSchedule === null) {
+  if (!autoInputLocked() && !battlePresentationActive() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyIntentSchedule === null) {
     scheduleEnemyIntent();
   }
 }
 
-function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.snapshot()) {
+function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.snapshot(), startedAt = performance.now()) {
   if (command.type === 'move') {
     const result = engine.move(actorId, command.dx, command.dy);
     if (result.ok) markBattleMotion(actorId, command.dx, command.dy);
@@ -1528,10 +1672,32 @@ function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.sn
     startCombatAnimation(result, actorId, beforeSnapshot);
     return result;
   }
-  if (command.type === 'objective') return engine.performObjectiveAction(actorId, command.action);
+  if (command.type === 'objective') {
+    const requirement = beforeSnapshot.objective.requirements.find((candidate) => !candidate.automatic
+      && !candidate.complete
+      && candidate.action === command.action.type
+      && (!candidate.targetId || candidate.targetId === command.action.targetId));
+    const result = engine.performObjectiveAction(actorId, command.action);
+    startBattleCommandPresentation({
+      type: 'objective', actorId, requirement, result, beforeSnapshot, startedAt, speed: speedMultiplier,
+    });
+    return result;
+  }
   if (command.type === 'guard') {
     const result = engine.guard(actorId);
-    if (result.ok) pageAudio.playCue('combatGuard');
+    if (result.ok) {
+      pageAudio.playCue('combatGuard');
+      startBattleCommandPresentation({
+        type: 'guard', actorId, result, beforeSnapshot, startedAt, speed: speedMultiplier,
+      });
+    }
+    return result;
+  }
+  if (command.type === 'analyze') {
+    const result = engine.analyze(actorId, command.targetId);
+    startBattleCommandPresentation({
+      type: 'analyze', actorId, targetId: command.targetId, result, beforeSnapshot, startedAt, speed: speedMultiplier,
+    });
     return result;
   }
   return { ok: false, reason: `Unsupported Auto-Grind command ${command.type}.` };
@@ -1559,7 +1725,7 @@ function executeAutoGrindStep(now) {
       const command = chooseRepeatBattleCommand(engine);
       if (!command) throw new Error('The repeat policy could not select a party command.');
       stepType = command.type;
-      result = executeRepeatPolicyCommand(before.activeActorId, command, before);
+      result = executeRepeatPolicyCommand(before.activeActorId, command, before, now);
     } else if (before.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND) {
       stepType = 'enemyActivation';
       result = engine.resolveEnemyActivation();
@@ -1587,19 +1753,19 @@ function executeAutoGrindStep(now) {
   );
   const recoveredPulses = Math.max(0, after.nowPulse - beforePulse);
   const stepDelay = getRepeatStepDelayMs(stepType, speedMultiplier, recoveredPulses);
-  const animationEnd = activeBattleAnimation?.endsAt ?? 0;
+  const presentationEnd = battlePresentationEndsAt();
   if (after.result) {
     stopAutoGrind();
     if (after.result !== 'victory') repeatGrindQueue = cancelRepeatGrindQueue(repeatGrindQueue);
     const terminalDelay = getRepeatStepDelayMs('resolution', speedMultiplier)
       + (after.result === 'victory' ? getRepeatStepDelayMs('reward', speedMultiplier) : 0);
-    autoSettleAt = Math.max(now + stepDelay, animationEnd) + terminalDelay;
+    autoSettleAt = Math.max(now + stepDelay, presentationEnd ?? 0) + terminalDelay;
     addMessage(`Auto-Grind reached ${after.result}; presenting the deterministic result${after.result === 'victory' ? ' and reward' : ''}.`);
   } else {
     autoActionAt = getNextBattleActionAt({
       nowMs: now,
       stepDelayMs: stepDelay,
-      animationEndsAt: activeBattleAnimation ? animationEnd : null,
+      animationEndsAt: presentationEnd,
       nextIsEnemy: after.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND,
       speed: speedMultiplier,
     });
@@ -1620,7 +1786,7 @@ function toggleAutoGrind() {
     render();
     return;
   }
-  const animationActive = battleAnimationActive();
+  const animationActive = battlePresentationActive();
   if (animationActive) {
     addMessage('Finish the current action animation before starting Auto-Grind.');
     render();
@@ -1636,6 +1802,7 @@ function toggleAutoGrind() {
   queuedVictoryRecorded = false;
   autoGrindActive = true;
   activeBattleAnimation = null;
+  activeCommandPresentation = null;
   clearEnemyIntentSchedule();
   autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind started for ${repeatGrindQueue.plannedWins} win${repeatGrindQueue.plannedWins === 1 ? '' : 's'} at ${speedMultiplier}×. Every reward saves before the next repeat.`);
@@ -1656,6 +1823,7 @@ function restartQueuedAutoGrind(now) {
   battleEnemyPoseByActor.clear();
   battleEnemyPoseUntil.clear();
   activeBattleAnimation = null;
+  activeCommandPresentation = null;
   autoGrindActive = true;
   autoActionAt = now + getRepeatStepDelayMs('intro', speedMultiplier);
   addMessage(`Auto-Grind starting win ${repeatGrindQueue.completedWins + 1}/${repeatGrindQueue.plannedWins} at ${speedMultiplier}×.`);
@@ -1675,6 +1843,7 @@ function executeSelectedCommand() {
   const actor = activePartyActor(snapshot);
   if (!actor) return;
   let result;
+  let commandRequirement = null;
   if (selectedCommand === 'attack' || selectedCommand === 'skill') {
     const skillId = selectedCommand === 'attack' ? actor.skills[0]?.id : skillSelect.value;
     result = engine.useSkill(actor.instanceId, skillId, targetSelect.value);
@@ -1684,9 +1853,9 @@ function executeSelectedCommand() {
   } else if (selectedCommand === 'analyze') {
     result = engine.analyze(actor.instanceId, targetSelect.value);
   } else if (selectedCommand === 'objective') {
-    const requirement = snapshot.objective.requirements.find((entry) => !entry.automatic && !entry.complete);
-    result = requirement
-      ? engine.performObjectiveAction(actor.instanceId, { type: requirement.action, targetId: requirement.targetId, amount: 1 })
+    commandRequirement = snapshot.objective.requirements.find((entry) => !entry.automatic && !entry.complete);
+    result = commandRequirement
+      ? engine.performObjectiveAction(actor.instanceId, { type: commandRequirement.action, targetId: commandRequirement.targetId, amount: 1 })
       : { ok: false, reason: 'No objective action is pending.' };
   }
   const afterSnapshot = engine.snapshot();
@@ -1696,6 +1865,17 @@ function executeSelectedCommand() {
   if (selectedCommand === 'attack' || selectedCommand === 'skill') {
     markCombatResolutionPose(result);
     startCombatAnimation(result, actor.instanceId, snapshot);
+  } else if (result?.ok && ['guard', 'analyze', 'objective'].includes(selectedCommand)) {
+    startBattleCommandPresentation({
+      type: selectedCommand,
+      actorId: actor.instanceId,
+      targetId: selectedCommand === 'analyze' ? targetSelect.value : null,
+      requirement: commandRequirement,
+      result,
+      beforeSnapshot: snapshot,
+      startedAt: performance.now(),
+      speed: 1,
+    });
   }
   if (result?.ok) {
     activeBattleAnimation = mergeBossTerminalPresentationRecord(
@@ -1776,6 +1956,7 @@ restartBattle.addEventListener('click', () => {
   battleEnemyPoseByActor.clear();
   battleEnemyPoseUntil.clear();
   activeBattleAnimation = null;
+  activeCommandPresentation = null;
   uiMessages = [`Restarted ${encounter.name}. First-clear rewards remain saved; victories can be replayed for grind XP.`];
   render();
 });
@@ -1850,7 +2031,7 @@ function tick(now) {
     intervalEndMs: now,
     result: engine.snapshot().result,
     settling: autoSettleAt !== null,
-    animationEndsAt: activeBattleAnimation?.endsAt ?? null,
+    animationEndsAt: battlePresentationEndsAt(),
   });
   if (!inactive && countableElapsed > 0) {
     const category = battlePlaytimeCategory;
@@ -1864,6 +2045,11 @@ function tick(now) {
   }
   if (activeBattleAnimation && now >= activeBattleAnimation.endsAt) {
     activeBattleAnimation = null;
+    clearEnemyIntentSchedule();
+    render();
+  }
+  if (activeCommandPresentation && now >= activeCommandPresentation.endsAt) {
+    activeCommandPresentation = null;
     clearEnemyIntentSchedule();
     render();
   }

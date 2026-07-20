@@ -20,6 +20,7 @@ export const REPEAT_LOOP_PRESENTATION_MS = Object.freeze({
   move: 240,
   skill: 480,
   guard: 400,
+  analyze: 480,
   objective: 480,
   enemyActivation: 800,
   resolution: 600,
@@ -71,6 +72,7 @@ function executePlayerCommand(engine, actorId, command) {
     case 'skill': return engine.useSkill(actorId, command.skillId, command.targetId);
     case 'objective': return engine.performObjectiveAction(actorId, command.action);
     case 'guard': return engine.guard(actorId);
+    case 'analyze': return engine.analyze(actorId, command.targetId);
     default: return { ok: false, reason: `Unsupported repeat command ${command.type}.` };
   }
 }
