@@ -8,6 +8,7 @@ export const BOSS_COMBAT_POSES = Object.freeze([
 ]);
 
 export const BOSS_DEFEAT_HOLD_MS = 420;
+export const BOSS_TRANSITION_HOLD_MS = 280;
 
 const point = (x, y) => Object.freeze({ x, y });
 
@@ -129,12 +130,12 @@ export function getBossCombatPresentationPose({
   phase = null,
   actorPose = null,
   targetPose = null,
+  transitionActive = false,
 } = {}) {
   if (!active || hp <= 0) return 'defeat';
+  if (transitionActive) return 'transition';
   if (targetPose === 'stagger') return 'break';
   if (phase === 'windup' || actorPose === 'windup') return 'telegraph';
-  // `transition` remains reserved until the simulation publishes an explicit,
-  // reliable boss phase-boundary signal. A generic status glyph is not one.
   if (phase === 'recovery') return 'neutral';
   if (actorPose === 'attack') return 'active';
   return 'neutral';
@@ -222,6 +223,63 @@ export function createBossTerminalPresentationRecord(
   options = {},
 ) {
   return mergeBossTerminalPresentationRecord(null, beforeActors, afterActors, options);
+}
+
+/** Detect one explicit typed phase entry without consulting statuses or prose. */
+export function getNewBossPhaseTransition(beforeSnapshot = {}, afterSnapshot = {}) {
+  const beforePhase = beforeSnapshot?.bossPhase;
+  const afterPhase = afterSnapshot?.bossPhase;
+  const transition = afterPhase?.lastTransition;
+  if (!beforePhase || !afterPhase || !transition || afterPhase.revision <= beforePhase.revision) return null;
+  if (transition.revision !== afterPhase.revision || transition.toPhaseId !== afterPhase.phaseId) return null;
+  const bossActor = (afterSnapshot.actors ?? []).find((actor) => actor?.instanceId === afterPhase.bossId);
+  if (!bossActor || !hasBossCombatTemplate(bossActor.templateId) || bossActor.hp <= 0 || bossActor.active === false) return null;
+  return Object.freeze({ ...transition, bossActor });
+}
+
+/** Append a presentation-only transition hold after an existing skill timeline. */
+export function mergeBossTransitionPresentationRecord(
+  presentationRecord = null,
+  beforeSnapshot = {},
+  afterSnapshot = {},
+  { startedAt = 0, speed = 1 } = {},
+) {
+  const transition = getNewBossPhaseTransition(beforeSnapshot, afterSnapshot);
+  if (!transition) return presentationRecord;
+  const recordStart = presentationRecord
+    ? terminalPresentationClock(presentationRecord.startedAt)
+    : terminalPresentationClock(startedAt);
+  const timelineEndsAt = presentationRecord
+    ? terminalPresentationClock(presentationRecord.timelineEndsAt)
+    : recordStart;
+  const transitionEndsAt = timelineEndsAt + (BOSS_TRANSITION_HOLD_MS / terminalPresentationSpeed(speed));
+  const bossTransition = Object.freeze({
+    ...transition,
+    startsAt: timelineEndsAt,
+    endsAt: transitionEndsAt,
+  });
+
+  if (presentationRecord) {
+    return Object.freeze({
+      ...presentationRecord,
+      bossTransition,
+      endsAt: Math.max(terminalPresentationClock(presentationRecord.endsAt), transitionEndsAt),
+    });
+  }
+
+  return Object.freeze({
+    attackerId: null,
+    targetId: null,
+    retainedActors: Object.freeze([]),
+    terminalPartyActors: EMPTY_TERMINAL_ACTORS,
+    terminalEnemyActors: EMPTY_TERMINAL_ACTORS,
+    terminalBossActors: EMPTY_TERMINAL_ACTORS,
+    bossTransition,
+    timeline: BOSS_TERMINAL_ONLY_TIMELINE,
+    startedAt: recordStart,
+    timelineEndsAt,
+    endsAt: transitionEndsAt,
+  });
 }
 
 /** Replace a pre-action ghost with its post-resolution boss during the hold. */

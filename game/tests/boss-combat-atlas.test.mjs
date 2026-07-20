@@ -9,12 +9,15 @@ import {
   BOSS_COMBAT_BOSSES,
   BOSS_COMBAT_POSES,
   BOSS_DEFEAT_HOLD_MS,
+  BOSS_TRANSITION_HOLD_MS,
   bossCombatImageHasExpectedSize,
   createBossTerminalPresentationRecord,
   getBossCombatDrawPlacement,
   getBossCombatFrame,
   getBossCombatPresentationPose,
+  getNewBossPhaseTransition,
   hasBossCombatTemplate,
+  mergeBossTransitionPresentationRecord,
   mergeBossTerminalPresentationRecord,
 } from '../boss-combat-atlas.mjs';
 
@@ -43,18 +46,87 @@ test('boss combat atlas maps every canonical primary boss to all six exact key p
   assert.throws(() => getBossCombatFrame('court-clone'), /Unknown boss combat template/);
 });
 
-test('boss presentation states reserve transitions until an explicit live signal exists', () => {
+test('boss presentation states use only an explicit phase signal for transitions', () => {
   assert.equal(getBossCombatPresentationPose({ hp: 0, actorPose: 'attack' }), 'defeat');
   assert.equal(getBossCombatPresentationPose({ active: false, hp: 10 }), 'defeat');
   assert.equal(getBossCombatPresentationPose({ targetPose: 'stagger', phase: 'windup' }), 'break');
   assert.equal(getBossCombatPresentationPose({ phase: 'windup' }), 'telegraph');
   assert.equal(getBossCombatPresentationPose({ phase: 'status-glyph', actorPose: 'attack' }), 'active');
   assert.equal(getBossCombatPresentationPose({ phase: 'status-glyph' }), 'neutral');
+  assert.equal(getBossCombatPresentationPose({ hp: 0, transitionActive: true, targetPose: 'stagger' }), 'defeat');
+  assert.equal(getBossCombatPresentationPose({ transitionActive: true, targetPose: 'stagger', phase: 'windup', actorPose: 'windup' }), 'transition');
   assert.equal(getBossCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'neutral');
   assert.equal(getBossCombatPresentationPose({ actorPose: 'attack' }), 'active');
   assert.equal(getBossCombatPresentationPose({}), 'neutral');
   assert.ok(BOSS_COMBAT_POSES.includes('transition'), 'the authored frame stays reserved in the atlas contract');
+  assert.ok(BOSS_TRANSITION_HOLD_MS > 0 && BOSS_TRANSITION_HOLD_MS < BOSS_DEFEAT_HOLD_MS);
   assert.ok(BOSS_DEFEAT_HOLD_MS > 0 && BOSS_DEFEAT_HOLD_MS <= 500, 'terminal presentation is deliberately bounded');
+});
+
+test('pure phase presenter detects revision changes and appends a bounded post-skill hold', () => {
+  const bossActor = { instanceId: 'kurozane-1', templateId: 'kurozane', faction: 'enemy', hp: 900, active: true };
+  const before = {
+    actors: [bossActor],
+    bossPhase: { bossId: bossActor.instanceId, phaseId: 'court', revision: 0, lastTransition: null },
+  };
+  const transition = {
+    bossId: bossActor.instanceId,
+    bossTemplateId: bossActor.templateId,
+    fromPhaseId: 'court',
+    toPhaseId: 'bell',
+    ordinal: 1,
+    revision: 1,
+    enteredAtPulse: 8,
+    reason: 'damage',
+  };
+  const after = {
+    actors: [bossActor],
+    bossPhase: { bossId: bossActor.instanceId, phaseId: 'bell', revision: 1, lastTransition: transition },
+  };
+  const detected = getNewBossPhaseTransition(before, after);
+  assert.equal(detected.bossActor, bossActor);
+  assert.deepEqual({ ...detected, bossActor: undefined }, { ...transition, bossActor: undefined });
+  assert.equal(getNewBossPhaseTransition(after, after), null);
+  assert.equal(getNewBossPhaseTransition({ ...before, bossPhase: { ...before.bossPhase, revision: 1 } }, after), null, 'stale revisions cannot replay');
+  assert.equal(getNewBossPhaseTransition({}, after), null, 'legacy snapshots cannot invent a transition');
+  assert.equal(getNewBossPhaseTransition(before, { ...after, actors: [{ ...bossActor, hp: 0 }] }), null, 'defeat takes precedence');
+  assert.equal(getNewBossPhaseTransition(before, { ...after, actors: [{ ...bossActor, active: false }] }), null, 'inactive bosses cannot transition');
+
+  for (const speed of [1, 2, 4]) {
+    const terminalOnly = mergeBossTransitionPresentationRecord(null, before, after, { startedAt: 500, speed });
+    assert.equal(terminalOnly.startedAt, 500);
+    assert.equal(terminalOnly.timelineEndsAt, 500);
+    assert.equal(terminalOnly.bossTransition.startsAt, 500);
+    assert.equal(terminalOnly.bossTransition.endsAt, 500 + (BOSS_TRANSITION_HOLD_MS / speed));
+    assert.equal(terminalOnly.endsAt, terminalOnly.bossTransition.endsAt);
+    assert.equal(Object.isFrozen(terminalOnly), true);
+    assert.equal(Object.isFrozen(terminalOnly.timeline), true);
+    assert.equal(Object.isFrozen(terminalOnly.bossTransition), true);
+    assert.equal(Object.isFrozen(terminalOnly.terminalBossActors), true);
+  }
+
+  const timeline = Object.freeze({ durationMs: 600, frames: Object.freeze([]) });
+  const skillRecord = Object.freeze({
+    attackerId: 'ren',
+    targetId: bossActor.instanceId,
+    retainedActors: Object.freeze([]),
+    terminalPartyActors: Object.freeze([]),
+    terminalEnemyActors: Object.freeze([]),
+    terminalBossActors: Object.freeze([]),
+    timeline,
+    startedAt: 1_000,
+    timelineEndsAt: 1_600,
+    endsAt: 1_600,
+  });
+  const merged = mergeBossTransitionPresentationRecord(skillRecord, before, after, { startedAt: 9_999, speed: 2 });
+  assert.equal(merged.timeline, timeline);
+  assert.equal(merged.attackerId, skillRecord.attackerId);
+  assert.equal(merged.targetId, skillRecord.targetId);
+  assert.equal(merged.bossTransition.startsAt, skillRecord.timelineEndsAt);
+  assert.equal(merged.bossTransition.endsAt, skillRecord.timelineEndsAt + (BOSS_TRANSITION_HOLD_MS / 2));
+  assert.equal(merged.endsAt, merged.bossTransition.endsAt);
+  assert.equal(Object.isFrozen(merged), true);
+  assert.equal(Object.isFrozen(merged.bossTransition), true);
 });
 
 test('pure terminal record composition supports objective-only holds and preserves skill timelines', () => {

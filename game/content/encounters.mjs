@@ -204,8 +204,8 @@ export const ENCOUNTERS = [
     bossMechanic: {
       type: 'exposed-weak-point', telegraphs: ['consume-ink'],
       phases: [
-        { id: 'hunger', when: 'hp-above-50', rule: 'The Hound alternates approach and Consume Ink.' },
-        { id: 'frantic', when: 'hp-at-or-below-50', rule: 'Consume Ink returns faster, but the exposed seal lasts one extra activation.' },
+        { id: 'hunger', initial: true, when: 'hp-above-50', rule: 'The Hound alternates approach and Consume Ink.' },
+        { id: 'frantic', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.5 }, when: 'hp-at-or-below-50', rule: 'Consume Ink returns faster, but the exposed seal lasts one extra activation.' },
       ],
       counterplay: 'Move out of the line, then Pierce or Radiance the exposed seal during Recovery 3.',
     },
@@ -364,9 +364,20 @@ export const ENCOUNTERS = [
       type: 'three-phase-recovery-boss',
       telegraphs: ['pale-cut', 'sanguine-step', 'blood-ward', 'crimson-litany'],
       phases: [
-        { id: 'phase-1', when: 'hp-above-55-percent', moves: ['pale-cut', 'sanguine-step', 'blood-ward'], rule: 'No Litany until the player has a Ledger teaching opportunity.' },
-        { id: 'phase-2', when: 'hp-at-or-below-55-percent', moves: ['blood-ward', 'crimson-litany'], rule: 'First Litany pauses only the HUD for 0.75 seconds to call out Recovery 3.' },
-        { id: 'phase-3', when: 'hp-at-or-below-20-percent OR both-wards-broken-after-phase-2', moves: [], rule: 'Mateus takes 20% nonlethal self-damage and orders guards away.' },
+        { id: 'phase-1', initial: true, when: 'hp-above-55-percent', moves: ['pale-cut', 'sanguine-step', 'blood-ward'], rule: 'No Litany until the player has a Ledger teaching opportunity.' },
+        { id: 'phase-2', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.55 }, when: 'hp-at-or-below-55-percent', moves: ['blood-ward', 'crimson-litany'], rule: 'First Litany pauses only the HUD for 0.75 seconds to call out Recovery 3.' },
+        {
+          id: 'phase-3',
+          enter: {
+            kind: 'any',
+            requiresPhaseId: 'phase-2',
+            conditions: [
+              { kind: 'boss-hp-ratio-at-or-below', value: 0.2 },
+              { kind: 'objective-keys-complete', keys: ['broken:blood-ward-west', 'broken:blood-ward-east'] },
+            ],
+          },
+          when: 'hp-at-or-below-20-percent OR both-wards-broken-after-phase-2', moves: [], rule: 'Mateus takes 20% nonlethal self-damage and orders guards away.',
+        },
       ],
       counterplay: 'Leave the Litany line, then exploit its three Recovery pulses with Pierce/Radiance seal damage, healing, or setup.',
     },
@@ -469,7 +480,18 @@ export const ENCOUNTERS = [
         ], ai: ['Alternate Receding Call and Name Drag.', 'Switch tide state every two boss activations.'],
       },
     ],
-    bossMechanic: { type: 'tide-phase', telegraphs: ['receding-call', 'name-drag'], phases: [{ id: 'high-tide', safeTiles: ['2,3', '9,3'] }, { id: 'low-tide', safeTiles: ['4,1', '5,1', '6,1', '7,1', '4,5', '5,5', '6,5', '7,5'] }], counterplay: 'Use Ember to create dry safety and strike with Ember or Radiance.' },
+    bossMechanic: {
+      type: 'tide-phase',
+      telegraphs: ['receding-call', 'name-drag'],
+      phases: [
+        { id: 'high-tide', initial: true, safeTiles: ['2,3', '9,3'] },
+        { id: 'low-tide', safeTiles: ['4,1', '5,1', '6,1', '7,1', '4,5', '5,5', '6,5', '7,5'] },
+      ],
+      phaseCycle: {
+        kind: 'boss-activation-cadence', initialPhaseId: 'high-tide', completedBossActivationsPerPhase: 2, warningActivations: 1,
+      },
+      counterplay: 'Use Ember to create dry safety and strike with Ember or Radiance.',
+    },
     reward: { keyItems: ['Second bell key'], party: ['Kiku joins permanently'], story: 'The sailors’ names return to the survivors rather than becoming loot.' },
   },
 
@@ -518,7 +540,7 @@ export const ENCOUNTERS = [
         ], ai: ['Use Forge Sermon every third activation.', 'Use Hammer Decree if two targets are in front.', 'Otherwise advance.'],
       },
     ],
-    bossMechanic: { type: 'overheat-window', telegraphs: ['forge-sermon', 'hammer-decree'], phases: [{ id: 'forge', when: 'hp-above-50', rule: 'Forge Sermon creates hazards and applies Overheated.' }, { id: 'sigil-break', when: 'hp-at-or-below-50', rule: 'Mateus burns his court sigil to unlock prison doors while the boss is recovering.' }], counterplay: 'Create Frost footing, avoid grates, then Pierce during Overheated Recovery 3.' },
+    bossMechanic: { type: 'overheat-window', telegraphs: ['forge-sermon', 'hammer-decree'], phases: [{ id: 'forge', initial: true, when: 'hp-above-50', rule: 'Forge Sermon creates hazards and applies Overheated.' }, { id: 'sigil-break', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.5 }, when: 'hp-at-or-below-50', rule: 'Mateus burns his court sigil to unlock prison doors while the boss is recovering.' }], counterplay: 'Create Frost footing, avoid grates, then Pierce during Overheated Recovery 3.' },
     reward: { story: 'Forge records expose Ujiro and Kurozane’s manufactured raids; Mateus burns his court sigil.' },
   },
 
@@ -748,9 +770,9 @@ export const ENCOUNTERS = [
     bossMechanic: {
       type: 'three-phase-final-exam', telegraphs: ['court-command', 'blood-eclipse', 'yearless-thrust', 'black-chrysanthemum'],
       phases: [
-        { id: 'court', when: 'hp-above-66-percent', rule: 'Command clones and spear lines test target priority and Pace.' },
-        { id: 'bell', when: 'hp-66-to-34-percent', rule: 'Bell-node positioning and ring telegraphs test hazard lanes.' },
-        { id: 'dawn', when: 'hp-at-or-below-33-percent', rule: 'Mateus gives up his strongest Umbral rite; Black Chrysanthemum has Recovery 3 and daylight grants Radiance 125%.' },
+        { id: 'court', initial: true, when: 'hp-above-66-percent', rule: 'Command clones and spear lines test target priority and Pace.' },
+        { id: 'bell', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.66 }, when: 'hp-66-to-34-percent', rule: 'Bell-node positioning and ring telegraphs test hazard lanes.' },
+        { id: 'dawn', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.33 }, when: 'hp-at-or-below-33-percent', rule: 'Mateus gives up his strongest Umbral rite; Black Chrysanthemum has Recovery 3 and daylight grants Radiance 125%.' },
       ],
       counterplay: 'Never use Umbral on Kurozane, protect the archive core, use Pace against marked shapes, then spend the final Recovery window in the dawn lane.',
     },
@@ -801,6 +823,71 @@ export function getEncountersForLevel(levelId) {
   return ENCOUNTERS.filter((encounter) => encounter.levelId === levelId);
 }
 
+function validateBossPhaseEntry(entry, earlierPhaseIds, path, errors) {
+  if (!entry || typeof entry !== 'object') {
+    errors.push(`${path} missing typed enter contract`);
+    return;
+  }
+  if (entry.requiresPhaseId && !earlierPhaseIds.has(entry.requiresPhaseId)) {
+    errors.push(`${path} requires an earlier phase id`);
+  }
+  if (entry.kind === 'boss-hp-ratio-at-or-below') {
+    if (!Number.isFinite(entry.value) || entry.value <= 0 || entry.value >= 1) errors.push(`${path} needs a ratio between zero and one`);
+    return;
+  }
+  if (entry.kind === 'objective-keys-complete') {
+    if (!Array.isArray(entry.keys) || !entry.keys.length || entry.keys.some((key) => typeof key !== 'string' || !key)) {
+      errors.push(`${path} needs objective progress keys`);
+    }
+    return;
+  }
+  if (entry.kind === 'any') {
+    if (!Array.isArray(entry.conditions) || !entry.conditions.length) {
+      errors.push(`${path} needs conditions`);
+      return;
+    }
+    entry.conditions.forEach((condition, index) => validateBossPhaseEntry(condition, earlierPhaseIds, `${path}.conditions[${index}]`, errors));
+    return;
+  }
+  errors.push(`${path} has unknown enter kind`);
+}
+
+function validateBossPhases(encounter, errors) {
+  const phases = encounter?.bossMechanic?.phases;
+  if (phases == null) return;
+  if (!Array.isArray(phases) || !phases.length) {
+    errors.push('boss phases must be a non-empty array');
+    return;
+  }
+  const ids = phases.map(({ id }) => id);
+  if (ids.some((id) => typeof id !== 'string' || !id) || new Set(ids).size !== ids.length) errors.push('boss phase ids must be unique non-empty strings');
+  if (phases[0]?.initial !== true || phases.slice(1).some(({ initial }) => initial === true)) {
+    errors.push('boss phase zero must be the only initial phase');
+  }
+
+  const cycle = encounter.bossMechanic.phaseCycle;
+  if (cycle) {
+    if (cycle.kind !== 'boss-activation-cadence') errors.push('boss phase cycle has unknown kind');
+    if (cycle.initialPhaseId !== phases[0]?.id) errors.push('boss phase cycle must start at phase zero');
+    if (!Number.isSafeInteger(cycle.completedBossActivationsPerPhase) || cycle.completedBossActivationsPerPhase < 1) {
+      errors.push('boss phase cycle needs a positive activation cadence');
+    }
+    if (!Number.isSafeInteger(cycle.warningActivations) || cycle.warningActivations < 1
+      || cycle.warningActivations >= cycle.completedBossActivationsPerPhase) {
+      errors.push('boss phase cycle warning must precede its cadence boundary');
+    }
+    if (phases.slice(1).some(({ enter }) => enter != null)) errors.push('cyclic boss phases cannot also define one-way enter contracts');
+    return;
+  }
+
+  const earlierPhaseIds = new Set([phases[0]?.id]);
+  for (const [index, phase] of phases.entries()) {
+    if (index === 0) continue;
+    validateBossPhaseEntry(phase.enter, earlierPhaseIds, `boss phase ${phase.id ?? index}`, errors);
+    earlierPhaseIds.add(phase.id);
+  }
+}
+
 /** Lightweight authoring validation, intentionally independent of a renderer. */
 export function validateEncounter(encounter) {
   const errors = [];
@@ -815,5 +902,6 @@ export function validateEncounter(encounter) {
     if (!enemy.id || !enemy.name) errors.push(`incomplete enemy in ${encounter.id}`);
     if (!enemy.resistances?.delivery || !enemy.resistances?.essence) errors.push(`missing ledger resistances for ${enemy.id}`);
   }
+  validateBossPhases(encounter, errors);
   return errors;
 }

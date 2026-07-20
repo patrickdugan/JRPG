@@ -88,6 +88,7 @@ import {
   getBossCombatPresentationPose,
   getNewlyTerminalBossCombatActors,
   hasBossCombatTemplate,
+  mergeBossTransitionPresentationRecord,
   mergeBossTerminalPresentationActors,
   mergeBossTerminalPresentationRecord,
 } from './boss-combat-atlas.mjs';
@@ -488,6 +489,9 @@ function currentBattleAnimationFrame(now = performance.now()) {
   if (now >= activeBattleAnimation.endsAt) return null;
   return {
     ...activeBattleAnimation,
+    bossTransitionWindow: Boolean(activeBattleAnimation.bossTransition
+      && now >= activeBattleAnimation.bossTransition.startsAt
+      && now < activeBattleAnimation.bossTransition.endsAt),
     terminalDefeatWindow: (activeBattleAnimation.terminalPartyActors.length > 0
       || activeBattleAnimation.terminalEnemyActors.length > 0
       || activeBattleAnimation.terminalBossActors.length > 0)
@@ -598,6 +602,22 @@ function phaseName(snapshot) {
   if (snapshot.result === 'victory') return 'VICTORY';
   if (snapshot.result === 'defeat') return 'DEFEAT';
   return snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND ? 'PARTY COMMAND' : 'ENEMY INTENT';
+}
+
+function readableBossPhaseId(phaseId) {
+  return String(phaseId ?? 'unknown')
+    .replace(/[-_]+/gu, ' ')
+    .replace(/\b\p{L}/gu, (letter) => letter.toUpperCase());
+}
+
+function bossPhaseSummary(snapshot) {
+  const phase = snapshot.bossPhase;
+  if (!phase) return '';
+  const current = readableBossPhaseId(phase.phaseId);
+  const warning = phase.warning?.toPhaseId
+    ? ` · shift pending: ${readableBossPhaseId(phase.warning.toPhaseId)} after ${phase.warning.remainingBossActivations} boss activation${phase.warning.remainingBossActivations === 1 ? '' : 's'}`
+    : '';
+  return `Boss phase ${phase.ordinal + 1}: ${current}${warning}`;
 }
 
 function terrainColor(tag) {
@@ -1024,6 +1044,8 @@ function drawBattle(now = performance.now()) {
         phase: animatedActor ? animation?.frame.phase : null,
         actorPose: animatedActor?.pose,
         targetPose: animatedTarget?.pose,
+        transitionActive: Boolean(animation?.bossTransitionWindow
+          && animation.bossTransition?.bossId === actor.instanceId),
       });
       const frame = getBossCombatFrame(actor.templateId, pose);
       const drawHeight = cell * frame.scale * animationScale;
@@ -1194,7 +1216,17 @@ function publishRenderedBattleState(snapshot) {
     'bossMechanicId', 'bossActiveWardCount', 'bossIncomingDamageMultiplier',
     'bossIntentId', 'bossIntentSkillId', 'bossIntentKind', 'bossIntentTiles',
     'bossIntentAnswer', 'bossIntentRecoveryPulses',
+    'bossPhaseId', 'bossPhaseOrdinal', 'bossPhaseRevision', 'bossPhaseWarningTo',
   ]) delete canvas.dataset[key];
+
+  if (snapshot.bossPhase) {
+    canvas.dataset.bossPhaseId = snapshot.bossPhase.phaseId;
+    canvas.dataset.bossPhaseOrdinal = String(snapshot.bossPhase.ordinal);
+    canvas.dataset.bossPhaseRevision = String(snapshot.bossPhase.revision);
+    if (snapshot.bossPhase.warning?.toPhaseId) {
+      canvas.dataset.bossPhaseWarningTo = snapshot.bossPhase.warning.toPhaseId;
+    }
+  }
 
   const mechanic = snapshot.bossMechanic;
   if (mechanic) {
@@ -1369,6 +1401,8 @@ function formatEngineLog(entry, actors) {
   if (entry.type === 'intent-resolved') return `${entry.intentId} resolves on ${entry.hitTargetIds.length} target${entry.hitTargetIds.length === 1 ? '' : 's'}; Mateus enters Recovery ${entry.aftermath.recoveryPulses}.`;
   if (entry.type === 'ward-broken') return `${name(entry.targetId)} is broken by ${name(entry.sourceActorId)}.`;
   if (entry.type === 'surrender') return `${name(entry.actorId)} yields without death at ${entry.hp} HP; both Blood Wards broken: ${entry.bothWardsBroken ? 'yes' : 'no'}.`;
+  if (entry.type === 'boss-phase-warning') return `${name(entry.bossId)} signals a phase shift from ${readableBossPhaseId(entry.fromPhaseId)} to ${readableBossPhaseId(entry.toPhaseId)} after ${entry.remainingBossActivations} boss activation${entry.remainingBossActivations === 1 ? '' : 's'}.`;
+  if (entry.type === 'boss-phase-entered') return `${name(entry.bossId)} enters boss phase ${entry.ordinal + 1}: ${readableBossPhaseId(entry.toPhaseId)}.`;
   return null;
 }
 
@@ -1378,6 +1412,15 @@ function announceEngineLogDelta(beforeSnapshot, afterSnapshot) {
     .map((entry) => formatEngineLog(entry, afterSnapshot.actors))
     .filter(Boolean)
     .slice(0, 4);
+  if (lines.length) announcements.textContent = lines.join(' ');
+}
+
+function announceBossPhaseLogDelta(beforeSnapshot, afterSnapshot) {
+  const lines = afterSnapshot.log
+    .slice(beforeSnapshot.log.length)
+    .filter((entry) => entry.type === 'boss-phase-warning' || entry.type === 'boss-phase-entered')
+    .map((entry) => formatEngineLog(entry, afterSnapshot.actors))
+    .filter(Boolean);
   if (lines.length) announcements.textContent = lines.join(' ');
 }
 
@@ -1635,11 +1678,12 @@ function render() {
     }
   }
   encounterTitle.textContent = encounter.name;
-  encounterSubtitle.textContent = `${encounter.chapterId} · ${engine.level.name} · ${encounter.format}`;
+  const phaseSummary = bossPhaseSummary(snapshot);
+  encounterSubtitle.textContent = `${encounter.chapterId} · ${engine.level.name} · ${encounter.format}${phaseSummary ? ` · ${phaseSummary}` : ''}`;
   document.title = `${encounter.name} — Bells Battle`;
   battleClock.textContent = formatClock(snapshot.nowMs);
   roundLabel.textContent = `ACTIVATION ${engine.activationCount}`;
-  phaseLabel.textContent = phaseName(snapshot);
+  phaseLabel.textContent = `${phaseName(snapshot)}${snapshot.bossPhase ? ` · ${readableBossPhaseId(snapshot.bossPhase.phaseId)}` : ''}`;
   battleStateBadge.textContent = autoSettleAt !== null
     ? 'RESOLVING'
     : snapshot.result?.toUpperCase() ?? (snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND ? 'COMMAND' : 'INTENT');
@@ -1745,10 +1789,17 @@ function executeAutoGrindStep(now) {
     return;
   }
   const after = engine.snapshot();
+  announceBossPhaseLogDelta(before, after);
   activeBattleAnimation = mergeBossTerminalPresentationRecord(
     activeBattleAnimation,
     before.actors,
     after.actors,
+    { startedAt: now, speed: speedMultiplier },
+  );
+  activeBattleAnimation = mergeBossTransitionPresentationRecord(
+    activeBattleAnimation,
+    before,
+    after,
     { startedAt: now, speed: speedMultiplier },
   );
   const recoveredPulses = Math.max(0, after.nowPulse - beforePulse);
@@ -1882,6 +1933,12 @@ function executeSelectedCommand() {
       activeBattleAnimation,
       snapshot.actors,
       afterSnapshot.actors,
+      { startedAt: performance.now(), speed: 1 },
+    );
+    activeBattleAnimation = mergeBossTransitionPresentationRecord(
+      activeBattleAnimation,
+      snapshot,
+      afterSnapshot,
       { startedAt: performance.now(), speed: 1 },
     );
   }
@@ -2070,6 +2127,12 @@ function tick(now) {
     else announceEngineLogDelta(before, engine.snapshot());
     markCombatResolutionPose({ ok: result.ok, ...result.resolution }, enemyActorId);
     startCombatAnimation({ ok: result.ok, ...result.resolution }, enemyActorId, before);
+    activeBattleAnimation = mergeBossTransitionPresentationRecord(
+      activeBattleAnimation,
+      before,
+      engine.snapshot(),
+      { startedAt: now, speed: 1 },
+    );
     render();
   }
   drawBattle(now);

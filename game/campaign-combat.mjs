@@ -301,6 +301,42 @@ function partyInstances(encounter, profiles) {
   });
 }
 
+function initialBossPhaseState(encounter, actors, pulse = 0) {
+  const phases = encounter?.bossMechanic?.phases;
+  if (!Array.isArray(phases) || !phases.length) return null;
+  const boss = actors.find((actor) => actor.faction === 'enemy' && actor.active !== false);
+  if (!boss) return null;
+  return {
+    bossId: boss.instanceId,
+    bossTemplateId: boss.templateId,
+    phaseId: phases[0].id,
+    ordinal: 0,
+    enteredAtPulse: pulse,
+    revision: 0,
+    history: [phases[0].id],
+    completedBossActivations: 0,
+    activationsInPhase: 0,
+    warning: null,
+    lastTransition: null,
+  };
+}
+
+function bossPhaseEntrySatisfied(entry, context) {
+  if (!entry || typeof entry !== 'object') return false;
+  if (entry.requiresPhaseId && !context.history.has(entry.requiresPhaseId)) return false;
+  if (entry.kind === 'boss-hp-ratio-at-or-below') {
+    return context.boss.maxHp > 0 && context.boss.hp / context.boss.maxHp <= entry.value;
+  }
+  if (entry.kind === 'objective-keys-complete') {
+    return entry.keys.every((key) => {
+      const requirement = context.requirementsByKey.get(key);
+      return (context.objectiveProgress[key] ?? 0) >= (requirement?.count ?? 1);
+    });
+  }
+  if (entry.kind === 'any') return entry.conditions.some((condition) => bossPhaseEntrySatisfied(condition, context));
+  return false;
+}
+
 export class CampaignCombatEngine {
   constructor(options = {}) {
     this.encounter = clone(options.encounter ?? getEncounter(options.encounterId));
@@ -335,6 +371,7 @@ export class CampaignCombatEngine {
       recovery: null,
       resolution: null,
     } : null;
+    this.bossPhaseState = initialBossPhaseState(this.encounter, this.actors, this.nowPulse);
     this._selectNext();
     return this.snapshot();
   }
@@ -362,7 +399,90 @@ export class CampaignCombatEngine {
       objective: this.getObjectiveStatus(),
       log: this.log,
       ...(this.mateusMechanic ? { bossMechanic: this.getBossMechanicStatus() } : {}),
+      ...(this.bossPhaseState ? { bossPhase: this.getBossPhaseStatus() } : {}),
     }));
+  }
+
+  /** Optional additive state for encounters with a typed phase contract. */
+  getBossPhaseStatus() {
+    return this.bossPhaseState ? deepFreeze(clone(this.bossPhaseState)) : null;
+  }
+
+  _enterBossPhase(ordinal, reason) {
+    const phases = this.encounter.bossMechanic.phases;
+    const next = phases[ordinal];
+    const previousPhaseId = this.bossPhaseState.phaseId;
+    this.bossPhaseState.phaseId = next.id;
+    this.bossPhaseState.ordinal = ordinal;
+    this.bossPhaseState.enteredAtPulse = this.nowPulse;
+    this.bossPhaseState.revision += 1;
+    this.bossPhaseState.activationsInPhase = 0;
+    this.bossPhaseState.warning = null;
+    if (!this.bossPhaseState.history.includes(next.id)) this.bossPhaseState.history.push(next.id);
+    const transition = {
+      bossId: this.bossPhaseState.bossId,
+      bossTemplateId: this.bossPhaseState.bossTemplateId,
+      fromPhaseId: previousPhaseId,
+      toPhaseId: next.id,
+      ordinal,
+      revision: this.bossPhaseState.revision,
+      enteredAtPulse: this.nowPulse,
+      reason,
+    };
+    this.bossPhaseState.lastTransition = transition;
+    this.log.push({ type: 'boss-phase-entered', ...clone(transition), pulse: this.nowPulse });
+    return transition;
+  }
+
+  _updateBossPhase(reason) {
+    const state = this.bossPhaseState;
+    const phases = this.encounter.bossMechanic?.phases;
+    if (!state || !Array.isArray(phases) || this.encounter.bossMechanic.phaseCycle) return [];
+    const boss = this.getActor(state.bossId);
+    if (!boss || boss.hp <= 0 || boss.active === false) return [];
+    const context = {
+      boss,
+      objectiveProgress: this.objectiveProgress,
+      requirementsByKey: new Map(this.objectiveRequirements.map((requirement) => [requirement.key, requirement])),
+      history: new Set(state.history),
+    };
+    const transitions = [];
+    while (state.ordinal + 1 < phases.length) {
+      const nextOrdinal = state.ordinal + 1;
+      const next = phases[nextOrdinal];
+      context.history = new Set(state.history);
+      if (!bossPhaseEntrySatisfied(next.enter, context)) break;
+      transitions.push(this._enterBossPhase(nextOrdinal, reason));
+    }
+    return transitions;
+  }
+
+  _completeBossPhaseActivation(actor) {
+    const state = this.bossPhaseState;
+    const cycle = this.encounter.bossMechanic?.phaseCycle;
+    const phases = this.encounter.bossMechanic?.phases;
+    if (!state || actor.instanceId !== state.bossId || !cycle || !Array.isArray(phases)) return null;
+    state.completedBossActivations += 1;
+    state.activationsInPhase += 1;
+    const cadence = cycle.completedBossActivationsPerPhase;
+    const nextOrdinal = (state.ordinal + 1) % phases.length;
+    const nextPhaseId = phases[nextOrdinal].id;
+    if (state.activationsInPhase >= cadence) return this._enterBossPhase(nextOrdinal, 'boss-activation-cadence');
+
+    const remaining = cadence - state.activationsInPhase;
+    if (remaining === cycle.warningActivations && !state.warning) {
+      state.warning = {
+        bossId: state.bossId,
+        bossTemplateId: state.bossTemplateId,
+        fromPhaseId: state.phaseId,
+        toPhaseId: nextPhaseId,
+        remainingBossActivations: remaining,
+        publishedAtPulse: this.nowPulse,
+        phaseRevision: state.revision,
+      };
+      this.log.push({ type: 'boss-phase-warning', ...clone(state.warning), pulse: this.nowPulse });
+    }
+    return null;
   }
 
   /** FP-1's presentation-safe mechanic state; null for every other encounter. */
@@ -578,6 +698,7 @@ export class CampaignCombatEngine {
     this.enemyActivations += 1;
     this._incrementAutomatic('enemyActivation');
     this.log.push({ type: 'enemy-activation', actorId: actor.instanceId, pulse: this.nowPulse });
+    this._completeBossPhaseActivation(actor);
     this.activeActorId = null;
     this._evaluateOutcome();
     if (!this.result) this._selectNext();
@@ -706,6 +827,7 @@ export class CampaignCombatEngine {
     if (statusApplied) this._applyStatus(attacker, target, statusId, skill.id, skill.effect?.duration);
     const selfStatusId = skill.effect?.selfStatus;
     if (selfStatusId) this._applyStatus(attacker, attacker, selfStatusId, skill.id, skill.effect?.selfDuration ?? skill.effect?.duration);
+    if (target.instanceId === this.bossPhaseState?.bossId) this._updateBossPhase('damage');
     if (this.mateusMechanic && target.templateId === 'mateus') this._resolveMateusSurrenderIfReady('hp-threshold');
     return resolution;
   }
@@ -821,6 +943,7 @@ export class CampaignCombatEngine {
     const progressKey = `broken:${ward.templateId}`;
     this.objectiveProgress[progressKey] = 1;
     this.log.push({ type: 'ward-broken', targetId: ward.instanceId, sourceActorId, source, pulse: this.nowPulse });
+    this._updateBossPhase('objective-progress');
     this._resolveMateusSurrenderIfReady('both-wards-broken');
   }
 
@@ -918,6 +1041,7 @@ export class CampaignCombatEngine {
           targetHp: actor.hp,
           pulse: this.nowPulse,
         });
+        if (actor.instanceId === this.bossPhaseState?.bossId) this._updateBossPhase('status-damage');
       }
 
       if (actor.faction === 'party' && definition.activationPaceDelta) {
