@@ -62,6 +62,34 @@ test('a route exit blocked by newly due work hands control back to the rendered 
   assert.match(finishField, /if self\.field_objective_target\(\) != published:\s+continue/);
 });
 
+test('multi-map route work cannot be abandoned merely because its activity ID stays stable', () => {
+  const drain = routeSource.slice(
+    routeSource.indexOf('    def drain_due_route_work'),
+    routeSource.indexOf('    def return_to_story_route_if_available', routeSource.indexOf('    def drain_due_route_work')),
+  );
+  assert.match(drain, /for _ in range\(30\):/);
+  assert.match(drain, /self\.start_due_entries\(\)/);
+  assert.match(drain, /self\.finish_published_route_markers\(scene_key\)/);
+  assert.doesNotMatch(drain, /after_due == before_due and after_marker == before_marker/);
+  assert.match(drain, /raise RouteBlocked\("route-work-loop"/);
+});
+
+test('story-complete recovery keeps the active clean receipt through the credits boundary', () => {
+  assert.match(routeSource, /proof_badge = page\.locator\("#runProofStatus"\)/);
+  assert.match(routeSource, /proof_badge\.get_attribute\("data-proof"\) != "active"/);
+  assert.doesNotMatch(routeSource, /proof\.startswith\("Clean run "\)/);
+  assert.match(
+    routeSource,
+    /before_next_scene = page\.locator\("#nextScene"\)\.inner_text\(\)[\s\S]*after_next_scene = page\.locator\("#nextScene"\)\.inner_text\(\)[\s\S]*if before == after:\s+if before_next_scene != after_next_scene and after_next_scene\.startswith\("View credits"\):\s+continue/,
+  );
+  assert.match(routeSource, /driver\.on_credits_page\(\):\s+driver\.seal_credits\(\)/);
+  assert.match(routeSource, /self\.page\.locator\("#sealCredits"\)/);
+  assert.match(routeSource, /route_proof\.startswith\("215\/215 "\)/);
+  assert.match(routeSource, /status\.startswith\("Credits complete · receipt sealed"\)/);
+  assert.match(routeSource, /self\.page\.locator\("#exportEvidence"\)/);
+  assert.match(routeSource, /evidence\["playtestEvidenceExport"\] = driver\.export_credits_evidence/);
+});
+
 test('native field-choice prompts retain their published player-visible default', () => {
   const handler = routeSource.slice(
     routeSource.indexOf('def accept_player_dialog'),

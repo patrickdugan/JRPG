@@ -111,6 +111,49 @@ class PlayerDriver:
             or self.page.locator("#battleStateBadge").count() > 0
         )
 
+    def on_credits_page(self) -> bool:
+        return urlparse(self.page.url).path.endswith("credits.html")
+
+    def seal_credits(self) -> None:
+        self.page.locator("#creditsStatus").wait_for()
+        route_proof = self.page.locator("#routeProof").inner_text()
+        if not route_proof.startswith("215/215 ") or "credits gate ready" not in route_proof:
+            raise RouteBlocked(
+                "credits-route-gate",
+                "Credits were reached before the rendered intended-route gate was ready.",
+                routeProof=route_proof,
+            )
+        seal = self.page.locator("#sealCredits")
+        if not seal.is_disabled():
+            seal.click()
+            self.controls += 1
+        for _ in range(40):
+            if self.page.locator("#creditsStatus").get_attribute("data-state") == "sealed":
+                break
+            self.page.wait_for_timeout(50)
+        status = self.page.locator("#creditsStatus").inner_text()
+        if not status.startswith("Credits complete · receipt sealed"):
+            raise RouteBlocked(
+                "credits-seal",
+                "The rendered credits control did not seal the clean-run receipt.",
+                creditsStatus=status,
+            )
+
+    def export_credits_evidence(self, target: Path) -> dict[str, object]:
+        export = self.page.locator("#exportEvidence")
+        if export.is_disabled():
+            raise RouteBlocked("evidence-export", "The rendered playtest-evidence export remained disabled after credits sealed.")
+        with self.page.expect_download() as download_info:
+            export.click()
+        self.controls += 1
+        download = download_info.value
+        download.save_as(str(target))
+        return {
+            "path": str(target),
+            "suggestedFilename": download.suggested_filename,
+            "renderedControl": True,
+        }
+
     def scene_key(self) -> str:
         if self.on_battle_page():
             return "__BATTLE__"
@@ -126,6 +169,15 @@ class PlayerDriver:
 
     def checkpoint(self) -> dict[str, object]:
         path = urlparse(self.page.url).path.rsplit("/", 1)[-1]
+        if path == "credits.html":
+            return {
+                "page": path,
+                "creditsStatus": self.page.locator("#creditsStatus").inner_text(),
+                "creditsProof": self.page.locator("#creditsProof").inner_text(),
+                "routeProof": self.page.locator("#routeProof").inner_text(),
+                "creditsAction": self.page.locator("#sealCredits").inner_text(),
+                "creditsHint": self.page.locator("#creditsActionHint").inner_text(),
+            }
         if path == "battle.html" or self.on_battle_page():
             return {
                 "page": path,
@@ -628,11 +680,8 @@ class PlayerDriver:
         raise RouteBlocked("route-entry-loop", "The due-entry list did not converge after 30 rendered entries.")
 
     def drain_due_route_work(self, scene_key: str) -> None:
-        """Alternate frontier entry and its published fieldwork until neither changes."""
+        """Alternate frontier entry and its published fieldwork until both clear."""
         for _ in range(30):
-            due = self.page.locator("#routeDueList [data-route-activity-id]")
-            before_due = due.first.get_attribute("data-route-activity-id") if due.count() else None
-            before_marker = self.route_marker_target()
             self.start_due_entries()
             if self.on_battle_page():
                 return
@@ -644,8 +693,11 @@ class PlayerDriver:
             after_marker = self.route_marker_target()
             if after_due is None and after_marker is None:
                 return
-            if after_due == before_due and after_marker == before_marker:
-                return
+            # A multi-map quest legitimately keeps the same activity ID while
+            # completing one objective and publishing its next destination.
+            # Re-enter it through the rendered ledger until the activity or
+            # marker actually converges; the outer hard bound catches a true
+            # no-progress loop without abandoning a valid cross-map route.
         raise RouteBlocked("route-work-loop", "Due route entries and their published fieldwork did not converge.")
 
     def return_to_story_route_if_available(self) -> None:
@@ -976,8 +1028,9 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     page.locator("#resetCampaign").click()
                     driver.controls += 1
                 page.locator("#sceneTitle").wait_for()
-                proof = page.locator("#runProofStatus").inner_text()
-                if not proof.startswith("Clean run "):
+                proof_badge = page.locator("#runProofStatus")
+                proof = proof_badge.inner_text()
+                if proof_badge.get_attribute("data-proof") != "active":
                     raise RouteBlocked("clean-run-receipt", "The rendered start path did not expose a clean-run receipt.", runProof=proof)
                 evidence["startCheckpoint"] = driver.checkpoint()
 
@@ -992,15 +1045,22 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                         break
                     budget.check("story frontier")
                     before = driver.scene_key()
+                    before_next_scene = page.locator("#nextScene").inner_text()
                     driver.finish_story_scene()
                     if driver.on_battle_page():
                         driver.play_battle_and_resume_scene(before)
-                    if urlparse(page.url).path.endswith("credits.html"):
+                    if driver.on_credits_page():
+                        driver.seal_credits()
+                        if args.evidence_out:
+                            evidence["playtestEvidenceExport"] = driver.export_credits_evidence(Path(args.evidence_out).resolve())
                         evidence["status"] = "complete"
                         break
                     after = driver.scene_key()
+                    after_next_scene = page.locator("#nextScene").inner_text()
                     driver.scenes.append({"before": before, "after": after, "route": page.locator("#routeSummary").inner_text()})
                     if before == after:
+                        if before_next_scene != after_next_scene and after_next_scene.startswith("View credits"):
+                            continue
                         raise RouteBlocked("no-scene-progress", "A scene attempt returned without advancing the story.", checkpoint=driver.checkpoint())
                 else:
                     evidence["status"] = "bounded"
@@ -1071,8 +1131,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-battle-commands", type=int, default=500)
     parser.add_argument("--recovery-in", help="Restore a recovery-only checkpoint through Campaign's rendered file control instead of starting New Game.")
     parser.add_argument("--recovery-out", help="Export a recovery-only checkpoint through Campaign's rendered download control before closing.")
+    parser.add_argument("--evidence-out", help="After sealing Credits, export playtest evidence through its rendered download control.")
     parser.add_argument("--frontier-reserve-seconds", type=int, default=120, help="When exporting recovery, retain this many seconds rather than starting another scene.")
-    parser.add_argument("--require-complete", action="store_true", help="Exit nonzero unless the route reaches credits.")
+    parser.add_argument("--require-complete", action="store_true", help="Exit nonzero unless the route seals credits.")
     args = parser.parse_args()
     for name in ("max_scenes", "max_seconds", "max_field_moves", "max_battle_commands", "frontier_reserve_seconds"):
         if getattr(args, name) <= 0:
@@ -1081,6 +1142,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("--recovery-in must name an existing checkpoint file")
     if args.recovery_out and not Path(args.recovery_out).expanduser().resolve().parent.is_dir():
         parser.error("--recovery-out parent directory must already exist")
+    if args.evidence_out and not Path(args.evidence_out).expanduser().resolve().parent.is_dir():
+        parser.error("--evidence-out parent directory must already exist")
     if args.recovery_out and args.frontier_reserve_seconds >= args.max_seconds:
         parser.error("--frontier-reserve-seconds must be less than --max-seconds when exporting recovery")
     return args
