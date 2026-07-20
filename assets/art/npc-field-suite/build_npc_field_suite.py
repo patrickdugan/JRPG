@@ -21,7 +21,13 @@ CONTACT_PATH = ROOT / "npc-field-contact-sheet.png"
 MANIFEST_PATH = ROOT / "manifest.json"
 RUNTIME_PATH = REPO / "game" / "assets" / "art" / "npc-field-suite" / "npc-field-atlas.png"
 CELL_W, CELL_H = 32, 48
-ROLES = ("speaker", "interviewee", "confined-person", "courier")
+ROLES = (
+    "speaker", "interviewee", "confined-person", "courier",
+    "dock-worker", "ferry-captain", "market-seller", "trade-broker",
+    "print-organizer", "port-clerk", "physician", "resident",
+    "former-retainer", "caretaker", "net-mender", "post-keeper",
+)
+POSES = ("south-idle", "south-gesture")
 
 
 def rgba(value: str) -> tuple[int, int, int, int]:
@@ -47,12 +53,12 @@ def load_source() -> dict:
         "footPoint": [16, 44], "transparentGutter": 1,
     }
     assert tuple(source["sheet"]["columns"]) == ROLES
-    assert source["sheet"]["rows"] == ["south-idle"]
+    assert tuple(source["sheet"]["rows"]) == POSES
     assert tuple(role["id"] for role in source["roleTaxonomy"]) == ROLES
     return source
 
 
-def draw_person(role: dict) -> Image.Image:
+def draw_person(role: dict, pose: str) -> Image.Image:
     image = Image.new("RGBA", (CELL_W, CELL_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(image)
     shared = {
@@ -103,7 +109,7 @@ def draw_person(role: dict) -> Image.Image:
         rect((22, 26, 24, 33), "light")
         rect((8, 34, 10, 36), "skin")
         rect((22, 34, 24, 36), "skin")
-    else:
+    elif role["id"] == "courier":
         # The unarmed courier leans into motion; the diagonal is a plain
         # satchel strap and deliberately carries no symbol or mark.
         poly([(8, 21), (12, 17), (23, 18), (26, 23), (23, 40), (10, 40)], "outline")
@@ -119,6 +125,62 @@ def draw_person(role: dict) -> Image.Image:
         rect((24, 26, 26, 31), "primary")
         rect((8, 32, 10, 34), "skin")
         rect((24, 32, 26, 34), "skin")
+    else:
+        # Twelve explicit community roles share one grounded field grammar but
+        # retain separate palettes, secular work silhouettes, and props. The
+        # role comes only from authored metadata; this builder never infers it
+        # from names, prose, religion, or ethnicity.
+        role_index = ROLES.index(role["id"]) - 4
+        left = 7 + (role_index % 3 == 0)
+        right = 25 - (role_index % 4 == 0)
+        poly([(left, 22), (11, 17), (21, 17), (right, 22), (22, 40), (10, 40)], "outline")
+        poly([(left + 2, 23), (12, 19), (20, 19), (right - 2, 23), (20, 38), (12, 38)], "primary")
+        poly([(11, 25), (16, 21), (21, 25), (19, 36), (13, 36)], "secondary")
+        rect((7, 25, 10, 34), "outline")
+        rect((8, 26, 10, 32), "primary")
+        rect((22, 25, 25, 34), "outline")
+        rect((22, 26, 24, 32), "primary")
+        rect((8, 33, 10, 35), "skin")
+        rect((22, 33, 24, 35), "skin")
+
+        if role["id"] == "dock-worker":
+            draw.arc((3, 26, 12, 39), 80, 285, fill=c["accent"], width=2)
+        elif role["id"] == "ferry-captain":
+            rect((7, 18, 24, 20), "light")
+            rect((10, 16, 21, 18), "primary")
+        elif role["id"] == "market-seller":
+            rect((21, 31, 28, 39), "outline")
+            rect((22, 32, 27, 38), "accent")
+            rect((23, 32, 24, 33), "light")
+            rect((26, 34, 27, 35), "secondary")
+        elif role["id"] == "trade-broker":
+            draw.line((12, 21, 22, 35), fill=c["accent"], width=2)
+            rect((19, 32, 24, 38), "secondary")
+        elif role["id"] == "print-organizer":
+            rect((5, 28, 11, 37), "outline")
+            rect((6, 29, 10, 36), "light")
+            rect((7, 31, 9, 31), "accent")
+        elif role["id"] == "port-clerk":
+            rect((21, 30, 27, 38), "outline")
+            rect((22, 31, 26, 37), "secondary")
+            rect((23, 32, 25, 32), "accent")
+        elif role["id"] == "physician":
+            rect((5, 30, 11, 38), "outline")
+            rect((6, 31, 10, 37), "secondary")
+            draw.line((8, 30, 7, 25), fill=c["accent"], width=1)
+            rect((6, 24, 7, 26), "light")
+        elif role["id"] == "former-retainer":
+            rect((5, 30, 11, 38), "outline")
+            rect((6, 31, 10, 37), "secondary")
+        elif role["id"] == "caretaker":
+            poly([(8, 8), (12, 4), (21, 5), (24, 10), (22, 18), (10, 18)], "deep")
+            rect((5, 31, 10, 38), "secondary")
+        elif role["id"] == "net-mender":
+            draw.arc((20, 29, 30, 41), 70, 300, fill=c["accent"], width=2)
+            draw.line((22, 31, 28, 38), fill=c["light"], width=1)
+        elif role["id"] == "post-keeper":
+            draw.line((12, 21, 21, 34), fill=c["accent"], width=2)
+            rect((19, 32, 24, 38), "secondary")
 
     # Original generic face and hair clusters.
     rect((10, 7, 22, 18), "outline")
@@ -136,6 +198,13 @@ def draw_person(role: dict) -> Image.Image:
     # One-pixel cloth/material accents, intentionally non-symbolic.
     rect((12, 30, 12, 35), "light")
     rect((19, 29, 19, 34), "accent")
+    if pose == "south-gesture":
+        # One empty raised hand supplies a conversation loop. It is a visual
+        # state only and never changes interaction range, timing, or authority.
+        poly([(23, 25), (25, 20), (27, 18), (29, 20), (27, 23), (26, 29)], "outline")
+        poly([(24, 25), (26, 21), (27, 20), (28, 20), (26, 27)], "primary")
+        rect((27, 17, 29, 20), "skin")
+        rect((28, 16, 29, 17), "skinLight")
     return image
 
 
@@ -145,53 +214,64 @@ def alpha_bounds(image: Image.Image) -> list[int] | None:
 
 
 def build_outputs(source: dict) -> dict[Path, bytes]:
-    atlas = Image.new("RGBA", (CELL_W * len(ROLES), CELL_H), (0, 0, 0, 0))
+    atlas = Image.new("RGBA", (CELL_W * len(ROLES), CELL_H * len(POSES)), (0, 0, 0, 0))
     frames = []
-    for column, role_id in enumerate(ROLES):
-        role = next(item for item in source["roleTaxonomy"] if item["id"] == role_id)
-        frame = draw_person(role)
-        atlas.alpha_composite(frame, (column * CELL_W, 0))
-        frames.append({
-            "id": f"{role_id}-south-idle", "role": role_id,
-            "rect": [column * CELL_W, 0, CELL_W, CELL_H],
-            "pivot": [16, 44], "footPoint": [16, 44],
-            "localAlphaBounds": alpha_bounds(frame),
-            "rgbaSha256": sha256(frame.tobytes()),
-        })
+    for row, pose in enumerate(POSES):
+        for column, role_id in enumerate(ROLES):
+            role = next(item for item in source["roleTaxonomy"] if item["id"] == role_id)
+            frame = draw_person(role, pose)
+            atlas.alpha_composite(frame, (column * CELL_W, row * CELL_H))
+            frames.append({
+                "id": f"{role_id}-{pose}", "role": role_id, "pose": pose,
+                "rect": [column * CELL_W, row * CELL_H, CELL_W, CELL_H],
+                "pivot": [16, 44], "footPoint": [16, 44],
+                "localAlphaBounds": alpha_bounds(frame),
+                "rgbaSha256": sha256(frame.tobytes()),
+            })
 
     atlas_data = png_bytes(atlas)
-    scale, margin, label_h = 7, 24, 28
-    contact_w = margin * 2 + CELL_W * scale * len(ROLES)
-    contact_h = margin * 2 + label_h + CELL_H * scale
+    scale, margin, label_h, roles_per_row = 4, 24, 28, 4
+    role_block_w = CELL_W * scale * len(POSES)
+    role_block_h = label_h + CELL_H * scale
+    role_rows = (len(ROLES) + roles_per_row - 1) // roles_per_row
+    contact_w = margin * 2 + role_block_w * roles_per_row
+    contact_h = margin * 2 + role_block_h * role_rows
     contact = Image.new("RGBA", (contact_w, contact_h), rgba("#151b2b"))
     contact_draw = ImageDraw.Draw(contact)
     checker = 8
-    for y in range(margin + label_h, contact_h - margin, checker):
+    for y in range(margin, contact_h - margin, checker):
         for x in range(margin, contact_w - margin, checker):
             fill = "#263044" if ((x // checker) + (y // checker)) % 2 else "#344058"
             contact_draw.rectangle((x, y, x + checker - 1, y + checker - 1), fill=rgba(fill))
     font = ImageFont.load_default()
     for column, role_id in enumerate(ROLES):
-        x = margin + column * CELL_W * scale
-        contact_draw.text((x + 4, margin + 6), role_id.upper(), font=font, fill=rgba("#f6e8b9"))
-        enlarged = atlas.crop((column * CELL_W, 0, (column + 1) * CELL_W, CELL_H)).resize(
-            (CELL_W * scale, CELL_H * scale), Image.Resampling.NEAREST,
-        )
-        contact.alpha_composite(enlarged, (x, margin + label_h))
-        pivot_y = margin + label_h + 44 * scale
-        contact_draw.line((x + 13 * scale, pivot_y, x + 19 * scale, pivot_y), fill=rgba("#66d9ef"), width=1)
+        grid_x = column % roles_per_row
+        grid_y = column // roles_per_row
+        x = margin + grid_x * role_block_w
+        y = margin + grid_y * role_block_h
+        contact_draw.text((x + 4, y + 6), role_id.upper(), font=font, fill=rgba("#f6e8b9"))
+        for row, _pose in enumerate(POSES):
+            enlarged = atlas.crop((
+                column * CELL_W, row * CELL_H,
+                (column + 1) * CELL_W, (row + 1) * CELL_H,
+            )).resize((CELL_W * scale, CELL_H * scale), Image.Resampling.NEAREST)
+            pose_x = x + row * CELL_W * scale
+            contact.alpha_composite(enlarged, (pose_x, y + label_h))
+            pivot_y = y + label_h + 44 * scale
+            contact_draw.line((pose_x + 13 * scale, pivot_y, pose_x + 19 * scale, pivot_y), fill=rgba("#66d9ef"), width=1)
     contact_data = png_bytes(contact)
     manifest = {
         "assetId": source["assetId"],
         "status": "production-foundation-review",
         "authorship": source["authorship"],
         "geometry": {
-            "frameWidth": CELL_W, "frameHeight": CELL_H, "columns": len(ROLES), "rows": 1,
+            "frameWidth": CELL_W, "frameHeight": CELL_H, "columns": len(ROLES), "rows": len(POSES),
             "sheetWidth": atlas.width, "sheetHeight": atlas.height,
             "pivot": [16, 44], "footPoint": [16, 44], "transparentGutter": 1,
             "alphaBoundingBox": alpha_bounds(atlas),
         },
         "roleOrder": list(ROLES),
+        "poseOrder": list(POSES),
         "mappingContracts": {role["id"]: role["liveContract"] for role in source["roleTaxonomy"]},
         "paletteIds": {role["id"]: role["paletteId"] for role in source["roleTaxonomy"]},
         "frames": frames,
@@ -201,7 +281,7 @@ def build_outputs(source: dict) -> dict[Path, bytes]:
         ],
         "review": {
             "runtimeIntegration": "campaign-explicit-field-characters-only-with-geometric-fallback",
-            "animationExpansion": "additional-directions-and-motion-pending",
+            "animationExpansion": "south-idle-and-conversation-gesture-live; additional-directions-and-motion-pending",
             "unmapped": source["exclusions"],
         },
     }

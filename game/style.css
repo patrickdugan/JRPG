@@ -27,6 +27,11 @@ body {
 
 button { font: inherit; }
 
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
 .game-shell {
   width: min(1120px, calc(100% - 24px));
   margin: 0 auto;

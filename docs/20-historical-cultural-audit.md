@@ -24,6 +24,18 @@ Status: **provisional internal correction pass; external consultant review remai
 - The schema-v1 field-interaction presentation catalogue now covers all 113 exact level/interactable pairs. Campaign buttons, native choice prompts, completions, blocked states, and replay text consume that authored copy; unknown pairs use neutral language and never expose legacy IDs or infer wording from rewards, actions, or flags.
 - Takamine is described as an **experimental local bell registry**, never as a normal nationwide “temple system” in 1622.
 - The Integrated 20-frame scene-panorama suite uses only original deterministic integer-coordinate primitives. Its source forbids actors, readable records, sacred/devotional objects, authentic heraldry, ceremonial masks, clean radial floral emblems, historical victims/methods, real-person likenesses, imported concept pixels, and borrowed film/game compositions. Kurozane's authority uses asymmetrical broken ledger-tab geometry; Takamine uses invented registry machinery without temple-bell ornament. Visual QA corrected one cross-like lantern read and one calm-band violation before integration. These internal constraints reduce risk but do not satisfy the external-review gate.
+- The 16-role NPC suite maps only explicit structured person metadata. Twelve community roles use secular work silhouettes and an empty-hand conversation pose; no role is inferred from a Japanese name, Christian identity, ethnicity, prose, or objective action. The generated twelve-person roster is reference-only, while runtime pixels remain editable deterministic primitives.
+
+## Source-to-content boundaries
+
+| Source evidence | What production may use | What production must not infer |
+| --- | --- | --- |
+| The official Hidden Christian Sites history records the 1614 nationwide ban and the 1622 deaths of 55 Catholics, including Japanese people who sheltered clergy. | Genna 8 is a credible point for clandestine pressure, fractured routes, and danger shared by Japanese organizers and foreign clergy. | Do not reenact those deaths, reuse victims, or reduce Japanese participants to anonymous shelter for Europeans. |
+| UNESCO describes Hidden Christianity as a tradition sustained by communities across more than two centuries of prohibition. | Japanese lay networks may own routes, records, concealment rules, refusal, and continuity independent of a priest protagonist. | Do not make foreign clergy the sole source of belief, organization, rescue, or historical memory. |
+| Japan's Cultural Heritage Online records 2,218 later Hidden Christian devotional and ritual objects and notes coexistence with Buddhist and Shinto practice. | Material culture is diverse, locally transformed, and embedded in lived communities. | The collection spans later developments; do not back-project its objects wholesale into 1622, turn them into loot, or use them as generic gothic set dressing. |
+| Kyoto National Museum material documents both kami–Buddha combinatory practice and varied oni imagery within religious and narrative contexts. | Shrine and temple life need not follow a modern exclusive binary; an invented Ashen Oni label may be contested in-world. | Do not present one canonical oni body, copy a ceremonial mask or sacred figure, or define Japanese religious identity as demonic. |
+
+The production-facing questions, asset inventory, reject conditions, and disposition fields are frozen in the [external cultural review packet](24-external-cultural-review-packet.md). Source checking and automated guardrails can prepare that packet but cannot approve it.
 
 ## Review still required
 

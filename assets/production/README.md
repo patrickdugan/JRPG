@@ -1,6 +1,6 @@
 # Bells of the Black Chrysanthemum - Production References
 
-These original, project-bound PNG files were generated with the built-in image-generation workflow. All five files are now production references only. The 2026-07-18 party and enemy atlases formerly supplied provisional runtime pixels, but the browser build now uses the deterministic editable suites under `assets/art/party-field-suite/` and `assets/art/enemy-combat-suite/`; the generated copies stay here solely as design and migration receipts.
+These original, project-bound PNG files were generated with the built-in image-generation workflow. All six files are production references only. The 2026-07-18 party and enemy atlases formerly supplied provisional runtime pixels, but the browser build now uses deterministic editable suites under `assets/art/`; the generated copies stay here solely as design and migration receipts.
 
 Use [the animation bible](../../docs/10-animation-bible.md) and [the art-direction contract](../../docs/05-art-direction.md) to rebuild all game art as editable, authored assets. Do not cut pixels, text, or UI out of these images.
 
@@ -11,6 +11,7 @@ Use [the animation bible](../../docs/10-animation-bible.md) and [the art-directi
 | `bells-takamine-keyframe-v1.png` | 1448 x 1086 | `17aea41ebe154d79fcdd509c2951a6a5a3b0273d7c4fe569c5e40561d6be16ac` | FP-1 Takamine Rain Gate environment/keyframe reference | Accepted: gate, wet approach, service-route read, warm lantern destination, and cold court pressure are legible; no text. |
 | `bells-party-field-atlas-v1.png` | 1536 x 1024 | `df3600769c333788126c50390fa36e3ccc4d1436578c2bf8503749617ec0c4b3` | Superseded six-row, eight-column party field/camp reference | Reference-only: it retains the original silhouette and directional-pose study, but no shipped browser surface loads these pixels. |
 | `bells-enemy-combat-atlas-v1.png` | 896 x 1792 | `37c8efac4ded9223b3580a5d89bee65af71310fa7ed79348c260cfc995449805` | Superseded eight-row, four-column enemy-family reference | Reference-only: it retains the original family/pose study, but no shipped browser surface loads these pixels. |
+| `bells-community-npc-roster-v1.png` | 1448 x 1086 | `3555647766affeece6b8c55ce62b8226a5c18d147df71287888fba8b9cc89be0` | Twelve-person community-role and empty-hand-gesture reference | Accepted as reference: twelve distinct fictional community silhouettes, no text, no real-person likeness, and no devotional prop. Runtime pixels are rebuilt deterministically in the 16-role NPC suite. |
 
 ## Generation method
 
@@ -94,6 +95,21 @@ Lighting/mood: monsoon dusk with rain falling left-to-right; lantern amber and c
 Color palette: ink black and indigo shadow, rain blue, wet stone gray, cedar brown, paper/candle ivory, oxidized bronze, a very limited lacquer red / black-crimson court accent, muted teal only near Aya.
 Materials/textures: wet cedar grain, mottled stone, roof tile, bronze bell hardware, paper, water in broken reflecting bands.
 Constraints: no text, no logo, no watermark, no readable signage, no historical crest, no real sacred object used as loot or a monster prop, no gore, no celebrity or actor likeness, no existing franchise characters, and no direct franchise visual imitation.
+```
+
+## Exact prompt: `bells-community-npc-roster-v1.png`
+
+```text
+Use case: historical-scene
+Asset type: internal NPC silhouette and animation-pose production reference for the original pixel-art JRPG "Bells of the Black Chrysanthemum"
+Primary request: Create one original roster sheet of twelve fictional civilian and community NPC designs for an alternate Genna 8 (1622) Japan setting. Arrange exactly twelve full-body figures in a clean 3-row by 4-column presentation, each separated by generous negative space. The designs should guide small 32x48 field sprites and a second conversational gesture frame.
+Subjects: dock worker, ferry captain, market seller, local trade broker, Japanese print organizer, port clerk, village physician, coal-town resident, former retainer choosing civilian life, clandestine community caretaker, net mender, post keeper. Japanese local organizers and workers should read as practical authorities in their own communities. All are original fictional people.
+Style/medium: crisp hand-authored late-16-bit-era pixel-art production reference, hard pixel clusters, stepped diagonals, limited 2-4 value materials, strong small-scale silhouettes, no painterly blur, no anti-aliasing, no 3D.
+Composition/framing: 4:3 landscape roster sheet, exactly 3 rows by 4 columns, consistent feet line and scale, mostly south-facing three-quarter field poses; each figure has one clearly visible empty-hand conversational gesture or secular work item. No borders, labels, numbers, text, UI, logo, or watermark.
+Lighting/mood: rain-indigo ambient light with candle-ivory edge light; grounded, resilient, communal rather than exoticized.
+Color palette: ink shadow, rain indigo, cedar brown, parchment ivory, muted teal, earth gray, worn blue, old bronze, herb green; rare restrained lacquer red.
+Materials/textures: rain-worn cloth, practical travel layers, secular work satchels, plain paper bundles, rope, baskets, and tools.
+Constraints: historically grounded alternate early-Edo clothing with invented non-sacred details; no authentic crest; no ceremonial mask; no sacred or devotional object; no readable religious text; no weapon glamour; no gore; no ethnicity coded as monstrous; no celebrity, Adam Driver, actor, or film likeness; no existing franchise character or visual imitation; exactly twelve figures and no extras.
 ```
 
 ## Limitation

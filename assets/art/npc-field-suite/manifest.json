@@ -5,10 +5,10 @@
   "geometry": {
     "frameWidth": 32,
     "frameHeight": 48,
-    "columns": 4,
-    "rows": 1,
-    "sheetWidth": 128,
-    "sheetHeight": 48,
+    "columns": 16,
+    "rows": 2,
+    "sheetWidth": 512,
+    "sheetHeight": 96,
     "pivot": [
       16,
       44
@@ -20,33 +20,74 @@
     "transparentGutter": 1,
     "alphaBoundingBox": [
       6,
-      6,
-      124,
-      44
+      4,
+      510,
+      92
     ]
   },
   "roleOrder": [
     "speaker",
     "interviewee",
     "confined-person",
-    "courier"
+    "courier",
+    "dock-worker",
+    "ferry-captain",
+    "market-seller",
+    "trade-broker",
+    "print-organizer",
+    "port-clerk",
+    "physician",
+    "resident",
+    "former-retainer",
+    "caretaker",
+    "net-mender",
+    "post-keeper"
+  ],
+  "poseOrder": [
+    "south-idle",
+    "south-gesture"
   ],
   "mappingContracts": {
     "speaker": "side-story talk plus targetKind person, or level interactable fieldCharacter.kind npc plus role speaker",
     "interviewee": "scene-operation activityType equals interview",
     "confined-person": "level interactable fieldCharacter.kind equals npc and role equals confined-person",
-    "courier": "level interactable fieldCharacter.kind equals npc and role equals courier"
+    "courier": "level interactable fieldCharacter.kind equals npc and role equals courier",
+    "dock-worker": "explicit level fieldCharacter role dock-worker",
+    "ferry-captain": "explicit level fieldCharacter role ferry-captain",
+    "market-seller": "explicit level fieldCharacter role market-seller",
+    "trade-broker": "explicit level fieldCharacter role trade-broker",
+    "print-organizer": "explicit level fieldCharacter role print-organizer or side-story presentationRole print-organizer",
+    "port-clerk": "explicit level fieldCharacter role port-clerk",
+    "physician": "explicit level fieldCharacter role physician",
+    "resident": "explicit level fieldCharacter role resident",
+    "former-retainer": "explicit level fieldCharacter role former-retainer",
+    "caretaker": "side-story presentationRole caretaker",
+    "net-mender": "side-story presentationRole net-mender",
+    "post-keeper": "side-story presentationRole post-keeper"
   },
   "paletteIds": {
     "speaker": "npc-speaker-rain-clay-v1",
     "interviewee": "npc-interviewee-indigo-reed-v1",
     "confined-person": "npc-confined-ash-russet-v1",
-    "courier": "npc-courier-cedar-rain-v1"
+    "courier": "npc-courier-cedar-rain-v1",
+    "dock-worker": "npc-dock-worker-rope-indigo-v1",
+    "ferry-captain": "npc-ferry-captain-deep-blue-v1",
+    "market-seller": "npc-market-seller-clay-moss-v1",
+    "trade-broker": "npc-trade-broker-teal-umber-v1",
+    "print-organizer": "npc-print-organizer-indigo-paper-v1",
+    "port-clerk": "npc-port-clerk-reed-green-v1",
+    "physician": "npc-physician-herb-ash-v1",
+    "resident": "npc-resident-ash-clay-v1",
+    "former-retainer": "npc-former-retainer-earth-blue-v1",
+    "caretaker": "npc-caretaker-charcoal-reed-v1",
+    "net-mender": "npc-net-mender-sea-reed-v1",
+    "post-keeper": "npc-post-keeper-rain-ochre-v1"
   },
   "frames": [
     {
       "id": "speaker-south-idle",
       "role": "speaker",
+      "pose": "south-idle",
       "rect": [
         0,
         0,
@@ -72,6 +113,7 @@
     {
       "id": "interviewee-south-idle",
       "role": "interviewee",
+      "pose": "south-idle",
       "rect": [
         32,
         0,
@@ -97,6 +139,7 @@
     {
       "id": "confined-person-south-idle",
       "role": "confined-person",
+      "pose": "south-idle",
       "rect": [
         64,
         0,
@@ -122,6 +165,7 @@
     {
       "id": "courier-south-idle",
       "role": "courier",
+      "pose": "south-idle",
       "rect": [
         96,
         0,
@@ -143,27 +187,755 @@
         44
       ],
       "rgbaSha256": "b0a6472208682791222c65839102da5e8cb26eb0aae5f7c4e8891b72c0bf8c45"
+    },
+    {
+      "id": "dock-worker-south-idle",
+      "role": "dock-worker",
+      "pose": "south-idle",
+      "rect": [
+        128,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        3,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "61c2a23d0ff50ad6b97e4f5783534d1b97dd84fa705969690b1d27e276e4cc0c"
+    },
+    {
+      "id": "ferry-captain-south-idle",
+      "role": "ferry-captain",
+      "pose": "south-idle",
+      "rect": [
+        160,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "dd6ee8947c0950eba1c749ef9ee468a92171b255e6d542fa38cda1550a323c54"
+    },
+    {
+      "id": "market-seller-south-idle",
+      "role": "market-seller",
+      "pose": "south-idle",
+      "rect": [
+        192,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        29,
+        44
+      ],
+      "rgbaSha256": "62b672617c06e5d7e570c3b21307232f96e978acdb6c5c745e831782d0902feb"
+    },
+    {
+      "id": "trade-broker-south-idle",
+      "role": "trade-broker",
+      "pose": "south-idle",
+      "rect": [
+        224,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "c72285dcb0fb8dbee73b82ec738c16d6cb6af872db42a24e39e28638ceae0138"
+    },
+    {
+      "id": "print-organizer-south-idle",
+      "role": "print-organizer",
+      "pose": "south-idle",
+      "rect": [
+        256,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "cd0a0f809a1ca3955bcbb7e83d3b842a31e077492ec25e17dd37f1feeb2e7346"
+    },
+    {
+      "id": "port-clerk-south-idle",
+      "role": "port-clerk",
+      "pose": "south-idle",
+      "rect": [
+        288,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        28,
+        44
+      ],
+      "rgbaSha256": "20d0e40900088ddcb84bffa7f653cf0dd5aa33c1a59b4c9a2f3895b31a26d9c0"
+    },
+    {
+      "id": "physician-south-idle",
+      "role": "physician",
+      "pose": "south-idle",
+      "rect": [
+        320,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "57451c384b383ce1259d1c0192ec89b88648e50534f05f6c967fc20827cfef62"
+    },
+    {
+      "id": "resident-south-idle",
+      "role": "resident",
+      "pose": "south-idle",
+      "rect": [
+        352,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "3caba5216ba05992a86a404bf377fa2d0fb98efd71931025b986644910d2affc"
+    },
+    {
+      "id": "former-retainer-south-idle",
+      "role": "former-retainer",
+      "pose": "south-idle",
+      "rect": [
+        384,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "f6603ddddbcd73da1293c420beaa1487666572bb67c480d60bed0e2443e669d5"
+    },
+    {
+      "id": "caretaker-south-idle",
+      "role": "caretaker",
+      "pose": "south-idle",
+      "rect": [
+        416,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        4,
+        26,
+        44
+      ],
+      "rgbaSha256": "05812c622caaf3b46247d8cc317244385383bc6bfb2528503e28dd2e4c5a4241"
+    },
+    {
+      "id": "net-mender-south-idle",
+      "role": "net-mender",
+      "pose": "south-idle",
+      "rect": [
+        448,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        29,
+        44
+      ],
+      "rgbaSha256": "ac5b8ad9ee2169982553e8e83cfe6e173d276fc22d91fa7729170c640f49b055"
+    },
+    {
+      "id": "post-keeper-south-idle",
+      "role": "post-keeper",
+      "pose": "south-idle",
+      "rect": [
+        480,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "6e074fa7529154c0e0ab31cc322bb85134d96773b30e985d50c141d3abea440c"
+    },
+    {
+      "id": "speaker-south-gesture",
+      "role": "speaker",
+      "pose": "south-gesture",
+      "rect": [
+        0,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        6,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "5d4baa2329c87fe657cdb94e4412dcfe0372547a8cfbbba810ce22781da58a54"
+    },
+    {
+      "id": "interviewee-south-gesture",
+      "role": "interviewee",
+      "pose": "south-gesture",
+      "rect": [
+        32,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        6,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "750c34fa79b6e0a9755ea800d80f42012ec02cc3c5fcb2c6846c15131dd1163b"
+    },
+    {
+      "id": "confined-person-south-gesture",
+      "role": "confined-person",
+      "pose": "south-gesture",
+      "rect": [
+        64,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "59b03738423a40ca3c7c0991619bcaa5d0f1d2b636f425e3b12103b4467e87b4"
+    },
+    {
+      "id": "courier-south-gesture",
+      "role": "courier",
+      "pose": "south-gesture",
+      "rect": [
+        96,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "3712362912647491edfbf18cf7ee0ef7d62c5c82e2bf2ddb89bc9e854f38f572"
+    },
+    {
+      "id": "dock-worker-south-gesture",
+      "role": "dock-worker",
+      "pose": "south-gesture",
+      "rect": [
+        128,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        3,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "b2df822c32c013640ecd25032e514af84c44e8cef375139b7b333f83a6acd890"
+    },
+    {
+      "id": "ferry-captain-south-gesture",
+      "role": "ferry-captain",
+      "pose": "south-gesture",
+      "rect": [
+        160,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "de8506278e7744a2f8d2a89d7b95cd1bb41ef3a150a403857529571285594333"
+    },
+    {
+      "id": "market-seller-south-gesture",
+      "role": "market-seller",
+      "pose": "south-gesture",
+      "rect": [
+        192,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "62e8b1b3b007927371ec1ed2ecd7aaf27c9b938aba60b77d4b974db0b6aa4559"
+    },
+    {
+      "id": "trade-broker-south-gesture",
+      "role": "trade-broker",
+      "pose": "south-gesture",
+      "rect": [
+        224,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "04b0edb962028334f73b16aa62ea36cbc28fb120e719fc34d227260043ea151c"
+    },
+    {
+      "id": "print-organizer-south-gesture",
+      "role": "print-organizer",
+      "pose": "south-gesture",
+      "rect": [
+        256,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "521ec8ab94c5b8754d6dde54c73400907e9f3bc30671d2635ec96c6eafaa5df0"
+    },
+    {
+      "id": "port-clerk-south-gesture",
+      "role": "port-clerk",
+      "pose": "south-gesture",
+      "rect": [
+        288,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "a1a09a06dee7bec5b9be1bf8ac3a605484b204de34aa6bb1ab9a0a0210f10490"
+    },
+    {
+      "id": "physician-south-gesture",
+      "role": "physician",
+      "pose": "south-gesture",
+      "rect": [
+        320,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "2cb90c3c7a9614d3123eb62126537cf203d495093f5b768cd6c392a929b4bf31"
+    },
+    {
+      "id": "resident-south-gesture",
+      "role": "resident",
+      "pose": "south-gesture",
+      "rect": [
+        352,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "500b243d8f7f89c3c98846b007cbb9b41a6623206c3b74902d8418f5a3ac5589"
+    },
+    {
+      "id": "former-retainer-south-gesture",
+      "role": "former-retainer",
+      "pose": "south-gesture",
+      "rect": [
+        384,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "b69bf8a845b58e0d5445f59bca0fd593a3459a0506ef1edac13d7671170e8d23"
+    },
+    {
+      "id": "caretaker-south-gesture",
+      "role": "caretaker",
+      "pose": "south-gesture",
+      "rect": [
+        416,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        5,
+        4,
+        30,
+        44
+      ],
+      "rgbaSha256": "39007fa46457bd54225a74470bcb57776dbd8ec3ec1cc519839362845fdc805e"
+    },
+    {
+      "id": "net-mender-south-gesture",
+      "role": "net-mender",
+      "pose": "south-gesture",
+      "rect": [
+        448,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "06efe14d4dc5b6c319e2167d3387634cd390e8690f67fe0bbb037150a8006488"
+    },
+    {
+      "id": "post-keeper-south-gesture",
+      "role": "post-keeper",
+      "pose": "south-gesture",
+      "rect": [
+        480,
+        48,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        30,
+        44
+      ],
+      "rgbaSha256": "b19b7a2b4615181f64fb21a2e6f335e8aff218994b569a98b1220a4b04a9113b"
     }
   ],
   "exports": [
     {
       "file": "npc-field-atlas.png",
       "purpose": "transparent-runtime-atlas",
-      "width": 128,
-      "height": 48,
-      "sha256": "562577923e3a72d6fd97337c9f38599b9c048d536302e5f02bffeaf71c8b1d1b"
+      "width": 512,
+      "height": 96,
+      "sha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441"
     },
     {
       "file": "npc-field-contact-sheet.png",
       "purpose": "labeled-review-only-not-runtime",
-      "width": 944,
-      "height": 412,
-      "sha256": "f36cfdf9acf85539b90564c054a01c5393568f1401ef5d9608ae276170b2d0cf"
+      "width": 1072,
+      "height": 928,
+      "sha256": "3b3a4f2875f2fabd1fdc3a3eee4f7b867b9fbda9bd863ced34431dd5c5c45cf7"
     }
   ],
   "review": {
     "runtimeIntegration": "campaign-explicit-field-characters-only-with-geometric-fallback",
-    "animationExpansion": "additional-directions-and-motion-pending",
+    "animationExpansion": "south-idle-and-conversation-gesture-live; additional-directions-and-motion-pending",
     "unmapped": [
       "props",
       "hazards",

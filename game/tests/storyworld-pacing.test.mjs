@@ -11,7 +11,7 @@ test('maximum visible Storyworld path keeps the 80-scene reference route within 
   assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 1653);
   assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 19);
   assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 14.598333333333333);
-  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceMinutes, 323.73333333333335);
+  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceMinutes, 323.5253333333334);
   assert.equal(STORYWORLD_PACING_REPORT.withinFiveToSixHourTarget, true);
 });
 

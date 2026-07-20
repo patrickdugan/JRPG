@@ -22,7 +22,7 @@ body {
 }
 
 button, a { font: inherit; }
-button:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
 .credits-shell { width: min(1080px, calc(100% - 28px)); margin: 0 auto; padding: 22px 0 44px; }
 .credits-hero { position: relative; min-height: clamp(310px, 55vw, 570px); overflow: hidden; border: 1px solid #4b5775; border-radius: 8px 8px 0 0; background: #111626; }

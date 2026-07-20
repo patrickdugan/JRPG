@@ -816,9 +816,22 @@ export class CampaignCombatEngine {
     if (!targets.length) return this._evaluateOutcome();
     const target = targets[0];
     const mateusSpecial = this._resolveMateusSpecialActivation(actor, target);
-    const skill = mateusSpecial ? null : actor.skills.find((item) => distance(actor.pos, target.pos) <= (item.range ?? 1)
+    const availableSkills = mateusSpecial ? [] : actor.skills.filter((item) => distance(actor.pos, target.pos) <= (item.range ?? 1)
       && actor.spirit >= asPositiveInteger(item.spiritCost, 0)
       && !['blood-ward', 'crimson-litany'].includes(item.id));
+    let skill = availableSkills[0];
+    if (actor.templateId === 'kurozane' && this.bossPhaseState) {
+      // His authored final-exam phases own their skill grammar and Recovery;
+      // the generic first-in-range rule would repeat Court Command forever.
+      let phaseSkillIds;
+      if (this.bossPhaseState.phaseId === 'dawn') phaseSkillIds = ['black-chrysanthemum'];
+      else if (this.bossPhaseState.phaseId === 'bell') phaseSkillIds = ['blood-eclipse'];
+      else phaseSkillIds = this.enemyActivations % 2 === 0
+        ? ['court-command', 'yearless-thrust']
+        : ['yearless-thrust', 'court-command'];
+      skill = phaseSkillIds.map((skillId) => availableSkills.find((item) => item.id === skillId)).find(Boolean)
+        ?? skill;
+    }
     let resolution;
     if (mateusSpecial) {
       resolution = mateusSpecial.resolution;

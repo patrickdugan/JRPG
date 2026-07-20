@@ -37,7 +37,7 @@
             <p class="eyebrow">Allied formation</p>
             <h2 id="partyHeading">Party</h2>
           </header>
-          <div id="partyPanel" class="combatant-list" role="list">
+          <div id="partyPanel" class="combatant-list" role="group" aria-label="Party combatants and selectable allies">
             <p class="panel-placeholder">Party deployment pending.</p>
           </div>
         </aside>
@@ -69,7 +69,7 @@
               <p id="activeActorLabel" class="active-actor">No combatant selected</p>
             </div>
 
-            <div id="commandButtons" class="command-grid" role="toolbar" aria-label="Battle commands">
+            <div id="commandButtons" class="command-grid" role="group" aria-label="Battle commands">
               <button type="button" data-command="move" aria-keyshortcuts="1">1 · Move</button>
               <button type="button" data-command="attack" aria-keyshortcuts="2">2 · Attack</button>
               <button type="button" data-command="skill" aria-keyshortcuts="3">3 · Skill</button>
@@ -214,7 +214,7 @@
         </article>
       </section>
 
-      <p id="battleAnnouncements" class="visually-hidden" role="status" aria-live="assertive"></p>
+      <p id="battleAnnouncements" class="visually-hidden" role="status" aria-live="assertive" aria-atomic="true"></p>
       <noscript><p class="noscript">Enable JavaScript to run this tactical encounter.</p></noscript>
     </main>
 

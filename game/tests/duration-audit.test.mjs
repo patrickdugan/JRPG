@@ -265,7 +265,7 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
     interactions: 236,
     exits: 41,
     playerCommands: 231,
-    enemyActivations: 102,
+    enemyActivations: 97,
     campRests: 17,
     finiteEncounterCount: 23,
     finiteQuestCount: 0,
@@ -291,8 +291,8 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
       - audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedSeconds
       - audit.estimates.reference.postStoryPreCredits.estimatedSeconds,
   ) < 1e-9);
-  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 309.135);
-  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 393.583);
+  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 308.927);
+  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 393.375);
   assert.ok(audit.estimates.low.allFiniteBeforeStoryCompletion.estimatedMinutes
     < audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes);
   assert.ok(audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes
@@ -302,23 +302,23 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
       name,
       estimate.allFiniteBeforeStoryCompletion.estimatedMinutes,
     ])),
-    { low: 769.479, reference: 1_221.201, high: 1_902.512 },
+    { low: 769.395, reference: 1_220.993, high: 1_902.096 },
   );
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates).map(([name, estimate]) => [
       name,
       estimate.allFiniteContent.estimatedMinutes,
     ])),
-    { low: 776.805, reference: 1_232.141, high: 1_918.255 },
+    { low: 776.721, reference: 1_231.933, high: 1_917.838 },
   );
   assert.equal(audit.estimates.reference.allFiniteContent.requiredRepeatPresentationMs, 36_800);
   assert.equal(audit.estimates.reference.allFiniteContent.breakdownMinutes.requiredRepeatPresentation, 0.613);
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates.reference.allFiniteContent.repeatSpeedVariants)
       .map(([speed, variant]) => [speed, variant.estimatedMinutes])),
-    { 1: 1_232.141, 2: 1_231.834, 4: 1_231.681 },
+    { 1: 1_231.933, 2: 1_231.626, 4: 1_231.473 },
   );
-  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 32.141);
+  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 31.933);
   assert.equal(audit.estimates.low.allFiniteContent.reaches20HoursUnderModel, false);
   assert.equal(audit.estimates.reference.allFiniteContent.reaches20HoursUnderModel, true);
   assert.equal(audit.estimates.high.allFiniteContent.reaches20HoursUnderModel, true);

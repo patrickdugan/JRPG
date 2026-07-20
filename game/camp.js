@@ -521,11 +521,12 @@ function renderCampConversationStage() {
   if (progress.phase === 'choice') {
     campConversationLine.textContent = conversation.choice.prompt;
     advanceCampConversation.hidden = true;
-    campConversationChoices.append(...conversation.choice.options.map((option) => {
+    campConversationChoices.append(...conversation.choice.options.map((option, index) => {
       const button = element('button', '', option.label);
       button.type = 'button';
       button.dataset.campConversationChoice = option.id;
       button.dataset.campConversationId = conversation.id;
+      button.setAttribute('aria-keyshortcuts', String(index + 1));
       return button;
     }));
     return;
@@ -565,6 +566,7 @@ function renderCampConversations() {
       button.dataset.campConversationId = conversation.id;
       button.classList.toggle('is-active', conversation.id === selectedCampConversationId || conversation.id === activeId);
       button.classList.toggle('is-complete', record?.status === 'completed');
+      if (conversation.id === selectedCampConversationId) button.setAttribute('aria-current', 'true');
       const status = record?.status === 'completed' ? 'Recorded' : record?.status === 'active' ? 'Continue' : 'Available';
       button.append(
         element('strong', '', conversation.title),
@@ -613,11 +615,12 @@ function renderPartyCouncilStage() {
   if (progress.phase === 'choice') {
     partyCouncilLine.textContent = council.choice.prompt;
     advancePartyCouncil.hidden = true;
-    partyCouncilChoices.append(...council.choice.options.map((option) => {
+    partyCouncilChoices.append(...council.choice.options.map((option, index) => {
       const button = element('button', '', option.label);
       button.type = 'button';
       button.dataset.partyCouncilChoice = option.id;
       button.dataset.partyCouncilId = council.id;
+      button.setAttribute('aria-keyshortcuts', String(index + 1));
       return button;
     }));
     return;
@@ -662,6 +665,7 @@ function renderPartyCouncils() {
       button.dataset.partyCouncilId = council.id;
       button.classList.toggle('is-active', council.id === selectedPartyCouncilId || council.id === activeId);
       button.classList.toggle('is-complete', record?.status === 'completed');
+      if (council.id === selectedPartyCouncilId) button.setAttribute('aria-current', 'true');
       const status = record?.status === 'completed' ? 'Recorded' : record?.status === 'active' ? 'Continue' : 'Available';
       button.append(
         element('strong', '', council.title),
@@ -730,6 +734,7 @@ function renderArchiveRecords() {
       button.dataset.archiveRecordId = record.id;
       button.classList.toggle('is-active', record.id === selectedArchiveRecordId || record.id === activeId);
       button.classList.toggle('is-complete', progressRecord?.status === 'completed');
+      if (record.id === selectedArchiveRecordId) button.setAttribute('aria-current', 'true');
       const status = progressRecord?.status === 'completed' ? 'Read' : progressRecord?.status === 'active' ? 'Continue' : 'Available';
       button.append(
         element('strong', '', record.title),

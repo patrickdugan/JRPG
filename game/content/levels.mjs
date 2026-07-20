@@ -1186,7 +1186,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya'] },
     exits: [{ id: 'cedar-route', at: '18,3', destinationLevelId: 'c1-flooded-cedars', condition: 'three-conversations-complete' }],
     objective: 'Hear three local accounts, then follow the clerk trail through the flooded cedars.',
-    interactables: [{ id: 'dock-worker', at: '5,4', action: 'talk', result: 'supply-manifest-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'ferry-captain', at: '10,4', action: 'talk', result: 'uphill-crates-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'market-seller', at: '14,4', action: 'talk', result: 'clerk-storehouse-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }],
+    interactables: [{ id: 'dock-worker', at: '5,4', action: 'talk', result: 'supply-manifest-lead', fieldCharacter: { kind: 'npc', role: 'dock-worker' } }, { id: 'ferry-captain', at: '10,4', action: 'talk', result: 'uphill-crates-lead', fieldCharacter: { kind: 'npc', role: 'ferry-captain' } }, { id: 'market-seller', at: '14,4', action: 'talk', result: 'clerk-storehouse-lead', fieldCharacter: { kind: 'npc', role: 'market-seller' } }],
     lesson: 'Multiple conversations distribute knowledge without a single authority figure solving the route.',
   }),
   sceneHub({
@@ -1196,7 +1196,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'east', formation: ['ren', 'aya', 'lise', 'mateus'] },
     exits: [{ id: 'customs-house', at: '18,3', destinationLevelId: 'sdg-customs-house', condition: 'separate-arrivals-complete' }, { id: 'rain-docks', at: '18,8', destinationLevelId: 'sdg-rain-docks', condition: 'lantern-route-chosen' }],
     objective: 'Enter separately, gather trade context, and choose a lantern escort route.',
-    interactables: [{ id: 'trade-broker', at: '6,4', action: 'talk', result: 'port-etiquette-note', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'printer-stall', label: 'Sayo’s Print Stall', at: '10,4', action: 'talk', result: 'aya-printer-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'checkpoint-sign', at: '15,5', action: 'inspect', result: 'transport-mark-read' }],
+    interactables: [{ id: 'trade-broker', at: '6,4', action: 'talk', result: 'port-etiquette-note', fieldCharacter: { kind: 'npc', role: 'trade-broker' } }, { id: 'printer-stall', label: 'Sayo’s Print Stall', at: '10,4', action: 'talk', result: 'aya-printer-lead', fieldCharacter: { kind: 'npc', role: 'print-organizer' } }, { id: 'checkpoint-sign', at: '15,5', action: 'inspect', result: 'transport-mark-read' }],
     lesson: 'Port life is a hub of competing needs, not a flat faction backdrop.',
   }),
   sceneHub({
@@ -1206,7 +1206,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north', formation: ['ren', 'aya', 'lise', 'mateus'] },
     exits: [{ id: 'dock-door', at: '18,5', destinationLevelId: 'sdg-rain-docks', condition: 'cipher-recorded' }],
     objective: 'Compare port ledger annotations and record Mateus’s admitted cipher handwriting.',
-    interactables: [{ id: 'customs-ledger', at: '9,4', action: 'inspect-cipher', result: 'mateus-handwriting-recorded' }, { id: 'clerk-desk', at: '13,4', action: 'talk', result: 'port-clerk-witness', fieldCharacter: { kind: 'npc', role: 'speaker' } }],
+    interactables: [{ id: 'customs-ledger', at: '9,4', action: 'inspect-cipher', result: 'mateus-handwriting-recorded' }, { id: 'clerk-desk', at: '13,4', action: 'talk', result: 'port-clerk-witness', fieldCharacter: { kind: 'npc', role: 'port-clerk' } }],
     lesson: 'A character’s admission gives information without granting them instant trust.',
   }),
   sceneHub({
@@ -1216,7 +1216,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta'] },
     exits: [{ id: 'tide-caves', at: '18,3', destinationLevelId: 'ngi-tide-caves', condition: 'nagi-bargain-accepted' }],
     objective: 'Clear the bell-fog net route before asking fishers for passage.',
-    interactables: [{ id: 'net-pile', at: '11,6', action: 'inspect', result: 'bell-fog-route' }, { id: 'kiku-remedy-basket', at: '6,5', action: 'talk', result: 'kiku-guest-support', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'fisher-council', at: '14,4', action: 'bargain', result: 'nagi-bargain-accepted' }],
+    interactables: [{ id: 'net-pile', at: '11,6', action: 'inspect', result: 'bell-fog-route' }, { id: 'kiku-remedy-basket', at: '6,5', action: 'talk', result: 'kiku-guest-support', fieldCharacter: { kind: 'npc', role: 'physician' } }, { id: 'fisher-council', at: '14,4', action: 'bargain', result: 'nagi-bargain-accepted' }],
     lesson: 'Practical aid precedes requests for risk; the town sets the terms of its help.',
   }),
   sceneHub({
@@ -1236,7 +1236,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'ash-fields', at: '18,3', destinationLevelId: 'kgr-ash-fields', condition: 'requisition-marks-recorded' }],
     objective: 'Record the requisition marks and hear what refusing the furnace would cost local residents.',
-    interactables: [{ id: 'coal-ledger', at: '8,4', action: 'record', result: 'requisition-marks-recorded' }, { id: 'resident-kitchen', at: '5,5', action: 'talk', result: 'coal-cost-testimony', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'genta-supply-mark', at: '12,5', action: 'inspect', result: 'military-supply-chain-lead' }],
+    interactables: [{ id: 'coal-ledger', at: '8,4', action: 'record', result: 'requisition-marks-recorded' }, { id: 'resident-kitchen', at: '5,5', action: 'talk', result: 'coal-cost-testimony', fieldCharacter: { kind: 'npc', role: 'resident' } }, { id: 'genta-supply-mark', at: '12,5', action: 'inspect', result: 'military-supply-chain-lead' }],
     lesson: 'The forge is sustained by named logistics and choices, not supernatural inevitability.',
   }),
   sceneHub({
@@ -1286,7 +1286,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'prison-ferry', at: '18,3', destinationLevelId: 'hsh-prison-ferry', condition: 'former-retainer-scene-complete' }],
     objective: 'Speak with Genta’s former subordinates and offer a concrete safe stand-down.',
-    interactables: [{ id: 'former-retainer', at: '9,4', action: 'talk', result: 'former-retainer-scene-complete', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'food-cache', at: '13,5', action: 'share-supplies', result: 'subordinate-food-route' }],
+    interactables: [{ id: 'former-retainer', at: '9,4', action: 'talk', result: 'former-retainer-scene-complete', fieldCharacter: { kind: 'npc', role: 'former-retainer' } }, { id: 'food-cache', at: '13,5', action: 'share-supplies', result: 'subordinate-food-route' }],
     lesson: 'Accountability allows people to refuse Genta while still making room for a practical choice.',
   }),
   sceneHub({

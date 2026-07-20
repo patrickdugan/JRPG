@@ -356,6 +356,7 @@ let autoActionAt = null;
 let autoSettleAt = null;
 let repeatGrindQueue = createRepeatGrindQueue();
 let queuedVictoryRecorded = false;
+let victoryExitFocusPlaced = false;
 const battleFacingByActor = new Map();
 const battleMotionUntil = new Map();
 const battleEnemyPoseByActor = new Map();
@@ -2594,7 +2595,12 @@ function render() {
   renderLog(snapshot);
   publishActiveCommandAnnouncement();
   continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady || !durableVictory;
-  if (snapshot.result === 'victory' && settlementReady && durableVictory) continueCampaign.focus({ preventScroll: true });
+  const victoryExitReady = !continueCampaign.hidden;
+  if (!victoryExitReady) victoryExitFocusPlaced = false;
+  else if (!victoryExitFocusPlaced) {
+    continueCampaign.focus({ preventScroll: true });
+    victoryExitFocusPlaced = true;
+  }
   drawBattle();
   if (!autoInputLocked() && !battlePresentationActive() && snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && !snapshot.result && enemyIntentSchedule === null) {
     scheduleEnemyIntent();

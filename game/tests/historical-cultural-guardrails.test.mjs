@@ -80,6 +80,7 @@ test('canonical content and production directions avoid superseded sacred-object
 test('travel, confession, and consultant requirements are explicit', () => {
   const camp = readRepoFile('game/content/camp-conversations-early.mjs');
   const audit = readRepoFile('docs/20-historical-cultural-audit.md');
+  const packet = readRepoFile('docs/24-external-cultural-review-packet.md');
 
   assert.match(CAMPAIGN.cast.mateus.background, /Goa and Macao before 1614/u);
   assert.match(CAMPAIGN.cast.mateus.background, /remained clandestinely after the ban/u);
@@ -91,4 +92,12 @@ test('travel, confession, and consultant requirements are explicit', () => {
   assert.match(audit, /https:\/\/www\.bunka\.go\.jp\/seisaku\/bunkazai/u);
   assert.match(audit, /https:\/\/www\.kunaicho\.go\.jp/u);
   assert.match(audit, /https:\/\/www\.vatican\.va/u);
+  assert.match(audit, /do not back-project its objects wholesale into 1622/iu);
+  assert.match(audit, /cannot approve it/iu);
+  assert.match(packet, /ready for independent review; no external approval recorded/iu);
+  assert.match(packet, /Japanese organizers retain authority/iu);
+  assert.match(packet, /named independent reviewer/iu);
+  assert.match(packet, /https:\/\/whc\.unesco\.org\/en\/list\/1495/u);
+  assert.match(packet, /https:\/\/kirishitan\.jp\/histories_en\/his001/u);
+  assert.match(packet, /https:\/\/online\.bunka\.go\.jp\/heritages\/detail\/611963/u);
 });

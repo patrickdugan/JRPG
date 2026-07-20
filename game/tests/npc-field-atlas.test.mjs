@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   NPC_FIELD_ATLAS,
+  NPC_FIELD_POSES,
   NPC_FIELD_ROLES,
   getNpcFieldFrame,
   npcFieldAtlasImageHasExpectedSize,
@@ -18,29 +19,43 @@ import { WITNESS_STAGE_FIELDWORK } from '../witness-stage-fieldwork.mjs';
 
 const GAME_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SUITE_ROOT = resolve(GAME_ROOT, '..', 'assets', 'art', 'npc-field-suite');
+const PRODUCTION_ROOT = resolve(GAME_ROOT, '..', 'assets', 'production');
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 test('NPC field taxonomy and frame geometry are compact and exact', () => {
-  assert.deepEqual(NPC_FIELD_ROLES, ['speaker', 'interviewee', 'confined-person', 'courier']);
+  assert.deepEqual(NPC_FIELD_ROLES, [
+    'speaker', 'interviewee', 'confined-person', 'courier',
+    'dock-worker', 'ferry-captain', 'market-seller', 'trade-broker',
+    'print-organizer', 'port-clerk', 'physician', 'resident',
+    'former-retainer', 'caretaker', 'net-mender', 'post-keeper',
+  ]);
+  assert.deepEqual(NPC_FIELD_POSES, ['south-idle', 'south-gesture']);
   assert.deepEqual(NPC_FIELD_ATLAS, {
     url: './assets/art/npc-field-suite/npc-field-atlas.png',
-    width: 128, height: 48, columns: 4, rows: 1, cellWidth: 32, cellHeight: 48,
+    width: 512, height: 96, columns: 16, rows: 2, cellWidth: 32, cellHeight: 48,
     pivot: [16, 44], footPoint: [16, 44],
   });
   assert.deepEqual(getNpcFieldFrame('speaker'), {
-    role: 'speaker', column: 0, row: 0, x: 0, y: 0, width: 32, height: 48,
+    role: 'speaker', pose: 'south-idle', column: 0, row: 0, x: 0, y: 0, width: 32, height: 48,
     pivot: [16, 44], footPoint: [16, 44],
   });
   assert.equal(getNpcFieldFrame('interviewee').x, 32);
   assert.equal(getNpcFieldFrame('confined-person').x, 64);
   assert.equal(getNpcFieldFrame('courier').x, 96);
+  assert.deepEqual(getNpcFieldFrame('post-keeper', 'south-gesture'), {
+    role: 'post-keeper', pose: 'south-gesture', column: 15, row: 1,
+    x: 480, y: 48, width: 32, height: 48, pivot: [16, 44], footPoint: [16, 44],
+  });
   assert.throws(() => getNpcFieldFrame('prop'), /Unknown NPC field role/u);
-  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 128, naturalHeight: 48 }), true);
-  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 64, naturalHeight: 48 }), false);
+  assert.throws(() => getNpcFieldFrame('speaker', 'north-idle'), /Unknown NPC field pose/u);
+  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 512, naturalHeight: 96 }), true);
+  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 128, naturalHeight: 48 }), false);
 });
 
 test('resolver uses authored person metadata and never guesses from labels', () => {
   assert.equal(resolveNpcFieldRole({ markerType: 'side-story', objectiveType: 'talk', targetKind: 'person' }), 'speaker');
+  assert.equal(resolveNpcFieldRole({ markerType: 'side-story', objectiveType: 'talk', targetKind: 'person', presentationRole: 'net-mender' }), 'net-mender');
+  assert.equal(resolveNpcFieldRole({ markerType: 'side-story', objectiveType: 'talk', targetKind: 'person', presentationRole: 'prop' }), 'speaker');
   assert.equal(resolveNpcFieldRole({ markerType: 'scene-operation', activityType: 'interview' }), 'interviewee');
   for (const record of [
     { markerType: 'side-story', objectiveType: 'talk' },
@@ -58,7 +73,10 @@ test('every mapped live record is covered only by exact metadata contracts', () 
   assert.equal(objectives.filter(({ type }) => type === 'talk').length, 8);
   assert.equal(objectives.filter((objective) => resolveNpcFieldRole({
     markerType: 'side-story', objectiveType: objective.type, targetKind: objective.targetKind,
+    presentationRole: objective.presentationRole,
   })).length, 4);
+  assert.deepEqual(objectives.filter(({ type, targetKind }) => type === 'talk' && targetKind === 'person')
+    .map(({ presentationRole }) => presentationRole).sort(), ['caretaker', 'net-mender', 'post-keeper', 'print-organizer']);
   assert.equal(objectives.filter(({ type, targetKind }) => type === 'talk' && targetKind === 'group').length, 4);
 
   const operationNodes = SCENE_OPERATIONS.operations.flatMap((operation) => operation.nodes);
@@ -86,19 +104,36 @@ test('production atlas, runtime copy, contact sheet, manifest, and builder agree
   assert.deepEqual(source.sheet.columns, NPC_FIELD_ROLES);
   assert.deepEqual(manifest.roleOrder, NPC_FIELD_ROLES);
   assert.deepEqual(manifest.geometry, {
-    frameWidth: 32, frameHeight: 48, columns: 4, rows: 1,
-    sheetWidth: 128, sheetHeight: 48, pivot: [16, 44], footPoint: [16, 44],
-    transparentGutter: 1, alphaBoundingBox: [6, 6, 124, 44],
+    frameWidth: 32, frameHeight: 48, columns: 16, rows: 2,
+    sheetWidth: 512, sheetHeight: 96, pivot: [16, 44], footPoint: [16, 44],
+    transparentGutter: 1, alphaBoundingBox: [6, 4, 510, 92],
   });
-  assert.equal(manifest.frames.length, 4);
+  assert.deepEqual(manifest.poseOrder, NPC_FIELD_POSES);
+  assert.equal(manifest.frames.length, 32);
   assert.deepEqual(manifest.frames.slice(0, 2).map(({ rgbaSha256 }) => rgbaSha256), [
     'fcb6b778383e4eb534b3085e331ebc4dd5cd42e18459decfce5d88684d0f71c6',
     '9dc8bcb6c327aa2a0cd7d48996e8f7fd3b16064e38be3036d1e7ef89ae7c3b28',
   ], 'the two legacy roles must remain pixel-identical while the atlas grows');
-  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 4);
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 32);
   assert.equal(manifest.review.runtimeIntegration, 'campaign-explicit-field-characters-only-with-geometric-fallback');
   assert.equal(runtime.equals(atlas), true);
   assert.equal(manifest.exports[0].sha256, sha256(atlas));
   assert.equal(manifest.exports[1].sha256, sha256(contact));
   assert.doesNotMatch(builder, /Adam Driver|celebrity likeness|holy relic|real insignia/iu);
+});
+
+test('generated community roster is a locked reference and never runtime pixel authority', async () => {
+  const [reference, readme, runtimeSource] = await Promise.all([
+    readFile(resolve(PRODUCTION_ROOT, 'bells-community-npc-roster-v1.png')),
+    readFile(resolve(PRODUCTION_ROOT, 'README.md'), 'utf8'),
+    readFile(resolve(GAME_ROOT, 'npc-field-atlas.mjs'), 'utf8'),
+  ]);
+  assert.equal(reference.subarray(1, 4).toString('ascii'), 'PNG');
+  assert.equal(reference.readUInt32BE(16), 1448);
+  assert.equal(reference.readUInt32BE(20), 1086);
+  assert.equal(sha256(reference), '3555647766affeece6b8c55ce62b8226a5c18d147df71287888fba8b9cc89be0');
+  assert.match(readme, /Exact prompt: `bells-community-npc-roster-v1\.png`/u);
+  assert.match(readme, /Japanese local organizers and workers should read as practical authorities/u);
+  assert.match(readme, /no sacred or devotional object/u);
+  assert.doesNotMatch(runtimeSource, /bells-community-npc-roster-v1/u);
 });

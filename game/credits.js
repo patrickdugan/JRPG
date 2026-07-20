@@ -60,6 +60,12 @@ let storyworldState = loadedStoryworld.ok && loadedStoryworld.found ? loadedStor
 let pendingMs = 0;
 let lastSample = performance.now();
 let lastActivity = lastSample;
+let evidenceExportNotice = null;
+
+function publishEvidenceExportHint(readinessText) {
+  const nextText = evidenceExportNotice ?? readinessText;
+  if (evidenceExportHint.textContent !== nextText) evidenceExportHint.textContent = nextText;
+}
 
 function loadRequiredRouteProgress() {
   const advancement = createAdvancementStorageAdapter().load();
@@ -164,7 +170,7 @@ function render() {
     creditsActionHint.textContent = 'Return to the campaign and start a clean New Game to create verified evidence.';
     sealCredits.disabled = true;
     exportEvidence.disabled = true;
-    evidenceExportHint.textContent = 'A valid clean-run receipt is required before evidence can be exported.';
+    publishEvidenceExportHint('A valid clean-run receipt is required before evidence can be exported.');
     return;
   }
 
@@ -177,11 +183,11 @@ function render() {
     : `Completionist · ${routeTotals.completedActivityCount}/${routeTotals.requiredActivityCount} optional activities · ${routeTotals.remainingActivityCount} remain`;
   renderTimingLedger(report);
   exportEvidence.disabled = false;
-  evidenceExportHint.textContent = narrativeRun
+  publishEvidenceExportHint(narrativeRun
     ? 'The export records current narrative timing and optional completionist evidence; incomplete conditions remain explicit.'
     : report.durationProven && routeReady
       ? 'The export contains a signed completionist proof with category, chapter, story, combat, and 215-activity evidence.'
-      : 'The export records current evidence and names every missing condition; it never upgrades incomplete timing or route data.';
+      : 'The export records current evidence and names every missing condition; it never upgrades incomplete timing or route data.');
   const elapsed = formatPlaytime(report.totalMs);
   creditsProof.textContent = narrativeRun
     ? `${report.completedBeatCount}/${report.requiredBeatCount} canonical · ${report.completedStoryworldPlayedSceneCount}/${report.requiredStoryworldPlayedSceneCount} Storyworld · ${elapsed} active / 05:00:00 minimum`
@@ -308,7 +314,8 @@ sealCredits.addEventListener('click', () => {
 exportEvidence.addEventListener('click', () => {
   if (!receiptState) return;
   if (!flushPlaytime()) {
-    evidenceExportHint.textContent = 'Pending active time could not be saved, so no stale evidence file was created.';
+    evidenceExportNotice = 'Pending active time could not be saved, so no stale evidence file was created.';
+    publishEvidenceExportHint('');
     return;
   }
   requiredRouteProgress = loadRequiredRouteProgress();
@@ -325,10 +332,11 @@ exportEvidence.addEventListener('click', () => {
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+    evidenceExportNotice = `Evidence ${report.signature} exported for run ${report.runId}.`;
     render();
-    evidenceExportHint.textContent = `Evidence ${report.signature} exported for run ${report.runId}.`;
   } catch (error) {
-    evidenceExportHint.textContent = error instanceof Error ? error.message : 'Playtest evidence could not be exported.';
+    evidenceExportNotice = error instanceof Error ? error.message : 'Playtest evidence could not be exported.';
+    publishEvidenceExportHint('');
   }
 });
 
@@ -340,6 +348,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') flushPlaytime();
 });
 window.addEventListener('pageshow', () => {
+  evidenceExportNotice = null;
   const refreshedCampaign = campaignAdapter.load();
   if (refreshedCampaign.ok) campaignState = refreshedCampaign.state;
   const refreshedReceipt = receiptAdapter.load();

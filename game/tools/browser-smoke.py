@@ -144,7 +144,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             page.locator("#resetCampaign").click()
             page.wait_for_timeout(350)
             clean_proof = page.locator("#runProofStatus").inner_text()
-            require(clean_proof.startswith("Clean run "), "New Game did not create a run receipt.")
+            require(clean_proof.startswith("Narrative run "), "New Game did not create a narrative run receipt.")
             run_prefix = clean_proof.split(" · ", 1)[0]
             require(
                 page.locator("#launchBattle").get_attribute("aria-disabled") == "true",
@@ -794,7 +794,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     lambda route: route.fulfill(status=200, content_type="image/png", body=WRONG_SIZE_PNG),
                 )
             wrong_size_page = wrong_size_context.new_page()
-            wrong_size_page.set_default_timeout(20_000)
+            wrong_size_page.set_default_timeout(45_000)
             wrong_size_page.set_default_navigation_timeout(45_000)
             wrong_size_page.on("pageerror", lambda error: page_errors.append(str(error)))
             wrong_size_response = wrong_size_page.goto(
@@ -990,79 +990,74 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 """async () => {
                   const receipt = await import('./run-receipt.mjs');
                   const { CAMPAIGN } = await import('./content/campaign.mjs');
-                  const { ENCOUNTERS } = await import('./content/encounters.mjs');
-                  const route = await import('./required-route-run.mjs');
-                  const progression = await import('./progression.mjs');
-                  const advancement = await import('./advancement.mjs');
-                  const quests = await import('./quest-runtime.mjs');
-                  const witnesses = await import('./witness-chronicle-runtime.mjs');
-                  const conversations = await import('./camp-conversation-runtime.mjs');
-                  const councils = await import('./party-council-runtime.mjs');
-                  const archives = await import('./archive-record-runtime.mjs');
-                  const conversationContract = await import('./camp-conversation-contract.mjs');
-                  const councilContract = await import('./party-council-contract.mjs');
-                  const archiveContract = await import('./archive-record-contract.mjs');
+                  const storyworld = await import('./storyworld-runtime.mjs');
+                  const { STORYWORLD_CLUSTERS } = await import('./content/storyworld-encounters.generated.mjs');
+                  const { deriveNarrativeCreditsGate } = await import('./narrative-credits-gate.mjs');
                   const adapter = receipt.createRunReceiptStorageAdapter();
                   const loaded = adapter.load();
                   if (!loaded.ok || !loaded.found) throw new Error('Clean receipt is missing.');
                   let state = loaded.state;
-                  const required = route.runRequiredRouteCompletion({ runId: state.runId });
-                  localStorage.setItem(
-                    progression.DEFAULT_PROGRESSION_SAVE_KEY,
-                    progression.serializeCampaignState(required.states.campaign),
-                  );
-                  localStorage.setItem(
-                    advancement.DEFAULT_ADVANCEMENT_SAVE_KEY,
-                    advancement.serializeAdvancementState(required.states.advancement),
-                  );
-                  localStorage.setItem(
-                    quests.DEFAULT_QUEST_SAVE_KEY,
-                    quests.serializeQuestState(required.states.quests),
-                  );
-                  localStorage.setItem(
-                    witnesses.DEFAULT_WITNESS_CHRONICLE_SAVE_KEY,
-                    witnesses.serializeWitnessChronicleState(required.states.witnessChronicles),
-                  );
-                  localStorage.setItem(
-                    conversationContract.DEFAULT_CAMP_CONVERSATION_SAVE_KEY,
-                    conversations.serializeCampConversationState(required.states.campConversations),
-                  );
-                  localStorage.setItem(
-                    councilContract.DEFAULT_PARTY_COUNCIL_SAVE_KEY,
-                    councils.serializePartyCouncilState(required.states.partyCouncils),
-                  );
-                  localStorage.setItem(
-                    archiveContract.DEFAULT_ARCHIVE_RECORD_SAVE_KEY,
-                    archives.serializeArchiveRecordState(required.states.archiveRecords),
-                  );
-                  for (const encounter of ENCOUNTERS) {
-                    const result = receipt.recordRunFirstClear(state, state.runId, encounter.id);
-                    if (!result.ok) throw new Error(result.errors.join(' '));
-                    state = result.state;
-                  }
                   for (const beat of CAMPAIGN.chapters.flatMap(chapter => chapter.beats)) {
+                    if (state.completedBeatIds.includes(beat.id)) continue;
                     const result = receipt.recordRunBeatCompletion(state, state.runId, beat.id);
                     if (!result.ok) throw new Error(result.errors.join(' '));
                     state = result.state;
                   }
-                  if (!adapter.save(state).ok) throw new Error('Story-complete receipt did not save.');
+                  let storyworldState = storyworld.createStoryworldState({ runId: state.runId });
+                  for (const cluster of STORYWORLD_CLUSTERS) {
+                    let result = storyworld.beginStoryworldEncounter(storyworldState, cluster.id);
+                    if (!result.ok) throw new Error(`Could not begin ${cluster.id}: ${result.code}`);
+                    storyworldState = result.state;
+                    const entryOption = storyworld.getVisibleStoryworldOptions(storyworldState, cluster.id)[0];
+                    result = storyworld.chooseStoryworldOption(storyworldState, cluster.id, entryOption.id);
+                    if (!result.ok) throw new Error(`Could not choose ${cluster.id}: ${result.code}`);
+                    storyworldState = result.state;
+                    result = storyworld.advanceStoryworldEncounter(storyworldState, cluster.id);
+                    if (!result.ok) throw new Error(`Could not advance ${cluster.id}: ${result.code}`);
+                    storyworldState = result.state;
+                    const progress = storyworld.getStoryworldProgress(storyworldState, cluster.id);
+                    if (!progress.outcome.terminal) {
+                      const outcomeOption = storyworld.getVisibleStoryworldOptions(storyworldState, cluster.id)[0];
+                      result = storyworld.chooseStoryworldOption(storyworldState, cluster.id, outcomeOption.id);
+                      if (!result.ok) throw new Error(`Could not resolve ${cluster.id}: ${result.code}`);
+                      storyworldState = result.state;
+                    }
+                    result = storyworld.advanceStoryworldEncounter(storyworldState, cluster.id);
+                    if (!result.ok) throw new Error(`Could not complete ${cluster.id}: ${result.code}`);
+                    storyworldState = result.state;
+                    const receiptResult = receipt.recordRunStoryworldDecision(state, state.runId, cluster.id);
+                    if (!receiptResult.ok) throw new Error(receiptResult.errors.join(' '));
+                    state = receiptResult.state;
+                  }
+                  if (!storyworld.createStoryworldStorageAdapter().save(storyworldState).ok) {
+                    throw new Error('Storyworld-complete authority did not save.');
+                  }
+                  if (!adapter.save(state).ok) throw new Error('Narrative-complete receipt did not save.');
                   const proof = receipt.getRunProofReport(state);
+                  const gate = deriveNarrativeCreditsGate(state, storyworldState);
                   return {
+                    profileId: proof.profileId,
                     storyComplete: proof.storyComplete,
+                    playedScenes: proof.playedSceneCount,
+                    storyworldScenes: proof.completedStoryworldPlayedSceneCount,
                     creditsComplete: proof.creditsComplete,
-                    routeComplete: required.completionProof.creditsCompletionGateSatisfied,
-                    routeActivities: required.summary.completedRequiredActivityCount,
+                    durationProven: proof.durationProven,
+                    totalMs: proof.totalMs,
+                    gateReady: gate.ready,
+                    gateReasons: gate.reasons,
                   };
                 }"""
             )
             require(
-                credits_seed == {
-                    "storyComplete": True,
-                    "creditsComplete": False,
-                    "routeComplete": True,
-                    "routeActivities": 215,
-                },
-                "Story or intended-route completion seed drifted before credits.",
+                credits_seed["profileId"] == "narrative-5-6h-v1"
+                and credits_seed["storyComplete"] is True
+                and credits_seed["playedScenes"] == 80
+                and credits_seed["storyworldScenes"] == 20
+                and credits_seed["creditsComplete"] is False
+                and credits_seed["durationProven"] is False
+                and credits_seed["gateReady"] is False
+                and "active-playtime-incomplete" in credits_seed["gateReasons"],
+                f"Narrative gate seed drifted before credits: {credits_seed}.",
             )
             page.goto(f"{base}/credits.html", wait_until="domcontentloaded")
             page.locator("#sealCredits").wait_for()
@@ -1072,32 +1067,54 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(" / " in chapter_timing_text, "Credits chapter timing rows omit actual/reference values.")
             require("short by" in chapter_timing_text, "Completed short-run chapters omit their checkpoint gaps.")
             pacing_basis_text = page.locator("#pacingBasis").inner_text()
-            require("20:32:08" in pacing_basis_text, "Credits pacing total drifted from the reference checkpoint.")
-            require("not observed proof" in pacing_basis_text, "Credits pacing checkpoint is not clearly labeled diagnostic.")
+            require("05:00:00 minimum" in pacing_basis_text, "Narrative credits omitted the five-hour floor.")
+            require("observed active play is authoritative" in pacing_basis_text,
+                    "Narrative credits did not distinguish observed play from diagnostic pacing.")
             require(
                 page.locator("#timingAttribution").get_attribute("data-state") == "complete",
                 "Credits timing ledger contains unattributed active play.",
             )
             require(
-                not page.locator("#sealCredits").is_disabled(),
-                "Credits seal stayed disabled after story completion: "
+                page.locator("#sealCredits").is_disabled(),
+                "Narrative credits seal bypassed the five-hour active-play floor: "
                 f"{page.locator('#creditsStatus').inner_text()} / {page.locator('#routeProof').inner_text()}",
+            )
+            require(
+                "Narrative complete" in page.locator("#creditsStatus").inner_text()
+                and "Keep playing" in page.locator("#creditsActionHint").inner_text(),
+                "Narrative credits did not explain the remaining active-play gate.",
+            )
+            route_proof_text = page.locator("#routeProof").inner_text()
+            require(
+                route_proof_text.startswith("Completionist · ")
+                and "optional activities" in route_proof_text
+                and "215/215" not in route_proof_text,
+                f"Optional completionist ledger unexpectedly became the narrative gate: {route_proof_text}.",
             )
             require(page.locator('a[href="camp.html"]').is_visible(), "Credits omitted the pre-seal Camp route.")
             require(page.locator('a[href="campaign.html"]').is_visible(), "Credits omitted the Campaign return route.")
-            page.locator("#sealCredits").click()
-            page.wait_for_function("() => document.querySelector('#sealCredits').disabled")
             credits_final = page.evaluate(
                 """async () => {
                   const receipt = await import('./run-receipt.mjs');
                   const loaded = receipt.createRunReceiptStorageAdapter().load();
                   const proof = receipt.getRunProofReport(loaded.state);
-                  return { status: proof.status, storyComplete: proof.storyComplete, creditsComplete: proof.creditsComplete };
+                  return {
+                    status: proof.status,
+                    storyComplete: proof.storyComplete,
+                    creditsComplete: proof.creditsComplete,
+                    durationProven: proof.durationProven,
+                    playedScenes: proof.playedSceneCount,
+                    totalMs: proof.totalMs,
+                  };
                 }"""
             )
             require(
-                credits_final == {"status": "complete", "storyComplete": True, "creditsComplete": True},
-                "Explicit credits did not seal the completed story receipt.",
+                credits_final["status"] == "active"
+                and credits_final["storyComplete"] is True
+                and credits_final["creditsComplete"] is False
+                and credits_final["durationProven"] is False
+                and credits_final["playedScenes"] == 80,
+                f"Blocked narrative credits mutated or upgraded the receipt: {credits_final}.",
             )
             page.locator("#exportEvidence").wait_for()
             require(not page.locator("#exportEvidence").is_disabled(), "Evidence export stayed disabled for a valid receipt.")
@@ -1107,19 +1124,28 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             download_path = download.path()
             require(download.failure() is None and download_path is not None, "Evidence JSON download failed.")
             exported_report = json.loads(Path(download_path).read_text(encoding="utf-8"))
-            require(exported_report.get("schemaVersion") == 2, "Evidence export schema drifted.")
-            require(exported_report.get("story", {}).get("creditsComplete") is True, "Evidence export omitted credits completion.")
-            require(exported_report.get("combat", {}).get("complete") is True, "Evidence export omitted first-clear completion.")
-            require(exported_report.get("requiredRoute", {}).get("complete") is True, "Evidence export omitted the 215/215 route.")
-            require(exported_report.get("proof", {}).get("durationProven") is False, "Zero-time browser seed fabricated duration proof.")
-            require(exported_report.get("proof", {}).get("releaseTargetProven") is False, "Zero-time browser seed fabricated release proof.")
+            require(exported_report.get("schemaVersion") == 3, "Evidence export schema drifted.")
+            require(exported_report.get("story", {}).get("creditsComplete") is False, "Blocked credits were exported as complete.")
+            require(exported_report.get("story", {}).get("playedSceneCount") == 80, "Evidence export omitted the 80-scene route.")
+            require(exported_report.get("story", {}).get("completedStoryworldPlayedSceneCount") == 20,
+                    "Evidence export omitted Storyworld completion.")
+            require(exported_report.get("requiredRoute", {}).get("complete") is False,
+                    "Evidence export promoted optional completionist work to complete.")
+            require(exported_report.get("narrativeRoute", {}).get("applicable") is True,
+                    "Evidence export omitted the narrative profile verdict.")
+            require("active-playtime-incomplete" in exported_report.get("narrativeRoute", {}).get("strictCreditsGateReasons", []),
+                    "Evidence export omitted the active-playtime gate reason.")
+            require(exported_report.get("narrativeRoute", {}).get("minimumPlaytimeMet") is False,
+                    "Bounded browser smoke fabricated the five-hour floor.")
+            require(exported_report.get("proof", {}).get("durationProven") is False, "Bounded browser smoke fabricated duration proof.")
+            require(exported_report.get("proof", {}).get("releaseTargetProven") is False, "Bounded browser smoke fabricated release proof.")
             require(exported_report.get("proof", {}).get("chapterTimingComplete") is True, "Browser play left unattributed chapter time.")
             require(exported_report.get("playtime", {}).get("unattributedMs") == 0, "Evidence export contains unattributed playtime.")
             pacing_export = exported_report.get("pacing", {})
             require(pacing_export.get("diagnosticOnly") is True, "Evidence export pacing is not diagnostic-only.")
             require(pacing_export.get("observedPlaytimeProof") is False, "Evidence export pacing fabricated observed proof.")
-            require(pacing_export.get("checkpointSignature") == "fnv1a32:dab8e7de", "Evidence checkpoint signature drifted.")
-            require(pacing_export.get("aggregateReferenceTargetMs") == 73928467, "Evidence pacing total drifted.")
+            require(pacing_export.get("checkpointSignature") == "fnv1a32:dd7a4469", "Evidence checkpoint signature drifted.")
+            require(pacing_export.get("aggregateReferenceTargetMs") == 73915967, "Evidence pacing total drifted.")
             require(len(pacing_export.get("chapters", [])) == 11, "Evidence export chapter pacing is incomplete.")
             signature = exported_report.get("signature", "")
             require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")
@@ -1128,6 +1154,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "signature": signature,
                 "routeActivities": exported_report["requiredRoute"]["completedActivityCount"],
                 "durationProven": exported_report["proof"]["durationProven"],
+                "narrativeGateReasons": exported_report["narrativeRoute"]["strictCreditsGateReasons"],
+                "playedScenes": exported_report["story"]["playedSceneCount"],
                 "unattributedMs": exported_report["playtime"]["unattributedMs"],
             }
             context.close()
@@ -1143,18 +1171,201 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 else None,
             )
             recovery_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            recovery_page.on(
+                "response",
+                lambda response: delivery_errors.append({"status": response.status, "url": response.url})
+                if response.status >= 400
+                else None,
+            )
             recovery_page.on("dialog", lambda dialog: dialog.accept())
             recovery_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
             recovery_page.locator("#resetCampaign").click()
-            recovery_page.locator("#exportRecovery").wait_for()
-            original_run_id = recovery_page.evaluate(
+            # Campaign owns pagehide persistence. Leave it before preparing a
+            # later canonical frontier so the live opening state cannot
+            # overwrite the QA setup during navigation.
+            recovery_page.goto(f"{base}/index.html", wait_until="domcontentloaded")
+            recovery_page.locator("#gameCanvas").wait_for()
+            storyworld_seed = recovery_page.evaluate(
                 """async () => {
                   const receipt = await import('./run-receipt.mjs');
+                  const progression = await import('./progression.mjs');
+                  const field = await import('./field-runtime.mjs');
+                  const storyworld = await import('./storyworld-runtime.mjs');
+                  const { STORYWORLD_CLUSTERS } = await import('./content/storyworld-encounters.generated.mjs');
                   const loaded = receipt.createRunReceiptStorageAdapter().load();
                   if (!loaded.ok || !loaded.found) throw new Error('Recovery smoke has no clean run.');
-                  return loaded.state.runId;
+                  let receiptState = loaded.state;
+                  let campaignState = progression.createCampaignState();
+                  while (progression.getCurrentBeat(campaignState).id !== 'c3-04-lantern-boat-escort') {
+                    const beat = progression.getCurrentBeat(campaignState);
+                    const recorded = receipt.recordRunBeatCompletion(receiptState, receiptState.runId, beat.id);
+                    if (!recorded.ok) throw new Error(recorded.errors.join(' '));
+                    receiptState = recorded.state;
+                    campaignState = progression.completeCurrentBeat(campaignState);
+                  }
+                  const beat = progression.getCurrentBeat(campaignState);
+                  const fieldState = field.createFieldState({ levelId: beat.mapId, beatId: beat.id });
+                  let storyworldState = storyworld.createStoryworldState({ runId: receiptState.runId });
+                  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 2)) {
+                    storyworldState = storyworld.beginStoryworldEncounter(storyworldState, cluster.id).state;
+                    const entryOption = storyworld.getVisibleStoryworldOptions(storyworldState, cluster.id)[0];
+                    storyworldState = storyworld.chooseStoryworldOption(storyworldState, cluster.id, entryOption.id).state;
+                    storyworldState = storyworld.advanceStoryworldEncounter(storyworldState, cluster.id).state;
+                    const progress = storyworld.getStoryworldProgress(storyworldState, cluster.id);
+                    if (!progress.outcome.terminal) {
+                      const outcomeOption = storyworld.getVisibleStoryworldOptions(storyworldState, cluster.id)[0];
+                      storyworldState = storyworld.chooseStoryworldOption(storyworldState, cluster.id, outcomeOption.id).state;
+                    }
+                    storyworldState = storyworld.advanceStoryworldEncounter(storyworldState, cluster.id).state;
+                    const recorded = receipt.recordRunStoryworldDecision(receiptState, receiptState.runId, cluster.id);
+                    if (!recorded.ok) throw new Error(recorded.errors.join(' '));
+                    receiptState = recorded.state;
+                  }
+                  const saves = [
+                    progression.createLocalStorageAdapter().save(campaignState),
+                    field.createFieldStorageAdapter().save(fieldState),
+                    receipt.createRunReceiptStorageAdapter().save(receiptState),
+                    storyworld.createStoryworldStorageAdapter().save(storyworldState),
+                  ];
+                  if (saves.some(result => !result.ok)) throw new Error('Pre-boss Storyworld seed did not save.');
+                  return {
+                    runId: receiptState.runId,
+                    beatId: beat.id,
+                    levelId: beat.mapId,
+                    completedBeatCount: receiptState.completedBeatIds.length,
+                    completedStoryworldDecisionIds: receiptState.completedStoryworldDecisionIds,
+                  };
                 }"""
             )
+            recovery_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            recovery_page.locator("#storyworldPanel").wait_for(state="visible")
+            pre_boss_lock = recovery_page.evaluate(
+                """() => {
+                  const canvas = document.querySelector('#mapCanvas');
+                  return {
+                    clusterId: document.querySelector('#storyworldPanel').dataset.clusterId,
+                    phase: document.querySelector('#storyworldPanel').dataset.phase,
+                    placement: document.querySelector('#storyworldPlacement').textContent,
+                    fieldPosition: [canvas.dataset.fieldX, canvas.dataset.fieldY],
+                    fieldMoveDisabled: [...document.querySelectorAll('#fieldControls button')].every(button => button.disabled),
+                    dialogueDisabled: document.querySelector('#continueDialogue').disabled,
+                    nextDisabled: document.querySelector('#nextScene').disabled,
+                    battleDisabled: document.querySelector('#launchBattle').getAttribute('aria-disabled'),
+                    battleHref: document.querySelector('#launchBattle').getAttribute('href'),
+                    battleLabel: document.querySelector('#launchBattle').textContent,
+                  };
+                }"""
+            )
+            require(
+                storyworld_seed["beatId"] == "c3-04-lantern-boat-escort"
+                and storyworld_seed["completedStoryworldDecisionIds"] == [
+                    "sw1-clerks-second-copy",
+                    "sw2-witness-not-family",
+                ],
+                f"Pre-boss Storyworld setup drifted: {storyworld_seed}.",
+            )
+            require(
+                pre_boss_lock["clusterId"] == "sw3-sayos-warehouse-conditions"
+                and pre_boss_lock["phase"] == "unseen"
+                and "c3-dock-patrol" in pre_boss_lock["placement"]
+                and pre_boss_lock["fieldMoveDisabled"] is True
+                and pre_boss_lock["dialogueDisabled"] is True
+                and pre_boss_lock["nextDisabled"] is True
+                and pre_boss_lock["battleDisabled"] == "true"
+                and pre_boss_lock["battleHref"] is None
+                and "Resolve" in pre_boss_lock["battleLabel"],
+                f"Pre-boss Storyworld lock did not own direct play: {pre_boss_lock}.",
+            )
+            recovery_page.keyboard.press("w")
+            recovery_page.wait_for_timeout(80)
+            position_after_blocked_move = recovery_page.locator("#mapCanvas").evaluate(
+                "canvas => [canvas.dataset.fieldX, canvas.dataset.fieldY]"
+            )
+            require(
+                position_after_blocked_move == pre_boss_lock["fieldPosition"],
+                "Keyboard movement bypassed the pre-boss Storyworld lock.",
+            )
+
+            recovery_page.locator("#storyworldContinue").click()
+            recovery_page.wait_for_function(
+                "() => document.querySelector('#storyworldPanel').dataset.phase === 'entry'"
+            )
+            visible_entry_options = recovery_page.locator("[data-storyworld-option-id]:visible")
+            require(visible_entry_options.count() >= 2, "Rendered Storyworld entry exposed fewer than two options.")
+            selected_entry_option_id = visible_entry_options.first.get_attribute("data-storyworld-option-id")
+            recovery_page.keyboard.press("1")
+            recovery_page.wait_for_function(
+                "() => document.querySelector('#storyworldPanel').dataset.phase === 'entry-reaction'"
+            )
+            require(recovery_page.locator("#storyworldReaction").inner_text().strip(),
+                    "Rendered Storyworld option omitted its deterministic reaction.")
+            require(
+                recovery_page.evaluate("() => document.activeElement === document.querySelector('#storyworldPanel')"),
+                "Storyworld transition did not restore focus to the changing panel.",
+            )
+            recovery_page.locator("#storyworldContinue").click()
+            recovery_page.wait_for_function(
+                "() => document.querySelector('#storyworldPanel').dataset.phase === 'outcome'"
+            )
+            outcome_options = recovery_page.locator("[data-storyworld-option-id]:visible")
+            selected_outcome_option_id = None
+            if outcome_options.count():
+                selected_outcome_option_id = outcome_options.first.get_attribute("data-storyworld-option-id")
+                outcome_options.first.click()
+                recovery_page.wait_for_function(
+                    "() => document.querySelector('#storyworldPanel').dataset.phase === 'outcome-reaction'"
+                )
+                require(recovery_page.locator("#storyworldReaction").inner_text().strip(),
+                        "Rendered Storyworld consequence omitted its deterministic reaction.")
+            require(
+                recovery_page.locator("#storyworldContinue").is_visible()
+                and not recovery_page.locator("#storyworldContinue").is_disabled(),
+                "Storyworld consequence did not expose its final rendered continuation.",
+            )
+            recovery_page.keyboard.press("n")
+            recovery_page.locator("#storyworldPanel").wait_for(state="hidden")
+            storyworld_completed = recovery_page.evaluate(
+                """async () => {
+                  const receipt = await import('./run-receipt.mjs');
+                  const storyworld = await import('./storyworld-runtime.mjs');
+                  const loadedReceipt = receipt.createRunReceiptStorageAdapter().load();
+                  const loadedStoryworld = storyworld.createStoryworldStorageAdapter().load();
+                  if (!loadedReceipt.ok || !loadedReceipt.found || !loadedStoryworld.ok || !loadedStoryworld.found) {
+                    throw new Error('Rendered Storyworld completion did not persist.');
+                  }
+                  return {
+                    receiptDecisionIds: loadedReceipt.state.completedStoryworldDecisionIds,
+                    storyworldDecisionIds: storyworld.getCompletedStoryworldClusterIds(loadedStoryworld.state),
+                    proofEligible: loadedStoryworld.state.proofEligible,
+                    coverageStartBeatIndex: loadedStoryworld.state.coverageStartBeatIndex,
+                    sw3Phase: storyworld.getStoryworldProgress(
+                      loadedStoryworld.state,
+                      'sw3-sayos-warehouse-conditions',
+                    ).phase,
+                  };
+                }"""
+            )
+            require(
+                storyworld_completed == {
+                    "receiptDecisionIds": [
+                        "sw1-clerks-second-copy",
+                        "sw2-witness-not-family",
+                        "sw3-sayos-warehouse-conditions",
+                    ],
+                    "storyworldDecisionIds": [
+                        "sw1-clerks-second-copy",
+                        "sw2-witness-not-family",
+                        "sw3-sayos-warehouse-conditions",
+                    ],
+                    "proofEligible": True,
+                    "coverageStartBeatIndex": 0,
+                    "sw3Phase": "complete",
+                },
+                f"Rendered Storyworld completion and receipt mirror diverged: {storyworld_completed}.",
+            )
+
+            recovery_page.locator("#exportRecovery").wait_for()
+            original_run_id = storyworld_seed["runId"]
             with recovery_page.expect_download() as recovery_download_info:
                 recovery_page.locator("#exportRecovery").click()
             recovery_download = recovery_download_info.value
@@ -1164,12 +1375,23 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "Recovery checkpoint download failed.",
             )
             recovery_checkpoint = json.loads(Path(recovery_download_path).read_text(encoding="utf-8"))
-            require(recovery_checkpoint.get("schemaVersion") == 1, "Recovery checkpoint schema drifted.")
+            require(recovery_checkpoint.get("schemaVersion") == 2, "Recovery checkpoint schema drifted.")
             require(recovery_checkpoint.get("recoveryOnly") is True, "Recovery checkpoint lost its recovery-only label.")
-            require(len(recovery_checkpoint.get("records", [])) == 13, "Recovery checkpoint omitted an authority.")
+            require(len(recovery_checkpoint.get("records", [])) == 14, "Recovery checkpoint omitted an authority.")
+            require(
+                [record.get("id") for record in recovery_checkpoint.get("records", [])][-1] == "storyworld",
+                "Recovery checkpoint did not retain Storyworld as its fourteenth authority.",
+            )
             require(
                 recovery_checkpoint.get("summary", {}).get("runId") == original_run_id,
                 "Recovery checkpoint summary is not bound to the exported run.",
+            )
+            require(
+                recovery_checkpoint.get("summary", {}).get("storyworldCompletedClusterCount") == 3
+                and recovery_checkpoint.get("summary", {}).get("storyworldRequiredClusterCount") == 10
+                and recovery_checkpoint.get("summary", {}).get("storyworldNarrativeComplete") is False
+                and recovery_checkpoint.get("summary", {}).get("storyworldProofEligible") is True,
+                f"Recovery checkpoint Storyworld summary drifted: {recovery_checkpoint.get('summary', {})}.",
             )
             require(
                 "not playtest proof" in recovery_page.locator("#recoveryStatus").inner_text(),
@@ -1201,7 +1423,9 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             restored = recovery_page.evaluate(
                 """async ({ expected, originalRunId }) => {
                   const receipt = await import('./run-receipt.mjs');
+                  const storyworld = await import('./storyworld-runtime.mjs');
                   const loaded = receipt.createRunReceiptStorageAdapter().load();
+                  const loadedStoryworld = storyworld.createStoryworldStorageAdapter().load();
                   const mismatches = Object.entries(expected)
                     .filter(([key, serialized]) => window.__recoveryRawAtDocumentStart?.[key] !== serialized)
                     .map(([key]) => key);
@@ -1209,6 +1433,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     runId: loaded.state.runId,
                     mismatches,
                     proof: receipt.getRunProofReport(loaded.state),
+                    storyworldDecisionIds: storyworld.getCompletedStoryworldClusterIds(loadedStoryworld.state),
+                    storyworldProofEligible: loadedStoryworld.state.proofEligible,
                     expectedRun: originalRunId,
                   };
                 }""",
@@ -1217,12 +1443,26 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(restored["runId"] == original_run_id, "Recovery import did not restore the exported run.")
             require(not restored["mismatches"], f"Recovery import changed exact authority strings: {restored['mismatches']}.")
             require(restored["proof"]["durationProven"] is False, "Recovery import fabricated duration proof.")
+            require(
+                restored["storyworldDecisionIds"] == storyworld_completed["storyworldDecisionIds"]
+                and restored["storyworldProofEligible"] is True,
+                f"Recovery import did not restore Storyworld progress exactly: {restored}.",
+            )
             recovery_result = {
                 "filename": recovery_download.suggested_filename,
                 "authorityRecords": len(recovery_checkpoint["records"]),
                 "exactStringsRestored": True,
                 "runRestored": original_run_id,
                 "durationProven": restored["proof"]["durationProven"],
+                "storyworldCompletedClusters": len(restored["storyworldDecisionIds"]),
+            }
+            storyworld_ui = {
+                "clusterId": pre_boss_lock["clusterId"],
+                "movementBlocked": position_after_blocked_move == pre_boss_lock["fieldPosition"],
+                "selectedEntryOptionId": selected_entry_option_id,
+                "selectedOutcomeOptionId": selected_outcome_option_id,
+                "receiptMirrored": restored["storyworldDecisionIds"]
+                == storyworld_completed["receiptDecisionIds"],
             }
             recovery_context.close()
 
@@ -1841,6 +2081,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         credits_seed=credits_seed,
         credits_final=credits_final,
         evidence_export=evidence_export,
+        storyworld_ui=storyworld_ui,
         recovery_checkpoint=recovery_result,
         route_action=route_action,
         catalog_seed=catalog_seed,

@@ -10,8 +10,13 @@
     "transparentGutter": 1
   },
   "sheet": {
-    "columns": ["speaker", "interviewee", "confined-person", "courier"],
-    "rows": ["south-idle"]
+    "columns": [
+      "speaker", "interviewee", "confined-person", "courier",
+      "dock-worker", "ferry-captain", "market-seller", "trade-broker",
+      "print-organizer", "port-clerk", "physician", "resident",
+      "former-retainer", "caretaker", "net-mender", "post-keeper"
+    ],
+    "rows": ["south-idle", "south-gesture"]
   },
   "roleTaxonomy": [
     {
@@ -45,6 +50,102 @@
       "paletteId": "npc-courier-cedar-rain-v1",
       "silhouette": "forward civilian coat, compact secular satchel, empty hands, no weapon or insignia",
       "colors": {"primary": "#3d5964", "secondary": "#624a38", "light": "#71838a", "accent": "#c08b52", "hair": "#28201d"}
+    },
+    {
+      "id": "dock-worker",
+      "meaning": "A Hoshigawa dock worker who owns practical knowledge of manifests and loading routes.",
+      "liveContract": "explicit level fieldCharacter role dock-worker",
+      "paletteId": "npc-dock-worker-rope-indigo-v1",
+      "silhouette": "rolled work sleeves, short rain wrap, secular rope coil",
+      "colors": {"primary": "#354d63", "secondary": "#67523c", "light": "#71859a", "accent": "#b78b4f", "hair": "#211d1b"}
+    },
+    {
+      "id": "ferry-captain",
+      "meaning": "A Hoshigawa ferry captain whose route judgment remains locally authoritative.",
+      "liveContract": "explicit level fieldCharacter role ferry-captain",
+      "paletteId": "npc-ferry-captain-deep-blue-v1",
+      "silhouette": "broad rain coat, head cloth, empty signaling hand",
+      "colors": {"primary": "#2f4661", "secondary": "#4f4438", "light": "#687c91", "accent": "#d0ae68", "hair": "#171a1d"}
+    },
+    {
+      "id": "market-seller",
+      "meaning": "A Hoshigawa market seller who supplies local route testimony.",
+      "liveContract": "explicit level fieldCharacter role market-seller",
+      "paletteId": "npc-market-seller-clay-moss-v1",
+      "silhouette": "layered apron, compact secular produce basket",
+      "colors": {"primary": "#70503b", "secondary": "#4b654f", "light": "#987254", "accent": "#d2b76f", "hair": "#30231e"}
+    },
+    {
+      "id": "trade-broker",
+      "meaning": "A Sodegaura trade broker who explains port etiquette without controlling community choices.",
+      "liveContract": "explicit level fieldCharacter role trade-broker",
+      "paletteId": "npc-trade-broker-teal-umber-v1",
+      "silhouette": "clean layered coat, secular account satchel",
+      "colors": {"primary": "#47666a", "secondary": "#584536", "light": "#799093", "accent": "#c49c59", "hair": "#271f1c"}
+    },
+    {
+      "id": "print-organizer",
+      "meaning": "A Japanese print organizer who decides what testimony may travel.",
+      "liveContract": "explicit level fieldCharacter role print-organizer or side-story presentationRole print-organizer",
+      "paletteId": "npc-print-organizer-indigo-paper-v1",
+      "silhouette": "ink-dark sleeves, blank secular paper bundle, no devotional print",
+      "colors": {"primary": "#3d4d6c", "secondary": "#6b543e", "light": "#7786a0", "accent": "#d1c18f", "hair": "#201b1c"}
+    },
+    {
+      "id": "port-clerk",
+      "meaning": "A Sodegaura port clerk who provides a bounded witness account.",
+      "liveContract": "explicit level fieldCharacter role port-clerk",
+      "paletteId": "npc-port-clerk-reed-green-v1",
+      "silhouette": "narrow work coat, closed secular ledger at side",
+      "colors": {"primary": "#4d634f", "secondary": "#5e4939", "light": "#7c8c70", "accent": "#c39855", "hair": "#2a211e"}
+    },
+    {
+      "id": "physician",
+      "meaning": "A village physician whose practical aid precedes any request for risk.",
+      "liveContract": "explicit level fieldCharacter role physician",
+      "paletteId": "npc-physician-herb-ash-v1",
+      "silhouette": "short cloak, secular medicine basket, single herb stem",
+      "colors": {"primary": "#4b5f55", "secondary": "#5f4a39", "light": "#7f8e7d", "accent": "#b6a765", "hair": "#24201d"}
+    },
+    {
+      "id": "resident",
+      "meaning": "A coal-town resident who names the civilian cost of the requisition system.",
+      "liveContract": "explicit level fieldCharacter role resident",
+      "paletteId": "npc-resident-ash-clay-v1",
+      "silhouette": "ash-worn layers, empty open hand, no occupational stereotype",
+      "colors": {"primary": "#5d5148", "secondary": "#4a5660", "light": "#81736a", "accent": "#b78b63", "hair": "#272120"}
+    },
+    {
+      "id": "former-retainer",
+      "meaning": "A former retainer choosing civilian stand-down under locally stated terms.",
+      "liveContract": "explicit level fieldCharacter role former-retainer",
+      "paletteId": "npc-former-retainer-earth-blue-v1",
+      "silhouette": "broad repaired civilian mantle, work bag, no weapon or crest",
+      "colors": {"primary": "#5d5543", "secondary": "#3f5062", "light": "#82765b", "accent": "#b3965d", "hair": "#211e1c"}
+    },
+    {
+      "id": "caretaker",
+      "meaning": "A clandestine community caretaker who sets handling rules for private letters.",
+      "liveContract": "side-story presentationRole caretaker",
+      "paletteId": "npc-caretaker-charcoal-reed-v1",
+      "silhouette": "plain hooded rain wrap, secular cloth bundle, empty hand",
+      "colors": {"primary": "#404a54", "secondary": "#5a4d3e", "light": "#6d7780", "accent": "#aaa070", "hair": "#222022"}
+    },
+    {
+      "id": "net-mender",
+      "meaning": "A fishing-village net mender who owns the meaning of local rope marks.",
+      "liveContract": "side-story presentationRole net-mender",
+      "paletteId": "npc-net-mender-sea-reed-v1",
+      "silhouette": "working wrap, small secular net coil, braced seated-work stance",
+      "colors": {"primary": "#3f5a67", "secondary": "#66533d", "light": "#718792", "accent": "#bd9b5c", "hair": "#24201d"}
+    },
+    {
+      "id": "post-keeper",
+      "meaning": "A post keeper who confirms which civilian fog signal must remain in service.",
+      "liveContract": "side-story presentationRole post-keeper",
+      "paletteId": "npc-post-keeper-rain-ochre-v1",
+      "silhouette": "weather cape, secular travel pouch, empty signaling hand",
+      "colors": {"primary": "#445d70", "secondary": "#67503c", "light": "#74899b", "accent": "#c4a25e", "hair": "#211d1c"}
     }
   ],
   "exclusions": [

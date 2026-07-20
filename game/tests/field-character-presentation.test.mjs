@@ -16,17 +16,19 @@ const keysFor = (predicate) => typed
 test('level schema publishes exactly the audited field-character set', () => {
   assert.equal(LEVEL_SCHEMA_VERSION, 2);
   assert.equal(typed.length, 18);
-  assert.deepEqual(keysFor(({ kind, role }) => kind === 'npc' && role === 'speaker'), [
-    'c1-ferry-landing/dock-worker',
-    'c1-ferry-landing/ferry-captain',
-    'c1-ferry-landing/market-seller',
-    'hsh-post-town/former-retainer',
-    'kgr-requisition-town/resident-kitchen',
-    'ngi-fishing-village/kiku-remedy-basket',
-    'sdg-customs-house/clerk-desk',
-    'sdg-market-lane/printer-stall',
+  assert.deepEqual(keysFor(({ kind, role }) => kind === 'npc' && !['confined-person', 'courier'].includes(role)), [
+    'c1-ferry-landing/dock-worker', 'c1-ferry-landing/ferry-captain',
+    'c1-ferry-landing/market-seller', 'hsh-post-town/former-retainer',
+    'kgr-requisition-town/resident-kitchen', 'ngi-fishing-village/kiku-remedy-basket',
+    'sdg-customs-house/clerk-desk', 'sdg-market-lane/printer-stall',
     'sdg-market-lane/trade-broker',
   ]);
+  assert.deepEqual(typed.filter(({ interactable }) => interactable.fieldCharacter?.kind === 'npc')
+    .map(({ interactable }) => interactable.fieldCharacter.role).sort(), [
+      'confined-person', 'confined-person', 'courier', 'dock-worker', 'ferry-captain',
+      'former-retainer', 'market-seller', 'physician', 'port-clerk', 'print-organizer',
+      'resident', 'trade-broker',
+    ]);
   assert.deepEqual(keysFor(({ kind, role }) => kind === 'npc' && role === 'confined-person'), [
     'tkm-abandoned-chapel/prisoner-grate-east',
     'tkm-abandoned-chapel/prisoner-grate-west',

@@ -1183,7 +1183,10 @@ function attemptFieldMove(dx, dy) {
 
 function drawNpcFieldMarker(role, px, py, cell, { badge = null } = {}) {
   if (!role || npcFieldAtlasState !== 'ready' || !npcFieldAtlasImageHasExpectedSize(npcFieldAtlasImage)) return false;
-  const frame = getNpcFieldFrame(role);
+  const pose = reducedMotion.matches || Math.floor(performance.now() / 900) % 4 !== 1
+    ? 'south-idle'
+    : 'south-gesture';
+  const frame = getNpcFieldFrame(role, pose);
   const drawHeight = cell * 1.22;
   const drawWidth = drawHeight * (frame.width / frame.height);
   const footY = py + cell * 0.34;
@@ -1456,6 +1459,7 @@ function drawMap(level, encounter, now) {
       markerType: 'side-story',
       objectiveType: questMarker.objective.type,
       targetKind: questMarker.objective.targetKind,
+      presentationRole: questMarker.objective.presentationRole,
     });
     if (!drawNpcFieldMarker(role, px, py, cell)) {
       const pulse = 0.68 + (Math.sin(now / 210) * 0.15);
@@ -1667,6 +1671,7 @@ function renderStoryworldPanel(presentation) {
     button.type = 'button';
     button.className = 'storyworld-option';
     button.dataset.storyworldOptionId = option.id;
+    button.setAttribute('aria-keyshortcuts', String(index + 1));
     button.textContent = `${index + 1}. ${option.text}`;
     return button;
   }));
@@ -1902,6 +1907,7 @@ function renderChoices(beat) {
     button.type = 'button';
     button.className = 'story-choice';
     button.dataset.choiceId = choice.id;
+    button.setAttribute('aria-keyshortcuts', String(index + 1));
     button.innerHTML = `<strong>${index + 1}.</strong> ${choice.label}`;
     button.disabled = isBeatCompleted(campaignState, beat.id) || !currentNarrativeComplete(beat);
     if (pickedIds.has(choice.id)) button.classList.add('is-picked');
@@ -2003,11 +2009,12 @@ function renderWitnessChronicleJournal(chapter) {
   if (isChoiceStage && progress.dialogueComplete) {
     const prompt = document.createElement('p');
     prompt.textContent = progress.chronicle.choice.prompt;
-    witnessChoiceDeck.append(prompt, ...progress.chronicle.choice.options.map((option) => {
+    witnessChoiceDeck.append(prompt, ...progress.chronicle.choice.options.map((option, index) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.witnessChoiceId = option.id;
       button.setAttribute('aria-pressed', String(selectedWitnessChoiceId === option.id));
+      button.setAttribute('aria-keyshortcuts', String(index + 1));
       button.textContent = `${option.label} ${option.consequence.summary}`;
       return button;
     }));

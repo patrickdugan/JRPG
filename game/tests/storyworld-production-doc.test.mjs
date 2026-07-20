@@ -40,7 +40,7 @@ test('production map locks authored-versus-played arithmetic and core guardrails
   assert.match(DOC, /\*\*90 scenes\*\*/);
   assert.match(DOC, /\*\*80 played scenes\*\*/);
   assert.equal(STORYWORLD_PACING_REPORT.withinFiveToSixHourTarget, true);
-  assert.match(DOC, /323\.733 minutes \(about 5\.40 hours\)/);
+  assert.match(DOC, /323\.525 minutes \(about 5\.39 hours\)/);
   assert.match(DOC, /Sacred and devotional objects are not loot/);
   assert.match(DOC, /Japanese organizers, witnesses, crews, and custodians retain authority/);
   assert.match(DOC, /not absolution, command authority, private access, restored office/);

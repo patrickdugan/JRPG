@@ -88,14 +88,14 @@
             <span id="campConversationSummary">0 / 90 complete</span>
           </header>
           <div class="camp-conversation-layout">
-            <div id="campConversationList" class="camp-conversation-list" aria-label="Available companion conversations"></div>
-            <article id="campConversationStage" class="camp-conversation-stage" hidden>
+            <div id="campConversationList" class="camp-conversation-list" role="group" aria-label="Available companion conversations"></div>
+            <article id="campConversationStage" class="camp-conversation-stage" aria-labelledby="campConversationTitle" hidden>
               <small id="campConversationMeta"></small>
               <h3 id="campConversationTitle" tabindex="-1">Conversation</h3>
               <p id="campConversationTheme"></p>
-              <blockquote id="campConversationLine" aria-live="polite" aria-atomic="true"></blockquote>
-              <div id="campConversationChoices" class="camp-conversation-choices" aria-label="Conversation response"></div>
-              <button id="advanceCampConversation" type="button">Continue conversation</button>
+              <blockquote id="campConversationLine" role="status" aria-live="polite" aria-atomic="true"></blockquote>
+              <div id="campConversationChoices" class="camp-conversation-choices" role="group" aria-label="Conversation response"></div>
+              <button id="advanceCampConversation" type="button" aria-keyshortcuts="N">Continue conversation</button>
             </article>
           </div>
         </section>
@@ -106,14 +106,14 @@
             <span id="partyCouncilSummary">0 / 30 complete</span>
           </header>
           <div class="party-council-layout">
-            <div id="partyCouncilList" class="party-council-list" aria-label="Available party councils"></div>
-            <article id="partyCouncilStage" class="party-council-stage" hidden>
+            <div id="partyCouncilList" class="party-council-list" role="group" aria-label="Available party councils"></div>
+            <article id="partyCouncilStage" class="party-council-stage" aria-labelledby="partyCouncilTitle" hidden>
               <small id="partyCouncilMeta"></small>
               <h3 id="partyCouncilTitle" tabindex="-1">Party council</h3>
               <p id="partyCouncilTheme"></p>
-              <blockquote id="partyCouncilLine" aria-live="polite" aria-atomic="true"></blockquote>
+              <blockquote id="partyCouncilLine" role="status" aria-live="polite" aria-atomic="true"></blockquote>
               <div id="partyCouncilChoices" class="party-council-choices" role="group" aria-labelledby="partyCouncilLine"></div>
-              <button id="advancePartyCouncil" type="button">Continue council</button>
+              <button id="advancePartyCouncil" type="button" aria-keyshortcuts="N">Continue council</button>
             </article>
           </div>
         </section>
@@ -124,13 +124,13 @@
             <span id="archiveRecordSummary">0 / 60 read</span>
           </header>
           <div class="archive-record-layout">
-            <div id="archiveRecordList" class="archive-record-list" aria-label="Unlocked public archive records"></div>
-            <article id="archiveRecordStage" class="archive-record-stage" hidden>
+            <div id="archiveRecordList" class="archive-record-list" role="group" aria-label="Unlocked public archive records"></div>
+            <article id="archiveRecordStage" class="archive-record-stage" aria-labelledby="archiveRecordTitle" hidden>
               <small id="archiveRecordMeta"></small>
               <h3 id="archiveRecordTitle" tabindex="-1">Public record</h3>
               <p id="archiveRecordAccess"></p>
-              <blockquote id="archiveRecordParagraph" aria-live="polite" aria-atomic="true"></blockquote>
-              <button id="advanceArchiveRecord" type="button">Continue reading</button>
+              <blockquote id="archiveRecordParagraph" role="status" aria-live="polite" aria-atomic="true"></blockquote>
+              <button id="advanceArchiveRecord" type="button" aria-keyshortcuts="N">Continue reading</button>
             </article>
           </div>
         </section>
@@ -147,7 +147,7 @@
           <header class="panel-heading">
             <div><p class="eyebrow">Camp record</p><h2>Latest action</h2></div>
           </header>
-          <p id="campFeedback" role="status">The lantern is steady. Choose a party member or prepare the route.</p>
+          <p id="campFeedback" role="status" aria-live="polite" aria-atomic="true">The lantern is steady. Choose a party member or prepare the route.</p>
         </section>
       </section>
       <noscript><p class="noscript">Enable JavaScript to use the camp menu.</p></noscript>

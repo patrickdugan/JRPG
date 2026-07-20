@@ -33,7 +33,7 @@
             <p class="eyebrow">ENDING LEDGER</p>
             <h2 id="creditsHeading">Credits</h2>
           </div>
-          <span id="creditsStatus" class="receipt-status" role="status" tabindex="-1">Loading clean-run receipt…</span>
+          <span id="creditsStatus" class="receipt-status" tabindex="-1">Loading clean-run receipt…</span>
         </div>
 
         <div class="credit-grid">
@@ -71,7 +71,7 @@
               <p class="eyebrow">ACTIVE-PLAY RECEIPT</p>
               <h2 id="timingHeading">Playtest timing ledger</h2>
             </div>
-            <p id="timingAttribution" class="timing-attribution" role="status">Loading chapter attribution…</p>
+            <p id="timingAttribution" class="timing-attribution">Loading chapter attribution…</p>
           </div>
           <div class="timing-grid">
             <section aria-labelledby="categoryTimingHeading">
@@ -95,9 +95,9 @@
             <p id="creditsActionHint" class="hint">This explicit action freezes the run receipt. Visit camp first if you still want post-final content to count.</p>
           </div>
           <div class="seal-actions">
-            <button id="sealCredits" type="button">Complete credits &amp; seal run receipt</button>
-            <button id="exportEvidence" type="button" disabled>Export playtest evidence (.json)</button>
-            <p id="evidenceExportHint" class="hint" role="status" aria-live="polite">Loading export readinessâ€¦</p>
+            <button id="sealCredits" type="button" aria-describedby="creditsProof creditsActionHint">Complete credits &amp; seal run receipt</button>
+            <button id="exportEvidence" type="button" aria-describedby="evidenceExportHint" disabled>Export playtest evidence (.json)</button>
+            <p id="evidenceExportHint" class="hint" role="status" aria-live="polite" aria-atomic="true">Loading export readiness…</p>
           </div>
         </section>
 

@@ -24,8 +24,8 @@
             <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
             <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
           </div>
-          <span id="runProofStatus" class="run-proof-status" role="status">Unverified save</span>
-          <span id="recoveryStatus" class="recovery-status" role="status">Recovery checkpoints are separate from playtest proof.</span>
+          <span id="runProofStatus" class="run-proof-status" role="status" aria-live="polite" aria-atomic="true">Unverified save</span>
+          <span id="recoveryStatus" class="recovery-status" role="status" aria-live="polite" aria-atomic="true">Recovery checkpoints are separate from playtest proof.</span>
           <a class="subtle-button" href="camp.html">Camp &amp; Loadout</a>
           <a class="battle-link" href="index.html">Training Court</a>
           <button id="exportRecovery" class="subtle-button" type="button">Export recovery checkpoint</button>
@@ -59,9 +59,9 @@
               <span id="fieldPlaytime">00:00:00</span>
             </div>
           </div>
-          <p id="fieldFeedback" class="field-feedback" role="status">Field movement: W/A/S/D orthogonal · Q/E/Z/C diagonal. Movement is one exact map space per key press.</p>
+          <p id="fieldFeedback" class="field-feedback" role="status" aria-live="polite" aria-atomic="true">Field movement: W/A/S/D orthogonal · Q/E/Z/C diagonal. Movement is one exact map space per key press.</p>
           <div class="field-command-row">
-            <div id="fieldControls" class="field-controls" aria-label="Field movement controls">
+            <div id="fieldControls" class="field-controls" role="group" aria-label="Field movement controls">
               <button type="button" data-field-move="-1,-1" aria-label="Move north-west">&#8598;</button>
               <button type="button" data-field-move="0,-1" aria-label="Move north">&#8593;</button>
               <button type="button" data-field-move="1,-1" aria-label="Move north-east">&#8599;</button>
@@ -72,7 +72,7 @@
               <button type="button" data-field-move="0,1" aria-label="Move south">&#8595;</button>
               <button type="button" data-field-move="1,1" aria-label="Move south-east">&#8600;</button>
             </div>
-            <button id="interactField" class="field-interact" type="button">Interact / Investigate <kbd>X</kbd></button>
+            <button id="interactField" class="field-interact" type="button" aria-keyshortcuts="X Enter">Interact / Investigate <kbd>X</kbd></button>
             <div class="field-objective-card">
               <strong>Field objective</strong>
               <span id="fieldObjective"></span>
@@ -98,7 +98,7 @@
             </div>
             <div class="dialogue-controls">
               <span id="dialogueProgress">Dialogue 1/1</span>
-              <button id="continueDialogue" class="subtle-button" type="button">Continue dialogue</button>
+              <button id="continueDialogue" class="subtle-button" type="button" aria-keyshortcuts="N">Continue dialogue</button>
             </div>
             <details class="presentation-transcript">
               <summary>Presentation transcript</summary>
@@ -111,8 +111,8 @@
                 <div><dt>Transition</dt><dd id="sceneTransitionCue"></dd></div>
               </dl>
             </details>
-            <div id="choiceDeck" class="choice-deck" aria-label="Story choices"></div>
-            <p id="choiceResult" class="choice-result" role="status"></p>
+            <div id="choiceDeck" class="choice-deck" role="group" aria-label="Story choices"></div>
+            <p id="choiceResult" class="choice-result" role="status" aria-live="polite" aria-atomic="true"></p>
           </section>
 
           <section id="storyworldPanel" class="storyworld-card" aria-labelledby="storyworldTitle" tabindex="-1" hidden>
@@ -128,17 +128,17 @@
             <p id="storyworldReaction" class="storyworld-reaction" role="status" aria-live="polite" aria-atomic="true"></p>
             <div class="storyworld-controls">
               <p id="storyworldStateSummary"></p>
-              <button id="storyworldContinue" class="subtle-button" type="button">Begin encounter</button>
+              <button id="storyworldContinue" class="subtle-button" type="button" aria-keyshortcuts="N">Begin encounter</button>
             </div>
           </section>
 
           <footer class="scene-controls">
-            <button id="previousScene" type="button">← Previous</button>
+            <button id="previousScene" type="button" aria-keyshortcuts="ArrowLeft">← Previous</button>
             <div class="progress-wrap" aria-label="Chapter progress">
               <span id="progressLabel"></span>
               <div class="progress-track"><span id="progressFill"></span></div>
             </div>
-            <button id="nextScene" type="button">Next scene →</button>
+            <button id="nextScene" type="button" aria-keyshortcuts="ArrowRight">Next scene →</button>
           </footer>
         </section>
 
@@ -156,7 +156,7 @@
             </dl>
             <div class="encounter-actions">
               <a id="launchBattle" class="battle-launch" href="battle.html">Enter encounter</a>
-              <span id="battleStatus" class="battle-status">Battle status pending</span>
+              <span id="battleStatus" class="battle-status" role="status" aria-live="polite" aria-atomic="true">Battle status pending</span>
             </div>
           </section>
           <section class="party-card">
@@ -205,9 +205,9 @@
               <small id="witnessStageMeta"></small>
               <h3 id="witnessStageTitle"></h3>
               <p id="witnessStageInstruction"></p>
-              <blockquote id="witnessDialogue" class="witness-dialogue"></blockquote>
-              <div id="witnessChoiceDeck" class="witness-choice-deck" aria-label="Witness chronicle consequence"></div>
-              <p id="witnessStageHint" class="witness-stage-hint"></p>
+              <blockquote id="witnessDialogue" class="witness-dialogue" aria-live="polite" aria-atomic="true"></blockquote>
+              <div id="witnessChoiceDeck" class="witness-choice-deck" role="group" aria-label="Witness chronicle consequence"></div>
+              <p id="witnessStageHint" class="witness-stage-hint" role="status" aria-live="polite" aria-atomic="true"></p>
             </div>
           </section>
         </aside>

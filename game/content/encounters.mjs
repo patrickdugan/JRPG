@@ -228,15 +228,15 @@ export const ENCOUNTERS = [
     enemies: [
       {
         id: 'cinder-hound', name: 'Cinder Hound', count: 2, positions: ['2,1', '9,1'], role: 'line-lunge skirmisher',
-        stats: { hp: 94, power: 14, guard: 9, speed: 94 },
+        stats: { hp: 94, power: 10, guard: 9, speed: 94 },
         resistances: {
           delivery: { cut: 0.75, pierce: 1.25, crush: 1, arcane: 1 },
           essence: { ember: 0.75, frost: 1, storm: 1, radiance: 1, umbral: 1 },
         },
         ledger: 'Soot-covered hide: Cut 75%, Pierce 125%, Ember 75%.',
         skills: [
-          { id: 'cinder-lunge', name: 'Cinder Lunge', delivery: 'pierce', essence: 'ember', power: 13, range: 3, shape: { type: 'line', length: 3, origin: 'hound-facing' }, telegraph: 'A three-space red line appears before the lunge.', recoveryPulses: 1, dodgeable: true },
-          { id: 'ash-bite', name: 'Ash Bite', delivery: 'cut', essence: 'ember', power: 11, range: 1, telegraph: 'Adjacent jaw flare.', recoveryPulses: 0, dodgeable: true },
+          { id: 'cinder-lunge', name: 'Cinder Lunge', delivery: 'pierce', essence: 'ember', power: 10, range: 3, shape: { type: 'line', length: 3, origin: 'hound-facing' }, telegraph: 'A three-space red line appears before the lunge.', recoveryPulses: 1, dodgeable: true },
+          { id: 'ash-bite', name: 'Ash Bite', delivery: 'cut', essence: 'ember', power: 8, range: 1, telegraph: 'Adjacent jaw flare.', recoveryPulses: 0, dodgeable: true },
         ],
         ai: ['Lunge a target in line.', 'Bite an adjacent target.', 'Otherwise move one space toward the nearest target.'],
       },
