@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "assetId": "scene-backdrop-suite-v01",
+  "authorship": "original-code-native-pixel-primitives",
+  "geometry": {
+    "frameWidth": 320,
+    "frameHeight": 180,
+    "columns": 5,
+    "rows": 4,
+    "sheetWidth": 1600,
+    "sheetHeight": 720,
+    "uiCalmBand": [0, 132, 320, 48],
+    "focalSafeRect": [48, 20, 224, 106]
+  },
+  "renderPolicy": {
+    "presentationOnly": true,
+    "collisionAuthority": "none",
+    "bakeActors": false,
+    "bakeText": false,
+    "bakeUi": false,
+    "bakeSacredObjects": false,
+    "bakeAuthenticHeraldry": false,
+    "generatedConceptPixels": false,
+    "externalPixels": false,
+    "partialAlpha": false
+  },
+  "paletteFamilies": {
+    "rain-inland": {
+      "sky0": "#0B1020", "sky1": "#16233A", "far": "#23364B", "ground0": "#202D3D",
+      "ground1": "#29394A", "shadow": "#111A27", "edge": "#40556A", "cedar0": "#34252A",
+      "cedar1": "#5A3A2C", "paper": "#D7C99A", "light": "#F6E8B9", "water": "#27466B",
+      "accent": "#6B5D40", "alarm": "#762B32"
+    },
+    "archive-indigo": {
+      "sky0": "#0B1020", "sky1": "#16233A", "far": "#252E41", "ground0": "#222C3A",
+      "ground1": "#2C3948", "shadow": "#111720", "edge": "#526479", "cedar0": "#2B2023",
+      "cedar1": "#4A3433", "paper": "#D7C99A", "light": "#F6E8B9", "water": "#28556C",
+      "accent": "#637462", "alarm": "#762B32"
+    },
+    "coast-fog": {
+      "sky0": "#101827", "sky1": "#26384A", "far": "#465B68", "ground0": "#283B43",
+      "ground1": "#334A52", "shadow": "#111C22", "edge": "#657982", "cedar0": "#332A29",
+      "cedar1": "#5A4438", "paper": "#D7C99A", "light": "#F6E8B9", "water": "#286078",
+      "accent": "#7D7058", "alarm": "#762B32"
+    },
+    "kagura-ash": {
+      "sky0": "#111116", "sky1": "#29282B", "far": "#454047", "ground0": "#343135",
+      "ground1": "#454047", "shadow": "#17161A", "edge": "#6B6262", "cedar0": "#302322",
+      "cedar1": "#49332D", "paper": "#C8B88F", "light": "#E2D3A5", "water": "#35515A",
+      "accent": "#806044", "alarm": "#B34A3E"
+    },
+    "court-vermilion": {
+      "sky0": "#0B0D16", "sky1": "#1D1B2A", "far": "#332A39", "ground0": "#292431",
+      "ground1": "#352D3B", "shadow": "#111017", "edge": "#665361", "cedar0": "#281C24",
+      "cedar1": "#493039", "paper": "#C8B68C", "light": "#E7D8A8", "water": "#304D5D",
+      "accent": "#795246", "alarm": "#781E39"
+    },
+    "daybreak-repair": {
+      "sky0": "#263A45", "sky1": "#4F7392", "far": "#88C8C5", "ground0": "#786A55",
+      "ground1": "#A58D65", "shadow": "#263A45", "edge": "#9DBBB2", "cedar0": "#5A3A2C",
+      "cedar1": "#8B6043", "paper": "#D7C99A", "light": "#D7F0D5", "water": "#5B8C91",
+      "accent": "#A08B58", "alarm": "#762B32"
+    }
+  },
+  "backdrops": [
+    {
+      "id": "hoshigawa-rain-lane", "paletteFamily": "rain-inland", "motif": "river-lane", "weather": "rain",
+      "focalMotif": "household-lantern-and-medicine-route", "supportMotifs": ["wet-cedar-homes", "river-drainage", "blank-registry-tags"],
+      "beatIds": ["p00-delivery-in-rain", "p01-altered-order", "p02-medicine-across-lane", "p03-bailiff-returns", "p04-river-escape"]
+    },
+    {
+      "id": "hoshigawa-record-room", "paletteFamily": "archive-indigo", "motif": "record-room", "weather": "sheltered-rain",
+      "focalMotif": "blank-household-records-at-lamplight", "supportMotifs": ["cedar-shelves", "archive-case", "paper-bundles"],
+      "beatIds": ["p05-archive-promise", "c1-01-registers-omissions"]
+    },
+    {
+      "id": "river-ferry-cedars", "paletteFamily": "rain-inland", "motif": "ferry-cedars", "weather": "rain",
+      "focalMotif": "empty-ferry-landing", "supportMotifs": ["flooded-cedars", "practical-bundles", "river-route"],
+      "beatIds": ["c1-02-kikus-threshold", "c1-03-ferry-gossip", "c1-04-flooded-cedars"]
+    },
+    {
+      "id": "tax-storehouse", "paletteFamily": "archive-indigo", "motif": "tax-storehouse", "weather": "sheltered-rain",
+      "focalMotif": "copy-table-before-cold-brazier", "supportMotifs": ["blank-ledger-bundles", "storehouse-beams", "drainage"],
+      "beatIds": ["c1-05-storehouse-clerk", "c1-06-copy-before-fire"]
+    },
+    {
+      "id": "takamine-rain-temple", "paletteFamily": "rain-inland", "motif": "registry-gate", "weather": "mountain-rain",
+      "focalMotif": "fictional-local-registry-gate", "supportMotifs": ["cedar-service-route", "plaster-infill", "blank-forms", "storm-drains"],
+      "beatIds": ["c2-01-rain-gate", "c2-02-chapel-service-route", "c2-03-lises-interruption", "c2-04-bell-stair"]
+    },
+    {
+      "id": "takamine-undercrypt", "paletteFamily": "archive-indigo", "motif": "undercrypt", "weather": "seepage",
+      "focalMotif": "faceted-registry-resonator", "supportMotifs": ["flooded-archive", "prison-lattice", "floor-drains"],
+      "beatIds": ["c2-05-undercrypt-truth", "c2-06-name-from-europe"]
+    },
+    {
+      "id": "sodegaura-market-customs", "paletteFamily": "coast-fog", "motif": "market-customs", "weather": "sea-mist",
+      "focalMotif": "printer-stall-and-customs-counter", "supportMotifs": ["salt-port-stalls", "blank-paper-bundles", "working-harbor"],
+      "beatIds": ["c3-01-separate-arrivals", "c3-02-the-checkpoint", "c3-03-ledger-customs-house"]
+    },
+    {
+      "id": "sodegaura-rain-docks", "paletteFamily": "coast-fog", "motif": "rain-docks", "weather": "coastal-rain",
+      "focalMotif": "lantern-boat-beside-salt-warehouse", "supportMotifs": ["piers", "cranes", "cold-water", "mechanical-key-crate"],
+      "beatIds": ["c3-04-lantern-boat-escort", "c3-05-gentas-order", "c3-06-first-key"]
+    },
+    {
+      "id": "nagi-fog-shore", "paletteFamily": "coast-fog", "motif": "fog-shore", "weather": "fog",
+      "focalMotif": "maintained-fishing-homes-and-dry-lantern", "supportMotifs": ["nets", "small-boats", "working-shore"],
+      "beatIds": ["c4-01-nets-in-fog", "c4-05-names-returned", "c4-06-kikus-terms"]
+    },
+    {
+      "id": "nagi-tide-wreck", "paletteFamily": "coast-fog", "motif": "tide-wreck", "weather": "cave-mist",
+      "focalMotif": "wreck-ribs-and-varga-strongbox", "supportMotifs": ["tide-cave", "net-weights", "cold-water"],
+      "beatIds": ["c4-02-tide-caves", "c4-03-varga-journal", "c4-04-survivors-hold"]
+    },
+    {
+      "id": "kagura-relay-ash", "paletteFamily": "kagura-ash", "motif": "relay-ash", "weather": "ashfall",
+      "focalMotif": "relay-shed-and-kitchen-light", "supportMotifs": ["volcanic-earth", "empty-carts", "requisition-crates"],
+      "beatIds": ["c5-01-requisition-town", "c5-02-ash-fields"]
+    },
+    {
+      "id": "kagura-forge-archive", "paletteFamily": "kagura-ash", "motif": "forge-archive", "weather": "furnace-draft",
+      "focalMotif": "invented-industrial-registry-machine", "supportMotifs": ["furnace-brick", "prison-locks", "vents", "blank-directives"],
+      "beatIds": ["c5-03-cipher-room", "c5-04-prison-locks", "c5-05-sigil-burned", "c5-06-midpoint-evidence"]
+    },
+    {
+      "id": "kozui-printmaker-lane", "paletteFamily": "court-vermilion", "motif": "printmaker-lane", "weather": "light-rain",
+      "focalMotif": "woodblock-bench-and-blank-copy-bundles", "supportMotifs": ["canal-lane", "shop-fronts", "delivery-boat"],
+      "beatIds": ["c6-01-city-competing-needs", "c6-02-three-copies"]
+    },
+    {
+      "id": "kozui-tribunal-roof", "paletteFamily": "court-vermilion", "motif": "tribunal-roof", "weather": "wind-rain",
+      "focalMotif": "fictional-tribunal-and-protected-print-blocks", "supportMotifs": ["roof-tile", "canal-edge", "invented-administrative-brackets"],
+      "beatIds": ["c6-03-tribunal", "c6-04-printmaker-flight", "c6-05-all-copies-leave"]
+    },
+    {
+      "id": "hushroad-camp", "paletteFamily": "archive-indigo", "motif": "hushroad-camp", "weather": "cold-mist",
+      "focalMotif": "map-table-and-repair-fire", "supportMotifs": ["abandoned-post-town", "care-supplies", "route-markers"],
+      "beatIds": ["c7-01-decision-map-table", "c7-02-former-retainer"]
+    },
+    {
+      "id": "hushroad-aqueduct", "paletteFamily": "archive-indigo", "motif": "aqueduct", "weather": "water-mist",
+      "focalMotif": "maintenance-aqueduct-and-ferry-chain", "supportMotifs": ["cold-waterworks", "fictional-name-slip-channel", "rescue-route"],
+      "beatIds": ["c7-03-aqueduct-names", "c7-04-lises-revised-oath", "c7-05-rescue-before-ring"]
+    },
+    {
+      "id": "black-gate-planning", "paletteFamily": "court-vermilion", "motif": "gate-planning", "weather": "sheltered-storm",
+      "focalMotif": "lantern-network-route-table", "supportMotifs": ["repair-tools", "three-region-materials", "blank-route-cards"],
+      "beatIds": ["c8-01-three-homecomings", "c8-02-consent-not-conscription"]
+    },
+    {
+      "id": "black-gate-causeway", "paletteFamily": "court-vermilion", "motif": "black-gate", "weather": "ash-rain",
+      "focalMotif": "black-lacquer-gate-and-two-lantern-relays", "supportMotifs": ["causeway-stone", "ash-lanes", "broken-ledger-tabs"],
+      "beatIds": ["c8-03-black-gate-bargain", "c8-04-lantern-breach", "c8-05-gate-opened"]
+    },
+    {
+      "id": "kurohana-living-archive", "paletteFamily": "court-vermilion", "motif": "living-archive", "weather": "impossible-stillness",
+      "focalMotif": "invented-lacquer-archive-and-bell-spine-machinery", "supportMotifs": ["audience-hall", "conservatory-glass", "yearless-mechanism", "dawn-window"],
+      "beatIds": ["c9-01-archive-breathes", "c9-02-ujiros-last-ledger", "c9-03-conservatory-offers", "c9-04-yearless-bell", "c9-05-dawn-at-observatory", "c9-06-leave-evidence-alive"]
+    },
+    {
+      "id": "daybreak-repair-montage", "paletteFamily": "daybreak-repair", "motif": "daybreak-repair", "weather": "clear-dawn",
+      "focalMotif": "public-archive-medical-storehouse-and-repaired-tower", "supportMotifs": ["ordinary-repair", "open-shelves", "cedar-work", "shared-daylight"],
+      "beatIds": ["e00-open-archive", "e01-repair-work", "e02-repaired-tower"]
+    }
+  ],
+  "restrictions": [
+    "Runtime frames contain no actors, lettering, interface, readable documents, logos, or watermarks.",
+    "No sacred or devotional object, authentic heraldry, real ceremonial mask, real clan mark, or radial floral emblem is drawn.",
+    "No historical victim, persecution method, ethnicity, or religious identity is converted into horror scenery.",
+    "No celebrity, film character, copyrighted game character, recognizable franchise castle, or borrowed visual composition is an input.",
+    "No pixels are sampled, traced, transformed, or imported from assets/concepts, assets/production, or any external image.",
+    "Kurozane's authority uses only asymmetrical broken ledger-tab geometry and invented administrative machinery.",
+    "Takamine is a fictional local registry experiment; its machinery never reproduces temple-bell ornament or devotional architecture.",
+    "External Japanese historical, Christianity, and religious-practice review remains required before art lock."
+  ]
+}
