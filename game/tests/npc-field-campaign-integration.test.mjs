@@ -19,6 +19,19 @@ test('only exact marker metadata is sent to the NPC resolver', () => {
     'the current witness fieldwork catalogue exposes no metadata-proven person node');
 });
 
+test('level field characters use a dedicated metadata-only render pass', () => {
+  assert.match(campaignSource, /resolveFieldCharacterPresentation\(interactable\.fieldCharacter\)/u);
+  assert.match(campaignSource, /drawLevelFieldCharacters\(level, originX, originY, cell\)/u);
+  assert.match(campaignSource, /presentation\.kind === 'npc'[\s\S]*?drawNpcFieldMarker\(presentation\.role/u);
+  assert.match(campaignSource, /drawPartyFieldCharacterMarker\(presentation/u);
+  assert.match(campaignSource, /if \(!drawn\) drawFieldCharacterFallback\(presentation/u);
+  const passStart = campaignSource.indexOf('function drawLevelFieldCharacters');
+  const mapStart = campaignSource.indexOf('function drawMap', passStart);
+  const pass = campaignSource.slice(passStart, mapStart);
+  assert.doesNotMatch(pass, /\.id|\.action|\.label|\.result|\.text/u,
+    'level character presentation must never infer from interactable identity or prose');
+});
+
 test('person sprites preserve operation order and every geometric fallback', () => {
   assert.match(campaignSource, /drawNpcFieldMarker\(role, px, py, cell, \{ badge: sceneOperationMarker\.nodeIndex \+ 1 \}\)/u);
   assert.match(campaignSource, /if \(!drawNpcFieldMarker\(role, px, py, cell/u);

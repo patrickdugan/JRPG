@@ -115,7 +115,7 @@ test('campaign wires authored event poses only to live interaction input and haz
   assert.match(movement, /const hazardHits = result\.events\.filter[\s\S]*if \(hazardHits\.length\) holdPartyFieldPose\('hurt'\)/u);
   assert.doesNotMatch(movement, /getPartyAtlasWalkFrame/u, 'walk-frame sampling must remain outside movement authority');
   assert.match(interaction, /ensureFieldPosition\(level\)[\s\S]*holdPartyFieldPose\('interact'\)/u);
-  assert.match(draw, /const moving = !reducedMotion\.matches && now < fieldWalkUntil[\s\S]*getPartyAtlasWalkFrame\('ren', fieldFacing, phase\)[\s\S]*getPartyAtlasFrame\('ren', fieldFacing, 0\)/u);
+  assert.match(draw, /const fieldLeaderId = effectiveFieldLeader\(level\)[\s\S]*const moving = !reducedMotion\.matches && now < fieldWalkUntil[\s\S]*getPartyAtlasWalkFrame\(fieldLeaderId, fieldFacing, phase\)[\s\S]*getPartyAtlasFrame\(fieldLeaderId, fieldFacing, 0\)/u);
 });
 
 test('party frame identity, authored pose mapping, and source scale stay stable', () => {

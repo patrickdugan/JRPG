@@ -21,10 +21,10 @@ const SUITE_ROOT = resolve(GAME_ROOT, '..', 'assets', 'art', 'npc-field-suite');
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 test('NPC field taxonomy and frame geometry are compact and exact', () => {
-  assert.deepEqual(NPC_FIELD_ROLES, ['speaker', 'interviewee']);
+  assert.deepEqual(NPC_FIELD_ROLES, ['speaker', 'interviewee', 'confined-person', 'courier']);
   assert.deepEqual(NPC_FIELD_ATLAS, {
     url: './assets/art/npc-field-suite/npc-field-atlas.png',
-    width: 64, height: 48, columns: 2, rows: 1, cellWidth: 32, cellHeight: 48,
+    width: 128, height: 48, columns: 4, rows: 1, cellWidth: 32, cellHeight: 48,
     pivot: [16, 44], footPoint: [16, 44],
   });
   assert.deepEqual(getNpcFieldFrame('speaker'), {
@@ -32,9 +32,11 @@ test('NPC field taxonomy and frame geometry are compact and exact', () => {
     pivot: [16, 44], footPoint: [16, 44],
   });
   assert.equal(getNpcFieldFrame('interviewee').x, 32);
+  assert.equal(getNpcFieldFrame('confined-person').x, 64);
+  assert.equal(getNpcFieldFrame('courier').x, 96);
   assert.throws(() => getNpcFieldFrame('prop'), /Unknown NPC field role/u);
-  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 64, naturalHeight: 48 }), true);
-  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 63, naturalHeight: 48 }), false);
+  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 128, naturalHeight: 48 }), true);
+  assert.equal(npcFieldAtlasImageHasExpectedSize({ naturalWidth: 64, naturalHeight: 48 }), false);
 });
 
 test('resolver uses authored person metadata and never guesses from labels', () => {
@@ -84,10 +86,17 @@ test('production atlas, runtime copy, contact sheet, manifest, and builder agree
   assert.deepEqual(source.sheet.columns, NPC_FIELD_ROLES);
   assert.deepEqual(manifest.roleOrder, NPC_FIELD_ROLES);
   assert.deepEqual(manifest.geometry, {
-    frameWidth: 32, frameHeight: 48, columns: 2, rows: 1,
-    sheetWidth: 64, sheetHeight: 48, pivot: [16, 44], footPoint: [16, 44],
-    transparentGutter: 1, alphaBoundingBox: [6, 6, 59, 44],
+    frameWidth: 32, frameHeight: 48, columns: 4, rows: 1,
+    sheetWidth: 128, sheetHeight: 48, pivot: [16, 44], footPoint: [16, 44],
+    transparentGutter: 1, alphaBoundingBox: [6, 6, 124, 44],
   });
+  assert.equal(manifest.frames.length, 4);
+  assert.deepEqual(manifest.frames.slice(0, 2).map(({ rgbaSha256 }) => rgbaSha256), [
+    'fcb6b778383e4eb534b3085e331ebc4dd5cd42e18459decfce5d88684d0f71c6',
+    '9dc8bcb6c327aa2a0cd7d48996e8f7fd3b16064e38be3036d1e7ef89ae7c3b28',
+  ], 'the two legacy roles must remain pixel-identical while the atlas grows');
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 4);
+  assert.equal(manifest.review.runtimeIntegration, 'campaign-explicit-field-characters-only-with-geometric-fallback');
   assert.equal(runtime.equals(atlas), true);
   assert.equal(manifest.exports[0].sha256, sha256(atlas));
   assert.equal(manifest.exports[1].sha256, sha256(contact));

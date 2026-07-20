@@ -10,14 +10,14 @@
     "transparentGutter": 1
   },
   "sheet": {
-    "columns": ["speaker", "interviewee"],
+    "columns": ["speaker", "interviewee", "confined-person", "courier"],
     "rows": ["south-idle"]
   },
   "roleTaxonomy": [
     {
       "id": "speaker",
-      "meaning": "A generic individual person explicitly addressed by a side-story talk objective.",
-      "liveContract": "side-story objective.type equals talk and targetKind equals person",
+      "meaning": "A generic individual person explicitly addressed by a side-story objective or level interactable.",
+      "liveContract": "side-story talk plus targetKind person, or level interactable fieldCharacter.kind npc plus role speaker",
       "paletteId": "npc-speaker-rain-clay-v1",
       "silhouette": "layered civilian coat, open hand, no insignia or carried prop",
       "colors": {"primary": "#5d4a3b", "secondary": "#315b62", "light": "#8b7057", "accent": "#c19a61", "hair": "#211b1a"}
@@ -29,12 +29,28 @@
       "paletteId": "npc-interviewee-indigo-reed-v1",
       "silhouette": "short rain mantle, folded sleeves, empty visible hands",
       "colors": {"primary": "#4c526f", "secondary": "#6f5843", "light": "#777e9a", "accent": "#8ab5aa", "hair": "#302522"}
+    },
+    {
+      "id": "confined-person",
+      "meaning": "A generic person explicitly present behind one of the two authored prisoner grates.",
+      "liveContract": "level interactable fieldCharacter.kind equals npc and role equals confined-person",
+      "paletteId": "npc-confined-ash-russet-v1",
+      "silhouette": "compact layered coat, close stance, empty lowered hands, no chain or cage prop",
+      "colors": {"primary": "#59423f", "secondary": "#3c4658", "light": "#80645a", "accent": "#aa7658", "hair": "#211d24"}
+    },
+    {
+      "id": "courier",
+      "meaning": "A generic civilian courier explicitly authored as the archive-roof escort objective.",
+      "liveContract": "level interactable fieldCharacter.kind equals npc and role equals courier",
+      "paletteId": "npc-courier-cedar-rain-v1",
+      "silhouette": "forward civilian coat, compact secular satchel, empty hands, no weapon or insignia",
+      "colors": {"primary": "#3d5964", "secondary": "#624a38", "light": "#71838a", "accent": "#c08b52", "hair": "#28201d"}
     }
   ],
   "exclusions": [
     "props", "hazards", "exits", "evidence", "mechanisms", "deliveries",
     "care and rescue procedure nodes", "group-target talk objectives", "councils and ambiguous groups",
-    "combat markers", "sacred or devotional objects", "untyped label guesses"
+    "unrelated combat markers", "sacred or devotional objects", "untyped label guesses"
   ],
   "likenessPolicy": "generic fictional people only; no real-person likenesses",
   "symbolPolicy": "plain invented clothing geometry only; no real insignia or sacred marks"

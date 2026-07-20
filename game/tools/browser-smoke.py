@@ -96,14 +96,24 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             page.wait_for_function(
                 """() => document.querySelector('#mapCanvas')?.dataset.partyArtState === 'ready'
                   && document.querySelector('#mapCanvas')?.dataset.npcArtState === 'ready'
+                  && document.querySelector('#mapCanvas')?.dataset.terrainArtState === 'ready'
                   && document.querySelector('#sceneFocusPortrait')?.dataset.artState === 'ready'"""
             )
             campaign_party_art = page.evaluate(
                 """() => ({
                   field: document.querySelector('#mapCanvas').dataset.partyArtState,
                   npc: document.querySelector('#mapCanvas').dataset.npcArtState,
+                  terrain: document.querySelector('#mapCanvas').dataset.terrainArtState,
                   portrait: document.querySelector('#sceneFocusPortrait').dataset.artState,
+                  leader: document.querySelector('#mapCanvas').dataset.fieldLeaderId,
+                  leaderOptions: [...document.querySelector('#fieldLeader').options].map(option => option.value),
                 })"""
+            )
+            require(
+                campaign_party_art["terrain"] == "ready"
+                and campaign_party_art["leader"] == "ren"
+                and campaign_party_art["leaderOptions"] == ["ren"],
+                f"Fresh field terrain/leader contract drifted: {campaign_party_art}.",
             )
             require(
                 page.locator("#runProofStatus").inner_text().startswith("Unverified save"),

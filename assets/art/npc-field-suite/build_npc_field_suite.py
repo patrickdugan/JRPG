@@ -21,7 +21,7 @@ CONTACT_PATH = ROOT / "npc-field-contact-sheet.png"
 MANIFEST_PATH = ROOT / "manifest.json"
 RUNTIME_PATH = REPO / "game" / "assets" / "art" / "npc-field-suite" / "npc-field-atlas.png"
 CELL_W, CELL_H = 32, 48
-ROLES = ("speaker", "interviewee")
+ROLES = ("speaker", "interviewee", "confined-person", "courier")
 
 
 def rgba(value: str) -> tuple[int, int, int, int]:
@@ -80,7 +80,7 @@ def draw_person(role: dict) -> Image.Image:
         rect((23, 24, 26, 31), "outline")
         rect((24, 25, 26, 28), "primary")
         rect((25, 29, 27, 31), "skin")
-    else:
+    elif role["id"] == "interviewee":
         poly([(6, 21), (10, 17), (22, 17), (26, 21), (23, 40), (9, 40)], "outline")
         poly([(8, 22), (11, 19), (21, 19), (24, 22), (21, 38), (11, 38)], "primary")
         poly([(7, 21), (12, 17), (20, 17), (25, 22), (22, 27), (10, 27)], "light")
@@ -91,6 +91,34 @@ def draw_person(role: dict) -> Image.Image:
         rect((23, 25, 25, 31), "light")
         rect((7, 32, 9, 34), "skin")
         rect((23, 32, 25, 34), "skin")
+    elif role["id"] == "confined-person":
+        # Close stance and lowered empty hands communicate confinement without
+        # baking a cage, chain, or other prop into the person sprite.
+        poly([(8, 22), (11, 18), (21, 18), (24, 23), (22, 40), (10, 40)], "outline")
+        poly([(10, 23), (12, 20), (20, 20), (22, 24), (20, 38), (12, 38)], "primary")
+        poly([(11, 25), (16, 22), (21, 25), (19, 36), (13, 36)], "secondary")
+        rect((7, 25, 10, 35), "outline")
+        rect((8, 26, 10, 33), "light")
+        rect((22, 25, 25, 35), "outline")
+        rect((22, 26, 24, 33), "light")
+        rect((8, 34, 10, 36), "skin")
+        rect((22, 34, 24, 36), "skin")
+    else:
+        # The unarmed courier leans into motion; the diagonal is a plain
+        # satchel strap and deliberately carries no symbol or mark.
+        poly([(8, 21), (12, 17), (23, 18), (26, 23), (23, 40), (10, 40)], "outline")
+        poly([(10, 22), (13, 19), (22, 20), (24, 24), (21, 38), (12, 38)], "primary")
+        poly([(11, 24), (16, 20), (22, 24), (20, 36), (13, 36)], "light")
+        draw.line((12, 21, 22, 35), fill=c["outline"], width=3)
+        draw.line((13, 21, 22, 34), fill=c["accent"], width=1)
+        rect((19, 32, 24, 38), "outline")
+        rect((20, 33, 23, 37), "secondary")
+        rect((7, 24, 10, 33), "outline")
+        rect((8, 25, 10, 31), "primary")
+        rect((24, 25, 27, 33), "outline")
+        rect((24, 26, 26, 31), "primary")
+        rect((8, 32, 10, 34), "skin")
+        rect((24, 32, 26, 34), "skin")
 
     # Original generic face and hair clusters.
     rect((10, 7, 22, 18), "outline")
@@ -172,7 +200,7 @@ def build_outputs(source: dict) -> dict[Path, bytes]:
             {"file": CONTACT_PATH.name, "purpose": "labeled-review-only-not-runtime", "width": contact.width, "height": contact.height, "sha256": sha256(contact_data)},
         ],
         "review": {
-            "runtimeIntegration": "campaign-person-markers-only-with-geometric-fallback",
+            "runtimeIntegration": "campaign-explicit-field-characters-only-with-geometric-fallback",
             "animationExpansion": "additional-directions-and-motion-pending",
             "unmapped": source["exclusions"],
         },

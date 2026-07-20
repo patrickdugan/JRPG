@@ -1,0 +1,367 @@
+{
+  "assetId": "field-terrain-overlay-suite-v1",
+  "status": "production-foundation-review",
+  "authorship": "original-code-native-pixel-primitives",
+  "runtimeIntegration": "campaign-decorative-overlays-over-level-owned-color-with-geometric-fallback",
+  "coverage": {
+    "liveLevelCount": 48,
+    "liveTerrainKeys": 19
+  },
+  "geometry": {
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "columns": 5,
+    "rows": 4,
+    "sheetWidth": 80,
+    "sheetHeight": 64
+  },
+  "terrainOrder": [
+    "stone",
+    "wet-stone",
+    "shallow-puddle",
+    "paper-litter",
+    "cracked-board",
+    "swing-beam-lane",
+    "water",
+    "storm-water",
+    "cold-pool",
+    "ash-field",
+    "ember-ash",
+    "umbral-ash",
+    "bell-node",
+    "furnace-grate",
+    "legal-seal",
+    "flowing-water",
+    "high-gallery",
+    "archive-floor",
+    "dry-lantern"
+  ],
+  "frames": [
+    {
+      "id": "stone",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "rgbaSha256": "a77a8f02e28e347fc2393b0f818f157112ada20a689d888aa2628afedaec19d9",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "wet-stone",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "rgbaSha256": "a205688e04880c1e40d861df4e10be4979c4249646fd565732b0402ffc0d8ab1",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "shallow-puddle",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "rgbaSha256": "31d80380855b62bcfc2c4d86102f21064cd14ce73753b88286279a9e83b33dcf",
+      "alphaBounds": [
+        1,
+        4,
+        15,
+        13
+      ]
+    },
+    {
+      "id": "paper-litter",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "rgbaSha256": "cc5c0b189e00426fccb5eb6189e163949778ad45e5d71822c036d218655dfdd1",
+      "alphaBounds": [
+        2,
+        2,
+        15,
+        15
+      ]
+    },
+    {
+      "id": "cracked-board",
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "rgbaSha256": "2e5ee953b5eb97f66e02439f0a5f4fd44018e12064a9b85a9f01d086299f801f",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "swing-beam-lane",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "rgbaSha256": "43b07e64be6285b8338a14c56fc9ee010b53852eb2e88117ccda97ff145401f5",
+      "alphaBounds": [
+        1,
+        6,
+        15,
+        10
+      ]
+    },
+    {
+      "id": "water",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "rgbaSha256": "03762a20d4a5f6dfe62d34e275773f9004d264ec43e76552ce7ac90bb4cd6103",
+      "alphaBounds": [
+        0,
+        2,
+        15,
+        14
+      ]
+    },
+    {
+      "id": "storm-water",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "rgbaSha256": "9bb122db52c8278a017241351f1bb4ff7909e937694a12fc6530954e635fb791",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        13
+      ]
+    },
+    {
+      "id": "cold-pool",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "rgbaSha256": "1c4070c3c876aa1f272440638c3978a0be101f2dd90577607557e2fd7e495b23",
+      "alphaBounds": [
+        1,
+        2,
+        15,
+        15
+      ]
+    },
+    {
+      "id": "ash-field",
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "rgbaSha256": "5d1a7797e81668a10cb8646bb8a46b572ae06b473820ed8401a7459625e1c22b",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "ember-ash",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "rgbaSha256": "7cac349cd3a235e09d1625df4ff461c28e7fc3e494b9e5864c2fe86aa08d1f99",
+      "alphaBounds": [
+        0,
+        3,
+        16,
+        15
+      ]
+    },
+    {
+      "id": "umbral-ash",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "rgbaSha256": "ef0cdd16a3e41bb526d595a40ec91f2c8f3e26d9eb21f215739b1160b313347c",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        15
+      ]
+    },
+    {
+      "id": "bell-node",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "rgbaSha256": "aa92fc83fbd9909f23891f63c8663d868e206298a15191343d9cfbae7cf0cf55",
+      "alphaBounds": [
+        3,
+        3,
+        13,
+        15
+      ]
+    },
+    {
+      "id": "furnace-grate",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "rgbaSha256": "83d75228e555afe96f0f7de3f45dc80ff61516ebdef695a6556598d76c03504e",
+      "alphaBounds": [
+        1,
+        2,
+        15,
+        15
+      ]
+    },
+    {
+      "id": "legal-seal",
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "rgbaSha256": "8e3e2ba800ee6a919b1be66c9ea336b44f22369ce675d91af3d4dc778f5aed75",
+      "alphaBounds": [
+        3,
+        3,
+        13,
+        13
+      ]
+    },
+    {
+      "id": "flowing-water",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "rgbaSha256": "49341ba577eed9d3fab51fde082b7762cc0b7e66c99815db949c01182fe848ac",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        15
+      ]
+    },
+    {
+      "id": "high-gallery",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "rgbaSha256": "41ff5e6382c995aeee2e8334b6e1f2321b95d4dfcce1c9e261153266594b34d9",
+      "alphaBounds": [
+        1,
+        3,
+        15,
+        14
+      ]
+    },
+    {
+      "id": "archive-floor",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "rgbaSha256": "07549cff1e9fbc04a8801121c1f751d8d552e964a6b766bd7b79a71530360926",
+      "alphaBounds": [
+        1,
+        1,
+        15,
+        15
+      ]
+    },
+    {
+      "id": "dry-lantern",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "rgbaSha256": "d58ab6875b4de08cb1867862cf266825797043a9bfee6049c355ce52f9e36a73",
+      "alphaBounds": [
+        4,
+        1,
+        12,
+        15
+      ]
+    }
+  ],
+  "exports": [
+    {
+      "file": "field-terrain-atlas.png",
+      "purpose": "transparent-runtime-atlas",
+      "width": 80,
+      "height": 64,
+      "sha256": "ecb961570a7d0d2a08050ca00dfd262175b1b5ddf82513fe87690eaa5592adce"
+    },
+    {
+      "file": "field-terrain-contact-sheet.png",
+      "purpose": "labeled-review-only-not-runtime",
+      "width": 552,
+      "height": 518,
+      "sha256": "a69fd9e18bf4e947af8e12c9e82353b1851cb1ec33213bd590cb88798aa50a01"
+    }
+  ],
+  "restrictions": [
+    "Overlays are decorative and never define collision, exits, hazards, movement, or interaction authority.",
+    "Use secular material marks only: paving, water, wood, ash, metal, paper, and invented court hardware.",
+    "Do not depict sacred objects, devotional symbols, real heraldry, text, or readable historical documents.",
+    "The flat color and geometric renderer remains the required load, wrong-size, and unknown-tag fallback."
+  ]
+}

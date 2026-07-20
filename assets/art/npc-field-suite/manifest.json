@@ -5,9 +5,9 @@
   "geometry": {
     "frameWidth": 32,
     "frameHeight": 48,
-    "columns": 2,
+    "columns": 4,
     "rows": 1,
-    "sheetWidth": 64,
+    "sheetWidth": 128,
     "sheetHeight": 48,
     "pivot": [
       16,
@@ -21,21 +21,27 @@
     "alphaBoundingBox": [
       6,
       6,
-      59,
+      124,
       44
     ]
   },
   "roleOrder": [
     "speaker",
-    "interviewee"
+    "interviewee",
+    "confined-person",
+    "courier"
   ],
   "mappingContracts": {
-    "speaker": "side-story objective.type equals talk and targetKind equals person",
-    "interviewee": "scene-operation activityType equals interview"
+    "speaker": "side-story talk plus targetKind person, or level interactable fieldCharacter.kind npc plus role speaker",
+    "interviewee": "scene-operation activityType equals interview",
+    "confined-person": "level interactable fieldCharacter.kind equals npc and role equals confined-person",
+    "courier": "level interactable fieldCharacter.kind equals npc and role equals courier"
   },
   "paletteIds": {
     "speaker": "npc-speaker-rain-clay-v1",
-    "interviewee": "npc-interviewee-indigo-reed-v1"
+    "interviewee": "npc-interviewee-indigo-reed-v1",
+    "confined-person": "npc-confined-ash-russet-v1",
+    "courier": "npc-courier-cedar-rain-v1"
   },
   "frames": [
     {
@@ -87,26 +93,76 @@
         44
       ],
       "rgbaSha256": "9dc8bcb6c327aa2a0cd7d48996e8f7fd3b16064e38be3036d1e7ef89ae7c3b28"
+    },
+    {
+      "id": "confined-person-south-idle",
+      "role": "confined-person",
+      "rect": [
+        64,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        26,
+        44
+      ],
+      "rgbaSha256": "a6516436f4695c094148261cf40627782ab21360177cebe304d7b3b59d1e700a"
+    },
+    {
+      "id": "courier-south-idle",
+      "role": "courier",
+      "rect": [
+        96,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        7,
+        6,
+        28,
+        44
+      ],
+      "rgbaSha256": "b0a6472208682791222c65839102da5e8cb26eb0aae5f7c4e8891b72c0bf8c45"
     }
   ],
   "exports": [
     {
       "file": "npc-field-atlas.png",
       "purpose": "transparent-runtime-atlas",
-      "width": 64,
+      "width": 128,
       "height": 48,
-      "sha256": "7596d2331f815b8878630c61c17fc04eadfd67c113dd2d2de73c9dd05b299c49"
+      "sha256": "562577923e3a72d6fd97337c9f38599b9c048d536302e5f02bffeaf71c8b1d1b"
     },
     {
       "file": "npc-field-contact-sheet.png",
       "purpose": "labeled-review-only-not-runtime",
-      "width": 496,
+      "width": 944,
       "height": 412,
-      "sha256": "e89c36f56d8c54cfb85dee4682ccfed9f8ac0be095945761a1ac85d113cbe1a3"
+      "sha256": "f36cfdf9acf85539b90564c054a01c5393568f1401ef5d9608ae276170b2d0cf"
     }
   ],
   "review": {
-    "runtimeIntegration": "campaign-person-markers-only-with-geometric-fallback",
+    "runtimeIntegration": "campaign-explicit-field-characters-only-with-geometric-fallback",
     "animationExpansion": "additional-directions-and-motion-pending",
     "unmapped": [
       "props",
@@ -118,7 +174,7 @@
       "care and rescue procedure nodes",
       "group-target talk objectives",
       "councils and ambiguous groups",
-      "combat markers",
+      "unrelated combat markers",
       "sacred or devotional objects",
       "untyped label guesses"
     ]

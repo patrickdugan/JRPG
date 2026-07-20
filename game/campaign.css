@@ -203,6 +203,10 @@ h1 {
 .battle-launch[aria-disabled="true"] { pointer-events: none; opacity: 0.45; }
 .battle-status { color: var(--aqua); font-size: 0.62rem; line-height: 1.4; text-align: center; }
 .party-note { margin-top: 10px !important; color: #8e9ab4 !important; font-size: 0.61rem !important; }
+.field-leader-control { display: grid; gap: 5px; margin-top: 10px; color: var(--gold); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.field-leader-control select { width: 100%; min-height: 34px; padding: 6px 8px; border: 1px solid #46516d; border-radius: 3px; color: #e6edf7; background: #111728; font: inherit; letter-spacing: 0; text-transform: none; }
+.field-leader-control select:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
+.field-leader-hint { margin-top: 6px !important; color: #8e9ab4 !important; font-size: 0.59rem !important; }
 .journal-heading { display: flex; align-items: start; justify-content: space-between; gap: 8px; }
 .journal-heading h2 { margin: 0; }
 .journal-heading > span { color: var(--aqua); font-size: 0.59rem; text-align: right; }

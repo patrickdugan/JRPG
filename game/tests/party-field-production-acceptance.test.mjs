@@ -150,7 +150,7 @@ test('manifest maps all 84 frames to stable pivots and preserves the exact legac
   assert.deepEqual(Object.keys(manifest.paletteIds), ROWS);
   assert.equal(manifest.validation.legacyFrameCount, 60);
   assert.equal(manifest.validation.legacyFrameRgbaSha256Digest, LEGACY_FRAME_DIGEST);
-  assert.equal(manifest.review.runtimeIntegration, 'current-browser-ren-leader-two-phase-walk-all-member-keys-authored-interact-hurt');
+  assert.equal(manifest.review.runtimeIntegration, 'current-browser-selectable-field-leader-two-phase-directional-walk-interact-hurt');
   assert.equal(manifest.review.fullAnimationExpansion, 'alternate-action-facings-and-additional-inbetweens-pending');
 
   const legacyLines = manifest.frames

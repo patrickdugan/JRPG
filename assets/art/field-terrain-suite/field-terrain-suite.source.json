@@ -1,0 +1,39 @@
+{
+  "assetId": "field-terrain-overlay-suite-v1",
+  "authorship": "original-code-native-pixel-primitives",
+  "frame": {
+    "width": 16,
+    "height": 16
+  },
+  "sheet": {
+    "columns": 5,
+    "rows": 4
+  },
+  "terrainOrder": [
+    "stone",
+    "wet-stone",
+    "shallow-puddle",
+    "paper-litter",
+    "cracked-board",
+    "swing-beam-lane",
+    "water",
+    "storm-water",
+    "cold-pool",
+    "ash-field",
+    "ember-ash",
+    "umbral-ash",
+    "bell-node",
+    "furnace-grate",
+    "legal-seal",
+    "flowing-water",
+    "high-gallery",
+    "archive-floor",
+    "dry-lantern"
+  ],
+  "restrictions": [
+    "Overlays are decorative and never define collision, exits, hazards, movement, or interaction authority.",
+    "Use secular material marks only: paving, water, wood, ash, metal, paper, and invented court hardware.",
+    "Do not depict sacred objects, devotional symbols, real heraldry, text, or readable historical documents.",
+    "The flat color and geometric renderer remains the required load, wrong-size, and unknown-tag fallback."
+  ]
+}

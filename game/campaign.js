@@ -54,11 +54,14 @@ import {
   createFieldStorageAdapter,
   enterField,
   grantFieldFlags,
+  getEffectiveFieldPresentationLeader,
   getCurrentFieldContext,
+  getFieldPresentationLeaderPreference,
   getFieldStatus,
   interactField as performFieldInteraction,
   moveFieldBy,
   resolveFieldEncounter,
+  setFieldPresentationLeader,
   useFieldExit,
 } from './field-runtime.mjs';
 import { selectNearbyFieldInteractable } from './field-interaction-priority.mjs';
@@ -120,6 +123,12 @@ import {
   npcFieldAtlasImageHasExpectedSize,
   resolveNpcFieldRole,
 } from './npc-field-atlas.mjs';
+import { resolveFieldCharacterPresentation } from './field-character-presentation.mjs';
+import {
+  FIELD_TERRAIN_ATLAS,
+  fieldTerrainImageHasExpectedSize,
+  getFieldTerrainFrame,
+} from './field-terrain-atlas.mjs';
 import {
   acknowledgeWitnessChronicleLine,
   acceptWitnessChronicle,
@@ -189,6 +198,21 @@ npcFieldAtlasImage.addEventListener('error', () => {
   renderSceneDirection(getBeat());
 }, { once: true });
 npcFieldAtlasImage.src = NPC_FIELD_ATLAS.url;
+const fieldTerrainAtlasImage = new Image();
+let fieldTerrainAtlasState = 'loading';
+mapCanvas.dataset.terrainArtState = fieldTerrainAtlasState;
+fieldTerrainAtlasImage.decoding = 'async';
+fieldTerrainAtlasImage.addEventListener('load', () => {
+  fieldTerrainAtlasState = fieldTerrainImageHasExpectedSize(fieldTerrainAtlasImage) ? 'ready' : 'error';
+  mapCanvas.dataset.terrainArtState = fieldTerrainAtlasState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+fieldTerrainAtlasImage.addEventListener('error', () => {
+  fieldTerrainAtlasState = 'error';
+  mapCanvas.dataset.terrainArtState = fieldTerrainAtlasState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+fieldTerrainAtlasImage.src = FIELD_TERRAIN_ATLAS.url;
 const mapName = document.querySelector('#mapName');
 const mapLegend = document.querySelector('#mapLegend');
 const sceneNumber = document.querySelector('#sceneNumber');
@@ -241,6 +265,7 @@ const encounterEnemies = document.querySelector('#encounterEnemies');
 const bossMechanic = document.querySelector('#bossMechanic');
 const chapterReward = document.querySelector('#chapterReward');
 const partyList = document.querySelector('#partyList');
+const fieldLeaderSelect = document.querySelector('#fieldLeader');
 const keyArt = document.querySelector('#keyArt');
 const fieldFeedback = document.querySelector('#fieldFeedback');
 const fieldControls = document.querySelector('#fieldControls');
@@ -563,7 +588,8 @@ function sampleFieldRuntime(now) {
   const result = advanceFieldTime(fieldRuntimeState, tickMs, { flags: externalFieldFlags() });
   const important = result.events.find((event) => event.type === 'hazard-hit' || event.type === 'hazard-warning');
   if (important?.type === 'hazard-hit') {
-    const consequence = getFieldHazardConsequence(important, loadoutState);
+    const level = getActiveLevelForBeat(getChapter(), getBeat());
+    const consequence = getFieldHazardConsequence(important, loadoutState, effectiveFieldLeader(level));
     const changes = [
       { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: result.state },
       ...(consequence.state !== loadoutState ? [
@@ -582,9 +608,8 @@ function sampleFieldRuntime(now) {
   if (fieldRuntimeState.revision % 20 === 0) fieldAdapter.save(fieldRuntimeState);
 }
 
-function getFieldHazardConsequence(event, state) {
+function getFieldHazardConsequence(event, state, leaderId) {
   const effect = event.effect ?? {};
-  const leaderId = getChapter().party?.[0] ?? 'ren';
   const vitals = state.vitals?.[leaderId];
   if (!vitals) return Object.freeze({ state, message: '' });
   const patch = {};
@@ -949,6 +974,33 @@ function fieldPosition() {
   return getCurrentFieldContext(fieldRuntimeState).position;
 }
 
+function fieldFormation(level) {
+  return level?.spawn?.formation ?? ['ren'];
+}
+
+function effectiveFieldLeader(level) {
+  return getEffectiveFieldPresentationLeader(fieldRuntimeState, fieldFormation(level));
+}
+
+function renderFieldLeaderControl(level) {
+  const formation = fieldFormation(level);
+  const leaderId = effectiveFieldLeader(level);
+  const formationKey = formation.join('|');
+  if (fieldLeaderSelect.dataset.formation !== formationKey) {
+    fieldLeaderSelect.replaceChildren(...formation.map((memberId) => {
+      const option = document.createElement('option');
+      option.value = memberId;
+      option.textContent = CAMPAIGN.cast?.[memberId]?.name ?? memberId;
+      return option;
+    }));
+    fieldLeaderSelect.dataset.formation = formationKey;
+  }
+  fieldLeaderSelect.value = leaderId;
+  fieldLeaderSelect.dataset.preferredLeaderId = getFieldPresentationLeaderPreference(fieldRuntimeState) ?? '';
+  fieldLeaderSelect.dataset.effectiveLeaderId = leaderId;
+  mapCanvas.dataset.fieldLeaderId = leaderId;
+}
+
 function ensureFieldPosition(level) {
   const progress = getSelectedWitnessProgress();
   const witnessContextId = progress?.currentStage?.mapId === level.id ? getWitnessFieldContextId(progress) : null;
@@ -1004,7 +1056,7 @@ function attemptFieldMove(dx, dy) {
   const consequenceMessages = [];
   const hazardHits = result.events.filter((entry) => entry.type === 'hazard-hit');
   for (const event of hazardHits) {
-    const consequence = getFieldHazardConsequence(event, nextLoadoutState);
+    const consequence = getFieldHazardConsequence(event, nextLoadoutState, effectiveFieldLeader(level));
     nextLoadoutState = consequence.state;
     if (consequence.message) consequenceMessages.push(consequence.message);
   }
@@ -1072,6 +1124,60 @@ function drawNpcFieldMarker(role, px, py, cell, { badge = null } = {}) {
   return true;
 }
 
+function drawPartyFieldCharacterMarker({ memberId, facing }, px, py, cell) {
+  if (partyAtlasState !== 'ready' || !partyAtlasImageHasExpectedSize(partyAtlasImage)) return false;
+  const frame = getPartyAtlasFrame(memberId, facing, 0);
+  const drawHeight = cell * 1.22;
+  const drawWidth = drawHeight * (frame.width / frame.height);
+  const footY = py + cell * 0.34;
+  mapCtx.fillStyle = 'rgba(0, 0, 0, 0.36)';
+  mapCtx.beginPath();
+  mapCtx.ellipse(px, footY, cell * 0.22, cell * 0.07, 0, 0, Math.PI * 2);
+  mapCtx.fill();
+  mapCtx.drawImage(
+    partyAtlasImage,
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height,
+    px - drawWidth / 2,
+    footY - drawHeight * (44 / frame.height),
+    drawWidth,
+    drawHeight,
+  );
+  return true;
+}
+
+function drawFieldCharacterFallback(presentation, px, py, cell) {
+  const party = presentation.kind === 'party';
+  const body = party ? '#d7b35f' : '#7994a6';
+  const edge = party ? '#332619' : '#172333';
+  mapCtx.fillStyle = 'rgba(0, 0, 0, 0.36)';
+  mapCtx.beginPath();
+  mapCtx.ellipse(px, py + cell * 0.34, cell * 0.2, cell * 0.07, 0, 0, Math.PI * 2);
+  mapCtx.fill();
+  mapCtx.fillStyle = edge;
+  mapCtx.fillRect(px - cell * 0.18, py - cell * 0.18, cell * 0.36, cell * 0.48);
+  mapCtx.fillStyle = body;
+  mapCtx.fillRect(px - cell * 0.12, py - cell * 0.12, cell * 0.24, cell * 0.36);
+  mapCtx.fillStyle = '#bc8662';
+  mapCtx.fillRect(px - cell * 0.09, py - cell * 0.31, cell * 0.18, cell * 0.16);
+}
+
+function drawLevelFieldCharacters(level, originX, originY, cell) {
+  for (const interactable of level?.interactables ?? []) {
+    const presentation = resolveFieldCharacterPresentation(interactable.fieldCharacter);
+    const position = presentation ? coordinatesOf(interactable.at) : null;
+    if (!position) continue;
+    const px = originX + position.x * cell + cell / 2;
+    const py = originY + position.y * cell + cell / 2;
+    const drawn = presentation.kind === 'npc'
+      ? drawNpcFieldMarker(presentation.role, px, py, cell)
+      : drawPartyFieldCharacterMarker(presentation, px, py, cell);
+    if (!drawn) drawFieldCharacterFallback(presentation, px, py, cell);
+  }
+}
+
 function drawMap(level, encounter, now) {
   const width = level?.width ?? 12;
   const height = level?.height ?? 7;
@@ -1103,6 +1209,24 @@ function drawMap(level, encounter, now) {
       const terrain = terrainAt(level ?? {}, x, y);
       mapCtx.fillStyle = terrainColor(terrain, palette);
       mapCtx.fillRect(px, py, cell, cell);
+      const terrainFrame = fieldTerrainAtlasState === 'ready'
+        && fieldTerrainImageHasExpectedSize(fieldTerrainAtlasImage)
+        ? getFieldTerrainFrame(terrain)
+        : null;
+      if (terrainFrame) {
+        mapCtx.imageSmoothingEnabled = false;
+        mapCtx.drawImage(
+          fieldTerrainAtlasImage,
+          terrainFrame.x,
+          terrainFrame.y,
+          terrainFrame.width,
+          terrainFrame.height,
+          px,
+          py,
+          cell,
+          cell,
+        );
+      }
       mapCtx.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.035)';
       mapCtx.fillRect(px, py, cell, cell);
       mapCtx.strokeStyle = 'rgba(219,227,242,0.11)';
@@ -1143,6 +1267,8 @@ function drawMap(level, encounter, now) {
       }
     }
   }
+
+  drawLevelFieldCharacters(level, originX, originY, cell);
 
   const sceneOperationMarker = getActiveSceneOperationMarker(level);
   if (sceneOperationMarker) {
@@ -1226,6 +1352,8 @@ function drawMap(level, encounter, now) {
   });
 
   const partyPosition = fieldPosition();
+  const fieldLeaderId = effectiveFieldLeader(level);
+  mapCanvas.dataset.fieldLeaderId = fieldLeaderId;
   const partyX = originX + partyPosition.x * cell + cell / 2;
   const partyY = originY + partyPosition.y * cell + cell / 2;
   mapCtx.fillStyle = 'rgba(0, 0, 0, 0.42)';
@@ -1241,10 +1369,10 @@ function drawMap(level, encounter, now) {
     const moving = !reducedMotion.matches && now < fieldWalkUntil;
     const phase = moving ? Math.floor(now / 110) % 2 : 0;
     const frame = heldPose
-      ? getPartyAtlasFieldPoseFrame('ren', heldPose)
+      ? getPartyAtlasFieldPoseFrame(fieldLeaderId, heldPose)
       : moving
-        ? getPartyAtlasWalkFrame('ren', fieldFacing, phase)
-        : getPartyAtlasFrame('ren', fieldFacing, 0);
+        ? getPartyAtlasWalkFrame(fieldLeaderId, fieldFacing, phase)
+        : getPartyAtlasFrame(fieldLeaderId, fieldFacing, 0);
     const drawHeight = cell * 1.38;
     const drawWidth = drawHeight * (frame.width / frame.height);
     mapCtx.drawImage(
@@ -1906,6 +2034,7 @@ function render() {
   renderDialogue(beat);
   renderSceneDirection(beat);
   partyList.textContent = formatParty(chapter.party);
+  renderFieldLeaderControl(level);
   chapterReward.textContent = formatValue(chapter.reward, 'Narrative progress');
   encounterName.textContent = encounter?.name ?? formatValue(chapter.boss, 'Chapter encounter pending');
   encounterObjective.textContent = formatBrief(encounter?.objective, chapter.objective);
@@ -2494,6 +2623,28 @@ interactFieldButton.addEventListener('click', () => {
     return;
   }
   fieldFeedback.textContent = 'No interaction is within the marked one-space range.';
+});
+
+fieldLeaderSelect.addEventListener('change', () => {
+  const level = getActiveLevelForBeat(getChapter(), getBeat());
+  const memberId = fieldLeaderSelect.value;
+  if (!fieldFormation(level).includes(memberId)) {
+    renderFieldLeaderControl(level);
+    fieldFeedback.textContent = 'That field leader is not present in this level formation.';
+    return;
+  }
+  const next = setFieldPresentationLeader(fieldRuntimeState, memberId);
+  if (next === fieldRuntimeState) return;
+  if (!commitStateChanges('Field leader', [
+    { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: next },
+  ]).ok) {
+    renderFieldLeaderControl(level);
+    return;
+  }
+  fieldRuntimeState = next;
+  fieldFeedback.textContent = `${CAMPAIGN.cast?.[memberId]?.name ?? memberId} now leads field presentation; battle formation is unchanged.`;
+  render();
+  fieldLeaderSelect.focus({ preventScroll: true });
 });
 
 previousScene.addEventListener('click', () => advance(-1));

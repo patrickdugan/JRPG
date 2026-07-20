@@ -19,6 +19,8 @@ import {
 
 export const FIELD_SCHEMA_VERSION = 1;
 export const DEFAULT_FIELD_SAVE_KEY = `${CAMPAIGN.id}.field.v${FIELD_SCHEMA_VERSION}`;
+export const FIELD_PRESENTATION_LEADER_FLAG_PREFIX = 'presentation-field-leader-';
+export const FIELD_PRESENTATION_LEADER_IDS = Object.freeze(['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']);
 
 export const FIELD_DIRECTIONS = Object.freeze({
   north: Object.freeze({ dx: 0, dy: -1, facing: 'north' }),
@@ -689,6 +691,42 @@ export function grantFieldFlags(state, flags) {
   const merged = normalizeFlags(snapshot.flags, flags);
   if (merged.length === snapshot.flags.length && merged.every((value, index) => value === snapshot.flags[index])) return snapshot;
   return buildState({ ...snapshot, flags: merged, revision: snapshot.revision + 1 });
+}
+
+/** Return the one exact persisted presentation preference, or null for old/ambiguous saves. */
+export function getFieldPresentationLeaderPreference(state) {
+  const snapshot = assertValidState(state);
+  const matches = snapshot.flags
+    .filter((flag) => flag.startsWith(FIELD_PRESENTATION_LEADER_FLAG_PREFIX))
+    .map((flag) => flag.slice(FIELD_PRESENTATION_LEADER_FLAG_PREFIX.length))
+    .filter((memberId) => FIELD_PRESENTATION_LEADER_IDS.includes(memberId));
+  return matches.length === 1 ? matches[0] : null;
+}
+
+/** Resolve the saved preference only inside the level-owned formation authority. */
+export function getEffectiveFieldPresentationLeader(state, formation) {
+  if (!Array.isArray(formation) || formation.length === 0
+    || formation.some((memberId) => !FIELD_PRESENTATION_LEADER_IDS.includes(memberId))
+    || new Set(formation).size !== formation.length) {
+    throw new TypeError('formation must contain unique canonical field-leader IDs.');
+  }
+  const preference = getFieldPresentationLeaderPreference(state);
+  return preference && formation.includes(preference) ? preference : formation[0];
+}
+
+/** Replace only the presentation-leader flag while preserving every unrelated field flag. */
+export function setFieldPresentationLeader(state, memberId) {
+  const snapshot = assertValidState(state);
+  if (!FIELD_PRESENTATION_LEADER_IDS.includes(memberId)) {
+    throw new RangeError(`Unknown field presentation leader: ${memberId}`);
+  }
+  const nextFlag = `${FIELD_PRESENTATION_LEADER_FLAG_PREFIX}${memberId}`;
+  const flags = snapshot.flags.filter((flag) => !flag.startsWith(FIELD_PRESENTATION_LEADER_FLAG_PREFIX));
+  flags.push(nextFlag);
+  const normalized = normalizeFlags(flags);
+  if (normalized.length === snapshot.flags.length
+    && normalized.every((flag, index) => flag === snapshot.flags[index])) return snapshot;
+  return buildState({ ...snapshot, flags: normalized, revision: snapshot.revision + 1 });
 }
 
 function combinedFlagSet(state, externalFlags) {

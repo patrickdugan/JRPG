@@ -7,7 +7,7 @@
  * supplies serializable level facts and small lookup helpers.
  */
 
-export const LEVEL_SCHEMA_VERSION = 1;
+export const LEVEL_SCHEMA_VERSION = 2;
 
 export const TERRAIN_TAGS = {
   'wet-stone': {
@@ -357,8 +357,8 @@ export const LEVELS = [
     objective: 'Speak to witnesses, meet Lise, and open the rear door with her stolen key.',
     palette: archivePalette,
     interactables: [
-      { id: 'prisoner-grate-west', at: '4,5', action: 'talk', optional: true, result: 'casebook-note-west' },
-      { id: 'prisoner-grate-east', at: '15,5', action: 'talk', optional: true, result: 'casebook-note-east' },
+      { id: 'prisoner-grate-west', at: '4,5', action: 'talk', optional: true, result: 'casebook-note-west', fieldCharacter: { kind: 'npc', role: 'confined-person' } },
+      { id: 'prisoner-grate-east', at: '15,5', action: 'talk', optional: true, result: 'casebook-note-east', fieldCharacter: { kind: 'npc', role: 'confined-person' } },
       { id: 'hidden-key-screen', at: '12,2', action: 'inspect', optional: true, result: 'reveal-lise-entry-route' },
       { id: 'rear-lock', at: '17,5', action: 'unlock', requires: 'c2_lise_trusted_with_key' },
     ],
@@ -1076,7 +1076,7 @@ export const LEVELS = [
     exits: [{ id: 'canal-rope', at: '11,3', destinationLevelId: 'kzu-public-tribunal', condition: 'copies-preserved' }],
     objective: 'Protect a civilian courier and three print blocks until the canal rope is available.',
     palette: courtPalette,
-    interactables: [{ id: 'courier', at: '2,3', action: 'escort', hp: 3 }, { id: 'print-block-a', at: '1,2', action: 'defend', hp: 3 }, { id: 'print-block-b', at: '1,3', action: 'defend', hp: 3 }, { id: 'print-block-c', at: '1,4', action: 'defend', hp: 3 }],
+    interactables: [{ id: 'courier', at: '2,3', action: 'escort', hp: 3, fieldCharacter: { kind: 'npc', role: 'courier' } }, { id: 'print-block-a', at: '1,2', action: 'defend', hp: 3 }, { id: 'print-block-b', at: '1,3', action: 'defend', hp: 3 }, { id: 'print-block-c', at: '1,4', action: 'defend', hp: 3 }],
     lesson: 'Multi-target pressure is readable because every intended objective target gets a direct marker.',
   },
   {
@@ -1186,7 +1186,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya'] },
     exits: [{ id: 'cedar-route', at: '18,3', destinationLevelId: 'c1-flooded-cedars', condition: 'three-conversations-complete' }],
     objective: 'Hear three local accounts, then follow the clerk trail through the flooded cedars.',
-    interactables: [{ id: 'dock-worker', at: '5,4', action: 'talk', result: 'supply-manifest-lead' }, { id: 'ferry-captain', at: '10,4', action: 'talk', result: 'uphill-crates-lead' }, { id: 'market-seller', at: '14,4', action: 'talk', result: 'clerk-storehouse-lead' }],
+    interactables: [{ id: 'dock-worker', at: '5,4', action: 'talk', result: 'supply-manifest-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'ferry-captain', at: '10,4', action: 'talk', result: 'uphill-crates-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'market-seller', at: '14,4', action: 'talk', result: 'clerk-storehouse-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }],
     lesson: 'Multiple conversations distribute knowledge without a single authority figure solving the route.',
   }),
   sceneHub({
@@ -1196,7 +1196,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'east', formation: ['ren', 'aya', 'lise', 'mateus'] },
     exits: [{ id: 'customs-house', at: '18,3', destinationLevelId: 'sdg-customs-house', condition: 'separate-arrivals-complete' }, { id: 'rain-docks', at: '18,8', destinationLevelId: 'sdg-rain-docks', condition: 'lantern-route-chosen' }],
     objective: 'Enter separately, gather trade context, and choose a lantern escort route.',
-    interactables: [{ id: 'trade-broker', at: '6,4', action: 'talk', result: 'port-etiquette-note' }, { id: 'printer-stall', label: 'Sayo’s Print Stall', at: '10,4', action: 'talk', result: 'aya-printer-lead' }, { id: 'checkpoint-sign', at: '15,5', action: 'inspect', result: 'transport-mark-read' }],
+    interactables: [{ id: 'trade-broker', at: '6,4', action: 'talk', result: 'port-etiquette-note', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'printer-stall', label: 'Sayo’s Print Stall', at: '10,4', action: 'talk', result: 'aya-printer-lead', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'checkpoint-sign', at: '15,5', action: 'inspect', result: 'transport-mark-read' }],
     lesson: 'Port life is a hub of competing needs, not a flat faction backdrop.',
   }),
   sceneHub({
@@ -1206,7 +1206,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north', formation: ['ren', 'aya', 'lise', 'mateus'] },
     exits: [{ id: 'dock-door', at: '18,5', destinationLevelId: 'sdg-rain-docks', condition: 'cipher-recorded' }],
     objective: 'Compare port ledger annotations and record Mateus’s admitted cipher handwriting.',
-    interactables: [{ id: 'customs-ledger', at: '9,4', action: 'inspect-cipher', result: 'mateus-handwriting-recorded' }, { id: 'clerk-desk', at: '13,4', action: 'talk', result: 'port-clerk-witness' }],
+    interactables: [{ id: 'customs-ledger', at: '9,4', action: 'inspect-cipher', result: 'mateus-handwriting-recorded' }, { id: 'clerk-desk', at: '13,4', action: 'talk', result: 'port-clerk-witness', fieldCharacter: { kind: 'npc', role: 'speaker' } }],
     lesson: 'A character’s admission gives information without granting them instant trust.',
   }),
   sceneHub({
@@ -1216,7 +1216,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta'] },
     exits: [{ id: 'tide-caves', at: '18,3', destinationLevelId: 'ngi-tide-caves', condition: 'nagi-bargain-accepted' }],
     objective: 'Clear the bell-fog net route before asking fishers for passage.',
-    interactables: [{ id: 'net-pile', at: '11,6', action: 'inspect', result: 'bell-fog-route' }, { id: 'kiku-remedy-basket', at: '6,5', action: 'talk', result: 'kiku-guest-support' }, { id: 'fisher-council', at: '14,4', action: 'bargain', result: 'nagi-bargain-accepted' }],
+    interactables: [{ id: 'net-pile', at: '11,6', action: 'inspect', result: 'bell-fog-route' }, { id: 'kiku-remedy-basket', at: '6,5', action: 'talk', result: 'kiku-guest-support', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'fisher-council', at: '14,4', action: 'bargain', result: 'nagi-bargain-accepted' }],
     lesson: 'Practical aid precedes requests for risk; the town sets the terms of its help.',
   }),
   sceneHub({
@@ -1236,7 +1236,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'ash-fields', at: '18,3', destinationLevelId: 'kgr-ash-fields', condition: 'requisition-marks-recorded' }],
     objective: 'Record the requisition marks and hear what refusing the furnace would cost local residents.',
-    interactables: [{ id: 'coal-ledger', at: '8,4', action: 'record', result: 'requisition-marks-recorded' }, { id: 'resident-kitchen', at: '5,5', action: 'talk', result: 'coal-cost-testimony' }, { id: 'genta-supply-mark', at: '12,5', action: 'inspect', result: 'military-supply-chain-lead' }],
+    interactables: [{ id: 'coal-ledger', at: '8,4', action: 'record', result: 'requisition-marks-recorded' }, { id: 'resident-kitchen', at: '5,5', action: 'talk', result: 'coal-cost-testimony', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'genta-supply-mark', at: '12,5', action: 'inspect', result: 'military-supply-chain-lead' }],
     lesson: 'The forge is sustained by named logistics and choices, not supernatural inevitability.',
   }),
   sceneHub({
@@ -1286,7 +1286,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'prison-ferry', at: '18,3', destinationLevelId: 'hsh-prison-ferry', condition: 'former-retainer-scene-complete' }],
     objective: 'Speak with Genta’s former subordinates and offer a concrete safe stand-down.',
-    interactables: [{ id: 'former-retainer', at: '9,4', action: 'talk', result: 'former-retainer-scene-complete' }, { id: 'food-cache', at: '13,5', action: 'share-supplies', result: 'subordinate-food-route' }],
+    interactables: [{ id: 'former-retainer', at: '9,4', action: 'talk', result: 'former-retainer-scene-complete', fieldCharacter: { kind: 'npc', role: 'speaker' } }, { id: 'food-cache', at: '13,5', action: 'share-supplies', result: 'subordinate-food-route' }],
     lesson: 'Accountability allows people to refuse Genta while still making room for a practical choice.',
   }),
   sceneHub({
@@ -1336,7 +1336,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'bell-spine', at: '18,3', destinationLevelId: 'krh-bell-spine', condition: 'six-offers-refused' }],
     objective: 'Let each hero refuse Kurozane’s tailored offer; the choice changes an opening readout, never the ending’s rejection.',
-    interactables: [{ id: 'ren-offer', at: '6,4', action: 'refuse-offer', actor: 'ren' }, { id: 'aya-offer', at: '7,4', action: 'refuse-offer', actor: 'aya' }, { id: 'lise-offer', at: '8,4', action: 'refuse-offer', actor: 'lise' }, { id: 'mateus-offer', at: '9,4', action: 'refuse-offer', actor: 'mateus' }, { id: 'genta-offer', at: '10,4', action: 'refuse-offer', actor: 'genta' }, { id: 'kiku-offer', at: '11,4', action: 'refuse-offer', actor: 'kiku' }],
+    interactables: [{ id: 'ren-offer', at: '6,4', action: 'refuse-offer', actor: 'ren', fieldCharacter: { kind: 'party', memberId: 'ren', facing: 'south' } }, { id: 'aya-offer', at: '7,4', action: 'refuse-offer', actor: 'aya', fieldCharacter: { kind: 'party', memberId: 'aya', facing: 'south' } }, { id: 'lise-offer', at: '8,4', action: 'refuse-offer', actor: 'lise', fieldCharacter: { kind: 'party', memberId: 'lise', facing: 'south' } }, { id: 'mateus-offer', at: '9,4', action: 'refuse-offer', actor: 'mateus', fieldCharacter: { kind: 'party', memberId: 'mateus', facing: 'south' } }, { id: 'genta-offer', at: '10,4', action: 'refuse-offer', actor: 'genta', fieldCharacter: { kind: 'party', memberId: 'genta', facing: 'south' } }, { id: 'kiku-offer', at: '11,4', action: 'refuse-offer', actor: 'kiku', fieldCharacter: { kind: 'party', memberId: 'kiku', facing: 'south' } }],
     lesson: 'Refusal is playable character ownership, not a branch where the story permits complicity.',
   }),
   sceneHub({

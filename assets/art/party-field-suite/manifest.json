@@ -2446,7 +2446,7 @@
     {
       "path": "build_party_field_suite.py",
       "format": "python",
-      "sha256": "ee44fbbb25eadf8e310f6491e96ae8a7b5cac0ee9bace92593f259a5d9c9ced0"
+      "sha256": "a37df9dc5f1b2adb51533f5758cf4b83c0d3e20676484d6c53a3a2a91176bccf"
     }
   ],
   "exports": [
@@ -2479,7 +2479,7 @@
   "review": {
     "internalArtDirectionConstraints": "applied",
     "externalCulturalReview": "pending",
-    "runtimeIntegration": "current-browser-ren-leader-two-phase-walk-all-member-keys-authored-interact-hurt",
+    "runtimeIntegration": "current-browser-selectable-field-leader-two-phase-directional-walk-interact-hurt",
     "fullAnimationExpansion": "alternate-action-facings-and-additional-inbetweens-pending"
   }
 }

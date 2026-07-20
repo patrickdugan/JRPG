@@ -1,10 +1,10 @@
-export const NPC_FIELD_ROLES = Object.freeze(['speaker', 'interviewee']);
+export const NPC_FIELD_ROLES = Object.freeze(['speaker', 'interviewee', 'confined-person', 'courier']);
 
 export const NPC_FIELD_ATLAS = Object.freeze({
   url: './assets/art/npc-field-suite/npc-field-atlas.png',
-  width: 64,
+  width: 128,
   height: 48,
-  columns: 2,
+  columns: 4,
   rows: 1,
   cellWidth: 32,
   cellHeight: 48,
