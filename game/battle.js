@@ -141,6 +141,7 @@ import {
 } from './battle-command-presentation.mjs';
 import {
   createBattleDefeatAccent,
+  createBattleDamageOutcomeFeedback,
   createBattleHealFeedback,
   createBattleMoveFeedback,
   createBattleTelegraphEvadeFeedback,
@@ -148,6 +149,7 @@ import {
   createBattleVictoryAccent,
   createRecoveryLockFeedback,
   createSelectedTargetFeedback,
+  sampleBattleDamageOutcomeFeedback,
   sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
   sampleBattleTelegraphEvadeFeedback,
@@ -322,6 +324,7 @@ const battleEnemyPoseUntil = new Map();
 let activeBattleAnimation = null;
 let activeCommandPresentation = null;
 let activeBattleSystemFeedback = null;
+let activeBattleDamageFeedback = null;
 let statusVfxProofSnapshot = null;
 let activeStatusExpiryVfx = Object.freeze([]);
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
@@ -649,6 +652,17 @@ function startBattleTelegraphEvadeSystemFeedback(beforeSnapshot, afterSnapshot, 
   const feedback = createBattleTelegraphEvadeFeedback({ beforeSnapshot, afterSnapshot, startedAt, speed });
   if (!feedback) return null;
   activeBattleSystemFeedback = feedback;
+  announcements.textContent = feedback.announcement;
+  return feedback;
+}
+
+function startBattleDamageOutcomeFeedback(beforeSnapshot, afterSnapshot, {
+  startedAt = performance.now(),
+  speed = autoGrindActive ? speedMultiplier : 1,
+} = {}) {
+  const feedback = createBattleDamageOutcomeFeedback({ beforeSnapshot, afterSnapshot, startedAt, speed });
+  if (!feedback) return null;
+  activeBattleDamageFeedback = feedback;
   announcements.textContent = feedback.announcement;
   return feedback;
 }
@@ -1233,6 +1247,46 @@ function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
   context.restore();
 }
 
+function drawBattleDamageOutcomeFeedback(frame, geometry) {
+  if (!frame) return;
+  const colors = {
+    absorb: { fill: '#a8f0c7', stroke: '#17382d' },
+    immune: { fill: '#d7e3ef', stroke: '#253346' },
+    weak: { fill: '#ffe58f', stroke: '#4a2d17' },
+    resist: { fill: '#cbbbea', stroke: '#302342' },
+    neutral: { fill: '#f2eee4', stroke: '#272735' },
+  };
+  context.save();
+  context.imageSmoothingEnabled = false;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  for (const entry of frame.entries) {
+    const center = battleCanvasPoint(entry.targetTile, geometry);
+    const y = center.y - (entry.riseTiles + entry.stackIndex * 0.42) * geometry.cell;
+    const palette = colors[entry.outcome] ?? colors.neutral;
+    const headline = `${entry.displayValue}${entry.outcomeLabel ? ` ${entry.outcomeLabel}` : ''}`;
+    const modifiers = [
+      `D${entry.deliveryPercent}%`,
+      `E${entry.essencePercent}%`,
+      ...(entry.guarded ? ['GUARD'] : []),
+      ...(entry.wardPercent === null ? [] : [`WARD${entry.wardPercent}%`]),
+    ].join(' ');
+    const headlineSize = Math.max(10, Math.round(geometry.cell * 0.22));
+    const detailSize = Math.max(8, Math.round(geometry.cell * 0.14));
+    context.globalAlpha = entry.opacity;
+    context.font = `bold ${headlineSize}px monospace`;
+    context.lineWidth = Math.max(2, geometry.cell * 0.045);
+    context.strokeStyle = palette.stroke;
+    context.fillStyle = palette.fill;
+    context.strokeText(headline, center.x, y);
+    context.fillText(headline, center.x, y);
+    context.font = `bold ${detailSize}px monospace`;
+    context.strokeText(modifiers, center.x, y + headlineSize * 0.82);
+    context.fillText(modifiers, center.x, y + headlineSize * 0.82);
+  }
+  context.restore();
+}
+
 function drawBattleTempoPresentation(frames, geometry) {
   for (const frame of frames) {
     const left = geometry.originX + frame.tile.x * geometry.cell + geometry.cell * 0.16;
@@ -1383,6 +1437,9 @@ function drawBattle(now = performance.now()) {
     : activeBattleSystemFeedback?.kind === 'recovery-lock'
       ? sampleRecoveryLockFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
       : sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
+  const damageFeedback = sampleBattleDamageOutcomeFeedback(activeBattleDamageFeedback, now, {
+    reducedMotion: reducedMotion.matches,
+  });
   const tempoPresentation = createBattleTempoPresentation(snapshot, {
     visualNowMs: now,
     reducedMotion: reducedMotion.matches,
@@ -1647,6 +1704,7 @@ function drawBattle(now = performance.now()) {
   drawPersistentStatusVfx(snapshot, geometry);
   drawBattleTempoPresentation(tempoPresentation, geometry);
   drawBattleAnimationFx(animation, geometry);
+  drawBattleDamageOutcomeFeedback(damageFeedback, geometry);
   if (reducedStatusApplicationFrame) drawBattleStatusApplicationVfx(reducedStatusApplicationFrame, geometry);
   drawStatusExpiryVfx(statusExpiryFrames, geometry);
   drawBattleCommandPresentationFx(commandPresentation, geometry);
@@ -2339,6 +2397,7 @@ function executeAutoGrindStep(now) {
     return;
   }
   const after = engine.snapshot();
+  startBattleDamageOutcomeFeedback(before, after, { startedAt: now, speed: speedMultiplier });
   startBattleTelegraphEvadeSystemFeedback(before, after, { startedAt: now, speed: speedMultiplier });
   announceBossPhaseLogDelta(before, after);
   activeBattleAnimation = mergeBossTerminalPresentationRecord(
@@ -2406,6 +2465,7 @@ function toggleAutoGrind() {
   activeBattleAnimation = null;
   activeCommandPresentation = null;
   activeBattleSystemFeedback = null;
+  activeBattleDamageFeedback = null;
   activeStatusExpiryVfx = Object.freeze([]);
   clearEnemyIntentSchedule();
   autoActionAt = performance.now() + getRepeatStepDelayMs('intro', speedMultiplier);
@@ -2429,6 +2489,7 @@ function restartQueuedAutoGrind(now) {
   activeBattleAnimation = null;
   activeCommandPresentation = null;
   activeBattleSystemFeedback = null;
+  activeBattleDamageFeedback = null;
   statusVfxProofSnapshot = null;
   activeStatusExpiryVfx = Object.freeze([]);
   autoGrindActive = true;
@@ -2485,6 +2546,7 @@ function executeSelectedCommand() {
     });
   }
   if (result?.ok) {
+    startBattleDamageOutcomeFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
     startBattleTelegraphEvadeSystemFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
     activeBattleAnimation = mergeBossTerminalPresentationRecord(
       activeBattleAnimation,
@@ -2593,6 +2655,7 @@ restartBattle.addEventListener('click', () => {
   activeBattleAnimation = null;
   activeCommandPresentation = null;
   activeBattleSystemFeedback = null;
+  activeBattleDamageFeedback = null;
   statusVfxProofSnapshot = null;
   activeStatusExpiryVfx = Object.freeze([]);
   uiMessages = [`Restarted ${encounter.name}. First-clear rewards remain saved; victories can be replayed for grind XP.`];
@@ -2696,6 +2759,10 @@ function tick(now) {
     activeBattleSystemFeedback = null;
     drawBattle(now);
   }
+  if (activeBattleDamageFeedback && now >= activeBattleDamageFeedback.endsAt) {
+    activeBattleDamageFeedback = null;
+    drawBattle(now);
+  }
   if (autoSettleAt !== null && now >= autoSettleAt) {
     autoSettleAt = null;
     if (repeatGrindQueue.active && queuedVictoryRecorded) restartQueuedAutoGrind(now);
@@ -2709,14 +2776,16 @@ function tick(now) {
     const enemyActorId = before.activeActorId;
     clearEnemyIntentSchedule();
     const result = engine.resolveEnemyActivation();
+    const after = engine.snapshot();
     if (!result.ok) addMessage(result.reason);
-    else announceEngineLogDelta(before, engine.snapshot());
+    else announceEngineLogDelta(before, after);
+    if (result.ok) startBattleDamageOutcomeFeedback(before, after, { startedAt: now, speed: 1 });
     markCombatResolutionPose({ ok: result.ok, ...result.resolution }, enemyActorId);
     startCombatAnimation({ ok: result.ok, ...result.resolution }, enemyActorId, before);
     activeBattleAnimation = mergeBossTransitionPresentationRecord(
       activeBattleAnimation,
       before,
-      engine.snapshot(),
+      after,
       { startedAt: now, speed: 1 },
     );
     render();

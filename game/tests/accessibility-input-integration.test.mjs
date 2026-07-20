@@ -57,7 +57,7 @@ test('rapidly replaced battle histories are not live regions', () => {
   const battle = source('battle.js');
   assert.match(battle, /function announceEngineLogDelta\(beforeSnapshot, afterSnapshot\)/);
   assert.ok((battle.match(/announceEngineLogDelta\(/g) ?? []).length >= 4);
-  assert.match(battle, /const result = engine\.resolveEnemyActivation\(\);\s+if \(!result\.ok\) addMessage\(result\.reason\);\s+else announceEngineLogDelta\(before, engine\.snapshot\(\)\);/);
+  assert.match(battle, /const result = engine\.resolveEnemyActivation\(\);\s+const after = engine\.snapshot\(\);\s+if \(!result\.ok\) addMessage\(result\.reason\);\s+else announceEngineLogDelta\(before, after\);/);
   assert.match(source('credits.html'), /id="evidenceExportHint"[^>]*role="status"[^>]*aria-live="polite"/);
 });
 

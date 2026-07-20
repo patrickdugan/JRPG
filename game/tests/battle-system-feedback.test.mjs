@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import {
   BATTLE_SYSTEM_FEEDBACK_MS,
+  createBattleDamageOutcomeFeedback,
   createBattleDefeatAccent,
   createBattleHealFeedback,
   createBattleMoveFeedback,
@@ -12,11 +13,45 @@ import {
   createBattleVictoryAccent,
   createRecoveryLockFeedback,
   createSelectedTargetFeedback,
+  sampleBattleDamageOutcomeFeedback,
   sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
   sampleBattleTelegraphEvadeFeedback,
   sampleRecoveryLockFeedback,
 } from '../battle-system-feedback.mjs';
+
+function damageSnapshots(event, {
+  beforeHp = 100,
+  afterHp = event.targetHp,
+  beforeLog = [],
+  afterEvents = [event],
+} = {}) {
+  return {
+    beforeSnapshot: {
+      actors: [
+        { instanceId: event.attackerId, name: 'Attacker', faction: 'party', hp: 80, pos: { x: 2, y: 3 } },
+        { instanceId: event.targetId, name: 'Target', faction: 'enemy', hp: beforeHp, pos: { x: 5, y: 2 } },
+      ],
+      log: beforeLog,
+    },
+    afterSnapshot: {
+      actors: [
+        { instanceId: event.attackerId, name: 'Attacker', faction: 'party', hp: 80, pos: { x: 2, y: 3 } },
+        { instanceId: event.targetId, name: 'Target', faction: 'enemy', hp: afterHp, pos: { x: 5, y: 2 } },
+      ],
+      log: [...beforeLog, ...afterEvents],
+    },
+  };
+}
+
+function damageEvent(overrides = {}) {
+  return {
+    type: 'damage', attackerId: 'aya', targetId: 'oni-1', skillId: 'warding-script',
+    base: 20, deliveryMultiplier: 1, essenceMultiplier: 1, typedDamage: 20,
+    absorbed: false, finalDamage: 20, guarded: false, targetHp: 80, pulse: 4,
+    ...overrides,
+  };
+}
 
 test('successful movement marks the exact engine destination without changing simulation data', () => {
   const result = { ok: true, position: { x: 3, y: 2 }, pace: 1 };
@@ -268,6 +303,145 @@ test('heal feedback cannot be inferred from a divergent snapshot log suffix', ()
   }), null);
 });
 
+test('typed damage feedback preserves weakness, Guard, Ward, exact percentages, and snapshots', () => {
+  const event = damageEvent({
+    base: 24,
+    essenceMultiplier: 1.25,
+    typedDamage: 30,
+    finalDamage: 4,
+    guarded: true,
+    incomingDamageMultiplier: 0.25,
+    targetHp: 96,
+  });
+  const snapshots = damageSnapshots(event, { beforeHp: 100, afterHp: 96 });
+  const beforeCopy = JSON.parse(JSON.stringify(snapshots));
+  const record = createBattleDamageOutcomeFeedback({ ...snapshots, startedAt: 200, speed: 2 });
+  assert.equal(record.kind, 'damage-outcome');
+  assert.equal(record.durationMs, BATTLE_SYSTEM_FEEDBACK_MS['damage-outcome'] / 2);
+  assert.equal(record.endsAt, 560);
+  assert.equal(record.entries.length, 1);
+  assert.deepEqual(record.entries[0], {
+    attackerId: 'aya', attackerName: 'Attacker', targetId: 'oni-1', targetName: 'Target',
+    skillId: 'warding-script', targetTile: { x: 5, y: 2 }, outcome: 'weak',
+    base: 24, typedDamage: 30, finalDamage: 4, damageAmount: 4, restoreAmount: 0,
+    targetHpBefore: 100, targetHpAfter: 96,
+    deliveryMultiplier: 1, essenceMultiplier: 1.25, affinityMultiplier: 1.25,
+    deliveryPercent: 100, essencePercent: 125, affinityPercent: 125,
+    guarded: true, incomingDamageMultiplier: 0.25, wardPercent: 25,
+    displayValue: '4', outcomeLabel: 'WEAK',
+    announcement: 'Attacker deals 4 damage to Target with warding-script (100% delivery, 125% essence, Guard, Ward 25%). Weakness.',
+  });
+  assert.equal(Object.isFrozen(record.entries[0].targetTile), true);
+  assert.deepEqual(snapshots, beforeCopy, 'presentation cannot mutate engine snapshots');
+});
+
+test('typed damage outcomes distinguish neutral, resist, immune, absorption, and a nonlethal zero', () => {
+  const cases = [
+    { event: damageEvent(), beforeHp: 100, afterHp: 80, outcome: 'neutral', displayValue: '20', label: '' },
+    {
+      event: damageEvent({ deliveryMultiplier: 0.75, essenceMultiplier: 0.75, typedDamage: 11, finalDamage: 11, targetHp: 89 }),
+      beforeHp: 100, afterHp: 89, outcome: 'resist', displayValue: '11', label: 'RESIST', affinityPercent: 56.25,
+    },
+    {
+      event: damageEvent({ essenceMultiplier: 0, typedDamage: 0, finalDamage: 0, targetHp: 100 }),
+      beforeHp: 100, afterHp: 100, outcome: 'immune', displayValue: '0', label: 'IMMUNE',
+    },
+    {
+      event: damageEvent({ essenceMultiplier: -1, typedDamage: -20, absorbed: true, finalDamage: -12, targetHp: 112 }),
+      beforeHp: 100, afterHp: 112, outcome: 'absorb', displayValue: '+12 HP', label: 'ABSORB',
+    },
+    {
+      event: damageEvent({ essenceMultiplier: -1, typedDamage: -20, absorbed: true, finalDamage: -0, targetHp: 100 }),
+      beforeHp: 100, afterHp: 100, outcome: 'absorb', displayValue: '+0 HP', label: 'ABSORB',
+    },
+    {
+      event: damageEvent({ essenceMultiplier: 1.25, typedDamage: 25, finalDamage: 0, targetHp: 100 }),
+      beforeHp: 100, afterHp: 100, outcome: 'weak', displayValue: '0', label: 'WEAK',
+    },
+  ];
+  for (const item of cases) {
+    const record = createBattleDamageOutcomeFeedback(damageSnapshots(item.event, item));
+    assert.equal(record.entries[0].outcome, item.outcome);
+    assert.equal(record.entries[0].displayValue, item.displayValue);
+    assert.equal(record.entries[0].outcomeLabel, item.label);
+    if (item.affinityPercent !== undefined) assert.equal(record.entries[0].affinityPercent, item.affinityPercent);
+  }
+});
+
+test('typed damage feedback keeps exact event order across multiple targets and later status damage', () => {
+  const first = damageEvent({ attackerId: 'mateus-1', targetId: 'lise', skillId: 'crimson-litany', finalDamage: 20, targetHp: 80 });
+  const second = damageEvent({ attackerId: 'mateus-1', targetId: 'ren', skillId: 'crimson-litany', finalDamage: 10, targetHp: 70 });
+  const statusDamage = { type: 'status-damage', targetId: 'lise', finalDamage: 3, targetHp: 77, statusId: 'scorch' };
+  const beforeSnapshot = {
+    actors: [
+      { instanceId: 'mateus-1', name: 'Mateus', faction: 'enemy', hp: 200, pos: { x: 6, y: 3 } },
+      { instanceId: 'lise', name: 'Lise', faction: 'party', hp: 100, pos: { x: 3, y: 2 } },
+      { instanceId: 'ren', name: 'Ren', faction: 'party', hp: 80, pos: { x: 4, y: 2 } },
+    ],
+    log: [{ type: 'intent-answered', intentId: 'crimson-litany-1' }],
+  };
+  const afterSnapshot = {
+    actors: [
+      beforeSnapshot.actors[0],
+      { ...beforeSnapshot.actors[1], hp: 77 },
+      { ...beforeSnapshot.actors[2], hp: 70 },
+    ],
+    log: [...beforeSnapshot.log, first, second, statusDamage],
+  };
+  const record = createBattleDamageOutcomeFeedback({ beforeSnapshot, afterSnapshot });
+  assert.deepEqual(record.entries.map(({ targetId }) => targetId), ['lise', 'ren']);
+  assert.deepEqual(record.entries.map(({ targetHpBefore, targetHpAfter }) => [targetHpBefore, targetHpAfter]), [[100, 80], [80, 70]]);
+  assert.match(record.announcement, /^Mateus deals 20 damage to Lise.*Mateus deals 10 damage to Ren/s);
+});
+
+test('typed damage feedback fails closed on divergent, malformed, or uncorroborated authority', () => {
+  const event = damageEvent();
+  const snapshots = damageSnapshots(event, { beforeLog: [{ type: 'prior', pulse: 1 }] });
+  assert.equal(createBattleDamageOutcomeFeedback({
+    beforeSnapshot: snapshots.beforeSnapshot,
+    afterSnapshot: { ...snapshots.afterSnapshot, log: [{ type: 'different', pulse: 1 }, event] },
+  }), null);
+  assert.equal(createBattleDamageOutcomeFeedback(damageSnapshots({ ...event, essenceMultiplier: Number.NaN })), null);
+  assert.equal(createBattleDamageOutcomeFeedback(damageSnapshots({ ...event, attackerId: '' })), null);
+  assert.equal(createBattleDamageOutcomeFeedback({
+    ...snapshots,
+    afterSnapshot: { ...snapshots.afterSnapshot, actors: snapshots.afterSnapshot.actors.map((actor) => (
+      actor.instanceId === event.targetId ? { ...actor, hp: 79 } : actor
+    )) },
+  }), null, 'after HP must match the typed event transition');
+  assert.equal(createBattleDamageOutcomeFeedback({
+    beforeSnapshot: { actors: snapshots.beforeSnapshot.actors, log: [] },
+    afterSnapshot: { actors: snapshots.beforeSnapshot.actors, log: [{ type: 'message', text: '20 WEAK damage' }] },
+  }), null, 'damage prose cannot authorize feedback');
+  assert.equal(createBattleDamageOutcomeFeedback(damageSnapshots({
+    ...event, essenceMultiplier: 0, typedDamage: 0, finalDamage: 1, targetHp: 99,
+  }, { beforeHp: 100, afterHp: 99 })), null, 'zero affinity with nonzero damage is malformed');
+  assert.equal(createBattleDamageOutcomeFeedback(damageSnapshots({
+    ...event, typedDamage: 20, finalDamage: -20, targetHp: 120,
+  }, { beforeHp: 100, afterHp: 120 })), null, 'positive affinity cannot restore HP');
+  assert.equal(createBattleDamageOutcomeFeedback(damageSnapshots({
+    ...event, typedDamage: 20, finalDamage: 21, targetHp: 79,
+  }, { beforeHp: 100, afterHp: 79 })), null, 'final damage cannot exceed typed damage');
+  assert.equal(createBattleDamageOutcomeFeedback(damageSnapshots({
+    ...event, essenceMultiplier: -1, typedDamage: -20, absorbed: true, finalDamage: -30, targetHp: 130,
+  }, { beforeHp: 100, afterHp: 130 })), null, 'absorbed healing cannot exceed typed absorption');
+});
+
+test('typed damage sampling expires exactly and reduced motion holds one static frame', () => {
+  const event = damageEvent();
+  const record = createBattleDamageOutcomeFeedback({ ...damageSnapshots(event), startedAt: 100, speed: 1 });
+  assert.equal(sampleBattleDamageOutcomeFeedback(record, 99), null);
+  const middle = sampleBattleDamageOutcomeFeedback(record, 460);
+  assert.equal(middle.progress, 0.5);
+  assert.equal(middle.entries[0].riseTiles, 0.65);
+  assert.equal(sampleBattleDamageOutcomeFeedback(record, 820), null);
+  assert.deepEqual(
+    sampleBattleDamageOutcomeFeedback(record, 101, { reducedMotion: true }),
+    sampleBattleDamageOutcomeFeedback(record, 819, { reducedMotion: true }),
+  );
+  assert.throws(() => createBattleDamageOutcomeFeedback({ ...damageSnapshots(event), speed: 3 }), /speed must be 1, 2, or 4/i);
+});
+
 test('telegraph evasion requires an exact typed resolved-intent delta and party targets', () => {
   const published = {
     type: 'intent-published', intentId: 'crimson-litany-1', targetIdsAtPublish: ['lise'], pulse: 3,
@@ -378,12 +552,26 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
   assert.match(source, /drawBattleTempoPresentation\(tempoPresentation, geometry\)/);
   assert.match(source, /createBattleHealFeedback\(\{/);
   assert.match(source, /sampleBattleHealFeedback\(activeBattleSystemFeedback, now, \{ reducedMotion: reducedMotion\.matches \}\)/);
+  assert.match(source, /createBattleDamageOutcomeFeedback\(\{ beforeSnapshot, afterSnapshot, startedAt, speed \}\)/);
+  assert.match(source, /sampleBattleDamageOutcomeFeedback\(activeBattleDamageFeedback, now, \{/);
+  assert.match(source, /function drawBattleDamageOutcomeFeedback\(/);
+  assert.match(source, /drawBattleDamageOutcomeFeedback\(damageFeedback, geometry\)/);
   assert.match(source, /createBattleTelegraphEvadeFeedback\(\{ beforeSnapshot, afterSnapshot, startedAt, speed \}\)/);
   assert.match(source, /sampleBattleTelegraphEvadeFeedback\(activeBattleSystemFeedback, now, \{ reducedMotion: reducedMotion\.matches \}\)/);
   assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(before, after, \{ startedAt: now, speed: speedMultiplier \}\)/,
     'Auto-Grind consumes the same exact typed telegraph delta');
   assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(snapshot, afterSnapshot, \{ startedAt: performance\.now\(\), speed: 1 \}\)/,
     'manual commands consume the same exact typed telegraph delta');
+  assert.match(source, /startBattleDamageOutcomeFeedback\(before, after, \{ startedAt: now, speed: speedMultiplier \}\)/,
+    'Auto-Grind consumes the exact typed damage delta');
+  assert.match(source, /startBattleDamageOutcomeFeedback\(snapshot, afterSnapshot, \{ startedAt: performance\.now\(\), speed: 1 \}\)/,
+    'manual party commands consume the exact typed damage delta');
+  const manualEnemyResolution = source.slice(
+    source.indexOf('function tick(now)'),
+    source.indexOf('requestAnimationFrame(tick);'),
+  );
+  assert.match(manualEnemyResolution, /const after = engine\.snapshot\(\);[\s\S]*?startBattleDamageOutcomeFeedback\(before, after, \{ startedAt: now, speed: 1 \}\)/,
+    'manual enemy activations consume the exact typed damage delta');
   const combatAnimationSource = source.slice(
     source.indexOf('function startCombatAnimation('),
     source.indexOf('function currentBattleAnimationFrame('),
@@ -417,8 +605,17 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
     'checking a locked party actor cannot issue or redirect an engine command');
   assert.match(source, /function announceSelectedBattleTarget\(/);
   assert.match(source, /activeBattleSystemFeedback = null/);
+  assert.match(source, /activeBattleDamageFeedback = null/);
   assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*activeBattleSystemFeedback/,
     'system feedback cannot delay commands, Recovery, intent, or Auto-Grind');
+  assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*activeBattleDamageFeedback/,
+    'damage flyouts cannot delay commands, Recovery, intent, or Auto-Grind');
+  const playtimeAccounting = source.slice(
+    source.indexOf('const countableElapsed = getBattlePresentationElapsedMs({'),
+    source.indexOf('if (!inactive && countableElapsed > 0)'),
+  );
+  assert.doesNotMatch(playtimeAccounting, /activeBattleDamageFeedback/,
+    'damage flyouts cannot join playtime accounting');
   assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*victoryAccent/,
     'victory accent cannot extend the terminal hold or settlement boundary');
   assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*defeatAccent/,

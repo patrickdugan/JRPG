@@ -7,6 +7,7 @@ export const BATTLE_SYSTEM_FEEDBACK_MS = Object.freeze({
   'move-blocked': 480,
   'recovery-lock': 560,
   'telegraph-evaded': 720,
+  'damage-outcome': 720,
   heal: 720,
 });
 
@@ -276,6 +277,210 @@ export function sampleBattleHealFeedback(record, nowMs, { reducedMotion = false 
     pulse: round(pulse),
     opacity: round(reducedMotion ? 0.94 : 0.62 + (pulse * 0.34)),
     routeProgress: round(reducedMotion ? 1 : Math.min(1, progress * 2.5)),
+    reducedMotion: Boolean(reducedMotion),
+  });
+}
+
+function finiteDamageEvent(event) {
+  return event?.type === 'damage'
+    && typeof event.attackerId === 'string' && event.attackerId.length > 0
+    && typeof event.targetId === 'string' && event.targetId.length > 0
+    && typeof event.skillId === 'string' && event.skillId.length > 0
+    && Number.isSafeInteger(event.base) && event.base >= 1
+    && Number.isFinite(event.deliveryMultiplier)
+    && Number.isFinite(event.essenceMultiplier)
+    && Number.isSafeInteger(event.typedDamage)
+    && typeof event.absorbed === 'boolean'
+    && Number.isSafeInteger(event.finalDamage)
+    && typeof event.guarded === 'boolean'
+    && Number.isSafeInteger(event.targetHp) && event.targetHp >= 0
+    && (event.incomingDamageMultiplier === undefined
+      || (Number.isFinite(event.incomingDamageMultiplier) && event.incomingDamageMultiplier > 0));
+}
+
+function damageOutcome(event) {
+  const affinity = event.deliveryMultiplier * event.essenceMultiplier;
+  if (!Number.isFinite(affinity)) return null;
+  if (Math.round(event.base * affinity) !== event.typedDamage) return null;
+  if (affinity < 0) {
+    if (!event.absorbed || event.typedDamage >= 0 || event.finalDamage > 0
+      || event.finalDamage < event.typedDamage) return null;
+    return 'absorb';
+  }
+  if (event.absorbed) return null;
+  if (affinity === 0) {
+    if (event.typedDamage !== 0 || event.finalDamage !== 0) return null;
+    return 'immune';
+  }
+  if (event.typedDamage < 0 || event.finalDamage < 0 || event.finalDamage > event.typedDamage) return null;
+  if (affinity > 1) return 'weak';
+  if (affinity < 1) return 'resist';
+  return 'neutral';
+}
+
+function percent(multiplier) {
+  return round(multiplier * 100);
+}
+
+function damageAnnouncement(entry) {
+  const modifiers = [
+    `${entry.deliveryPercent}% delivery`,
+    `${entry.essencePercent}% essence`,
+    ...(entry.guarded ? ['Guard'] : []),
+    ...(entry.wardPercent === null ? [] : [`Ward ${entry.wardPercent}%`]),
+  ].join(', ');
+  if (entry.outcome === 'absorb') {
+    return `${entry.targetName} absorbs ${entry.restoreAmount} HP from ${entry.skillId} (${modifiers}).`;
+  }
+  if (entry.outcome === 'immune') {
+    return `${entry.targetName} is immune to ${entry.skillId} (${modifiers}).`;
+  }
+  const outcome = entry.outcome === 'weak'
+    ? ' Weakness.'
+    : entry.outcome === 'resist'
+      ? ' Resisted.'
+      : '';
+  return `${entry.attackerName} deals ${entry.damageAmount} damage to ${entry.targetName} with ${entry.skillId} (${modifiers}).${outcome}`;
+}
+
+/**
+ * Presentation-only typed damage outcomes. Authority is an exact appended
+ * `damage` event whose HP transition is corroborated by both snapshots.
+ */
+export function createBattleDamageOutcomeFeedback({
+  beforeSnapshot,
+  afterSnapshot,
+  startedAt = 0,
+  speed = 1,
+} = {}) {
+  if (!BATTLE_SYSTEM_FEEDBACK_SPEEDS.includes(speed)) {
+    throw new RangeError('Battle system feedback speed must be 1, 2, or 4.');
+  }
+  if (!Array.isArray(beforeSnapshot?.actors) || !Array.isArray(afterSnapshot?.actors)) {
+    throw new TypeError('beforeSnapshot and afterSnapshot actors must be arrays.');
+  }
+  const beforeLog = Array.isArray(beforeSnapshot.log) ? beforeSnapshot.log : [];
+  const afterLog = Array.isArray(afterSnapshot.log) ? afterSnapshot.log : [];
+  if (!logsShareExactPrefix(beforeLog, afterLog)) return null;
+  const newEvents = afterLog.slice(beforeLog.length);
+  const damageEvents = newEvents.filter((event) => event?.type === 'damage');
+  if (!damageEvents.length || damageEvents.some((event) => !finiteDamageEvent(event))) return null;
+
+  const beforeById = new Map(beforeSnapshot.actors.map((actor) => [actor?.instanceId, actor]));
+  const afterById = new Map(afterSnapshot.actors.map((actor) => [actor?.instanceId, actor]));
+  const hpCursor = new Map(beforeSnapshot.actors
+    .filter((actor) => typeof actor?.instanceId === 'string' && Number.isSafeInteger(actor.hp))
+    .map((actor) => [actor.instanceId, actor.hp]));
+  const touchedDamageTargets = new Set();
+  const entries = [];
+
+  for (const event of newEvents) {
+    if (event?.type === 'status-damage') {
+      const priorHp = hpCursor.get(event.targetId);
+      if (!Number.isSafeInteger(priorHp) || !Number.isSafeInteger(event.finalDamage)
+        || !Number.isSafeInteger(event.targetHp) || priorHp - event.finalDamage !== event.targetHp) return null;
+      hpCursor.set(event.targetId, event.targetHp);
+      continue;
+    }
+    if (event?.type === 'surrender' && typeof event.actorId === 'string' && Number.isSafeInteger(event.hp)) {
+      const priorHp = hpCursor.get(event.actorId);
+      if (!Number.isSafeInteger(priorHp) || event.hp < 0 || event.hp > priorHp) return null;
+      hpCursor.set(event.actorId, event.hp);
+      continue;
+    }
+    if (event?.type !== 'damage') continue;
+
+    const attacker = beforeById.get(event.attackerId) ?? afterById.get(event.attackerId);
+    const beforeTarget = beforeById.get(event.targetId);
+    const afterTarget = afterById.get(event.targetId);
+    const priorHp = hpCursor.get(event.targetId);
+    const outcome = damageOutcome(event);
+    if (!attacker || !beforeTarget || !afterTarget || !outcome
+      || !Number.isSafeInteger(priorHp) || priorHp - event.finalDamage !== event.targetHp) return null;
+
+    const affinityMultiplier = event.deliveryMultiplier * event.essenceMultiplier;
+    const incomingDamageMultiplier = event.incomingDamageMultiplier ?? null;
+    const entry = {
+      attackerId: event.attackerId,
+      attackerName: String(attacker.name ?? event.attackerId),
+      targetId: event.targetId,
+      targetName: String(afterTarget.name ?? event.targetId),
+      skillId: event.skillId,
+      targetTile: exactTile(afterTarget.pos, 'afterTarget.pos'),
+      outcome,
+      base: event.base,
+      typedDamage: event.typedDamage,
+      finalDamage: event.finalDamage,
+      damageAmount: Math.max(0, event.finalDamage),
+      restoreAmount: Math.max(0, -event.finalDamage),
+      targetHpBefore: priorHp,
+      targetHpAfter: event.targetHp,
+      deliveryMultiplier: event.deliveryMultiplier,
+      essenceMultiplier: event.essenceMultiplier,
+      affinityMultiplier,
+      deliveryPercent: percent(event.deliveryMultiplier),
+      essencePercent: percent(event.essenceMultiplier),
+      affinityPercent: percent(affinityMultiplier),
+      guarded: event.guarded,
+      incomingDamageMultiplier,
+      wardPercent: incomingDamageMultiplier === null ? null : percent(incomingDamageMultiplier),
+    };
+    entry.displayValue = outcome === 'absorb' ? `+${entry.restoreAmount} HP` : String(entry.damageAmount);
+    entry.outcomeLabel = outcome === 'neutral' ? '' : outcome.toUpperCase();
+    entry.announcement = damageAnnouncement(entry);
+    entries.push(entry);
+    hpCursor.set(event.targetId, event.targetHp);
+    touchedDamageTargets.add(event.targetId);
+  }
+
+  if (!entries.length) return null;
+  for (const targetId of touchedDamageTargets) {
+    if (!Number.isSafeInteger(afterById.get(targetId)?.hp) || hpCursor.get(targetId) !== afterById.get(targetId).hp) return null;
+  }
+  const baseDurationMs = BATTLE_SYSTEM_FEEDBACK_MS['damage-outcome'];
+  const durationMs = baseDurationMs / speed;
+  const safeStartedAt = safeTime(startedAt);
+  return deepFreeze({
+    kind: 'damage-outcome',
+    entries,
+    announcement: entries.map((entry) => entry.announcement).join(' '),
+    baseDurationMs,
+    durationMs,
+    startedAt: safeStartedAt,
+    endsAt: safeStartedAt + durationMs,
+    presentationSpeed: speed,
+  });
+}
+
+export function sampleBattleDamageOutcomeFeedback(record, nowMs, { reducedMotion = false } = {}) {
+  if (!record || record.kind !== 'damage-outcome') return null;
+  const now = safeTime(nowMs);
+  if (now < record.startedAt || now >= record.endsAt) return null;
+  const progress = Math.max(0, Math.min(1, (now - record.startedAt) / record.durationMs));
+  const visualProgress = reducedMotion ? 0.5 : progress;
+  const opacity = reducedMotion ? 0.96 : Math.min(1, Math.max(0, 1 - Math.max(0, progress - 0.58) / 0.42));
+  const perTargetIndex = new Map();
+  return deepFreeze({
+    kind: record.kind,
+    entries: record.entries.map((entry) => {
+      const stackIndex = perTargetIndex.get(entry.targetId) ?? 0;
+      perTargetIndex.set(entry.targetId, stackIndex + 1);
+      return {
+        targetId: entry.targetId,
+        targetTile: entry.targetTile,
+        outcome: entry.outcome,
+        displayValue: entry.displayValue,
+        outcomeLabel: entry.outcomeLabel,
+        deliveryPercent: entry.deliveryPercent,
+        essencePercent: entry.essencePercent,
+        guarded: entry.guarded,
+        wardPercent: entry.wardPercent,
+        stackIndex,
+        riseTiles: round(reducedMotion ? 0.62 : 0.34 + (visualProgress * 0.62)),
+        opacity: round(opacity),
+      };
+    }),
+    progress: round(visualProgress),
     reducedMotion: Boolean(reducedMotion),
   });
 }
