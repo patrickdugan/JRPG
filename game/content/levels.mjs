@@ -300,7 +300,7 @@ export const LEVELS = [
     objective: 'Clear the path encounter, inspect the optional side chest, and reach the chapel service door.',
     palette: rainPalette,
     interactables: [
-      { id: 'temple-charm-chest', at: '6,9', action: 'loot', optional: true, reward: 'Temple Charm' },
+      { id: 'temple-charm-chest', at: '6,9', action: 'loot', optional: true, reward: 'Defaced Registry Token' },
       { id: 'loading-alcove-sheet', at: '16,4', action: 'inspect', text: 'A torn confession sheet waits for an empty signature.' },
     ],
     encounterTriggers: [{ id: 'cedar-path-ambush', encounterId: 'fp1-cedar-path', tiles: ['11,4', '12,4', '11,5', '12,5'], once: true }],
@@ -1196,7 +1196,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'east', formation: ['ren', 'aya', 'lise', 'mateus'] },
     exits: [{ id: 'customs-house', at: '18,3', destinationLevelId: 'sdg-customs-house', condition: 'separate-arrivals-complete' }, { id: 'rain-docks', at: '18,8', destinationLevelId: 'sdg-rain-docks', condition: 'lantern-route-chosen' }],
     objective: 'Enter separately, gather trade context, and choose a lantern escort route.',
-    interactables: [{ id: 'trade-broker', at: '6,4', action: 'talk', result: 'port-etiquette-note' }, { id: 'printer-stall', at: '10,4', action: 'talk', result: 'aya-printer-lead' }, { id: 'checkpoint-sign', at: '15,5', action: 'inspect', result: 'transport-mark-read' }],
+    interactables: [{ id: 'trade-broker', at: '6,4', action: 'talk', result: 'port-etiquette-note' }, { id: 'printer-stall', label: 'Sayo’s Print Stall', at: '10,4', action: 'talk', result: 'aya-printer-lead' }, { id: 'checkpoint-sign', at: '15,5', action: 'inspect', result: 'transport-mark-read' }],
     lesson: 'Port life is a hub of competing needs, not a flat faction backdrop.',
   }),
   sceneHub({
@@ -1226,7 +1226,7 @@ export const LEVELS = [
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'reef-deck', at: '18,4', destinationLevelId: 'ngi-storm-reef', condition: 'survivor-choice-complete' }],
     objective: 'Find the Varga journal, protect survivors, and choose Kiku’s initial rescue position.',
-    interactables: [{ id: 'varga-journal', at: '9,4', action: 'read', result: 'varga-archive-truth' }, { id: 'survivor-hold', at: '15,5', action: 'choose-support', options: ['send-kiku', 'keep-kiku'] }, { id: 'reliquary-lock', at: '11,5', action: 'inspect', result: 'second-key-lead' }],
+    interactables: [{ id: 'varga-journal', at: '9,4', action: 'read', result: 'varga-archive-truth' }, { id: 'survivor-hold', at: '15,5', action: 'choose-support', options: ['send-kiku', 'keep-kiku'] }, { id: 'reliquary-lock', label: 'Varga Strongbox', at: '11,5', action: 'inspect', result: 'second-key-lead' }],
     lesson: 'Heritage is evidence to examine, not a moral credential.',
   }),
   sceneHub({
@@ -1315,7 +1315,7 @@ export const LEVELS = [
     terrain: [{ at: '11,8', tag: 'dry-lantern' }, { at: '12,8', tag: 'dry-lantern' }],
     spawn: { x: 2, y: 9, facing: 'east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'black-gate-route', at: '18,3', destinationLevelId: 'c8-black-gate', condition: 'medical-tents-confirmed' }],
-    objective: 'Coordinate medical tents and a safe route with people who survived the temple system.',
+    objective: 'Coordinate medical tents and a safe route with people who survived Takamine\'s experimental bell registry.',
     interactables: [{ id: 'medical-tent-list', at: '10,4', action: 'confirm-contribution', contribution: 'medical-tents' }, { id: 'lantern-route-map', at: '14,4', action: 'inspect', result: 'takamine-safe-route' }],
     lesson: 'No ally is converted into an anonymous assault bonus.',
   }),

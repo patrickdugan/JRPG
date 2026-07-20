@@ -343,8 +343,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             pacing_export = exported_report.get("pacing", {})
             require(pacing_export.get("diagnosticOnly") is True, "Evidence export pacing is not diagnostic-only.")
             require(pacing_export.get("observedPlaytimeProof") is False, "Evidence export pacing fabricated observed proof.")
-            require(pacing_export.get("checkpointSignature") == "fnv1a32:2d4d30fc", "Evidence checkpoint signature drifted.")
-            require(pacing_export.get("aggregateReferenceTargetMs") == 73928133, "Evidence pacing total drifted.")
+            require(pacing_export.get("checkpointSignature") == "fnv1a32:dab8e7de", "Evidence checkpoint signature drifted.")
+            require(pacing_export.get("aggregateReferenceTargetMs") == 73928467, "Evidence pacing total drifted.")
             require(len(pacing_export.get("chapters", [])) == 11, "Evidence export chapter pacing is incomplete.")
             signature = exported_report.get("signature", "")
             require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")
@@ -411,6 +411,15 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 }"""
             )
             require(replacement_run_id != original_run_id, "New Game did not replace the recovery smoke run.")
+            recovery_keys = json.dumps(list(expected_raw_records), ensure_ascii=True)
+            recovery_page.add_init_script(
+                f"""Object.defineProperty(window, '__recoveryRawAtDocumentStart', {{
+                  configurable: false,
+                  value: Object.freeze(Object.fromEntries(
+                    {recovery_keys}.map(key => [key, localStorage.getItem(key)]),
+                  )),
+                }});"""
+            )
             with recovery_page.expect_navigation(wait_until="domcontentloaded"):
                 recovery_page.locator("#recoveryFile").set_input_files(recovery_download_path)
             recovery_page.locator("#runProofStatus").wait_for()
@@ -419,7 +428,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   const receipt = await import('./run-receipt.mjs');
                   const loaded = receipt.createRunReceiptStorageAdapter().load();
                   const mismatches = Object.entries(expected)
-                    .filter(([key, serialized]) => localStorage.getItem(key) !== serialized)
+                    .filter(([key, serialized]) => window.__recoveryRawAtDocumentStart?.[key] !== serialized)
                     .map(([key]) => key);
                   return {
                     runId: loaded.state.runId,
@@ -731,8 +740,9 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                         const explicitLabel = element.id
                           ? document.querySelector(`label[for="${CSS.escape(element.id)}"]`)?.textContent?.trim() || ''
                           : '';
+                        const nativeText = element.matches('button, a[href]') ? element.textContent : '';
                         return (element.getAttribute('aria-label') || labelledBy || explicitLabel
-                          || element.textContent || element.getAttribute('title') || '').trim();
+                          || nativeText || element.getAttribute('title') || '').trim();
                       };
                       const seen = new Set();
                       const duplicateIds = [...document.querySelectorAll('[id]')].flatMap(element => {
@@ -740,7 +750,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                         seen.add(element.id);
                         return [];
                       });
-                      const unnamedInteractive = [...document.querySelectorAll('button, a[href], select')]
+                      const unnamedInteractive = [...document.querySelectorAll('button, a[href], select, input:not([type="hidden"]), canvas[tabindex]')]
                         .filter(element => visible(element) && !accessibleName(element))
                         .map(element => `${element.tagName.toLowerCase()}#${element.id || '(no-id)'}`);
                       const imagesMissingAlt = [...document.images]
@@ -752,6 +762,13 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 require(not semantic["duplicateIds"], f"{path} has duplicate IDs: {semantic['duplicateIds']}.")
                 require(not semantic["unnamedInteractive"], f"{path} has unnamed visible controls: {semantic['unnamedInteractive']}.")
                 require(not semantic["imagesMissingAlt"], f"{path} has images without alt text: {semantic['imagesMissingAlt']}.")
+
+                responsive_page.locator('.skip-link').focus()
+                responsive_page.keyboard.press('Enter')
+                require(
+                    responsive_page.evaluate("() => document.activeElement?.id === 'mainContent'"),
+                    f"{path} skip link did not move focus to main content.",
+                )
 
                 audio_toggle = responsive_page.locator("#audioToggle")
                 audio_volume = responsive_page.get_by_label("Volume", exact=True)
@@ -772,6 +789,149 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     "() => document.querySelector('#audioVolume')?.getAttribute('aria-valuetext') === '35 percent'"
                     " && document.querySelector('#audioStatus')?.textContent?.includes('playing at 35%')",
                 )
+                gameplay_before = responsive_page.evaluate(
+                    """() => JSON.stringify({
+                      prototype: window.bellsPrototype ? {
+                        x: window.bellsPrototype.engine.player.pos.x,
+                        y: window.bellsPrototype.engine.player.pos.y,
+                      } : null,
+                      scene: document.querySelector('#sceneNumber')?.textContent ?? null,
+                      field: document.querySelector('#fieldProgress')?.textContent ?? null,
+                      battleX: document.querySelector('#battleCanvas')?.dataset.activeActorX ?? null,
+                      battleY: document.querySelector('#battleCanvas')?.dataset.activeActorY ?? null,
+                    })"""
+                )
+                audio_volume.focus()
+                responsive_page.keyboard.press("ArrowRight")
+                require(float(audio_volume.input_value()) == 0.4, f"{path} captured the focused volume range ArrowRight key.")
+                gameplay_after = responsive_page.evaluate(
+                    """() => JSON.stringify({
+                      prototype: window.bellsPrototype ? {
+                        x: window.bellsPrototype.engine.player.pos.x,
+                        y: window.bellsPrototype.engine.player.pos.y,
+                      } : null,
+                      scene: document.querySelector('#sceneNumber')?.textContent ?? null,
+                      field: document.querySelector('#fieldProgress')?.textContent ?? null,
+                      battleX: document.querySelector('#battleCanvas')?.dataset.activeActorX ?? null,
+                      battleY: document.querySelector('#battleCanvas')?.dataset.activeActorY ?? null,
+                    })"""
+                )
+                require(gameplay_after == gameplay_before, f"{path} changed gameplay while the volume range owned ArrowRight.")
+
+                if path == "index.html":
+                    move = responsive_page.evaluate(
+                        """() => {
+                          const engine = window.bellsPrototype.engine;
+                          const origin = { ...engine.player.pos };
+                          const legal = engine.getLegalMoves('ren')[0];
+                          return { origin, dx: legal.destination.x - origin.x, dy: legal.destination.y - origin.y };
+                        }"""
+                    )
+                    responsive_page.locator(f'[data-move="{move["dx"]},{move["dy"]}"]').click()
+                    moved = responsive_page.evaluate("() => ({ ...window.bellsPrototype.engine.player.pos })")
+                    require(
+                        moved == {"x": move["origin"]["x"] + move["dx"], "y": move["origin"]["y"] + move["dy"]},
+                        "FP-0 touch movement pad did not move Ren to its legal destination.",
+                    )
+                    movement_box = responsive_page.locator('[data-move="0,-1"]').bounding_box()
+                    require(movement_box is not None and movement_box["width"] >= 44 and movement_box["height"] >= 44,
+                            f"FP-0 touch target is smaller than 44px: {movement_box}.")
+                    for _step in range(48):
+                        plan = responsive_page.evaluate(
+                            """() => {
+                              const engine = window.bellsPrototype.engine;
+                              if (engine.result) return { result: engine.result };
+                              if (engine.phase !== 'player_command') return { wait: true };
+                              const priority = ['cinder-route', 'dawn-signal', 'courier-cut'];
+                              const skill = engine.getActionAvailability()
+                                .filter(entry => entry.available)
+                                .sort((left, right) => priority.indexOf(left.id) - priority.indexOf(right.id))[0];
+                              if (skill) return { action: `skill:${skill.id}` };
+                              if (engine.movementPoints <= 0) return { action: 'stance:guard' };
+                              const origin = engine.player.pos;
+                              const enemy = engine.enemy.pos;
+                              const blocked = engine.map.blocked;
+                              const enemyKey = `${enemy.x},${enemy.y}`;
+                              const directions = [
+                                [-1, 0], [1, 0], [0, -1], [0, 1],
+                                [-1, -1], [1, -1], [-1, 1], [1, 1],
+                              ];
+                              const routeDistance = start => {
+                                const queue = [{ ...start, distance: 0 }];
+                                const seen = new Set([`${start.x},${start.y}`]);
+                                while (queue.length) {
+                                  const current = queue.shift();
+                                  if (Math.max(Math.abs(current.x - enemy.x), Math.abs(current.y - enemy.y)) <= 4) {
+                                    return current.distance;
+                                  }
+                                  for (const [dx, dy] of directions) {
+                                    const x = current.x + dx;
+                                    const y = current.y + dy;
+                                    const key = `${x},${y}`;
+                                    if (x < 0 || y < 0 || x >= engine.map.width || y >= engine.map.height
+                                      || blocked.has(key) || key === enemyKey || seen.has(key)) continue;
+                                    if (dx && dy && (blocked.has(`${current.x + dx},${current.y}`)
+                                      || blocked.has(`${current.x},${current.y + dy}`))) continue;
+                                    seen.add(key);
+                                    queue.push({ x, y, distance: current.distance + 1 });
+                                  }
+                                }
+                                return Number.POSITIVE_INFINITY;
+                              };
+                              const move = engine.getLegalMoves('ren')
+                                .sort((left, right) => routeDistance(left.destination) - routeDistance(right.destination))[0];
+                              if (!move) return { action: 'stance:guard' };
+                              return {
+                                dx: move.destination.x - origin.x,
+                                dy: move.destination.y - origin.y,
+                              };
+                            }"""
+                        )
+                        if plan.get("result"):
+                            break
+                        if plan.get("wait"):
+                            responsive_page.wait_for_function(
+                                "() => window.bellsPrototype.engine.result"
+                                " || window.bellsPrototype.engine.phase === 'player_command'",
+                                timeout=15_000,
+                            )
+                            continue
+                        if plan.get("action"):
+                            responsive_page.locator(f'[data-action="{plan["action"]}"]').click()
+                            responsive_page.wait_for_function(
+                                "() => window.bellsPrototype.engine.result"
+                                " || window.bellsPrototype.engine.phase === 'player_command'",
+                                timeout=15_000,
+                            )
+                        else:
+                            responsive_page.locator(f'[data-move="{plan["dx"]},{plan["dy"]}"]').click()
+                            responsive_page.wait_for_timeout(75)
+                    touch_terminal = responsive_page.evaluate("() => window.bellsPrototype.engine.result")
+                    require(touch_terminal == "victory", f"FP-0 touch-only gameplay path ended at {touch_terminal!r}.")
+                elif path == "campaign.html":
+                    chapter_button = responsive_page.locator("[data-chapter-id]:not(:disabled)").first
+                    chapter_id = chapter_button.get_attribute("data-chapter-id")
+                    chapter_button.click()
+                    require(
+                        responsive_page.evaluate("id => document.activeElement?.dataset.chapterId === id", chapter_id),
+                        "Campaign chapter focus was lost after its control was rebuilt.",
+                    )
+                elif path.startswith("battle.html"):
+                    enemy_button = responsive_page.locator("#enemyPanel button[data-actor-id]").first
+                    enemy_id = enemy_button.get_attribute("data-actor-id")
+                    enemy_button.click()
+                    require(
+                        responsive_page.evaluate("id => document.activeElement?.dataset.actorId === id", enemy_id),
+                        "Battle enemy focus was lost after target cards were rebuilt.",
+                    )
+                elif path == "camp.html":
+                    member_button = responsive_page.locator("[data-member-id]:not(:disabled)").first
+                    member_id = member_button.get_attribute("data-member-id")
+                    member_button.click()
+                    require(
+                        responsive_page.evaluate("id => document.activeElement?.dataset.memberId === id", member_id),
+                        "Camp member focus was lost after party controls were rebuilt.",
+                    )
                 audio_surfaces[path] = {
                     "aria_pressed": audio_toggle.get_attribute("aria-pressed"),
                     "aria_valuetext": audio_volume.get_attribute("aria-valuetext"),
@@ -780,6 +940,27 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 responsive_widths[path] = widths
                 semantic_audits[path] = semantic
             responsive_context.close()
+
+            reduced_context = browser.new_context(viewport={"width": 1024, "height": 768}, reduced_motion="reduce")
+            reduced_page = reduced_context.new_page()
+            reduced_page.set_default_timeout(20_000)
+            reduced_page.set_default_navigation_timeout(60_000)
+            reduced_motion_canvases: dict[str, bool] = {}
+            for path, canvas_selector in (
+                ("index.html", "#gameCanvas"),
+                ("campaign.html", "#mapCanvas"),
+                (f"battle.html?encounter={encounter_id}", "#battleCanvas"),
+            ):
+                response = reduced_page.goto(f"{base}/{path}", wait_until="domcontentloaded")
+                require(response is not None and response.status == 200, f"Reduced-motion {path} failed delivery.")
+                reduced_page.locator(canvas_selector).wait_for()
+                reduced_page.wait_for_timeout(750)
+                before = reduced_page.locator(canvas_selector).evaluate("canvas => canvas.toDataURL()")
+                reduced_page.wait_for_timeout(350)
+                after = reduced_page.locator(canvas_selector).evaluate("canvas => canvas.toDataURL()")
+                require(before == after, f"Reduced-motion canvas kept animating on {path}.")
+                reduced_motion_canvases[path] = True
+            reduced_context.close()
 
             restricted_errors: list[str] = []
             restricted = browser.new_context(viewport={"width": 1024, "height": 768})
@@ -833,6 +1014,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         audio_surfaces=audio_surfaces,
         responsive_widths=responsive_widths,
         semantic_audits=semantic_audits,
+        reduced_motion_canvases=reduced_motion_canvases,
         denied_storage_pages=[path for path, _selector in restricted_pages],
         console_errors=[],
         page_errors=[],

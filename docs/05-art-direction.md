@@ -44,7 +44,7 @@ The generated concepts successfully establish atmosphere and macro-composition. 
 - Put the strongest contrast at the player route, current target, attack active frame, and story focal object. The background never wins a value contest against a command target.
 - Rain is sparse directional one-pixel or two-pixel marks on separate layers. It never becomes a screen-wide gray veil.
 - Candle halos use 3-4 hard value steps; metal gets one cold or warm specular pixel group; wet surfaces mirror only broken bands of light.
-- Keep silhouette gaps. Spears, ofuda, matchlocks, bells, and folded sleeves need negative space around their function.
+- Keep silhouette gaps. Spears, folded archive-seal fans, matchlocks, bells, and folded sleeves need negative space around their function.
 
 ### Palette contract
 
@@ -82,7 +82,7 @@ At least one warm practical light must identify a human-scale destination in a n
 | Region | Visual signature | Reusable kit | Supernatural intrusion |
 | --- | --- | --- | --- |
 | Hoshigawa / Sodegaura | cedar river, terraced homes, harbor inspection, monsoon slate | bridge, riverbank, roof, lantern, pier, warehouse, fishing gear | black registry tags, one bell echo in water |
-| Takamine Bell Temple | mountain steps, altered temple registry, hidden chapel rooms, wet bronze | stairs, corridor, prison lattice, bell, paper screen, cedar gate | seams of ash in bell cavities; red wax on official records |
+| Takamine Bell Temple | mountain steps, experimental local bell registry, hidden chapel rooms, wet bronze | stairs, corridor, prison lattice, bell, paper screen, cedar gate | seams of ash in bell cavities; red wax on official records |
 | Nagi Sea Road | fog islands, carrack wreck, salt-worn shrines, net sheds | docks, sea rocks, boats, sail cloth, tide pools, storm walls | moonlit Umbral reflection; impossible still water around a bell shard |
 | Kagura Pass / Ash Fields | volcanic slope, relay stations, furnace sheds, wind-blown grass | black rock, rope bridge, kiln, cart, warning posts | soot that rises against wind; Ashen Oni mask patterns in slag |
 | Kurohana Castle | black lacquer administration becoming living fortress | palace corridor, archive, chapel, gate, organ-like bell machinery | architecture subtly develops veins, bell mouths, and blood-dark glass |
@@ -92,7 +92,8 @@ At least one warm practical light must identify a human-scale destination in a n
 - Treat early-Edo Japan as a lived world with varied Japanese people, occupations, regional practices, and political positions. It is not a generic backdrop for foreign heroes.
 - Historical reference is for material truth: roof construction, garments, trade objects, paper, lacquer, coastal labor, records, architecture, and weather. Confirm period details with the planned Japanese cultural historian before final art lock.
 - Christianity, shrine practice, and domestic ritual may appear as people and places, never as interchangeable magic decorations. Do not turn real sacred objects or real historical victims into loot, enemy props, or boss arenas.
-- The Ashen Oni are invented bell-forged court soldiers. Their masks, anatomy, and behavior must not reproduce a specific living religious figure, ceremonial mask, or folk being.
+- The Ashen Oni are a deliberate fictional synthesis under a contested in-world label. Their masks, anatomy, and behavior must not claim a canonical oni design or reproduce a specific sacred figure, ceremonial mask, or identifiable local tradition.
+- Kurozane’s black chrysanthemum is deliberately stolen and defaced imperial imagery. Frame it as illegitimate usurpation, never as an authentic shogunal crest or a neutral government emblem.
 - Court uniforms are invented: dark lacquer, chrysanthemum geometry, iron ledger tabs, and blood-black seals. They do not need to copy a real shogunal insignia.
 
 ## 5. Character and enemy language
@@ -104,7 +105,7 @@ At 32 x 48, each party member must be identifiable in monochrome, from either fi
 | Character | Silhouette anchor | Base color cue | Animation emphasis |
 | --- | --- | --- | --- |
 | Ren Ishikawa | courier satchel, short spear, forward-leaning coat | cedar brown + rain blue | quick measured step; spear line makes Pierce range clear |
-| Aya Shinohara | squared archive case, ofuda fan, layered sleeves | parchment + muted teal | deliberate ward placement; paper arc stays readable |
+| Aya Shinohara | squared archive case, folded record-seal fan, layered sleeves | parchment + muted teal | deliberate seal placement; paper arc stays readable; no devotional talismans |
 | Lise Varga | long travel coat, compact crossbow/rapier profile, sea-weather cape | desaturated blue + brass | precise lunge and recoil; no glamorous pose dependence |
 | Father Mateus Avelar | narrow cassock-derived coat, high collar, ring of keys, controlled posture | charcoal + dried-wine accent | a held stillness that breaks into costly blood-rite motion; original face and proportions |
 | Genta Mononobe | broad shoulder mantle, tetsubo or shield mass | earth gray + oxidized gold | braced stance and lane-blocking impact |

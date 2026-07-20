@@ -38,12 +38,12 @@ h2, h3 { color: #fff0d1; }
 .panel-heading > span, .section-heading > span { color: var(--aqua); font-size: 0.59rem; text-align: right; }
 .party-list { display: grid; gap: 6px; margin-top: 12px; }
 .party-button { display: grid; grid-template-columns: 31px 1fr auto; gap: 8px; align-items: center; width: 100%; padding: 8px; border: 1px solid transparent; color: var(--muted); background: transparent; text-align: left; cursor: pointer; }
-.party-button:hover, .party-button[aria-selected="true"] { border-color: #806a3c; color: #fff0bd; background: rgba(128,106,60,.18); }
+.party-button:hover, .party-button[aria-pressed="true"] { border-color: #806a3c; color: #fff0bd; background: rgba(128,106,60,.18); }
 .party-button:disabled { opacity: .34; cursor: not-allowed; }
 .party-glyph { display: grid; width: 27px; height: 31px; place-items: center; border: 1px solid #536080; color: var(--gold); background: #10162a; }
 .party-button strong, .party-button small { display: block; }
 .party-button strong { color: inherit; font-size: .66rem; }
-.party-button small { margin-top: 3px; color: #7f8aa4; font-size: .55rem; }
+.party-button small { margin-top: 3px; color: #a8b1c7; font-size: .55rem; }
 .party-button > span:last-child { color: var(--aqua); font-size: .58rem; }
 .rest-card { display: grid; gap: 7px; margin-top: 15px; padding-top: 13px; border-top: 1px solid #303a56; }
 .rest-card label { color: var(--gold); font-size: .6rem; text-transform: uppercase; }
@@ -72,7 +72,7 @@ h2, h3 { color: #fff0d1; }
 .vow-card span, .inventory-entry span, .shop-entry span { color: var(--muted); font-size: .57rem; line-height: 1.45; }
 .inventory-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 11px; }
 .inventory-tabs button { padding: 7px 3px; border: 1px solid #3d4866; color: var(--muted); background: #11172a; font-size: .55rem; cursor: pointer; }
-.inventory-tabs button[aria-selected="true"] { border-color: var(--gold); color: #ffe9ad; background: #302617; }
+.inventory-tabs button[aria-pressed="true"] { border-color: var(--gold); color: #ffe9ad; background: #302617; }
 .inventory-list, .shop-list { display: grid; gap: 7px; max-height: 620px; margin-top: 9px; overflow: auto; }
 .inventory-entry-actions, .shop-entry-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
 .shop-panel { grid-column: 2 / 4; }
@@ -112,7 +112,9 @@ h2, h3 { color: #fff0d1; }
 .party-council-stage[hidden] { display: none; }
 .party-council-stage small { color: var(--gold); font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; }
 .party-council-stage h3 { margin: 0; font-size: 1rem; }
-.party-council-stage h3:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.camp-conversation-stage h3:focus-visible,
+.party-council-stage h3:focus-visible,
+.archive-record-stage h3:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .party-council-stage > p { margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.55; }
 .party-council-stage blockquote { min-height: 110px; margin: 3px 0; padding: 12px; border-left: 3px solid var(--ember); color: #f3ead8; background: rgba(8,11,23,.62); font-size: .86rem; line-height: 1.68; }
 .party-council-choices { display: grid; gap: 6px; }
@@ -165,4 +167,14 @@ h2, h3 { color: #fff0d1; }
   .inventory-rail, .shop-panel, .camp-log-panel, .camp-conversation-panel, .party-council-panel, .archive-record-panel { grid-column: auto; }
   .stat-grid { grid-template-columns: repeat(3,1fr); }
   .equipment-slots, .equipped-vows, .vow-catalogue { grid-template-columns: 1fr; }
+  .camp-layout button, .camp-layout select { min-height: 44px; font-size: .72rem; }
+  .camp-layout small, .camp-layout label { font-size: .68rem; }
+  .vow-card span, .inventory-entry span, .shop-entry span,
+  .rest-card p, .camp-log-panel p { font-size: .68rem; }
+  .return-link, .audio-controls button { min-height: 44px; }
+  .audio-volume input { min-height: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

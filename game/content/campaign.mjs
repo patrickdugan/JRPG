@@ -22,11 +22,17 @@ export const CAMPAIGN = deepFreeze({
   title: 'Bells of the Black Chrysanthemum',
   format: 'Original pixel-art, party-based turn RPG',
   campaignTarget: '20-25 hour critical path; 3-5 optional hours',
-  premise: 'In alternate 1622 Japan, six people cross a court-made bell network that turns fear and falsified records into undead force.',
+  premise: 'In alternate Genna 8 (1622) Japan, six people cross a court-made bell network that turns fear and falsified records into undead force.',
+  historicalFraming: {
+    date: 'The fictional story deliberately shares the year 1622 with the Great Genna Martyrdom but does not reenact that event or use its victims, locations, or methods.',
+    missions: 'After the 1614 nationwide ban, active missionaries are clandestine holdovers or returnees; Japanese Christian communities are not open foreign missions.',
+    registry: 'Takamine is Kurozane\'s fictional local experiment, an alternate-history precursor rather than the later nationwide temple-certification system.',
+    symbols: 'Kurozane deliberately steals and blackens imperial chrysanthemum imagery; his self-styled Court is an illegitimate bakufu apparatus, not the Imperial Court in Kyoto.',
+  },
   narrativeGuardrails: [
-    'The setting is alternate historical fantasy, not a retelling of real persecution or martyrdom.',
+    'The setting is alternate historical fantasy; Genna 8 is acknowledged, not used as an unmarked substitute for real persecution or martyrdom.',
     'Japanese characters lead local decisions, knowledge, and consequences.',
-    'The Black Chrysanthemum Court and its bell system are fictional; Ashen Oni are fabricated bell-forged soldiers, not depictions of living folklore.',
+    'Ashen Oni are a deliberate fictional synthesis under a contested in-world label, not a claim that Japanese oni have one canonical appearance or moral meaning.',
     'Conversion, apostasy, survival, and resistance are personal and political pressures; no culture, faith, or ethnicity is inherently pure or evil.',
     'Father Mateus Avelar is an original fictional character with no actor likeness, film adaptation, or celebrity reference.',
     'Choices show values and local consequences; no choice grants a license to abandon people or changes the campaign into a revenge fantasy.',
@@ -49,12 +55,14 @@ export const CAMPAIGN = deepFreeze({
       name: 'Elisabet "Lise" Varga',
       role: 'Translator, Pierce specialist, and heir to a fictional hunting oath',
       arc: 'Rewrites inherited vengeance into a promise to protect named people.',
+      background: 'Followed a fictional Adriatic–Goa–Macao route toward Hirado and Nagasaki, learning practical Japanese from displaced Christians, brokers, and copied mission correspondence.',
     },
     mateus: {
       id: 'mateus',
       name: 'Father Mateus Avelar',
       role: 'Former priest, vampire, court interpreter, and Umbral rite user',
       arc: 'Faces his complicity through costly protection and testimony, never instant forgiveness.',
+      background: 'Reached Japan through Goa and Macao before 1614, remained clandestinely after the ban, and later betrayed the routes and language once entrusted to him.',
     },
     genta: {
       id: 'genta',
@@ -67,6 +75,14 @@ export const CAMPAIGN = deepFreeze({
       name: 'Kiku Nawa',
       role: 'Village physician, elemental mixer, and care-network organizer',
       arc: 'Makes every plan account for people who cannot or should not fight.',
+    },
+  },
+  supportingCast: {
+    sayo: {
+      id: 'sayo-sodegaura',
+      name: 'Sayo of Sodegaura',
+      role: 'Japanese Kirishitan lay catechist, printer, and port-route organizer',
+      agency: 'Conceals her community’s prayer sheets, assigns the Takamine families to her warehouse route, and carries their testimony copy separately so one seizure cannot expose both.',
     },
   },
   flagDefinitions: {
@@ -255,7 +271,7 @@ export const CAMPAIGN = deepFreeze({
       reward: {
         keyItems: ['Takamine supply manifest', 'Lantern Network code'],
         systems: ['Analyze', 'Enemy Ledger', 'Cut/Pierce weakness language'],
-        story: 'Takamine holds a private registry and a second bell fragment.',
+        story: 'Takamine holds Kurozane\'s experimental local bell registry and a second bell fragment.',
       },
       maps: [
         { id: 'c1-shrine-archive', name: 'Hoshigawa Shrine Archive', purpose: 'Compare the original register, packet, and fragment impression.' },
@@ -397,9 +413,9 @@ export const CAMPAIGN = deepFreeze({
       id: 'chapter-2',
       number: 2,
       title: 'Bell at Takamine',
-      subtitle: 'A temple registry keeps a buried mouth.',
+      subtitle: 'A local bell registry keeps a buried mouth.',
       summary: 'Ren and Aya enter Takamine under forged supply papers, meet Lise while investigating the same black alloy, and confront Mateus. The boss fight proves that a spectacular attack can create a recovery window instead of a reflex test.',
-      objective: 'Interrupt the midnight registry, free the prisoners, and learn how the court uses bell fragments.',
+      objective: 'Interrupt Kurozane\'s experimental midnight registry, free the prisoners, and learn how the court uses bell fragments.',
       estimatedMinutes: 130,
       party: ['ren', 'aya', 'lise', 'mateus'],
       partyMeta: {
@@ -572,7 +588,7 @@ export const CAMPAIGN = deepFreeze({
       number: 3,
       title: 'Sodegaura Lanterns',
       subtitle: 'A port blockade turns inspection into disappearance.',
-      summary: 'The party moves Takamine witnesses through a closed port, uncovers Mateus\'s handwriting in another ledger, and watches Genta reject an unlawful order in public.',
+      summary: 'The party accepts Kirishitan organizer Sayo’s route conditions to move Takamine witnesses through a closed port, uncovers Mateus\'s handwriting in another ledger, and watches Genta reject an unlawful order in public.',
       objective: 'Move the witnesses through Sodegaura and secure the first bell key from the salt warehouse.',
       estimatedMinutes: 120,
       party: ['ren', 'aya', 'lise', 'mateus', 'genta'],
@@ -592,10 +608,10 @@ export const CAMPAIGN = deepFreeze({
       reward: {
         keyItems: ['First bell key'],
         systems: ['Facing', 'Guard against forced movement', 'Genta anchor command'],
-        story: 'A Nagi Sea Road wreck carries a foreign reliquary and a second key.',
+        story: 'A Nagi Sea Road wreck carries a Varga strongbox and a second key.',
       },
       maps: [
-        { id: 'sdg-market-lane', name: 'Sodegaura Market Lane', purpose: 'Separate arrival and trade conversation hub.' },
+        { id: 'sdg-market-lane', name: 'Sodegaura Market Lane', purpose: 'Separate arrival, Sayo’s route terms, and trade conversation hub.' },
         { id: 'sdg-customs-house', name: 'Customs House', purpose: 'Ledger evidence and Mateus admission.' },
         { id: 'sdg-rain-docks', name: 'Rain Docks', purpose: 'Lantern route escort.' },
         { id: 'sdg-salt-warehouse', name: 'Salt Warehouse', purpose: 'Cargo platform boss and first key.' },
@@ -1896,8 +1912,8 @@ export const CAMPAIGN = deepFreeze({
             id: 'fp01-c-optional-chest',
             type: 'optional_interaction',
             trigger: 'open_side_chest',
-            text: 'Temple Charm: a charm with a stamped name removed.',
-            result: 'The charm has no stats in FP-1; it establishes the court\'s erasure motif.',
+            text: 'Defaced Registry Token: a secular route tag with its stamped name removed.',
+            result: 'The token has no stats in FP-1; it establishes the court\'s erasure motif without treating a sacred object as loot.',
           },
           {
             id: 'fp01-d-confession-sheet',

@@ -615,7 +615,7 @@ REN|There are twelve double hooks.
 AYA|Copy each adjacent name exactly, including crossed characters. A correction can reveal who changed the destination.
     `),
     after: dialogue(`
-CLERK|The final annotation names a private registry beneath Takamine Bell Temple.
+CLERK|The final annotation names Kurozane’s experimental local registry beneath Takamine Bell Temple.
 AYA|And the receiver's seal matches Ren's fragment impression. Tie that sheet separately.
 REN|The furnace draft is strengthening. We cannot carry the original through the cedar firebreak.
 AYA|We do not need to. The evidentiary copy is complete, witnessed, and marked with what we omitted.

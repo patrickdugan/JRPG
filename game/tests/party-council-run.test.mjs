@@ -22,7 +22,7 @@ function recursivelyFrozen(value, seen = new Set()) {
 test('all finite party councils complete deterministically at exact hard bounds', () => {
   const replay = runPartyCouncilCompletion(EXACT_BOUNDS);
   assert.equal(RUN.ok, true);
-  assert.equal(RUN.signature, 'fnv1a32:9316ed08');
+  assert.equal(RUN.signature, 'fnv1a32:c6b5b5c8');
   assert.equal(RUN.catalogueSignature, 'fnv1a32:01bf3c11');
   assert.equal(replay.signature, RUN.signature);
   assert.deepEqual(replay.summary, RUN.summary);

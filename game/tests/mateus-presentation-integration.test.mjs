@@ -42,7 +42,7 @@ test('pending Crimson Litany publishes exact read-only QA metadata and four-tile
   assert.match(overlay, /snapshot\.bossMechanic\?\.pendingIntent/);
   assert.match(overlay, /intent\.tiles\.forEach/);
   assert.match(overlay, /key\.split\(','\)\.map\(Number\)/);
-  assert.match(source, /drawObjectiveTokens\(snapshot, level, geometry, now\);\s+drawBossIntent\(snapshot, geometry\);/);
+  assert.match(source, /drawObjectiveTokens\(snapshot, level, geometry, visualNow\);\s+drawBossIntent\(snapshot, geometry\);/);
 });
 
 test('Mateus simulation events have concise battle-log presentation without frame-loop cues', () => {

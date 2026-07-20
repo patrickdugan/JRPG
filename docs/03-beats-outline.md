@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.724/309.130/499.269 minutes low/reference/high (about 3.11/5.15/8.32 hours)<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.801/1,232.136/1,918.247 minutes (about 12.95/20.54/31.97 hours), not measured playtime<br>
+**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.728/309.135/499.277 minutes low/reference/high (about 3.11/5.15/8.32 hours)<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.805/1,232.141/1,918.255 minutes (about 12.95/20.54/31.97 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 
@@ -21,7 +21,7 @@
 | --- | --- | --- | --- | --- | --- |
 | Prologue | Escape the Night Census | Hoshigawa | Ren protects neighbors instead of a state dispatch | Ashen Bailiff | Pace and telegraphs |
 | 1. River of Names | Find the stolen bell fragment | Hoshigawa, Shrine Archive | Aya joins; records become a form of resistance | Tithe Hound | Analyze and delivery type |
-| 2. Bell at Takamine | Stop a temple registry from ringing | Takamine Bell Temple | Lise arrives; Mateus meets her and breaks rank | Father Mateus Avelar | Recovery and boss phase readability |
+| 2. Bell at Takamine | Stop Kurozane’s experimental local bell registry | Takamine Bell Temple | Lise arrives; Mateus meets her and breaks rank | Father Mateus Avelar | Recovery and boss phase readability |
 | 3. Sodegaura Lanterns | Move witnesses through a closed port | Sodegaura, rain docks | Genta defects; the party learns who profits from the ban | Captain Kaji | Facing, Guard, forced movement |
 | 4. The Sea Keeps No Ledger | Recover a lost bell key from a wreck | Nagi Sea Road, wrecked carrack | Kiku joins; Lise confronts inherited vengeance | Widow-of-Fog | elemental terrain |
 | 5. Ash in Kagura Pass | Destroy the forge that makes Ashen Oni | Kagura Pass, Ash Fields | Mateus admits his ledger work; midpoint reveal | Furnace Abbot | Resist/absorb and recovery economy |
@@ -66,7 +66,7 @@
 4. On the cedar route, the party encounters Cinder Hounds whose hides resist Cut but not Pierce; Aya teaches Analyze and the Ledger.
 5. In the tax storehouse, the party frees a clerk who did not know his copied list was being used for arrests. He provides a temple supply manifest and agrees to testify later.
 6. The collector releases the Tithe Hound, a bell-bound predator that eats written names. Ren destroys the false ledger only after Aya copies its evidence.
-7. The manifest identifies a second fragment and a private registry beneath Takamine Bell Temple.
+7. The manifest identifies a second fragment and Kurozane’s experimental local registry beneath Takamine Bell Temple; this is an alternate-history precursor, not a nationwide temple-certification system.
 
 **Boss:** Tithe Hound. Cut resistance, Pierce weakness, and a consume-ink attack that weakens a character until the player attacks its exposed seal.
 
@@ -74,7 +74,7 @@
 
 ## Chapter 2 — Bell at Takamine
 
-**Quest:** Interrupt Takamine’s midnight registry and learn why the court collects bell fragments.
+**Quest:** Interrupt Takamine’s experimental midnight bell registry and learn why the court collects bell fragments.
 
 **Places:** Takamine rain gate; cedar stair; abandoned chapel; bell tower; flooded undercroft.
 
@@ -103,11 +103,11 @@
 
 **Places:** Sodegaura market lane; customs house; rain docks; lantern boat route; salt warehouse.
 
-**Characters:** Genta Mononobe, a court retainer assigned to the blockade, sees that the “inspection” route is ferrying prisoners to Kurohana. He is a participant in harm, not a secretly innocent hero.
+**Characters:** Sayo of Sodegaura is a fictional Japanese Kirishitan lay catechist, printer, and port-route organizer who sets the conditions for moving Takamine witnesses. Genta Mononobe, a court retainer assigned to the blockade, sees that the “inspection” route is ferrying prisoners to Kurohana. He is a participant in harm, not a secretly innocent hero.
 
 **Major beats**
 
-1. The party enters the port separately to avoid an obvious foreigner-and-priest patrol profile. Lise’s language skills open a trade conversation but do not solve the chapter.
+1. The party enters the port separately to avoid an obvious foreigner-and-priest patrol profile. Sayo has already concealed her community’s prayer sheets; she assigns the Takamine families to her warehouse route and carries their testimony copy separately. Her decision is stated in the early camp scene **“An Alias at the Lantern Dock.”** Lise’s language skills open a trade conversation but do not overrule Sayo or solve the chapter.
 2. Aya identifies the port registry as another copy of Ujiro’s falsified system. Mateus recognizes his own coded annotations in the margins.
 3. Genta stops Ren at a checkpoint. When a detained family is marked for disappearance rather than trial, Genta disobeys an order and creates the party’s escape.
 4. The party escorts witnesses through dockside lanes, using lantern signals and a simple route-choice sequence rather than stealth failure loops.
@@ -116,7 +116,7 @@
 
 **Boss:** Captain Kaji on a cargo platform. He drags characters with hook chains; facing, Guard, and Genta’s anchor command prevent a player from being shoved into an electric water lane.
 
-**Exit state:** First bell key secured. Genta joins permanently. A departing boat brings word of a wreck on the Nagi Sea Road carrying a foreign reliquary.
+**Exit state:** First bell key secured. Genta joins permanently. A departing boat brings word of a wreck on the Nagi Sea Road carrying a locked Varga strongbox.
 
 ## Chapter 4 — The Sea Keeps No Ledger
 
@@ -245,4 +245,4 @@ Ren delivers a new packet between Hoshigawa and Sodegaura. It contains not a com
 
 ## Sources
 
-The historical backdrop was checked against [Jesuits Japan’s history overview](https://www.jesuits-japan.org/blank?lang=en), the [Japan Agency for Cultural Affairs chronology for Hidden Christian Sites](https://www.bunka.go.jp/seisaku/bunkazai/shokai/sekai_isan/ichiran/pdf/suisensho_02.pdf), and [UNESCO’s related historical material](https://whc.unesco.org/document/160507). All characters, locations, events, and supernatural elements above are fictional.
+The historical backdrop was checked against [Jesuits Japan’s history overview](https://www.jesuits-japan.org/blank?lang=en), the [Japan Agency for Cultural Affairs chronology for Hidden Christian Sites](https://www.bunka.go.jp/seisaku/bunkazai/shokai/sekai_isan/ichiran/pdf/suisensho_02.pdf), and [UNESCO’s related historical material](https://whc.unesco.org/document/160507). The project’s precise divergences and unresolved consultation requirement are recorded in the [historical and cultural audit note](20-historical-cultural-audit.md). All characters, locations, events, and supernatural elements above are fictional.

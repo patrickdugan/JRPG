@@ -4,12 +4,12 @@
 
 **Working title:** *Bells of the Black Chrysanthemum*<br>
 **Format:** 2D pixel-art, party-based turn RPG<br>
-**Target scope:** an intended 20-hour first-play route; 6 permanent party members; 3 active combatants. Duration audit v8 estimates the 60-beat canonical story at about 5.14 reference hours and the complete 215-activity route at about 20.53 reference hours; human timing remains unproven.<br>
-**Setting:** An alternate, historically informed Japan in 1622, during the early Edo transition and the widening suppression of Christianity. The country, rulers, clans, villages, and supernatural events are fictional. This is not a retelling of any real martyrdom, historical persecution, film, game, or person.
+**Target scope:** an intended 20-hour first-play route; 6 permanent party members; 3 active combatants. Duration audit v8 estimates the 60-beat canonical story at about 5.15 reference hours and the complete 215-activity route at about 20.54 reference hours; human timing remains unproven.<br>
+**Setting:** An alternate, historically informed Japan in Genna 8 (1622), during the early Edo transition and the widening suppression of Christianity. The date deliberately coincides with the historical Great Genna Martyrdom; the game neither reenacts that event nor borrows its victims, places, or methods. The country, rulers, clans, villages, supernatural events, and the precise fictional divergence are documented separately in the [historical and cultural audit note](20-historical-cultural-audit.md).
 
 ### One-sentence pitch
 
-In a rain-darkened, alternate 1622 Japan ruled from the shadows by an immortal shogun, a village courier, a disgraced priest-vampire, and a foreign heir to an old hunting oath cross haunted provinces to break the bell that turns political fear into undeath.
+In a rain-darkened, alternate Genna 8 (1622) Japan ruled from the shadows by an immortal shogun, a village courier, a disgraced priest-vampire, and a foreign heir to an old hunting oath cross haunted provinces to break the bell that turns political fear into undeath.
 
 ### Player promise
 
@@ -19,7 +19,7 @@ In a rain-darkened, alternate 1622 Japan ruled from the shadows by an immortal s
 
 ### Genre
 
-Historical dark-fantasy JRPG. The baseline is a linear, chapter-led party adventure with towns, field routes, dungeons, bosses, gear, and optional side stories. Japan’s early-seventeenth-century encounter with foreign trade, Jesuit missions, and anti-Christian policy informs the human stakes; vampires, bell magic, and the Black Chrysanthemum court are wholly invented.
+Historical dark-fantasy JRPG. The baseline is a linear, chapter-led party adventure with towns, field routes, dungeons, bosses, gear, and optional side stories. Japan’s early-seventeenth-century encounter with foreign trade, clandestine Christian communities, and anti-Christian policy informs the human stakes. After the 1614 nationwide ban, any active missionaries in the story are concealed holdovers or clandestine returnees rather than members of an open mission; vampires, bell magic, and the Black Chrysanthemum court are wholly invented.
 
 ### Hook: the measured battle stage
 
@@ -149,11 +149,11 @@ Aya, 26, is a shrine archivist whose family records births, land promises, flood
 
 ### Elisabet “Lise” Varga — the oath carried across the sea
 
-Lise, 24, is a Venetian-Dalmatian translator and last public heir of the Varga household, a fictional European lineage that catalogued and hunted predatory immortals. Her family taught her that monsters exploit institutions before they drink blood. Shipwrecked while tracking an illicit relic, she comes to Japan seeking the shogun’s source. She begins certain that killing the monster is sufficient and learns that people trapped in its system must also be freed.
+Lise, 24, is a Venetian-Dalmatian translator and last public heir of the Varga household, a fictional European lineage that catalogued and hunted predatory immortals. Her family taught her that monsters exploit institutions before they drink blood. She follows a fictional Adriatic–Goa–Macao route through Portuguese-linked ports, learning practical Japanese from displaced Christians, brokers, and copied mission correspondence before her final passage toward Hirado and Nagasaki. Shipwrecked while tracking an illicit strongbox, she comes to Japan seeking the shogun’s source. She begins certain that killing the monster is sufficient and learns that people trapped in its system must also be freed.
 
 ### Father Mateus Avelar — the apostate at the bell
 
-Mateus, 43 in appearance, is a Portuguese-born former Jesuit priest turned vampire. He accepted the shogun’s blood years ago, becoming an interpreter and collector who persuades frightened communities to submit. His sophistication and survival are not signs of moral depth; he has rationalized cowardice as pragmatism. Meeting Lise confronts him with an oath he assumed had died in Europe, and with someone able to name what he has become without granting him absolution. He changes course through costly actions—protecting victims, exposing the court, and surrendering power—not because a stranger forgives him.
+Mateus, 43 in appearance, is a Portuguese-born former Jesuit priest turned vampire. He reached Japan through Goa and Macao before the 1614 nationwide ban, remained as a clandestine missionary after the expulsion order, and later sold the routes and language entrusted to him when he accepted the shogun’s blood. He became an interpreter and collector who persuades frightened communities to submit. His sophistication and survival are not signs of moral depth; he has rationalized cowardice as pragmatism. Meeting Lise confronts him with an oath he assumed had died in Europe, and with someone able to name what he has become without granting him absolution. He changes course through costly actions—protecting victims, exposing the court, and surrendering power—not because a stranger forgives him.
 
 Mateus has no visual, vocal, biographical, or behavioral relationship to a real actor or any existing film’s priest character.
 
@@ -169,31 +169,31 @@ Kiku, 31, is a healer and herbalist who has kept people alive under taxes, raids
 
 ### Shogun Kurozane, the Black Chrysanthemum
 
-Kurozane is an invented vampire who occupies the shogunal office in this alternate timeline. He presents himself as the nation’s protector, but his “unity” is a blood system: denunciations are recorded in black bells, fear becomes supernatural fuel, and the court manufactures enemies it can consume. He is Dracula-like only in the broad archetype of an aristocratic vampire ruler; his mythology, motives, appearance, castle, and powers are original.
+Kurozane is an invented vampire who occupies the shogunal office in this alternate timeline. His black chrysanthemum is a deliberate theft and defacement of imperial symbolism, not an authentic shogunal crest; Japanese characters understand the emblem and his use of “Court” as an illegitimate claim to authority. He presents himself as the nation’s protector, but his “unity” is a blood system: denunciations are recorded in black bells, fear becomes supernatural fuel, and the court manufactures enemies it can consume. He is Dracula-like only in the broad archetype of an aristocratic vampire ruler; his mythology, motives, appearance, castle, and powers are original.
 
 ### The Black Chrysanthemum Court
 
-Human magistrates, corrupt retainers, informants, and undead officers profit from Kurozane’s order. Magistrate Ujiro Arata is the main human antagonist: brilliant, venal, and responsible for individual choices. The story never suggests all officials, samurai, or Japanese people share his corruption.
+“Court” is Kurozane’s invented name for his usurping bakufu apparatus, not the Imperial Court in Kyoto. Human magistrates, corrupt retainers, informants, and undead officers profit from Kurozane’s order. Magistrate Ujiro Arata is the main human antagonist: brilliant, venal, and responsible for individual choices. The story never suggests all officials, samurai, or Japanese people share his corruption.
 
 ### Ashen Oni
 
-The Ashen Oni are fabricated bell-forged soldiers with mask-like faces and furnace ash inside. They are a new fantasy enemy class, not depictions of Japanese religious oni or a statement about living folklore. Their existence is evidence that the court has turned local fear into weapons.
+The Ashen Oni are fabricated bell-forged soldiers with mask-like faces and furnace ash inside. “Oni” is a frightened, contested in-world label applied to them, and the designs are a deliberate fictional synthesis rather than a claim that Japanese oni have one canonical appearance or moral meaning. Their existence is evidence that the court has turned local fear into weapons; production must not reproduce a specific ceremonial mask, sacred figure, or identifiable local tradition.
 
 ### The Lantern Network
 
-Farmers, artisans, displaced families, local officials, clergy, and sailors form a loose mutual-aid network. Members differ in faith, class, and goal. They are not a single “good religion” faction; they are people choosing to protect one another.
+Farmers, artisans, displaced families, local officials, clergy, and sailors form a loose mutual-aid network. Named Japanese organizers retain their own authority: Sayo of Sodegaura, a fictional Kirishitan lay catechist and printer, conceals prayer sheets, assigns witness routes, and separates testimony from household movement. Members differ in faith, class, and goal. They are not a single “good religion” faction; they are people choosing to protect one another.
 
 ## Key locations
 
 1. **Hoshigawa and Sodegaura Port:** Ren’s cedar-river home and the rain-lashed harbor where trade, rumor, and state inspection meet.
-2. **Takamine Bell Temple:** A fictional mountain complex converted into a registry and prison. Its buried bell is the first visible piece of the court’s machine.
+2. **Takamine Bell Temple:** A fictional mountain complex converted into a prison and Kurozane’s experimental local bell registry. It is an alternate-history precursor, not the later nationwide temple-certification system; its buried bell is the first visible piece of the court’s machine.
 3. **Nagi Sea Road:** Fishing villages, fog islands, a wrecked foreign carrack, and the Lantern Network’s secret routes.
 4. **Kagura Pass and the Ash Fields:** Volcanic ridges, abandoned relay stations, and Oni forges that reveal the human cost of “order.”
 5. **Kurohana Castle:** A sprawling black-lacquer fortress above Edo Bay, part administrative capital and part living vampire organ. It is the final dungeon, not an interconnected world map.
 
 ## Highest-level plot beats
 
-In 1622, Black Chrysanthemum inspectors destroy a rural meeting and seize a fragment of a forbidden bell. Courier Ren Ishikawa survives and joins archivist Aya to trace the fragment to Takamine Bell Temple. There they meet Lise Varga, a European hunter-descendant pursuing the same relic, and confront Father Mateus Avelar, the vampire priest who serves the court.
+In alternate Genna 8 (1622), Black Chrysanthemum inspectors destroy a rural meeting and seize a fragment of a forbidden bell. Courier Ren Ishikawa survives and joins archivist Aya to trace the fragment to Takamine Bell Temple. There they meet Lise Varga, a European hunter-descendant pursuing the same strongbox and bell network, and confront Father Mateus Avelar, the apostate vampire priest who serves the court.
 
 Mateus recognizes Lise’s household seal and begins to betray Kurozane, but the group learns the shogun’s persecution apparatus is also a supernatural machine: every forced denunciation feeds a network of black bells that turns the disappeared into Ashen Oni. The party crosses the coast, mountain routes, and forge fields to gather proof, allies, and the three bell keys needed to break the network.
 
@@ -203,6 +203,7 @@ At the midpoint, they discover Kurozane engineered the policy’s worst terror t
 
 * Do not use real victims, named historical officials, or actual sacred objects as boss fodder.
 * Consult a Japanese cultural historian and sensitivity reader before locking dialogue, costumes, faith practices, and regional details.
+* Treat the current historical and cultural audit as provisional until that external consultant review is complete.
 * Depict conversion, apostasy, and resistance as personal and political pressures with varied voices; no group is inherently pure, gullible, or evil.
 * Never use celebrity likenesses, actor references, or scene-for-scene adaptations.
 * **FP-0 Combat Proof** is a narrow 5–10 minute, one-combat technical build. It validates exact board movement, Tempo/Pace/Recovery, Guard/Dodge, and the damage Ledger with Ren, Lise named in the prelude, and an Ashen Oni Tithe Enforcer. It is deliberately not the template’s full first playable.

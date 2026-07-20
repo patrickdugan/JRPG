@@ -10,23 +10,64 @@ import {
   hasAuthoredEnemyFamily,
 } from '../enemy-atlas.mjs';
 
-test('enemy atlas exposes exact non-overlapping 8 by 4 cells', () => {
+test('enemy atlas exposes exhaustive integer 8 by 4 inset source frames', () => {
   assert.equal(ENEMY_ATLAS.rows, 8);
   assert.equal(ENEMY_ATLAS.columns, 4);
   assert.equal(ENEMY_ATLAS.width, ENEMY_ATLAS.cellWidth * ENEMY_ATLAS.columns);
-  assert.equal(ENEMY_ATLAS.height, ENEMY_ATLAS.cellHeight * ENEMY_ATLAS.rows);
   assert.deepEqual(ENEMY_FAMILIES.map(({ row }) => row), [0, 1, 2, 3, 4, 5, 6, 7]);
+  assert.equal(ENEMY_ATLAS.rowCells.length, ENEMY_ATLAS.rows);
+  assert.deepEqual(ENEMY_ATLAS.rowCells.map(({ y }) => y), [0, 197, 404, 629, 856, 1094, 1316, 1545]);
 
   const rectangles = new Set();
   for (const family of ENEMY_FAMILIES) {
     for (const pose of ENEMY_ATLAS.poses) {
       const frame = getEnemyAtlasFrame(family.templateIds[0], pose);
+      for (const field of [
+        'row', 'column', 'cellX', 'cellY', 'cellWidth', 'cellHeight',
+        'sourceInset', 'x', 'y', 'width', 'height',
+      ]) assert.equal(Number.isSafeInteger(frame[field]), true, `${family.id}:${pose}:${field}`);
+
+      assert.ok(frame.cellX >= 0 && frame.cellX + frame.cellWidth <= ENEMY_ATLAS.width);
+      assert.ok(frame.cellY >= 0 && frame.cellY + frame.cellHeight <= ENEMY_ATLAS.height);
+      assert.ok(frame.x - frame.cellX >= 4);
+      assert.ok(frame.y - frame.cellY >= 4);
+      assert.ok((frame.cellX + frame.cellWidth) - (frame.x + frame.width) >= 4);
+      assert.ok((frame.cellY + frame.cellHeight) - (frame.y + frame.height) >= 4);
+      assert.equal(frame.width, ENEMY_ATLAS.sourceWidth);
+      assert.equal(frame.height, ENEMY_ATLAS.sourceHeight);
+      assert.equal(frame.familyId, family.id);
+      assert.equal(frame.pose, pose);
+      assert.equal(frame.row, family.row);
+      assert.equal(frame.column, ENEMY_ATLAS.poses.indexOf(pose));
+      assert.equal(Object.isFrozen(frame), true);
+
       const key = `${frame.x},${frame.y},${frame.width},${frame.height}`;
       assert.equal(rectangles.has(key), false, key);
       rectangles.add(key);
     }
   }
   assert.equal(rectangles.size, 32);
+});
+
+test('every enemy family template keeps a stable identity and pose mapping at one source scale', () => {
+  const widths = new Set();
+  const heights = new Set();
+  for (const family of ENEMY_FAMILIES) {
+    for (const templateId of family.templateIds) {
+      for (const [column, pose] of ENEMY_ATLAS.poses.entries()) {
+        const frame = getEnemyAtlasFrame(templateId, pose);
+        assert.equal(frame.familyId, family.id);
+        assert.equal(frame.row, family.row);
+        assert.equal(frame.pose, pose);
+        assert.equal(frame.column, column);
+        assert.deepEqual(frame, getEnemyAtlasFrame(templateId, pose));
+        widths.add(frame.width);
+        heights.add(frame.height);
+      }
+    }
+  }
+  assert.deepEqual([...widths], [216]);
+  assert.deepEqual([...heights], [216]);
 });
 
 test('every canonical enemy template has an authored family mapping', () => {

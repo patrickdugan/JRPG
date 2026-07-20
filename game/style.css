@@ -183,6 +183,34 @@ h1 {
 .control-row p { margin: 0; }
 #feedback { color: var(--paper); }
 
+.movement-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid #424b70;
+  background: linear-gradient(180deg, #171b33, #101427);
+}
+
+.movement-panel h2 { margin: 2px 0 5px; font-size: 0.86rem; }
+.board-summary { margin: 0; color: #b8c2db; font-size: 0.68rem; line-height: 1.45; }
+.movement-pad { display: grid; grid-template-columns: repeat(3, 44px); gap: 4px; }
+.movement-pad button,
+.movement-center {
+  display: grid;
+  width: 44px;
+  min-height: 44px;
+  place-items: center;
+  border: 1px solid #5b668f;
+  background: #202743;
+  color: var(--paper);
+  font: 700 1rem/1 ui-monospace, monospace;
+}
+.movement-pad button:hover:not(:disabled), .movement-pad button:focus-visible { border-color: var(--teal); background: #293454; }
+.movement-center { border-color: #725e35; color: var(--gold); font-size: 0.58rem; }
+
 .restart-button {
   min-height: 34px;
   padding: 5px 8px;
@@ -217,6 +245,8 @@ h1 {
   .command-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .control-row { grid-template-columns: 1fr; }
   .restart-button { justify-self: start; }
+  .movement-panel { grid-template-columns: 1fr; }
+  .movement-pad { justify-self: center; }
 }
 
 @media (max-width: 440px) {
@@ -224,4 +254,8 @@ h1 {
   .command-deck { gap: 5px; }
   .command-button { min-height: 52px; padding: 5px; }
   .command-button small { font-size: 0.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { performance } from 'node:perf_hooks';
 import test from 'node:test';
 
 import {
   AUDIO_CUE_DEFINITIONS,
+  DEFAULT_AUDIO_CROSSFADE_SECONDS,
   AUDIO_LOOP_DEFINITIONS,
   createAudioRuntime,
   synthesizeLoopBuffer,
@@ -140,11 +142,18 @@ function resetFakeContexts() {
 }
 
 test('public loop and cue definitions are deeply immutable and cover each context', () => {
-  assert.deepEqual(Object.keys(AUDIO_LOOP_DEFINITIONS), ['exploration', 'battle', 'boss']);
+  assert.deepEqual(Object.keys(AUDIO_LOOP_DEFINITIONS), [
+    'exploration', 'battle', 'boss',
+    'rain-evidence', 'care-lantern', 'road-water', 'court-cipher', 'fog-tide',
+    'forge-ash', 'lantern-network', 'black-court', 'repair-dawn',
+  ]);
   assert.notDeepEqual(AUDIO_LOOP_DEFINITIONS.exploration, AUDIO_LOOP_DEFINITIONS.battle);
   assert.notDeepEqual(AUDIO_LOOP_DEFINITIONS.battle, AUDIO_LOOP_DEFINITIONS.boss);
   assert.ok(Object.isFrozen(AUDIO_LOOP_DEFINITIONS));
   assert.ok(Object.isFrozen(AUDIO_LOOP_DEFINITIONS.exploration.voices[0].notes));
+  assert.ok(Object.isFrozen(AUDIO_LOOP_DEFINITIONS['rain-evidence'].ambience.cycles));
+  assert.ok(Object.values(AUDIO_LOOP_DEFINITIONS).every((loop) => loop.id && loop.label
+    && loop.scoreFamily && loop.ambienceFamily));
   assert.deepEqual(new Set(Object.values(AUDIO_CUE_DEFINITIONS).map((cue) => cue.group)), new Set(['ui', 'field', 'combat']));
   assert.ok(Object.isFrozen(AUDIO_CUE_DEFINITIONS.combatCritical.segments[0]));
   assert.throws(() => { AUDIO_LOOP_DEFINITIONS.boss.bpm = 1; }, TypeError);
@@ -184,6 +193,54 @@ test('deterministic synthesis repeats exactly and distinct loop scores differ', 
   assert.ok(first.every((sample) => sample >= -1 && sample <= 1));
 });
 
+test('every synthesized family is a complete deterministic bar loop with a quiet seam', () => {
+  for (const definition of Object.values(AUDIO_LOOP_DEFINITIONS)) {
+    const contextA = new FakeAudioContext();
+    const contextB = new FakeAudioContext();
+    const first = synthesizeLoopBuffer(contextA, definition).getChannelData(0);
+    const second = synthesizeLoopBuffer(contextB, definition).getChannelData(0);
+    const expectedFrames = Math.round(
+      contextA.sampleRate * definition.bars * definition.beatsPerBar * 60 / definition.bpm,
+    );
+    const expectedSteps = definition.bars * definition.beatsPerBar * definition.stepsPerBeat;
+    assert.equal(first.length, expectedFrames, `${definition.id} frame seam`);
+    assert.ok(definition.voices.every((voice) => voice.notes.length === expectedSteps), `${definition.id} bar coverage`);
+    assert.deepEqual(first, second, `${definition.id} deterministic synthesis`);
+    assert.ok(Math.abs(first[0] - first.at(-1)) < 0.001, `${definition.id} audible loop seam`);
+  }
+});
+
+test('all campaign families synthesize at 48 kHz without per-frame trigonometry or a first-use stall', () => {
+  const context = new FakeAudioContext();
+  context.sampleRate = 48_000;
+  const campaignFamilyIds = [
+    'rain-evidence', 'care-lantern', 'road-water', 'court-cipher', 'fog-tide',
+    'forge-ash', 'lantern-network', 'black-court', 'repair-dawn',
+  ];
+  const originalSin = Math.sin;
+  const originalCos = Math.cos;
+  let sineCalls = 0;
+  let cosineCalls = 0;
+  Math.sin = (...args) => { sineCalls += 1; return originalSin(...args); };
+  Math.cos = (...args) => { cosineCalls += 1; return originalCos(...args); };
+
+  const startedAt = performance.now();
+  let buffers;
+  try {
+    buffers = campaignFamilyIds.map((id) => synthesizeLoopBuffer(context, AUDIO_LOOP_DEFINITIONS[id]));
+  } finally {
+    Math.sin = originalSin;
+    Math.cos = originalCos;
+  }
+  const elapsedMs = performance.now() - startedAt;
+
+  assert.equal(buffers.length, campaignFamilyIds.length);
+  assert.ok(buffers.every((buffer) => buffer.getChannelData(0).length > 170_000));
+  assert.ok(sineCalls < 400, `campaign synthesis made ${sineCalls} sine calls`);
+  assert.ok(cosineCalls < 400, `campaign synthesis made ${cosineCalls} cosine calls`);
+  assert.ok(elapsedMs < 1_500, `48 kHz campaign synthesis took ${elapsedMs.toFixed(1)}ms`);
+});
+
 test('music loops are cached, switched, and stopped through synthesized buffer sources', async () => {
   resetFakeContexts();
   const audio = createAudioRuntime({ AudioContextClass: FakeAudioContext });
@@ -207,6 +264,35 @@ test('music loops are cached, switched, and stopped through synthesized buffer s
   assert.equal(audio.stopLoop(), false);
   assert.equal(audio.getState().loop, null);
   assert.throws(() => audio.playLoop('missing'), /Unknown audio loop/);
+});
+
+test('active loop families crossfade on one bounded seam without creating a new context', async () => {
+  resetFakeContexts();
+  const audio = createAudioRuntime({ AudioContextClass: FakeAudioContext });
+  await audio.unlock();
+  const context = FakeAudioContext.instances[0];
+  audio.playLoop('rain-evidence');
+  const firstSource = context.sources[0];
+  const firstGain = context.gains[1].gain;
+
+  assert.equal(audio.transitionLoop('care-lantern'), true);
+  assert.equal(FakeAudioContext.instances.length, 1);
+  assert.equal(context.sources.length, 2);
+  assert.equal(audio.getState().loop, 'care-lantern');
+  assert.deepEqual(firstSource.stops, [context.currentTime + DEFAULT_AUDIO_CROSSFADE_SECONDS]);
+  assert.ok(firstGain.events.some((event) => event[0] === 'linear' && event[1] === 0
+    && event[2] === context.currentTime + DEFAULT_AUDIO_CROSSFADE_SECONDS));
+  const nextGain = context.gains[2].gain;
+  assert.deepEqual(nextGain.events[0], ['set', 0, context.currentTime]);
+  assert.ok(nextGain.events.some((event) => event[0] === 'linear'
+    && event[1] === AUDIO_LOOP_DEFINITIONS['care-lantern'].gain));
+  assert.equal(firstSource.disconnected, false, 'retiring score remains connected during its fade');
+  firstSource.onended();
+  assert.equal(firstSource.disconnected, true);
+  assert.equal(audio.transitionLoop('care-lantern'), true);
+  assert.equal(context.sources.length, 2, 'same-family render is a no-op');
+  assert.throws(() => audio.transitionLoop('missing'), /Unknown audio loop/);
+  assert.throws(() => audio.transitionLoop('repair-dawn', { fadeSeconds: 3 }), /between 0 and 2/);
 });
 
 test('reusable cue definitions schedule envelopes and clean their nodes on end', async () => {

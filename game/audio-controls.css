@@ -1,3 +1,21 @@
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: 8px;
+  left: 8px;
+  max-width: calc(100vw - 16px);
+  padding: 9px 12px;
+  border: 2px solid #f4d77d;
+  border-radius: 4px;
+  color: #090b17;
+  background: #fff1bd;
+  font: 700 0.82rem/1.3 ui-monospace, "Cascadia Mono", Consolas, monospace;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 16px));
+}
+
+.skip-link:focus { transform: translateY(0); outline: 3px solid #8adbd0; outline-offset: 2px; }
+
 .audio-controls {
   display: inline-flex;
   align-items: center;
@@ -21,10 +39,12 @@
 .audio-controls button[aria-pressed="true"] { border-color: #67c8ba; color: #9ce3d8; }
 .audio-controls button:disabled { cursor: not-allowed; opacity: 0.58; }
 .audio-volume { display: inline-flex; align-items: center; gap: 6px; }
-.audio-volume input { width: 88px; accent-color: #67c8ba; }
+.audio-volume input { width: 112px; min-height: 24px; accent-color: #67c8ba; }
 .audio-status { max-width: 220px; color: #9fb2b8; line-height: 1.25; }
 
 @media (max-width: 720px) {
   .audio-controls { justify-content: flex-start; width: 100%; }
+  .audio-controls button { min-height: 44px; padding-inline: 12px; }
+  .audio-volume input { width: 128px; min-height: 32px; }
   .audio-status { max-width: none; flex: 1 1 160px; }
 }

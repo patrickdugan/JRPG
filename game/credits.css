@@ -85,5 +85,5 @@ blockquote { margin: 0 0 38px; padding: 22px clamp(20px, 4vw, 40px); border: 1px
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

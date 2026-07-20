@@ -5,7 +5,7 @@
 **Applies to:** field actors, combat actors, enemies, bosses, hazards, and battle VFX
 **Primary slice:** FP-1 Takamine Vertical Slice
 
-**Runtime note (2026-07-18):** the provisional generated 6×8 party atlas addresses all six members and four idle/walk facing pairs in Camp, field, scene-focus, and party battle rendering. A second transparent 8×4 enemy combat atlas supplies neutral, wind-up, attack, and stagger poses for all eight live enemy families. `game/battle-animation.mjs` now drives deterministic wind-up, exact-grid lunge, projectile/trail, impact, status-glyph, stagger, and recovery presentation for all eight party skills and every enemy template at 1×/2×/4× without moving simulation coordinates. Exact frame addressing, family mapping, status coverage, duration bounds, and replay determinism are tested. These generated sheets remain provisional raster production assets; editable source sheets, per-cel manifests, bespoke boss clips, and final VFX are still an art-production gate.
+**Runtime note (2026-07-20):** the provisional generated 6×8 party atlas addresses all six members and four idle/walk facing pairs in Camp, field, scene-focus, and party battle rendering. A second transparent 8×4 enemy combat atlas supplies neutral, wind-up, attack, and stagger poses for all eight live enemy families. Source addressing now uses measured integer row cells, fixed frame scales, and 4px safety insets rather than fractional division; read-only alpha analysis retains 99.986% of party and 99.759% of enemy pixels. `game/battle-animation.mjs` drives deterministic wind-up, exact-grid lunge, projectile/trail, impact, status-glyph, stagger, and recovery presentation for all eight party skills and every enemy template at 1×/2×/4× without moving simulation coordinates. Exact frame addressing, family mapping, status coverage, duration bounds, and replay determinism are tested. Peripheral effects can still meet a raw bitmap edge, so regenerated transparent-gutter sheets, editable sources, per-cel manifests, bespoke boss clips, and final VFX remain an art-production gate.
 
 ## 1. Purpose and non-negotiables
 
@@ -156,7 +156,7 @@ The event manifest must mark `windupStart`, `activeStart`, `activeEnd`, `recover
 | Character | Primary animation grammar | Signature key poses | Recovery read |
 | --- | --- | --- | --- |
 | Ren | Short spear establishes Pierce lines and redirection | Low target notice, rearward load, line-extension hit, one-foot braced recovery | Spear point drops one quadrant and satchel pulls him off balance. |
-| Aya | Paper ward placement and careful Radiance arcs | Case-open load, squared ofuda fan, eight-ray disc active, sleeves settle | Ward hand remains extended, head turns to check allies. |
+| Aya | Record-seal placement and careful Radiance arcs | Case-open load, squared archive-seal fan, eight-ray disc active, sleeves settle | Seal hand remains extended, head turns to check allies; no devotional talismans. |
 | Lise | Precise lunge / recoil with compact tool | Narrow side profile, low rear heel, clean pierce line, immediate withdrawal | Sea coat trails behind a controlled recoil; no pose-glamour. |
 | Mateus | Stillness breaks into costly blood rite; no gore | Locked hands, controlled raised palm, thorned crescent line, low kneel-like recovery | Dried-wine accent dims; shoulders drop and keys go still. |
 | Genta | Weight, bracing, and lane control | Shield/tetsubo mass planted, wide shoulder load, square impact, planted recovery | Feet remain separated; center of mass stays low. |

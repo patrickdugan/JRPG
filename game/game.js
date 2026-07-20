@@ -11,8 +11,11 @@ const canvas = document.querySelector('#gameCanvas');
 const ctx = canvas.getContext('2d');
 const feedback = document.querySelector('#feedback');
 const accessLog = document.querySelector('#access-log');
+const boardSummary = document.querySelector('#boardSummary');
 const commandButtons = [...document.querySelectorAll('[data-action]')];
+const movementButtons = [...document.querySelectorAll('[data-move]')];
 const pageAudio = mountAudioControls({ desiredLoop: 'battle' });
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 ctx.imageSmoothingEnabled = false;
 
@@ -167,7 +170,7 @@ function drawTempoRibbon(x, y, width) {
   });
 }
 
-function drawStage(time) {
+function drawStage(time, realTime = time) {
   drawPanel(board.x - 5, board.y - 5, boardWidth + 10, boardHeight + 10, '#11152a', '#59648c');
   for (let row = 0; row < board.height; row += 1) {
     for (let column = 0; column < board.width; column += 1) {
@@ -207,9 +210,9 @@ function drawStage(time) {
 
   drawRain(time);
   drawAxisLabels();
-  drawUnit(engine.player, true);
-  drawUnit(engine.enemy, false);
-  drawAttackFlash(time);
+  drawUnit(engine.player, true, time);
+  drawUnit(engine.enemy, false, time);
+  if (!reducedMotion.matches) drawAttackFlash(realTime);
 }
 
 function drawGateSpace(x, y) {
@@ -256,13 +259,13 @@ function drawAxisLabels() {
   }
 }
 
-function drawUnit(unit, playerControlled) {
+function drawUnit(unit, playerControlled, time) {
   const center = cellCenter(unit.pos);
   const isActive = engine.activeId === unit.id;
   ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
   ctx.fillRect(center.x - 15, center.y + 16, 30, 6);
-  if (playerControlled) drawRen(center.x, center.y, unit.stance, isActive);
-  else drawOni(center.x, center.y, unit.stance, isActive);
+  if (playerControlled) drawRen(center.x, center.y, unit.stance, isActive, time);
+  else drawOni(center.x, center.y, unit.stance, isActive, time);
 
   const barWidth = 38;
   const barX = center.x - Math.floor(barWidth / 2);
@@ -281,8 +284,8 @@ function drawUnit(unit, playerControlled) {
   }
 }
 
-function drawRen(x, y, stance, active) {
-  const pulse = active ? (Math.floor(performance.now() / 180) % 2) : 0;
+function drawRen(x, y, stance, active, time) {
+  const pulse = active ? (Math.floor(time / 180) % 2) : 0;
   ctx.fillStyle = '#0b0d19';
   ctx.fillRect(x - 9, y + 8, 7, 12);
   ctx.fillRect(x + 2, y + 8, 7, 12);
@@ -310,8 +313,8 @@ function drawRen(x, y, stance, active) {
   }
 }
 
-function drawOni(x, y, stance, active) {
-  const pulse = active ? (Math.floor(performance.now() / 150) % 2) : 0;
+function drawOni(x, y, stance, active, time) {
+  const pulse = active ? (Math.floor(time / 150) % 2) : 0;
   ctx.fillStyle = '#0b0813';
   ctx.fillRect(x - 12, y + 7, 9, 14);
   ctx.fillRect(x + 4, y + 7, 9, 14);
@@ -464,7 +467,8 @@ function render(time) {
   ctx.fillStyle = palette.ink;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawHeader();
-  drawStage(time);
+  const visualTime = reducedMotion.matches ? 0 : time;
+  drawStage(visualTime, time);
   drawLedger();
   drawMessageBar();
   drawOutcomeOverlay();
@@ -496,6 +500,10 @@ function updateInterface() {
     announcedSignature = accessibilityMessage;
     accessLog.textContent = accessibilityMessage;
   }
+  const legalMoves = engine.phase === PHASES.PLAYER_COMMAND && engine.movementPoints > 0
+    ? engine.getLegalMoves('ren').map(({ destination }) => `${destination.x + 1},${destination.y + 1}`)
+    : [];
+  boardSummary.textContent = `Ren space ${engine.player.pos.x + 1},${engine.player.pos.y + 1}; Oni space ${engine.enemy.pos.x + 1},${engine.enemy.pos.y + 1}; distance ${engine.distance}; ${engine.movementPoints} pace. ${legalMoves.length ? `Legal destinations: ${legalMoves.join('; ')}.` : 'No legal movement this activation.'}`;
 }
 
 function applyAction(action) {
@@ -515,8 +523,21 @@ commandButtons.forEach((button) => {
   button.addEventListener('click', () => applyAction(button.dataset.action));
 });
 
+function movePlayer(dx, dy, now = performance.now()) {
+  engine.movePlayer(dx, dy);
+  render(now);
+}
+
+movementButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const [dx, dy] = button.dataset.move.split(',').map(Number);
+    movePlayer(dx, dy);
+  });
+});
+
 window.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey) return;
+  if (event.target instanceof Element && event.target.closest('input, select, textarea, button, a, [contenteditable="true"]')) return;
   const key = event.key.toLowerCase();
   const direction = keyDirections[key];
   if (direction) {
@@ -525,8 +546,7 @@ window.addEventListener('keydown', (event) => {
     const previous = lastInputAt.get(key) || 0;
     if (!event.repeat || now - previous >= 145) {
       lastInputAt.set(key, now);
-      engine.movePlayer(direction.x, direction.y);
-      render(now);
+      movePlayer(direction.x, direction.y, now);
     }
     return;
   }
@@ -555,6 +575,8 @@ function gameLoop(now) {
 
 render(previousFrameAt);
 window.requestAnimationFrame(gameLoop);
+
+reducedMotion.addEventListener('change', () => render(performance.now()));
 
 // Expose a tiny manual-inspection seam in development tools without coupling
 // combat rules to the DOM. It is intentionally not used by the game itself.

@@ -37,7 +37,7 @@ export function saveAudioPreferences(storage, preferences) {
 }
 
 function loopLabel(loop) {
-  return loop === 'boss' ? 'Boss score' : loop === 'battle' ? 'Battle score' : 'Exploration score';
+  return AUDIO_LOOP_DEFINITIONS[loop]?.label ?? 'Game score';
 }
 
 /**
@@ -132,7 +132,10 @@ export function mountAudioControls({
     if (!AUDIO_LOOP_DEFINITIONS[nextLoop]) throw new RangeError(`Unknown desired audio loop: ${nextLoop}`);
     loop = nextLoop;
     const state = runtime.getState();
-    if (state.running && !state.muted) runtime.playLoop(loop);
+    if (state.running && !state.muted) {
+      if (typeof runtime.transitionLoop === 'function') runtime.transitionLoop(loop);
+      else runtime.playLoop(loop);
+    }
     render();
     return loop;
   }

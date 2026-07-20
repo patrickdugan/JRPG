@@ -1,5 +1,6 @@
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
+import { getSceneAudioPresentation } from './scene-audio.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
 import { ALL_OPTIONAL_QUESTS, getOptionalQuestsForChapter, getSideQuest } from './content/sidequests.mjs';
@@ -205,6 +206,7 @@ const routeSummary = document.querySelector('#routeSummary');
 const routeStatus = document.querySelector('#routeStatus');
 const routeDueList = document.querySelector('#routeDueList');
 const pageAudio = mountAudioControls({ desiredLoop: 'exploration' });
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
@@ -1177,10 +1179,13 @@ function renderDialogue(beat) {
 
 function renderSceneDirection(beat) {
   const direction = getSceneDirection(beat.id);
-  pageAudio.setLoop('exploration');
+  const audioPresentation = getSceneAudioPresentation(beat.id);
+  pageAudio.setLoop(audioPresentation?.loop ?? 'exploration');
   if (!direction) return;
   sceneAtmosphere.textContent = direction.atmosphere;
-  sceneMusicCue.textContent = direction.musicCue;
+  sceneMusicCue.textContent = audioPresentation
+    ? `Procedural ${audioPresentation.scoreLabel}; ambience: ${audioPresentation.ambienceLabel}. Direction: ${direction.musicCue}`
+    : direction.musicCue;
   sceneCameraCue.textContent = direction.cameraCue;
   sceneEntranceCue.textContent = direction.entranceCue;
   sceneGestureCue.textContent = `${direction.gestureCue.speaker}: ${direction.gestureCue.action}`;
@@ -1247,9 +1252,8 @@ function renderChapterList() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'chapter-button';
-    button.role = 'tab';
     button.dataset.chapterId = chapter.id;
-    button.setAttribute('aria-selected', String(chapter.id === activeChapterId));
+    if (chapter.id === activeChapterId) button.setAttribute('aria-current', 'true');
     const availableBeats = chapter.beats.filter((beat) => unlocked.has(beat.id));
     button.disabled = availableBeats.length === 0;
     if (chapter.beats.every((beat) => isBeatCompleted(campaignState, beat.id))) button.classList.add('is-finished');
@@ -1691,7 +1695,7 @@ function focusAndActivateRouteEntry(activity) {
     fieldFeedback.textContent = `${requiredRouteActivityLabel(activity.id)} is not available on this story frontier.`;
     return;
   }
-  target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  target.scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'auto' : 'smooth' });
   target.focus();
   target.click();
 }
@@ -1942,6 +1946,7 @@ chapterList.addEventListener('click', (event) => {
   campaignState = nextCampaignState;
   fieldRuntimeState = nextFieldState;
   render();
+  chapterList.querySelector(`[data-chapter-id="${CSS.escape(chapter.id)}"]`)?.focus({ preventScroll: true });
 });
 
 choiceDeck.addEventListener('click', (event) => {
@@ -2370,7 +2375,8 @@ resetCampaign.addEventListener('click', () => {
 });
 
 window.addEventListener('keydown', (event) => {
-  if (event.target instanceof Element && event.target.closest('button, a')) return;
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  if (event.target instanceof Element && event.target.closest('input, select, textarea, button, a, [contenteditable="true"]')) return;
   if (event.repeat) return;
   const direction = {
     w: [0, -1], a: [-1, 0], s: [0, 1], d: [1, 0],
@@ -2508,17 +2514,25 @@ recoveryFile.addEventListener('change', async () => {
 function animate(now) {
   sampleCampaignPlaytime(now);
   sampleFieldRuntime(now);
-  animationNow = now;
+  animationNow = reducedMotion.matches ? 0 : now;
   const chapter = getChapter();
   const level = getActiveLevelForBeat(chapter, getBeat());
   const encounter = getBeatEncounterState().selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
-  drawMap(level, encounter, now);
+  drawMap(level, encounter, animationNow);
   requestAnimationFrame(animate);
 }
 
 document.title = `${CAMPAIGN.title} — Campaign Atlas`;
 render();
 requestAnimationFrame(animate);
+
+reducedMotion.addEventListener('change', () => {
+  animationNow = reducedMotion.matches ? 0 : performance.now();
+  const chapter = getChapter();
+  const level = getActiveLevelForBeat(chapter, getBeat());
+  const encounter = getBeatEncounterState().selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
+  drawMap(level, encounter, animationNow);
+});
 
 window.addEventListener('pageshow', (event) => {
   if (!event.persisted) return;

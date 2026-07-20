@@ -54,6 +54,7 @@ function fakeRuntimeFactory(log) {
     return {
       async unlock() { log.push('unlock'); state.unlocked = true; state.running = true; return true; },
       playLoop(name) { log.push(`loop:${name}`); state.loop = name; return state.unlocked; },
+      transitionLoop(name) { log.push(`transition:${name}`); state.loop = name; return state.unlocked; },
       playCue(name) { log.push(`cue:${name}`); return state.unlocked; },
       setMuted(value) { state.muted = Boolean(value); return state.muted; },
       toggleMuted() { state.muted = !state.muted; return state.muted; },
@@ -86,7 +87,7 @@ test('mount stays silent until the visible toggle unlocks and starts the desired
   assert.match(storage.values.get(AUDIO_PREFERENCE_KEY), /"muted":false/);
   assert.equal(audio.playCue('combatHit'), true);
   audio.setLoop('boss');
-  assert.deepEqual(log.slice(-2), ['cue:combatHit', 'loop:boss']);
+  assert.deepEqual(log.slice(-2), ['cue:combatHit', 'transition:boss']);
   log.state.running = false;
   assert.equal(await audio.handleToggle(), true);
   assert.deepEqual(log.slice(-2), ['unlock', 'loop:boss']);

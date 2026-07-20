@@ -2,7 +2,7 @@
 
 ## Detailed script outline
 
-**Narrative target:** a focused 60-beat JRPG story whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward. The story-only quantity estimate is about 5.14 reference hours; the intended 20-hour route comes from the explicitly interleaved 215-activity contract, not an unsupported critical-path claim.<br>
+**Narrative target:** a focused 60-beat JRPG story whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward. The story-only quantity estimate is about 5.15 reference hours; the intended 20-hour route comes from the explicitly interleaved 215-activity contract, not an unsupported critical-path claim.<br>
 **Canonical names:** Ren Ishikawa; Aya Shinohara; Elisabet “Lise” Varga; Father Mateus Avelar; Genta Mononobe; Kiku Nawa; Shogun Kurozane; Magistrate Ujiro Arata.<br>
 **Format note:** Scene titles are production IDs. Dialogue below is first-draft intent and can be revised for localization and historical review; plot function, speaker ownership, and exit state are locked unless a later design review changes them.
 
@@ -130,7 +130,7 @@ Lise identifies Mateus’s former teacher and says the Varga oath did not die wi
 
 ### C3-01 — Separate arrivals
 
-The group enters the port separately. Lise’s scene is about navigating trade etiquette and suspicion, while Aya finds the local printer. No single dialogue choice determines success.
+The group enters the port separately under conditions set by Sayo of Sodegaura, a fictional Japanese Kirishitan lay catechist, printer, and route organizer. The early camp scene **“An Alias at the Lantern Dock”** states her consequential choice: Sayo has already concealed her community’s prayer sheets, assigns the Takamine families to her warehouse route, and carries their testimony copy separately so one seizure cannot expose both people and evidence. Lise’s scene is about navigating trade etiquette and suspicion, not overriding Sayo’s conditions. No single player dialogue choice determines success.
 
 ### C3-02 — The checkpoint
 
@@ -422,7 +422,7 @@ Required encounters: two normal battles and one boss. The intended number of fie
 4. When a Hound telegraphs Lunge, draw a 3-space red line and label “Lunge next activation.” The player can move or Guard.
 5. Victory grants 1 River Salve. Do not award equipment in the slice.
 
-**Optional chest:** 1 Temple Charm. It modifies no stats in this slice; its description establishes “a charm with a stamped name removed.”
+**Optional chest:** 1 Defaced Registry Token. It modifies no stats in this slice; its description establishes a secular court route tag with its stamped name removed.
 
 **Exit:** At the loading alcove, the party finds a torn blank confession sheet with an empty signature line. Aya keeps it.
 
@@ -617,4 +617,4 @@ The first playable is ready for external testing when all of the following are t
 
 ## Sources
 
-Historical context and safeguards were checked against [Jesuits Japan’s history overview](https://www.jesuits-japan.org/blank?lang=en), the [Japan Agency for Cultural Affairs chronology for Hidden Christian Sites](https://www.bunka.go.jp/seisaku/bunkazai/shokai/sekai_isan/ichiran/pdf/suisensho_02.pdf), and [UNESCO’s related historical material](https://whc.unesco.org/document/160507). All named people, institutions, incidents, and supernatural features in this outline are fictional.
+Historical context and safeguards were checked against [Jesuits Japan’s history overview](https://www.jesuits-japan.org/blank?lang=en), the [Japan Agency for Cultural Affairs chronology for Hidden Christian Sites](https://www.bunka.go.jp/seisaku/bunkazai/shokai/sekai_isan/ichiran/pdf/suisensho_02.pdf), and [UNESCO’s related historical material](https://whc.unesco.org/document/160507). The project’s precise divergences and unresolved consultation requirement are recorded in the [historical and cultural audit note](20-historical-cultural-audit.md). All named people, institutions, incidents, and supernatural features in this outline are fictional.

@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
-    <main class="camp-shell">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <main id="mainContent" class="camp-shell" tabindex="-1">
       <header class="camp-masthead">
         <div>
           <p class="eyebrow">LANTERN CAMP · PARTY PREPARATION</p>
@@ -34,7 +35,7 @@
             <div><p class="eyebrow">Formation</p><h2>Party</h2></div>
             <span id="partyCurrency">0 mon</span>
           </header>
-          <div id="campPartyList" class="party-list" role="tablist" aria-label="Choose a party member"></div>
+          <div id="campPartyList" class="party-list" role="group" aria-label="Choose a party member"></div>
           <section class="rest-card">
             <label for="campSelect">Rest point</label>
             <select id="campSelect"></select>
@@ -73,10 +74,10 @@
             <div><p class="eyebrow">Shared stores</p><h2>Inventory</h2></div>
             <span id="inventoryCount">0 items</span>
           </header>
-          <div class="inventory-tabs" role="tablist" aria-label="Inventory filters">
-            <button type="button" data-inventory-filter="all" aria-selected="true">All</button>
-            <button type="button" data-inventory-filter="gear">Gear</button>
-            <button type="button" data-inventory-filter="consumable">Remedies</button>
+          <div class="inventory-tabs" role="group" aria-label="Inventory filters">
+            <button type="button" data-inventory-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-inventory-filter="gear" aria-pressed="false">Gear</button>
+            <button type="button" data-inventory-filter="consumable" aria-pressed="false">Remedies</button>
           </div>
           <div id="inventoryList" class="inventory-list"></div>
         </aside>
@@ -90,7 +91,7 @@
             <div id="campConversationList" class="camp-conversation-list" aria-label="Available companion conversations"></div>
             <article id="campConversationStage" class="camp-conversation-stage" hidden>
               <small id="campConversationMeta"></small>
-              <h3 id="campConversationTitle">Conversation</h3>
+              <h3 id="campConversationTitle" tabindex="-1">Conversation</h3>
               <p id="campConversationTheme"></p>
               <blockquote id="campConversationLine" aria-live="polite" aria-atomic="true"></blockquote>
               <div id="campConversationChoices" class="camp-conversation-choices" aria-label="Conversation response"></div>
@@ -126,7 +127,7 @@
             <div id="archiveRecordList" class="archive-record-list" aria-label="Unlocked public archive records"></div>
             <article id="archiveRecordStage" class="archive-record-stage" hidden>
               <small id="archiveRecordMeta"></small>
-              <h3 id="archiveRecordTitle">Public record</h3>
+              <h3 id="archiveRecordTitle" tabindex="-1">Public record</h3>
               <p id="archiveRecordAccess"></p>
               <blockquote id="archiveRecordParagraph" aria-live="polite" aria-atomic="true"></blockquote>
               <button id="advanceArchiveRecord" type="button">Continue reading</button>

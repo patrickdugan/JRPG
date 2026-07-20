@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
-    <main class="battle-shell">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <main id="mainContent" class="battle-shell" tabindex="-1">
       <header class="battle-masthead">
         <div class="encounter-heading">
           <p class="eyebrow">TACTICAL ENCOUNTER</p>
@@ -36,7 +37,7 @@
             <p class="eyebrow">Allied formation</p>
             <h2 id="partyHeading">Party</h2>
           </header>
-          <div id="partyPanel" class="combatant-list" role="list" aria-live="polite">
+          <div id="partyPanel" class="combatant-list" role="list">
             <p class="panel-placeholder">Party deployment pending.</p>
           </div>
         </aside>
@@ -49,6 +50,7 @@
               height="540"
               tabindex="0"
               aria-label="Tactical battle field. Use the command deck to select actions."
+              aria-describedby="activeActorLabel commandHint objectiveText objectiveProgress"
             >
               This battle requires a browser with Canvas and JavaScript enabled.
             </canvas>
@@ -68,12 +70,12 @@
             </div>
 
             <div id="commandButtons" class="command-grid" role="toolbar" aria-label="Battle commands">
-              <button type="button" data-command="move" aria-keyshortcuts="M">Move</button>
-              <button type="button" data-command="attack" aria-keyshortcuts="A">Attack</button>
-              <button type="button" data-command="skill" aria-keyshortcuts="S">Skill</button>
-              <button type="button" data-command="guard" aria-keyshortcuts="G">Guard</button>
-              <button type="button" data-command="analyze" aria-keyshortcuts="N">Analyze</button>
-              <button type="button" data-command="objective" aria-keyshortcuts="O">Objective</button>
+              <button type="button" data-command="move" aria-keyshortcuts="1">1 · Move</button>
+              <button type="button" data-command="attack" aria-keyshortcuts="2">2 · Attack</button>
+              <button type="button" data-command="skill" aria-keyshortcuts="3">3 · Skill</button>
+              <button type="button" data-command="guard" aria-keyshortcuts="4">4 · Guard</button>
+              <button type="button" data-command="analyze" aria-keyshortcuts="5">5 · Analyze</button>
+              <button type="button" data-command="objective" aria-keyshortcuts="6">6 · Objective</button>
             </div>
 
             <div class="selection-grid">
@@ -93,7 +95,7 @@
 
             <div class="commit-row">
               <p id="commandHint" class="command-hint">Choose a combatant, then issue a command.</p>
-              <button id="confirmCommand" class="confirm-command" type="button" data-action="confirm" disabled>
+              <button id="confirmCommand" class="confirm-command" type="button" data-action="confirm" aria-keyshortcuts="Enter" disabled>
                 Confirm action
               </button>
             </div>
@@ -109,7 +111,7 @@
               </div>
               <strong id="battleClock" aria-label="Battle time">0:00</strong>
             </header>
-            <ol id="tempoQueue" class="tempo-queue" aria-live="polite">
+            <ol id="tempoQueue" class="tempo-queue">
               <li class="panel-placeholder">Initiative pending.</li>
             </ol>
             <fieldset id="speedControls" class="speed-controls">
@@ -144,7 +146,7 @@
               <p class="eyebrow">Hostile formation</p>
               <h2 id="enemyHeading">Enemies</h2>
             </header>
-            <div id="enemyPanel" class="combatant-list" role="list" aria-live="polite">
+            <div id="enemyPanel" class="combatant-list" role="group" aria-label="Enemy combatants and selectable targets">
               <p class="panel-placeholder">Enemy deployment pending.</p>
             </div>
           </section>
@@ -186,7 +188,7 @@
             </div>
             <span id="battleStateBadge" class="state-badge">READY</span>
           </div>
-          <ol id="resultLog" class="result-log" tabindex="0" aria-live="polite" aria-relevant="additions text">
+          <ol id="resultLog" class="result-log" tabindex="0" aria-label="Battle result history">
             <li>Awaiting encounter initialization.</li>
           </ol>
           <div class="result-actions">

@@ -189,6 +189,7 @@ const ROUTE_FOCUS_SELECTORS = Object.freeze({
   'archive-record': 'archiveRecordId',
 });
 let routeFocusPending = Boolean(ROUTE_FOCUS_SELECTORS[requestedRouteType] && requestedRouteId);
+const reducedMotionPreference = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
 
 const ROLES = Object.freeze({
   ren: 'Courier Vanguard', aya: 'Ledger Arcanist', lise: 'Dawn Hunter',
@@ -246,9 +247,8 @@ function renderParty() {
     const button = element('button', 'party-button');
     button.type = 'button';
     button.dataset.memberId = view.id;
-    button.role = 'tab';
     button.disabled = !view.unlocked;
-    button.setAttribute('aria-selected', String(view.id === selectedMemberId));
+    button.setAttribute('aria-pressed', String(view.id === selectedMemberId));
     const glyph = element('span', 'party-glyph', String(index + 1));
     const copy = element('span');
     copy.append(element('strong', '', view.name), element('small', '', view.unlocked ? ROLES[view.id] : 'Joins during the campaign'));
@@ -284,6 +284,9 @@ function renderMember() {
     const card = element('div', 'equipment-slot');
     const label = element('label', '', slot);
     const select = document.createElement('select');
+    const controlId = `equipment-${selectedMemberId}-${slot.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+    select.id = controlId;
+    label.htmlFor = controlId;
     select.dataset.equipmentSlot = slot;
     const current = summary.equipment[slot]?.id ?? '';
     const candidates = Object.values(ITEM_CATALOGUE).filter((item) => item.kind === 'equipment'
@@ -295,6 +298,12 @@ function renderMember() {
     button.type = 'button';
     button.dataset.unequipSlot = slot;
     button.disabled = !current;
+    button.setAttribute(
+      'aria-label',
+      current
+        ? `Unequip ${itemName(current)} from ${member.name}'s ${slot}`
+        : `Nothing equipped in ${member.name}'s ${slot}`,
+    );
     card.append(label, select, button);
     return card;
   }));
@@ -305,6 +314,7 @@ function renderMember() {
     const button = element('button', '', 'Release Vow');
     button.type = 'button';
     button.dataset.unequipVow = vow.id;
+    button.setAttribute('aria-label', `Release ${vow.name} from ${member.name}`);
     card.append(button);
     return card;
   }) : [element('p', 'subtitle', 'One or two Vows may be bound to each character')]));
@@ -317,6 +327,7 @@ function renderMember() {
     button.type = 'button';
     button.dataset[unlocked ? 'equipVow' : 'learnVow'] = vow.id;
     button.disabled = unlocked && summary.openVowSlots === 0;
+    button.setAttribute('aria-label', unlocked ? `Bind ${vow.name} to ${member.name}` : `Learn ${vow.name}`);
     card.append(button);
     return card;
   }));
@@ -334,13 +345,19 @@ function renderInventory() {
     const actions = element('div', 'inventory-entry-actions');
     if (item.kind === 'consumable') {
       const use = element('button', '', `Use on ${castName(selectedMemberId).split(' ')[0]}`);
-      use.type = 'button'; use.dataset.useItem = item.id; actions.append(use);
+      use.type = 'button'; use.dataset.useItem = item.id;
+      use.setAttribute('aria-label', `Use ${item.name} on ${castName(selectedMemberId)}`);
+      actions.append(use);
     } else if (item.allowedMembers.includes(selectedMemberId)) {
       const equip = element('button', '', 'Equip');
-      equip.type = 'button'; equip.dataset.equipItem = item.id; actions.append(equip);
+      equip.type = 'button'; equip.dataset.equipItem = item.id;
+      equip.setAttribute('aria-label', `Equip ${item.name} on ${castName(selectedMemberId)}`);
+      actions.append(equip);
     }
     const sell = element('button', '', `Sell · ${item.sellPrice} mon`);
-    sell.type = 'button'; sell.dataset.sellItem = item.id; actions.append(sell);
+    sell.type = 'button'; sell.dataset.sellItem = item.id;
+    sell.setAttribute('aria-label', `Sell ${item.name} for ${item.sellPrice} mon`);
+    actions.append(sell);
     card.append(actions);
     return card;
   }) : [element('p', 'subtitle', 'No items match this filter.')]));
@@ -353,10 +370,17 @@ function renderShop() {
     card.append(element('small', '', `${item.kind}${item.slot ? ` · ${item.slot}` : ''}${upgrade ? ` · forge ${upgrade}` : ''}`), element('strong', '', item.name), element('span', '', item.description));
     const actions = element('div', 'shop-entry-actions');
     const buy = element('button', '', `Buy · ${item.price}`);
-    buy.type = 'button'; buy.dataset.buyItem = item.id; actions.append(buy);
+    buy.type = 'button'; buy.dataset.buyItem = item.id;
+    buy.setAttribute('aria-label', `Buy ${item.name} for ${item.price} mon`);
+    actions.append(buy);
     if (item.kind === 'equipment') {
       const forge = element('button', '', upgrade >= 3 ? 'Forge max' : `Forge +1`);
-      forge.type = 'button'; forge.dataset.upgradeItem = item.id; forge.disabled = upgrade >= 3; actions.append(forge);
+      forge.type = 'button'; forge.dataset.upgradeItem = item.id; forge.disabled = upgrade >= 3;
+      forge.setAttribute(
+        'aria-label',
+        upgrade >= 3 ? `${item.name} is at maximum forge rank` : `Forge ${item.name} to rank ${upgrade + 1}`,
+      );
+      actions.append(forge);
     }
     card.append(actions);
     return card;
@@ -651,6 +675,40 @@ function render() {
   applyRequestedRouteFocus();
 }
 
+function focusWithoutScroll(target) {
+  if (!(target instanceof HTMLElement) || target.hidden) return false;
+  target.focus({ preventScroll: true });
+  return document.activeElement === target;
+}
+
+function focusSelectedPartyMember() {
+  const selector = `[data-member-id="${CSS.escape(selectedMemberId)}"]`;
+  return focusWithoutScroll(partyList.querySelector(selector));
+}
+
+function focusCampConversationStage() {
+  const progress = selectedCampConversationId
+    ? getCampConversationProgress(campConversationState, selectedCampConversationId)
+    : null;
+  if (!progress || campConversationStage.hidden) return false;
+  if (progress.phase === 'choice') {
+    return focusWithoutScroll(campConversationChoices.querySelector('[data-camp-conversation-choice]'));
+  }
+  if (progress.phase === 'completed') return focusWithoutScroll(campConversationTitle);
+  return focusWithoutScroll(advanceCampConversation);
+}
+
+function focusArchiveRecordStage() {
+  const progress = selectedArchiveRecordId
+    ? getArchiveRecordProgress(archiveRecordState, selectedArchiveRecordId)
+    : null;
+  if (!progress || archiveRecordStage.hidden) return false;
+  const reviewing = progress.complete && Number.isSafeInteger(archiveReviewParagraphIndex);
+  return reviewing || !progress.complete
+    ? focusWithoutScroll(advanceArchiveRecord)
+    : focusWithoutScroll(archiveRecordTitle);
+}
+
 function applyRequestedRouteFocus() {
   if (!routeFocusPending) return;
   const datasetKey = ROUTE_FOCUS_SELECTORS[requestedRouteType];
@@ -663,7 +721,10 @@ function applyRequestedRouteFocus() {
   }
   target.classList.add('is-route-focus');
   activeNarrativeSurface = requestedRouteType;
-  target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  target.scrollIntoView({
+    block: 'center',
+    behavior: reducedMotionPreference?.matches ? 'auto' : 'smooth',
+  });
   target.focus();
   target.click();
 }
@@ -673,6 +734,7 @@ partyList.addEventListener('click', (event) => {
   if (!button || button.disabled) return;
   selectedMemberId = button.dataset.memberId;
   render();
+  focusSelectedPartyMember();
 });
 
 equipmentSlots.addEventListener('change', (event) => {
@@ -704,7 +766,8 @@ inventoryTabs.addEventListener('click', (event) => {
   const button = event.target.closest('[data-inventory-filter]');
   if (!button) return;
   inventoryFilter = button.dataset.inventoryFilter;
-  [...inventoryTabs.querySelectorAll('button')].forEach((entry) => entry.setAttribute('aria-selected', String(entry === button)));
+  [...inventoryTabs.querySelectorAll('button')]
+    .forEach((entry) => entry.setAttribute('aria-pressed', String(entry === button)));
   renderInventory();
 });
 
@@ -755,10 +818,12 @@ campConversationList.addEventListener('click', (event) => {
     }
     campConversationState = result.state;
     render();
+    focusCampConversationStage();
     campFeedback.textContent = `Camp conversation begun: ${conversation.title}. Every line and one explicit response will be recorded once.`;
     return;
   }
   renderCampConversations();
+  focusCampConversationStage();
 });
 
 campConversationChoices.addEventListener('click', (event) => {
@@ -780,6 +845,7 @@ campConversationChoices.addEventListener('click', (event) => {
   }
   campConversationState = result.state;
   renderCampConversations();
+  focusCampConversationStage();
   campFeedback.textContent = `Response recorded: ${result.option.label}`;
 });
 
@@ -802,6 +868,7 @@ advanceCampConversation.addEventListener('click', () => {
   }
   campConversationState = result.state;
   renderCampConversations();
+  focusCampConversationStage();
   if (result.code === 'conversation-complete') {
     campFeedback.textContent = `Finite conversation complete. ${result.consequence.summary}`;
   }
@@ -900,6 +967,7 @@ archiveRecordList.addEventListener('click', (event) => {
   if (progressRecord?.status === 'completed') {
     archiveReviewParagraphIndex = 0;
     renderArchiveRecords();
+    focusArchiveRecordStage();
     campFeedback.textContent = `Reviewing ${record.title}. Review does not change finite completion state.`;
     return;
   }
@@ -917,10 +985,12 @@ archiveRecordList.addEventListener('click', (event) => {
     }
     archiveRecordState = result.state;
     render();
+    focusArchiveRecordStage();
     campFeedback.textContent = `Public reading begun: ${record.title}. Its custody and correction terms remain visible.`;
     return;
   }
   renderArchiveRecords();
+  focusArchiveRecordStage();
 });
 
 advanceArchiveRecord.addEventListener('click', () => {
@@ -935,6 +1005,7 @@ advanceArchiveRecord.addEventListener('click', () => {
       campFeedback.textContent = 'Review passage advanced without changing finite completion state.';
     }
     renderArchiveRecordStage();
+    focusArchiveRecordStage();
     return;
   }
   const result = acknowledgeArchiveRecordParagraph(archiveRecordState, selectedArchiveRecordId);
@@ -949,6 +1020,7 @@ advanceArchiveRecord.addEventListener('click', () => {
   }
   archiveRecordState = result.state;
   renderArchiveRecords();
+  focusArchiveRecordStage();
   campFeedback.textContent = result.code === 'archive-reading-complete'
     ? 'Finite public reading complete. No reward or ownership claim was created.'
     : 'Passage acknowledged; the next public passage is ready.';

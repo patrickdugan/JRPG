@@ -487,7 +487,7 @@ export const ENCOUNTERS = [
         id: 'bound-ashen-oni', name: 'Bound Ashen Oni', count: 1, positions: ['8,3'], role: 'releaseable bell-forged soldier',
         stats: { hp: 480, power: 18, guard: 18, speed: 84 },
         resistances: { delivery: { cut: 0.75, pierce: 1.25, crush: 0.75, arcane: 1 }, essence: { ember: 1, frost: 1.25, storm: 1, radiance: 1.25, umbral: 0.75 } },
-        ledger: 'Fabricated court armor around a stolen name. This is not a creature from living folklore.',
+        ledger: 'Fabricated court armor around a stolen name; “oni” is a frightened in-world label, not a canonical design claim.',
         skills: [{ id: 'ash-guard-swing', name: 'Ash Guard Swing', delivery: 'crush', essence: 'ember', power: 16, range: 1, telegraph: 'The ash shell raises a heavy arm.', recoveryPulses: 2, dodgeable: true }],
         ai: ['Use Ash Guard Swing at adjacency.', 'Otherwise walk toward the name-slip guard tile.', 'Turn neutral as soon as the name release resolves.'],
       },

@@ -122,13 +122,13 @@ h1 {
 }
 
 .chapter-button:hover { background: rgba(255, 255, 255, 0.05); color: var(--paper); }
-.chapter-button[aria-selected="true"] { border-color: #897142; background: rgba(137, 113, 66, 0.18); color: #fff0bb; }
+.chapter-button[aria-current="true"] { border-color: #897142; background: rgba(137, 113, 66, 0.18); color: #fff0bb; }
 .chapter-button.is-finished .chapter-index::after { content: "✓"; margin-left: 3px; color: var(--aqua); }
 .chapter-index { color: var(--gold); font-size: 0.66rem; padding-top: 2px; }
 .chapter-copy { min-width: 0; }
 .chapter-copy strong, .chapter-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chapter-copy strong { font-size: 0.72rem; font-weight: 600; }
-.chapter-copy small { margin-top: 3px; color: #7f8ba7; font-size: 0.61rem; }
+.chapter-copy small { margin-top: 3px; color: #98a7c4; font-size: 0.61rem; }
 
 .scene-stage { min-width: 0; padding: 16px; }
 .scene-heading { padding: 2px 4px 14px; }
@@ -272,4 +272,18 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
   .scene-location { grid-column: 1 / -1; max-width: none; text-align: left; }
   .scene-controls { grid-template-columns: 1fr 1fr; }
   .progress-wrap { grid-column: 1 / -1; grid-row: 1; }
+}
+
+@media (max-width: 600px) {
+  .field-controls { grid-template-columns: repeat(3, 44px); gap: 5px; }
+  .field-controls button, .field-controls span { width: 44px; height: 44px; font-size: 0.9rem; }
+  .dialogue-controls button, .scene-controls button, .story-choice, .battle-link, .subtle-button,
+  .route-due-list button, .witness-choice-deck button { min-height: 44px; }
+  .map-overlay, .field-feedback, .field-objective-card strong, .field-objective-card span,
+  .field-objective-card small, .dialogue-controls span, .presentation-transcript summary,
+  .presentation-transcript dt, .presentation-transcript dd { font-size: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

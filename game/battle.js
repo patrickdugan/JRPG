@@ -139,6 +139,7 @@ const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
 const encounter = getEncounter(requestedEncounterId) ?? ENCOUNTERS[0];
 const pageAudio = mountAudioControls({ desiredLoop: isBossEncounter(encounter) ? 'boss' : 'battle' });
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const requestedReturn = query.get('return');
 const requestedQuestId = query.get('quest');
 const requestedQuestObjectiveId = query.get('objective');
@@ -544,7 +545,8 @@ function drawBattle(now = performance.now()) {
   const level = engine.level;
   const { cell, originX, originY } = mapGeometry();
   const geometry = { cell, originX, originY };
-  const animation = currentBattleAnimationFrame(now);
+  const visualNow = reducedMotion.matches ? 0 : now;
+  const animation = reducedMotion.matches ? null : currentBattleAnimationFrame(now);
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
@@ -594,7 +596,7 @@ function drawBattle(now = performance.now()) {
     }
   }
 
-  drawObjectiveTokens(snapshot, level, geometry, now);
+  drawObjectiveTokens(snapshot, level, geometry, visualNow);
   drawBossIntent(snapshot, geometry);
 
   const presentationActors = getBattlePresentationActors(snapshot.actors, animation?.retainedActors ?? []);
@@ -603,7 +605,7 @@ function drawBattle(now = performance.now()) {
     const animatedTarget = animation && actor.instanceId === animation.targetId ? animation.frame.target : null;
     const renderTile = animatedActor?.renderTile ?? animatedTarget?.renderTile ?? actor.pos;
     const centerX = originX + renderTile.x * cell + cell / 2;
-    const centerY = originY + renderTile.y * cell + cell / 2 + Math.sin(now / 170 + actor.pos.x) * Math.max(1, cell * 0.035);
+    const centerY = originY + renderTile.y * cell + cell / 2 + Math.sin(visualNow / 170 + actor.pos.x) * Math.max(1, cell * 0.035);
     const animationScale = animatedActor?.scale ?? 1;
     const party = actor.faction === 'party';
     if (party && actor.instanceId === snapshot.activeActorId) {
@@ -625,7 +627,7 @@ function drawBattle(now = performance.now()) {
         : null;
       const facing = animationFacing ?? battleFacingByActor.get(actor.instanceId) ?? fallbackFacing;
       const presentationSpeed = autoGrindActive ? speedMultiplier : 1;
-      const phase = now < (battleMotionUntil.get(actor.instanceId) ?? 0)
+      const phase = !reducedMotion.matches && now < (battleMotionUntil.get(actor.instanceId) ?? 0)
         ? Math.floor((now * presentationSpeed) / 110) % 2
         : 0;
       const frame = getPartyAtlasFrame(actor.templateId, facing, phase);
@@ -644,7 +646,7 @@ function drawBattle(now = performance.now()) {
       );
     } else if (!party && battleEnemyAtlasImage.complete && battleEnemyAtlasImage.naturalWidth > 0) {
       const animationPose = animatedActor?.pose ?? animatedTarget?.pose;
-      const transientPose = now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)
+      const transientPose = !reducedMotion.matches && now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)
         ? battleEnemyPoseByActor.get(actor.instanceId)
         : null;
       const pose = animationPose
@@ -703,13 +705,17 @@ function drawBattle(now = performance.now()) {
   drawBattleAnimationFx(animation, geometry);
 }
 
-function createCombatantCard(actor, selected = false) {
+function createCombatantCard(actor, selected = false, targetable = true) {
   const card = document.createElement(actor.faction === 'enemy' ? 'button' : 'div');
-  if (card instanceof HTMLButtonElement) card.type = 'button';
+  if (card instanceof HTMLButtonElement) {
+    card.type = 'button';
+    card.setAttribute('aria-pressed', String(selected));
+    card.disabled = !targetable;
+  } else {
+    card.role = 'listitem';
+  }
   card.className = `combatant-card${actor.hp <= 0 ? ' is-defeated' : ''}`;
-  card.role = 'listitem';
   card.dataset.actorId = actor.instanceId;
-  card.setAttribute('aria-selected', String(selected));
   const name = document.createElement('div');
   name.className = 'combatant-name';
   const strong = document.createElement('strong');
@@ -741,7 +747,7 @@ function createCombatantCard(actor, selected = false) {
   const statuses = actor.statuses?.map((status) => (
     `${COMBAT_STATUS_DEFINITIONS[status.id]?.name ?? status.id} ${status.remainingActivations}`
   )) ?? [];
-  meta.textContent = `${actor.stance.toUpperCase()} · ready pulse ${actor.readyAtPulse}${actor.analyzed ? ' · ANALYZED' : ''}${statuses.length ? ` · ${statuses.join(', ')}` : ''}`;
+  meta.textContent = `Space ${actor.pos.x},${actor.pos.y} · ${actor.stance.toUpperCase()} · ready pulse ${actor.readyAtPulse}${actor.analyzed ? ' · ANALYZED' : ''}${statuses.length ? ` · ${statuses.join(', ')}` : ''}`;
   card.append(name, meter);
   if (spirit.childElementCount) card.append(spirit);
   card.append(meta);
@@ -749,10 +755,16 @@ function createCombatantCard(actor, selected = false) {
 }
 
 function renderCombatants(snapshot) {
+  const enemyTargetingAvailable = snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND
+    && !snapshot.result
+    && !manualInputLocked();
   partyPanel.replaceChildren(...snapshot.actors.filter((actor) => actor.faction === 'party').map((actor) => createCombatantCard(actor)));
   enemyPanel.replaceChildren(...snapshot.actors
     .filter((actor) => actor.faction !== 'party' && (actor.active !== false || actor.hp <= 0))
-    .map((actor) => createCombatantCard(actor, actor.instanceId === selectedTargetId)));
+    .map((actor) => {
+      const targetable = enemyTargetingAvailable && actor.active !== false && actor.hp > 0;
+      return createCombatantCard(actor, targetable && actor.instanceId === selectedTargetId, targetable);
+    }));
 }
 
 function publishRenderedBattleState(snapshot) {
@@ -868,7 +880,7 @@ function renderCommands(snapshot) {
   const inputLocked = manualInputLocked();
   const available = new Set(actor ? engine.getAvailableCommands(actor.instanceId) : []);
   activeActorLabel.textContent = actor
-    ? `${actor.name} · ${snapshot.pace} Pace · ${actor.spirit}/${actor.maxSpirit} Spirit${autoInputLocked() ? ' · AUTO' : battleAnimationActive() ? ' · ANIMATING' : ''}`
+    ? `${actor.name} · space ${actor.pos.x},${actor.pos.y} · ${snapshot.pace} Pace · ${actor.spirit}/${actor.maxSpirit} Spirit${autoInputLocked() ? ' · AUTO' : battleAnimationActive() ? ' · ANIMATING' : ''}`
     : 'Waiting for the next activation';
   commandButtons.forEach((button) => {
     const command = button.dataset.command;
@@ -880,7 +892,7 @@ function renderCommands(snapshot) {
     .find((requirement) => !requirement.automatic && !requirement.complete);
   const objectivePresentation = getObjectiveActionPresentation(pendingObjective);
   const objectiveButton = commandButtons.find((button) => button.dataset.command === 'objective');
-  if (objectiveButton) objectiveButton.textContent = pendingObjective ? objectivePresentation.buttonLabel : 'Objective';
+  if (objectiveButton) objectiveButton.textContent = `6 · ${pendingObjective ? objectivePresentation.buttonLabel : 'Objective'}`;
 
   const skills = actor?.skills ?? [];
   replaceOptions(skillSelect, skills.map((skill) => {
@@ -892,7 +904,7 @@ function renderCommands(snapshot) {
       disabled: !quote.affordable,
     };
   }), 'Select an art');
-  replaceOptions(targetSelect, livingEnemies(snapshot).map((target) => ({ value: target.instanceId, label: `${target.name} · ${target.hp} HP` })), 'Select a target');
+  replaceOptions(targetSelect, livingEnemies(snapshot).map((target) => ({ value: target.instanceId, label: `${target.name} · space ${target.pos.x},${target.pos.y} · ${target.hp} HP` })), 'Select a target');
   if (selectedTargetId && livingEnemies(snapshot).some((target) => target.instanceId === selectedTargetId)) targetSelect.value = selectedTargetId;
   selectedTargetId = targetSelect.value;
 
@@ -942,6 +954,15 @@ function formatEngineLog(entry, actors) {
   if (entry.type === 'ward-broken') return `${name(entry.targetId)} is broken by ${name(entry.sourceActorId)}.`;
   if (entry.type === 'surrender') return `${name(entry.actorId)} yields without death at ${entry.hp} HP; both Blood Wards broken: ${entry.bothWardsBroken ? 'yes' : 'no'}.`;
   return null;
+}
+
+function announceEngineLogDelta(beforeSnapshot, afterSnapshot) {
+  const lines = afterSnapshot.log
+    .slice(beforeSnapshot.log.length)
+    .map((entry) => formatEngineLog(entry, afterSnapshot.actors))
+    .filter(Boolean)
+    .slice(0, 4);
+  if (lines.length) announcements.textContent = lines.join(' ');
 }
 
 function renderBossMechanic(snapshot) {
@@ -1177,6 +1198,10 @@ function renderSpeedControls() {
 
 function render() {
   const snapshot = engine.snapshot();
+  const targets = livingEnemies(snapshot);
+  if (!targets.some((target) => target.instanceId === selectedTargetId)) {
+    selectedTargetId = targets[0]?.instanceId ?? null;
+  }
   const settlementReady = isBattlePresentationSettled({
     result: snapshot.result,
     animationActive: battleAnimationActive(),
@@ -1387,6 +1412,7 @@ function executeSelectedCommand() {
   }
   if (!result?.ok) addMessage(result?.reason ?? 'Command failed.');
   else if (result.readout) addMessage(`${targetSelect.options[targetSelect.selectedIndex]?.text ?? 'Target'} Ledger: ${result.readout.ledger || 'No note.'}`);
+  else announceEngineLogDelta(snapshot, engine.snapshot());
   if (selectedCommand === 'attack' || selectedCommand === 'skill') {
     markCombatResolutionPose(result);
     startCombatAnimation(result, actor.instanceId, snapshot);
@@ -1402,7 +1428,10 @@ function moveActive(dx, dy) {
   if (!actor) return;
   selectedCommand = 'move';
   const result = engine.move(actor.instanceId, dx, dy);
-  if (result.ok) markBattleMotion(actor.instanceId, dx, dy);
+  if (result.ok) {
+    markBattleMotion(actor.instanceId, dx, dy);
+    announceEngineLogDelta(snapshot, engine.snapshot());
+  }
   if (!result.ok) addMessage(result.reason);
   render();
 }
@@ -1417,9 +1446,11 @@ enemyPanel.addEventListener('click', (event) => {
   if (manualInputLocked()) return;
   const card = event.target.closest('[data-actor-id]');
   if (!card) return;
-  selectedTargetId = card.dataset.actorId;
+  const actorId = card.dataset.actorId;
+  selectedTargetId = actorId;
   targetSelect.value = selectedTargetId;
   render();
+  enemyPanel.querySelector(`[data-actor-id="${CSS.escape(actorId)}"]`)?.focus({ preventScroll: true });
 });
 
 speedButtons.forEach((button) => button.addEventListener('click', () => {
@@ -1462,13 +1493,33 @@ restartBattle.addEventListener('click', () => {
 });
 
 window.addEventListener('keydown', (event) => {
-  if (event.target instanceof HTMLSelectElement || event.target instanceof HTMLButtonElement || event.target instanceof HTMLAnchorElement) return;
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  if (event.target instanceof Element && event.target.closest('input, select, textarea, button, a, [contenteditable="true"]')) return;
+  const key = event.key.toLowerCase();
+  const commandShortcuts = {
+    '1': 'move',
+    '2': 'attack',
+    '3': 'skill',
+    '4': 'guard',
+    '5': 'analyze',
+    '6': 'objective',
+  };
+  if (commandShortcuts[key] && !event.repeat) {
+    event.preventDefault();
+    selectCommand(commandShortcuts[key]);
+    return;
+  }
+  if (event.key === 'Enter' && !event.repeat && !confirmCommand.disabled) {
+    event.preventDefault();
+    confirmCommand.click();
+    return;
+  }
   const directions = {
     arrowleft: [-1, 0], a: [-1, 0], arrowright: [1, 0], d: [1, 0],
     arrowup: [0, -1], w: [0, -1], arrowdown: [0, 1], s: [0, 1],
     q: [-1, -1], e: [1, -1], z: [-1, 1], c: [1, 1],
   };
-  const direction = directions[event.key.toLowerCase()];
+  const direction = directions[key];
   if (direction && !event.repeat) {
     event.preventDefault();
     moveActive(...direction);
@@ -1541,6 +1592,7 @@ function tick(now) {
     clearEnemyIntentSchedule();
     const result = engine.resolveEnemyActivation();
     if (!result.ok) addMessage(result.reason);
+    else announceEngineLogDelta(before, engine.snapshot());
     markCombatResolutionPose({ ok: result.ok, ...result.resolution }, enemyActorId);
     startCombatAnimation({ ok: result.ok, ...result.resolution }, enemyActorId, before);
     render();
@@ -1552,6 +1604,8 @@ function tick(now) {
 engine = createEngine();
 render();
 requestAnimationFrame(tick);
+
+reducedMotion.addEventListener('change', () => drawBattle(performance.now()));
 
 function markPlaytimeActivity() {
   playtimeLastActivity = performance.now();

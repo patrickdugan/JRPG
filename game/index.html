@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
-    <main class="game-shell">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <main id="mainContent" class="game-shell" tabindex="-1">
       <header class="masthead">
         <div>
           <p class="eyebrow">FP-0 COMBAT PROOF</p>
@@ -26,29 +27,48 @@
       </header>
 
       <section class="game-frame" aria-label="Bell Court combat encounter">
-        <canvas id="gameCanvas" width="960" height="540">
+        <canvas id="gameCanvas" width="960" height="540" tabindex="0" aria-label="Bell Court tactical stage" aria-describedby="boardSummary feedback access-log">
           This prototype needs a browser with Canvas and JavaScript enabled.
         </canvas>
       </section>
 
+      <section class="movement-panel" aria-labelledby="movementHeading">
+        <div>
+          <p class="eyebrow">Touch movement</p>
+          <h2 id="movementHeading">Eight-way pace</h2>
+          <p id="boardSummary" class="board-summary">Board state loading.</p>
+        </div>
+        <div class="movement-pad" role="group" aria-label="Move Ren one space">
+          <button type="button" data-move="-1,-1" aria-label="Move northwest">↖</button>
+          <button type="button" data-move="0,-1" aria-label="Move north">↑</button>
+          <button type="button" data-move="1,-1" aria-label="Move northeast">↗</button>
+          <button type="button" data-move="-1,0" aria-label="Move west">←</button>
+          <span class="movement-center" aria-hidden="true">REN</span>
+          <button type="button" data-move="1,0" aria-label="Move east">→</button>
+          <button type="button" data-move="-1,1" aria-label="Move southwest">↙</button>
+          <button type="button" data-move="0,1" aria-label="Move south">↓</button>
+          <button type="button" data-move="1,1" aria-label="Move southeast">↘</button>
+        </div>
+      </section>
+
       <section class="command-deck" aria-label="Combat commands">
-        <button class="command-button cut" type="button" data-action="skill:courier-cut">
+        <button class="command-button cut" type="button" data-action="skill:courier-cut" aria-keyshortcuts="1">
           <span class="keycap">1</span>
           <span><strong>Courier’s Cut</strong><small>Cut · Range 1 · Recovery 2P</small></span>
         </button>
-        <button class="command-button ember" type="button" data-action="skill:cinder-route">
+        <button class="command-button ember" type="button" data-action="skill:cinder-route" aria-keyshortcuts="2">
           <span class="keycap">2</span>
           <span><strong>Cinder Route</strong><small>Arcane + Ember · Range 4 · Recovery 3P</small></span>
         </button>
-        <button class="command-button radiance" type="button" data-action="skill:dawn-signal">
+        <button class="command-button radiance" type="button" data-action="skill:dawn-signal" aria-keyshortcuts="3">
           <span class="keycap">3</span>
           <span><strong>Dawn Signal</strong><small>Arcane + Radiance · Range 3 · Recovery 2P</small></span>
         </button>
-        <button class="command-button guard" type="button" data-action="stance:guard">
+        <button class="command-button guard" type="button" data-action="stance:guard" aria-keyshortcuts="G">
           <span class="keycap">G</span>
           <span><strong>Guard</strong><small>Next hit −45% · Recovery 1P</small></span>
         </button>
-        <button class="command-button dodge" type="button" data-action="stance:dodge">
+        <button class="command-button dodge" type="button" data-action="stance:dodge" aria-keyshortcuts="F">
           <span class="keycap">F</span>
           <span><strong>Dodge</strong><small>Next physical hit 65% miss · 1P</small></span>
         </button>
@@ -57,7 +77,7 @@
       <section class="control-row" aria-label="Controls and encounter feedback">
         <p><strong>Move:</strong> Arrow keys / WASD · <strong>Diagonal:</strong> Q E Z C · <strong>Commands:</strong> 1/2/3, G, F</p>
         <p id="feedback" role="status" aria-live="polite"></p>
-        <button class="restart-button" type="button" data-action="restart"><span class="keycap">R</span> Restart encounter</button>
+        <button class="restart-button" type="button" data-action="restart" aria-keyshortcuts="R"><span class="keycap">R</span> Restart encounter</button>
       </section>
 
       <p id="access-log" class="visually-hidden" aria-live="polite"></p>

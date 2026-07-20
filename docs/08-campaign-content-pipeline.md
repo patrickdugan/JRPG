@@ -25,7 +25,7 @@ The core shape is intentionally small:
     id: 'chapter-2',
     number: 2,
     title: 'Bell at Takamine',
-    subtitle: 'A temple registry keeps a buried mouth.',
+    subtitle: 'A local bell registry keeps a buried mouth.',
     objective: 'Interrupt the midnight registry...',
     party: ['ren', 'aya', 'lise', 'mateus'],
     partyMeta: { activeAtStart: ['ren', 'aya'], joins: [] },
@@ -106,7 +106,7 @@ The 32-minute expected clear remains a first-playable target, not permission to 
 - The historical backdrop needs Japanese cultural-historian and sensitivity review before production dialogue, garments, practices, or regional details are locked.
 - Japanese characters retain local authority and decision-making. Lise and Mateus cannot become default interpreters of Japanese stakes because they are European.
 - Mateus is original. Do not use a celebrity likeness, a real actor reference, copied scene behavior, or a film adaptation shorthand.
-- The Ashen Oni are court-made bell constructs, not a depiction of Japanese religious oni or a claim about living folklore.
+- The Ashen Oni use a contested in-world label and a deliberate fictional synthesis; they must not claim one canonical Japanese oni design or copy a sacred figure, ceremonial mask, or identifiable local tradition.
 - Redemption is evidence-based and ongoing: Mateus protects people, confesses, loses power, and remains under supervision. The content must never turn a single helpful act into forgiveness owed by victims.
 
 ## Validation

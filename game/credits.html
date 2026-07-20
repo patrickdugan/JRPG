@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
-    <main class="credits-shell">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <main id="mainContent" class="credits-shell" tabindex="-1">
       <header class="credits-hero">
-        <img src="assets/production/bells-takamine-keyframe-v1.png" alt="The party beneath Takamine's repaired lantern tower at dawn">
+        <img src="assets/production/bells-takamine-keyframe-v1.png" alt="Two travelers facing Takamine's rain-soaked bell gate">
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="hero-copy">
           <p class="eyebrow">THE BELL REMAINS SILENT</p>
@@ -96,7 +97,7 @@
           <div class="seal-actions">
             <button id="sealCredits" type="button">Complete credits &amp; seal run receipt</button>
             <button id="exportEvidence" type="button" disabled>Export playtest evidence (.json)</button>
-            <p id="evidenceExportHint" class="hint">Loading export readinessâ€¦</p>
+            <p id="evidenceExportHint" class="hint" role="status" aria-live="polite">Loading export readinessâ€¦</p>
           </div>
         </section>
 

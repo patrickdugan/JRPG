@@ -122,7 +122,7 @@ h2 { margin-bottom: 0; color: #fff0cf; font-size: 0.95rem; }
 }
 
 button.combatant-card { cursor: pointer; }
-.combatant-card[aria-selected="true"] { border-color: var(--gold); background: rgba(77, 60, 25, 0.55); }
+.combatant-card[aria-pressed="true"] { border-color: var(--gold); background: rgba(77, 60, 25, 0.55); }
 .combatant-card.is-defeated { filter: grayscale(0.85); opacity: 0.5; }
 .combatant-name { display: flex; justify-content: space-between; gap: 8px; font-size: 0.7rem; }
 .combatant-meta { color: var(--muted); font-size: 0.58rem; }
@@ -251,6 +251,14 @@ button.combatant-card { cursor: pointer; }
   .active-actor { text-align: left; }
 }
 
+@media (max-width: 600px) {
+  .command-grid button, .confirm-command, .speed-options button, .auto-grind-button,
+  .restart-button, .campaign-link, select, button.combatant-card { min-height: 44px; }
+  .stage-hud span, .combatant-meta, .combatant-resource, .speed-status,
+  .auto-grind-wins, .auto-grind-status, .mechanic-badge, .mechanic-rule,
+  .mechanic-recovery, .mechanic-surrender, .intent-tiles li { font-size: 0.75rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

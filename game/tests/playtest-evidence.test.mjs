@@ -58,8 +58,8 @@ test('partial playtest exports remain explicit about every missing proof', () =>
   assert.equal(report.playtime.unattributedMs, 0);
   assert.equal(report.pacing.diagnosticOnly, true);
   assert.equal(report.pacing.observedPlaytimeProof, false);
-  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:2d4d30fc');
-  assert.equal(report.pacing.aggregateReferenceTargetMs, 73_928_133);
+  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:dab8e7de');
+  assert.equal(report.pacing.aggregateReferenceTargetMs, 73_928_467);
   assert.equal(report.pacing.chapters.length, 11);
   assert.deepEqual(report.pacing.chapters[0], {
     chapterId: 'prologue',

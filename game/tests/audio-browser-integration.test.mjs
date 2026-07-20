@@ -62,8 +62,11 @@ test('audio hooks consume score metadata and fire transition cues outside animat
     campaign.indexOf('function renderChapterList'),
   );
   assert.match(sceneDirection, /getSceneDirection\(beat\.id\)/);
-  assert.match(sceneDirection, /sceneMusicCue\.textContent = direction\.musicCue/);
-  assert.match(sceneDirection, /pageAudio\.setLoop\('exploration'\)/);
+  assert.match(campaign, /import \{ getSceneAudioPresentation \} from '\.\/scene-audio\.mjs';/);
+  assert.match(sceneDirection, /getSceneAudioPresentation\(beat\.id\)/);
+  assert.match(sceneDirection, /pageAudio\.setLoop\(audioPresentation\?\.loop \?\? 'exploration'\)/);
+  assert.match(sceneDirection, /Procedural \$\{audioPresentation\.scoreLabel\}; ambience:/);
+  assert.match(sceneDirection, /Direction: \$\{direction\.musicCue\}/);
   const animation = battle.slice(
     battle.indexOf('function startCombatAnimation'),
     battle.indexOf('function currentBattleAnimationFrame'),

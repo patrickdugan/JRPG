@@ -39,9 +39,9 @@ The speed preference remains restricted to `1x`, `2x`, or `4x`. It affects only 
 
 | Required repeat speed | Intended-route reference estimate | Hours |
 | --- | ---: | ---: |
-| 1× | 1,232.136 min | 20.54 |
-| 2× | 1,231.829 min | 20.53 |
-| 4× | 1,231.676 min | 20.53 |
+| 1× | 1,232.141 min | 20.54 |
+| 2× | 1,231.834 min | 20.53 |
+| 4× | 1,231.681 min | 20.53 |
 
 Only 0.614 reference minute at 1× belongs to the four required repeat presentation schedules, so speed-up changes the estimate by seconds rather than removing hours of authored play.
 
@@ -49,7 +49,7 @@ Optional leveling has a separate finite queue: after a manual first clear, Battl
 
 Chapter level targets rise from level 2 after the Prologue to level 40 for Chapter 9 and the Epilogue. Canonical first clears attain those targets; repeat grinding provides optional over-leveling, currency, recovery from skipped party participation, or a lower-difficulty route through later encounters.
 
-The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 186.724/309.130/499.269 minutes and the complete intended route at 776.801/1,232.136/1,918.247 minutes low/reference/high. The 1× reference route is 32.136 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
+The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 186.728/309.135/499.277 minutes and the complete intended route at 776.805/1,232.141/1,918.255 minutes low/reference/high. The 1× reference route is 32.141 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
 
 ## Save contract
 

@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
-    <main class="campaign-shell">
+    <a class="skip-link" href="#mainContent">Skip to main content</a>
+    <main id="mainContent" class="campaign-shell" tabindex="-1">
       <header class="campaign-masthead">
         <div>
           <p class="eyebrow">FULL CAMPAIGN · ACTIVE BUILD</p>
@@ -40,10 +41,10 @@
             <span>Story ledger</span>
             <strong id="completionLabel">0 / 0 scenes</strong>
           </div>
-          <div id="chapterList" class="chapter-list" role="tablist" aria-label="Choose a chapter"></div>
+          <div id="chapterList" class="chapter-list" role="group" aria-label="Choose a chapter"></div>
         </aside>
 
-        <section class="scene-stage" aria-live="polite">
+        <section class="scene-stage">
           <header class="scene-heading">
             <p id="chapterKicker" class="chapter-kicker"></p>
             <h2 id="chapterTitle"></h2>
@@ -51,7 +52,7 @@
           </header>
 
           <div class="map-wrap">
-            <canvas id="mapCanvas" width="960" height="480" data-coordinate-space="zero-based-grid" data-field-state="loading" aria-label="Campaign field map; move one exact space with W, A, S, D or diagonals Q, E, Z, C."></canvas>
+            <canvas id="mapCanvas" width="960" height="480" data-coordinate-space="zero-based-grid" data-field-state="loading" aria-label="Campaign field map; move one exact space with W, A, S, D or diagonals Q, E, Z, C." aria-describedby="fieldObjective fieldProgress fieldFeedback"></canvas>
             <div class="map-overlay">
               <span id="mapName"></span>
               <span id="mapLegend"></span>
@@ -89,7 +90,7 @@
               <canvas id="sceneFocusPortrait" class="scene-focus-portrait" width="96" height="96" aria-label="Scene focus portrait"></canvas>
               <div>
                 <p id="sceneAtmosphere" class="scene-atmosphere"></p>
-                <p id="sceneText" class="scene-text"></p>
+                <p id="sceneText" class="scene-text" role="status" aria-live="polite" aria-atomic="true"></p>
               </div>
             </div>
             <div class="dialogue-controls">
