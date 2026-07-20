@@ -18,6 +18,16 @@ import {
   getNewlyTerminalBossCombatActors,
   mergeBossTerminalPresentationActors,
 } from '../boss-combat-atlas.mjs';
+import {
+  getNewlyTerminalPartyCombatActors,
+  getPartyCombatPresentationPose,
+  mergePartyTerminalPresentationActors,
+} from '../party-combat-atlas.mjs';
+import {
+  getEnemyCombatPresentationPose,
+  getNewlyTerminalEnemyCombatActors,
+  mergeEnemyTerminalPresentationActors,
+} from '../enemy-atlas.mjs';
 
 test('Auto-Grind start is rejected during an animation and every terminal hold', () => {
   assert.equal(canStartAutoGrindPresentation({ unlocked: true }), true);
@@ -134,6 +144,40 @@ test('lethal boss resolution swaps the pre-action ghost to a defeat pose only in
   assert.equal(defeatedBoss.hp, 0, 'presentation composition does not mutate simulation output');
 });
 
+test('lethal party resolution swaps the pre-action ghost to a defeat pose only in the terminal hold', () => {
+  const livingParty = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 12, active: true, pos: { x: 1, y: 1 } };
+  const defeatedParty = { ...livingParty, hp: 0 };
+  const enemy = { instanceId: 'hound-1', templateId: 'cinder-hound', faction: 'enemy', hp: 20, active: true, pos: { x: 4, y: 1 } };
+  const terminal = getNewlyTerminalPartyCombatActors([livingParty, enemy], [defeatedParty, enemy]);
+  assert.deepEqual(terminal, [defeatedParty]);
+
+  const preActionPresentation = getBattlePresentationActors([defeatedParty, enemy], [enemy, livingParty]);
+  assert.equal(preActionPresentation.find(({ instanceId }) => instanceId === livingParty.instanceId), livingParty);
+  assert.equal(mergePartyTerminalPresentationActors(preActionPresentation, terminal, false), preActionPresentation);
+
+  const terminalPresentation = mergePartyTerminalPresentationActors(preActionPresentation, terminal, true);
+  const presentedParty = terminalPresentation.find(({ instanceId }) => instanceId === livingParty.instanceId);
+  assert.equal(presentedParty, defeatedParty);
+  assert.equal(getPartyCombatPresentationPose({ hp: presentedParty.hp, active: presentedParty.active }), 'defeat');
+});
+
+test('lethal regular-enemy resolution swaps the pre-action ghost to a defeat pose only in the terminal hold', () => {
+  const party = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 40, active: true, pos: { x: 1, y: 1 } };
+  const livingEnemy = { instanceId: 'hound-1', templateId: 'cinder-hound', faction: 'enemy', hp: 8, active: true, pos: { x: 4, y: 1 } };
+  const defeatedEnemy = { ...livingEnemy, hp: 0 };
+  const terminal = getNewlyTerminalEnemyCombatActors([party, livingEnemy], [party, defeatedEnemy]);
+  assert.deepEqual(terminal, [defeatedEnemy]);
+
+  const preActionPresentation = getBattlePresentationActors([party, defeatedEnemy], [party, livingEnemy]);
+  assert.equal(preActionPresentation.find(({ instanceId }) => instanceId === livingEnemy.instanceId), livingEnemy);
+  assert.equal(mergeEnemyTerminalPresentationActors(preActionPresentation, terminal, false), preActionPresentation);
+
+  const terminalPresentation = mergeEnemyTerminalPresentationActors(preActionPresentation, terminal, true);
+  const presentedEnemy = terminalPresentation.find(({ instanceId }) => instanceId === livingEnemy.instanceId);
+  assert.equal(presentedEnemy, defeatedEnemy);
+  assert.equal(getEnemyCombatPresentationPose({ hp: presentedEnemy.hp, active: presentedEnemy.active }), 'defeat');
+});
+
 test('nonlethal boss deactivation is appended for defeat presentation even when a ward was targeted', () => {
   const party = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 40, active: true, pos: { x: 1, y: 1 } };
   const livingBoss = { instanceId: 'mateus-1', templateId: 'mateus', faction: 'enemy', hp: 18, active: true, pos: { x: 5, y: 1 } };
@@ -241,9 +285,13 @@ test('browser controller wires locks, ghosts, fresh intent scheduling, and compl
   assert.match(source, /retainedActors: Object\.freeze\(\[attacker, target\]\)/);
   assert.match(source, /getBattlePresentationActors\(snapshot\.actors, animation\?\.retainedActors \?\? \[\]\)/);
   assert.match(source, /getNewlyTerminalBossCombatActors\(beforeSnapshot\.actors, afterSnapshot\.actors\)/);
+  assert.match(source, /getNewlyTerminalPartyCombatActors\(beforeSnapshot\.actors, afterSnapshot\.actors\)/);
+  assert.match(source, /getNewlyTerminalEnemyCombatActors\(beforeSnapshot\.actors, afterSnapshot\.actors\)/);
   assert.match(source, /endsAt: timelineEndsAt \+ defeatHoldMs/);
   assert.match(source, /now >= activeBattleAnimation\.timelineEndsAt/);
   assert.match(source, /mergeBossTerminalPresentationActors\(/);
+  assert.match(source, /mergePartyTerminalPresentationActors\(/);
+  assert.match(source, /mergeEnemyTerminalPresentationActors\(/);
   assert.match(source, /getBossCombatDrawPlacement\(frame, \{/);
   assert.match(source, /activeBattleAnimation = null;\s+clearEnemyIntentSchedule\(\);\s+render\(\);/);
   assert.match(source, /scheduleEnemyIntent\(\);/);

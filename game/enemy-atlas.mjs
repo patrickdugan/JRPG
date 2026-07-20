@@ -1,8 +1,8 @@
 /**
- * Addressing contract for the authored 8 x 4 enemy combat key-pose atlas.
+ * Addressing contract for the authored 8 x 5 enemy combat key-pose atlas.
  *
  * Rows are reusable silhouette families rather than one-off encounter IDs.
- * Columns are neutral, wind-up, attack, and stagger poses. Combat rules never
+ * Columns are neutral, wind-up, attack, stagger, and defeat poses. Combat rules never
  * depend on this mapping; an unknown enemy safely falls back to Ashen Oni.
  */
 
@@ -31,9 +31,9 @@ const ENEMY_ROW_CELLS = deepFreeze([
 
 export const ENEMY_ATLAS = deepFreeze({
   url: './assets/art/enemy-combat-suite/enemy-combat-atlas.png',
-  width: 256,
+  width: 320,
   height: 640,
-  columns: 4,
+  columns: 5,
   rows: 8,
   cellWidth: ENEMY_CELL_WIDTH,
   cellHeight: ENEMY_CELL_HEIGHT,
@@ -41,8 +41,10 @@ export const ENEMY_ATLAS = deepFreeze({
   sourceWidth: ENEMY_SOURCE_WIDTH,
   sourceHeight: ENEMY_SOURCE_HEIGHT,
   rowCells: ENEMY_ROW_CELLS,
-  poses: ['neutral', 'windup', 'attack', 'stagger'],
+  poses: ['neutral', 'windup', 'attack', 'stagger', 'defeat'],
 });
+
+export const ENEMY_DEFEAT_HOLD_MS = 420;
 
 export const ENEMY_FAMILIES = deepFreeze([
   { id: 'hound', row: 0, templateIds: ['cinder-hound', 'tithe-hound'] },
@@ -96,6 +98,47 @@ export function getEnemyAtlasFrame(templateId, pose = 'neutral') {
 
 export function hasAuthoredEnemyFamily(templateId) {
   return FAMILY_BY_TEMPLATE.has(templateId);
+}
+
+export function getEnemyCombatPresentationPose({
+  hp = 1,
+  active = true,
+  animationPose = null,
+  transientPose = null,
+  windingUp = false,
+} = {}) {
+  if (!active || hp <= 0) return 'defeat';
+  if (ENEMY_ATLAS.poses.includes(animationPose)) return animationPose;
+  if (ENEMY_ATLAS.poses.includes(transientPose)) return transientPose;
+  return windingUp ? 'windup' : 'neutral';
+}
+
+/** Capture authored enemy-family actors that newly reached a terminal state. */
+export function getNewlyTerminalEnemyCombatActors(beforeActors = [], afterActors = []) {
+  const beforeById = new Map(beforeActors.map((actor) => [actor?.instanceId, actor]));
+  return Object.freeze(afterActors.filter((actor) => {
+    if (!actor?.instanceId || actor.faction !== 'enemy' || !hasAuthoredEnemyFamily(actor.templateId)) return false;
+    const before = beforeById.get(actor.instanceId);
+    const wasPresent = before?.hp > 0 && before.active !== false;
+    const isTerminal = actor.hp <= 0 || actor.active === false;
+    return wasPresent && isTerminal;
+  }));
+}
+
+/** Replace a pre-action ghost with its post-resolution enemy during the hold. */
+export function mergeEnemyTerminalPresentationActors(
+  presentationActors = [],
+  terminalEnemyActors = [],
+  terminalWindow = false,
+) {
+  if (!terminalWindow || !terminalEnemyActors.length) return presentationActors;
+  const terminalById = new Map(terminalEnemyActors.map((actor) => [actor.instanceId, actor]));
+  const merged = presentationActors.map((actor) => terminalById.get(actor.instanceId) ?? actor);
+  const mergedIds = new Set(merged.map((actor) => actor.instanceId));
+  for (const actor of terminalEnemyActors) {
+    if (!mergedIds.has(actor.instanceId)) merged.push(actor);
+  }
+  return Object.freeze(merged);
 }
 
 export function enemyAtlasImageHasExpectedSize(image) {

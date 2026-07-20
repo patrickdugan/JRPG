@@ -11,7 +11,7 @@ const REPO_ROOT = resolve(GAME_ROOT, '..');
 const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-combat-suite');
 const FIELD_SOURCE_PATH = resolve(REPO_ROOT, 'assets', 'art', 'party-field-suite', 'party-field-suite.source.json');
 const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
-const COLUMNS = ['idle', 'move', 'guard', 'hit', 'basic-strike-windup', 'basic-strike-active', 'signature-a', 'signature-b'];
+const COLUMNS = ['idle', 'move', 'guard', 'hit', 'basic-strike-windup', 'basic-strike-active', 'signature-a', 'signature-b', 'defeat'];
 
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
@@ -82,7 +82,7 @@ function cellBytes(image, column, row) {
   return bytes;
 }
 
-test('combat source fixes the canonical six-by-eight 48x64 action contract', async () => {
+test('combat source fixes the canonical six-by-nine 48x64 action contract', async () => {
   const source = JSON.parse(await readFile(resolve(SUITE_ROOT, 'party-combat-suite.source.json'), 'utf8'));
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.equal(source.canonicalFieldSource, '../party-field-suite/party-field-suite.source.json');
@@ -113,11 +113,11 @@ test('manifest reuses every canonical field palette and silhouette exactly', asy
   assert.deepEqual(manifest.rowOrder, ROWS);
   assert.deepEqual(manifest.columnOrder, COLUMNS);
   assert.deepEqual(manifest.geometry, {
-    columns: 8,
+    columns: 9,
     rows: 6,
     cellWidth: 48,
     cellHeight: 64,
-    sheetWidth: 384,
+    sheetWidth: 432,
     sheetHeight: 384,
     pivot: [24, 58],
     footPoint: [24, 58],
@@ -134,13 +134,13 @@ test('manifest reuses every canonical field palette and silhouette exactly', asy
   assert.equal(fieldRecord.sha256, hash(Buffer.from(fieldText)));
 });
 
-test('all 48 manifested frames have stable pivots, exact hit anchors, events, and distinct pixels', async () => {
+test('all 54 manifested frames have stable pivots, exact hit anchors, events, and distinct pixels', async () => {
   const manifest = JSON.parse(await readFile(resolve(SUITE_ROOT, 'manifest.json'), 'utf8'));
-  assert.equal(manifest.frames.length, 48);
-  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 48);
+  assert.equal(manifest.frames.length, 54);
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 54);
   manifest.frames.forEach((frame, index) => {
-    const row = Math.floor(index / 8);
-    const column = index % 8;
+    const row = Math.floor(index / 9);
+    const column = index % 9;
     const action = manifest.actionSemantics[COLUMNS[column]];
     assert.equal(frame.id, `${ROWS[row]}:${COLUMNS[column]}`);
     assert.deepEqual(frame.rect, [column * 48, row * 64, 48, 64]);
@@ -162,17 +162,17 @@ test('runtime-candidate atlas is exact, binary-transparent, guttered, and byte-i
   ]);
   const manifest = JSON.parse(manifestText);
   const record = manifest.exports.find(({ role }) => role === 'transparent-runtime-candidate');
-  assert.deepEqual([record.width, record.height, record.mode], [384, 384, 'RGBA']);
+  assert.deepEqual([record.width, record.height, record.mode], [432, 384, 'RGBA']);
   assert.equal(hash(atlasBytes), record.sha256);
   assert.equal(runtimeBytes.equals(atlasBytes), true, 'browser and production party combat atlases must be byte-identical');
   const image = decodeRgbaPng(atlasBytes);
-  assert.deepEqual([image.width, image.height], [384, 384]);
+  assert.deepEqual([image.width, image.height], [432, 384]);
   const alphaValues = new Set();
   for (let index = 3; index < image.pixels.length; index += 4) alphaValues.add(image.pixels[index]);
   assert.deepEqual([...alphaValues].sort((a, b) => a - b), [0, 255]);
   const actualHashes = new Set();
   for (let row = 0; row < 6; row += 1) {
-    for (let column = 0; column < 8; column += 1) {
+    for (let column = 0; column < 9; column += 1) {
       actualHashes.add(hash(cellBytes(image, column, row)));
       const x0 = column * 48;
       const y0 = row * 64;
@@ -188,7 +188,7 @@ test('runtime-candidate atlas is exact, binary-transparent, guttered, and byte-i
       }
     }
   }
-  assert.equal(actualHashes.size, 48, 'every character/action key must have distinct RGBA pixels');
+  assert.equal(actualHashes.size, 54, 'every character/action key must have distinct RGBA pixels');
 });
 
 test('contact sheet is review-only and the builder has no generated raster input', async () => {
@@ -199,7 +199,7 @@ test('contact sheet is review-only and the builder has no generated raster input
   ]);
   const manifest = JSON.parse(manifestText);
   const record = manifest.exports.find(({ role }) => role === 'labeled-review-only-not-runtime');
-  assert.deepEqual([record.width, record.height], [1268, 1222]);
+  assert.deepEqual([record.width, record.height], [1412, 1222]);
   assert.equal(hash(contactBytes), record.sha256);
   assert.equal(manifest.runtimeIntegration, 'current-browser-battle-key-poses');
   assert.doesNotMatch(builderText, /assets[\\/](?:production|concepts)|Adam Driver|celebrity likeness/iu);

@@ -4,16 +4,20 @@ import assert from 'node:assert/strict';
 import { ENCOUNTERS } from '../content/encounters.mjs';
 import {
   ENEMY_ATLAS,
+  ENEMY_DEFEAT_HOLD_MS,
   ENEMY_FAMILIES,
   enemyAtlasImageHasExpectedSize,
   getEnemyAtlasFrame,
+  getEnemyCombatPresentationPose,
   getEnemyFamily,
+  getNewlyTerminalEnemyCombatActors,
   hasAuthoredEnemyFamily,
+  mergeEnemyTerminalPresentationActors,
 } from '../enemy-atlas.mjs';
 
-test('enemy atlas exposes exhaustive integer 8 by 4 authored source frames', () => {
+test('enemy atlas exposes exhaustive integer 8 by 5 authored source frames', () => {
   assert.equal(ENEMY_ATLAS.rows, 8);
-  assert.equal(ENEMY_ATLAS.columns, 4);
+  assert.equal(ENEMY_ATLAS.columns, 5);
   assert.equal(ENEMY_ATLAS.width, ENEMY_ATLAS.cellWidth * ENEMY_ATLAS.columns);
   assert.deepEqual(ENEMY_FAMILIES.map(({ row }) => row), [0, 1, 2, 3, 4, 5, 6, 7]);
   assert.equal(ENEMY_ATLAS.rowCells.length, ENEMY_ATLAS.rows);
@@ -45,14 +49,35 @@ test('enemy atlas exposes exhaustive integer 8 by 4 authored source frames', () 
       rectangles.add(key);
     }
   }
-  assert.equal(rectangles.size, 32);
+  assert.equal(rectangles.size, 40);
 });
 
 test('enemy atlas image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 256, naturalHeight: 640 }), true);
-  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 255, naturalHeight: 640 }), false);
-  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 256, naturalHeight: 639 }), false);
+  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 320, naturalHeight: 640 }), true);
+  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 319, naturalHeight: 640 }), false);
+  assert.equal(enemyAtlasImageHasExpectedSize({ naturalWidth: 320, naturalHeight: 639 }), false);
   assert.equal(enemyAtlasImageHasExpectedSize(null), false);
+});
+
+test('enemy presentation selects authored defeat first and holds newly terminal regular actors', () => {
+  assert.equal(getEnemyCombatPresentationPose({}), 'neutral');
+  assert.equal(getEnemyCombatPresentationPose({ windingUp: true }), 'windup');
+  assert.equal(getEnemyCombatPresentationPose({ transientPose: 'stagger' }), 'stagger');
+  assert.equal(getEnemyCombatPresentationPose({ animationPose: 'attack', transientPose: 'stagger' }), 'attack');
+  assert.equal(getEnemyCombatPresentationPose({ hp: 0, animationPose: 'attack' }), 'defeat');
+  assert.equal(getEnemyCombatPresentationPose({ active: false, transientPose: 'stagger' }), 'defeat');
+
+  const living = { instanceId: 'hound-1', templateId: 'cinder-hound', faction: 'enemy', hp: 7, active: true };
+  const defeated = { ...living, hp: 0 };
+  const party = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 20, active: true };
+  const terminals = getNewlyTerminalEnemyCombatActors([living, party], [defeated, party]);
+  assert.equal(ENEMY_DEFEAT_HOLD_MS, 420);
+  assert.deepEqual(terminals, [defeated]);
+  assert.equal(Object.isFrozen(terminals), true);
+  assert.equal(mergeEnemyTerminalPresentationActors([living, party], terminals, false)[0], living);
+  const held = mergeEnemyTerminalPresentationActors([living, party], terminals, true);
+  assert.equal(held[0], defeated);
+  assert.equal(Object.isFrozen(held), true);
 });
 
 test('every enemy family template keeps a stable identity and pose mapping at one source scale', () => {

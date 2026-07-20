@@ -41,7 +41,7 @@ test('enemy combat production suite rebuild is byte-identical', () => {
 
 test('enemy combat suite publishes exact transparent atlas geometry and review-only sheet', () => {
   assert.deepEqual(manifest.geometry, {
-    columns: 4,
+    columns: 5,
     rows: 8,
     cellWidth: 64,
     cellHeight: 80,
@@ -62,7 +62,7 @@ test('enemy combat suite publishes exact transparent atlas geometry and review-o
   assert.deepEqual(pngIhdr(atlas), atlasExport.ihdr);
   assert.deepEqual(pngIhdr(contact), contactExport.ihdr);
   assert.deepEqual(atlasExport.ihdr, {
-    width: 256,
+    width: 320,
     height: 640,
     bitDepth: 8,
     colorType: 6,
@@ -70,27 +70,27 @@ test('enemy combat suite publishes exact transparent atlas geometry and review-o
     filter: 0,
     interlace: 0,
   });
-  assert.equal(contactExport.ihdr.width, 560);
+  assert.equal(contactExport.ihdr.width, 696);
   assert.equal(contactExport.ihdr.height, 1500);
   assert.equal(contactExport.ihdr.colorType, 2);
-  assert.equal(manifest.runtimeIntegration, 'current-browser-neutral-windup-attack-stagger');
+  assert.equal(manifest.runtimeIntegration, 'current-browser-neutral-windup-attack-stagger-defeat');
 });
 
-test('all live enemy families and templates map to four distinct anchored frames', () => {
-  assert.deepEqual(manifest.poseOrder, ['neutral', 'windup', 'attack', 'stagger']);
+test('all live enemy families and templates map to five distinct anchored frames', () => {
+  assert.deepEqual(manifest.poseOrder, ['neutral', 'windup', 'attack', 'stagger', 'defeat']);
   assert.deepEqual(
     manifest.familyMappings.map(({ id, row, templateIds }) => ({ id, row, templateIds })),
     ENEMY_FAMILIES.map(({ id, row, templateIds }) => ({ id, row, templateIds })),
   );
-  assert.equal(manifest.frames.length, 32);
+  assert.equal(manifest.frames.length, 40);
   const rects = new Set();
   for (const family of ENEMY_FAMILIES) {
     const frames = manifest.frames.filter(({ familyId }) => familyId === family.id);
     assert.deepEqual(frames.map(({ pose }) => pose), manifest.poseOrder);
-    assert.equal(new Set(frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 4);
+    assert.equal(new Set(frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 5);
     assert.equal(new Set(frames.map(({ rgbaSha256, alphaBounds }) => (
       `${rgbaSha256}:${JSON.stringify(alphaBounds)}`
-    ))).size, 4);
+    ))).size, 5);
     for (const [column, frame] of frames.entries()) {
       assert.deepEqual(frame.rect, {
         x: column * 64,
@@ -113,7 +113,7 @@ test('all live enemy families and templates map to four distinct anchored frames
         : source.families.find(({ id }) => id === family.id).paletteId);
     }
   }
-  assert.equal(rects.size, 32);
+  assert.equal(rects.size, 40);
 });
 
 test('source and production labels avoid real emblem and devotional design terms', () => {

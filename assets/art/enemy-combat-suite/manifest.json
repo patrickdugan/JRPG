@@ -1,12 +1,12 @@
 {
   "assetId": "enemy-combat-suite",
   "status": "editable-production-key-pose-suite",
-  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger",
+  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat",
   "canonicalSource": "enemy-combat-suite.source.json",
   "builder": "build_enemy_combat_suite.py",
   "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",
   "geometry": {
-    "columns": 4,
+    "columns": 5,
     "rows": 8,
     "cellWidth": 64,
     "cellHeight": 80,
@@ -17,7 +17,8 @@
     "neutral",
     "windup",
     "attack",
-    "stagger"
+    "stagger",
+    "defeat"
   ],
   "familyOrder": [
     "hound",
@@ -192,12 +193,12 @@
     {
       "path": "enemy-combat-suite.source.json",
       "format": "json",
-      "sha256": "fcea156225e97a8fe72b0753d3a3daab8a9e337f70084e8371ed1401bc099df2"
+      "sha256": "8916f09d12057f61374575411ea3a7454c80152b0d506b53327cc60f245b4b80"
     },
     {
       "path": "build_enemy_combat_suite.py",
       "format": "python",
-      "sha256": "7ffbf27e5b442061d03506eaf2a0ef9f4329a9488f51de9b1ce4b51363ef14ba"
+      "sha256": "3ac6561ea5a1abcbd2748545f59c6ead193eb93844f4f8d0560e5c2ae9727a32"
     }
   ],
   "exports": [
@@ -205,9 +206,9 @@
       "path": "enemy-combat-atlas.png",
       "role": "transparent-runtime-atlas",
       "runtime": true,
-      "sha256": "9c0b06b298b3176cc3d73bec2466f87259b914ed0ecf08a4ac0ed8ff2d0d92bc",
+      "sha256": "c1fe889a553397c3f2cd116e3280f278adae5ab831271f41127e77acec384872",
       "ihdr": {
-        "width": 256,
+        "width": 320,
         "height": 640,
         "bitDepth": 8,
         "colorType": 6,
@@ -220,9 +221,9 @@
       "path": "enemy-combat-contact-sheet.png",
       "role": "labeled-review-contact-sheet",
       "runtime": false,
-      "sha256": "37acb036c73c57377a0d2d6f9913c7668fd9a30961702198dbb5c7752b97a441",
+      "sha256": "b8387d4f21eb3f5f253ed78dea3378bd6c68ca6db25bae9160248edc62c43c7c",
       "ihdr": {
-        "width": 560,
+        "width": 696,
         "height": 1500,
         "bitDepth": 8,
         "colorType": 2,
@@ -410,6 +411,50 @@
       "rgbaSha256": "2bb7b64b951e811f7ac6e04258e16b21e9e19283f29069dac9fec6af38a76b8e"
     },
     {
+      "id": "hound:defeat",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 256,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        67
+      ],
+      "ground": [
+        30,
+        73
+      ],
+      "contact": [
+        49,
+        63
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 50,
+        "width": 52,
+        "height": 25
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 50,
+        "right": 5,
+        "bottom": 5
+      },
+      "opaquePixelCount": 940,
+      "rgbaSha256": "e6b52f5619eb14cfe76c3cd3167217adff4d6c78cbf5f3c7124d2aad0b19594d"
+    },
+    {
       "id": "wisp:neutral",
       "familyId": "wisp",
       "templateIds": [
@@ -592,6 +637,52 @@
       },
       "opaquePixelCount": 1018,
       "rgbaSha256": "85c07cc7db7417926af30632ee470eee689668f1ac13bdbdc7bad1e864ca936b"
+    },
+    {
+      "id": "wisp:defeat",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 256,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        59
+      ],
+      "ground": [
+        30,
+        72
+      ],
+      "contact": [
+        43,
+        56
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 31,
+        "width": 51,
+        "height": 42
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 31,
+        "right": 5,
+        "bottom": 7
+      },
+      "opaquePixelCount": 856,
+      "rgbaSha256": "b9617ac3dc9e9878e2901bd2abc377d8dddf7d794916092b1a3fc86e1d77723a"
     },
     {
       "id": "ashen-oni:neutral",
@@ -798,6 +889,57 @@
       "rgbaSha256": "f30050e418a9b1d0cfb549356e0fbe70a93a27a0fb999f426b9d6ffc0073a533"
     },
     {
+      "id": "ashen-oni:defeat",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 256,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        65
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        51,
+        67
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 39,
+        "width": 52,
+        "height": 36
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 39,
+        "right": 5,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1164,
+      "rgbaSha256": "393a1ffb87165baea4b0a29e04f65e23eb20848724c03ea1aaa9c893c25ec110"
+    },
+    {
       "id": "court-retainer:neutral",
       "familyId": "court-retainer",
       "templateIds": [
@@ -986,6 +1128,53 @@
       "rgbaSha256": "bad222a278fc6772e270564ea2198961febad296166ce0d08ffccda1381fa548"
     },
     {
+      "id": "court-retainer:defeat",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 256,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        64
+      ],
+      "ground": [
+        29,
+        72
+      ],
+      "contact": [
+        50,
+        67
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 36,
+        "width": 52,
+        "height": 39
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 36,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1150,
+      "rgbaSha256": "09dc8a213812083152d9567e50547c6eddaacb973e2f5901e11c68177ec4ef7a"
+    },
+    {
       "id": "widow:neutral",
       "familyId": "widow",
       "templateIds": [
@@ -1156,6 +1345,49 @@
       },
       "opaquePixelCount": 1459,
       "rgbaSha256": "7c82ccef27d85a53c6cd73000b4bf3b43a2b7cf7aaba96fcd10b29c3998c31df"
+    },
+    {
+      "id": "widow:defeat",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 256,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        30,
+        60
+      ],
+      "ground": [
+        30,
+        72
+      ],
+      "contact": [
+        48,
+        59
+      ],
+      "alphaBounds": {
+        "x": 8,
+        "y": 39,
+        "width": 50,
+        "height": 36
+      },
+      "transparentGutter": {
+        "left": 8,
+        "top": 39,
+        "right": 6,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1084,
+      "rgbaSha256": "3d89d995f1375ea7b36ed41a4a4c200b70955bbff116feca722fec917b445e4e"
     },
     {
       "id": "furnace:neutral",
@@ -1334,6 +1566,50 @@
       "rgbaSha256": "805786a3876bdedcc7de82964efcf5399c8c275b3ea63d528c8a9fc6758629ba"
     },
     {
+      "id": "furnace:defeat",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 256,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        65
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        51,
+        67
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 33,
+        "width": 54,
+        "height": 42
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 33,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1526,
+      "rgbaSha256": "574503485a108905d20d864eddbe137e31d9decfb7a2a346a65f66e94d84176b"
+    },
+    {
       "id": "bell-warden:neutral",
       "familyId": "bell-warden",
       "templateIds": [
@@ -1510,6 +1786,50 @@
       "rgbaSha256": "1775ebfc57971eec50a513dd90f7ddea2516e1fed094f0b20752c33eebfba701"
     },
     {
+      "id": "bell-warden:defeat",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 256,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        65
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        50,
+        67
+      ],
+      "alphaBounds": {
+        "x": 7,
+        "y": 34,
+        "width": 53,
+        "height": 41
+      },
+      "transparentGutter": {
+        "left": 7,
+        "top": 34,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1386,
+      "rgbaSha256": "1dae986f9acdb6c2ba5c7ed84215567f5729ebe67684c619c5a0f2917705ce0e"
+    },
+    {
       "id": "black-court:neutral",
       "familyId": "black-court",
       "templateIds": [
@@ -1684,6 +2004,50 @@
       },
       "opaquePixelCount": 1562,
       "rgbaSha256": "267f533dae675fcde1f4f1192e80b3a8f4fb5fb7748ef5e2207018f503ee4a49"
+    },
+    {
+      "id": "black-court:defeat",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "defeat",
+      "tag": "defeat-release",
+      "event": "complete",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 256,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        29,
+        64
+      ],
+      "ground": [
+        29,
+        73
+      ],
+      "contact": [
+        51,
+        67
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 34,
+        "width": 54,
+        "height": 41
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 34,
+        "right": 4,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1448,
+      "rgbaSha256": "ba0af71b2eb8c7fa0a095c550e31e951ec1de36ebe2d03302e4ad120117b05fc"
     }
   ]
 }

@@ -4,15 +4,18 @@ import assert from 'node:assert/strict';
 import { PARTY_PROFILES, PARTY_SKILLS } from '../campaign-combat.mjs';
 import {
   PARTY_COMBAT_ATLAS,
+  PARTY_DEFEAT_HOLD_MS,
   PARTY_COMBAT_MEMBERS,
   PARTY_COMBAT_POSES,
   PARTY_COMBAT_SKILL_POSES,
   getPartyCombatFrame,
   getPartyCombatPresentationPose,
+  getNewlyTerminalPartyCombatActors,
+  mergePartyTerminalPresentationActors,
   partyCombatImageHasExpectedSize,
 } from '../party-combat-atlas.mjs';
 
-test('party combat atlas exposes all 48 exact authored cells', () => {
+test('party combat atlas exposes all 54 exact authored cells', () => {
   const rectangles = new Set();
   for (const [row, memberId] of PARTY_COMBAT_MEMBERS.entries()) {
     for (const [column, pose] of PARTY_COMBAT_POSES.entries()) {
@@ -33,7 +36,7 @@ test('party combat atlas exposes all 48 exact authored cells', () => {
       rectangles.add(`${frame.x},${frame.y},${frame.width},${frame.height}`);
     }
   }
-  assert.equal(rectangles.size, 48);
+  assert.equal(rectangles.size, 54);
   assert.equal(PARTY_COMBAT_ATLAS.width, PARTY_COMBAT_ATLAS.columns * PARTY_COMBAT_ATLAS.cellWidth);
   assert.equal(PARTY_COMBAT_ATLAS.height, PARTY_COMBAT_ATLAS.rows * PARTY_COMBAT_ATLAS.cellHeight);
   assert.throws(() => getPartyCombatFrame('unknown', 'idle'), /Unknown party combat member/);
@@ -99,11 +102,28 @@ test('live animation phases resolve to authored party combat keys', () => {
   assert.equal(getPartyCombatPresentationPose({ actorPose: 'attack', actionId: 'future-skill' }), 'basic-strike-active');
   assert.equal(getPartyCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'idle');
   assert.equal(getPartyCombatPresentationPose({ targetPose: 'stagger', phase: 'windup' }), 'hit');
+  assert.equal(getPartyCombatPresentationPose({ hp: 0, targetPose: 'stagger' }), 'defeat');
+  assert.equal(getPartyCombatPresentationPose({ active: false, actorPose: 'attack' }), 'defeat');
+});
+
+test('newly terminal party members replace pre-action ghosts only during their bounded hold', () => {
+  const livingRen = { instanceId: 'ren-1', templateId: 'ren', faction: 'party', hp: 12, active: true };
+  const defeatedRen = { ...livingRen, hp: 0 };
+  const enemy = { instanceId: 'hound-1', templateId: 'cinder-hound', faction: 'enemy', hp: 9, active: true };
+  const terminals = getNewlyTerminalPartyCombatActors([livingRen, enemy], [defeatedRen, enemy]);
+  assert.equal(PARTY_DEFEAT_HOLD_MS, 420);
+  assert.deepEqual(terminals, [defeatedRen]);
+  assert.equal(Object.isFrozen(terminals), true);
+  assert.equal(mergePartyTerminalPresentationActors([livingRen, enemy], terminals, false)[0], livingRen);
+  const held = mergePartyTerminalPresentationActors([livingRen, enemy], terminals, true);
+  assert.equal(held[0], defeatedRen);
+  assert.equal(Object.isFrozen(held), true);
+  assert.deepEqual(getNewlyTerminalPartyCombatActors([defeatedRen], [defeatedRen]), []);
 });
 
 test('party combat image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 384, naturalHeight: 384 }), true);
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 383, naturalHeight: 384 }), false);
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 384, naturalHeight: 383 }), false);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 432, naturalHeight: 384 }), true);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 431, naturalHeight: 384 }), false);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 432, naturalHeight: 383 }), false);
   assert.equal(partyCombatImageHasExpectedSize(null), false);
 });

@@ -4,11 +4,11 @@
   "runtimeIntegration": "current-browser-battle-key-poses",
   "authorship": "original-code-native-pixel-primitives",
   "geometry": {
-    "columns": 8,
+    "columns": 9,
     "rows": 6,
     "cellWidth": 48,
     "cellHeight": 64,
-    "sheetWidth": 384,
+    "sheetWidth": 432,
     "sheetHeight": 384,
     "pivot": [
       24,
@@ -36,7 +36,8 @@
     "basic-strike-windup",
     "basic-strike-active",
     "signature-a",
-    "signature-b"
+    "signature-b",
+    "defeat"
   ],
   "paletteAndSilhouetteReuse": {
     "ren": {
@@ -178,6 +179,15 @@
         27
       ],
       "rule": "character-specific secondary signature key"
+    },
+    "defeat": {
+      "phase": "terminal-hold",
+      "event": "none",
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell"
     }
   },
   "frames": [
@@ -467,6 +477,40 @@
       "rgbaSha256": "4d1e48de06a7a1eacee37355e1dac613dc0300f28c2a8db714ec1a8242c7660b"
     },
     {
+      "id": "ren:defeat",
+      "characterId": "ren",
+      "action": "defeat",
+      "rect": [
+        384,
+        0,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        35,
+        44,
+        60
+      ],
+      "rgbaSha256": "bec3bf5932603a6c957fab9da288cd0898cdaf25fb8c2d042da208f1f2e4935b"
+    },
+    {
       "id": "aya:idle",
       "characterId": "aya",
       "action": "idle",
@@ -753,6 +797,40 @@
       "rgbaSha256": "7a3eccc5786a710dade971c45c1e80aeeccae07de0e23d5d397e1ad26e5559d6"
     },
     {
+      "id": "aya:defeat",
+      "characterId": "aya",
+      "action": "defeat",
+      "rect": [
+        384,
+        64,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        38,
+        44,
+        60
+      ],
+      "rgbaSha256": "67346fc3cd4ffd3c0324df2b5bc9c510a2822ebdf06dac87fafdc647e7a836ac"
+    },
+    {
       "id": "lise:idle",
       "characterId": "lise",
       "action": "idle",
@@ -1036,6 +1114,40 @@
         59
       ],
       "rgbaSha256": "f7388bfe51869f2f9de7a5b6cf8f779833fc43433a73fe6e320081f3b0b2de9b"
+    },
+    {
+      "id": "lise:defeat",
+      "characterId": "lise",
+      "action": "defeat",
+      "rect": [
+        384,
+        128,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        38,
+        44,
+        60
+      ],
+      "rgbaSha256": "1a8269278e8aff39cce9cd75594b725124bf69fe148cbdc2784a3a8292a14dc3"
     },
     {
       "id": "mateus:idle",
@@ -1324,6 +1436,40 @@
       "rgbaSha256": "10a142ee9e97d15fc9a8994b8f84b9330f910dfb69e01e105726c0cb2e237766"
     },
     {
+      "id": "mateus:defeat",
+      "characterId": "mateus",
+      "action": "defeat",
+      "rect": [
+        384,
+        192,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        39,
+        44,
+        60
+      ],
+      "rgbaSha256": "6ff5b60f829ac9fffe5d9e8d8ab50b4b151b4f4355b538bb93c90f2397d49c0c"
+    },
+    {
       "id": "genta:idle",
       "characterId": "genta",
       "action": "idle",
@@ -1606,6 +1752,40 @@
         59
       ],
       "rgbaSha256": "e3a43dfe60e83535c9fd8e9e095f70c942ef8c0b76c56f4541516b00e4cc8b54"
+    },
+    {
+      "id": "genta:defeat",
+      "characterId": "genta",
+      "action": "defeat",
+      "rect": [
+        384,
+        256,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        34,
+        44,
+        60
+      ],
+      "rgbaSha256": "98b049d727e1f4eeb07fc3afc1b8d113fd31ebff7920599eb52ca1b7a57ec559"
     },
     {
       "id": "kiku:idle",
@@ -1892,13 +2072,47 @@
         59
       ],
       "rgbaSha256": "a0f39f38bff14c0f659280f6e8120c080777267f4643df11fda37f05561ddc1e"
+    },
+    {
+      "id": "kiku:defeat",
+      "characterId": "kiku",
+      "action": "defeat",
+      "rect": [
+        384,
+        320,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        39,
+        44,
+        60
+      ],
+      "rgbaSha256": "49307751e4b8d8946dcbfb870d09f605497198836c49fac73a64201cd3529c96"
     }
   ],
   "sources": [
     {
       "path": "party-combat-suite.source.json",
       "role": "editable-combat-contract",
-      "sha256": "e86a368e301d473e5b0b73c7b32e54405fe63fe77a0c9ade646758e450b974cd"
+      "sha256": "7a2088be170477e7449cb66e5d61543e402e258bdafa08e7d0541c88ab0d4300"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
@@ -1908,30 +2122,30 @@
     {
       "path": "build_party_combat_suite.py",
       "role": "deterministic-builder",
-      "sha256": "ff2757caad74e0391effda0998abe9776475134ae091739f9b2bf88e71736c7d"
+      "sha256": "1953b4fb2df17277f5791ea0c6c009f0a4de397ec9c42a3f6f2745e14fc9393c"
     }
   ],
   "exports": [
     {
       "path": "party-combat-actions.png",
       "role": "transparent-runtime-candidate",
-      "width": 384,
+      "width": 432,
       "height": 384,
       "mode": "RGBA",
-      "sha256": "8decef09a94f3b7da71eb6c67bcf7c04e254a48bb6ede24e0434e10bd0943196"
+      "sha256": "3f16d1ce7922facc2b8a63f40a4d3d712dbc8d17a8f4523513eee5dcd578185a"
     },
     {
       "path": "party-combat-actions-contact-sheet.png",
       "role": "labeled-review-only-not-runtime",
-      "width": 1268,
+      "width": 1412,
       "height": 1222,
       "mode": "RGBA",
-      "sha256": "300ecfe18338a7cebe539b1475945a5a60eab4cdb07aaa225c933c6c8a7f96d4"
+      "sha256": "aedeb8c7d4f98f2fd6d31926c3bc2016141d7fa5850a12a6722b6530a586b212"
     }
   ],
   "validation": {
-    "frameCount": 48,
-    "distinctRgbaFrameHashes": 48,
+    "frameCount": 54,
+    "distinctRgbaFrameHashes": 54,
     "binaryTransparency": true,
     "minimumObservedGutter": 4,
     "deterministicCommand": "python build_party_combat_suite.py --check"

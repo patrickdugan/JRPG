@@ -22,16 +22,56 @@ export const BATTLE_VFX_ATLAS = Object.freeze({
   anchorY: 32,
 });
 
+export const BATTLE_VFX_ANCHORS = Object.freeze({
+  source: 'source',
+  target: 'target',
+  emission: 'emission',
+});
+
 function frameColumn(phase, progress = 0) {
   const amount = Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
   if (phase === 'windup') return amount < 0.5 ? 0 : 1;
   if (phase === 'movement') return 1;
-  if (phase === 'projectile-or-trail') return amount < 0.34 ? 1 : amount < 0.8 ? 2 : 3;
+  if (['projectile', 'trail', 'projectile-or-trail'].includes(phase)) {
+    return amount < 0.34 ? 1 : amount < 0.8 ? 2 : 3;
+  }
   if (phase === 'impact') return amount < 0.6 ? 2 : 3;
   if (phase === 'stagger') return amount < 0.65 ? 3 : 4;
   if (phase === 'status-glyph') return 4;
   if (phase === 'recovery') return amount < 0.5 ? 4 : 5;
   return null;
+}
+
+function freezeAnchor(channel, anchor) {
+  return Object.freeze({ channel, anchor });
+}
+
+/**
+ * Resolve authored overlay placement without depending on canvas or battle state.
+ * A status phase may intentionally produce two overlays when the action applies
+ * both a target status and a self status.
+ */
+export function resolveBattleVfxAnchors({
+  phase,
+  statusGlyph = null,
+  selfStatusGlyph = null,
+} = {}) {
+  if (phase === 'status-glyph') {
+    const anchors = [];
+    if (statusGlyph) anchors.push(freezeAnchor('status', BATTLE_VFX_ANCHORS.target));
+    if (selfStatusGlyph) anchors.push(freezeAnchor('self-status', BATTLE_VFX_ANCHORS.source));
+    return Object.freeze(anchors);
+  }
+  if (['projectile', 'trail', 'projectile-or-trail'].includes(phase)) {
+    return Object.freeze([freezeAnchor('phase', BATTLE_VFX_ANCHORS.emission)]);
+  }
+  if (['impact', 'stagger'].includes(phase)) {
+    return Object.freeze([freezeAnchor('phase', BATTLE_VFX_ANCHORS.target)]);
+  }
+  if (['windup', 'movement', 'recovery'].includes(phase)) {
+    return Object.freeze([freezeAnchor('phase', BATTLE_VFX_ANCHORS.source)]);
+  }
+  return Object.freeze([]);
 }
 
 export function getBattleVfxFrame({ delivery, essence, phase, phaseProgress } = {}) {

@@ -20,7 +20,8 @@
       "basic-strike-windup",
       "basic-strike-active",
       "signature-a",
-      "signature-b"
+      "signature-b",
+      "defeat"
     ]
   },
   "actions": {
@@ -31,7 +32,8 @@
     "basic-strike-windup": {"phase": "windup", "event": "none", "hitAnchor": [14, 31], "rule": "commitment must read before impact"},
     "basic-strike-active": {"phase": "active", "event": "damage", "hitAnchor": [42, 31], "rule": "single authored damage-event key"},
     "signature-a": {"phase": "active-key", "event": "skill-a", "hitAnchor": [37, 28], "rule": "character-specific primary signature key"},
-    "signature-b": {"phase": "active-key", "event": "skill-b", "hitAnchor": [35, 27], "rule": "character-specific secondary signature key"}
+    "signature-b": {"phase": "active-key", "event": "skill-b", "hitAnchor": [35, 27], "rule": "character-specific secondary signature key"},
+    "defeat": {"phase": "terminal-hold", "event": "none", "hitAnchor": [24, 50], "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell"}
   },
   "characters": [
     {"id": "ren", "basicDelivery": "cut", "signatureA": {"id": "courier-cut", "name": "Courier's Cut", "delivery": "cut"}, "signatureB": {"id": "cinder-route", "name": "Cinder Route", "delivery": "arcane", "essence": "ember"}},

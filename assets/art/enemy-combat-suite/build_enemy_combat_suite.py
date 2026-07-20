@@ -20,7 +20,7 @@ SOURCE_PATH = ROOT / "enemy-combat-suite.source.json"
 ATLAS_PATH = ROOT / "enemy-combat-atlas.png"
 CONTACT_PATH = ROOT / "enemy-combat-contact-sheet.png"
 MANIFEST_PATH = ROOT / "manifest.json"
-POSES = ("neutral", "windup", "attack", "stagger")
+POSES = ("neutral", "windup", "attack", "stagger", "defeat")
 FAMILIES = (
     "hound", "wisp", "ashen-oni", "court-retainer",
     "widow", "furnace", "bell-warden", "black-court",
@@ -38,7 +38,7 @@ def load_source() -> dict:
     source = json.loads(SOURCE_PATH.read_text(encoding="utf-8"))
     geometry = source.get("geometry", {})
     expected_geometry = {
-        "columns": 4,
+        "columns": 5,
         "rows": 8,
         "cellWidth": 64,
         "cellHeight": 80,
@@ -48,7 +48,7 @@ def load_source() -> dict:
     if geometry != expected_geometry:
         raise ValueError(f"Geometry contract changed: {geometry!r}")
     if tuple(pose.get("id") for pose in source.get("poses", [])) != POSES:
-        raise ValueError("Pose order must be neutral, windup, attack, stagger")
+        raise ValueError("Pose order must be neutral, windup, attack, stagger, defeat")
     families = source.get("families", [])
     if tuple(family.get("id") for family in families) != FAMILIES:
         raise ValueError("Family order differs from the eight live runtime families")
@@ -89,7 +89,10 @@ class PixelSurface:
     """Native-resolution, integer-only RGBA drawing surface."""
 
     def __init__(self, palette: dict[str, str]):
-        self.image = Image.new("RGBA", (64, 80), (0, 0, 0, 0))
+        geometry = SOURCE["geometry"]
+        self.image = Image.new(
+            "RGBA", (geometry["cellWidth"], geometry["cellHeight"]), (0, 0, 0, 0)
+        )
         self.draw = ImageDraw.Draw(self.image)
         self.colors = {name: rgba(value) for name, value in palette.items()}
 
@@ -668,6 +671,157 @@ def detail_black_court(s: PixelSurface, pose: str) -> None:
         s.line([(47, 37), (53, 39)], "body", 2)
 
 
+def defeat_hound(s: PixelSurface) -> None:
+    """Contained collapse: latch dark, paws folded, split tail released."""
+    s.shadow(9, 56)
+    s.polygon([(7, 59), (15, 54), (26, 55), (37, 58), (47, 57), (56, 61),
+               (53, 68), (37, 70), (20, 68), (11, 65)], "shade")
+    s.polygon([(14, 55), (27, 50), (43, 54), (48, 60), (42, 66), (24, 66),
+               (12, 62)], "body")
+    s.polygon([(24, 52), (39, 54), (44, 58), (31, 59), (19, 57)], "light")
+    s.polygon([(43, 56), (50, 52), (58, 56), (58, 63), (52, 67), (44, 64)], "body")
+    s.rect((47, 60, 52, 64), "metal")
+    s.rect((49, 61, 50, 62), "shade")
+    s.polygon([(13, 58), (7, 54), (9, 62), (16, 65)], "accent")
+    s.polygon([(10, 64), (18, 66), (16, 70), (8, 68)], "body")
+    s.rect((22, 66, 30, 70), "shade")
+    s.rect((39, 65, 47, 69), "shade")
+
+
+def defeat_wisp(s: PixelSurface) -> None:
+    """Non-gory dispersal into hard vapor facets around a dimmed core."""
+    s.polygon([(23, 43), (30, 37), (39, 42), (41, 52), (34, 59), (24, 56),
+               (19, 49)], "shade")
+    s.polygon([(26, 43), (31, 40), (37, 44), (37, 51), (32, 55), (25, 52)], "body")
+    s.rect((29, 45, 34, 51), "metal")
+    s.rect((31, 47, 33, 50), "shade")
+    s.polygon([(9, 35), (17, 31), (18, 40), (12, 44)], "light")
+    s.polygon([(43, 31), (54, 35), (49, 43), (42, 40)], "body")
+    s.polygon([(48, 51), (58, 55), (52, 62), (44, 58)], "light")
+    s.polygon([(33, 62), (39, 70), (29, 72), (25, 65)], "body")
+    s.polygon([(8, 57), (17, 53), (20, 62), (13, 67)], "metal")
+    s.rect((20, 33, 23, 36), "accent")
+    s.rect((40, 65, 43, 68), "accent")
+    s.rect((54, 45, 57, 48), "metal")
+
+
+def defeat_bailiff(s: PixelSurface) -> None:
+    """Heavy kneel with ledger plates closed and square maul grounded."""
+    s.shadow(7, 57)
+    s.polygon([(17, 45), (29, 39), (41, 43), (47, 54), (43, 68), (24, 71),
+               (14, 62)], "shade")
+    s.polygon([(21, 43), (33, 41), (43, 48), (43, 59), (36, 67), (22, 65),
+               (17, 55)], "body")
+    s.polygon([(25, 45), (35, 44), (41, 50), (31, 52), (21, 49)], "light")
+    s.rect((22, 53, 39, 57), "metal")
+    s.rect((24, 54, 28, 56), "accent")
+    s.rect((31, 54, 34, 56), "shade")
+    s.rect((36, 54, 38, 56), "shade")
+    s.polygon([(18, 60), (28, 62), (25, 71), (13, 70)], "body")
+    s.polygon([(36, 61), (47, 62), (51, 70), (38, 71)], "body")
+    s.line([(43, 51), (52, 66)], "metal", 4)
+    s.rect((48, 64, 58, 72), "shade")
+    s.rect((50, 65, 57, 69), "metal")
+    s.rect((52, 66, 56, 67), "light")
+
+
+def defeat_retainer(s: PixelSurface) -> None:
+    """Disarmed kneel: visor lowered and docket blade set aside."""
+    s.shadow(8, 56)
+    s.polygon([(18, 43), (31, 38), (43, 44), (47, 57), (41, 68), (20, 69),
+               (14, 57)], "shade")
+    s.polygon([(22, 42), (33, 40), (41, 46), (43, 57), (36, 65), (23, 64),
+               (18, 54)], "body")
+    s.polygon([(25, 43), (34, 42), (39, 47), (31, 49), (22, 47)], "light")
+    s.rect((25, 36, 38, 42), "shade")
+    s.rect((28, 38, 36, 40), "metal")
+    s.rect((31, 39, 34, 40), "accent")
+    s.polygon([(21, 60), (31, 62), (28, 71), (15, 70)], "body")
+    s.polygon([(35, 61), (44, 64), (48, 71), (35, 71)], "body")
+    s.rect((24, 52, 29, 58), "shade")
+    s.rect((25, 53, 28, 56), "metal")
+    s.line([(43, 57), (55, 70)], "metal", 3)
+    s.polygon([(53, 66), (59, 71), (54, 73), (49, 68)], "accent")
+
+
+def defeat_widow(s: PixelSurface) -> None:
+    """Fog dispersal leaves the harmless net spindle and loose ribbons."""
+    s.shadow(9, 55)
+    s.polygon([(22, 45), (31, 39), (41, 45), (43, 55), (36, 63), (24, 61),
+               (18, 53)], "shade")
+    s.polygon([(26, 44), (32, 42), (38, 47), (38, 54), (32, 59), (24, 55)], "body")
+    s.rect((29, 47, 35, 54), "metal")
+    s.line([(30, 48), (34, 53), (30, 53), (35, 48)], "light", 1)
+    s.polygon([(18, 52), (9, 57), (14, 64), (25, 59)], "light")
+    s.polygon([(40, 51), (55, 55), (50, 63), (36, 59)], "body")
+    s.polygon([(13, 65), (25, 61), (31, 70), (20, 73), (8, 70)], "body")
+    s.polygon([(33, 61), (45, 64), (57, 70), (48, 73), (35, 69)], "light")
+    s.rect((11, 50, 14, 53), "accent")
+    s.rect((51, 48, 54, 51), "metal")
+
+
+def defeat_furnace(s: PixelSurface) -> None:
+    """Cold shutdown with closed grate, buckled mantle, and parked rake."""
+    s.shadow(6, 58)
+    s.polygon([(13, 43), (27, 38), (43, 41), (51, 51), (49, 66), (39, 71),
+               (18, 70), (9, 59)], "shade")
+    s.polygon([(17, 42), (31, 40), (45, 45), (47, 57), (42, 66), (21, 66),
+               (14, 56)], "body")
+    s.polygon([(20, 43), (34, 42), (43, 47), (31, 50), (17, 47)], "light")
+    s.rect((21, 51, 42, 61), "metal")
+    s.rect((24, 53, 39, 59), "shade")
+    s.line([(27, 53), (27, 59)], "body", 2)
+    s.line([(33, 53), (33, 59)], "body", 2)
+    s.rect((19, 36, 25, 43), "shade")
+    s.rect((29, 33, 36, 41), "body")
+    s.rect((39, 36, 45, 43), "shade")
+    s.polygon([(17, 61), (27, 64), (25, 72), (12, 70)], "body")
+    s.polygon([(38, 63), (49, 64), (54, 71), (39, 72)], "body")
+    s.line([(44, 49), (56, 69)], "metal", 3)
+    s.rect((52, 67, 59, 72), "accent")
+
+
+def defeat_warden(s: PixelSurface) -> None:
+    """Released resonator yoke settles with both dampers safely open."""
+    s.shadow(7, 57)
+    s.polygon([(15, 44), (28, 39), (43, 43), (50, 54), (46, 68), (24, 71),
+               (12, 61)], "shade")
+    s.polygon([(20, 43), (33, 41), (44, 47), (46, 58), (39, 66), (22, 65),
+               (16, 54)], "body")
+    s.polygon([(23, 44), (35, 43), (42, 48), (31, 51), (19, 48)], "light")
+    s.polygon([(17, 40), (27, 34), (35, 38), (31, 45), (21, 46)], "metal")
+    s.polygon([(37, 39), (50, 42), (48, 51), (40, 49)], "metal")
+    s.rect((21, 47, 27, 54), "shade")
+    s.rect((40, 50, 47, 57), "shade")
+    s.rect((27, 52, 39, 59), "metal")
+    s.rect((30, 54, 36, 57), "accent")
+    s.polygon([(18, 60), (29, 63), (26, 72), (12, 69)], "body")
+    s.polygon([(37, 62), (48, 64), (54, 71), (39, 72)], "body")
+    s.line([(45, 55), (57, 69)], "metal", 3)
+    s.rect((53, 67, 59, 72), "light")
+
+
+def defeat_black_court(s: PixelSurface) -> None:
+    """Broken mantle folds inward while the decree blade lies released."""
+    s.shadow(6, 58)
+    s.polygon([(14, 42), (29, 36), (43, 41), (51, 54), (48, 67), (37, 71),
+               (18, 69), (9, 57)], "shade")
+    s.polygon([(19, 41), (32, 38), (44, 45), (46, 56), (39, 65), (21, 64),
+               (14, 53)], "body")
+    s.polygon([(22, 42), (34, 40), (42, 46), (31, 49), (18, 47)], "light")
+    s.polygon([(16, 50), (23, 46), (28, 52), (22, 58), (13, 55)], "accent")
+    s.polygon([(36, 49), (46, 46), (51, 53), (44, 59), (37, 56)], "accent")
+    s.rect((26, 34, 39, 40), "shade")
+    s.rect((29, 36, 36, 38), "metal")
+    s.rect((31, 37, 34, 38), "accent")
+    s.rect((25, 53, 30, 59), "shade")
+    s.rect((26, 54, 29, 57), "metal")
+    s.polygon([(18, 59), (30, 62), (27, 71), (11, 69)], "body")
+    s.polygon([(36, 61), (47, 63), (54, 70), (39, 72)], "body")
+    s.line([(43, 57), (57, 69)], "metal", 3)
+    s.polygon([(54, 65), (59, 69), (56, 73), (50, 68)], "accent")
+
+
 DRAWERS = {
     "hound": draw_hound,
     "wisp": draw_wisp,
@@ -688,6 +842,17 @@ DETAILERS = {
     "furnace": detail_furnace,
     "bell-warden": detail_warden,
     "black-court": detail_black_court,
+}
+
+DEFEAT_DRAWERS = {
+    "hound": defeat_hound,
+    "wisp": defeat_wisp,
+    "ashen-oni": defeat_bailiff,
+    "court-retainer": defeat_retainer,
+    "widow": defeat_widow,
+    "furnace": defeat_furnace,
+    "bell-warden": defeat_warden,
+    "black-court": defeat_black_court,
 }
 
 
@@ -719,6 +884,9 @@ def ihdr(data: bytes) -> dict:
 
 
 def frame_metadata(image: Image.Image, family: dict, pose: str, column: int) -> dict:
+    cell_width = SOURCE["geometry"]["cellWidth"]
+    cell_height = SOURCE["geometry"]["cellHeight"]
+    minimum_gutter = SOURCE["geometry"]["minimumTransparentGutter"]
     alpha = image.getchannel("A")
     bbox = alpha.getbbox()
     if bbox is None:
@@ -727,10 +895,10 @@ def frame_metadata(image: Image.Image, family: dict, pose: str, column: int) -> 
     gutters = {
         "left": left,
         "top": top,
-        "right": 64 - right,
-        "bottom": 80 - bottom,
+        "right": cell_width - right,
+        "bottom": cell_height - bottom,
     }
-    if min(gutters.values()) < 4:
+    if min(gutters.values()) < minimum_gutter:
         raise ValueError(f"Insufficient gutter in {family['id']}:{pose}: {gutters}")
     opaque_pixels = sum(1 for value in alpha.getdata() if value)
     if opaque_pixels < 140:
@@ -744,7 +912,12 @@ def frame_metadata(image: Image.Image, family: dict, pose: str, column: int) -> 
         "tag": next(item["tag"] for item in SOURCE["poses"] if item["id"] == pose),
         "event": next(item["event"] for item in SOURCE["poses"] if item["id"] == pose),
         "paletteId": family["paletteId"],
-        "rect": {"x": column * 64, "y": family["row"] * 80, "width": 64, "height": 80},
+        "rect": {
+            "x": column * cell_width,
+            "y": family["row"] * cell_height,
+            "width": cell_width,
+            "height": cell_height,
+        },
         "pivot": anchors["pivot"],
         "ground": anchors["ground"],
         "contact": anchors["contact"],
@@ -756,22 +929,31 @@ def frame_metadata(image: Image.Image, family: dict, pose: str, column: int) -> 
 
 
 def build_contact_sheet(atlas: Image.Image, families: list[dict]) -> Image.Image:
+    geometry = SOURCE["geometry"]
+    cell_width = geometry["cellWidth"]
+    cell_height = geometry["cellHeight"]
     frame_scale = 2
-    frame_width = 136
-    row_height = 184
-    sheet = Image.new("RGB", (560, 28 + row_height * 8), (11, 16, 32))
+    frame_width = cell_width * frame_scale + 8
+    row_height = cell_height * frame_scale + 24
+    sheet_width = 16 + frame_width * len(POSES)
+    sheet = Image.new("RGB", (sheet_width, 28 + row_height * len(families)), (11, 16, 32))
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default()
     draw.text((8, 7), "ENEMY COMBAT KEY POSES - REVIEW ONLY / NOT RUNTIME", fill=(215, 201, 154), font=font)
     for family in families:
         row_y = 28 + family["row"] * row_height
-        draw.rectangle((4, row_y, 555, row_y + row_height - 4), outline=(39, 70, 107), width=1)
+        draw.rectangle((4, row_y, sheet_width - 5, row_y + row_height - 4), outline=(39, 70, 107), width=1)
         draw.text((8, row_y + 5), f"{family['row'] + 1:02d}  {family['label']}", fill=(246, 232, 185), font=font)
         for column, pose in enumerate(POSES):
             cell_x = 8 + column * frame_width
             draw.text((cell_x, row_y + 18), pose.upper(), fill=(136, 200, 197), font=font)
-            frame = atlas.crop((column * 64, family["row"] * 80, column * 64 + 64, family["row"] * 80 + 80))
-            scaled = frame.resize((128, 160), Image.Resampling.NEAREST)
+            frame = atlas.crop((
+                column * cell_width,
+                family["row"] * cell_height,
+                (column + 1) * cell_width,
+                (family["row"] + 1) * cell_height,
+            ))
+            scaled = frame.resize((cell_width * frame_scale, cell_height * frame_scale), Image.Resampling.NEAREST)
             sheet.paste(scaled.convert("RGB"), (cell_x, row_y + 32), scaled.getchannel("A"))
     return sheet
 
@@ -790,14 +972,20 @@ def build_artifacts() -> dict[str, bytes]:
         palette = SOURCE["paletteSets"][family["paletteId"]]
         for column, pose in enumerate(POSES):
             surface = PixelSurface(palette)
-            DRAWERS[family["id"]](surface, pose)
-            DETAILERS[family["id"]](surface, pose)
+            if pose == "defeat":
+                DEFEAT_DRAWERS[family["id"]](surface)
+            else:
+                DRAWERS[family["id"]](surface, pose)
+                DETAILERS[family["id"]](surface, pose)
             mask_hash = sha256(surface.image.getchannel("A").tobytes())
             if mask_hash in seen_masks[family["id"]]:
                 raise ValueError(f"Pose silhouette repeated in {family['id']}:{pose}")
             seen_masks[family["id"]].add(mask_hash)
             frames.append(frame_metadata(surface.image, family, pose, column))
-            atlas.alpha_composite(surface.image, (column * 64, family["row"] * 80))
+            atlas.alpha_composite(surface.image, (
+                column * geometry["cellWidth"],
+                family["row"] * geometry["cellHeight"],
+            ))
 
     atlas_data = png_bytes(atlas)
     contact_data = png_bytes(build_contact_sheet(atlas, SOURCE["families"]))
@@ -806,7 +994,7 @@ def build_artifacts() -> dict[str, bytes]:
     manifest = {
         "assetId": SOURCE["assetId"],
         "status": "editable-production-key-pose-suite",
-        "runtimeIntegration": "current-browser-neutral-windup-attack-stagger",
+        "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat",
         "canonicalSource": SOURCE_PATH.name,
         "builder": Path(__file__).name,
         "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",

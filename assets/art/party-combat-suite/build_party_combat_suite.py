@@ -21,7 +21,7 @@ CONTACT_NAME = "party-combat-actions-contact-sheet.png"
 MANIFEST_NAME = "manifest.json"
 README_NAME = "README.md"
 ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
-COLUMNS = ("idle", "move", "guard", "hit", "basic-strike-windup", "basic-strike-active", "signature-a", "signature-b")
+COLUMNS = ("idle", "move", "guard", "hit", "basic-strike-windup", "basic-strike-active", "signature-a", "signature-b", "defeat")
 W, H = 48, 64
 PIVOT = (24, 58)
 GUTTER = 4
@@ -90,7 +90,7 @@ def pose_offsets(pose: str) -> tuple[int, int]:
     return {
         "idle": (0, 0), "move": (3, 1), "guard": (1, 2), "hit": (-4, 1),
         "basic-strike-windup": (-2, 1), "basic-strike-active": (4, 0),
-        "signature-a": (1, 0), "signature-b": (0, 1),
+        "signature-a": (1, 0), "signature-b": (0, 1), "defeat": (0, 0),
     }[pose]
 
 
@@ -143,6 +143,53 @@ def draw_feet(cel: Cel, x: int, primary="primary", broad=False):
         cel.rect((x + spread - 1, 48, x + spread + 1, 54), primary)
 
 
+def draw_defeat_head(cel: Cel, character_id: str, x=11, y=44):
+    """Draw an original, non-gory face resting sideways in a collapsed pose."""
+    cel.rect((x - 6, y - 5, x + 6, y + 5), "outline")
+    cel.rect((x - 5, y - 4, x + 2, y + 4), "skin")
+    cel.rect((x - 5, y - 4, x + 5, y - 1), "hair")
+    cel.rect((x - 5, y + 2, x - 2, y + 4), "skinShadow")
+    cel.px(x + 3, y + 1, "skinLight")
+    cel.px(x + 4, y + 2, "deep")
+    if character_id in ("aya", "kiku"):
+        cel.rect((x - 6, y - 2, x - 4, y + 6), "hair")
+        cel.px(x - 5, y + 7, "hair")
+    if character_id == "lise":
+        cel.rect((x - 6, y - 4, x - 3, y + 5), "hair")
+        cel.px(x - 6, y + 5, "hair")
+        cel.px(x + 3, y - 3, "light")
+    if character_id == "mateus":
+        cel.rect((x - 5, y - 5, x + 4, y - 3), "hair")
+        cel.px(x - 6, y - 2, "hair")
+    if character_id == "genta":
+        cel.rect((x - 6, y - 5, x + 5, y - 3), "hair")
+        cel.rect((x - 2, y + 2, x + 4, y + 5), "hair")
+
+
+def draw_defeat_body(cel: Cel, character_id: str, *, broad=False, long=False):
+    """Draw a readable collapsed hold inside the existing pivot and gutter contract."""
+    cel.rect((28, 50, 38, 56), "outline")
+    cel.rect((30, 51, 37, 54), "primary")
+    cel.rect((35, 55, 43, 59), "outline")
+    cel.rect((36, 55, 41, 57), "primary")
+    cel.rect((25, 54, 31, 59), "outline")
+    cel.rect((26, 54, 29, 57), "primary")
+    if broad:
+        cel.poly([(15, 43), (22, 39), (34, 43), (37, 52), (31, 57), (18, 54)], "outline")
+        cel.poly([(17, 44), (23, 41), (32, 44), (34, 51), (30, 54), (19, 52)], "primary")
+    elif long:
+        cel.poly([(15, 43), (21, 40), (32, 43), (36, 52), (31, 57), (18, 54)], "outline")
+        cel.poly([(17, 44), (22, 42), (30, 44), (33, 51), (29, 54), (19, 52)], "primary")
+    else:
+        cel.poly([(15, 43), (22, 40), (32, 44), (35, 52), (30, 56), (18, 53)], "outline")
+        cel.poly([(17, 44), (22, 42), (30, 45), (32, 51), (29, 53), (19, 51)], "primary")
+    cel.line([(19, 45), (29, 51)], "light")
+    cel.rect((17, 43, 25, 46), "secondary")
+    cel.rect((15, 50, 24, 55), "outline")
+    cel.rect((17, 50, 23, 53), "skinShadow")
+    draw_defeat_head(cel, character_id)
+
+
 def body(cel: Cel, character_id: str, broad=False, long=False):
     dx, dy = pose_offsets(cel.pose)
     x = 22 + dx
@@ -174,6 +221,12 @@ def impact_cleft(cel: Cel, x=39, y=28, fill="white"):
 
 
 def draw_ren(cel: Cel):
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "ren")
+        cel.rect((19, 47, 25, 54), "outline"); cel.rect((20, 48, 24, 52), "light")
+        cel.line([(7, 36), (41, 52)], "outline", 3); cel.line([(8, 36), (40, 51)], "brass")
+        cel.poly([(41, 52), (36, 48), (38, 54)], "metal")
+        return
     x = body(cel, "ren")
     # Satchel and spear remain silhouette anchors in every action.
     cel.rect((x - 13, 29, x - 7, 40), "outline")
@@ -197,6 +250,13 @@ def draw_ren(cel: Cel):
 
 
 def draw_aya(cel: Cel):
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "aya")
+        cel.rect((18, 47, 23, 55), "outline"); cel.rect((19, 48, 22, 53), "deep")
+        cel.poly([(31, 40), (40, 38), (42, 47), (33, 49)], "outline")
+        cel.poly([(33, 41), (39, 40), (40, 45), (34, 47)], "paper")
+        cel.line([(34, 43), (39, 43)], "accent")
+        return
     x = body(cel, "aya")
     cel.rect((x - 13, 27, x - 7, 41), "outline"); cel.rect((x - 12, 28, x - 8, 39), "deep")
     cel.px(x - 11, 29, "brass"); cel.px(x - 9, 38, "brass")
@@ -221,6 +281,13 @@ def draw_aya(cel: Cel):
 
 
 def draw_lise(cel: Cel):
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "lise", long=True)
+        cel.poly([(16, 43), (20, 39), (32, 43), (29, 56), (18, 54)], "outline")
+        cel.poly([(18, 44), (21, 42), (30, 44), (27, 53), (19, 52)], "secondary")
+        cel.line([(27, 39), (42, 53)], "outline", 3); cel.line([(28, 40), (41, 52)], "metal")
+        cel.poly([(42, 53), (37, 50), (39, 55)], "white")
+        return
     x = body(cel, "lise", long=True)
     cel.poly([(x-9,23),(x-14,30),(x-11,45),(x-5,40)], "outline")
     cel.poly([(x-9,25),(x-12,31),(x-10,41),(x-6,38)], "secondary")
@@ -243,6 +310,13 @@ def draw_lise(cel: Cel):
 
 
 def draw_mateus(cel: Cel):
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "mateus", long=True)
+        cel.rect((18, 43, 26, 46), "outline"); cel.rect((20, 43, 24, 45), "light")
+        cel.rect((25, 45, 27, 54), "secondary")
+        cel.line([(30, 48), (38, 55)], "brass")
+        cel.px(39, 56, "brass"); cel.px(37, 57, "metal")
+        return
     x = body(cel, "mateus", long=True)
     cel.rect((x-5,21,x+4,25), "outline"); cel.rect((x-3,21,x+2,24), "light")
     cel.rect((x-1,25,x,46), "secondary")
@@ -267,6 +341,13 @@ def draw_mateus(cel: Cel):
 
 
 def draw_genta(cel: Cel):
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "genta", broad=True)
+        cel.poly([(5, 43), (10, 38), (18, 41), (19, 54), (12, 58), (6, 53)], "outline")
+        cel.poly([(7, 44), (11, 40), (16, 42), (17, 52), (12, 56), (8, 52)], "metal")
+        cel.line([(27, 37), (42, 51)], "outline", 4); cel.line([(28, 38), (41, 50)], "brass", 2)
+        cel.rect((24, 34, 32, 41), "outline"); cel.rect((26, 35, 31, 39), "metalDark")
+        return
     x = body(cel, "genta", broad=True)
     shield_x = max(4, x - 17) if cel.pose != "guard" else x + 3
     cel.poly([(shield_x,27),(shield_x+7,23),(shield_x+12,28),(shield_x+10,45),(shield_x+4,50),(shield_x,43)], "outline")
@@ -288,6 +369,13 @@ def draw_genta(cel: Cel):
 
 
 def draw_kiku(cel: Cel):
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "kiku")
+        cel.rect((18, 47, 24, 55), "outline"); cel.rect((19, 48, 23, 53), "secondary")
+        cel.line([(20, 51), (23, 51)], "primary"); cel.px(21, 49, "dawn")
+        cel.rect((34, 42, 40, 49), "outline"); cel.rect((35, 43, 39, 47), "frost")
+        cel.line([(33, 50), (41, 54)], "white")
+        return
     x = body(cel, "kiku")
     cel.rect((x-14,28,x-7,43), "outline"); cel.rect((x-12,30,x-8,41), "secondary")
     cel.line([(x-12,35),(x-8,35)], "primary"); cel.px(x-10,31,"dawn"); cel.px(x-9,39,"brass")
@@ -357,7 +445,7 @@ def render_atlas(source: dict, field: dict) -> tuple[Image.Image, list[dict]]:
 FONT = {
     "A":("01110","10001","10001","11111","10001","10001","10001"),"B":("11110","10001","10001","11110","10001","10001","11110"),
     "C":("01111","10000","10000","10000","10000","10000","01111"),"D":("11110","10001","10001","10001","10001","10001","11110"),
-    "E":("11111","10000","10000","11110","10000","10000","11111"),"G":("01111","10000","10000","10111","10001","10001","01111"),
+    "E":("11111","10000","10000","11110","10000","10000","11111"),"F":("11111","10000","10000","11110","10000","10000","10000"),"G":("01111","10000","10000","10111","10001","10001","01111"),
     "H":("10001","10001","10001","11111","10001","10001","10001"),"I":("11111","00100","00100","00100","00100","00100","11111"),
     "K":("10001","10010","10100","11000","10100","10010","10001"),"L":("10000","10000","10000","10000","10000","10000","11111"),
     "M":("10001","11011","10101","10101","10001","10001","10001"),"N":("10001","11001","10101","10011","10001","10001","10001"),
@@ -381,13 +469,17 @@ def label(draw, x, y, text, fill, scale=1):
 def render_contact(atlas: Image.Image) -> Image.Image:
     scale, left, top = 3, 100, 54
     cw, ch = W * scale, H * scale
-    contact = Image.new("RGBA", (left + cw*8 + 16, top + ch*6 + 16), color("#0b1020"))
+    contact = Image.new("RGBA", (left + cw*len(COLUMNS) + 16, top + ch*len(ROWS) + 16), color("#0b1020"))
     draw = ImageDraw.Draw(contact)
-    short = ("IDLE","MOVE","GUARD","HIT","WINDUP","ACTIVE","SIG-A","SIG-B")
-    for column, text in enumerate(short): label(draw, left+column*cw+8, 18, text, color("#d7c99a"))
+    short = {
+        "idle":"IDLE", "move":"MOVE", "guard":"GUARD", "hit":"HIT",
+        "basic-strike-windup":"WINDUP", "basic-strike-active":"ACTIVE",
+        "signature-a":"SIG-A", "signature-b":"SIG-B", "defeat":"DEFEAT",
+    }
+    for column, pose in enumerate(COLUMNS): label(draw, left+column*cw+8, 18, short[pose], color("#d7c99a"))
     for row, character_id in enumerate(ROWS): label(draw, 8, top+row*ch+84, character_id, color("#d7c99a"), 2)
-    for row in range(6):
-        for column in range(8):
+    for row in range(len(ROWS)):
+        for column in range(len(COLUMNS)):
             x, y = left+column*cw, top+row*ch
             checker = Image.new("RGBA", (cw,ch), color("#16233a")); cd = ImageDraw.Draw(checker)
             for cy in range(0,ch,12):
@@ -412,7 +504,7 @@ def build_files() -> dict[str, bytes]:
     manifest = {
         "assetId": source["assetId"], "status": "editable-production-combat-key-pose-suite",
         "runtimeIntegration": "current-browser-battle-key-poses", "authorship": source["authorship"],
-        "geometry": {"columns":8,"rows":6,"cellWidth":W,"cellHeight":H,"sheetWidth":atlas.width,"sheetHeight":atlas.height,"pivot":list(PIVOT),"footPoint":list(PIVOT),"minimumTransparentGutter":GUTTER},
+        "geometry": {"columns":len(COLUMNS),"rows":len(ROWS),"cellWidth":W,"cellHeight":H,"sheetWidth":atlas.width,"sheetHeight":atlas.height,"pivot":list(PIVOT),"footPoint":list(PIVOT),"minimumTransparentGutter":GUTTER},
         "rowOrder": list(ROWS), "columnOrder": list(COLUMNS), "paletteAndSilhouetteReuse": palette_records,
         "actionSemantics": source["actions"], "frames": frames,
         "sources": [
@@ -424,11 +516,11 @@ def build_files() -> dict[str, bytes]:
             {"path":ATLAS_NAME,"role":"transparent-runtime-candidate","width":atlas.width,"height":atlas.height,"mode":atlas.mode,"sha256":digest(atlas_data)},
             {"path":CONTACT_NAME,"role":"labeled-review-only-not-runtime","width":contact.width,"height":contact.height,"mode":contact.mode,"sha256":digest(contact_data)},
         ],
-        "validation": {"frameCount":48,"distinctRgbaFrameHashes":48,"binaryTransparency":True,"minimumObservedGutter":GUTTER,"deterministicCommand":"python build_party_combat_suite.py --check"},
+        "validation": {"frameCount":len(frames),"distinctRgbaFrameHashes":len({entry["rgbaSha256"] for entry in frames}),"binaryTransparency":True,"minimumObservedGutter":GUTTER,"deterministicCommand":"python build_party_combat_suite.py --check"},
         "review": {"visualInspection":"pending","externalCulturalReview":"pending","fullInbetweens":"pending","portraits":"not-in-this-suite"},
     }
     manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode("utf-8")
-    readme=f"""# Party combat action suite\n\nOriginal, code-authored combat key poses for Ren, Aya, Lise, Mateus, Genta, and Kiku. The builder reads the canonical palette IDs, colors, and silhouette descriptions from `../party-field-suite/party-field-suite.source.json`; it does not use generated concepts or raster atlases as input. Mateus has an original fictional face and proportions.\n\n- `{SOURCE_PATH.name}` is the editable action and event contract.\n- `{ATLAS_NAME}` is the transparent 384 × 384 runtime candidate: six rows, eight columns, 48 × 64 per cell.\n- `{CONTACT_NAME}` is a labeled {contact.width} × {contact.height} checkerboard review sheet and is not for runtime use.\n- `{MANIFEST_NAME}` records exact frames, pivots `(24, 58)`, foot points, hit anchors, action semantics, palette reuse, hashes, and review state.\n\nColumns are idle, move, guard, hit, basic-strike wind-up, basic-strike active, signature A, and signature B. Battle now selects these exact keys from live presentation phases with dimension-gated loading and a procedural-token failure fallback. These are silhouette-defining production keys, not complete animation clips. In-betweens, a dedicated recovery key, retreat/defeat, alternate facings, portraits, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_combat_suite.py` to rebuild or `python build_party_combat_suite.py --check` to byte-compare every generated file.\n"""
+    readme=f"""# Party combat action suite\n\nOriginal, code-authored combat key poses for Ren, Aya, Lise, Mateus, Genta, and Kiku. The builder reads the canonical palette IDs, colors, and silhouette descriptions from `../party-field-suite/party-field-suite.source.json`; it does not use generated concepts or raster atlases as input. Mateus has an original fictional face and proportions.\n\n- `{SOURCE_PATH.name}` is the editable action and event contract.\n- `{ATLAS_NAME}` is the transparent {atlas.width} × {atlas.height} runtime candidate: {len(ROWS)} rows, {len(COLUMNS)} columns, {W} × {H} per cell.\n- `{CONTACT_NAME}` is a labeled {contact.width} × {contact.height} checkerboard review sheet and is not for runtime use.\n- `{MANIFEST_NAME}` records exact frames, pivots `(24, 58)`, foot points, hit anchors, action semantics, palette reuse, hashes, and review state.\n\nColumns are idle, move, guard, hit, basic-strike wind-up, basic-strike active, signature A, signature B, and a non-gory collapsed defeat hold. These are silhouette-defining production keys, not complete animation clips. In-betweens, a dedicated recovery key, a full defeat transition, alternate facings, portraits, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_combat_suite.py` to rebuild or `python build_party_combat_suite.py --check` to byte-compare every generated file.\n"""
     return {ATLAS_NAME:atlas_data,CONTACT_NAME:contact_data,MANIFEST_NAME:manifest_data,README_NAME:readme.encode("utf-8")}
 
 

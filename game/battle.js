@@ -63,14 +63,21 @@ import {
 } from './sprite-atlas.mjs';
 import {
   PARTY_COMBAT_ATLAS,
+  PARTY_DEFEAT_HOLD_MS,
   getPartyCombatFrame,
   getPartyCombatPresentationPose,
+  getNewlyTerminalPartyCombatActors,
+  mergePartyTerminalPresentationActors,
   partyCombatImageHasExpectedSize,
 } from './party-combat-atlas.mjs';
 import {
   ENEMY_ATLAS,
+  ENEMY_DEFEAT_HOLD_MS,
   enemyAtlasImageHasExpectedSize,
   getEnemyAtlasFrame,
+  getEnemyCombatPresentationPose,
+  getNewlyTerminalEnemyCombatActors,
+  mergeEnemyTerminalPresentationActors,
 } from './enemy-atlas.mjs';
 import {
   BOSS_COMBAT_ATLAS,
@@ -117,9 +124,11 @@ import {
   getBattleStageArt,
 } from './battle-stage-art.mjs';
 import {
+  BATTLE_VFX_ANCHORS,
   BATTLE_VFX_ATLAS,
   battleVfxImageHasExpectedSize,
   getBattleVfxFrame,
+  resolveBattleVfxAnchors,
 } from './battle-vfx-atlas.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
@@ -262,7 +271,6 @@ const battleFacingByActor = new Map();
 const battleMotionUntil = new Map();
 const battleEnemyPoseByActor = new Map();
 const battleEnemyPoseUntil = new Map();
-const VFX_TARGET_PHASES = new Set(['impact', 'stagger', 'status-glyph', 'recovery']);
 let activeBattleAnimation = null;
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
@@ -428,13 +436,23 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     : createEnemyFamilyTimeline(attacker.templateId, { ...animationOptions, skill });
   const startedAt = performance.now();
   const timelineEndsAt = startedAt + timeline.durationMs;
+  const terminalPartyActors = getNewlyTerminalPartyCombatActors(beforeSnapshot.actors, afterSnapshot.actors);
   const terminalBossActors = getNewlyTerminalBossCombatActors(beforeSnapshot.actors, afterSnapshot.actors);
-  const defeatHoldMs = terminalBossActors.length ? BOSS_DEFEAT_HOLD_MS / speed : 0;
+  const terminalBossIds = new Set(terminalBossActors.map((actor) => actor.instanceId));
+  const terminalEnemyActors = Object.freeze(getNewlyTerminalEnemyCombatActors(beforeSnapshot.actors, afterSnapshot.actors)
+    .filter((actor) => !terminalBossIds.has(actor.instanceId)));
+  const defeatHoldMs = Math.max(
+    terminalPartyActors.length ? PARTY_DEFEAT_HOLD_MS / speed : 0,
+    terminalEnemyActors.length ? ENEMY_DEFEAT_HOLD_MS / speed : 0,
+    terminalBossActors.length ? BOSS_DEFEAT_HOLD_MS / speed : 0,
+  );
   clearEnemyIntentSchedule();
   activeBattleAnimation = Object.freeze({
     attackerId,
     targetId: result.targetId,
     retainedActors: Object.freeze([attacker, target]),
+    terminalPartyActors,
+    terminalEnemyActors,
     terminalBossActors,
     timeline,
     startedAt,
@@ -449,6 +467,10 @@ function currentBattleAnimationFrame(now = performance.now()) {
   if (now >= activeBattleAnimation.endsAt) return null;
   return {
     ...activeBattleAnimation,
+    terminalDefeatWindow: (activeBattleAnimation.terminalPartyActors.length > 0
+      || activeBattleAnimation.terminalEnemyActors.length > 0
+      || activeBattleAnimation.terminalBossActors.length > 0)
+      && now >= activeBattleAnimation.timelineEndsAt,
     terminalBossWindow: activeBattleAnimation.terminalBossActors.length > 0
       && now >= activeBattleAnimation.timelineEndsAt,
     frame: sampleBattleAnimation(
@@ -636,23 +658,28 @@ function drawBattleAnimationFx(animation, geometry) {
       phaseProgress: frame.phaseProgress,
     });
     if (vfx) {
-      const anchorTile = frame.emission?.headTile
-        ?? (VFX_TARGET_PHASES.has(frame.phase) ? animation.timeline.motion.targetTile : frame.actor?.renderTile)
-        ?? animation.timeline.motion.sourceTile;
-      const at = battleCanvasPoint(anchorTile, geometry);
+      const anchors = resolveBattleVfxAnchors(frame);
       const drawSize = geometry.cell;
-      context.globalAlpha = 0.96;
-      context.drawImage(
-        battleVfxAtlasImage,
-        vfx.x,
-        vfx.y,
-        vfx.width,
-        vfx.height,
-        Math.round(at.x - drawSize / 2),
-        Math.round(at.y - drawSize / 2),
-        drawSize,
-        drawSize,
-      );
+      for (const descriptor of anchors) {
+        const anchorTile = descriptor.anchor === BATTLE_VFX_ANCHORS.emission
+          ? frame.emission?.headTile ?? frame.actor?.renderTile ?? animation.timeline.motion.sourceTile
+          : descriptor.anchor === BATTLE_VFX_ANCHORS.target
+            ? animation.timeline.motion.targetTile
+            : frame.actor?.renderTile ?? animation.timeline.motion.sourceTile;
+        const at = battleCanvasPoint(anchorTile, geometry);
+        context.globalAlpha = 0.96;
+        context.drawImage(
+          battleVfxAtlasImage,
+          vfx.x,
+          vfx.y,
+          vfx.width,
+          vfx.height,
+          Math.round(at.x - drawSize / 2),
+          Math.round(at.y - drawSize / 2),
+          drawSize,
+          drawSize,
+        );
+      }
     }
   }
   for (const glyph of [frame.statusGlyph, frame.selfStatusGlyph].filter(Boolean)) {
@@ -698,7 +725,7 @@ function drawBattle(now = performance.now()) {
   const { cell, originX, originY } = geometry;
   const visualNow = reducedMotion.matches ? 0 : now;
   const sampledAnimation = currentBattleAnimationFrame(now);
-  const animation = reducedMotion.matches && !sampledAnimation?.terminalBossWindow ? null : sampledAnimation;
+  const animation = reducedMotion.matches && !sampledAnimation?.terminalDefeatWindow ? null : sampledAnimation;
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
@@ -775,8 +802,18 @@ function drawBattle(now = performance.now()) {
   drawBossIntent(snapshot, geometry);
 
   const presentationActors = getBattlePresentationActors(snapshot.actors, animation?.retainedActors ?? []);
-  const resolvedPresentationActors = mergeBossTerminalPresentationActors(
+  const partyResolvedPresentationActors = mergePartyTerminalPresentationActors(
     presentationActors,
+    animation?.terminalPartyActors ?? [],
+    animation?.terminalDefeatWindow,
+  );
+  const enemyResolvedPresentationActors = mergeEnemyTerminalPresentationActors(
+    partyResolvedPresentationActors,
+    animation?.terminalEnemyActors ?? [],
+    animation?.terminalDefeatWindow,
+  );
+  const resolvedPresentationActors = mergeBossTerminalPresentationActors(
+    enemyResolvedPresentationActors,
     animation?.terminalBossActors ?? [],
     animation?.terminalBossWindow,
   );
@@ -808,6 +845,8 @@ function drawBattle(now = performance.now()) {
       const facing = animationFacing ?? battleFacingByActor.get(actor.instanceId) ?? fallbackFacing;
       const moving = !reducedMotion.matches && now < (battleMotionUntil.get(actor.instanceId) ?? 0);
       const pose = getPartyCombatPresentationPose({
+        hp: actor.hp,
+        active: actor.active !== false,
         actionId: animatedActor ? animation?.timeline.actionId : null,
         phase: animatedActor ? animation?.frame.phase : null,
         actorPose: animatedActor?.pose,
@@ -878,11 +917,14 @@ function drawBattle(now = performance.now()) {
       const transientPose = !reducedMotion.matches && now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)
         ? battleEnemyPoseByActor.get(actor.instanceId)
         : null;
-      const pose = animationPose
-        ?? transientPose
-        ?? (snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND && actor.instanceId === snapshot.activeActorId
-          ? 'windup'
-          : 'neutral');
+      const pose = getEnemyCombatPresentationPose({
+        hp: actor.hp,
+        active: actor.active !== false,
+        animationPose,
+        transientPose,
+        windingUp: snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND
+          && actor.instanceId === snapshot.activeActorId,
+      });
       const frame = getEnemyAtlasFrame(actor.templateId, pose);
       const scaleByFamily = {
         hound: 0.98,
