@@ -87,7 +87,10 @@
               <span id="sceneLocation" class="scene-location"></span>
             </div>
             <div class="scene-presentation">
-              <canvas id="sceneFocusPortrait" class="scene-focus-portrait" width="96" height="96" aria-label="Scene focus portrait"></canvas>
+              <div class="scene-visual" aria-hidden="true">
+                <canvas id="sceneBackdrop" class="scene-backdrop" width="320" height="180" data-art-state="loading"></canvas>
+                <canvas id="sceneFocusPortrait" class="scene-focus-portrait" width="96" height="96"></canvas>
+              </div>
               <div>
                 <p id="sceneAtmosphere" class="scene-atmosphere"></p>
                 <p id="sceneText" class="scene-text" role="status" aria-live="polite" aria-atomic="true"></p>

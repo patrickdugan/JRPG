@@ -140,6 +140,12 @@ import {
   getFieldTerrainFrame,
 } from './field-terrain-atlas.mjs';
 import {
+  SCENE_BACKDROP_ATLAS,
+  getSceneBackdropFrameForBeat,
+  getSceneBackdropIdForBeat,
+  sceneBackdropImageHasExpectedSize,
+} from './scene-backdrop-atlas.mjs';
+import {
   acknowledgeWitnessChronicleLine,
   acceptWitnessChronicle,
   advanceWitnessChronicle,
@@ -185,12 +191,12 @@ partyAtlasImage.decoding = 'async';
 partyAtlasImage.addEventListener('load', () => {
   partyAtlasState = partyAtlasImageHasExpectedSize(partyAtlasImage) ? 'ready' : 'error';
   mapCanvas.dataset.partyArtState = partyAtlasState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 partyAtlasImage.addEventListener('error', () => {
   partyAtlasState = 'error';
   mapCanvas.dataset.partyArtState = partyAtlasState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 partyAtlasImage.src = PARTY_ATLAS.url;
 const npcFieldAtlasImage = new Image();
@@ -200,12 +206,12 @@ npcFieldAtlasImage.decoding = 'async';
 npcFieldAtlasImage.addEventListener('load', () => {
   npcFieldAtlasState = npcFieldAtlasImageHasExpectedSize(npcFieldAtlasImage) ? 'ready' : 'error';
   mapCanvas.dataset.npcArtState = npcFieldAtlasState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 npcFieldAtlasImage.addEventListener('error', () => {
   npcFieldAtlasState = 'error';
   mapCanvas.dataset.npcArtState = npcFieldAtlasState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 npcFieldAtlasImage.src = NPC_FIELD_ATLAS.url;
 const fieldTerrainAtlasImage = new Image();
@@ -215,12 +221,12 @@ fieldTerrainAtlasImage.decoding = 'async';
 fieldTerrainAtlasImage.addEventListener('load', () => {
   fieldTerrainAtlasState = fieldTerrainImageHasExpectedSize(fieldTerrainAtlasImage) ? 'ready' : 'error';
   mapCanvas.dataset.terrainArtState = fieldTerrainAtlasState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 fieldTerrainAtlasImage.addEventListener('error', () => {
   fieldTerrainAtlasState = 'error';
   mapCanvas.dataset.terrainArtState = fieldTerrainAtlasState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 fieldTerrainAtlasImage.src = FIELD_TERRAIN_ATLAS.url;
 const mapName = document.querySelector('#mapName');
@@ -230,6 +236,24 @@ const sceneTitle = document.querySelector('#sceneTitle');
 const sceneLocation = document.querySelector('#sceneLocation');
 const sceneText = document.querySelector('#sceneText');
 const sceneAtmosphere = document.querySelector('#sceneAtmosphere');
+const sceneBackdrop = document.querySelector('#sceneBackdrop');
+const sceneBackdropCtx = sceneBackdrop.getContext('2d');
+sceneBackdropCtx.imageSmoothingEnabled = false;
+const sceneBackdropImage = new Image();
+let sceneBackdropState = 'loading';
+sceneBackdrop.dataset.artState = sceneBackdropState;
+sceneBackdropImage.decoding = 'async';
+sceneBackdropImage.addEventListener('load', () => {
+  sceneBackdropState = sceneBackdropImageHasExpectedSize(sceneBackdropImage) ? 'ready' : 'error';
+  sceneBackdrop.dataset.artState = sceneBackdropState;
+  renderCurrentSceneDirection();
+}, { once: true });
+sceneBackdropImage.addEventListener('error', () => {
+  sceneBackdropState = 'error';
+  sceneBackdrop.dataset.artState = sceneBackdropState;
+  renderCurrentSceneDirection();
+}, { once: true });
+sceneBackdropImage.src = SCENE_BACKDROP_ATLAS.url;
 const sceneFocusPortrait = document.querySelector('#sceneFocusPortrait');
 const scenePortraitCtx = sceneFocusPortrait.getContext('2d');
 scenePortraitCtx.imageSmoothingEnabled = false;
@@ -240,12 +264,12 @@ partyPortraitImage.decoding = 'async';
 partyPortraitImage.addEventListener('load', () => {
   partyPortraitState = partyPortraitImageHasExpectedSize(partyPortraitImage) ? 'ready' : 'error';
   sceneFocusPortrait.dataset.artState = partyPortraitState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 partyPortraitImage.addEventListener('error', () => {
   partyPortraitState = 'error';
   sceneFocusPortrait.dataset.artState = partyPortraitState;
-  renderSceneDirection(getBeat());
+  renderCurrentSceneDirection();
 }, { once: true });
 partyPortraitImage.src = PARTY_PORTRAIT_ATLAS.url;
 const sceneMusicCue = document.querySelector('#sceneMusicCue');
@@ -1551,7 +1575,46 @@ function renderDialogue(beat) {
     : 'Continue dialogue';
 }
 
-function renderSceneDirection(beat) {
+function renderCurrentSceneDirection() {
+  const beat = getBeat();
+  const level = getActiveLevelForBeat(getChapter(), beat);
+  renderSceneDirection(beat, level?.id);
+}
+
+function renderSceneBackdrop(beat, activeLevelId) {
+  const expectedBackdropId = getSceneBackdropIdForBeat(beat?.id);
+  const frame = getSceneBackdropFrameForBeat(beat?.id, activeLevelId);
+  sceneBackdrop.dataset.artState = frame ? sceneBackdropState : 'fallback';
+  sceneBackdrop.dataset.backdropId = frame?.id ?? '';
+  sceneBackdrop.dataset.expectedBackdropId = expectedBackdropId ?? '';
+  sceneBackdrop.dataset.activeLevelId = activeLevelId ?? '';
+  sceneBackdropCtx.clearRect(0, 0, sceneBackdrop.width, sceneBackdrop.height);
+  sceneBackdropCtx.fillStyle = '#0c1424';
+  sceneBackdropCtx.fillRect(0, 0, sceneBackdrop.width, sceneBackdrop.height);
+  sceneBackdropCtx.fillStyle = '#172a3b';
+  sceneBackdropCtx.fillRect(0, 82, sceneBackdrop.width, 98);
+  sceneBackdropCtx.fillStyle = '#294454';
+  sceneBackdropCtx.fillRect(0, 126, sceneBackdrop.width, 54);
+  sceneBackdropCtx.fillStyle = '#b09255';
+  sceneBackdropCtx.fillRect(22, 32, 5, 95);
+  sceneBackdropCtx.fillRect(293, 48, 5, 79);
+  if (frame && sceneBackdropState === 'ready' && sceneBackdropImageHasExpectedSize(sceneBackdropImage)) {
+    sceneBackdropCtx.drawImage(
+      sceneBackdropImage,
+      frame.x,
+      frame.y,
+      frame.width,
+      frame.height,
+      0,
+      0,
+      sceneBackdrop.width,
+      sceneBackdrop.height,
+    );
+  }
+}
+
+function renderSceneDirection(beat, activeLevelId) {
+  renderSceneBackdrop(beat, activeLevelId);
   const direction = getSceneDirection(beat.id);
   const audioPresentation = getSceneAudioPresentation(beat.id);
   pageAudio.setLoop(audioPresentation?.loop ?? 'exploration');
@@ -1565,7 +1628,6 @@ function renderSceneDirection(beat) {
   sceneGestureCue.textContent = `${direction.gestureCue.speaker}: ${direction.gestureCue.action}`;
   sceneBlockingCue.textContent = direction.blockingCue;
   sceneTransitionCue.textContent = direction.transitionCue;
-  sceneFocusPortrait.setAttribute('aria-label', `${direction.gestureCue.speaker} scene focus portrait`);
   scenePortraitCtx.clearRect(0, 0, sceneFocusPortrait.width, sceneFocusPortrait.height);
   const portraitMemberId = direction.gestureCue.speaker.toLowerCase();
   if (partyPortraitState === 'ready' && partyPortraitImageHasExpectedSize(partyPortraitImage)
@@ -2120,7 +2182,7 @@ function render() {
   sceneTitle.textContent = beat.title;
   sceneLocation.textContent = beat.location ?? chapter.maps?.[0]?.name ?? 'Campaign route';
   renderDialogue(beat);
-  renderSceneDirection(beat);
+  renderSceneDirection(beat, level?.id);
   partyList.textContent = formatParty(chapter.party);
   renderFieldLeaderControl(level);
   chapterReward.textContent = formatValue(chapter.reward, 'Narrative progress');

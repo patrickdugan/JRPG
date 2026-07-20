@@ -97,7 +97,27 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 """() => document.querySelector('#mapCanvas')?.dataset.partyArtState === 'ready'
                   && document.querySelector('#mapCanvas')?.dataset.npcArtState === 'ready'
                   && document.querySelector('#mapCanvas')?.dataset.terrainArtState === 'ready'
+                  && document.querySelector('#sceneBackdrop')?.dataset.artState === 'ready'
                   && document.querySelector('#sceneFocusPortrait')?.dataset.artState === 'ready'"""
+            )
+            campaign_scene_backdrop = page.locator("#sceneBackdrop").evaluate(
+                """canvas => ({
+                  state: canvas.dataset.artState,
+                  id: canvas.dataset.backdropId,
+                  width: canvas.width,
+                  height: canvas.height,
+                  decorative: canvas.closest('[aria-hidden="true"]') !== null,
+                })"""
+            )
+            require(
+                campaign_scene_backdrop == {
+                    "state": "ready",
+                    "id": "hoshigawa-rain-lane",
+                    "width": 320,
+                    "height": 180,
+                    "decorative": True,
+                },
+                f"Fresh Campaign scene-backdrop contract drifted: {campaign_scene_backdrop}.",
             )
             campaign_party_art = page.evaluate(
                 """() => ({
@@ -767,6 +787,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "**/assets/art/boss-combat-suite/boss-combat-atlas.png",
                 "**/assets/art/battle-vfx-suite/battle-vfx-suite-atlas.png",
                 "**/assets/art/party-portrait-suite/party-portrait-expressions.png",
+                "**/assets/art/scene-backdrop-suite/scene-backdrop-atlas.png",
             ):
                 wrong_size_context.route(
                     wrong_size_url,
@@ -790,6 +811,36 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     && state?.vfxArtState === 'error';
                 }"""
             )
+            wrong_size_campaign_response = wrong_size_page.goto(
+                f"{base}/campaign.html", wait_until="domcontentloaded"
+            )
+            require(
+                wrong_size_campaign_response is not None and wrong_size_campaign_response.status == 200,
+                "Wrong-size Campaign art page failed delivery.",
+            )
+            wrong_size_page.wait_for_function(
+                """() => document.querySelector('#sceneBackdrop')?.dataset.artState === 'error'
+                  && document.querySelector('#sceneFocusPortrait')?.dataset.artState === 'error'"""
+            )
+            wrong_size_scene_backdrop = wrong_size_page.locator("#sceneBackdrop").evaluate(
+                """canvas => {
+                  const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+                  const colors = new Set();
+                  for (let index = 0; index < pixels.length; index += 4) {
+                    colors.add(`${pixels[index]},${pixels[index + 1]},${pixels[index + 2]},${pixels[index + 3]}`);
+                  }
+                  return {
+                    state: canvas.dataset.artState,
+                    id: canvas.dataset.backdropId,
+                    colors: colors.size,
+                  };
+                }"""
+            )
+            require(
+                wrong_size_scene_backdrop["id"] == "hoshigawa-rain-lane"
+                and wrong_size_scene_backdrop["colors"] >= 4,
+                f"Wrong-size scene backdrop did not retain its exact-ID fallback: {wrong_size_scene_backdrop}.",
+            )
             wrong_size_page.goto(f"{base}/camp.html", wait_until="domcontentloaded")
             wrong_size_page.wait_for_function(
                 "() => document.querySelector('#portraitToken')?.dataset.artState === 'error'"
@@ -799,6 +850,93 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "Wrong-size Camp portrait hid the procedural fallback.",
             )
             wrong_size_context.close()
+
+            backdrop_error_context = browser.new_context(viewport={"width": 1024, "height": 768})
+            backdrop_error_context.route(
+                "**/assets/art/scene-backdrop-suite/scene-backdrop-atlas.png",
+                lambda route: route.fulfill(
+                    status=200,
+                    content_type="image/png",
+                    body=b"invalid-png-for-scene-backdrop-fallback-qa",
+                ),
+            )
+            backdrop_error_page = backdrop_error_context.new_page()
+            backdrop_error_page.set_default_timeout(20_000)
+            backdrop_error_page.set_default_navigation_timeout(45_000)
+            backdrop_error_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            backdrop_error_response = backdrop_error_page.goto(
+                f"{base}/campaign.html", wait_until="domcontentloaded"
+            )
+            require(
+                backdrop_error_response is not None and backdrop_error_response.status == 200,
+                "Scene-backdrop load-error page failed delivery.",
+            )
+            backdrop_error_page.wait_for_function(
+                "() => document.querySelector('#sceneBackdrop')?.dataset.artState === 'error'"
+            )
+            load_error_scene_backdrop = backdrop_error_page.locator("#sceneBackdrop").evaluate(
+                """canvas => {
+                  const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+                  const colors = new Set();
+                  for (let index = 0; index < pixels.length; index += 4) {
+                    colors.add(`${pixels[index]},${pixels[index + 1]},${pixels[index + 2]},${pixels[index + 3]}`);
+                  }
+                  return {
+                    state: canvas.dataset.artState,
+                    id: canvas.dataset.backdropId,
+                    expectedId: canvas.dataset.expectedBackdropId,
+                    colors: colors.size,
+                  };
+                }"""
+            )
+            require(
+                load_error_scene_backdrop["id"] == "hoshigawa-rain-lane"
+                and load_error_scene_backdrop["expectedId"] == "hoshigawa-rain-lane"
+                and load_error_scene_backdrop["colors"] >= 4,
+                f"Scene-backdrop load error did not retain its exact fallback: {load_error_scene_backdrop}.",
+            )
+            backdrop_error_context.close()
+
+            backdrop_mismatch_context = browser.new_context(viewport={"width": 1024, "height": 768})
+            backdrop_mismatch_page = backdrop_mismatch_context.new_page()
+            backdrop_mismatch_page.set_default_timeout(20_000)
+            backdrop_mismatch_page.set_default_navigation_timeout(45_000)
+            backdrop_mismatch_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            mismatch_response = backdrop_mismatch_page.goto(
+                f"{base}/campaign.html", wait_until="domcontentloaded"
+            )
+            require(
+                mismatch_response is not None and mismatch_response.status == 200,
+                "Scene-backdrop level-mismatch page failed delivery.",
+            )
+            mismatch_scene_backdrop = backdrop_mismatch_page.evaluate(
+                """async () => {
+                  const backdrops = await import('./scene-backdrop-atlas.mjs');
+                  const binding = backdrops.getSceneBackdropBindingForBeat('p00-delivery-in-rain');
+                  return {
+                    canonicalFrame: backdrops.getSceneBackdropFrameForBeat(
+                      'p00-delivery-in-rain',
+                      'hsh-river-lane',
+                    )?.id ?? null,
+                    mismatchedFrame: backdrops.getSceneBackdropFrameForBeat(
+                      'p00-delivery-in-rain',
+                      'hsh-census-square',
+                    )?.id ?? null,
+                    canonicalLevelId: binding?.canonicalLevelId ?? null,
+                    compatibleLevelIds: binding?.compatibleLevelIds ?? [],
+                  };
+                }"""
+            )
+            require(
+                mismatch_scene_backdrop == {
+                    "canonicalFrame": "hoshigawa-rain-lane",
+                    "mismatchedFrame": None,
+                    "canonicalLevelId": "hsh-river-lane",
+                    "compatibleLevelIds": ["hsh-river-lane"],
+                },
+                f"Scene-backdrop canonical-level registry did not fail closed: {mismatch_scene_backdrop}.",
+            )
+            backdrop_mismatch_context.close()
 
             portrait_fallback_context = browser.new_context(viewport={"width": 1024, "height": 768})
             portrait_fallback_context.route(
@@ -1546,6 +1684,31 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     touch_terminal = responsive_page.evaluate("() => window.bellsPrototype.engine.result")
                     require(touch_terminal == "victory", f"FP-0 touch-only gameplay path ended at {touch_terminal!r}.")
                 elif path == "campaign.html":
+                    responsive_page.wait_for_function(
+                        "() => document.querySelector('#sceneBackdrop')?.dataset.artState === 'ready'"
+                    )
+                    responsive_scene_backdrop = responsive_page.locator("#sceneBackdrop").evaluate(
+                        """canvas => {
+                          const canvasBox = canvas.getBoundingClientRect();
+                          const visualBox = canvas.parentElement.getBoundingClientRect();
+                          return {
+                            state: canvas.dataset.artState,
+                            id: canvas.dataset.backdropId,
+                            width: canvasBox.width,
+                            height: canvasBox.height,
+                            visualWidth: visualBox.width,
+                          };
+                        }"""
+                    )
+                    require(
+                        responsive_scene_backdrop["id"] == "hoshigawa-rain-lane"
+                        and responsive_scene_backdrop["width"] <= responsive_scene_backdrop["visualWidth"] + 1
+                        and abs(
+                            responsive_scene_backdrop["width"] / responsive_scene_backdrop["height"]
+                            - 320 / 180
+                        ) < 0.01,
+                        f"Responsive Campaign backdrop drifted: {responsive_scene_backdrop}.",
+                    )
                     chapter_button = responsive_page.locator("[data-chapter-id]:not(:disabled)").first
                     chapter_id = chapter_button.get_attribute("data-chapter-id")
                     chapter_button.click()
@@ -1602,6 +1765,22 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 after = reduced_page.locator(canvas_selector).evaluate("canvas => canvas.toDataURL()")
                 require(before == after, f"Reduced-motion canvas kept animating on {path}.")
                 reduced_motion_canvases[path] = True
+            reduced_campaign_response = reduced_page.goto(
+                f"{base}/campaign.html", wait_until="domcontentloaded"
+            )
+            require(
+                reduced_campaign_response is not None and reduced_campaign_response.status == 200,
+                "Reduced-motion Campaign backdrop failed delivery.",
+            )
+            reduced_page.wait_for_function(
+                "() => document.querySelector('#sceneBackdrop')?.dataset.artState === 'ready'"
+            )
+            reduced_page.wait_for_timeout(350)
+            backdrop_before = reduced_page.locator("#sceneBackdrop").evaluate("canvas => canvas.toDataURL()")
+            reduced_page.wait_for_timeout(350)
+            backdrop_after = reduced_page.locator("#sceneBackdrop").evaluate("canvas => canvas.toDataURL()")
+            require(backdrop_before == backdrop_after, "Reduced-motion Campaign backdrop kept animating.")
+            reduced_motion_canvases["campaign.html#sceneBackdrop"] = True
             reduced_context.close()
 
             restricted_errors: list[str] = []
@@ -1652,6 +1831,10 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         takamine_fallback_colors=fallback_colors,
         boss_fallback_colors=boss_fallback_colors,
         wrong_size_art_fallback=True,
+        campaign_scene_backdrop=campaign_scene_backdrop,
+        wrong_size_scene_backdrop=wrong_size_scene_backdrop,
+        load_error_scene_backdrop=load_error_scene_backdrop,
+        mismatch_scene_backdrop=mismatch_scene_backdrop,
         party_portrait_art={"campaign": campaign_party_art, "camp": camp_party_art, "aya": aya_portrait_art, "fallbackColors": portrait_fallback_colors},
         formation_followers=formation_followers,
         keyboard_terminal_link=True,
