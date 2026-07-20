@@ -5,6 +5,7 @@ export const BATTLE_SYSTEM_FEEDBACK_SPEEDS = Object.freeze([1, 2, 4]);
 export const BATTLE_SYSTEM_FEEDBACK_MS = Object.freeze({
   'move-destination': 320,
   'move-blocked': 480,
+  'recovery-lock': 560,
 });
 
 function deepFreeze(value) {
@@ -93,7 +94,7 @@ export function createBattleMoveFeedback({
 }
 
 export function sampleBattleMoveFeedback(record, nowMs, { reducedMotion = false } = {}) {
-  if (!record || !Object.hasOwn(BATTLE_SYSTEM_FEEDBACK_MS, record.kind)) return null;
+  if (!record || !['move-destination', 'move-blocked'].includes(record.kind)) return null;
   const now = safeTime(nowMs);
   if (now < record.startedAt || now >= record.endsAt) return null;
   const progress = Math.max(0, Math.min(1, (now - record.startedAt) / record.durationMs));
@@ -112,6 +113,137 @@ export function sampleBattleMoveFeedback(record, nowMs, { reducedMotion = false 
       : 1,
     reducedMotion: Boolean(reducedMotion),
   });
+}
+
+/** A command-selection attempt on a party actor that the snapshot proves is in Recovery. */
+export function createRecoveryLockFeedback({
+  actor,
+  nowPulse,
+  activeActorId = null,
+  startedAt = 0,
+  speed = 1,
+} = {}) {
+  if (!Number.isSafeInteger(nowPulse) || nowPulse < 0) {
+    throw new TypeError('nowPulse must be a non-negative integer.');
+  }
+  if (!BATTLE_SYSTEM_FEEDBACK_SPEEDS.includes(speed)) {
+    throw new RangeError('Battle system feedback speed must be 1, 2, or 4.');
+  }
+  if (!actor || actor.faction !== 'party' || actor.hp <= 0 || actor.active === false
+    || actor.instanceId === activeActorId || !Number.isSafeInteger(actor.readyAtPulse)
+    || actor.readyAtPulse <= nowPulse) return null;
+
+  const actorId = String(actor.instanceId);
+  const actorName = String(actor.name ?? actorId);
+  const tile = exactTile(actor.pos, 'actor.pos');
+  const remainingPulses = actor.readyAtPulse - nowPulse;
+  const baseDurationMs = BATTLE_SYSTEM_FEEDBACK_MS['recovery-lock'];
+  const durationMs = baseDurationMs / speed;
+  const safeStartedAt = safeTime(startedAt);
+  return deepFreeze({
+    kind: 'recovery-lock',
+    actorId,
+    actorName,
+    tile,
+    attemptedAtPulse: nowPulse,
+    readyAtPulse: actor.readyAtPulse,
+    remainingPulses,
+    announcement: `${actorName} cannot take a command: Recovery locked for ${remainingPulses} more pulse${remainingPulses === 1 ? '' : 's'}; ready at pulse ${actor.readyAtPulse}.`,
+    baseDurationMs,
+    durationMs,
+    startedAt: safeStartedAt,
+    endsAt: safeStartedAt + durationMs,
+    presentationSpeed: speed,
+  });
+}
+
+export function sampleRecoveryLockFeedback(record, nowMs, { reducedMotion = false } = {}) {
+  if (!record || record.kind !== 'recovery-lock') return null;
+  const now = safeTime(nowMs);
+  if (now < record.startedAt || now >= record.endsAt) return null;
+  const progress = Math.max(0, Math.min(1, (now - record.startedAt) / record.durationMs));
+  const pulse = reducedMotion ? 1 : 1 - Math.abs((progress * 2) - 1);
+  return deepFreeze({
+    kind: record.kind,
+    actorId: record.actorId,
+    tile: record.tile,
+    attemptedAtPulse: record.attemptedAtPulse,
+    readyAtPulse: record.readyAtPulse,
+    remainingPulses: record.remainingPulses,
+    progress: round(reducedMotion ? 0.5 : progress),
+    pulse: round(pulse),
+    opacity: round(reducedMotion ? 0.92 : 0.66 + (pulse * 0.3)),
+    reducedMotion: Boolean(reducedMotion),
+  });
+}
+
+/**
+ * Readiness is pulse-exact. visualNowMs only moves a scan across the proven fill;
+ * it never advances the fill or changes Recovery arithmetic.
+ */
+export function createBattleTempoPresentation(snapshot, {
+  visualNowMs = 0,
+  reducedMotion = false,
+} = {}) {
+  if (!Number.isSafeInteger(snapshot?.nowPulse) || snapshot.nowPulse < 0) {
+    throw new TypeError('snapshot.nowPulse must be a non-negative integer.');
+  }
+  if (!Array.isArray(snapshot.actors) || !Array.isArray(snapshot.log)) {
+    throw new TypeError('snapshot actors and log must be arrays.');
+  }
+
+  const scan = reducedMotion ? 0.5 : (safeTime(visualNowMs) % 800) / 800;
+  const records = snapshot.actors
+    .filter((actor) => actor.hp > 0 && actor.active !== false && actor.faction !== 'neutral')
+    .map((actor) => {
+      const readyAtPulse = Number.isSafeInteger(actor.readyAtPulse) ? actor.readyAtPulse : snapshot.nowPulse;
+      const remainingPulses = Math.max(0, readyAtPulse - snapshot.nowPulse);
+      const active = actor.instanceId === snapshot.activeActorId;
+      let matchingCommit = null;
+      for (let index = snapshot.log.length - 1; index >= 0; index -= 1) {
+        const event = snapshot.log[index];
+        if (event?.type === 'commit' && event.actorId === actor.instanceId
+          && event.readyAtPulse === readyAtPulse && Number.isSafeInteger(event.pulse)
+          && event.pulse <= snapshot.nowPulse) {
+          matchingCommit = event;
+          break;
+        }
+      }
+      const recoveryStartPulse = matchingCommit?.pulse ?? null;
+      const totalRecoveryPulses = recoveryStartPulse === null
+        ? null
+        : Math.max(0, readyAtPulse - recoveryStartPulse);
+      const readiness = remainingPulses === 0 || active
+        ? 1
+        : totalRecoveryPulses > 0
+          ? Math.max(0, Math.min(1, (snapshot.nowPulse - recoveryStartPulse) / totalRecoveryPulses))
+          : 0;
+      const status = active ? 'active' : remainingPulses === 0 ? 'ready' : 'recovery';
+      const actorId = String(actor.instanceId);
+      const actorName = String(actor.name ?? actorId);
+      return {
+        kind: 'tempo-readiness',
+        actorId,
+        actorName,
+        faction: actor.faction,
+        tile: exactTile(actor.pos, 'actor.pos'),
+        status,
+        nowPulse: snapshot.nowPulse,
+        recoveryStartPulse,
+        readyAtPulse,
+        totalRecoveryPulses,
+        remainingPulses,
+        readiness: round(readiness),
+        scan: round(scan),
+        reducedMotion: Boolean(reducedMotion),
+        label: active
+          ? `${actorName}: active and ready.`
+          : remainingPulses === 0
+            ? `${actorName}: ready at pulse ${snapshot.nowPulse}.`
+            : `${actorName}: Recovery ${remainingPulses} pulse${remainingPulses === 1 ? '' : 's'} remaining; ready at pulse ${readyAtPulse}; ${Math.round(readiness * 100)} percent ready.`,
+      };
+    });
+  return deepFreeze(records);
 }
 
 /** Persistent selected-cell frame; it owns no simulation or wall-clock hold. */

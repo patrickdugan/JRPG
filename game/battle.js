@@ -141,8 +141,11 @@ import {
 } from './battle-command-presentation.mjs';
 import {
   createBattleMoveFeedback,
+  createBattleTempoPresentation,
+  createRecoveryLockFeedback,
   createSelectedTargetFeedback,
   sampleBattleMoveFeedback,
+  sampleRecoveryLockFeedback,
 } from './battle-system-feedback.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
@@ -596,6 +599,20 @@ function startBattleMoveSystemFeedback({
   return activeBattleSystemFeedback;
 }
 
+function startRecoveryLockSystemFeedback(actor, snapshot = engine.snapshot(), startedAt = performance.now()) {
+  const feedback = createRecoveryLockFeedback({
+    actor,
+    nowPulse: snapshot.nowPulse,
+    activeActorId: snapshot.activeActorId,
+    startedAt,
+    speed: 1,
+  });
+  if (!feedback) return null;
+  activeBattleSystemFeedback = feedback;
+  addMessage(feedback.announcement);
+  return feedback;
+}
+
 function selectedBattleTargetFeedback(snapshot = engine.snapshot(), now = performance.now()) {
   const target = snapshot.actors.find((actor) => actor.instanceId === selectedTargetId
     && actor.faction === 'enemy' && actor.hp > 0 && actor.active !== false);
@@ -932,6 +949,35 @@ function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
   }
 
   if (!moveFrame) return;
+  if (moveFrame.kind === 'recovery-lock') {
+    const center = battleCanvasPoint(moveFrame.tile, geometry);
+    const px = geometry.originX + moveFrame.tile.x * geometry.cell;
+    const py = geometry.originY + moveFrame.tile.y * geometry.cell;
+    const lockWidth = Math.max(10, geometry.cell * 0.28);
+    const lockHeight = Math.max(8, geometry.cell * 0.22);
+    context.save();
+    context.globalAlpha = moveFrame.opacity;
+    context.fillStyle = 'rgba(115, 92, 166, 0.28)';
+    context.fillRect(px + 3, py + 3, geometry.cell - 6, geometry.cell - 6);
+    context.strokeStyle = '#d6c4ff';
+    context.lineWidth = Math.max(2, geometry.cell * 0.05);
+    context.setLineDash(moveFrame.reducedMotion ? [] : [Math.max(3, geometry.cell * 0.1), Math.max(2, geometry.cell * 0.07)]);
+    context.strokeRect(px + 4, py + 4, geometry.cell - 8, geometry.cell - 8);
+    context.setLineDash([]);
+    context.translate(center.x, center.y - geometry.cell * 0.03);
+    context.beginPath();
+    context.arc(0, -lockHeight * 0.42, lockWidth * 0.34, Math.PI, 0);
+    context.stroke();
+    context.fillStyle = '#d6c4ff';
+    context.fillRect(-lockWidth / 2, -lockHeight * 0.28, lockWidth, lockHeight);
+    context.fillStyle = '#241b38';
+    context.font = `bold ${Math.max(8, Math.round(geometry.cell * 0.17))}px monospace`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText(`R${moveFrame.remainingPulses}`, 0, lockHeight * 0.22);
+    context.restore();
+    return;
+  }
   const source = battleCanvasPoint(moveFrame.sourceTile, geometry);
   const destination = battleCanvasPoint(moveFrame.displayTile, geometry);
   const px = geometry.originX + moveFrame.displayTile.x * geometry.cell;
@@ -973,6 +1019,34 @@ function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
   context.restore();
 }
 
+function drawBattleTempoPresentation(frames, geometry) {
+  for (const frame of frames) {
+    const left = geometry.originX + frame.tile.x * geometry.cell + geometry.cell * 0.16;
+    const top = geometry.originY + (frame.tile.y + 1) * geometry.cell - Math.max(7, geometry.cell * 0.13);
+    const width = geometry.cell * 0.68;
+    const height = Math.max(3, geometry.cell * 0.065);
+    const fillWidth = width * frame.readiness;
+    context.save();
+    context.globalAlpha = frame.status === 'active' ? 1 : 0.9;
+    context.fillStyle = 'rgba(4, 7, 14, 0.88)';
+    context.fillRect(left - 1, top - 1, width + 2, height + 2);
+    context.fillStyle = frame.status === 'active'
+      ? '#f5d77e'
+      : frame.faction === 'party' ? '#77c9c5' : '#d76555';
+    context.fillRect(left, top, fillWidth, height);
+    if (fillWidth >= 3) {
+      const scanX = left + Math.min(fillWidth - 2, fillWidth * frame.scan);
+      context.globalAlpha = frame.reducedMotion ? 0.55 : 0.82;
+      context.fillStyle = '#fff7d2';
+      context.fillRect(scanX, top, Math.min(2, fillWidth), height);
+    }
+    context.strokeStyle = frame.status === 'recovery' ? '#9388ad' : '#fff1b7';
+    context.lineWidth = 1;
+    context.strokeRect(left - 0.5, top - 0.5, width + 1, height + 1);
+    context.restore();
+  }
+}
+
 function drawBossIntent(snapshot, geometry) {
   const intent = snapshot.bossMechanic?.pendingIntent;
   if (!intent) return;
@@ -1006,7 +1080,13 @@ function drawBattle(now = performance.now()) {
   const sampledAnimation = currentBattleAnimationFrame(now);
   const animation = reducedMotion.matches && !sampledAnimation?.terminalDefeatWindow ? null : sampledAnimation;
   const commandPresentation = sampleBattleCommandPresentation(activeCommandPresentation, now, { reducedMotion: reducedMotion.matches });
-  const moveFeedback = sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
+  const moveFeedback = activeBattleSystemFeedback?.kind === 'recovery-lock'
+    ? sampleRecoveryLockFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
+    : sampleBattleMoveFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches });
+  const tempoPresentation = createBattleTempoPresentation(snapshot, {
+    visualNowMs: now,
+    reducedMotion: reducedMotion.matches,
+  });
   const selectedTargetFeedback = selectedBattleTargetFeedback(snapshot, now);
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
@@ -1253,17 +1333,23 @@ function drawBattle(now = performance.now()) {
       context.fillRect(centerX - cell * 0.12, centerY - cell * 0.12, cell * 0.24, cell * 0.17);
     }
   }
+  drawBattleTempoPresentation(tempoPresentation, geometry);
   drawBattleAnimationFx(animation, geometry);
   drawBattleCommandPresentationFx(commandPresentation, geometry);
   drawBattleSystemFeedback(moveFeedback, selectedTargetFeedback, geometry);
 }
 
-function createCombatantCard(actor, selected = false, targetable = true) {
-  const card = document.createElement(actor.faction === 'enemy' ? 'button' : 'div');
+function createCombatantCard(actor, selected = false, targetable = true, partyCommandAttempt = false) {
+  const interactive = actor.faction === 'enemy' || partyCommandAttempt;
+  const card = document.createElement(interactive ? 'button' : 'div');
   if (card instanceof HTMLButtonElement) {
     card.type = 'button';
-    card.setAttribute('aria-pressed', String(selected));
     card.disabled = !targetable;
+    if (actor.faction === 'enemy') card.setAttribute('aria-pressed', String(selected));
+    else {
+      card.dataset.partyCommandAttempt = 'true';
+      card.setAttribute('aria-label', `${actor.name}, check command readiness`);
+    }
   } else {
     card.role = 'listitem';
   }
@@ -1311,7 +1397,17 @@ function renderCombatants(snapshot) {
   const enemyTargetingAvailable = snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND
     && !snapshot.result
     && !manualInputLocked();
-  partyPanel.replaceChildren(...snapshot.actors.filter((actor) => actor.faction === 'party').map((actor) => createCombatantCard(actor)));
+  const partyCommandAttemptAvailable = snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND
+    && !snapshot.result
+    && !manualInputLocked();
+  partyPanel.replaceChildren(...snapshot.actors
+    .filter((actor) => actor.faction === 'party')
+    .map((actor) => createCombatantCard(
+      actor,
+      false,
+      partyCommandAttemptAvailable && actor.hp > 0 && actor.active !== false,
+      true,
+    )));
   enemyPanel.replaceChildren(...snapshot.actors
     .filter((actor) => actor.faction !== 'party' && (actor.active !== false || actor.hp <= 0))
     .map((actor) => {
@@ -1413,11 +1509,22 @@ function publishRenderedBattleState(snapshot) {
 function renderTempo(snapshot) {
   const actors = snapshot.actors.filter((actor) => actor.hp > 0 && actor.active !== false && actor.faction !== 'neutral')
     .sort((left, right) => left.readyAtPulse - right.readyAtPulse || right.speed - left.speed || left.instanceId.localeCompare(right.instanceId));
+  const presentationByActor = new Map(createBattleTempoPresentation(snapshot, { reducedMotion: true })
+    .map((frame) => [frame.actorId, frame]));
   tempoQueue.replaceChildren(...actors.map((actor) => {
+    const frame = presentationByActor.get(actor.instanceId);
     const entry = document.createElement('li');
     entry.className = 'tempo-entry';
     entry.style.setProperty('--tempo-color', actor.faction === 'party' ? '#77c9c5' : '#d76555');
-    entry.textContent = `${actor.name} · ${actor.instanceId === snapshot.activeActorId ? 'ACTIVE' : `pulse ${actor.readyAtPulse}`}`;
+    entry.setAttribute('aria-label', frame?.label ?? `${actor.name}: ready at pulse ${actor.readyAtPulse}.`);
+    const state = frame?.status === 'active'
+      ? 'ACTIVE'
+      : frame?.status === 'ready'
+        ? 'READY'
+        : frame?.totalRecoveryPulses
+          ? `Recovery ${frame.remainingPulses}/${frame.totalRecoveryPulses} · ${Math.round(frame.readiness * 100)}% · pulse ${frame.readyAtPulse}`
+          : `Recovery ${frame?.remainingPulses ?? '?'} · pulse ${frame?.readyAtPulse ?? actor.readyAtPulse}`;
+    entry.textContent = `${actor.name} · ${state}`;
     return entry;
   }));
 }
@@ -2093,6 +2200,23 @@ targetSelect.addEventListener('change', () => {
   selectedTargetId = targetSelect.value;
   drawBattle();
   announceSelectedBattleTarget();
+});
+partyPanel.addEventListener('click', (event) => {
+  if (manualInputLocked()) return;
+  const card = event.target.closest('[data-party-command-attempt="true"][data-actor-id]');
+  if (!card) return;
+  const snapshot = engine.snapshot();
+  const actorId = card.dataset.actorId;
+  const actor = snapshot.actors.find((entry) => entry.instanceId === actorId && entry.faction === 'party');
+  if (!actor) return;
+  const feedback = startRecoveryLockSystemFeedback(actor, snapshot);
+  if (!feedback) {
+    addMessage(actor.instanceId === snapshot.activeActorId
+      ? `${actor.name} is active and ready; choose a command.`
+      : `${actor.name} is ready in the Tempo queue; ${snapshot.actors.find((entry) => entry.instanceId === snapshot.activeActorId)?.name ?? 'the active actor'} keeps command authority.`);
+  }
+  render();
+  partyPanel.querySelector(`[data-actor-id="${CSS.escape(actorId)}"]`)?.focus({ preventScroll: true });
 });
 enemyPanel.addEventListener('click', (event) => {
   if (manualInputLocked()) return;
