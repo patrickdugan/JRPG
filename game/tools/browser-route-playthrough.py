@@ -475,6 +475,13 @@ class PlayerDriver:
                     or "was already completed" in normalized_feedback
                     or "no interaction is within" in normalized_feedback
                 )
+                if not requirement_missing and not no_progress:
+                    # Some exits and encounter-adjacent objectives retain one
+                    # stable published target across several legitimate
+                    # rendered movement/interaction attempts. The outer bound
+                    # remains authoritative unless the UI explicitly reports
+                    # that no progress is possible.
+                    continue
                 blocker_code = (
                     "field-objective-requirement-missing"
                     if requirement_missing

@@ -83,6 +83,7 @@ test('published field objectives yield to newly ready story gates and fail fast 
   );
   assert.match(finishField, /"field-objective-requirement-missing"/);
   assert.match(finishField, /"field-objective-no-progress"/);
+  assert.match(finishField, /if not requirement_missing and not no_progress:[\s\S]*?continue/);
   assert.match(finishField, /feedback=feedback/);
 });
 
