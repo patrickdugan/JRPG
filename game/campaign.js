@@ -15,6 +15,10 @@ import { getSceneOperation } from './content/scene-operations.mjs';
 import { getCampConversation } from './content/camp-conversations.mjs';
 import { getPartyCouncil } from './content/party-councils.mjs';
 import { getArchiveRecord } from './content/archive-records.mjs';
+import {
+  getFieldInteractionChoiceCopy,
+  getFieldInteractionCopy,
+} from './content/field-interaction-copy.mjs';
 import { createBrowserRunUuid } from './browser-runtime.mjs';
 import { commitPersistenceTransaction, stateSaveStep } from './persistence-transaction.mjs';
 import { getRequiredRouteActivity } from './required-route-contract.mjs';
@@ -110,6 +114,12 @@ import {
   getPartyAtlasWalkFrame,
   partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
+import {
+  createFieldFormationPresentation,
+  recordFieldFormationDeparture,
+  resolveFieldFollowerPlacements,
+  syncFieldFormationPresentation,
+} from './field-formation-presentation.mjs';
 import {
   PARTY_PORTRAIT_ATLAS,
   getPartyPortraitFrame,
@@ -361,6 +371,9 @@ const loadedField = fieldAdapter.load({ levelId: openingLevel.id, beatId: getCur
 let fieldRuntimeState = loadedField.ok
   ? loadedField.state
   : createPersistentFieldState({ levelId: openingLevel.id, beatId: getCurrentBeat(campaignState).id });
+let fieldFormationPresentation = createFieldFormationPresentation(
+  fieldFormationPresentationContext(openingLevel, fieldRuntimeState),
+);
 let fieldTickLast = performance.now();
 let fieldTickAccumulator = 0;
 let selectedWitnessChronicleId = witnessChronicleState.records.find((record) => record.status === 'active')?.id ?? null;
@@ -982,6 +995,16 @@ function effectiveFieldLeader(level) {
   return getEffectiveFieldPresentationLeader(fieldRuntimeState, fieldFormation(level));
 }
 
+function fieldFormationPresentationContext(level, state = fieldRuntimeState) {
+  const formation = fieldFormation(level);
+  return Object.freeze({
+    levelId: level.id,
+    beatId: getCurrentFieldContext(state).beatId,
+    formation,
+    leaderId: getEffectiveFieldPresentationLeader(state, formation),
+  });
+}
+
 function renderFieldLeaderControl(level) {
   const formation = fieldFormation(level);
   const leaderId = effectiveFieldLeader(level);
@@ -1051,6 +1074,7 @@ function attemptFieldMove(dx, dy) {
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
   if (!ensureFieldPosition(level).ok) return;
+  const departedPosition = fieldPosition();
   const result = moveFieldBy(fieldRuntimeState, dx, dy, { flags: externalFieldFlags() });
   let nextLoadoutState = loadoutState;
   const consequenceMessages = [];
@@ -1071,6 +1095,12 @@ function attemptFieldMove(dx, dy) {
   loadoutState = nextLoadoutState;
   if (hazardHits.length) holdPartyFieldPose('hurt');
   if (result.moved) {
+    fieldFormationPresentation = recordFieldFormationDeparture(fieldFormationPresentation, {
+      ...fieldFormationPresentationContext(level, fieldRuntimeState),
+      moved: true,
+      position: departedPosition,
+      facing: fieldFacing,
+    });
     fieldWalkUntil = performance.now() + 320;
     pageAudio.playCue('fieldStep');
   }
@@ -1178,6 +1208,62 @@ function drawLevelFieldCharacters(level, originX, originY, cell) {
   }
 }
 
+function drawPartyFieldFollowerMarker({ memberId, facing }, px, py, cell, now) {
+  if (partyAtlasState !== 'ready' || !partyAtlasImageHasExpectedSize(partyAtlasImage)) return false;
+  const moving = !reducedMotion.matches && now < fieldWalkUntil;
+  const phase = moving ? Math.floor(now / 110) % 2 : 0;
+  let frame;
+  try {
+    frame = moving
+      ? getPartyAtlasWalkFrame(memberId, facing, phase)
+      : getPartyAtlasFrame(memberId, facing, 0);
+  } catch {
+    return false;
+  }
+  const drawHeight = cell * 1.18;
+  const drawWidth = drawHeight * (frame.width / frame.height);
+  const footY = py + cell * 0.34;
+  mapCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  mapCtx.beginPath();
+  mapCtx.ellipse(px, footY, cell * 0.2, cell * 0.065, 0, 0, Math.PI * 2);
+  mapCtx.fill();
+  mapCtx.globalAlpha = 0.9;
+  mapCtx.drawImage(
+    partyAtlasImage,
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height,
+    px - drawWidth / 2,
+    footY - drawHeight * (44 / frame.height),
+    drawWidth,
+    drawHeight,
+  );
+  mapCtx.globalAlpha = 1;
+  return true;
+}
+
+function drawFieldFormationFollowers(level, originX, originY, cell, now) {
+  const context = fieldFormationPresentationContext(level);
+  fieldFormationPresentation = syncFieldFormationPresentation(fieldFormationPresentation, context);
+  const placements = resolveFieldFollowerPlacements(fieldFormationPresentation, {
+    ...context,
+    currentPosition: fieldPosition(),
+    width: level.width,
+    height: level.height,
+    blocked: level.blocked ?? [],
+  });
+  const drawnIds = [];
+  for (const placement of placements) {
+    const px = originX + placement.position.x * cell + cell / 2;
+    const py = originY + placement.position.y * cell + cell / 2;
+    if (drawPartyFieldFollowerMarker(placement, px, py, cell, now)) drawnIds.push(placement.memberId);
+  }
+  mapCanvas.dataset.fieldFollowerCount = String(drawnIds.length);
+  mapCanvas.dataset.fieldFollowerIds = drawnIds.join('|');
+  mapCanvas.dataset.fieldFormationKey = context.formation.join('|');
+}
+
 function drawMap(level, encounter, now) {
   const width = level?.width ?? 12;
   const height = level?.height ?? 7;
@@ -1268,6 +1354,7 @@ function drawMap(level, encounter, now) {
     }
   }
 
+  drawFieldFormationFollowers(level, originX, originY, cell, now);
   drawLevelFieldCharacters(level, originX, originY, cell);
 
   const sceneOperationMarker = getActiveSceneOperationMarker(level);
@@ -1705,6 +1792,7 @@ function updateFieldDashboard(level) {
   const marker = getActiveQuestMarker(level);
   const markerNearby = marker && inInteractionRange(status.position, marker.position);
   const authored = selectNearbyFieldInteractable(status);
+  const authoredCopy = getFieldInteractionCopy(level.id, authored?.id);
   mapCanvas.dataset.beatId = getBeat().id;
   mapCanvas.dataset.levelId = level.id;
   mapCanvas.dataset.fieldX = String(status.position.x);
@@ -1821,7 +1909,7 @@ function updateFieldDashboard(level) {
       ? witnessMarker.stage.encounterId ? 'Enter chronicle battle (X)' : 'Record witness stage (X)'
       : `Hear testimony ${witnessMarker.progress.acknowledgedLines + 1}/${witnessMarker.progress.dialogueLineCount} (X)`)
     : markerNearby ? 'Advance side story (X)'
-    : authored ? `${authored.consumed ? 'Review' : 'Interact'}: ${authored.id} (X)`
+    : authored ? `${authored.consumed ? 'Review' : 'Interact'}: ${authoredCopy.label} (X)`
       : status.exit ? `${status.exit.ready ? 'Use' : 'Inspect'} exit (X)` : 'Nothing nearby (X)';
 }
 
@@ -2556,21 +2644,37 @@ interactFieldButton.addEventListener('click', () => {
   const status = getFieldStatus(fieldRuntimeState, { flags: externalFieldFlags() });
   const nearby = selectNearbyFieldInteractable(status);
   if (nearby) {
+    const interactionCopy = getFieldInteractionCopy(level.id, nearby.id);
     let result = performFieldInteraction(fieldRuntimeState, nearby.id, { flags: externalFieldFlags() });
     if (!result.ok && result.code === 'choice-required') {
-      const chosen = window.prompt(`Choose for ${nearby.id}: ${result.choices.join(' / ')}`, result.choices[0]);
-      if (chosen === null) return;
+      const publishedChoices = result.choices.map((choiceId, index) => {
+        const exact = getFieldInteractionChoiceCopy(interactionCopy, choiceId);
+        return Object.freeze({
+          id: choiceId,
+          label: exact?.label ?? `Option ${index + 1}`,
+        });
+      });
+      const chosenLabel = window.prompt(
+        `Choose for ${interactionCopy.label}: ${publishedChoices.map(({ label }) => label).join(' / ')}`,
+        publishedChoices[0]?.label ?? 'Option 1',
+      );
+      if (chosenLabel === null) return;
+      const chosen = publishedChoices.find(({ label }) => label === chosenLabel);
+      if (!chosen) {
+        fieldFeedback.textContent = 'Choose exactly one published option.';
+        return;
+      }
       try {
-        result = performFieldInteraction(fieldRuntimeState, nearby.id, { flags: externalFieldFlags(), choice: chosen });
+        result = performFieldInteraction(fieldRuntimeState, nearby.id, { flags: externalFieldFlags(), choice: chosen.id });
       } catch {
-        fieldFeedback.textContent = `Choose exactly one of: ${result.choices.join(', ')}.`;
+        fieldFeedback.textContent = 'Choose exactly one published option.';
         return;
       }
     }
     if (!result.ok) {
       fieldFeedback.textContent = result.code === 'requirement-missing'
-        ? `${nearby.id} requires ${result.blockedBy}.`
-        : `Interaction unavailable: ${result.code}.`;
+        ? interactionCopy.blocked
+        : 'This interaction is unavailable.';
       return;
     }
     const event = result.events[0];
@@ -2595,9 +2699,10 @@ interactFieldButton.addEventListener('click', () => {
     fieldRuntimeState = result.state;
     loadoutState = nextLoadoutState;
     pageAudio.playCue('fieldInteract');
+    const selectedChoiceCopy = getFieldInteractionChoiceCopy(interactionCopy, event?.selectedOption);
     fieldFeedback.textContent = result.repeated
-      ? `${nearby.id} was already completed.${event?.text ? ` ${event.text}` : ''}`
-      : `${nearby.id}: ${event?.text ?? event?.result ?? event?.reward ?? `${event?.action ?? 'interaction'} complete`}.${lootText}`;
+      ? interactionCopy.repeat
+      : `${selectedChoiceCopy?.completion ?? interactionCopy.completion}${lootText}`;
     updateFieldDashboard(level);
     return;
   }

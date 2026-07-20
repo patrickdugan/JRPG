@@ -106,7 +106,7 @@ test('field event pose addressing is exact and rejects unsupported authored stat
 
 test('campaign wires authored event poses only to live interaction input and hazard-hit paths', () => {
   const timedHazard = sourceSection('function sampleFieldRuntime', 'function getFieldHazardConsequence');
-  const movement = sourceSection('function attemptFieldMove', 'function drawMap');
+  const movement = sourceSection('function attemptFieldMove', 'function drawNpcFieldMarker');
   const interaction = sourceSection("interactFieldButton.addEventListener('click'", "previousScene.addEventListener('click'");
   const draw = sourceSection('function drawMap', 'function formatEnemies');
 

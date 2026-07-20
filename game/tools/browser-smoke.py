@@ -107,12 +107,14 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   portrait: document.querySelector('#sceneFocusPortrait').dataset.artState,
                   leader: document.querySelector('#mapCanvas').dataset.fieldLeaderId,
                   leaderOptions: [...document.querySelector('#fieldLeader').options].map(option => option.value),
+                  followerCount: document.querySelector('#mapCanvas').dataset.fieldFollowerCount,
                 })"""
             )
             require(
                 campaign_party_art["terrain"] == "ready"
                 and campaign_party_art["leader"] == "ren"
-                and campaign_party_art["leaderOptions"] == ["ren"],
+                and campaign_party_art["leaderOptions"] == ["ren"]
+                and campaign_party_art["followerCount"] == "0",
                 f"Fresh field terrain/leader contract drifted: {campaign_party_art}.",
             )
             require(
@@ -187,6 +189,74 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 page.locator("#runProofStatus").inner_text().startswith(run_prefix),
                 "Run receipt did not survive the Camp round trip.",
             )
+
+            formation_context = browser.new_context(viewport={"width": 1280, "height": 900})
+            formation_page = formation_context.new_page()
+            formation_page.set_default_timeout(20_000)
+            formation_page.set_default_navigation_timeout(45_000)
+            formation_page.on(
+                "console",
+                lambda message: console_errors.append(
+                    {"text": message.text, "url": message.location.get("url", "")}
+                )
+                if message.type == "error"
+                else None,
+            )
+            formation_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            formation_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            formation_seed = formation_page.evaluate(
+                """async () => {
+                  const canonical = await import('./canonical-run.mjs');
+                  const progression = await import('./progression.mjs');
+                  const advancement = await import('./advancement.mjs');
+                  const loadout = await import('./loadout.mjs');
+                  const field = await import('./field-runtime.mjs');
+                  const levels = await import('./content/levels.mjs');
+                  const run = canonical.runCanonicalCompletion();
+                  const campaign = progression.moveToBeat(run.states.campaign, 'chapter-5', 'c5-02-ash-fields');
+                  const fieldState = field.createFieldState({ levelId: 'kgr-ash-fields', beatId: 'c5-02-ash-fields' });
+                  const saves = [
+                    progression.createLocalStorageAdapter().save(campaign),
+                    advancement.createAdvancementStorageAdapter().save(run.states.advancement),
+                    loadout.createLoadoutStorageAdapter().save(run.states.loadout),
+                    field.createFieldStorageAdapter().save(fieldState),
+                  ];
+                  if (saves.some(result => !result.ok)) throw new Error('Formation QA seed did not save.');
+                  const directions = [
+                    ['w', 0, -1], ['a', -1, 0], ['s', 0, 1], ['d', 1, 0],
+                    ['q', -1, -1], ['e', 1, -1], ['z', -1, 1], ['c', 1, 1],
+                  ];
+                  const legal = directions.find(([_key, dx, dy]) => field.moveFieldBy(fieldState, dx, dy).moved);
+                  if (!legal) throw new Error('Formation QA seed has no legal first move.');
+                  return {
+                    key: legal[0],
+                    formation: levels.getLevel('kgr-ash-fields').spawn.formation,
+                  };
+                }"""
+            )
+            formation_page.reload(wait_until="domcontentloaded")
+            formation_page.wait_for_function(
+                """() => document.querySelector('#mapCanvas')?.dataset.partyArtState === 'ready'
+                  && document.querySelector('#mapCanvas')?.dataset.fieldFormationKey === 'ren|aya|lise|mateus|genta|kiku'
+                  && document.querySelector('#mapCanvas')?.dataset.fieldFollowerCount === '0'"""
+            )
+            formation_page.keyboard.press(formation_seed["key"])
+            formation_page.wait_for_function(
+                "() => document.querySelector('#mapCanvas')?.dataset.fieldFollowerCount === '1'"
+            )
+            formation_followers = formation_page.locator("#mapCanvas").evaluate(
+                "canvas => ({ count: Number(canvas.dataset.fieldFollowerCount), ids: canvas.dataset.fieldFollowerIds, formation: canvas.dataset.fieldFormationKey })"
+            )
+            require(
+                formation_seed["formation"] == ["ren", "aya", "lise", "mateus", "genta", "kiku"]
+                and formation_followers == {
+                    "count": 1,
+                    "ids": "aya",
+                    "formation": "ren|aya|lise|mateus|genta|kiku",
+                },
+                f"Formation follower contract drifted: seed={formation_seed}, rendered={formation_followers}.",
+            )
+            formation_context.close()
 
             encounter_id = "prologue-ashen-bailiff"
             page.goto(
@@ -1363,6 +1433,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         boss_fallback_colors=boss_fallback_colors,
         wrong_size_art_fallback=True,
         party_portrait_art={"campaign": campaign_party_art, "camp": camp_party_art, "aya": aya_portrait_art, "fallbackColors": portrait_fallback_colors},
+        formation_followers=formation_followers,
         keyboard_terminal_link=True,
         credits_seed=credits_seed,
         credits_final=credits_final,
