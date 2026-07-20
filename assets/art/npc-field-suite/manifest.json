@@ -1,0 +1,125 @@
+{
+  "assetId": "npc-field-suite-v1",
+  "status": "production-foundation-review",
+  "authorship": "original-code-native-pixel-primitives",
+  "geometry": {
+    "frameWidth": 32,
+    "frameHeight": 48,
+    "columns": 2,
+    "rows": 1,
+    "sheetWidth": 64,
+    "sheetHeight": 48,
+    "pivot": [
+      16,
+      44
+    ],
+    "footPoint": [
+      16,
+      44
+    ],
+    "transparentGutter": 1,
+    "alphaBoundingBox": [
+      6,
+      6,
+      59,
+      44
+    ]
+  },
+  "roleOrder": [
+    "speaker",
+    "interviewee"
+  ],
+  "mappingContracts": {
+    "speaker": "side-story objective.type equals talk",
+    "interviewee": "scene-operation activityType equals interview"
+  },
+  "paletteIds": {
+    "speaker": "npc-speaker-rain-clay-v1",
+    "interviewee": "npc-interviewee-indigo-reed-v1"
+  },
+  "frames": [
+    {
+      "id": "speaker-south-idle",
+      "role": "speaker",
+      "rect": [
+        0,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        6,
+        6,
+        28,
+        44
+      ],
+      "rgbaSha256": "fcb6b778383e4eb534b3085e331ebc4dd5cd42e18459decfce5d88684d0f71c6"
+    },
+    {
+      "id": "interviewee-south-idle",
+      "role": "interviewee",
+      "rect": [
+        32,
+        0,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        6,
+        6,
+        27,
+        44
+      ],
+      "rgbaSha256": "9dc8bcb6c327aa2a0cd7d48996e8f7fd3b16064e38be3036d1e7ef89ae7c3b28"
+    }
+  ],
+  "exports": [
+    {
+      "file": "npc-field-atlas.png",
+      "purpose": "transparent-runtime-atlas",
+      "width": 64,
+      "height": 48,
+      "sha256": "7596d2331f815b8878630c61c17fc04eadfd67c113dd2d2de73c9dd05b299c49"
+    },
+    {
+      "file": "npc-field-contact-sheet.png",
+      "purpose": "labeled-review-only-not-runtime",
+      "width": 496,
+      "height": 412,
+      "sha256": "e89c36f56d8c54cfb85dee4682ccfed9f8ac0be095945761a1ac85d113cbe1a3"
+    }
+  ],
+  "review": {
+    "runtimeIntegration": "campaign-person-markers-only-with-geometric-fallback",
+    "animationExpansion": "additional-directions-and-motion-pending",
+    "unmapped": [
+      "props",
+      "hazards",
+      "exits",
+      "evidence",
+      "mechanisms",
+      "deliveries",
+      "care and rescue procedure nodes",
+      "councils and ambiguous groups",
+      "combat markers",
+      "sacred or devotional objects",
+      "untyped label guesses"
+    ]
+  }
+}

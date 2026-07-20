@@ -114,6 +114,12 @@ import {
   portraitExpressionForGesture,
 } from './party-portrait-atlas.mjs';
 import {
+  NPC_FIELD_ATLAS,
+  getNpcFieldFrame,
+  npcFieldAtlasImageHasExpectedSize,
+  resolveNpcFieldRole,
+} from './npc-field-atlas.mjs';
+import {
   acknowledgeWitnessChronicleLine,
   acceptWitnessChronicle,
   advanceWitnessChronicle,
@@ -167,6 +173,21 @@ partyAtlasImage.addEventListener('error', () => {
   renderSceneDirection(getBeat());
 }, { once: true });
 partyAtlasImage.src = PARTY_ATLAS.url;
+const npcFieldAtlasImage = new Image();
+let npcFieldAtlasState = 'loading';
+mapCanvas.dataset.npcArtState = npcFieldAtlasState;
+npcFieldAtlasImage.decoding = 'async';
+npcFieldAtlasImage.addEventListener('load', () => {
+  npcFieldAtlasState = npcFieldAtlasImageHasExpectedSize(npcFieldAtlasImage) ? 'ready' : 'error';
+  mapCanvas.dataset.npcArtState = npcFieldAtlasState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+npcFieldAtlasImage.addEventListener('error', () => {
+  npcFieldAtlasState = 'error';
+  mapCanvas.dataset.npcArtState = npcFieldAtlasState;
+  renderSceneDirection(getBeat());
+}, { once: true });
+npcFieldAtlasImage.src = NPC_FIELD_ATLAS.url;
 const mapName = document.querySelector('#mapName');
 const mapLegend = document.querySelector('#mapLegend');
 const sceneNumber = document.querySelector('#sceneNumber');
@@ -1010,6 +1031,46 @@ function attemptFieldMove(dx, dy) {
   updateFieldDashboard(level);
 }
 
+function drawNpcFieldMarker(role, px, py, cell, { badge = null } = {}) {
+  if (!role || npcFieldAtlasState !== 'ready' || !npcFieldAtlasImageHasExpectedSize(npcFieldAtlasImage)) return false;
+  const frame = getNpcFieldFrame(role);
+  const drawHeight = cell * 1.22;
+  const drawWidth = drawHeight * (frame.width / frame.height);
+  const footY = py + cell * 0.34;
+  mapCtx.fillStyle = 'rgba(0, 0, 0, 0.36)';
+  mapCtx.beginPath();
+  mapCtx.ellipse(px, footY, cell * 0.22, cell * 0.07, 0, 0, Math.PI * 2);
+  mapCtx.fill();
+  mapCtx.drawImage(
+    npcFieldAtlasImage,
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height,
+    px - drawWidth / 2,
+    footY - drawHeight * (frame.footPoint[1] / frame.height),
+    drawWidth,
+    drawHeight,
+  );
+  if (badge != null) {
+    const badgeX = px + cell * 0.21;
+    const badgeY = py - cell * 0.25;
+    mapCtx.fillStyle = '#f4be5c';
+    mapCtx.beginPath();
+    mapCtx.arc(badgeX, badgeY, Math.max(5, cell * 0.13), 0, Math.PI * 2);
+    mapCtx.fill();
+    mapCtx.strokeStyle = '#fff0bb';
+    mapCtx.lineWidth = 1;
+    mapCtx.stroke();
+    mapCtx.fillStyle = '#21170b';
+    mapCtx.font = `${Math.max(7, Math.floor(cell * 0.2))}px monospace`;
+    mapCtx.textAlign = 'center';
+    mapCtx.textBaseline = 'middle';
+    mapCtx.fillText(String(badge), badgeX, badgeY + 1);
+  }
+  return true;
+}
+
 function drawMap(level, encounter, now) {
   const width = level?.width ?? 12;
   const height = level?.height ?? 7;
@@ -1086,34 +1147,47 @@ function drawMap(level, encounter, now) {
   if (sceneOperationMarker) {
     const px = originX + sceneOperationMarker.position.x * cell + cell / 2;
     const py = originY + sceneOperationMarker.position.y * cell + cell / 2;
-    const pulse = 0.7 + (Math.sin(now / 230) * 0.18);
-    mapCtx.fillStyle = `rgba(244, 190, 92, ${pulse})`;
-    mapCtx.fillRect(px - cell * 0.23, py - cell * 0.23, cell * 0.46, cell * 0.46);
-    mapCtx.strokeStyle = '#fff0bb';
-    mapCtx.lineWidth = 2;
-    mapCtx.strokeRect(px - cell * 0.28, py - cell * 0.28, cell * 0.56, cell * 0.56);
-    mapCtx.fillStyle = '#21170b';
-    mapCtx.font = `${Math.max(8, Math.floor(cell * 0.27))}px monospace`;
-    mapCtx.textAlign = 'center';
-    mapCtx.textBaseline = 'middle';
-    mapCtx.fillText(String(sceneOperationMarker.nodeIndex + 1), px, py + 1);
+    const role = resolveNpcFieldRole({
+      markerType: 'scene-operation',
+      activityType: sceneOperationMarker.node.activityType,
+      verb: sceneOperationMarker.node.verb,
+    });
+    if (!drawNpcFieldMarker(role, px, py, cell, { badge: sceneOperationMarker.nodeIndex + 1 })) {
+      const pulse = 0.7 + (Math.sin(now / 230) * 0.18);
+      mapCtx.fillStyle = `rgba(244, 190, 92, ${pulse})`;
+      mapCtx.fillRect(px - cell * 0.23, py - cell * 0.23, cell * 0.46, cell * 0.46);
+      mapCtx.strokeStyle = '#fff0bb';
+      mapCtx.lineWidth = 2;
+      mapCtx.strokeRect(px - cell * 0.28, py - cell * 0.28, cell * 0.56, cell * 0.56);
+      mapCtx.fillStyle = '#21170b';
+      mapCtx.font = `${Math.max(8, Math.floor(cell * 0.27))}px monospace`;
+      mapCtx.textAlign = 'center';
+      mapCtx.textBaseline = 'middle';
+      mapCtx.fillText(String(sceneOperationMarker.nodeIndex + 1), px, py + 1);
+    }
   }
 
   const questMarker = getActiveQuestMarker(level);
   if (questMarker) {
     const px = originX + questMarker.position.x * cell + cell / 2;
     const py = originY + questMarker.position.y * cell + cell / 2;
-    const pulse = 0.68 + (Math.sin(now / 210) * 0.15);
-    mapCtx.fillStyle = `rgba(244, 221, 148, ${pulse})`;
-    mapCtx.beginPath();
-    mapCtx.moveTo(px, py - cell * 0.28);
-    mapCtx.lineTo(px + cell * 0.24, py);
-    mapCtx.lineTo(px, py + cell * 0.28);
-    mapCtx.lineTo(px - cell * 0.24, py);
-    mapCtx.closePath();
-    mapCtx.fill();
-    mapCtx.strokeStyle = '#a08ad1';
-    mapCtx.stroke();
+    const role = resolveNpcFieldRole({
+      markerType: 'side-story',
+      objectiveType: questMarker.objective.type,
+    });
+    if (!drawNpcFieldMarker(role, px, py, cell)) {
+      const pulse = 0.68 + (Math.sin(now / 210) * 0.15);
+      mapCtx.fillStyle = `rgba(244, 221, 148, ${pulse})`;
+      mapCtx.beginPath();
+      mapCtx.moveTo(px, py - cell * 0.28);
+      mapCtx.lineTo(px + cell * 0.24, py);
+      mapCtx.lineTo(px, py + cell * 0.28);
+      mapCtx.lineTo(px - cell * 0.24, py);
+      mapCtx.closePath();
+      mapCtx.fill();
+      mapCtx.strokeStyle = '#a08ad1';
+      mapCtx.stroke();
+    }
   }
 
   const witnessMarker = getActiveWitnessMarker(level);

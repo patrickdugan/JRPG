@@ -1,0 +1,41 @@
+{
+  "assetId": "npc-field-suite-v1",
+  "formatVersion": 1,
+  "authorship": "original-code-native-pixel-primitives",
+  "frame": {
+    "width": 32,
+    "height": 48,
+    "pivot": [16, 44],
+    "footPoint": [16, 44],
+    "transparentGutter": 1
+  },
+  "sheet": {
+    "columns": ["speaker", "interviewee"],
+    "rows": ["south-idle"]
+  },
+  "roleTaxonomy": [
+    {
+      "id": "speaker",
+      "meaning": "A generic person or spokesperson explicitly addressed by a side-story talk objective.",
+      "liveContract": "side-story objective.type equals talk",
+      "paletteId": "npc-speaker-rain-clay-v1",
+      "silhouette": "layered civilian coat, open hand, no insignia or carried prop",
+      "colors": {"primary": "#5d4a3b", "secondary": "#315b62", "light": "#8b7057", "accent": "#c19a61", "hair": "#211b1a"}
+    },
+    {
+      "id": "interviewee",
+      "meaning": "A generic authored speaker explicitly present for an interview.",
+      "liveContract": "scene-operation activityType equals interview",
+      "paletteId": "npc-interviewee-indigo-reed-v1",
+      "silhouette": "short rain mantle, folded sleeves, empty visible hands",
+      "colors": {"primary": "#4c526f", "secondary": "#6f5843", "light": "#777e9a", "accent": "#8ab5aa", "hair": "#302522"}
+    }
+  ],
+  "exclusions": [
+    "props", "hazards", "exits", "evidence", "mechanisms", "deliveries",
+    "care and rescue procedure nodes", "councils and ambiguous groups",
+    "combat markers", "sacred or devotional objects", "untyped label guesses"
+  ],
+  "likenessPolicy": "generic fictional people only; no real-person likenesses",
+  "symbolPolicy": "plain invented clothing geometry only; no real insignia or sacred marks"
+}
