@@ -6,6 +6,7 @@ export const BATTLE_COMMAND_PRESENTATION_SPEEDS = Object.freeze([1, 2, 4]);
 
 export const BATTLE_COMMAND_PRESENTATION_MS = Object.freeze({
   guard: 400,
+  dodge: 400,
   analyze: 480,
   objective: 480,
 });
@@ -17,6 +18,7 @@ export const BATTLE_COMMAND_PRESENTATION_BOUNDS = Object.freeze({
 
 const DEFAULT_VISUALS = Object.freeze({
   guard: Object.freeze({ marker: 'shield', color: '#82c8ef', accentColor: '#d8f2ff' }),
+  dodge: Object.freeze({ marker: 'chevron', color: '#a98ae6', accentColor: '#f0e5ff' }),
   analyze: Object.freeze({ marker: 'scan', color: '#f1d386', accentColor: '#fff2ab' }),
   objective: Object.freeze({ marker: 'objective', color: '#d0b36b', accentColor: '#fff0bd' }),
 });
@@ -58,6 +60,7 @@ function nonempty(value, fallback) {
 function announcementFor(type, actorName, targetName, label, detail) {
   let announcement;
   if (type === 'guard') announcement = `${actorName} guards.`;
+  else if (type === 'dodge') announcement = `${actorName} readies Dodge.`;
   else if (type === 'analyze') announcement = `${actorName} analyzes ${targetName}.`;
   else announcement = `${actorName}: ${label}.`;
   return detail ? `${announcement} ${detail}` : announcement;
@@ -88,13 +91,14 @@ export function createBattleCommandPresentation({
     throw new RangeError('Battle command presentation speed must be 1, 2, or 4.');
   }
   const source = exactTile(actorTile, 'actorTile');
-  const target = type === 'guard'
+  const actorLocal = type === 'guard' || type === 'dodge';
+  const target = actorLocal
     ? source
     : exactTile(targetTile, 'targetTile');
   const resolvedActorId = nonempty(actorId, 'actor');
   const resolvedActorName = nonempty(actorName, resolvedActorId);
-  const resolvedTargetId = type === 'guard' ? resolvedActorId : nonempty(targetId, 'target');
-  const resolvedTargetName = type === 'guard' ? resolvedActorName : nonempty(targetName, resolvedTargetId);
+  const resolvedTargetId = actorLocal ? resolvedActorId : nonempty(targetId, 'target');
+  const resolvedTargetName = actorLocal ? resolvedActorName : nonempty(targetName, resolvedTargetId);
   const defaultVisual = DEFAULT_VISUALS[type];
   const resolvedLabel = type === 'objective' ? nonempty(label, 'Advance Objective') : null;
   const baseDurationMs = BATTLE_COMMAND_PRESENTATION_MS[type];
@@ -147,7 +151,7 @@ export function sampleBattleCommandPresentation(record, nowMs, { reducedMotion =
     pulse: round(pulse),
     opacity: round(reducedMotion ? 0.9 : 0.55 + (pulse * 0.4)),
     radiusScale: round(reducedMotion ? 1 : 0.84 + (progress * 0.24)),
-    linkProgress: record.type === 'guard' ? 0 : round(reducedMotion ? 1 : Math.min(1, progress * 2.5)),
+    linkProgress: ['guard', 'dodge'].includes(record.type) ? 0 : round(reducedMotion ? 1 : Math.min(1, progress * 2.5)),
     reducedMotion: Boolean(reducedMotion),
   });
 }

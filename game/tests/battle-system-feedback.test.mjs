@@ -2,12 +2,15 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
+import { CampaignCombatEngine } from '../campaign-combat.mjs';
+
 import {
   BATTLE_SYSTEM_FEEDBACK_MS,
   createBattleDamageOutcomeFeedback,
   createBattleDefeatAccent,
   createBattleHealFeedback,
   createBattleMoveFeedback,
+  createBattleStanceDodgeFeedback,
   createBattleTelegraphEvadeFeedback,
   createBattleTempoPresentation,
   createBattleVictoryAccent,
@@ -16,6 +19,7 @@ import {
   sampleBattleDamageOutcomeFeedback,
   sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
+  sampleBattleStanceDodgeFeedback,
   sampleBattleTelegraphEvadeFeedback,
   sampleRecoveryLockFeedback,
 } from '../battle-system-feedback.mjs';
@@ -50,6 +54,44 @@ function damageEvent(overrides = {}) {
     base: 20, deliveryMultiplier: 1, essenceMultiplier: 1, typedDamage: 20,
     absorbed: false, finalDamage: 20, guarded: false, targetHp: 80, pulse: 4,
     ...overrides,
+  };
+}
+
+function dodgeSnapshots({
+  eventOverrides = {},
+  skillOverrides = {},
+  attackerOverrides = {},
+  beforeTargetOverrides = {},
+  afterTargetOverrides = {},
+  beforeLog = [{ type: 'dodge', actorId: 'lise', recoveryPulses: 1, pulse: 2 }],
+  afterEvents = null,
+} = {}) {
+  const event = {
+    type: 'dodge-resolved', attackerId: 'oni-1', targetId: 'lise', skillId: 'tetsubo-hew',
+    base: 24, deliveryMultiplier: 1, essenceMultiplier: 1, typedDamage: 24, absorbed: false,
+    hit: false, dodged: true, guarded: false, finalDamage: 0, targetHp: 108,
+    statusId: null, statusApplied: false, pulse: 3,
+    ...eventOverrides,
+  };
+  const attacker = {
+    instanceId: 'oni-1', name: 'Ashen Oni', faction: 'enemy', hp: 90, stance: 'neutral', pos: { x: 6, y: 2 },
+    power: 14,
+    skills: [{ id: 'tetsubo-hew', name: 'Tetsubo Hew', delivery: 'crush', power: 13, dodgeable: true, ...skillOverrides }],
+    ...attackerOverrides,
+  };
+  const beforeTarget = {
+    instanceId: 'lise', name: 'Lise Varga', faction: 'party', hp: 108, stance: 'dodge', pos: { x: 2, y: 2 },
+    guard: 10, resistances: { delivery: { crush: 1 }, essence: {} }, statuses: [],
+    ...beforeTargetOverrides,
+  };
+  const afterTarget = { ...beforeTarget, stance: 'neutral', ...afterTargetOverrides };
+  return {
+    event,
+    beforeSnapshot: { actors: [attacker, beforeTarget], log: beforeLog },
+    afterSnapshot: {
+      actors: [attacker, afterTarget],
+      log: [...beforeLog, ...(afterEvents ?? [event, { type: 'enemy-activation', actorId: attacker.instanceId, pulse: 3 }])],
+    },
   };
 }
 
@@ -440,6 +482,207 @@ test('typed damage sampling expires exactly and reduced motion holds one static 
     sampleBattleDamageOutcomeFeedback(record, 819, { reducedMotion: true }),
   );
   assert.throws(() => createBattleDamageOutcomeFeedback({ ...damageSnapshots(event), speed: 3 }), /speed must be 1, 2, or 4/i);
+});
+
+test('stance Dodge feedback requires the exact authored engine result and unchanged target state', () => {
+  const snapshots = dodgeSnapshots();
+  const beforeCopy = JSON.parse(JSON.stringify(snapshots));
+  const record = createBattleStanceDodgeFeedback({
+    beforeSnapshot: snapshots.beforeSnapshot,
+    afterSnapshot: snapshots.afterSnapshot,
+    startedAt: 100,
+    speed: 2,
+  });
+
+  assert.equal(record.kind, 'stance-dodge');
+  assert.equal(record.durationMs, BATTLE_SYSTEM_FEEDBACK_MS['stance-dodge'] / 2);
+  assert.equal(record.endsAt, 460);
+  assert.deepEqual(record, {
+    kind: 'stance-dodge',
+    attackerId: 'oni-1', attackerName: 'Ashen Oni', attackerTile: { x: 6, y: 2 },
+    targetId: 'lise', targetName: 'Lise Varga', targetTile: { x: 2, y: 2 },
+    skillId: 'tetsubo-hew', skillName: 'Tetsubo Hew', delivery: 'crush', typedDamage: 24,
+    targetHp: 108, sidestepVector: { x: 0, y: -1 }, displayLabel: 'DODGE',
+    announcement: 'Lise Varga dodges Tetsubo Hew from Ashen Oni. Dodge consumed.',
+    baseDurationMs: 720, durationMs: 360, startedAt: 100, endsAt: 460, presentationSpeed: 2,
+  });
+  assert.equal(Object.isFrozen(record), true);
+  assert.equal(Object.isFrozen(record.targetTile), true);
+  assert.deepEqual(snapshots, beforeCopy, 'Dodge presentation cannot mutate engine snapshots');
+  assert.notEqual(record.kind, createBattleTelegraphEvadeFeedback({
+    beforeSnapshot: { actors: [], log: [] },
+    afterSnapshot: { actors: [], log: [] },
+  })?.kind ?? 'telegraph-evaded');
+});
+
+test('stance Dodge feedback fails closed on divergent logs, false stances, ineligible skills, HP changes, or outcome events', () => {
+  const valid = dodgeSnapshots();
+  assert.equal(createBattleStanceDodgeFeedback({
+    beforeSnapshot: valid.beforeSnapshot,
+    afterSnapshot: { ...valid.afterSnapshot, log: [{ type: 'different' }, valid.event] },
+  }), null, 'the prior log must be an exact prefix');
+
+  for (const fixture of [
+    dodgeSnapshots({ beforeTargetOverrides: { stance: 'neutral' } }),
+    dodgeSnapshots({ afterTargetOverrides: { stance: 'dodge' } }),
+    dodgeSnapshots({ skillOverrides: { dodgeable: false } }),
+    dodgeSnapshots({ eventOverrides: { dodged: false } }),
+    dodgeSnapshots({ eventOverrides: { hit: true } }),
+    dodgeSnapshots({ eventOverrides: { guarded: true } }),
+    dodgeSnapshots({ eventOverrides: { finalDamage: 1 } }),
+    dodgeSnapshots({ eventOverrides: { statusApplied: true } }),
+    dodgeSnapshots({ eventOverrides: { pulse: -1 } }),
+    dodgeSnapshots({ eventOverrides: { pulse: 1.5 } }),
+    dodgeSnapshots({ eventOverrides: { pulse: undefined } }),
+    dodgeSnapshots({ eventOverrides: { base: 25 } }),
+    dodgeSnapshots({ eventOverrides: { deliveryMultiplier: 0.5 } }),
+    dodgeSnapshots({ eventOverrides: { essenceMultiplier: 0.5 } }),
+    dodgeSnapshots({ eventOverrides: { typedDamage: 12 } }),
+    dodgeSnapshots({ eventOverrides: { absorbed: true } }),
+    dodgeSnapshots({ attackerOverrides: { power: 15 } }),
+    dodgeSnapshots({ attackerOverrides: { skills: {} } }),
+    dodgeSnapshots({ skillOverrides: { power: 14 } }),
+    dodgeSnapshots({ beforeTargetOverrides: { guard: 13 } }),
+    dodgeSnapshots({ beforeTargetOverrides: { resistances: { delivery: { crush: 0.5 }, essence: {} } } }),
+    dodgeSnapshots({ beforeTargetOverrides: { statuses: {} } }),
+    dodgeSnapshots({ afterTargetOverrides: { hp: 107 } }),
+    dodgeSnapshots({ afterTargetOverrides: { pos: { x: 2, y: 3 } } }),
+  ]) {
+    assert.equal(createBattleStanceDodgeFeedback(fixture), null);
+  }
+
+  assert.equal(createBattleStanceDodgeFeedback(
+    dodgeSnapshots({ skillOverrides: { delivery: 'arcane' } }),
+  )?.delivery, 'arcane', 'explicit authored dodgeability, not inferred delivery, is authoritative');
+
+  const damage = dodgeSnapshots();
+  damage.afterSnapshot.log.splice(1, 0, {
+    type: 'damage', attackerId: 'oni-1', targetId: 'lise', skillId: 'tetsubo-hew',
+    base: 24, deliveryMultiplier: 1, essenceMultiplier: 1, typedDamage: 24,
+    absorbed: false, finalDamage: 0, guarded: false, targetHp: 108,
+  });
+  assert.equal(createBattleStanceDodgeFeedback(damage), null, 'a Dodge cannot coexist with a damage event');
+
+  const targetStatus = dodgeSnapshots();
+  targetStatus.afterSnapshot.log.splice(1, 0, { type: 'status-applied', targetId: 'lise', statusId: 'shock' });
+  assert.equal(createBattleStanceDodgeFeedback(targetStatus), null, 'a Dodge cannot apply its target status');
+
+  const selfStatus = dodgeSnapshots();
+  selfStatus.afterSnapshot.log.splice(1, 0, { type: 'status-applied', targetId: 'oni-1', statusId: 'overheated' });
+  assert.equal(createBattleStanceDodgeFeedback(selfStatus)?.kind, 'stance-dodge', 'an independently authored attacker self-status remains valid');
+
+  assert.throws(() => createBattleStanceDodgeFeedback({ ...valid, speed: 3 }), /speed must be 1, 2, or 4/i);
+});
+
+test('stance Dodge feedback accepts only an authoritative later status activation through an ordered HP cursor', () => {
+  const scorch = {
+    id: 'scorch', sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', appliedAtPulse: 1,
+    durationActivations: 1, remainingActivations: 1, activeThisActivation: false,
+  };
+  const snapshots = dodgeSnapshots({ beforeTargetOverrides: { statuses: [scorch] } });
+  const triggered = {
+    type: 'status-triggered', statusId: 'scorch', actorId: 'lise',
+    sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', remainingActivations: 1, pulse: 4,
+  };
+  const statusDamage = {
+    type: 'status-damage', statusId: 'scorch', targetId: 'lise',
+    sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', baseDamage: 5,
+    finalDamage: 5, hpBefore: 108, targetHp: 103, pulse: 4,
+  };
+  snapshots.afterSnapshot.actors[1].hp = 103;
+  snapshots.afterSnapshot.actors[1].statuses = [{ ...scorch, activeThisActivation: true }];
+  snapshots.afterSnapshot.log = [
+    ...snapshots.beforeSnapshot.log,
+    snapshots.event,
+    { type: 'enemy-activation', actorId: 'oni-1', pulse: 3 },
+    triggered,
+    statusDamage,
+  ];
+
+  const record = createBattleStanceDodgeFeedback(snapshots);
+  assert.equal(record?.kind, 'stance-dodge');
+  assert.equal(record?.targetHp, 108, 'the Dodge record preserves HP at the dodge-resolved event');
+
+  const malformed = [
+    { events: [snapshots.event, statusDamage], message: 'status damage needs its pre-existing status trigger' },
+    { events: [triggered, snapshots.event, statusDamage], message: 'the trigger must follow the Dodge event' },
+    { events: [snapshots.event, { ...triggered, statusId: 'dread' }, statusDamage], message: 'the trigger must name a pre-existing status' },
+    { events: [snapshots.event, triggered, { ...statusDamage, sourceActorId: 'oni-1' }], message: 'status damage must preserve source authority' },
+    { events: [snapshots.event, triggered, { ...statusDamage, baseDamage: 4, finalDamage: 4, targetHp: 104 }], message: 'status damage must match its authored definition' },
+    { events: [snapshots.event, triggered, { ...statusDamage, hpBefore: 107, targetHp: 102 }], message: 'status damage must continue the HP cursor' },
+    { events: [snapshots.event, triggered], message: 'an activation-damage trigger cannot omit its damage event' },
+  ];
+  for (const fixture of malformed) {
+    assert.equal(createBattleStanceDodgeFeedback({
+      beforeSnapshot: snapshots.beforeSnapshot,
+      afterSnapshot: { ...snapshots.afterSnapshot, log: [...snapshots.beforeSnapshot.log, ...fixture.events] },
+    }), null, fixture.message);
+  }
+
+  assert.equal(createBattleStanceDodgeFeedback({
+    beforeSnapshot: snapshots.beforeSnapshot,
+    afterSnapshot: { ...snapshots.afterSnapshot, actors: snapshots.afterSnapshot.actors.map((actor) => (
+      actor.instanceId === 'lise' ? { ...actor, hp: 102 } : actor
+    )) },
+  }), null, 'the ordered cursor must end at the after snapshot HP');
+});
+
+test('stance Dodge feedback survives the engine cadence that activates a pre-existing Scorch after the miss', () => {
+  const encounter = {
+    id: 'dodge-status-feedback', levelId: 'dodge-status-feedback-level', format: 'battle',
+    objective: { type: 'defeatAll', text: 'Defeat all.' },
+    party: { roster: ['ren'], deployment: [{ actorId: 'ren', at: '1,3' }] },
+    enemies: [{
+      id: 'dummy', name: 'Dummy', count: 1, positions: ['2,3'], ledger: 'Test.',
+      stats: { hp: 40, power: 6, guard: 3, speed: 10 },
+      resistances: {
+        delivery: { cut: 1, pierce: 1, crush: 1, arcane: 1 },
+        essence: { ember: 1, frost: 1, storm: 1, radiance: 1, umbral: 1 },
+      },
+      skills: [{
+        id: 'poke', name: 'Poke', delivery: 'pierce', power: 4, range: 1,
+        recoveryPulses: 1, dodgeable: true,
+      }],
+    }],
+  };
+  const level = {
+    id: encounter.levelId, width: 6, height: 6, blocked: [], terrain: [], spawn: { x: 0, y: 0 },
+  };
+  const engine = new CampaignCombatEngine({ encounter, level });
+  engine.getActor('ren').statuses.push({
+    id: 'scorch', sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', appliedAtPulse: 0,
+    durationActivations: 1, remainingActivations: 1, activeThisActivation: false,
+  });
+  assert.equal(engine.dodge('ren').ok, true);
+  const beforeSnapshot = engine.snapshot();
+  const result = engine.resolveEnemyActivation();
+  const afterSnapshot = engine.snapshot();
+
+  assert.equal(result.resolution.dodged, true);
+  assert.equal(beforeSnapshot.actors.find((actor) => actor.instanceId === 'ren').hp, 118);
+  assert.equal(afterSnapshot.actors.find((actor) => actor.instanceId === 'ren').hp, 113);
+  assert.deepEqual(afterSnapshot.log.slice(beforeSnapshot.log.length).map((event) => event.type), [
+    'dodge-resolved', 'enemy-activation', 'status-triggered', 'status-damage',
+  ]);
+  assert.equal(createBattleStanceDodgeFeedback({ beforeSnapshot, afterSnapshot })?.kind, 'stance-dodge');
+});
+
+test('stance Dodge sampling expires exactly and removes sidestep motion under reduced motion', () => {
+  const snapshots = dodgeSnapshots();
+  const record = createBattleStanceDodgeFeedback({ ...snapshots, startedAt: 100 });
+  assert.equal(sampleBattleStanceDodgeFeedback(record, 99), null);
+  const middle = sampleBattleStanceDodgeFeedback(record, 460);
+  assert.equal(middle.kind, 'stance-dodge');
+  assert.equal(middle.displayLabel, 'DODGE');
+  assert.equal(middle.sidestepTiles, 0.18);
+  assert.deepEqual(middle.sidestepVector, { x: 0, y: -1 });
+  assert.equal(sampleBattleStanceDodgeFeedback(record, 820), null);
+  const reducedEarly = sampleBattleStanceDodgeFeedback(record, 101, { reducedMotion: true });
+  const reducedLate = sampleBattleStanceDodgeFeedback(record, 819, { reducedMotion: true });
+  assert.deepEqual(reducedLate, reducedEarly);
+  assert.equal(reducedEarly.sidestepTiles, 0);
+  assert.equal(reducedEarly.progress, 0.5);
+  assert.equal(reducedEarly.reducedMotion, true);
 });
 
 test('telegraph evasion requires an exact typed resolved-intent delta and party targets', () => {

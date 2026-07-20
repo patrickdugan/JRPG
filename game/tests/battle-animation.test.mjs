@@ -136,6 +136,48 @@ test('phases preserve windup, exact-grid movement, appropriate emission, impact,
   }
 });
 
+test('an explicit Dodge replaces impact, stagger, and target status with a within-cell evade phase', () => {
+  const skill = {
+    id: 'tetsubo-hew',
+    delivery: 'crush',
+    dodgeable: true,
+    effect: { status: 'shock' },
+  };
+  const source = { x: 8, y: 3 };
+  const target = { x: 2, y: 3 };
+  const timeline = createEnemyFamilyTimeline('ashen-oni', {
+    sourceTile: source,
+    targetTile: target,
+    skill,
+    statusId: 'shock',
+    statusApplied: true,
+    dodged: true,
+  });
+
+  assert.equal(timeline.action.dodged, true);
+  assert.equal(timeline.action.statusId, null);
+  assert.ok(timeline.simulationOrder.includes('evade'));
+  assert.equal(timeline.simulationOrder.includes('impact'), false);
+  assert.equal(timeline.simulationOrder.includes('stagger'), false);
+  assert.equal(timeline.simulationOrder.includes('status-glyph'), false);
+  assert.ok(timeline.frames.every(({ impact, statusGlyph }) => impact === null && statusGlyph === null));
+
+  const evadeFrames = timeline.frames.filter(({ phase }) => phase === 'evade');
+  assert.equal(evadeFrames.length, 5);
+  assert.ok(evadeFrames.every(({ target: frameTarget }) => (
+    frameTarget.pose === 'dodge'
+      && frameTarget.simulationTile.x === target.x
+      && frameTarget.simulationTile.y === target.y
+      && frameTarget.simulationPositionChanges === false
+  )));
+  assert.deepEqual(evadeFrames[0].target.renderTile, target);
+  assert.deepEqual(evadeFrames.at(-1).target.renderTile, target);
+  assert.deepEqual(evadeFrames[2].target.sidestepVector, { x: 0, y: -1 });
+  assert.deepEqual(evadeFrames[2].target.renderTile, { x: 2, y: 2.82 });
+  assert.equal(evadeFrames[2].target.sidestep, 0.18);
+  assertDeepFrozen(timeline);
+});
+
 test('lunge endpoints are exact integer grid tiles and presentation never changes simulation position', () => {
   const source = { x: 4, y: 5 };
   const target = { x: 7, y: 2 };

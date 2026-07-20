@@ -34,9 +34,9 @@ test('objective command presentation uses the same first incomplete exact tile a
   }), { x: 2, y: 2 });
 });
 
-test('Guard, Analyze, and Objective create exact bounded immutable records', () => {
+test('Guard, Dodge, Analyze, and Objective create exact bounded immutable records', () => {
   assert.deepEqual(BATTLE_COMMAND_PRESENTATION_SPEEDS, [1, 2, 4]);
-  assert.deepEqual(BATTLE_COMMAND_PRESENTATION_MS, { guard: 400, analyze: 480, objective: 480 });
+  assert.deepEqual(BATTLE_COMMAND_PRESENTATION_MS, { guard: 400, dodge: 400, analyze: 480, objective: 480 });
   assert.equal(Object.isFrozen(BATTLE_COMMAND_PRESENTATION_SPEEDS), true);
   assert.equal(Object.isFrozen(BATTLE_COMMAND_PRESENTATION_MS), true);
 
@@ -44,6 +44,9 @@ test('Guard, Analyze, and Objective create exact bounded immutable records', () 
   const targetTile = { x: 7, y: 3 };
   const guard = createBattleCommandPresentation({
     type: 'guard', actorId: 'ren', actorName: 'Ren', actorTile, startedAt: 1_000,
+  });
+  const dodge = createBattleCommandPresentation({
+    type: 'dodge', actorId: 'lise', actorName: 'Lise', actorTile, startedAt: 1_000,
   });
   const analyze = createBattleCommandPresentation({
     type: 'analyze', actorId: 'aya', actorName: 'Aya', actorTile,
@@ -59,12 +62,18 @@ test('Guard, Analyze, and Objective create exact bounded immutable records', () 
 
   assert.equal(guard.durationMs, 400);
   assert.equal(guard.endsAt, 1_400);
+  assert.equal(dodge.durationMs, 400);
   assert.equal(analyze.durationMs, 240);
   assert.equal(objective.durationMs, 120);
   assert.ok(guard.baseDurationMs >= BATTLE_COMMAND_PRESENTATION_BOUNDS.minimumBaseDurationMs);
   assert.ok(analyze.baseDurationMs <= BATTLE_COMMAND_PRESENTATION_BOUNDS.maximumBaseDurationMs);
   assert.deepEqual(guard.targetTile, guard.actorTile);
+  assert.deepEqual(dodge.targetTile, dodge.actorTile);
   assert.equal(guard.announcement, 'Ren guards.');
+  assert.equal(dodge.announcement, 'Lise readies Dodge.');
+  assert.equal(dodge.marker, 'chevron');
+  assert.equal(dodge.color, '#a98ae6');
+  assert.equal(dodge.accentColor, '#f0e5ff');
   assert.equal(analyze.announcement, 'Aya analyzes Ashen Oni. Ledger readout published.');
   assert.equal(objective.announcement, 'Lise: Break East Node.');
   assert.equal(objective.marker, 'node');
@@ -99,6 +108,26 @@ test('sampling is deterministic, expires exactly, and reduced motion holds one s
   assert.equal(reducedEarly.phase, 'hold');
   assert.equal(reducedEarly.linkProgress, 1);
   assert.equal(reducedEarly.reducedMotion, true);
+});
+
+test('Dodge samples one actor-local violet chevron without a target link', () => {
+  const record = createBattleCommandPresentation({
+    type: 'dodge', actorId: 'lise', actorName: 'Lise', actorTile: { x: 3, y: 2 }, startedAt: 500,
+  });
+  const animated = sampleBattleCommandPresentation(record, 700);
+  assert.equal(animated.type, 'dodge');
+  assert.equal(animated.marker, 'chevron');
+  assert.deepEqual(animated.actorTile, { x: 3, y: 2 });
+  assert.deepEqual(animated.targetTile, animated.actorTile);
+  assert.equal(animated.linkProgress, 0);
+  assert.equal(animated.reducedMotion, false);
+
+  const reducedEarly = sampleBattleCommandPresentation(record, 501, { reducedMotion: true });
+  const reducedLate = sampleBattleCommandPresentation(record, 899, { reducedMotion: true });
+  assert.deepEqual(reducedLate, reducedEarly);
+  assert.equal(reducedEarly.phase, 'hold');
+  assert.equal(reducedEarly.progress, 0.5);
+  assert.equal(reducedEarly.linkProgress, 0);
 });
 
 test('invalid command records fail explicitly and presentation boundaries compose without simulation data', () => {

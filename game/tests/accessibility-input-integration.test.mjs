@@ -68,3 +68,19 @@ test('battle target cards disable defeated and temporarily locked enemies', () =
   assert.match(battle, /const targetable = enemyTargetingAvailable && actor\.active !== false && actor\.hp > 0/);
   assert.match(battle, /if \(!targets\.some\(\(target\) => target\.instanceId === selectedTargetId\)\)/);
 });
+
+test('Campaign Dodge has one native touch control and an isolated non-repeating keyboard shortcut', () => {
+  const html = source('battle.html');
+  const battle = source('battle.js');
+  const css = source('battle.css');
+  assert.match(html, /<button type="button" data-command="dodge" aria-keyshortcuts="F">F · Dodge<\/button>/);
+  assert.equal((html.match(/data-command="dodge"/g) ?? []).length, 1);
+  assert.match(battle, /f: 'dodge'/);
+  assert.match(battle, /if \(commandShortcuts\[key\] && !event\.repeat\)/);
+  assert.match(battle, /selectedCommand === 'dodge'[\s\S]*?engine\.dodge\(actor\.instanceId\)/);
+  assert.match(battle, /!\['attack', 'skill', 'analyze'\]\.includes\(selectedCommand\)/,
+    'targetless commands suppress enemy canvas targeting');
+  assert.match(battle, /reducedMotion\.matches \? 0\.5 : \(visualNow % 640\) \/ 640/,
+    'persistent Dodge cue has one static reduced-motion frame');
+  assert.match(css, /\.command-grid \{[^}]*repeat\(7, minmax\(64px, 1fr\)\)/);
+});

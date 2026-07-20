@@ -1,5 +1,7 @@
 /** Pure, code-native feedback records for exact board interaction. */
 
+import { calculateTypedDamage, COMBAT_STATUS_DEFINITIONS } from './campaign-combat.mjs';
+
 export const BATTLE_SYSTEM_FEEDBACK_SPEEDS = Object.freeze([1, 2, 4]);
 
 export const BATTLE_SYSTEM_FEEDBACK_MS = Object.freeze({
@@ -7,6 +9,7 @@ export const BATTLE_SYSTEM_FEEDBACK_MS = Object.freeze({
   'move-blocked': 480,
   'recovery-lock': 560,
   'telegraph-evaded': 720,
+  'stance-dodge': 720,
   'damage-outcome': 720,
   heal: 720,
 });
@@ -481,6 +484,196 @@ export function sampleBattleDamageOutcomeFeedback(record, nowMs, { reducedMotion
       };
     }),
     progress: round(visualProgress),
+    reducedMotion: Boolean(reducedMotion),
+  });
+}
+
+function finiteDodgeResolution(event) {
+  return event?.type === 'dodge-resolved'
+    && typeof event.attackerId === 'string' && event.attackerId.length > 0
+    && typeof event.targetId === 'string' && event.targetId.length > 0
+    && typeof event.skillId === 'string' && event.skillId.length > 0
+    && event.hit === false
+    && event.dodged === true
+    && event.guarded === false
+    && event.finalDamage === 0
+    && Number.isSafeInteger(event.base) && event.base >= 1
+    && Number.isFinite(event.deliveryMultiplier)
+    && Number.isFinite(event.essenceMultiplier)
+    && Number.isSafeInteger(event.typedDamage)
+    && typeof event.absorbed === 'boolean'
+    && Number.isSafeInteger(event.targetHp) && event.targetHp >= 0
+    && typeof event.statusApplied === 'boolean' && event.statusApplied === false
+    && Number.isSafeInteger(event.pulse) && event.pulse >= 0;
+}
+
+function exactSameTile(left, right) {
+  return Number.isSafeInteger(left?.x) && Number.isSafeInteger(left?.y)
+    && left.x === right?.x && left.y === right?.y;
+}
+
+/**
+ * Exact pre-committed stance Dodge. This is intentionally separate from
+ * moving clear of a published telegraph: only a typed `dodge-resolved` event
+ * corroborated by the stance, authored skill, and unchanged HP may authorize it.
+ */
+export function createBattleStanceDodgeFeedback({
+  beforeSnapshot,
+  afterSnapshot,
+  startedAt = 0,
+  speed = 1,
+} = {}) {
+  if (!BATTLE_SYSTEM_FEEDBACK_SPEEDS.includes(speed)) {
+    throw new RangeError('Battle system feedback speed must be 1, 2, or 4.');
+  }
+  if (!Array.isArray(beforeSnapshot?.actors) || !Array.isArray(afterSnapshot?.actors)) {
+    throw new TypeError('beforeSnapshot and afterSnapshot actors must be arrays.');
+  }
+  const beforeLog = Array.isArray(beforeSnapshot.log) ? beforeSnapshot.log : [];
+  const afterLog = Array.isArray(afterSnapshot.log) ? afterSnapshot.log : [];
+  if (!logsShareExactPrefix(beforeLog, afterLog)) return null;
+  const newEvents = afterLog.slice(beforeLog.length);
+  const dodgeEvents = newEvents.filter((event) => event?.type === 'dodge-resolved');
+  if (dodgeEvents.length !== 1 || !finiteDodgeResolution(dodgeEvents[0])) return null;
+  const event = dodgeEvents[0];
+
+  const beforeAttackers = beforeSnapshot.actors.filter((actor) => actor?.instanceId === event.attackerId);
+  const beforeTargets = beforeSnapshot.actors.filter((actor) => actor?.instanceId === event.targetId);
+  const afterTargets = afterSnapshot.actors.filter((actor) => actor?.instanceId === event.targetId);
+  if (beforeAttackers.length !== 1 || beforeTargets.length !== 1 || afterTargets.length !== 1) return null;
+  const attacker = beforeAttackers[0];
+  const beforeTarget = beforeTargets[0];
+  const afterTarget = afterTargets[0];
+  if (!Array.isArray(attacker.skills)
+    || (beforeTarget.statuses !== undefined && !Array.isArray(beforeTarget.statuses))) return null;
+  const skillMatches = attacker.skills.filter((skill) => skill?.id === event.skillId);
+  if (attacker.faction !== 'enemy' || beforeTarget.faction !== 'party' || afterTarget.faction !== 'party'
+    || skillMatches.length !== 1) return null;
+  const skill = skillMatches[0];
+  if (skill.dodgeable !== true) return null;
+  if ((event.statusId ?? null) !== (skill.effect?.status ?? null)) return null;
+  const calculation = calculateTypedDamage(attacker, beforeTarget, skill);
+  if (event.base !== calculation.base
+    || event.deliveryMultiplier !== calculation.deliveryMultiplier
+    || event.essenceMultiplier !== calculation.essenceMultiplier
+    || event.typedDamage !== calculation.typedDamage
+    || event.absorbed !== calculation.absorbed) return null;
+  if (beforeTarget.stance !== 'dodge' || afterTarget.stance !== 'neutral'
+    || !Number.isSafeInteger(beforeTarget.hp) || !Number.isSafeInteger(afterTarget.hp)
+    || beforeTarget.hp !== event.targetHp || !exactSameTile(beforeTarget.pos, afterTarget.pos)) return null;
+
+  const dodgeIndex = newEvents.indexOf(event);
+  let hpCursor = beforeTarget.hp;
+  const beforeStatuses = beforeTarget.statuses ?? [];
+  if (beforeStatuses.some((status) => typeof status?.id !== 'string'
+    || !Number.isSafeInteger(status.remainingActivations) || status.remainingActivations < 1)
+    || new Set(beforeStatuses.map((status) => status.id)).size !== beforeStatuses.length) return null;
+  const preExistingStatuses = new Map(beforeStatuses.map((status) => [status.id, status]));
+  const triggeredStatuses = new Map();
+  for (const [index, candidate] of newEvents.entries()) {
+    if (!candidate || candidate === event) continue;
+    const targetsDodgeActor = candidate.targetId === event.targetId || candidate.actorId === event.targetId;
+    if (!targetsDodgeActor) continue;
+    if (candidate.type === 'damage' || candidate.type === 'damage-mitigated'
+      || candidate.type === 'status-applied' || candidate.type === 'status-refreshed') return null;
+    if (candidate.type === 'status-triggered') {
+      const status = preExistingStatuses.get(candidate.statusId);
+      const definition = COMBAT_STATUS_DEFINITIONS[candidate.statusId];
+      if (index <= dodgeIndex || !status || !definition || triggeredStatuses.has(candidate.statusId)
+        || candidate.actorId !== event.targetId
+        || candidate.sourceActorId !== status.sourceActorId
+        || candidate.sourceSkillId !== status.sourceSkillId
+        || candidate.remainingActivations !== status.remainingActivations
+        || !Number.isSafeInteger(candidate.pulse) || candidate.pulse < event.pulse) return null;
+      triggeredStatuses.set(candidate.statusId, {
+        pulse: candidate.pulse,
+        requiresDamage: Number.isSafeInteger(definition.activationDamage) && definition.activationDamage > 0,
+        damageResolved: false,
+      });
+      continue;
+    }
+    if (candidate.type === 'status-damage') {
+      const status = preExistingStatuses.get(candidate.statusId);
+      const definition = COMBAT_STATUS_DEFINITIONS[candidate.statusId];
+      const trigger = triggeredStatuses.get(candidate.statusId);
+      const baseDamage = definition?.activationDamage;
+      const expectedDamage = Number.isSafeInteger(baseDamage) && baseDamage > 0
+        ? Math.min(hpCursor, baseDamage)
+        : null;
+      if (index <= dodgeIndex || !status || !trigger || trigger.damageResolved || expectedDamage === null
+        || candidate.targetId !== event.targetId
+        || candidate.sourceActorId !== status.sourceActorId
+        || candidate.sourceSkillId !== status.sourceSkillId
+        || candidate.baseDamage !== baseDamage
+        || candidate.hpBefore !== hpCursor
+        || candidate.finalDamage !== expectedDamage
+        || candidate.targetHp !== hpCursor - expectedDamage
+        || !Number.isSafeInteger(candidate.pulse) || candidate.pulse !== trigger.pulse) return null;
+      hpCursor = candidate.targetHp;
+      trigger.damageResolved = true;
+    }
+  }
+  if ([...triggeredStatuses.values()].some((trigger) => trigger.requiresDamage && !trigger.damageResolved)
+    || hpCursor !== afterTarget.hp) return null;
+
+  const attackerTile = exactTile(attacker.pos, 'attacker.pos');
+  const targetTile = exactTile(afterTarget.pos, 'afterTarget.pos');
+  const attackVector = {
+    x: Math.sign(targetTile.x - attackerTile.x),
+    y: Math.sign(targetTile.y - attackerTile.y),
+  };
+  const sidestepVector = attackVector.x === 0 && attackVector.y === 0
+    ? { x: 1, y: 0 }
+    : {
+      x: attackVector.y === 0 ? 0 : -attackVector.y,
+      y: attackVector.x === 0 ? 0 : attackVector.x,
+    };
+  const attackerName = String(attacker.name ?? event.attackerId);
+  const targetName = String(afterTarget.name ?? event.targetId);
+  const skillName = String(skill.name ?? event.skillId);
+  const baseDurationMs = BATTLE_SYSTEM_FEEDBACK_MS['stance-dodge'];
+  const durationMs = baseDurationMs / speed;
+  const safeStartedAt = safeTime(startedAt);
+  return deepFreeze({
+    kind: 'stance-dodge',
+    attackerId: event.attackerId,
+    attackerName,
+    attackerTile,
+    targetId: event.targetId,
+    targetName,
+    targetTile,
+    skillId: event.skillId,
+    skillName,
+    delivery: skill.delivery,
+    typedDamage: event.typedDamage,
+    targetHp: event.targetHp,
+    sidestepVector,
+    displayLabel: 'DODGE',
+    announcement: `${targetName} dodges ${skillName} from ${attackerName}. Dodge consumed.`,
+    baseDurationMs,
+    durationMs,
+    startedAt: safeStartedAt,
+    endsAt: safeStartedAt + durationMs,
+    presentationSpeed: speed,
+  });
+}
+
+export function sampleBattleStanceDodgeFeedback(record, nowMs, { reducedMotion = false } = {}) {
+  if (!record || record.kind !== 'stance-dodge') return null;
+  const now = safeTime(nowMs);
+  if (now < record.startedAt || now >= record.endsAt) return null;
+  const progress = Math.max(0, Math.min(1, (now - record.startedAt) / record.durationMs));
+  const pulse = reducedMotion ? 1 : Math.sin(progress * Math.PI);
+  return deepFreeze({
+    kind: record.kind,
+    targetId: record.targetId,
+    targetTile: record.targetTile,
+    sidestepVector: record.sidestepVector,
+    displayLabel: record.displayLabel,
+    progress: round(reducedMotion ? 0.5 : progress),
+    pulse: round(pulse),
+    sidestepTiles: round(reducedMotion ? 0 : pulse * 0.18),
+    opacity: round(reducedMotion ? 0.96 : 0.62 + (pulse * 0.34)),
     reducedMotion: Boolean(reducedMotion),
   });
 }

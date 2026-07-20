@@ -429,3 +429,22 @@ test('rendered battle state exposes exact active and authoritative objective til
   assert.match(publish, /canvas\.dataset\.objectiveTargetY = String\(target\.y\)/);
   assert.match(source, /publishRenderedBattleState\(snapshot\);\s+renderCombatants\(snapshot\);/);
 });
+
+test('browser Dodge wiring is targetless, engine-owned, presentation-bounded, and never a hit cue', async () => {
+  const [source, html] = await Promise.all([
+    readFile(new URL('../battle.js', import.meta.url), 'utf8'),
+    readFile(new URL('../battle.html', import.meta.url), 'utf8'),
+  ]);
+  assert.match(html, /data-command="dodge" aria-keyshortcuts="F"/);
+  assert.match(source, /if \(command\.type === 'dodge'\)[\s\S]*?engine\.dodge\(actorId\)[\s\S]*?type: 'dodge'/);
+  assert.match(source, /selectedCommand === 'dodge'[\s\S]*?engine\.dodge\(actor\.instanceId\)/);
+  assert.match(source, /\['guard', 'dodge', 'analyze', 'objective'\]\.includes\(selectedCommand\)/);
+  assert.match(source, /dodged: Boolean\(result\.dodged\)/);
+  const audio = source.slice(source.indexOf('const healFeedback ='), source.indexOf('const timelineEndsAt ='));
+  assert.ok(audio.indexOf('result.dodged') >= 0 && audio.indexOf('result.dodged') < audio.indexOf('result.guarded'));
+  assert.doesNotMatch(audio.slice(audio.indexOf('result.dodged'), audio.indexOf('result.guarded')), /playCue\('combatHit'\)/);
+  assert.match(source, /function drawPersistentDodgeStances\(/);
+  assert.match(source, /actor\.stance === 'dodge'/);
+  assert.match(source, /canvas\.dataset\.activeActorStance = actor\.stance/);
+  assert.match(source, /if \(!\['attack', 'skill', 'analyze'\]\.includes\(selectedCommand\)\) return;/);
+});

@@ -75,6 +75,7 @@ export function getPartyCombatPresentationPose({
   moving = false,
 } = {}) {
   if (!active || hp <= 0) return 'defeat';
+  if (targetPose === 'dodge') return 'move';
   if (targetPose === 'stagger') return 'hit';
   if (phase === 'windup' || actorPose === 'windup') return 'basic-strike-windup';
   if (phase === 'movement' || moving) return 'move';

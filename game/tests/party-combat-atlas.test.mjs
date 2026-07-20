@@ -101,6 +101,7 @@ test('live animation phases resolve to authored party combat keys', () => {
   assert.equal(getPartyCombatPresentationPose({ actorPose: 'attack', actionId: 'cinder-route' }), 'signature-b');
   assert.equal(getPartyCombatPresentationPose({ actorPose: 'attack', actionId: 'future-skill' }), 'basic-strike-active');
   assert.equal(getPartyCombatPresentationPose({ phase: 'recovery', actorPose: 'attack' }), 'recovery');
+  assert.equal(getPartyCombatPresentationPose({ targetPose: 'dodge', phase: 'evade' }), 'move');
   assert.equal(getPartyCombatPresentationPose({ targetPose: 'stagger', phase: 'windup' }), 'hit');
   assert.equal(getPartyCombatPresentationPose({ hp: 0, targetPose: 'stagger' }), 'defeat');
   assert.equal(getPartyCombatPresentationPose({ active: false, actorPose: 'attack' }), 'defeat');

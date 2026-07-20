@@ -270,6 +270,53 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(all(first_clear_locks), "First clear exposed repeat-speed controls.")
             require(page.locator("#autoGrind").is_disabled(), "First clear exposed Auto-Grind.")
 
+            dodge_button = page.locator('[data-command="dodge"]')
+            require(dodge_button.get_attribute("aria-keyshortcuts") == "F", "Campaign Dodge lost its F shortcut.")
+            page.wait_for_function(
+                "() => !document.querySelector('[data-command=\"dodge\"]').disabled",
+                timeout=10_000,
+            )
+            ren_hp_before_dodge = page.locator('[data-actor-id="ren"] .combatant-name span').inner_text()
+            dodge_armed_seen = False
+            for _attempt in range(6):
+                page.wait_for_function(
+                    "() => !document.querySelector('[data-command=\"dodge\"]').disabled",
+                    timeout=10_000,
+                )
+                page.keyboard.press("f")
+                require(dodge_button.get_attribute("aria-pressed") == "true", "F did not select Campaign Dodge.")
+                page.keyboard.press("Enter")
+                page.wait_for_timeout(60)
+                dodge_armed_seen = dodge_armed_seen or "DODGE" in page.locator(
+                    '[data-actor-id="ren"] .combatant-meta'
+                ).inner_text()
+                if "Dodge is consumed with HP unchanged" in page.locator("#resultLog").inner_text():
+                    break
+                page.wait_for_function(
+                    """() => document.querySelector('#resultLog').textContent.includes('Dodge is consumed with HP unchanged')
+                      || !document.querySelector('[data-command="dodge"]').disabled""",
+                    timeout=10_000,
+                )
+                if "Dodge is consumed with HP unchanged" in page.locator("#resultLog").inner_text():
+                    break
+            dodge_log = page.locator("#resultLog").inner_text()
+            ren_hp_after_dodge = page.locator('[data-actor-id="ren"] .combatant-name span').inner_text()
+            ren_meta_after_dodge = page.locator('[data-actor-id="ren"] .combatant-meta').inner_text()
+            require(dodge_armed_seen, "Campaign Dodge never exposed its persistent stance cue.")
+            require(
+                "Dodge is consumed with HP unchanged" in dodge_log
+                and ren_hp_after_dodge == ren_hp_before_dodge
+                and "NEUTRAL" in ren_meta_after_dodge,
+                f"Campaign Dodge did not resolve as an exact HP-neutral consumed miss: {ren_hp_before_dodge}, {ren_hp_after_dodge}, {ren_meta_after_dodge}.",
+            )
+            dodge_result = {
+                "hpBefore": ren_hp_before_dodge,
+                "hpAfter": ren_hp_after_dodge,
+                "armedSeen": dodge_armed_seen,
+                "consumed": "Dodge is consumed with HP unchanged" in dodge_log,
+                "stanceAfter": "neutral" if "NEUTRAL" in ren_meta_after_dodge else ren_meta_after_dodge,
+            }
+
             seed = page.evaluate(
                 """async id => {
                   const a = await import('./advancement.mjs');
@@ -1423,6 +1470,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         clean_run=run_prefix,
         camp_round_trip=True,
         first_clear_speed_locked=True,
+        campaign_dodge=dodge_result,
         repeat_seed=seed,
         repeat_terminal="VICTORY",
         repeat_queue_wins=5,

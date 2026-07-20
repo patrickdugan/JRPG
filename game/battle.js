@@ -144,6 +144,7 @@ import {
   createBattleDamageOutcomeFeedback,
   createBattleHealFeedback,
   createBattleMoveFeedback,
+  createBattleStanceDodgeFeedback,
   createBattleTelegraphEvadeFeedback,
   createBattleTempoPresentation,
   createBattleVictoryAccent,
@@ -152,6 +153,7 @@ import {
   sampleBattleDamageOutcomeFeedback,
   sampleBattleHealFeedback,
   sampleBattleMoveFeedback,
+  sampleBattleStanceDodgeFeedback,
   sampleBattleTelegraphEvadeFeedback,
   sampleRecoveryLockFeedback,
 } from './battle-system-feedback.mjs';
@@ -492,6 +494,7 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     statusApplied: Boolean(result.statusApplied),
     selfStatusId,
     selfStatusApplied,
+    dodged: Boolean(result.dodged),
     speed,
   };
   const timeline = attacker.faction === 'party'
@@ -509,6 +512,8 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     activeBattleSystemFeedback = healFeedback;
     announcements.textContent = healFeedback.announcement;
     pageAudio.playCue('combatHeal');
+  } else if (result.dodged) {
+    // The exact evasion record owns its accessible cue; a miss never plays combatHit.
   } else if (result.guarded) pageAudio.playCue('combatGuard');
   else if (result.deliveryMultiplier * result.essenceMultiplier > 1) pageAudio.playCue('combatCritical');
   else if (Number.isFinite(result.finalDamage)) pageAudio.playCue('combatHit');
@@ -656,6 +661,17 @@ function startBattleTelegraphEvadeSystemFeedback(beforeSnapshot, afterSnapshot, 
   return feedback;
 }
 
+function startBattleStanceDodgeSystemFeedback(beforeSnapshot, afterSnapshot, {
+  startedAt = performance.now(),
+  speed = autoGrindActive ? speedMultiplier : 1,
+} = {}) {
+  const feedback = createBattleStanceDodgeFeedback({ beforeSnapshot, afterSnapshot, startedAt, speed });
+  if (!feedback) return null;
+  activeBattleSystemFeedback = feedback;
+  announcements.textContent = feedback.announcement;
+  return feedback;
+}
+
 function startBattleDamageOutcomeFeedback(beforeSnapshot, afterSnapshot, {
   startedAt = performance.now(),
   speed = autoGrindActive ? speedMultiplier : 1,
@@ -682,6 +698,7 @@ function startRecoveryLockSystemFeedback(actor, snapshot = engine.snapshot(), st
 }
 
 function selectedBattleTargetFeedback(snapshot = engine.snapshot(), now = performance.now()) {
+  if (!['attack', 'skill', 'analyze'].includes(selectedCommand)) return null;
   const target = snapshot.actors.find((actor) => actor.instanceId === selectedTargetId
     && actor.faction === 'enemy' && actor.hp > 0 && actor.active !== false);
   if (!target) return null;
@@ -1056,6 +1073,15 @@ function drawBattleCommandPresentationFx(frame, geometry) {
     context.strokeStyle = frame.accentColor;
     traceObjectiveMarker('shield', radius);
     context.stroke();
+  } else if (frame.type === 'dodge') {
+    context.translate(actor.x, actor.y);
+    context.strokeStyle = frame.accentColor;
+    const offset = radius * 0.7;
+    const span = radius * 0.58;
+    context.beginPath();
+    context.moveTo(-offset + span, -span); context.lineTo(-offset, 0); context.lineTo(-offset + span, span);
+    context.moveTo(offset - span, -span); context.lineTo(offset, 0); context.lineTo(offset - span, span);
+    context.stroke();
   } else if (frame.type === 'analyze') {
     context.translate(target.x, target.y);
     context.strokeStyle = frame.accentColor;
@@ -1111,6 +1137,32 @@ function drawBattleSystemFeedback(moveFrame, targetFrame, geometry) {
   }
 
   if (!moveFrame) return;
+  if (moveFrame.kind === 'stance-dodge') {
+    const center = battleCanvasPoint(moveFrame.targetTile, geometry);
+    const offsetX = moveFrame.sidestepVector.x * moveFrame.sidestepTiles * geometry.cell;
+    const offsetY = moveFrame.sidestepVector.y * moveFrame.sidestepTiles * geometry.cell;
+    const span = Math.max(6, geometry.cell * 0.19);
+    context.save();
+    context.globalAlpha = moveFrame.opacity;
+    context.strokeStyle = '#d7a7ff';
+    context.fillStyle = '#f1dbff';
+    context.lineWidth = Math.max(2, geometry.cell * 0.055);
+    context.lineCap = 'square';
+    context.beginPath();
+    context.moveTo(center.x - span + offsetX, center.y - span + offsetY);
+    context.lineTo(center.x + offsetX, center.y + offsetY);
+    context.lineTo(center.x - span + offsetX, center.y + span + offsetY);
+    context.moveTo(center.x + span + offsetX, center.y - span + offsetY);
+    context.lineTo(center.x + offsetX, center.y + offsetY);
+    context.lineTo(center.x + span + offsetX, center.y + span + offsetY);
+    context.stroke();
+    context.font = `bold ${Math.max(9, Math.round(geometry.cell * 0.19))}px monospace`;
+    context.textAlign = 'center';
+    context.textBaseline = 'bottom';
+    context.fillText(moveFrame.displayLabel, center.x + offsetX, center.y - geometry.cell * 0.48 + offsetY);
+    context.restore();
+    return;
+  }
   if (moveFrame.kind === 'telegraph-evaded') {
     context.save();
     context.lineWidth = Math.max(2, geometry.cell * 0.055);
@@ -1417,6 +1469,38 @@ function drawBossIntent(snapshot, geometry) {
   context.restore();
 }
 
+function drawPersistentDodgeStances(snapshot, geometry, visualNow) {
+  const dodgeActors = snapshot.actors.filter((actor) => actor.faction === 'party'
+    && actor.hp > 0 && actor.active !== false && actor.stance === 'dodge');
+  if (!dodgeActors.length) return;
+  const progress = reducedMotion.matches ? 0.5 : (visualNow % 640) / 640;
+  const pulse = reducedMotion.matches ? 1 : 1 - Math.abs((progress * 2) - 1);
+  const span = Math.max(5, geometry.cell * (0.17 + pulse * 0.035));
+  const offset = Math.max(7, geometry.cell * 0.34);
+  context.save();
+  context.strokeStyle = '#d7a7ff';
+  context.fillStyle = '#f1dbff';
+  context.globalAlpha = reducedMotion.matches ? 0.9 : 0.66 + pulse * 0.28;
+  context.lineWidth = Math.max(2, geometry.cell * 0.05);
+  context.lineCap = 'square';
+  context.font = `bold ${Math.max(8, Math.round(geometry.cell * 0.16))}px monospace`;
+  context.textAlign = 'center';
+  context.textBaseline = 'bottom';
+  for (const actor of dodgeActors) {
+    const center = battleCanvasPoint(actor.pos, geometry);
+    context.beginPath();
+    context.moveTo(center.x - offset + span, center.y - span);
+    context.lineTo(center.x - offset, center.y);
+    context.lineTo(center.x - offset + span, center.y + span);
+    context.moveTo(center.x + offset - span, center.y - span);
+    context.lineTo(center.x + offset, center.y);
+    context.lineTo(center.x + offset - span, center.y + span);
+    context.stroke();
+    context.fillText('DODGE', center.x, center.y - geometry.cell * 0.48);
+  }
+  context.restore();
+}
+
 function drawBattle(now = performance.now()) {
   const snapshot = engine.snapshot();
   const level = engine.level;
@@ -1432,6 +1516,8 @@ function drawBattle(now = performance.now()) {
   const commandPresentation = sampleBattleCommandPresentation(activeCommandPresentation, now, { reducedMotion: reducedMotion.matches });
   const moveFeedback = activeBattleSystemFeedback?.kind === 'heal'
     ? sampleBattleHealFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
+    : activeBattleSystemFeedback?.kind === 'stance-dodge'
+      ? sampleBattleStanceDodgeFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
     : activeBattleSystemFeedback?.kind === 'telegraph-evaded'
       ? sampleBattleTelegraphEvadeFeedback(activeBattleSystemFeedback, now, { reducedMotion: reducedMotion.matches })
     : activeBattleSystemFeedback?.kind === 'recovery-lock'
@@ -1701,6 +1787,7 @@ function drawBattle(now = performance.now()) {
       context.fillRect(centerX - cell * 0.12, centerY - cell * 0.12, cell * 0.24, cell * 0.17);
     }
   }
+  drawPersistentDodgeStances(snapshot, geometry, visualNow);
   drawPersistentStatusVfx(snapshot, geometry);
   drawBattleTempoPresentation(tempoPresentation, geometry);
   drawBattleAnimationFx(animation, geometry);
@@ -1770,6 +1857,7 @@ function createCombatantCard(actor, selected = false, targetable = true, partyCo
 function renderCombatants(snapshot) {
   const enemyTargetingAvailable = snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND
     && !snapshot.result
+    && ['attack', 'skill', 'analyze'].includes(selectedCommand)
     && !manualInputLocked();
   const partyCommandAttemptAvailable = snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND
     && !snapshot.result
@@ -1793,7 +1881,7 @@ function renderCombatants(snapshot) {
 function publishRenderedBattleState(snapshot) {
   const actor = activePartyActor(snapshot);
   for (const key of [
-    'activeActorId', 'activeActorX', 'activeActorY',
+    'activeActorId', 'activeActorX', 'activeActorY', 'activeActorStance',
     'objectiveAction', 'objectiveRequirementKey', 'objectiveTargetX', 'objectiveTargetY',
     'combatTargetId', 'combatTargetX', 'combatTargetY', 'combatSkillRange',
     'suggestedCommand', 'suggestedDx', 'suggestedDy', 'suggestedSkillId',
@@ -1832,6 +1920,7 @@ function publishRenderedBattleState(snapshot) {
     canvas.dataset.activeActorId = actor.instanceId;
     canvas.dataset.activeActorX = String(actor.pos.x);
     canvas.dataset.activeActorY = String(actor.pos.y);
+    canvas.dataset.activeActorStance = actor.stance;
     const target = livingEnemies(snapshot)
       .sort((left, right) => (
         left.hp - right.hp
@@ -1965,6 +2054,7 @@ function renderCommands(snapshot) {
     attack: 'Use the active character’s first combat art against the selected target.',
     skill: 'Choose an art and target. Recovery controls when this character returns to Tempo.',
     guard: 'Reduce the next incoming hit, then recover for one pulse.',
+    dodge: 'Guarantee a miss from the next art explicitly marked dodgeable, then recover for one pulse. Arts not explicitly marked dodgeable pass through without consuming the stance.',
     analyze: 'Reveal the selected enemy’s delivery and essence multipliers.',
     objective: pendingObjective ? objectivePresentation.hint : 'No manual encounter requirement remains.',
   };
@@ -1980,6 +2070,8 @@ function formatEngineLog(entry, actors) {
   if (entry.type === 'move') return `${name(entry.actorId)} moves to ${entry.at}.`;
   if (entry.type === 'damage') return `${name(entry.attackerId)} uses ${entry.skillId} on ${name(entry.targetId)}: ${entry.finalDamage} damage (${Math.round(entry.deliveryMultiplier * 100)}% delivery${entry.essenceMultiplier !== 1 ? `, ${Math.round(entry.essenceMultiplier * 100)}% essence` : ''})${entry.statusApplied ? ` and applies ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId}` : ''}.`;
   if (entry.type === 'guard') return `${name(entry.actorId)} guards.`;
+  if (entry.type === 'dodge') return `${name(entry.actorId)} readies Dodge; base Recovery ${entry.recoveryPulses}.`;
+  if (entry.type === 'dodge-resolved') return `${name(entry.targetId)} evades ${name(entry.attackerId)}'s ${entry.skillId}; Dodge is consumed with HP unchanged at ${entry.targetHp}.`;
   if (entry.type === 'analyze') return `${name(entry.actorId)} analyzes ${name(entry.targetId)}.`;
   if (entry.type === 'spirit-change' && entry.delta !== 0) return `${name(entry.actorId)} Spirit ${entry.delta > 0 ? '+' : ''}${entry.delta} (${entry.after}/${entry.maxSpirit}).`;
   if (entry.type === 'status-applied' || entry.type === 'status-refreshed') return `${name(entry.targetId)}: ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId} ${entry.type === 'status-refreshed' ? 'refreshed' : 'applied'} for ${entry.durationActivations} activation${entry.durationActivations === 1 ? '' : 's'}.`;
@@ -2342,6 +2434,15 @@ function executeRepeatPolicyCommand(actorId, command, beforeSnapshot = engine.sn
     }
     return result;
   }
+  if (command.type === 'dodge') {
+    const result = engine.dodge(actorId);
+    if (result.ok) {
+      startBattleCommandPresentation({
+        type: 'dodge', actorId, result, beforeSnapshot, startedAt, speed: speedMultiplier,
+      });
+    }
+    return result;
+  }
   if (command.type === 'analyze') {
     const result = engine.analyze(actorId, command.targetId);
     startBattleCommandPresentation({
@@ -2397,6 +2498,7 @@ function executeAutoGrindStep(now) {
     return;
   }
   const after = engine.snapshot();
+  startBattleStanceDodgeSystemFeedback(before, after, { startedAt: now, speed: speedMultiplier });
   startBattleDamageOutcomeFeedback(before, after, { startedAt: now, speed: speedMultiplier });
   startBattleTelegraphEvadeSystemFeedback(before, after, { startedAt: now, speed: speedMultiplier });
   announceBossPhaseLogDelta(before, after);
@@ -2518,6 +2620,8 @@ function executeSelectedCommand() {
   } else if (selectedCommand === 'guard') {
     result = engine.guard(actor.instanceId);
     if (result.ok) pageAudio.playCue('combatGuard');
+  } else if (selectedCommand === 'dodge') {
+    result = engine.dodge(actor.instanceId);
   } else if (selectedCommand === 'analyze') {
     result = engine.analyze(actor.instanceId, targetSelect.value);
   } else if (selectedCommand === 'objective') {
@@ -2533,7 +2637,7 @@ function executeSelectedCommand() {
   if (selectedCommand === 'attack' || selectedCommand === 'skill') {
     markCombatResolutionPose(result);
     startCombatAnimation(result, actor.instanceId, snapshot);
-  } else if (result?.ok && ['guard', 'analyze', 'objective'].includes(selectedCommand)) {
+  } else if (result?.ok && ['guard', 'dodge', 'analyze', 'objective'].includes(selectedCommand)) {
     startBattleCommandPresentation({
       type: selectedCommand,
       actorId: actor.instanceId,
@@ -2546,6 +2650,7 @@ function executeSelectedCommand() {
     });
   }
   if (result?.ok) {
+    startBattleStanceDodgeSystemFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
     startBattleDamageOutcomeFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
     startBattleTelegraphEvadeSystemFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
     activeBattleAnimation = mergeBossTerminalPresentationRecord(
@@ -2673,6 +2778,7 @@ window.addEventListener('keydown', (event) => {
     '4': 'guard',
     '5': 'analyze',
     '6': 'objective',
+    f: 'dodge',
   };
   if (commandShortcuts[key] && !event.repeat) {
     event.preventDefault();
@@ -2711,6 +2817,7 @@ canvas.addEventListener('click', (event) => {
   if (!actor) return;
   const enemy = livingEnemies(snapshot).find((entry) => entry.pos.x === tile.x && entry.pos.y === tile.y);
   if (enemy) {
+    if (!['attack', 'skill', 'analyze'].includes(selectedCommand)) return;
     selectedTargetId = enemy.instanceId;
     targetSelect.value = selectedTargetId;
     render();
@@ -2779,7 +2886,10 @@ function tick(now) {
     const after = engine.snapshot();
     if (!result.ok) addMessage(result.reason);
     else announceEngineLogDelta(before, after);
-    if (result.ok) startBattleDamageOutcomeFeedback(before, after, { startedAt: now, speed: 1 });
+    if (result.ok) {
+      startBattleStanceDodgeSystemFeedback(before, after, { startedAt: now, speed: 1 });
+      startBattleDamageOutcomeFeedback(before, after, { startedAt: now, speed: 1 });
+    }
     markCombatResolutionPose({ ok: result.ok, ...result.resolution }, enemyActorId);
     startCombatAnimation({ ok: result.ok, ...result.resolution }, enemyActorId, before);
     activeBattleAnimation = mergeBossTransitionPresentationRecord(

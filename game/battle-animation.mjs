@@ -20,6 +20,7 @@ export const BATTLE_ANIMATION_PHASE_ORDER = Object.freeze([
   'windup',
   'movement',
   'projectile-or-trail',
+  'evade',
   'impact',
   'stagger',
   'status-glyph',
@@ -354,14 +355,15 @@ function resolveMotion(sourceTile, targetTile, lungeTiles) {
   };
 }
 
-function phaseDescriptors(profile, hasStatus, speed) {
+function phaseDescriptors(profile, hasTargetStatus, hasSelfStatus, speed, dodged) {
   const authored = [
     ['windup', profile.durations.windupMs],
     ['movement', profile.durations.movementMs],
     ...(profile.emissionKind === 'none' ? [] : [[profile.emissionKind, profile.durations.emissionMs]]),
-    ['impact', profile.durations.impactMs],
-    ['stagger', profile.durations.staggerMs],
-    ...(hasStatus ? [['status-glyph', profile.durations.statusGlyphMs]] : []),
+    ...(dodged
+      ? [['evade', profile.durations.impactMs + profile.durations.staggerMs]]
+      : [['impact', profile.durations.impactMs], ['stagger', profile.durations.staggerMs]]),
+    ...((hasTargetStatus || hasSelfStatus) ? [['status-glyph', profile.durations.statusGlyphMs]] : []),
     ['recovery', profile.durations.recoveryMs],
   ];
   let baseCursor = 0;
@@ -402,7 +404,27 @@ function actorPresentation(phaseId, progress, motion) {
   };
 }
 
-function targetPresentation(phaseId, progress, motion) {
+function targetPresentation(phaseId, progress, motion, dodged) {
+  if (dodged && phaseId === 'evade') {
+    const perpendicular = motion.gridVector.x === 0 && motion.gridVector.y === 0
+      ? { x: 1, y: 0 }
+      : {
+        x: motion.gridVector.y === 0 ? 0 : -motion.gridVector.y,
+        y: motion.gridVector.x === 0 ? 0 : motion.gridVector.x,
+      };
+    const sidestep = round(Math.sin(progress * Math.PI) * 0.18);
+    return {
+      simulationTile: motion.targetTile,
+      renderTile: {
+        x: round(motion.targetTile.x + (perpendicular.x * sidestep)),
+        y: round(motion.targetTile.y + (perpendicular.y * sidestep)),
+      },
+      pose: 'dodge',
+      sidestep,
+      sidestepVector: perpendicular,
+      simulationPositionChanges: false,
+    };
+  }
   const staggerPulse = phaseId === 'stagger'
     ? round((1 - Math.abs((2 * progress) - 1)) * 0.125)
     : 0;
@@ -413,6 +435,9 @@ function targetPresentation(phaseId, progress, motion) {
       y: round(motion.targetTile.y + (motion.gridVector.y * staggerPulse)),
     },
     pose: ['impact', 'stagger'].includes(phaseId) ? 'stagger' : 'neutral',
+    sidestep: 0,
+    sidestepVector: null,
+    simulationPositionChanges: false,
   };
 }
 
@@ -457,7 +482,7 @@ function statusPresentation(phaseId, progress, statusId, motion, placement = 'ta
   };
 }
 
-function buildFrames(phases, profile, motion, colors, statusId, selfStatusId, speed) {
+function buildFrames(phases, profile, motion, colors, statusId, selfStatusId, speed, dodged) {
   const frames = [];
   for (const phase of phases) {
     for (const progress of FRAME_PROGRESS_POINTS) {
@@ -470,7 +495,7 @@ function buildFrames(phases, profile, motion, colors, statusId, selfStatusId, sp
         baseAtMs,
         atMs: baseAtMs / speed,
         actor: actorPresentation(phase.id, progress, motion),
-        target: targetPresentation(phase.id, progress, motion),
+        target: targetPresentation(phase.id, progress, motion, dodged),
         emission: emissionPresentation(phase.id, progress, profile, motion, colors),
         impact: impactPresentation(phase.id, progress, motion, colors),
         statusGlyph: statusPresentation(phase.id, progress, statusId, motion, 'target'),
@@ -492,7 +517,8 @@ function buildTimeline(profile, options) {
   const targetTile = safeTile(options.targetTile ?? options.target, sourceTile);
   const delivery = resolveDamageKey(options.delivery, DELIVERY_ANIMATION_COLORS, profile.delivery);
   const essence = resolveDamageKey(options.essence, ESSENCE_ANIMATION_COLORS, profile.essence);
-  const statusId = resolveStatusId(options.statusId);
+  const dodged = options.dodged === true;
+  const statusId = dodged ? null : resolveStatusId(options.statusId);
   const selfStatusId = resolveStatusId(options.selfStatusId);
   const motion = resolveMotion(sourceTile, targetTile, profile.lungeTiles);
   const colors = {
@@ -503,7 +529,7 @@ function buildTimeline(profile, options) {
     status: statusId ? STATUS_GLYPH_PRESENTATION[statusId].color : null,
     selfStatus: selfStatusId ? STATUS_GLYPH_PRESENTATION[selfStatusId].color : null,
   };
-  const phases = phaseDescriptors(profile, Boolean(statusId || selfStatusId), speed);
+  const phases = phaseDescriptors(profile, Boolean(statusId), Boolean(selfStatusId), speed, dodged);
   const lastPhase = phases.at(-1);
   const timeline = {
     schemaVersion: BATTLE_ANIMATION_SCHEMA_VERSION,
@@ -521,6 +547,7 @@ function buildTimeline(profile, options) {
       essence,
       statusId,
       selfStatusId,
+      dodged,
       movementKind: profile.movementKind,
       emissionKind: profile.emissionKind,
       emissionVisual: profile.emissionVisual,
@@ -528,7 +555,7 @@ function buildTimeline(profile, options) {
     colors,
     motion,
     phases,
-    frames: buildFrames(phases, profile, motion, colors, statusId, selfStatusId, speed),
+    frames: buildFrames(phases, profile, motion, colors, statusId, selfStatusId, speed, dodged),
   };
   return deepFreeze(timeline);
 }
