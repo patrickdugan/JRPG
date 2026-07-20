@@ -950,7 +950,9 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
             page.on("pageerror", lambda error: page_errors.append(str(error)))
             page.on("dialog", accept_player_dialog)
             budget = Budget(
-                deadline=started + args.max_seconds,
+                deadline=started + args.max_seconds - (
+                    args.frontier_reserve_seconds if args.recovery_out else 0
+                ),
                 max_scenes=args.max_scenes,
                 max_field_moves_per_scene=args.max_field_moves,
                 max_battle_commands=args.max_battle_commands,
@@ -980,7 +982,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 evidence["startCheckpoint"] = driver.checkpoint()
 
                 for _ in range(args.max_scenes):
-                    if args.recovery_out and budget.deadline - time.monotonic() < args.frontier_reserve_seconds:
+                    if args.recovery_out and time.monotonic() >= budget.deadline:
                         evidence["status"] = "bounded"
                         evidence["blocker"] = {
                             "code": "recovery-frontier",
@@ -1079,6 +1081,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("--recovery-in must name an existing checkpoint file")
     if args.recovery_out and not Path(args.recovery_out).expanduser().resolve().parent.is_dir():
         parser.error("--recovery-out parent directory must already exist")
+    if args.recovery_out and args.frontier_reserve_seconds >= args.max_seconds:
+        parser.error("--frontier-reserve-seconds must be less than --max-seconds when exporting recovery")
     return args
 
 

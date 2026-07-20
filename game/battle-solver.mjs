@@ -150,8 +150,19 @@ function objectiveGoal(requirement) {
   return (position) => tiles.some((tile) => tile.x === position.x && tile.y === position.y);
 }
 
+function manualRequirementAvailable(snapshot, requirement) {
+  if (snapshot.bossMechanic?.id !== 'fp1-mateus' || requirement.action !== 'breakObject') return true;
+  return snapshot.bossMechanic.wards.some((ward) => (
+    ward.actorId === `${requirement.targetId}-1` && ward.active
+  ));
+}
+
 function incompleteManualRequirement(snapshot) {
-  return snapshot.objective.requirements.find((requirement) => !requirement.automatic && !requirement.complete) ?? null;
+  return snapshot.objective.requirements.find((requirement) => (
+    !requirement.automatic
+    && !requirement.complete
+    && manualRequirementAvailable(snapshot, requirement)
+  )) ?? null;
 }
 
 function moveAlong(engine, actorId, path, trace) {

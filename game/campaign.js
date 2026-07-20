@@ -1446,7 +1446,11 @@ function updateFieldDashboard(level) {
     delete mapCanvas.dataset.routeMarkerX;
     delete mapCanvas.dataset.routeMarkerY;
   }
-  const unfinishedFieldRequirement = status.objective.requirements.find((requirement) => !requirement.complete);
+  // An `any(...)` exit is complete once one alternative is satisfied. Do not
+  // publish another incomplete atom as mandatory after the route is ready.
+  const unfinishedFieldRequirement = status.objective.completed
+    ? null
+    : status.objective.requirements.find((requirement) => !requirement.complete);
   const requiredInteractable = unfinishedFieldRequirement?.type === 'interaction'
     ? (level.interactables ?? []).find((item) => item.id === unfinishedFieldRequirement.id)
     : unfinishedFieldRequirement?.type === 'flag'
@@ -1456,10 +1460,12 @@ function updateFieldDashboard(level) {
     && !status.flags.includes(requiredInteractable.requires)
     ? (level.interactables ?? []).find((item) => item.id === requiredInteractable.requires)
     : null;
-  const readyExit = unfinishedFieldRequirement
-    ? null
-    : status.objective.exits.find((exit) => exit.ready) ?? null;
-  const exitBlockingInteractable = readyExit && authored && !authored.consumed ? authored : null;
+  const readyExit = status.objective.completed
+    ? status.objective.exits.find((exit) => exit.ready) ?? null
+    : null;
+  const exitBlockingInteractable = readyExit && authored?.available !== false && !authored?.consumed
+    ? authored
+    : null;
   const nextRequiredInteractable = missingInteractablePrerequisite ?? requiredInteractable ?? exitBlockingInteractable;
   const fieldTarget = nextRequiredInteractable?.at
     ? { type: 'interaction', id: nextRequiredInteractable.id, at: nextRequiredInteractable.at, range: 1 }

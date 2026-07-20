@@ -182,11 +182,14 @@ test('defeatAll and all-party defeat enter terminal phases', () => {
 
 test('threshold-or-objects boss objective supports its authored nonlethal branch', () => {
   const engine = createCampaignCombat('fp1-mateus');
+  engine.getActor('mateus-1').hp = 400;
+  engine.guard(engine.activeActorId);
+  engine.resolveEnemyActivation();
   assert.equal(engine.performObjectiveAction(engine.activeActorId, { type: OBJECTIVE_ACTIONS.BREAK_OBJECT, targetId: 'blood-ward-west' }).ok, true);
-  engine.advanceUntilPlayerCommand();
   assert.equal(engine.performObjectiveAction(engine.activeActorId, { type: OBJECTIVE_ACTIONS.BREAK_OBJECT, targetId: 'blood-ward-east' }).ok, true);
   assert.equal(engine.result, 'victory');
-  assert.equal(engine.getActor('mateus-1').hp, engine.getActor('mateus-1').maxHp);
+  assert.equal(engine.getActor('mateus-1').hp, 152);
+  assert.equal(engine.getBossMechanicStatus().resolution.kind, 'nonlethal-surrender');
 });
 
 test('objective action requirements explicitly cover non-defeat encounters', () => {

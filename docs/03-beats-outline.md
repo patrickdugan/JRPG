@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.549/308.680/498.286 minutes low/reference/high (about 3.11/5.14/8.30 hours)<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.626/1,231.686/1,917.264 minutes (about 12.94/20.53/31.95 hours), not measured playtime<br>
+**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.724/309.130/499.269 minutes low/reference/high (about 3.11/5.15/8.32 hours)<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.801/1,232.136/1,918.247 minutes (about 12.95/20.54/31.97 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 

@@ -297,7 +297,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(" / " in chapter_timing_text, "Credits chapter timing rows omit actual/reference values.")
             require("short by" in chapter_timing_text, "Completed short-run chapters omit their checkpoint gaps.")
             pacing_basis_text = page.locator("#pacingBasis").inner_text()
-            require("20:31:41" in pacing_basis_text, "Credits pacing total drifted from the reference checkpoint.")
+            require("20:32:08" in pacing_basis_text, "Credits pacing total drifted from the reference checkpoint.")
             require("not observed proof" in pacing_basis_text, "Credits pacing checkpoint is not clearly labeled diagnostic.")
             require(
                 page.locator("#timingAttribution").get_attribute("data-state") == "complete",
@@ -343,8 +343,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             pacing_export = exported_report.get("pacing", {})
             require(pacing_export.get("diagnosticOnly") is True, "Evidence export pacing is not diagnostic-only.")
             require(pacing_export.get("observedPlaytimeProof") is False, "Evidence export pacing fabricated observed proof.")
-            require(pacing_export.get("checkpointSignature") == "fnv1a32:8107b2cd", "Evidence checkpoint signature drifted.")
-            require(pacing_export.get("aggregateReferenceTargetMs") == 73901133, "Evidence pacing total drifted.")
+            require(pacing_export.get("checkpointSignature") == "fnv1a32:2d4d30fc", "Evidence checkpoint signature drifted.")
+            require(pacing_export.get("aggregateReferenceTargetMs") == 73928133, "Evidence pacing total drifted.")
             require(len(pacing_export.get("chapters", [])) == 11, "Evidence export chapter pacing is incomplete.")
             signature = exported_report.get("signature", "")
             require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")

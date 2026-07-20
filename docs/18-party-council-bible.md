@@ -118,7 +118,7 @@ The 25,072-word visible path includes title, theme, prompt, both option labels, 
 | Trace events | 1,174 |
 | Recorded timed duration | 0 ms / 0 minutes |
 
-The 1,143 successful transitions are 30 starts, 993 main-line acknowledgements, 30 choices, and 90 response acknowledgements. The 1,174-event trace adds one canonical-seed event and 30 replay-refusal events. Its prose-bound catalogue signature is `fnv1a32:01bf3c11`; the completion signature is `fnv1a32:51f4030c`.
+The 1,143 successful transitions are 30 starts, 993 main-line acknowledgements, 30 choices, and 90 response acknowledgements. The 1,174-event trace adds one canonical-seed event and 30 replay-refusal events. Its prose-bound catalogue signature is `fnv1a32:01bf3c11`; the completion signature is `fnv1a32:9316ed08`.
 
 This witness proves deterministic reachability, authored-line coverage, canonical first-choice settlement, unique consequence flags, exact bounds, and once-per-save replay refusal. It does not exercise human reading, reflection, browser presentation, accessibility, or elapsed play.
 

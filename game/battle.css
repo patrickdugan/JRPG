@@ -94,7 +94,7 @@ h2 { margin-bottom: 0; color: #fff0cf; font-size: 0.95rem; }
   align-items: start;
 }
 
-.combatant-rail, .battle-stage, .tempo-panel, .objective-card, .result-card {
+.combatant-rail, .battle-stage, .tempo-panel, .objective-card, .mechanic-card, .result-card {
   border: 1px solid var(--line);
   background: linear-gradient(150deg, rgba(31, 39, 67, 0.94), rgba(11, 14, 28, 0.97));
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
@@ -177,9 +177,24 @@ button.combatant-card { cursor: pointer; }
 .auto-grind-button:hover, .auto-grind-button[aria-pressed="true"] { border-color: var(--gold-soft); color: #fff7d6; background: #57431d; }
 .auto-grind-status { min-height: 28px; margin: 0; color: var(--muted); font-size: 0.57rem; line-height: 1.45; text-align: center; }
 
-.battle-briefing { display: grid; grid-template-columns: minmax(240px, 0.72fr) minmax(420px, 2.28fr); gap: 13px; margin-top: 13px; }
-.objective-card, .result-card { padding: 13px; }
-.objective-card h2, .result-card h2 { margin-bottom: 9px; }
+.battle-briefing { display: grid; grid-template-columns: minmax(240px, 0.72fr) minmax(260px, 0.9fr) minmax(420px, 2.28fr); gap: 13px; margin-top: 13px; }
+.objective-card, .mechanic-card, .result-card { padding: 13px; }
+.objective-card h2, .mechanic-card h2, .result-card h2 { margin-bottom: 9px; }
+.mechanic-card[hidden], .mechanic-intent[hidden] { display: none; }
+.mechanic-heading { display: flex; align-items: start; justify-content: space-between; gap: 10px; }
+.mechanic-badge { flex: 0 0 auto; padding: 4px 7px; border: 1px solid #845060; color: #ffd6df; background: #361824; font-size: 0.55rem; letter-spacing: 0.07em; }
+.mechanic-rule, .mechanic-recovery, .mechanic-surrender { margin-bottom: 9px; color: #d4d8e2; font-size: 0.63rem; line-height: 1.5; }
+.mechanic-wards { display: grid; gap: 5px; margin: 0 0 9px; padding: 0; list-style: none; }
+.mechanic-ward { display: flex; justify-content: space-between; gap: 8px; padding: 6px 7px; border-left: 2px solid #596680; color: var(--muted); background: rgba(7, 10, 20, 0.48); font-size: 0.61rem; }
+.mechanic-ward[data-state="active"] { border-left-color: #e25e76; color: #ffd8df; }
+.mechanic-ward[data-state="broken"] { border-left-color: var(--aqua); color: #c8f4ef; }
+.mechanic-intent { margin-bottom: 9px; padding: 9px; border: 1px solid #984457; background: rgba(67, 16, 29, 0.52); }
+.mechanic-intent h3 { margin: 0 0 6px; color: #ffd5dd; font-size: 0.68rem; }
+.mechanic-intent p { margin-bottom: 7px; color: #f0ced5; font-size: 0.61rem; line-height: 1.45; }
+.intent-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0; padding: 0; list-style: none; }
+.intent-tiles li { padding: 5px 3px; border: 1px solid #b45c6e; color: #ffe4e9; background: #431522; font-size: 0.58rem; text-align: center; }
+.mechanic-recovery { color: var(--gold-soft); }
+.mechanic-surrender { margin-bottom: 0; color: var(--aqua); }
 .result-actions { display: flex; justify-content: flex-end; margin-top: 11px; }
 .result-actions [hidden] { display: none; }
 #objectiveText { margin-bottom: 10px; color: #d4d8e2; font-size: 0.7rem; line-height: 1.55; }
@@ -208,6 +223,8 @@ button.combatant-card { cursor: pointer; }
   .battle-layout { grid-template-columns: minmax(170px, 0.72fr) minmax(460px, 2fr); }
   .right-rail { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
   .command-grid { grid-template-columns: repeat(3, 1fr); }
+  .battle-briefing { grid-template-columns: minmax(240px, 0.8fr) minmax(420px, 2fr); }
+  .result-card { grid-column: 1 / -1; }
 }
 
 @media (max-width: 760px) {

@@ -120,6 +120,14 @@ const announcements = document.querySelector('#battleAnnouncements');
 const restartBattle = document.querySelector('#restartBattle');
 const campaignLink = document.querySelector('.campaign-link');
 const continueCampaign = document.querySelector('#continueCampaign');
+const mateusMechanicCard = document.querySelector('#mateusMechanicCard');
+const mateusMitigation = document.querySelector('#mateusMitigation');
+const mateusWards = document.querySelector('#mateusWards');
+const mateusIntent = document.querySelector('#mateusIntent');
+const mateusIntentAnswer = document.querySelector('#mateusIntentAnswer');
+const mateusIntentTiles = document.querySelector('#mateusIntentTiles');
+const mateusRecovery = document.querySelector('#mateusRecovery');
+const mateusSurrender = document.querySelector('#mateusSurrender');
 
 context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
@@ -507,6 +515,30 @@ function drawBattleAnimationFx(animation, geometry) {
   context.restore();
 }
 
+function drawBossIntent(snapshot, geometry) {
+  const intent = snapshot.bossMechanic?.pendingIntent;
+  if (!intent) return;
+  context.save();
+  context.fillStyle = 'rgba(174, 35, 64, 0.32)';
+  context.strokeStyle = '#ff8298';
+  context.lineWidth = Math.max(2, geometry.cell * 0.06);
+  context.font = `${Math.max(10, Math.round(geometry.cell * 0.24))}px monospace`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  intent.tiles.forEach((key, index) => {
+    const [x, y] = key.split(',').map(Number);
+    if (!Number.isInteger(x) || !Number.isInteger(y)) return;
+    const px = geometry.originX + x * geometry.cell;
+    const py = geometry.originY + y * geometry.cell;
+    context.fillRect(px + 2, py + 2, geometry.cell - 4, geometry.cell - 4);
+    context.strokeRect(px + 3, py + 3, geometry.cell - 6, geometry.cell - 6);
+    context.fillStyle = '#ffe5ea';
+    context.fillText(String(index + 1), px + geometry.cell / 2, py + geometry.cell / 2);
+    context.fillStyle = 'rgba(174, 35, 64, 0.32)';
+  });
+  context.restore();
+}
+
 function drawBattle(now = performance.now()) {
   const snapshot = engine.snapshot();
   const level = engine.level;
@@ -563,6 +595,7 @@ function drawBattle(now = performance.now()) {
   }
 
   drawObjectiveTokens(snapshot, level, geometry, now);
+  drawBossIntent(snapshot, geometry);
 
   const presentationActors = getBattlePresentationActors(snapshot.actors, animation?.retainedActors ?? []);
   for (const actor of presentationActors) {
@@ -717,7 +750,9 @@ function createCombatantCard(actor, selected = false) {
 
 function renderCombatants(snapshot) {
   partyPanel.replaceChildren(...snapshot.actors.filter((actor) => actor.faction === 'party').map((actor) => createCombatantCard(actor)));
-  enemyPanel.replaceChildren(...snapshot.actors.filter((actor) => actor.faction !== 'party').map((actor) => createCombatantCard(actor, actor.instanceId === selectedTargetId)));
+  enemyPanel.replaceChildren(...snapshot.actors
+    .filter((actor) => actor.faction !== 'party' && (actor.active !== false || actor.hp <= 0))
+    .map((actor) => createCombatantCard(actor, actor.instanceId === selectedTargetId)));
 }
 
 function publishRenderedBattleState(snapshot) {
@@ -728,7 +763,25 @@ function publishRenderedBattleState(snapshot) {
     'combatTargetId', 'combatTargetX', 'combatTargetY', 'combatSkillRange',
     'suggestedCommand', 'suggestedDx', 'suggestedDy', 'suggestedSkillId',
     'suggestedTargetId', 'suggestedObjectiveAction', 'suggestedObjectiveTargetId',
+    'bossMechanicId', 'bossActiveWardCount', 'bossIncomingDamageMultiplier',
+    'bossIntentId', 'bossIntentSkillId', 'bossIntentKind', 'bossIntentTiles',
+    'bossIntentAnswer', 'bossIntentRecoveryPulses',
   ]) delete canvas.dataset[key];
+
+  const mechanic = snapshot.bossMechanic;
+  if (mechanic) {
+    canvas.dataset.bossMechanicId = mechanic.id;
+    canvas.dataset.bossActiveWardCount = String(mechanic.activeWardCount);
+    canvas.dataset.bossIncomingDamageMultiplier = String(mechanic.incomingDamageMultiplier);
+    if (mechanic.pendingIntent) {
+      canvas.dataset.bossIntentId = mechanic.pendingIntent.id;
+      canvas.dataset.bossIntentSkillId = mechanic.pendingIntent.skillId;
+      canvas.dataset.bossIntentKind = mechanic.pendingIntent.kind;
+      canvas.dataset.bossIntentTiles = mechanic.pendingIntent.tiles.join('|');
+      canvas.dataset.bossIntentAnswer = mechanic.pendingIntent.answer;
+      canvas.dataset.bossIntentRecoveryPulses = String(mechanic.pendingIntent.recoveryPulses);
+    }
+  }
 
   if (actor) {
     canvas.dataset.activeActorId = actor.instanceId;
@@ -881,7 +934,51 @@ function formatEngineLog(entry, actors) {
     return `${name(entry.actorId)}: ${presentation.label}.`;
   }
   if (entry.type === 'objective-failure') return `Objective failed: ${entry.reason}.`;
+  if (entry.type === 'summon') return `${name(entry.actorId)} summons ${name(entry.targetId)} with Blood Ward.`;
+  if (entry.type === 'damage-mitigated') return `Blood Ward limits ${name(entry.targetId)}'s incoming damage to ${Math.round(entry.incomingDamageMultiplier * 100)}% (${entry.unmitigatedDamage} becomes ${entry.finalDamage}).`;
+  if (entry.type === 'intent-published') return `${name(entry.sourceActorId)} declares Crimson Litany across ${entry.tiles.join(' / ')}. Answer: ${entry.answer}`;
+  if (entry.type === 'intent-answered') return `${name(entry.actorId)} answers ${entry.intentId} (${entry.answerActivations}/${entry.answerActivationsRequired}).`;
+  if (entry.type === 'intent-resolved') return `${entry.intentId} resolves on ${entry.hitTargetIds.length} target${entry.hitTargetIds.length === 1 ? '' : 's'}; Mateus enters Recovery ${entry.aftermath.recoveryPulses}.`;
+  if (entry.type === 'ward-broken') return `${name(entry.targetId)} is broken by ${name(entry.sourceActorId)}.`;
+  if (entry.type === 'surrender') return `${name(entry.actorId)} yields without death at ${entry.hp} HP; both Blood Wards broken: ${entry.bothWardsBroken ? 'yes' : 'no'}.`;
   return null;
+}
+
+function renderBossMechanic(snapshot) {
+  const mechanic = snapshot.bossMechanic;
+  mateusMechanicCard.hidden = !mechanic;
+  if (!mechanic) return;
+
+  mateusMitigation.textContent = mechanic.activeWardCount > 0
+    ? `INCOMING ${Math.round(mechanic.incomingDamageMultiplier * 100)}%`
+    : mechanic.resolution ? 'SURRENDERED' : 'NO MITIGATION';
+  mateusWards.replaceChildren(...mechanic.wards.map((ward) => {
+    const state = ward.active ? 'active' : ward.hp <= 0 ? 'broken' : 'dormant';
+    const item = document.createElement('li');
+    item.className = 'mechanic-ward';
+    item.dataset.state = state;
+    const label = document.createElement('span');
+    label.textContent = ward.actorId.includes('west') ? 'West Blood Ward' : 'East Blood Ward';
+    const status = document.createElement('strong');
+    status.textContent = state === 'active' ? `ACTIVE ${ward.hp}/${ward.maxHp}` : state.toUpperCase();
+    item.append(label, status);
+    return item;
+  }));
+
+  const intent = mechanic.pendingIntent;
+  mateusIntent.hidden = !intent;
+  mateusIntentAnswer.textContent = intent?.answer ?? '';
+  mateusIntentTiles.replaceChildren(...(intent?.tiles ?? []).map((tile) => {
+    const item = document.createElement('li');
+    item.textContent = tile;
+    return item;
+  }));
+  mateusRecovery.textContent = mechanic.recovery
+    ? `Crimson Litany Recovery ${mechanic.recovery.recoveryPulses}: ready at pulse ${mechanic.recovery.readyAtPulse}.`
+    : 'Crimson Litany opens Recovery 3 after its answer resolves.';
+  mateusSurrender.textContent = mechanic.resolution
+    ? `Nonlethal surrender secured at ${mechanic.resolution.hp} HP (${mechanic.resolution.reason}).`
+    : 'Nonlethal surrender pending: lower Mateus to the 20% floor or break both active wards.';
 }
 
 function renderLog(snapshot) {
@@ -1111,6 +1208,7 @@ function render() {
   renderCommands(snapshot);
   renderSpeedControls();
   renderObjective(snapshot);
+  renderBossMechanic(snapshot);
   renderLog(snapshot);
   continueCampaign.hidden = snapshot.result !== 'victory' || !settlementReady || !durableVictory;
   if (snapshot.result === 'victory' && settlementReady && durableVictory) continueCampaign.focus({ preventScroll: true });

@@ -93,5 +93,8 @@ test('bounded sessions can continue only through labeled rendered recovery contr
   assert.match(routeSource, /"recoveryOnly": True/);
   assert.match(routeSource, /"proofClaimed": False/);
   assert.match(routeSource, /"code": "recovery-frontier"/);
+  assert.match(routeSource, /deadline=started \+ args\.max_seconds - \(\s+args\.frontier_reserve_seconds if args\.recovery_out else 0\s+\)/);
+  assert.match(routeSource, /if args\.recovery_out and time\.monotonic\(\) >= budget\.deadline:/);
+  assert.match(routeSource, /args\.frontier_reserve_seconds >= args\.max_seconds/);
   assert.doesNotMatch(routeSource, /localStorage|sessionStorage|add_init_script|page\.evaluate/);
 });

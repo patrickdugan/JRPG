@@ -235,12 +235,15 @@ function enemyInstances(encounter, nonHostile) {
     return Array.from({ length: template.count ?? positions.length ?? 1 }, (_, index) => {
       const position = positions[index];
       if (!position) return [];
+      const isDormantMateusWard = encounter.id === 'fp1-mateus'
+        && ['blood-ward-west', 'blood-ward-east'].includes(template.id);
       return [{
         instanceId: `${template.id}-${index + 1}`,
         templateId: template.id,
         name: template.count > 1 ? `${template.name} ${index + 1}` : template.name,
         faction: nonHostile ? 'neutral' : 'enemy',
-        active: !nonHostile,
+        active: !nonHostile && !isDormantMateusWard,
+        ...(isDormantMateusWard ? { canAct: false } : {}),
         hp: template.stats.hp,
         maxHp: template.stats.hp,
         spirit: boundedResource(template.stats.spirit, asPositiveInteger(template.stats.spirit, 0)),
@@ -319,6 +322,14 @@ export class CampaignCombatEngine {
     this.pace = 0;
     this.activationCount = 0;
     this.log = [];
+    this.mateusMechanic = this.encounter.id === 'fp1-mateus' ? {
+      wardCasts: 0,
+      litanyCasts: 0,
+      wardedHits: 0,
+      pendingIntent: null,
+      recovery: null,
+      resolution: null,
+    } : null;
     this._selectNext();
     return this.snapshot();
   }
@@ -345,6 +356,31 @@ export class CampaignCombatEngine {
       actors: this.actors,
       objective: this.getObjectiveStatus(),
       log: this.log,
+      ...(this.mateusMechanic ? { bossMechanic: this.getBossMechanicStatus() } : {}),
+    }));
+  }
+
+  /** FP-1's presentation-safe mechanic state; null for every other encounter. */
+  getBossMechanicStatus() {
+    if (!this.mateusMechanic) return null;
+    const wards = ['blood-ward-west-1', 'blood-ward-east-1'].map((id) => {
+      const actor = this.getActor(id);
+      return {
+        actorId: id,
+        active: Boolean(actor?.active && actor.hp > 0),
+        hp: actor?.hp ?? 0,
+        maxHp: actor?.maxHp ?? 0,
+      };
+    });
+    const activeWardCount = wards.filter((ward) => ward.active).length;
+    return deepFreeze(clone({
+      id: 'fp1-mateus',
+      wards,
+      activeWardCount,
+      incomingDamageMultiplier: activeWardCount > 0 ? 0.25 : 1,
+      pendingIntent: this.mateusMechanic.pendingIntent,
+      recovery: this.mateusMechanic.recovery,
+      resolution: this.mateusMechanic.resolution,
     }));
   }
 
@@ -393,9 +429,16 @@ export class CampaignCombatEngine {
     const attacker = this.getActor(attackerId);
     const target = this.getActor(targetId);
     const skill = attacker?.skills.find((item) => item.id === skillId);
-    if (!attacker || !target || !skill) return null;
+    if (!attacker || !target || target.active === false || !skill) return null;
     if (attacker.spirit < asPositiveInteger(skill.spiritCost, 0)) return null;
-    return calculateTypedDamage(attacker, target, skill);
+    const calculation = calculateTypedDamage(attacker, target, skill);
+    const multiplier = this._mateusIncomingDamageMultiplier(target);
+    if (multiplier === 1 || calculation.typedDamage <= 0) return calculation;
+    return {
+      ...calculation,
+      incomingDamageMultiplier: multiplier,
+      mitigatedDamage: Math.max(1, Math.round(calculation.typedDamage * multiplier)),
+    };
   }
 
   getSkillSpiritQuote(actorId, skillId) {
@@ -422,7 +465,7 @@ export class CampaignCombatEngine {
     const target = this.getActor(targetId);
     const skill = actor.skills.find((item) => item.id === skillId);
     if (!skill) return { ok: false, reason: 'Unknown skill.' };
-    if (!target || target.hp <= 0 || target.faction !== 'enemy') return { ok: false, reason: 'Target is not a living enemy.' };
+    if (!target || target.hp <= 0 || target.active === false || target.faction !== 'enemy') return { ok: false, reason: 'Target is not a living enemy.' };
     if (distance(actor.pos, target.pos) > (skill.range ?? 1)) return { ok: false, reason: 'Target is outside skill range.' };
     const quote = this.getSkillSpiritQuote(actorId, skillId);
     if (!quote.affordable) return { ok: false, reason: `Not enough Spirit (${quote.spirit}/${quote.spiritCost}).`, spirit: quote };
@@ -467,11 +510,18 @@ export class CampaignCombatEngine {
       && (this.objectiveProgress[item.key] ?? 0) < item.count);
     const match = candidates[0];
     if (!match) return { ok: false, reason: 'That action does not advance this objective.' };
+    if (this.mateusMechanic && match.action === OBJECTIVE_ACTIONS.BREAK_OBJECT) {
+      const ward = this.getActor(`${match.targetId}-1`);
+      if (!ward?.active || ward.hp <= 0) return { ok: false, reason: 'Blood Ward must be active before its seal can be broken.' };
+    }
     if (match.tile && keyOf(actor.pos) !== match.tile) return { ok: false, reason: `Actor must stand at ${match.tile}.` };
     if (match.tiles?.length && !match.tiles.includes(keyOf(actor.pos))) return { ok: false, reason: `Actor must stand on an objective tile.` };
     const amount = Math.max(1, asPositiveInteger(action.amount, 1));
     this.objectiveProgress[match.key] = Math.min(match.count, (this.objectiveProgress[match.key] ?? 0) + amount);
     this.log.push({ type: 'objective', action: action.type, targetId: action.targetId ?? null, actorId, pulse: this.nowPulse });
+    if (this.mateusMechanic && match.action === OBJECTIVE_ACTIONS.BREAK_OBJECT) {
+      this._breakMateusWard(this.getActor(`${match.targetId}-1`), actor.instanceId, 'objective');
+    }
     const spirit = this._changeSpirit(actor, SPIRIT_RULES.objectiveGain, 'objective');
     this._commit(actor, action.recoveryPulses ?? 1, 'objective');
     return { ok: true, requirement: match.key, progress: this.objectiveProgress[match.key], complete: this.result === 'victory', spirit };
@@ -504,10 +554,15 @@ export class CampaignCombatEngine {
     const targets = living(this.actors, 'party').sort((a, b) => distance(actor.pos, a.pos) - distance(actor.pos, b.pos) || a.instanceId.localeCompare(b.instanceId));
     if (!targets.length) return this._evaluateOutcome();
     const target = targets[0];
-    const skill = actor.skills.find((item) => distance(actor.pos, target.pos) <= (item.range ?? 1)
-      && actor.spirit >= asPositiveInteger(item.spiritCost, 0));
+    const mateusSpecial = this._resolveMateusSpecialActivation(actor, target);
+    const skill = mateusSpecial ? null : actor.skills.find((item) => distance(actor.pos, target.pos) <= (item.range ?? 1)
+      && actor.spirit >= asPositiveInteger(item.spiritCost, 0)
+      && !['blood-ward', 'crimson-litany'].includes(item.id));
     let resolution;
-    if (skill) {
+    if (mateusSpecial) {
+      resolution = mateusSpecial.resolution;
+      this._schedule(actor, mateusSpecial.recoveryPulses);
+    } else if (skill) {
       this._applySkillSpirit(actor, skill);
       resolution = this._resolveAttack(actor, target, skill);
       this._schedule(actor, skill.recoveryPulses);
@@ -599,13 +654,31 @@ export class CampaignCombatEngine {
     const calculation = calculateTypedDamage(attacker, target, skill);
     const guarded = target.stance === 'guard';
     let finalDamage = guarded && calculation.typedDamage > 0 ? Math.max(1, Math.round(calculation.typedDamage * GUARD_MULTIPLIER)) : calculation.typedDamage;
+    const incomingDamageMultiplier = this._mateusIncomingDamageMultiplier(target);
+    if (incomingDamageMultiplier !== 1 && finalDamage > 0) {
+      const unmitigatedDamage = finalDamage;
+      finalDamage = Math.max(1, Math.round(finalDamage * incomingDamageMultiplier));
+      this.log.push({
+        type: 'damage-mitigated',
+        targetId: target.instanceId,
+        source: 'blood-ward',
+        incomingDamageMultiplier,
+        unmitigatedDamage,
+        finalDamage,
+        pulse: this.nowPulse,
+      });
+      if (this.mateusMechanic) this.mateusMechanic.wardedHits += 1;
+    }
     if (guarded && calculation.typedDamage > 0) target.stance = 'neutral';
     if (finalDamage < 0) {
       const healed = Math.min(target.maxHp - target.hp, Math.abs(finalDamage));
       target.hp += healed;
       finalDamage = -healed;
     } else {
-      target.hp = Math.max(0, target.hp - finalDamage);
+      const mateusFloor = this._mateusNonlethalFloor(target);
+      const hpBefore = target.hp;
+      target.hp = Math.max(mateusFloor, hpBefore - finalDamage);
+      finalDamage = hpBefore - target.hp;
     }
     const statusId = skill.effect?.status ?? null;
     const statusApplied = Boolean(statusId && COMBAT_STATUS_DEFINITIONS[statusId] && finalDamage > 0 && target.hp > 0);
@@ -616,15 +689,156 @@ export class CampaignCombatEngine {
       ...calculation,
       finalDamage,
       guarded,
+      ...(incomingDamageMultiplier !== 1 ? { incomingDamageMultiplier } : {}),
       targetHp: target.hp,
       statusId,
       statusApplied,
     };
     this.log.push({ type: 'damage', ...resolution, pulse: this.nowPulse });
+    if (this.mateusMechanic && target.templateId.startsWith('blood-ward-') && target.hp <= 0) {
+      this._breakMateusWard(target, attacker.instanceId, 'damage');
+    }
     if (statusApplied) this._applyStatus(attacker, target, statusId, skill.id, skill.effect?.duration);
     const selfStatusId = skill.effect?.selfStatus;
     if (selfStatusId) this._applyStatus(attacker, attacker, selfStatusId, skill.id, skill.effect?.selfDuration ?? skill.effect?.duration);
+    if (this.mateusMechanic && target.templateId === 'mateus') this._resolveMateusSurrenderIfReady('hp-threshold');
     return resolution;
+  }
+
+  _mateusIncomingDamageMultiplier(target) {
+    if (!this.mateusMechanic || target?.templateId !== 'mateus') return 1;
+    return this.getBossMechanicStatus().activeWardCount > 0 ? 0.25 : 1;
+  }
+
+  _mateusNonlethalFloor(target) {
+    if (!this.mateusMechanic || target?.templateId !== 'mateus') return 0;
+    return Math.ceil(target.maxHp * (this.encounter.objective.hpThreshold ?? 0.2));
+  }
+
+  _activateMateusWards(actor) {
+    const summoned = [];
+    for (const templateId of ['blood-ward-west', 'blood-ward-east']) {
+      const ward = this.getActor(`${templateId}-1`);
+      if (ward?.active && ward.hp > 0) continue;
+      ward.active = true;
+      ward.hp = ward.maxHp;
+      this.objectiveProgress[`broken:${templateId}`] = 0;
+      summoned.push(ward.instanceId);
+      this.log.push({ type: 'summon', actorId: actor.instanceId, targetId: ward.instanceId, skillId: 'blood-ward', pulse: this.nowPulse });
+    }
+    this.mateusMechanic.wardCasts += 1;
+    return {
+      type: 'blood-ward',
+      actorId: actor.instanceId,
+      skillId: 'blood-ward',
+      summoned,
+      incomingDamageMultiplier: 0.25,
+    };
+  }
+
+  _buildLitanyIntent(actor, target) {
+    const skill = actor.skills.find((candidate) => candidate.id === 'crimson-litany');
+    const dx = Math.sign(target.pos.x - actor.pos.x);
+    const dy = Math.sign(target.pos.y - actor.pos.y);
+    const tiles = Array.from({ length: 4 }, (_, index) => `${actor.pos.x + (dx * (index + 1))},${actor.pos.y + (dy * (index + 1))}`);
+    return {
+      id: `crimson-litany-${this.mateusMechanic.litanyCasts + 1}`,
+      sourceActorId: actor.instanceId,
+      skillId: 'crimson-litany',
+      kind: 'line',
+      tiles,
+      targetIdsAtPublish: living(this.actors, 'party').filter((candidate) => tiles.includes(keyOf(candidate.pos))).map((candidate) => candidate.instanceId),
+      telegraph: skill?.telegraph ?? '',
+      answer: 'Move beyond the listed tiles or Guard; Recovery 3 begins after the line resolves.',
+      answerActivationsRequired: 1,
+      answerActivations: 0,
+      recoveryPulses: skill?.recoveryPulses ?? 3,
+      publishedAtPulse: this.nowPulse,
+    };
+  }
+
+  _publishLitany(actor, target) {
+    const intent = this._buildLitanyIntent(actor, target);
+    this.mateusMechanic.litanyCasts += 1;
+    this.mateusMechanic.pendingIntent = intent;
+    this.log.push({ type: 'intent-published', ...clone(intent), pulse: this.nowPulse });
+    return { type: 'intent', intent: clone(intent) };
+  }
+
+  _resolveMateusSpecialActivation(actor, target) {
+    if (!this.mateusMechanic || actor.templateId !== 'mateus') return null;
+    this.mateusMechanic.recovery = null;
+    const hpRatio = actor.hp / actor.maxHp;
+    const activeWards = this.getBossMechanicStatus().activeWardCount;
+    if (activeWards === 0 && (hpRatio <= 0.55 || this.enemyActivations >= 2)) {
+      return { resolution: this._activateMateusWards(actor), recoveryPulses: 1 };
+    }
+    const teachingSeen = actor.analyzed || this.mateusMechanic.wardedHits >= 2 || hpRatio <= 0.55;
+    if (activeWards > 0 && this.mateusMechanic.litanyCasts === 0 && teachingSeen && distance(actor.pos, target.pos) <= 4) {
+      return { resolution: this._publishLitany(actor, target), recoveryPulses: 3 };
+    }
+    return null;
+  }
+
+  _resolvePendingMateusIntent(answerActor) {
+    const intent = this.mateusMechanic?.pendingIntent;
+    if (!intent) return null;
+    intent.answerActivations += 1;
+    this.log.push({
+      type: 'intent-answered',
+      intentId: intent.id,
+      actorId: answerActor.instanceId,
+      answerActivations: intent.answerActivations,
+      answerActivationsRequired: intent.answerActivationsRequired,
+      pulse: this.nowPulse,
+    });
+    if (intent.answerActivations < intent.answerActivationsRequired) return null;
+    const mateus = this.getActor(intent.sourceActorId);
+    const skill = mateus?.skills.find((candidate) => candidate.id === intent.skillId);
+    const targets = living(this.actors, 'party').filter((candidate) => intent.tiles.includes(keyOf(candidate.pos)));
+    const hits = skill ? targets.map((target) => this._resolveAttack(mateus, target, skill)) : [];
+    const recovery = {
+      sourceSkillId: 'crimson-litany',
+      recoveryPulses: intent.recoveryPulses,
+      openedAtPulse: this.nowPulse,
+      readyAtPulse: mateus?.readyAtPulse ?? this.nowPulse + 3,
+    };
+    this.mateusMechanic.pendingIntent = null;
+    this.mateusMechanic.recovery = recovery;
+    this.log.push({ type: 'intent-resolved', intentId: intent.id, answerActivations: intent.answerActivations, hitTargetIds: hits.map((hit) => hit.targetId), aftermath: clone(recovery), pulse: this.nowPulse });
+    return { intentId: intent.id, hits, aftermath: clone(recovery) };
+  }
+
+  _breakMateusWard(ward, sourceActorId, source) {
+    if (!this.mateusMechanic || !ward) return;
+    ward.hp = 0;
+    ward.active = false;
+    const progressKey = `broken:${ward.templateId}`;
+    this.objectiveProgress[progressKey] = 1;
+    this.log.push({ type: 'ward-broken', targetId: ward.instanceId, sourceActorId, source, pulse: this.nowPulse });
+    this._resolveMateusSurrenderIfReady('both-wards-broken');
+  }
+
+  _resolveMateusSurrenderIfReady(reason) {
+    if (!this.mateusMechanic || this.mateusMechanic.resolution) return false;
+    const mateus = this.getActor('mateus-1');
+    const threshold = this._mateusNonlethalFloor(mateus);
+    const bothWardsBroken = ['blood-ward-west', 'blood-ward-east'].every((id) => (this.objectiveProgress[`broken:${id}`] ?? 0) >= 1);
+    if (mateus.hp > threshold && !bothWardsBroken) return false;
+    if (bothWardsBroken) mateus.hp = Math.min(mateus.hp, threshold);
+    mateus.active = false;
+    this.mateusMechanic.pendingIntent = null;
+    this.mateusMechanic.resolution = {
+      kind: 'nonlethal-surrender',
+      reason,
+      actorId: mateus.instanceId,
+      hp: mateus.hp,
+      hpThreshold: threshold,
+      bothWardsBroken,
+      pulse: this.nowPulse,
+    };
+    this.log.push({ type: 'surrender', ...clone(this.mateusMechanic.resolution) });
+    return true;
   }
 
   _moveEnemyToward(actor, target) {
@@ -643,6 +857,7 @@ export class CampaignCombatEngine {
   _commit(actor, recoveryPulses, command) {
     this._schedule(actor, recoveryPulses);
     this.log.push({ type: 'commit', actorId: actor.instanceId, command, readyAtPulse: actor.readyAtPulse, pulse: this.nowPulse });
+    if (actor.faction === 'party' && this.mateusMechanic && !this.mateusMechanic.resolution) this._resolvePendingMateusIntent(actor);
     this.activeActorId = null;
     this.pace = 0;
     this._evaluateOutcome();
@@ -794,7 +1009,7 @@ export class CampaignCombatEngine {
   }
 
   _selectNext() {
-    const readyActors = this.actors.filter((actor) => actor.active !== false && actor.hp > 0 && actor.faction !== 'neutral');
+    const readyActors = this.actors.filter((actor) => actor.active !== false && actor.canAct !== false && actor.hp > 0 && actor.faction !== 'neutral');
     if (!readyActors.length) return this._evaluateOutcome();
     readyActors.sort((a, b) => a.readyAtPulse - b.readyAtPulse || b.speed - a.speed || a.instanceId.localeCompare(b.instanceId));
     const actor = readyActors[0];
