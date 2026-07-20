@@ -6,7 +6,7 @@
 
 This list is the art-production authority. Quantity is a planned final count, not a promise that every item must be unique. Reuse a carefully bounded kit aggressively; create bespoke assets only where story, navigation, or battle readability requires it.
 
-**Current authored-runtime status (2026-07-20):** all 19 current combat boards are authored: Takamine plus 18 regional boards. The party field foundation (6 × 10 directional idle/walk plus live interact/hurt), combat-action keys (6 × 10, including recovery and defeat), and portrait expressions (6 × 8) are integrated, as are eight regular-enemy families with seven key poses each (8 × 7, including defeat, recovery, and hurt), ten bosses with seven key poses each (10 × 7, including transition, defeat, and recovery), nine delivery/essence VFX with six phase frames each (9 × 6), six statuses with three lifecycle frames each (6 × 3), and a two-role metadata-only NPC field foundation. The VFX overlays retain procedural/generic fallback. These integrations remain foundation/key-pose coverage rather than complete packages: full in-betweens, alternate action facings, variants, the full named/generic NPC packages, an emitted Campaign heal, Campaign Dodge presentation, and a defeat-canvas accent are still absent. Human readability review, external cultural review, and Accepted/art lock remain pending.
+**Current authored-runtime status (2026-07-20):** all 19 current combat boards are authored: Takamine plus 18 regional boards. The party field atlas now contains 84 unique frames (6 × 14) with paired directional walk phases plus live interact/hurt; fixed field leader Ren samples the paired walk keys, while the other five authored pairs await a leader/formation authority. Combat-action keys (6 × 10, including recovery and defeat) and portrait expressions (6 × 8) remain integrated. Runtime art also includes eight regular-enemy families × seven poses, ten bosses × seven poses, nine delivery/essence VFX × six phase frames, six statuses × three lifecycle frames, 25 distinct item icons, and a two-role metadata-only NPC foundation. Procedural/generic/text fallbacks remain. Remaining combat/scene in-betweens, alternate action facings, variants, the full named/generic NPC packages, an emitted Campaign heal, and Campaign Dodge presentation are still absent. Human readability review, external cultural review, and Accepted/art lock remain pending.
 
 ## 1. Asset states, priorities, and naming
 
@@ -79,7 +79,7 @@ Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small
 
 **Character art total:** 6 party field sheets, 6 party battle sheets, 48 party portrait expressions, 84 regional/named NPC packages, and 48 generic NPC combinations.
 
-**Current NPC foundation receipt:** the live 64 × 48 atlas contains only `speaker` and `interviewee`, one 32 × 48 south-idle frame each with feet pivot `(16, 44)`. Exact metadata maps 8/71 side-story `talk` objectives and 37/183 scene-operation `interview` nodes. No label/name/prose inference exists; witness fieldwork and all prop, hazard, exit, evidence, mechanism, delivery, care/rescue, council, combat, and ambiguous markers retain geometric fallback. The planned totals above remain unchanged.
+**Current NPC foundation receipt:** the live 64 × 48 atlas contains only `speaker` and `interviewee`, one 32 × 48 south-idle frame each with feet pivot `(16, 44)`. Exact `type: 'talk'` plus `targetKind: 'person'` metadata maps 4/71 side-story objectives; four `targetKind: 'group'` talks retain geometry. Exact `activityType: 'interview'` maps 37/183 scene-operation nodes. No ID/label/name/prose inference exists; witness fieldwork and all prop, hazard, exit, evidence, mechanism, delivery, care/rescue, council, combat, and ambiguous markers retain geometric fallback. The planned totals above remain unchanged.
 
 ## 6. Enemy and boss production
 
@@ -129,12 +129,14 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 | VFX-DEL-001-004 | delivery effects: Cut, Pierce, Crush, Arcane | 4 | P0 | wind-up/active/recovery marker, hit, weak/resist variation. |
 | VFX-ESS-001-005 | essence effects: Ember, Frost, Storm, Radiance, Umbral | 5 | P0 | cast, projectile/area, impact, linger, weak/resist variation. |
 | VFX-STA-001-006 | status effects: Dread, Chill, Shock, Scorch, Bound, Overheated | 6 | P1 | Live authored apply/refreshed, persistent-active, and expire frames; cleanse is unsupported because Campaign has no cleanse event. |
-| VFX-SYS-001-012 | system feedback | 12 | P0 | Move, selected cell, blocked, Guard, Analyze, objectives, recovery lock, Tempo, and a non-locking victory accent are live; route preview remains one-step, heal is dormant, and Campaign Dodge plus the defeat-canvas accent are absent. |
+| VFX-SYS-001-012 | system feedback | 12 | P0 | Move, selected cell, blocked, Guard, Analyze, objectives, recovery lock, Tempo, and distinct non-locking victory/defeat accents are live; route preview remains one-step, heal is dormant, and Campaign Dodge is absent. |
 | UI-001-010 | battle UI kit | 10 panels | P0 | header/Tempo ribbon, Ledger, command row, recovery pips, HP/Spirit, damage log, tooltip, pause, victory, defeat. |
 | UI-011-020 | field/menu UI kit | 10 panels | P1 | dialogue, nameplate, journal, party, equipment, Vow board, shop, save, map, accessibility. |
 | ICO-001-036 | icon atlas | 36 | P0/P1 | 9 damage types, 6 statuses, 6 gear slots, 6 commands, navigation, currency, quest, danger, network, etc. |
 | FNT-001-003 | bitmap font and localization support | 3 | P0 | Latin, Japanese-capable plan/placeholder, numerals/symbols; runtime text not baked into art. |
 | CUT-001-015 | scene transition / dialogue accents | 15 | P1 | bell pulse, paper reveal, rain fade, seal break, chapter card frame, choice focus, flashback treatment. |
+
+**Current item-icon receipt:** a separate live 80 × 80 atlas supplies one distinct 16 × 16 decorative icon for all 25 `ITEM_CATALOGUE` IDs. Camp inventory/shop text remains authoritative and intact on load or dimension failure. The broader 36-icon UI target above remains planned.
 
 ## 9. Item, equipment, and interface illustration
 
