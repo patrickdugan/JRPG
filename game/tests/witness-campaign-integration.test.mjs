@@ -16,6 +16,7 @@ import {
 const campaignHtml = readFileSync(new URL('../campaign.html', import.meta.url), 'utf8');
 const campaignSource = readFileSync(new URL('../campaign.js', import.meta.url), 'utf8');
 const battleSource = readFileSync(new URL('../battle.js', import.meta.url), 'utf8');
+const battleSettlementSource = readFileSync(new URL('../battle-settlement.mjs', import.meta.url), 'utf8');
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -165,9 +166,11 @@ test('New Game and browser lifecycle clear, reload, and save witness progress', 
 });
 
 test('battle consumes the exact handoff and advances a chronicle only after victory', () => {
-  const names = importedNames(battleSource, './witness-chronicle-runtime.mjs');
-  for (const required of ['advanceWitnessChronicle', 'createWitnessChronicleStorageAdapter', 'getWitnessChronicleProgress']) {
-    assert.equal(names.has(required), true, `battle.js must import ${required}`);
+  const browserNames = importedNames(battleSource, './witness-chronicle-runtime.mjs');
+  assert.equal(browserNames.has('createWitnessChronicleStorageAdapter'), true);
+  const settlementNames = importedNames(battleSettlementSource, './witness-chronicle-runtime.mjs');
+  for (const required of ['advanceWitnessChronicle', 'getWitnessChronicleProgress']) {
+    assert.equal(settlementNames.has(required), true, `battle-settlement.mjs must import ${required}`);
   }
   assert.match(battleSource, /const\s+requestedChronicleId\s*=\s*query\.get\(\s*['\"]chronicle['\"]\s*\)/);
   assert.match(battleSource, /const\s+requestedChronicleStageId\s*=\s*query\.get\(\s*['\"]chronicleStage['\"]\s*\)/);
@@ -179,17 +182,21 @@ test('battle consumes the exact handoff and advances a chronicle only after vict
     'function renderSpeedControls',
   );
   const victoryGate = victorySettlement.search(/if\s*\(\s*snapshot\.result\s*!==\s*['\"]victory['\"]\s*\)\s*return false;[\s\S]*?if\s*\(\s*rewardRecorded\s*\)\s*return true/);
-  const witnessAdvance = victorySettlement.indexOf('advanceWitnessChronicle(');
-  assert.ok(victoryGate >= 0 && witnessAdvance > victoryGate, 'chronicle advancement must remain inside victory settlement');
-  assert.match(victorySettlement, /if\s*\(\s*requestedChronicleId\s*&&\s*requestedChronicleStageId\s*\)/);
-  assert.match(victorySettlement, /encounterId\s*:\s*encounter\.id/);
-  assert.match(victorySettlement, /victory\s*:\s*true/);
-  assert.match(victorySettlement, /requestedChronicleChoiceId\s*\?\s*\{\s*choiceId\s*:\s*requestedChronicleChoiceId\s*\}\s*:\s*\{\s*\}/);
-  assert.match(victorySettlement, /advanceWitnessChronicle\(\s*[\s\S]*?requestedChronicleId\s*,\s*requestedChronicleStageId\s*,\s*evidence\s*,?\s*\)/);
-  assert.match(victorySettlement, /if\s*\(\s*witnessResult\.ok\s*\)\s*\{\s*changes\.push\(\{\s*id:\s*['"]witness['"]/);
-  assert.match(victorySettlement, /commitPersistenceTransaction\(changes\.map/);
-  assert.doesNotMatch(victorySettlement, /witnessAdapter\.save\(/);
-  assert.equal((battleSource.match(/advanceWitnessChronicle\s*\(/g) ?? []).length, 1, 'battle must have one guarded chronicle transition site');
+  const settleCall = victorySettlement.indexOf('settleBattleVictory({');
+  assert.ok(victoryGate >= 0 && settleCall > victoryGate, 'chronicle handoff must remain inside victory settlement');
+  assert.match(victorySettlement, /chronicleId\s*:\s*requestedChronicleId/);
+  assert.match(victorySettlement, /chronicleStageId\s*:\s*requestedChronicleStageId/);
+  assert.match(victorySettlement, /chronicleChoiceId\s*:\s*requestedChronicleChoiceId/);
+  assert.match(battleSettlementSource, /if\s*\(\s*handoff\.chronicleId\s*&&\s*handoff\.chronicleStageId\s*\)/);
+  assert.match(battleSettlementSource, /encounterId\s*:\s*encounter\.id/);
+  assert.match(battleSettlementSource, /victory\s*:\s*true/);
+  assert.match(battleSettlementSource, /handoff\.chronicleChoiceId\s*\?\s*\{\s*choiceId\s*:\s*handoff\.chronicleChoiceId\s*\}\s*:\s*\{\s*\}/);
+  assert.match(battleSettlementSource, /advanceWitnessChronicle\(\s*[\s\S]*?handoff\.chronicleId\s*,\s*handoff\.chronicleStageId\s*,\s*evidence\s*,?\s*\)/);
+  assert.match(battleSettlementSource, /if\s*\(\s*witnessResult\.ok\s*\)\s*\{\s*changes\.push\(\{\s*id:\s*['"]witness['"]/);
+  assert.match(battleSettlementSource, /commitPersistenceTransaction\(changes\.map/);
+  assert.doesNotMatch(battleSettlementSource, /adapters\.witness\.save\(/);
+  assert.equal((battleSettlementSource.match(/advanceWitnessChronicle\s*\(/g) ?? []).length, 1,
+    'settlement must have one guarded chronicle transition site');
 });
 
 test('a non-combat chronicle acknowledges every line, chooses explicitly, rewards once, and refuses replay', () => {

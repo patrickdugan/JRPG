@@ -1,5 +1,11 @@
 # Bells of the Black Chrysanthemum — Browser Runtime
 
+## Action-combat migration
+
+`action-battle-prototype.html` is the non-canonical side-view real-time feel proof. Ren runs and jumps freely except during fixed wind-up, active-hit, and recovery animation commitment. A shared weapon cooldown and longer Cinder Route cooldown begin only afterward, remain visible in milliseconds, and permit immediate movement. Level changes timers through `max(0.55, 1 - 0.0125 × (level - 1))` without accelerating animation.
+
+The separate DOM-free `action-combat.mjs` kernel supplies fixed-step movement, gravity/platform hooks, one-shot hitboxes, delivery/Essence damage, shared/per-art cooldown gates, status hooks, and deterministic enemy decisions. The existing Campaign Battle remains canonical until action objectives and atomic victory settlement are integrated.
+
 This folder contains the playable browser runtime and the original small combat proof. The campaign, field, quest, battle, advancement, loadout, Storyworld, and playtime saves share one browser runtime. The ordinary 5–6 hour narrative target and optional 20-hour completionist target remain production claims until measured by end-to-end human playtests.
 
 - **FP-0 (this folder):** one original Bell Court encounter that validates integer-space movement, 2-Pace turns, Tempo/recovery, Guard/Dodge, delivery + essence resistance, deterministic Oni AI, victory/defeat, and restart.
@@ -72,7 +78,7 @@ To verify every shipped browser file over a real local HTTP boundary without ins
 python tools/static-delivery.py
 ```
 
-The current release manifest contains 145 byte-verified files and 10,515,636 delivered bytes: five pages, six stylesheets, five controllers, 95 modules, 33 PNG production assets, and one SVG favicon.
+The current release manifest contains 155 byte-verified files and 10,658,411 delivered bytes: six pages, seven stylesheets, six controllers, 102 modules, 33 PNG production assets, and one SVG favicon.
 
 ## FP-0 controls
 

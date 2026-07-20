@@ -476,19 +476,25 @@ test('browser Item wiring is party-targeted, presentation-locked, engine-owned, 
 });
 
 test('victory settles provisional item debits atomically before replacing live loadout state', async () => {
-  const source = await readFile(new URL('../battle.js', import.meta.url), 'utf8');
+  const [source, resultContract, settlement] = await Promise.all([
+    readFile(new URL('../battle.js', import.meta.url), 'utf8'),
+    readFile(new URL('../battle-result-contract.mjs', import.meta.url), 'utf8'),
+    readFile(new URL('../battle-settlement.mjs', import.meta.url), 'utf8'),
+  ]);
   const victory = source.slice(
     source.indexOf('function recordVictoryIfNeeded(snapshot)'),
     source.indexOf('\nfunction renderResult', source.indexOf('function recordVictoryIfNeeded(snapshot)')),
   );
-  assert.match(victory, /settleBattleLoadout\(loadoutState, \{/);
-  assert.match(victory, /itemDebits: snapshot\.itemConsumption/);
-  assert.match(victory, /reward: \{ currency: reward\.currency, items: reward\.items \}/);
-  assert.match(victory, /partyVitals/);
-  assert.match(victory, /entry\.faction === 'party' && entry\.hp > 0/);
-  assert.doesNotMatch(victory, /Math\.max\(1, actor\.hp\)/);
-  assert.ok(victory.indexOf('settleBattleLoadout(loadoutState') < victory.indexOf('commitPersistenceTransaction('));
-  assert.ok(victory.indexOf('commitPersistenceTransaction(') < victory.indexOf('loadoutState = nextLoadoutState'));
+  assert.match(victory, /createBattleResultFromSnapshot\(snapshot, encounter\.id\)/);
+  assert.match(victory, /settleBattleVictory\(\{/);
+  assert.match(settlement, /settleBattleLoadout\(states\.loadout, \{/);
+  assert.match(settlement, /itemDebits: result\.itemDebits/);
+  assert.match(settlement, /reward: \{ currency: reward\.currency, items: reward\.items \}/);
+  assert.match(settlement, /partyVitals: result\.partyVitals/);
+  assert.match(resultContract, /actor\?\.faction !== 'party' \|\| !\(actor\.hp > 0\)/);
+  assert.doesNotMatch(resultContract, /Math\.max\(1, actor\.hp\)/);
+  assert.ok(settlement.indexOf('settleBattleLoadout(states.loadout') < settlement.indexOf('commitPersistenceTransaction('));
+  assert.ok(victory.indexOf('if (!settlement.ok)') < victory.indexOf('loadoutState = settlement.states.loadout'));
   assert.match(victory, /if \(rewardRecorded\) return true/);
   const restart = source.slice(source.indexOf("restartBattle.addEventListener('click'"), source.indexOf("window.addEventListener('keydown'"));
   assert.match(restart, /engine = createEngine\(\)/, 'restart reconstructs provisional stock from durable loadout authority');

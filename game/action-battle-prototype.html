@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090812">
+  <title>Action Battle Proof · Bells of the Black Chrysanthemum</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="action-battle-prototype.css">
+</head>
+<body>
+  <a class="skip-link" href="#battleReadout">Skip the battle canvas</a>
+  <main class="prototype-shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">NON-CANONICAL FEEL PROOF · SIDE-VIEW ACTION</p>
+        <h1>Moonlit Bell Gallery</h1>
+        <p class="subtitle">Free movement. Committed strikes. Recovery you can move through.</p>
+      </div>
+      <a class="back-link" href="battle.html">Turn-based battle ↗</a>
+    </header>
+
+    <section class="battle-card" aria-labelledby="encounterTitle">
+      <div class="battle-heading">
+        <div>
+          <p class="stage-kicker">BLACK COURT · WESTERN CLOISTER</p>
+          <h2 id="encounterTitle">Ren vs. the Ashen Bailiff</h2>
+        </div>
+        <div class="motion-badge" id="motionMode">Full motion</div>
+      </div>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas
+          id="actionBattleCanvas"
+          width="960"
+          height="540"
+          tabindex="0"
+          aria-label="Side-view action battle. Ren begins on the left and the Ashen Bailiff approaches from the right. Run and jump freely; ground attacks have committed animations and separate cooldowns."
+          aria-describedby="battleInstructions battleReadout"
+        >
+          This action prototype requires Canvas. The exact battle state remains available in the text readout below.
+        </canvas>
+        <div class="focus-prompt" id="focusPrompt" aria-hidden="true">CLICK OR PRESS TAB TO FOCUS</div>
+      </div>
+
+      <div class="control-ribbon" aria-label="Battle controls">
+        <div class="key-guide" id="battleInstructions">
+          <span><kbd>A</kbd><kbd>D</kbd> or <kbd>←</kbd><kbd>→</kbd> Move freely</span>
+          <span><kbd>J</kbd> or <kbd>Space</kbd> Courier’s Cut</span>
+          <span><kbd>K</kbd> Cinder Route</span>
+          <span><kbd>W</kbd> or <kbd>↑</kbd> Jump</span>
+          <span><kbd>R</kbd> Restart</span>
+        </div>
+        <button class="restart-button" id="restartButton" type="button">Restart duel</button>
+      </div>
+    </section>
+
+    <section class="readout-grid" id="battleReadout" aria-label="Text battle state" tabindex="-1">
+      <article class="fighter-panel player-panel">
+        <div class="fighter-heading">
+          <div>
+            <p class="panel-kicker">COURIER-HUNTER</p>
+            <h2>Ren Ishikawa</h2>
+          </div>
+          <strong id="playerHpText">120 / 120 HP</strong>
+        </div>
+        <div class="meter hp-meter" role="meter" aria-label="Ren health" aria-valuemin="0" aria-valuemax="120" aria-valuenow="120">
+          <span id="playerHpBar"></span>
+        </div>
+        <dl class="combat-stats">
+          <div><dt>State</dt><dd id="playerStateText">READY</dd></div>
+          <div><dt>Position</dt><dd id="playerPositionText">218</dd></div>
+          <div><dt>Damage</dt><dd id="playerDamageText">Cut 29</dd></div>
+        </dl>
+      </article>
+
+      <article class="cooldown-panel" aria-labelledby="cooldownTitle">
+        <div class="cooldown-title-row">
+          <div>
+            <p class="panel-kicker">POST-ANIMATION RECOVERY</p>
+            <h2 id="cooldownTitle">Courier’s Cut</h2>
+          </div>
+          <output id="cooldownValue" aria-label="Shared offense cooldown remaining">READY</output>
+        </div>
+        <div class="meter cooldown-meter" role="meter" aria-label="Shared offense cooldown" aria-valuemin="0" aria-valuemax="1022" aria-valuenow="0">
+          <span id="cooldownBar"></span>
+        </div>
+        <div class="secondary-cooldown">
+          <span>Cinder Route skill</span>
+          <output id="skillCooldownValue" aria-label="Cinder Route cooldown remaining">READY</output>
+        </div>
+        <div class="meter skill-cooldown-meter" role="meter" aria-label="Cinder Route cooldown" aria-valuemin="0" aria-valuemax="2920" aria-valuenow="0">
+          <span id="skillCooldownBar"></span>
+        </div>
+        <p id="cooldownExplanation">Attacks lock movement for their fixed animation only. Both cooldowns begin afterward; running and jumping are immediately free.</p>
+        <label class="level-control" for="levelSlider">
+          <span>Prototype level <strong id="levelValue">8</strong></span>
+          <input id="levelSlider" type="range" min="1" max="50" value="8" step="1">
+          <small id="levelEffect">91.3% cooldown multiplier · animations unchanged</small>
+        </label>
+      </article>
+
+      <article class="fighter-panel enemy-panel">
+        <div class="fighter-heading">
+          <div>
+            <p class="panel-kicker">BLACK COURT RETAINER</p>
+            <h2>Ashen Bailiff</h2>
+          </div>
+          <strong id="enemyHpText">210 / 210 HP</strong>
+        </div>
+        <div class="meter hp-meter enemy-hp-meter" role="meter" aria-label="Ashen Bailiff health" aria-valuemin="0" aria-valuemax="210" aria-valuenow="210">
+          <span id="enemyHpBar"></span>
+        </div>
+        <dl class="combat-stats">
+          <div><dt>Intent</dt><dd id="enemyStateText">ADVANCING</dd></div>
+          <div><dt>Position</dt><dd id="enemyPositionText">730</dd></div>
+          <div><dt>Damage</dt><dd>Arcane · Umbral 14</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <section class="event-deck" aria-labelledby="eventTitle">
+      <div>
+        <p class="panel-kicker">ACCESSIBLE EVENT AUTHORITY</p>
+        <h2 id="eventTitle">Battle callout</h2>
+      </div>
+      <p id="battleAnnouncement" role="status" aria-live="polite" aria-atomic="true">Duel ready. Move with A and D; attack with J.</p>
+      <ol id="eventLog" aria-label="Recent battle events">
+        <li>Duel ready — close distance, commit the slash, then reposition during cooldown.</li>
+      </ol>
+    </section>
+
+    <div class="touch-controls" aria-label="On-screen battle controls">
+      <button type="button" data-held-control="left" aria-label="Move left">←</button>
+      <button type="button" data-action-control="jump">Jump</button>
+      <button type="button" data-action-control="attack" class="attack-control">Cut</button>
+      <button type="button" data-action-control="skill" class="skill-control">Cinder</button>
+      <button type="button" data-held-control="right" aria-label="Move right">→</button>
+    </div>
+  </main>
+  <script type="module" src="action-battle-prototype.js"></script>
+</body>
+</html>

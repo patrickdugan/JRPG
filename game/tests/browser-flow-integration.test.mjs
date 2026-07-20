@@ -182,31 +182,33 @@ test('camp loadout mutations persist before replacing the live cross-page state'
 
 test('battle victory is durable before the campaign continuation is exposed', () => {
   const battleSource = pageRecords.find(({ sourceName }) => sourceName === 'battle.js').source;
+  const settlementSource = readFileSync(resolve(ROOT, 'battle-settlement.mjs'), 'utf8');
+  const resultSource = readFileSync(resolve(ROOT, 'battle-result-contract.mjs'), 'utf8');
   const start = battleSource.indexOf('function recordVictoryIfNeeded(snapshot)');
   const end = battleSource.indexOf('\nfunction renderSpeedControls', start);
   assert.ok(start >= 0 && end > start, 'victory persistence boundary must exist');
   const victory = battleSource.slice(start, end);
-  const nextStateIndex = victory.indexOf('const nextAdvancementState = recordEncounterWin');
-  const saveIndex = victory.indexOf('commitPersistenceTransaction(');
-  const replaceIndex = victory.indexOf('advancementState = nextAdvancementState');
-  assert.ok(nextStateIndex >= 0 && saveIndex > nextStateIndex && replaceIndex > saveIndex,
-    'live battle authorities may change only after the complete transaction succeeds');
+  const settleIndex = victory.indexOf('const settlement = settleBattleVictory({');
+  const settledGateIndex = victory.indexOf('if (!settlement.ok) return failSettlement(settlement.message)');
+  const replaceIndex = victory.indexOf('advancementState = settlement.states.advancement');
+  assert.ok(settleIndex >= 0 && settledGateIndex > settleIndex && replaceIndex > settledGateIndex,
+    'live battle authorities may change only after the settlement boundary succeeds');
   assert.doesNotMatch(victory, /\b\w+Adapter\.save\(/, 'victory settlement must not bypass its transaction');
   for (const authority of ['advancement', 'loadout', 'quest', 'witness', 'field', 'run-receipt']) {
-    assert.match(victory, new RegExp(`id: '${authority}'`));
+    assert.match(settlementSource, new RegExp(`id: '${authority}'`));
   }
-  assert.match(victory, /stateSaveStep\(id, adapter, previousState, nextState, \{ supportsOverwriteRollback: true \}\)/);
-  assert.match(victory, /if \(!persisted\.ok\)[\s\S]*?return failSettlement/);
+  assert.match(settlementSource, /stateSaveStep\(id, adapter, previousState, nextState, \{ supportsOverwriteRollback: true \}\)/);
+  assert.match(settlementSource, /if \(!persisted\.ok\)[\s\S]*?return failure/);
   assert.match(victory, /victorySaveRetryAt = performance\.now\(\) \+ 1000/);
-  assert.match(victory, /const partyVitals = Object\.fromEntries\(snapshot\.actors/);
-  assert.match(victory, /entry\.faction === 'party' && entry\.hp > 0/,
+  assert.match(victory, /createBattleResultFromSnapshot\(snapshot, encounter\.id\)/);
+  assert.match(resultSource, /actor\?\.faction !== 'party' \|\| !\(actor\.hp > 0\)/,
     'victory persists living survivor HP without inventing a one-HP revival');
-  assert.doesNotMatch(victory, /Math\.max\(1, actor\.hp\)/);
-  assert.match(victory, /settleBattleLoadout\(loadoutState, \{/);
-  assert.match(victory, /itemDebits: snapshot\.itemConsumption/);
-  assert.match(victory, /reward: \{ currency: reward\.currency, items: reward\.items \}/);
-  assert.match(victory, /partyVitals/);
-  assert.ok(victory.indexOf('settleBattleLoadout(loadoutState') < saveIndex,
+  assert.doesNotMatch(resultSource, /Math\.max\(1, actor\.hp\)/);
+  assert.match(settlementSource, /settleBattleLoadout\(states\.loadout, \{/);
+  assert.match(settlementSource, /itemDebits: result\.itemDebits/);
+  assert.match(settlementSource, /reward: \{ currency: reward\.currency, items: reward\.items \}/);
+  assert.match(settlementSource, /partyVitals: result\.partyVitals/);
+  assert.ok(settlementSource.indexOf('settleBattleLoadout(states.loadout') < settlementSource.indexOf('commitPersistenceTransaction('),
     'battle items, rewards, and vitals are prepared before the atomic write');
   assert.match(battleSource, /continueCampaign\.hidden = [^;]+\|\| !durableVictory;/);
 });
