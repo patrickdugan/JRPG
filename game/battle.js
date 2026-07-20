@@ -90,6 +90,16 @@ import {
   getWitnessChronicleProgress,
 } from './witness-chronicle-runtime.mjs';
 import { commitPersistenceTransaction, stateSaveStep } from './persistence-transaction.mjs';
+import {
+  canvasPointToTile,
+  getBattleStageGeometry,
+  tileCenter,
+} from './battle-stage-geometry.mjs';
+import {
+  battleStageArtMatchesLevel,
+  battleStageImageHasExpectedSize,
+  getBattleStageArt,
+} from './battle-stage-art.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -138,6 +148,9 @@ battleEnemyAtlasImage.src = ENEMY_ATLAS.url;
 const query = new URLSearchParams(window.location.search);
 const requestedEncounterId = query.get('encounter');
 const encounter = getEncounter(requestedEncounterId) ?? ENCOUNTERS[0];
+const configuredStageArt = getBattleStageArt(encounter.levelId);
+let battleStageArtImage = null;
+let battleStageArtState = configuredStageArt ? 'loading' : 'fallback';
 const pageAudio = mountAudioControls({ desiredLoop: isBossEncounter(encounter) ? 'boss' : 'battle' });
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const requestedReturn = query.get('return');
@@ -223,6 +236,44 @@ function combatProfiles() {
 
 function createEngine() {
   return new CampaignCombatEngine({ encounterId: encounter.id, partyProfiles: combatProfiles() });
+}
+
+function setBattleStageArtState(state) {
+  battleStageArtState = state;
+  canvas.dataset.stageArtState = state;
+  if (configuredStageArt) canvas.dataset.stageArtId = configuredStageArt.id;
+  else delete canvas.dataset.stageArtId;
+}
+
+function initializeBattleStageArt() {
+  if (!configuredStageArt) {
+    setBattleStageArtState('fallback');
+    return;
+  }
+  if (!battleStageArtMatchesLevel(configuredStageArt, engine.level)) {
+    setBattleStageArtState('error');
+    return;
+  }
+
+  setBattleStageArtState('loading');
+  const image = new Image();
+  image.decoding = 'async';
+  image.addEventListener('load', () => {
+    if (!battleStageImageHasExpectedSize(configuredStageArt, image)) {
+      setBattleStageArtState('error');
+      drawBattle(performance.now());
+      return;
+    }
+    battleStageArtImage = image;
+    setBattleStageArtState('ready');
+    drawBattle(performance.now());
+  }, { once: true });
+  image.addEventListener('error', () => {
+    battleStageArtImage = null;
+    setBattleStageArtState('error');
+    drawBattle(performance.now());
+  }, { once: true });
+  image.src = configuredStageArt.url;
 }
 
 function addMessage(message) {
@@ -393,14 +444,27 @@ function terrainColor(tag) {
   return colors[tag] ?? '#202b42';
 }
 
+function terrainArtOverlay(tag) {
+  const colors = {
+    'wet-stone': 'rgba(41,58,84,0.28)', 'shallow-puddle': 'rgba(36,85,109,0.34)', water: 'rgba(39,94,120,0.34)',
+    'storm-water': 'rgba(57,117,138,0.36)', 'cold-pool': 'rgba(91,145,168,0.34)', 'ash-field': 'rgba(75,65,70,0.3)',
+    'ember-ash': 'rgba(122,69,56,0.34)', 'umbral-ash': 'rgba(60,49,80,0.34)', 'furnace-grate': 'rgba(116,59,45,0.34)',
+    'archive-floor': 'rgba(85,72,63,0.3)', 'high-gallery': 'rgba(7,9,17,0.46)', 'flowing-water': 'rgba(45,118,146,0.36)',
+    'paper-litter': 'rgba(112,105,87,0.3)', 'bell-node': 'rgba(126,96,48,0.38)', 'legal-seal': 'rgba(120,51,62,0.38)',
+    'dry-lantern': 'rgba(160,104,47,0.28)',
+  };
+  return colors[tag] ?? null;
+}
+
 function mapGeometry() {
   const level = engine.level;
-  const cell = Math.floor(Math.min(canvas.width / level.width, canvas.height / level.height));
-  return {
-    cell,
-    originX: Math.floor((canvas.width - level.width * cell) / 2),
-    originY: Math.floor((canvas.height - level.height * cell) / 2),
-  };
+  return getBattleStageGeometry({
+    canvasWidth: canvas.width,
+    canvasHeight: canvas.height,
+    levelWidth: level.width,
+    levelHeight: level.height,
+    spacePx: level.spacePx,
+  });
 }
 
 function traceObjectiveMarker(marker, radius) {
@@ -468,10 +532,7 @@ function drawObjectiveTokens(snapshot, level, geometry, now) {
 }
 
 function battleCanvasPoint(tile, geometry) {
-  return {
-    x: geometry.originX + tile.x * geometry.cell + geometry.cell / 2,
-    y: geometry.originY + tile.y * geometry.cell + geometry.cell / 2,
-  };
+  return tileCenter(tile, geometry);
 }
 
 function drawBattleAnimationFx(animation, geometry) {
@@ -543,31 +604,54 @@ function drawBossIntent(snapshot, geometry) {
 function drawBattle(now = performance.now()) {
   const snapshot = engine.snapshot();
   const level = engine.level;
-  const { cell, originX, originY } = mapGeometry();
-  const geometry = { cell, originX, originY };
+  const geometry = mapGeometry();
+  const { cell, originX, originY } = geometry;
   const visualNow = reducedMotion.matches ? 0 : now;
   const animation = reducedMotion.matches ? null : currentBattleAnimationFrame(now);
   const blocked = new Set(level.blocked ?? []);
   const exits = new Set((level.exits ?? []).map((exit) => exit.at));
   const terrain = new Map((level.terrain ?? []).map((tile) => [tile.at, tile.tag]));
+  const stageArtReady = battleStageArtState === 'ready'
+    && battleStageArtImage
+    && battleStageImageHasExpectedSize(configuredStageArt, battleStageArtImage);
   context.fillStyle = '#070a13';
   context.fillRect(0, 0, canvas.width, canvas.height);
+  if (stageArtReady) {
+    context.imageSmoothingEnabled = false;
+    context.drawImage(
+      battleStageArtImage,
+      originX,
+      originY,
+      geometry.boardWidth,
+      geometry.boardHeight,
+    );
+  }
 
   for (let y = 0; y < level.height; y += 1) {
     for (let x = 0; x < level.width; x += 1) {
       const key = `${x},${y}`;
       const px = originX + x * cell;
       const py = originY + y * cell;
-      context.fillStyle = terrainColor(terrain.get(key));
-      context.fillRect(px, py, cell, cell);
-      context.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.045)';
-      context.fillRect(px, py, cell, cell);
-      context.strokeStyle = 'rgba(210,224,244,0.12)';
+      if (stageArtReady) {
+        const overlay = terrainArtOverlay(terrain.get(key));
+        if (overlay) {
+          context.fillStyle = overlay;
+          context.fillRect(px, py, cell, cell);
+        }
+        context.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,0.018)' : 'rgba(0,0,0,0.035)';
+        context.fillRect(px, py, cell, cell);
+      } else {
+        context.fillStyle = terrainColor(terrain.get(key));
+        context.fillRect(px, py, cell, cell);
+        context.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.045)';
+        context.fillRect(px, py, cell, cell);
+      }
+      context.strokeStyle = stageArtReady ? 'rgba(221,228,239,0.16)' : 'rgba(210,224,244,0.12)';
       context.strokeRect(px + 0.5, py + 0.5, cell - 1, cell - 1);
       if (blocked.has(key)) {
-        context.fillStyle = '#0b1020';
+        context.fillStyle = stageArtReady ? 'rgba(5,8,15,0.34)' : '#0b1020';
         context.fillRect(px + 3, py + 3, cell - 6, cell - 6);
-        context.fillStyle = '#4a3340';
+        context.fillStyle = stageArtReady ? 'rgba(126,73,82,0.62)' : '#4a3340';
         context.fillRect(px + 6, py + 7, cell - 12, Math.max(2, cell * 0.12));
       }
       if (exits.has(key)) {
@@ -1533,8 +1617,9 @@ canvas.addEventListener('click', (event) => {
   const scaleY = canvas.height / bounds.height;
   const pointerX = (event.clientX - bounds.left) * scaleX;
   const pointerY = (event.clientY - bounds.top) * scaleY;
-  const { cell, originX, originY } = mapGeometry();
-  const tile = { x: Math.floor((pointerX - originX) / cell), y: Math.floor((pointerY - originY) / cell) };
+  const geometry = mapGeometry();
+  const tile = canvasPointToTile({ x: pointerX, y: pointerY }, geometry);
+  if (!tile) return;
   const snapshot = engine.snapshot();
   const actor = activePartyActor(snapshot);
   if (!actor) return;
@@ -1602,6 +1687,7 @@ function tick(now) {
 }
 
 engine = createEngine();
+initializeBattleStageArt();
 render();
 requestAnimationFrame(tick);
 

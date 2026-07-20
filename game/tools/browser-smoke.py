@@ -197,6 +197,88 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(final == {"wins": 6, "speed": 4}, "Five-win repeat queue or speed authority drifted.")
 
+            stage_context = browser.new_context(viewport={"width": 1440, "height": 1000})
+            stage_page = stage_context.new_page()
+            stage_page.set_default_timeout(20_000)
+            stage_page.set_default_navigation_timeout(45_000)
+            stage_page.on(
+                "console",
+                lambda message: console_errors.append(
+                    {"text": message.text, "url": message.location.get("url", "")}
+                )
+                if message.type == "error"
+                else None,
+            )
+            stage_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            stage_response = stage_page.goto(
+                f"{base}/battle.html?encounter=fp1-mateus",
+                wait_until="domcontentloaded",
+            )
+            require(stage_response is not None and stage_response.status == 200, "Takamine stage failed delivery.")
+            stage_page.wait_for_function(
+                "() => document.querySelector('#battleCanvas')?.dataset.stageArtState === 'ready'",
+            )
+            stage_art = stage_page.evaluate(
+                """async () => {
+                  const canvas = document.querySelector('#battleCanvas');
+                  const registry = await import('./battle-stage-art.mjs');
+                  const art = registry.getBattleStageArt('tkm-bell-chamber');
+                  return {
+                    state: canvas.dataset.stageArtState,
+                    id: canvas.dataset.stageArtId,
+                    width: art.sourceWidth,
+                    height: art.sourceHeight,
+                    sourceCell: art.sourceCell,
+                    url: art.url,
+                  };
+                }"""
+            )
+            require(
+                stage_art == {
+                    "state": "ready",
+                    "id": "takamine-bell-chamber-board-v1",
+                    "width": 384,
+                    "height": 224,
+                    "sourceCell": 32,
+                    "url": "./assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
+                },
+                f"Takamine runtime art contract drifted: {stage_art}.",
+            )
+            stage_context.close()
+
+            fallback_context = browser.new_context(viewport={"width": 1440, "height": 1000})
+            fallback_context.route(
+                "**/assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
+                lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-fallback-qa"),
+            )
+            fallback_page = fallback_context.new_page()
+            fallback_page.set_default_timeout(20_000)
+            fallback_page.set_default_navigation_timeout(45_000)
+            fallback_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            fallback_response = fallback_page.goto(
+                f"{base}/battle.html?encounter=fp1-mateus",
+                wait_until="domcontentloaded",
+            )
+            require(fallback_response is not None and fallback_response.status == 200, "Takamine fallback page failed delivery.")
+            fallback_page.wait_for_function(
+                "() => document.querySelector('#battleCanvas')?.dataset.stageArtState === 'error'",
+            )
+            fallback_colors = fallback_page.locator("#battleCanvas").evaluate(
+                """canvas => {
+                  const pixels = canvas.getContext('2d').getImageData(96, 46, 768, 448).data;
+                  const colors = new Set();
+                  for (let y = 16; y < 448; y += 32) {
+                    for (let x = 16; x < 768; x += 32) {
+                      const offset = (y * 768 + x) * 4;
+                      colors.add(`${pixels[offset]},${pixels[offset + 1]},${pixels[offset + 2]},${pixels[offset + 3]}`);
+                    }
+                  }
+                  return colors.size;
+                }"""
+            )
+            require(fallback_colors >= 3, f"Takamine image failure left a blank board: {fallback_colors} colors.")
+            fallback_context.close()
+
             page.locator("body").focus()
             focus_trace: list[str] = []
             for _ in range(10):
@@ -950,10 +1032,15 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 ("index.html", "#gameCanvas"),
                 ("campaign.html", "#mapCanvas"),
                 (f"battle.html?encounter={encounter_id}", "#battleCanvas"),
+                ("battle.html?encounter=fp1-mateus", "#battleCanvas"),
             ):
                 response = reduced_page.goto(f"{base}/{path}", wait_until="domcontentloaded")
                 require(response is not None and response.status == 200, f"Reduced-motion {path} failed delivery.")
                 reduced_page.locator(canvas_selector).wait_for()
+                if path == "battle.html?encounter=fp1-mateus":
+                    reduced_page.wait_for_function(
+                        "() => document.querySelector('#battleCanvas')?.dataset.stageArtState === 'ready'",
+                    )
                 reduced_page.wait_for_timeout(750)
                 before = reduced_page.locator(canvas_selector).evaluate("canvas => canvas.toDataURL()")
                 reduced_page.wait_for_timeout(350)
@@ -1003,6 +1090,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         repeat_terminal="VICTORY",
         repeat_queue_wins=5,
         repeat_final=final,
+        takamine_stage_art=stage_art,
+        takamine_fallback_colors=fallback_colors,
         keyboard_terminal_link=True,
         credits_seed=credits_seed,
         credits_final=credits_final,

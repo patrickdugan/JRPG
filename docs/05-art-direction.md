@@ -34,7 +34,7 @@ The generated concepts successfully establish atmosphere and macro-composition. 
 | Field terrain | 16 x 16 base modules; 16 x 32, 32 x 32, and 32 x 48 overlays for walls, roof edges, trees, and foreground masking. |
 | Field actor | 32 x 48 nominal body box, with a 12 x 10 foot collision box supplied by design. Taller hats/hair/cloaks may exceed the frame upward only. |
 | Combat actor | 48 x 64 standard; 64 x 80 for broad silhouettes; named bosses 96 x 96 to 128 x 128. |
-| Combat board | Simulation uses a 12 x 7 integer grid; level data carries nominal `spacePx: 32` authoring metadata, but the prototype renderer does not consume it. The 960 x 540 backing store currently derives 77-pixel cells, centers a 924 x 539 board at `(18,0)`, and leaves one unused bottom row. A production floor must be authored as an exact flat 12 x 7 module or as collision-matched cell modules; perspective paving may not imply a different grid. |
+| Combat board | Simulation uses a 12 x 7 integer grid and consumes level `spacePx: 32` metadata through one shared draw/input transform. The 960 x 540 backing store uses exact 64-pixel cells and centers a 768 x 448 board at `(96,46)`, preserving a 384 x 224 authored floor at 2x. Other layouts retain a bounded fallback. A production floor must be an exact flat 12 x 7 module or collision-matched cell modules; perspective paving may not imply a different grid. |
 | UI | Nine-slice panels and icon cells on an 8-pixel rhythm. UI text uses a purpose-made bitmap font; never ask generated art to supply lettering. |
 
 ### Pixel construction

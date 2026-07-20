@@ -1,6 +1,6 @@
 # Takamine Bell-Chamber Battle Environment Brief
 
-Status: **production contract; final board art and external cultural review pending.** This brief converts the accepted Takamine rain mood into an exact tactical asset without treating generated concept pixels as shippable art.
+Status: **editable production board integrated; external cultural review and final art lock pending.** The authored source, deterministic builder, manifest, and exports live in `assets/art/takamine-bell-chamber/`; the browser ships a byte-identical board from `game/assets/art/takamine-bell-chamber/`. Generated concept pixels remain mood reference only.
 
 ## Runtime authority
 
@@ -9,16 +9,16 @@ Status: **production contract; final board art and external cultural review pend
 | Level | `tkm-bell-chamber` / FP-05 Bell Chamber |
 | Encounter | `fp1-mateus` / Father Mateus Avelar |
 | Simulation | 12 x 7 integer spaces |
-| Nominal source board | 384 x 224 from level metadata `spacePx: 32`; not yet consumed by the renderer |
+| Source board | 384 x 224 from level metadata `spacePx: 32`; consumed through the frozen `tkm-bell-chamber` stage-art registry |
 | Current canvas | 960 x 540 |
-| Current backing-store grid | 77-pixel cells; 924 x 539 board at `(18,0)`; 18-pixel side margins and one unused bottom row |
+| Current backing-store grid | exact 64-pixel cells; 768 x 448 board at `(96,46)`; integer 2x source scale |
 | Presentation role | Static environment beneath terrain, telegraphs, units, and effects; never collision authority |
 
 The board art must be flat and cell-addressable. Perspective walls, roofs, stairs, galleries, and scenery belong outside the playable plane or only in cells already blocked by level data. The runtime's grid, blocked set, objective tokens, and actor positions remain authoritative even when the image suggests depth.
 
-### Open renderer/art-lock gate
+### Completed renderer migration
 
-The responsive prototype derives 77 backing-store pixels per cell and therefore cannot claim integer scaling of a nominal 32-pixel source board. Do not stretch a 384 x 224 final pixel-art board to 924 x 539 and call it integer-scaled. Before a stage is promoted from manifested source to final runtime art, choose and test the coherent migration: composite the 384 x 224 source at exactly 2x as a 768 x 448 board inside the existing 960 x 540 shell, then update draw and pointer geometry to the same 64-pixel cells. The current milestone intentionally leaves runtime geometry unchanged until that migration has pointer-boundary, telegraph, sprite-legibility, desktop, and 390-pixel responsive evidence.
+The renderer now composites the 384 x 224 source at exactly 2x as a 768 x 448 board inside the existing 960 x 540 shell. Drawing and pointer conversion use the same 64-pixel-cell transform; margin clicks fail closed. Stage loading validates level and natural-image dimensions, exposes loading/ready/error/fallback state on the canvas, disables smoothing, and retains opaque procedural terrain if the bitmap is absent or corrupt. Seventeen focused acceptance tests cover geometry, all 84 tile centers, desktop/narrow CSS scaling, manifest/live-data agreement, hashes, runtime byte identity, and paint order. Isolated Chrome evidence additionally records the ready board, a 12-color procedural corruption fallback, stable reduced-motion output, and no console, page, or HTTP errors.
 
 ## Exact occupancy contract
 
@@ -50,7 +50,7 @@ Keep indigo rain, wet cedar, plaster infill, stone drainage, black lacquer, iron
 1. Use generated imagery only as a mood/value reference. Rebuild the shipping floor from editable indexed or layered sources.
 2. Supply a monochrome 12 x 7 occupancy thumbnail before color.
 3. Supply a palette/module sheet with two to four value steps per material and no generated lettering.
-4. Review the board in engine with every blocked cell, both Blood Wards, Crimson Litany, movement range, actors, result log, and reduced-motion mode visible.
+4. Automated in-engine geometry, actors, movement, objective/intent layering, corrupt-image fallback, and reduced-motion checks pass. A human must still review both Blood Wards, Crimson Litany, result-log contrast, and narrow-screen readability before art lock.
 5. Reject any asset whose paving lines disagree with the grid, whose props imply false collision, whose texture obscures a telegraph, or whose symbols resemble authentic heraldic or sacred material.
 6. Complete the external Japanese religious-practice and cultural review documented in [the historical and cultural audit](20-historical-cultural-audit.md) before art lock.
 

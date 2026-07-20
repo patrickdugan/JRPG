@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="128" viewBox="0 0 384 128" shape-rendering="crispEdges">
+  <title>Takamine palette and material modules</title>
+  <desc>Integer-pixel editable tactical environment; collision remains runtime authority.</desc>
+  <g id="palette-swatches">
+    <rect x="0" y="0" width="384" height="128" fill="#0b111a"/>
+    <rect x="2" y="2" width="44" height="16" fill="#0b111a"/>
+    <rect x="50" y="2" width="44" height="16" fill="#111a27"/>
+    <rect x="98" y="2" width="44" height="16" fill="#182536"/>
+    <rect x="146" y="2" width="44" height="16" fill="#202d3d"/>
+    <rect x="194" y="2" width="44" height="16" fill="#243345"/>
+    <rect x="242" y="2" width="44" height="16" fill="#29394a"/>
+    <rect x="290" y="2" width="44" height="16" fill="#304153"/>
+    <rect x="338" y="2" width="44" height="16" fill="#40556a"/>
+    <rect x="2" y="22" width="44" height="16" fill="#172332"/>
+    <rect x="50" y="22" width="44" height="16" fill="#39424b"/>
+    <rect x="98" y="22" width="44" height="16" fill="#4a535b"/>
+    <rect x="146" y="22" width="44" height="16" fill="#211b1d"/>
+    <rect x="194" y="22" width="44" height="16" fill="#332528"/>
+    <rect x="242" y="22" width="44" height="16" fill="#483338"/>
+    <rect x="290" y="22" width="44" height="16" fill="#0e151d"/>
+    <rect x="338" y="22" width="44" height="16" fill="#1b252e"/>
+    <rect x="2" y="42" width="44" height="16" fill="#303c44"/>
+    <rect x="50" y="42" width="44" height="16" fill="#536169"/>
+    <rect x="98" y="42" width="44" height="16" fill="#17151a"/>
+    <rect x="146" y="42" width="44" height="16" fill="#514735"/>
+    <rect x="194" y="42" width="44" height="16" fill="#6b5d40"/>
+    <rect x="242" y="42" width="44" height="16" fill="#554d42"/>
+    <rect x="290" y="42" width="44" height="16" fill="#6b5e49"/>
+    <rect x="338" y="42" width="44" height="16" fill="#151923"/>
+    <rect x="2" y="62" width="44" height="16" fill="#625746"/>
+  </g>
+  <g id="material-modules">
+    <rect x="4" y="72" width="32" height="32" fill="#202d3d"/>
+    <rect x="6" y="74" width="28" height="1" fill="#40556a"/>
+    <rect x="9" y="91" width="15" height="1" fill="#172332"/>
+    <rect x="40" y="72" width="32" height="32" fill="#243345"/>
+    <rect x="42" y="74" width="28" height="1" fill="#40556a"/>
+    <rect x="45" y="91" width="15" height="1" fill="#172332"/>
+    <rect x="76" y="72" width="32" height="32" fill="#29394a"/>
+    <rect x="78" y="74" width="28" height="1" fill="#40556a"/>
+    <rect x="81" y="91" width="15" height="1" fill="#172332"/>
+    <rect x="112" y="72" width="32" height="32" fill="#304153"/>
+    <rect x="114" y="74" width="28" height="1" fill="#40556a"/>
+    <rect x="117" y="91" width="15" height="1" fill="#172332"/>
+    <rect x="164" y="72" width="32" height="32" fill="#211b1d"/>
+    <rect x="167" y="79" width="26" height="2" fill="#1b252e"/>
+    <rect x="167" y="94" width="26" height="1" fill="#514735"/>
+    <rect x="200" y="72" width="32" height="32" fill="#332528"/>
+    <rect x="203" y="79" width="26" height="2" fill="#1b252e"/>
+    <rect x="203" y="94" width="26" height="1" fill="#514735"/>
+    <rect x="236" y="72" width="32" height="32" fill="#483338"/>
+    <rect x="239" y="79" width="26" height="2" fill="#1b252e"/>
+    <rect x="239" y="94" width="26" height="1" fill="#514735"/>
+    <rect x="276" y="72" width="32" height="32" fill="#0e151d"/>
+    <rect x="280" y="76" width="24" height="24" fill="#303c44"/>
+    <rect x="284" y="80" width="16" height="3" fill="#536169"/>
+    <rect x="294" y="86" width="4" height="10" fill="#514735"/>
+    <rect x="324" y="72" width="32" height="32" fill="#39424b"/>
+    <rect x="326" y="74" width="28" height="28" fill="#4a535b"/>
+    <rect x="332" y="82" width="1" height="8" fill="#39424b"/>
+    <rect x="333" y="90" width="12" height="1" fill="#39424b"/>
+  </g>
+</svg>

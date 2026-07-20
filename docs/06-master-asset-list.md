@@ -147,7 +147,7 @@ This cut is the first staffing and outsourcing package. It is intentionally comp
 | ID | Deliverable | Quantity | Blocks | Definition of done |
 | --- | --- | ---: | --- | --- |
 | C1-ART-001 | palette/style/UI grammar sheets | 3 | all production | approved against both concept targets and in-engine 320 x 180 review |
-| C1-ART-002 | Takamine rain-gate battle stage | 1 | first playable | 12 x 7 board alignment, rain/candle layers, gate blocker, no UI overlap |
+| C1-ART-002 | Takamine Bell-Chamber battle stage | 1 | first playable | Produced and integrated as an editable 384 x 224, 12 x 7 board at exact 2x; automated geometry/layer/fallback checks pass; subjective telegraph and external cultural review remain before Accepted/art lock. |
 | C1-ART-003 | Takamine path, gate, registry, chapel, undercroft map kits | 5 | Chapter 1 | collision thumbnails, day/rain variants, story objects, foreground mask |
 | C1-ART-004 | Ren field/combat/portrait package | 1 | first playable | all required movement, command, Guard, hit, defeat tags |
 | C1-ART-005 | Lise scene/field/portrait package | 1 | first playable narrative | original traveler/hunter silhouette; no real-person reference |
