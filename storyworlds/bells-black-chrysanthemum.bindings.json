@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "bells-black-chrysanthemum",
+  "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
+  "authoredSceneCount": 30,
+  "clusters": [
+    {
+      "id": "sw1-clerks-second-copy",
+      "chapterId": "chapter-1",
+      "anchorBeatId": "c1-05-storehouse-clerk",
+      "placement": "after-beat",
+      "sequenceRole": "after-level-consequence",
+      "relatedEncounterIds": [],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_0000",
+      "outcomeEncounterIds": [
+        "page_sw01_accord",
+        "page_sw01_revision"
+      ]
+    },
+    {
+      "id": "sw2-witness-not-family",
+      "chapterId": "chapter-2",
+      "anchorBeatId": "c2-06-name-from-europe",
+      "placement": "after-beat",
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "fp1-mateus"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw02_decision",
+      "outcomeEncounterIds": [
+        "page_sw02_accord",
+        "page_sw02_revision"
+      ]
+    },
+    {
+      "id": "sw3-sayos-warehouse-conditions",
+      "chapterId": "chapter-3",
+      "anchorBeatId": "c3-04-lantern-boat-escort",
+      "placement": "before-beat",
+      "sequenceRole": "before-boss-decision",
+      "relatedEncounterIds": [
+        "c3-dock-patrol"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw03_decision",
+      "outcomeEncounterIds": [
+        "page_sw03_accord",
+        "page_sw03_revision"
+      ]
+    },
+    {
+      "id": "sw4-margin-varga-journal",
+      "chapterId": "chapter-4",
+      "anchorBeatId": "c4-03-varga-journal",
+      "placement": "after-beat",
+      "sequenceRole": "after-level-consequence",
+      "relatedEncounterIds": [],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw04_decision",
+      "outcomeEncounterIds": [
+        "page_sw04_accord",
+        "page_sw04_revision"
+      ]
+    },
+    {
+      "id": "sw5-cipher-handoff",
+      "chapterId": "chapter-5",
+      "anchorBeatId": "c5-05-sigil-burned",
+      "placement": "before-beat",
+      "sequenceRole": "before-boss-decision",
+      "relatedEncounterIds": [
+        "c5-furnace-abbot"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw05_decision",
+      "outcomeEncounterIds": [
+        "page_sw05_accord",
+        "page_sw05_revision"
+      ]
+    },
+    {
+      "id": "sw6-tribunal-afterword",
+      "chapterId": "chapter-6",
+      "anchorBeatId": "c6-03-tribunal",
+      "placement": "after-beat",
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c6-ujiro"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw06_decision",
+      "outcomeEncounterIds": [
+        "page_sw06_accord",
+        "page_sw06_revision"
+      ]
+    },
+    {
+      "id": "sw7-soldier-will-not-follow",
+      "chapterId": "chapter-7",
+      "anchorBeatId": "c7-03-aqueduct-names",
+      "placement": "before-beat",
+      "sequenceRole": "before-boss-decision",
+      "relatedEncounterIds": [
+        "c7-name-slip-release"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw07_decision",
+      "outcomeEncounterIds": [
+        "page_sw07_accord",
+        "page_sw07_revision"
+      ]
+    },
+    {
+      "id": "sw8-boats-with-conditions",
+      "chapterId": "chapter-8",
+      "anchorBeatId": "c8-04-lantern-breach",
+      "placement": "before-beat",
+      "sequenceRole": "before-boss-decision",
+      "relatedEncounterIds": [
+        "c8-outer-court"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw08_decision",
+      "outcomeEncounterIds": [
+        "page_sw08_accord",
+        "page_sw08_revision"
+      ]
+    },
+    {
+      "id": "sw9-mateus-living-archive",
+      "chapterId": "chapter-9",
+      "anchorBeatId": "c9-04-yearless-bell",
+      "placement": "before-beat",
+      "sequenceRole": "before-boss-decision",
+      "relatedEncounterIds": [
+        "c9-yearless-bell"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw09_decision",
+      "outcomeEncounterIds": [
+        "page_sw09_accord",
+        "page_sw09_revision"
+      ]
+    },
+    {
+      "id": "sw10-corrections-desk",
+      "chapterId": "epilogue",
+      "anchorBeatId": "e00-open-archive",
+      "placement": "after-beat",
+      "sequenceRole": "after-level-consequence",
+      "relatedEncounterIds": [],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw10_decision",
+      "outcomeEncounterIds": [
+        "page_end_corrections_visible",
+        "page_end_limits_posted"
+      ]
+    }
+  ]
+}

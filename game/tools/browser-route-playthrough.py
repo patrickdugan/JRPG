@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded, player-control-only browser attempt of the canonical Campaign route.
+"""Bounded, player-control-only browser attempt of the Campaign narrative.
 
 The driver starts with the rendered New Game button and uses only DOM controls
 that a player can reach.  It deliberately does not seed, edit, or delete web
@@ -91,9 +91,10 @@ class Budget:
 
 
 class PlayerDriver:
-    def __init__(self, page: Page, budget: Budget) -> None:
+    def __init__(self, page: Page, budget: Budget, *, completionist: bool = False) -> None:
         self.page = page
         self.budget = budget
+        self.completionist = completionist
         self.controls = 0
         self.field_moves = 0
         self.battle_commands = 0
@@ -117,22 +118,35 @@ class PlayerDriver:
     def seal_credits(self) -> None:
         self.page.locator("#creditsStatus").wait_for()
         route_proof = self.page.locator("#routeProof").inner_text()
-        if not route_proof.startswith("215/215 ") or "credits gate ready" not in route_proof:
+        route_state = self.page.locator("#routeProof").get_attribute("data-state")
+        if self.completionist and (
+            route_state != "complete"
+            or not re.search(r"\b215/215\b", route_proof)
+        ):
             raise RouteBlocked(
                 "credits-route-gate",
-                "Credits were reached before the rendered intended-route gate was ready.",
+                "Completionist Credits were reached before the rendered 215-activity ledger was complete.",
                 routeProof=route_proof,
+                routeState=route_state,
             )
         seal = self.page.locator("#sealCredits")
-        if not seal.is_disabled():
-            seal.click()
-            self.controls += 1
+        if seal.is_disabled():
+            raise RouteBlocked(
+                "credits-seal-gate",
+                "The rendered Credits seal remains gated; the runner will not synthesize playtime or bypass it.",
+                creditsStatus=self.page.locator("#creditsStatus").inner_text(),
+                creditsHint=self.page.locator("#creditsActionHint").inner_text(),
+                routeProof=route_proof,
+            )
+        seal.click()
+        self.controls += 1
         for _ in range(40):
             if self.page.locator("#creditsStatus").get_attribute("data-state") == "sealed":
                 break
             self.page.wait_for_timeout(50)
         status = self.page.locator("#creditsStatus").inner_text()
-        if not status.startswith("Credits complete · receipt sealed"):
+        normalized_status = status.casefold()
+        if not normalized_status.startswith("credits complete") or "receipt sealed" not in normalized_status:
             raise RouteBlocked(
                 "credits-seal",
                 "The rendered credits control did not seal the clean-run receipt.",
@@ -393,8 +407,52 @@ class PlayerDriver:
                 return
         raise RouteBlocked("operation-node-loop", "More than 12 operation-node transitions occurred in one scene.")
 
+    def finish_visible_storyworld(self) -> bool:
+        """Resolve one visible Storyworld panel through its rendered controls."""
+        panel = self.page.locator("#storyworldPanel")
+        if panel.count() == 0 or not panel.is_visible():
+            return False
+        for _ in range(20):
+            self.budget.check("Storyworld encounter")
+            if not panel.is_visible():
+                return True
+            continuation = self.page.locator("#storyworldContinue")
+            if continuation.is_visible() and not continuation.is_disabled():
+                continuation.click()
+                self.controls += 1
+                self.page.wait_for_timeout(50)
+                continue
+            options = self.page.locator("[data-storyworld-option-id]:visible")
+            visible_options: list[tuple[str, int]] = []
+            for index in range(options.count()):
+                option = options.nth(index)
+                option_id = option.get_attribute("data-storyworld-option-id")
+                if option_id and not option.is_disabled():
+                    visible_options.append((option_id, index))
+            if visible_options:
+                _, selected_index = min(visible_options)
+                options.nth(selected_index).click()
+                self.controls += 1
+                self.page.wait_for_timeout(50)
+                continue
+            raise RouteBlocked(
+                "storyworld-control-gate",
+                "The visible Storyworld panel exposed neither an enabled continuation nor a visible option.",
+                clusterId=panel.get_attribute("data-cluster-id"),
+                phase=panel.get_attribute("data-phase"),
+            )
+        raise RouteBlocked(
+            "storyworld-control-loop",
+            "The visible Storyworld panel did not resolve within 20 rendered controls.",
+            clusterId=panel.get_attribute("data-cluster-id"),
+            phase=panel.get_attribute("data-phase"),
+        )
+
     def advance_story_if_ready(self) -> bool:
-        """Use the rendered scene control as soon as the current gate opens."""
+        """Resolve Storyworld, then use the rendered scene control when ready."""
+        self.finish_visible_storyworld()
+        if self.completionist and self.page.locator("#routeDueList [data-route-activity-id]").count():
+            return False
         next_scene = self.page.locator("#nextScene")
         if next_scene.is_disabled():
             return False
@@ -456,7 +514,7 @@ class PlayerDriver:
                 return True
             if self.launch_pending_battle_if_ready():
                 return True
-            if self.page.locator("#routeDueList [data-route-activity-id]").count():
+            if self.completionist and self.page.locator("#routeDueList [data-route-activity-id]").count():
                 self.drain_due_route_work(scene_key)
                 if self.on_battle_page() or self.scene_key() != scene_key:
                     return True
@@ -601,6 +659,8 @@ class PlayerDriver:
             if not interaction.is_disabled() and interaction.inner_text().startswith("Use exit"):
                 interaction.click()
                 self.controls += 1
+                if not self.on_battle_page() and self.scene_key() == scene_key:
+                    self.advance_story_if_ready()
                 return True
             for vector, reverse in DIRECTIONS:
                 before = self.position()
@@ -989,23 +1049,23 @@ class PlayerDriver:
 
     def finish_story_scene(self) -> None:
         initial = self.scene_key()
+        self.finish_visible_storyworld()
         self.finish_dialogue_and_choices()
-        self.drain_due_route_work(initial)
-        if self.on_battle_page():
-            self.play_battle()
-            # A registered battle is one node inside the current scene
-            # operation. Returning to the same scene is expected; continue
-            # through its rendered post-battle acknowledgement.
-            initial = self.scene_key()
+        if self.completionist:
+            self.drain_due_route_work(initial)
+            if self.on_battle_page():
+                self.play_battle()
+                # A registered battle is one node inside the current scene
+                # operation. Returning to the same scene is expected; continue
+                # through its rendered post-battle acknowledgement.
+                initial = self.scene_key()
         self.return_to_story_route_if_available()
 
         self.finish_published_story_operations(initial)
         if self.on_battle_page():
             self.play_battle_and_resume_scene(initial)
             return
-        if self.page.locator("#nextScene").is_enabled():
-            self.page.locator("#nextScene").click()
-            self.controls += 1
+        if self.advance_story_if_ready():
             return
         if self.finish_published_field_objectives(initial):
             if self.on_battle_page():
@@ -1019,15 +1079,15 @@ class PlayerDriver:
                 return
             if self.scene_key() != initial:
                 return
+            self.finish_visible_storyworld()
             self.finish_dialogue_and_choices()
-            self.drain_due_route_work(initial)
-            if self.on_battle_page():
-                self.play_battle_and_resume_scene(initial)
-                return
+            if self.completionist:
+                self.drain_due_route_work(initial)
+                if self.on_battle_page():
+                    self.play_battle_and_resume_scene(initial)
+                    return
             self.return_to_story_route_if_available()
-            if self.page.locator("#nextScene").is_enabled():
-                self.page.locator("#nextScene").click()
-                self.controls += 1
+            if self.advance_story_if_ready():
                 return
             if self.finish_published_field_objectives(initial):
                 if self.on_battle_page():
@@ -1070,6 +1130,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
     evidence: dict[str, object] = {
         "policy": "rendered-controls-only; no direct storage mutation; no runtime transition calls; optional recovery uses the rendered file control",
         "chromium": str(chromium),
+        "routeMode": "completionist-215" if args.completionist else "narrative-80-scenes",
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
     }
@@ -1095,7 +1156,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 max_field_moves_per_scene=args.max_field_moves,
                 max_battle_commands=args.max_battle_commands,
             )
-            driver = PlayerDriver(page, budget)
+            driver = PlayerDriver(page, budget, completionist=args.completionist)
             try:
                 response = page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
                 if response is None or response.status != 200:
@@ -1223,6 +1284,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-seconds", type=int, default=300)
     parser.add_argument("--max-field-moves", type=int, default=4_000)
     parser.add_argument("--max-battle-commands", type=int, default=500)
+    parser.add_argument(
+        "--completionist",
+        action="store_true",
+        help="Drain the optional 215-activity ledger before advancing; narrative mode leaves it optional.",
+    )
     parser.add_argument("--recovery-in", help="Restore a recovery-only checkpoint through Campaign's rendered file control instead of starting New Game.")
     parser.add_argument("--recovery-out", help="Export a recovery-only checkpoint through Campaign's rendered download control before closing.")
     parser.add_argument("--evidence-out", help="After sealing Credits, export playtest evidence through its rendered download control.")

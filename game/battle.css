@@ -181,9 +181,14 @@ button.combatant-card { cursor: pointer; }
 .auto-grind-status { min-height: 28px; margin: 0; color: var(--muted); font-size: 0.57rem; line-height: 1.45; text-align: center; }
 
 .battle-briefing { display: grid; grid-template-columns: minmax(240px, 0.72fr) minmax(260px, 0.9fr) minmax(420px, 2.28fr); gap: 13px; margin-top: 13px; }
-.objective-card, .mechanic-card, .result-card { padding: 13px; }
-.objective-card h2, .mechanic-card h2, .result-card h2 { margin-bottom: 9px; }
-.mechanic-card[hidden], .mechanic-intent[hidden] { display: none; }
+.objective-card, .storyworld-context-card, .mechanic-card, .result-card { padding: 13px; }
+.objective-card h2, .storyworld-context-card h2, .mechanic-card h2, .result-card h2 { margin-bottom: 9px; }
+.storyworld-context-card[hidden], .mechanic-card[hidden], .mechanic-intent[hidden] { display: none; }
+.storyworld-context-card { border-color: #6b5f8e; background: linear-gradient(145deg, rgba(36, 28, 57, 0.94), rgba(12, 16, 29, 0.96)); }
+.storyworld-context-decision, .storyworld-context-consequence { color: #d8d4e5; font-size: 0.64rem; line-height: 1.5; }
+.storyworld-context-decision strong { color: var(--gold-soft); }
+.storyworld-context-consequence { margin-bottom: 0; color: #bfe9e4; }
+.storyworld-context-consequence strong { color: var(--aqua); }
 .mechanic-heading { display: flex; align-items: start; justify-content: space-between; gap: 10px; }
 .mechanic-badge { flex: 0 0 auto; padding: 4px 7px; border: 1px solid #845060; color: #ffd6df; background: #361824; font-size: 0.55rem; letter-spacing: 0.07em; }
 .mechanic-rule, .mechanic-recovery, .mechanic-surrender { margin-bottom: 9px; color: #d4d8e2; font-size: 0.63rem; line-height: 1.5; }

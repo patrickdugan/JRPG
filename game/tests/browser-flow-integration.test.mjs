@@ -83,13 +83,14 @@ test('credits are an explicit durable seal boundary after story completion', () 
   assert.match(sealBoundary, /if \(!saved\.ok\)/);
   assert.match(creditsSource, /report\.storyComplete/);
   assert.match(creditsSource, /report\.creditsComplete/);
-  assert.match(creditsSource, /createPlaytestEvidenceReport\(receiptState, requiredRouteProgress\)/);
+  assert.match(creditsSource, /createPlaytestEvidenceReport\(receiptState, requiredRouteProgress, storyworldState\)/);
+  assert.match(sealBoundary, /deriveNarrativeCreditsGate\(receiptState, storyworldState\)\.ready/);
   assert.match(creditsSource, /serializePlaytestEvidenceReport\(report\)/);
   assert.match(creditsSource, /chapterId: campaignState\.current\.chapterId/);
   assert.match(creditsSource, /renderTimingLedger\(report\)/);
   assert.match(creditsSource, /CAMPAIGN\.chapters\.map/);
   assert.match(creditsSource, /CHAPTER_PACING_CHECKPOINTS\.aggregateTargetMs/);
-  assert.match(creditsSource, /chapterTimingRow\(chapter, chapterMs\[chapter\.id\] \?\? 0, completedBeatIds\)/);
+  assert.match(creditsSource, /chapterTimingRow\(chapter, chapterMs\[chapter\.id\] \?\? 0, completedBeatIds, report\?\.profileId \?\? null\)/);
   assert.match(creditsSource, /diagnostic model, not observed proof/);
   assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']chapterTimingList["']/);
   assert.match(pageRecords.find(({ htmlName }) => htmlName === 'credits.html').html, /id=["']pacingBasis["']/);
@@ -118,30 +119,32 @@ test('Camp narrative surfaces expose deterministic keyboard reading controls', (
   assert.match(camp.source, /event\.repeat/);
 });
 
-test('the intended-route ledger blocks story frontiers and credits from real save evidence', () => {
+test('narrative credits reconcile Storyworld proof while the 215-entry completionist ledger stays optional', () => {
   const campaign = pageRecords.find(({ sourceName }) => sourceName === 'campaign.js');
   const credits = pageRecords.find(({ sourceName }) => sourceName === 'credits.js');
   assert.match(campaign.html, /id=["']routeSummary["']/);
   assert.match(campaign.html, /id=["']routeDueList["']/);
+  assert.match(campaign.html, /Optional 20-hour route/);
   assert.match(campaign.source, /deriveRequiredRouteProgress\(\{/);
-  assert.match(campaign.source, /routeProgress\.metrics\.total\.entryDueActivityCount/);
   assert.match(campaign.source, /\.\.\.progress\.inProgressActivityIds, \.\.\.progress\.entryDueActivityIds/);
   assert.match(campaign.source, /const needsEntry = progress\.entryDueActivityIds\.includes\(activityId\)/);
   assert.match(campaign.source, /needsEntry \? 'Start' : 'Continue'/);
-  assert.match(campaign.source, /if \(routeProgress\.metrics\.total\.entryDueActivityCount > 0\)/);
-  assert.match(
-    campaign.source,
-    /function persistCurrentBeatCompletion[\s\S]*?const routeProgress = requiredRouteProgress\(\);[\s\S]*?entryDueActivityCount > 0/,
-    'field exits and Next must share the same route-frontier gate',
-  );
+  const completionStart = campaign.source.indexOf('function persistCurrentBeatCompletion');
+  const completionEnd = campaign.source.indexOf('function advance(direction)', completionStart);
+  assert.doesNotMatch(campaign.source.slice(completionStart, completionEnd), /entryDueActivityCount/,
+    'optional completionist entries must not block a field exit or Next');
 
   assert.match(credits.html, /id=["']routeProof["']/);
   const start = credits.source.indexOf("sealCredits.addEventListener('click'");
   const completeIndex = credits.source.indexOf('completeRunCredits(receiptState, receiptState.runId)', start);
   const refreshIndex = credits.source.indexOf('requiredRouteProgress = loadRequiredRouteProgress()', start);
-  const gateIndex = credits.source.indexOf('if (!requiredRouteProgress.creditsGate.creditsReady)', start);
-  assert.ok(start >= 0 && refreshIndex > start && gateIndex > refreshIndex && completeIndex > gateIndex,
-    'credits must refresh and pass the 215-activity gate before sealing');
+  const storyworldRefreshIndex = credits.source.indexOf('storyworldAdapter.load()', start);
+  const gateIndex = credits.source.indexOf('deriveNarrativeCreditsGate(receiptState, storyworldState)', start);
+  assert.ok(start >= 0 && refreshIndex > start && storyworldRefreshIndex > refreshIndex
+    && gateIndex > storyworldRefreshIndex && completeIndex > gateIndex,
+  'narrative credits must refresh and reconcile Storyworld authority before sealing');
+  assert.match(credits.source, /else if \(!requiredRouteProgress\.creditsGate\.creditsReady\)/,
+    'legacy completionist receipts retain their exact 215-entry seal gate');
   assert.match(credits.source, /routeTotals\.completedActivityCount/);
   assert.match(campaign.source, /routeDueList\.addEventListener\('click'/);
   assert.match(campaign.source, /campRouteHref\(activity\)/);

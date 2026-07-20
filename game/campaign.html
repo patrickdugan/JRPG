@@ -115,6 +115,23 @@
             <p id="choiceResult" class="choice-result" role="status"></p>
           </section>
 
+          <section id="storyworldPanel" class="storyworld-card" aria-labelledby="storyworldTitle" tabindex="-1" hidden>
+            <div class="storyworld-header">
+              <div>
+                <p id="storyworldPlacement" class="eyebrow">Reaction encounter</p>
+                <h3 id="storyworldTitle"></h3>
+              </div>
+              <span id="storyworldProgress" class="storyworld-progress"></span>
+            </div>
+            <p id="storyworldText" class="storyworld-text" role="status" aria-live="polite" aria-atomic="true"></p>
+              <div id="storyworldOptionDeck" class="storyworld-option-deck" role="group" aria-label="Storyworld options"></div>
+            <p id="storyworldReaction" class="storyworld-reaction" role="status" aria-live="polite" aria-atomic="true"></p>
+            <div class="storyworld-controls">
+              <p id="storyworldStateSummary"></p>
+              <button id="storyworldContinue" class="subtle-button" type="button">Begin encounter</button>
+            </div>
+          </section>
+
           <footer class="scene-controls">
             <button id="previousScene" type="button">← Previous</button>
             <div class="progress-wrap" aria-label="Chapter progress">
@@ -155,13 +172,13 @@
           <section class="journal-card route-ledger-card" aria-labelledby="routeLedgerHeading">
             <div class="journal-heading">
               <div>
-                <p class="eyebrow">Intended 20-hour route</p>
-                <h2 id="routeLedgerHeading">Route ledger</h2>
+                <p class="eyebrow">Optional 20-hour route</p>
+                <h2 id="routeLedgerHeading">Completionist ledger</h2>
               </div>
               <span id="routeSummary">0 / 215 complete</span>
             </div>
-            <p id="routeStatus" class="route-status" role="status">Finish each finite route entry as it unlocks.</p>
-            <ul id="routeDueList" class="route-due-list" aria-label="Required route entries due now"></ul>
+            <p id="routeStatus" class="route-status" role="status">Optional finite activities remain available as the story advances.</p>
+            <ul id="routeDueList" class="route-due-list" aria-label="Optional completionist entries available now"></ul>
             <a class="subtle-button route-camp-link" href="camp.html">Open camp talks, councils &amp; archive</a>
           </section>
           <section class="journal-card">
@@ -196,7 +213,7 @@
         </aside>
       </section>
 
-      <p class="footer-note">The intended route interleaves all 215 finite activities with the 60-scene story and four transparent repeat circuits. Credits require the entire route ledger; the clean-run receipt separately counts active, visible play and remains open until the explicit credits seal.</p>
+      <p class="footer-note">Narrative credits require 60 canonical scenes, 20 played Storyworld scenes, and five active hours. The 215-activity, 20-hour completionist route is optional and never blocks story progress.</p>
     </main>
     <script type="module" src="campaign.js"></script>
   </body>

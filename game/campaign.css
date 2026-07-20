@@ -182,6 +182,23 @@ h1 {
 .story-choice.is-picked { border-color: var(--gold); color: #fff0bb; background: #352d1a; }
 .choice-result { min-height: 20px; margin: 0; padding: 0 14px 12px; color: var(--aqua); font-size: 0.67rem; line-height: 1.45; }
 
+.storyworld-card { margin-top: 13px; border: 1px solid #647457; background: linear-gradient(150deg, rgba(19, 31, 30, 0.96), rgba(17, 18, 35, 0.96)); box-shadow: inset 0 0 0 1px rgba(201, 177, 104, 0.12); }
+.storyworld-card[hidden] { display: none; }
+.storyworld-header { display: flex; align-items: start; justify-content: space-between; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #465746; background: rgba(47, 63, 54, 0.5); }
+.storyworld-header .eyebrow { margin: 0 0 4px; color: var(--aqua); }
+.storyworld-header h3 { margin: 0; color: #fff0cf; font-size: 0.94rem; }
+.storyworld-progress { color: var(--gold); font-size: 0.62rem; white-space: nowrap; }
+.storyworld-text { margin: 0; padding: 14px 14px 8px; color: #e0e3dc; font-size: 0.79rem; line-height: 1.65; }
+.storyworld-option-deck { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; padding: 8px 14px 13px; }
+.storyworld-option { min-height: 52px; padding: 9px 10px; border: 1px solid #557067; color: #e2f1e7; background: #142524; font-size: 0.69rem; line-height: 1.45; text-align: left; cursor: pointer; }
+.storyworld-option:hover, .storyworld-option:focus-visible { border-color: var(--aqua); background: #193330; }
+.storyworld-reaction { min-height: 0; margin: 0; padding: 0 14px 12px; color: #cde9dc; font-size: 0.73rem; line-height: 1.58; }
+.storyworld-reaction:empty { display: none; }
+.storyworld-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 14px 13px; }
+.storyworld-controls p { margin: 0; color: var(--muted); font-size: 0.61rem; line-height: 1.45; }
+.storyworld-controls button { flex: 0 0 auto; padding: 8px 10px; font-size: 0.64rem; }
+.storyworld-blocked { opacity: 0.58; }
+
 .scene-controls { display: grid; grid-template-columns: minmax(105px, auto) 1fr minmax(105px, auto); gap: 12px; align-items: center; margin-top: 13px; }
 .scene-controls button { padding: 10px; font-size: 0.72rem; }
 .scene-controls button:hover { border-color: var(--gold); color: #fff0bb; }
@@ -285,7 +302,9 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
   .field-controls { grid-template-columns: repeat(3, 44px); gap: 5px; }
   .field-controls button, .field-controls span { width: 44px; height: 44px; font-size: 0.9rem; }
   .dialogue-controls button, .scene-controls button, .story-choice, .battle-link, .subtle-button,
-  .route-due-list button, .witness-choice-deck button { min-height: 44px; }
+  .route-due-list button, .witness-choice-deck button, .storyworld-option { min-height: 44px; }
+  .storyworld-header, .storyworld-controls { align-items: stretch; flex-direction: column; }
+  .storyworld-progress { white-space: normal; }
   .map-overlay, .field-feedback, .field-objective-card strong, .field-objective-card span,
   .field-objective-card small, .dialogue-controls span, .presentation-transcript summary,
   .presentation-transcript dt, .presentation-transcript dd { font-size: 0.75rem; }

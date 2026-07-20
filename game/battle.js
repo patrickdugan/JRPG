@@ -173,6 +173,7 @@ import {
   createStatusVfxExpiryPresentations,
   sampleStatusVfxExpiryPresentations,
 } from './battle-status-vfx-presentation.mjs';
+import { loadStoryworldBattlePresentation } from './storyworld-battle-bridge.mjs';
 
 const encounterTitle = document.querySelector('#encounterTitle');
 const encounterSubtitle = document.querySelector('#encounterSubtitle');
@@ -213,6 +214,11 @@ const mateusIntentAnswer = document.querySelector('#mateusIntentAnswer');
 const mateusIntentTiles = document.querySelector('#mateusIntentTiles');
 const mateusRecovery = document.querySelector('#mateusRecovery');
 const mateusSurrender = document.querySelector('#mateusSurrender');
+const storyworldContextCard = document.querySelector('#storyworldContextCard');
+const storyworldContextEyebrow = document.querySelector('#storyworldContextEyebrow');
+const storyworldContextTitle = document.querySelector('#storyworldContextTitle');
+const storyworldContextDecision = document.querySelector('#storyworldContextDecision');
+const storyworldContextConsequence = document.querySelector('#storyworldContextConsequence');
 
 context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
@@ -321,6 +327,10 @@ let playtimeUnsavedMs = 0;
 const runReceiptAdapter = createRunReceiptStorageAdapter();
 const runReceiptLoad = runReceiptAdapter.load();
 let runReceiptState = runReceiptLoad.ok && runReceiptLoad.found ? runReceiptLoad.state : null;
+const storyworldBattlePresentation = loadStoryworldBattlePresentation({
+  encounterId: encounter.id,
+  runId: runReceiptState?.runId,
+});
 let runReceiptPendingMs = 0;
 let runReceiptPendingCategory = null;
 const questAdapter = createQuestStorageAdapter();
@@ -358,6 +368,15 @@ let statusVfxProofSnapshot = null;
 let activeStatusExpiryVfx = Object.freeze([]);
 let uiMessages = [`Loaded ${encounter.name}. ${encounter.objective.text}`];
 let engine;
+
+function renderStoryworldBattleContext() {
+  storyworldContextCard.hidden = !storyworldBattlePresentation;
+  if (!storyworldBattlePresentation) return;
+  storyworldContextEyebrow.textContent = storyworldBattlePresentation.eyebrow;
+  storyworldContextTitle.textContent = storyworldBattlePresentation.title;
+  storyworldContextDecision.textContent = storyworldBattlePresentation.decisionText;
+  storyworldContextConsequence.textContent = storyworldBattlePresentation.consequenceText;
+}
 
 function combatProfiles() {
   const profiles = {};
@@ -2555,6 +2574,7 @@ function render() {
     }
   }
   encounterTitle.textContent = encounter.name;
+  renderStoryworldBattleContext();
   const phaseSummary = bossPhaseSummary(snapshot);
   encounterSubtitle.textContent = `${encounter.chapterId} · ${engine.level.name} · ${encounter.format}${phaseSummary ? ` · ${phaseSummary}` : ''}`;
   document.title = `${encounter.name} — Bells Battle`;

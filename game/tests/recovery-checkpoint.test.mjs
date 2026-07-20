@@ -20,8 +20,18 @@ import {
   validateRecoveryCheckpoint,
 } from '../recovery-checkpoint.mjs';
 import { runRequiredRouteCompletion } from '../required-route-run.mjs';
-import { serializeRunReceipt } from '../run-receipt.mjs';
+import {
+  DEFAULT_RUN_RECEIPT_SAVE_KEY,
+  LEGACY_RUN_RECEIPT_V2_SAVE_KEY,
+  loadRunReceipt,
+  serializeRunReceipt,
+} from '../run-receipt.mjs';
 import { serializeSceneOperationState } from '../scene-operation-runtime.mjs';
+import {
+  createStoryworldState,
+  loadStoryworldState,
+  serializeStoryworldState,
+} from '../storyworld-runtime.mjs';
 import { serializeWitnessChronicleState } from '../witness-chronicle-runtime.mjs';
 
 class MemoryStorage {
@@ -79,6 +89,7 @@ function completeEntries() {
     campConversations: serializeCampConversationState(required.states.campConversations),
     partyCouncils: serializePartyCouncilState(required.states.partyCouncils),
     archiveRecords: serializeArchiveRecordState(required.states.archiveRecords),
+    storyworld: serializeStoryworldState(createStoryworldState({ runId: RUN_ID })),
   };
   return RECOVERY_CHECKPOINT_AUTHORITIES.map(({ id, key }) => [key, serializedById[id]]);
 }
@@ -87,11 +98,59 @@ function snapshot(storage) {
   return RECOVERY_CHECKPOINT_AUTHORITIES.map(({ key }) => [key, storage.getItem(key)]);
 }
 
-test('recovery checkpoint round-trips all thirteen exact authorities with a reconciled route summary', () => {
+function fnv1a32(value) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+function legacyV1Checkpoint(currentCheckpoint) {
+  const {
+    storyworldCompletedClusterCount: _completed,
+    storyworldRequiredClusterCount: _required,
+    storyworldNarrativeComplete: _complete,
+    storyworldProofEligible: _eligible,
+    storyworldCatalogSignature: _catalog,
+    ...summary
+  } = currentCheckpoint.summary;
+  const records = currentCheckpoint.records.slice(0, -1).map((record) => {
+    if (record.id !== 'runReceipt') return record;
+    const current = JSON.parse(record.serialized);
+    const legacyV2 = {
+      schemaVersion: 2,
+      campaignId: current.campaignId,
+      runId: current.runId,
+      cleanStart: current.cleanStart,
+      status: current.status,
+      creditsCompleted: current.creditsCompleted,
+      playtime: current.playtime,
+      completedBeatIds: current.completedBeatIds,
+      firstClearEncounterIds: current.firstClearEncounterIds,
+      revision: current.revision,
+    };
+    return { id: record.id, key: LEGACY_RUN_RECEIPT_V2_SAVE_KEY, serialized: JSON.stringify(legacyV2) };
+  });
+  const body = {
+    schemaVersion: 1,
+    kind: currentCheckpoint.kind,
+    campaignId: currentCheckpoint.campaignId,
+    recoveryOnly: currentCheckpoint.recoveryOnly,
+    createdAtEpochMs: currentCheckpoint.createdAtEpochMs,
+    summary,
+    records,
+  };
+  return { ...body, signature: `fnv1a32:${fnv1a32(JSON.stringify(body))}` };
+}
+
+test('recovery checkpoint round-trips all fourteen exact authorities with a reconciled Storyworld summary', () => {
   const storage = new MemoryStorage(completeEntries());
   const created = createRecoveryCheckpoint(storage, { createdAtEpochMs: 1_700_000_000_000 });
   assert.equal(created.ok, true, created.errors?.join(' '));
-  assert.equal(created.checkpoint.records.length, 13);
+  assert.equal(created.checkpoint.schemaVersion, 2);
+  assert.equal(created.checkpoint.records.length, 14);
   assert.equal(created.checkpoint.recoveryOnly, true);
   assert.equal(created.checkpoint.summary.runId, RUN_ID);
   assert.equal(created.checkpoint.summary.completedBeatCount, 60);
@@ -99,12 +158,55 @@ test('recovery checkpoint round-trips all thirteen exact authorities with a reco
   assert.equal(created.checkpoint.summary.routeCompletedActivityCount, 215);
   assert.equal(created.checkpoint.summary.routeRequiredActivityCount, 215);
   assert.equal(created.checkpoint.summary.routeCreditsReady, true);
+  assert.equal(created.checkpoint.summary.storyworldCompletedClusterCount, 0);
+  assert.equal(created.checkpoint.summary.storyworldRequiredClusterCount, 10);
+  assert.equal(created.checkpoint.summary.storyworldNarrativeComplete, false);
+  assert.equal(created.checkpoint.summary.storyworldProofEligible, true);
+  assert.match(created.checkpoint.summary.storyworldCatalogSignature, /^sha256:[0-9a-f]{64}$/u);
   assert.match(created.checkpoint.signature, /^fnv1a32:[0-9a-f]{8}$/u);
   const serialized = serializeRecoveryCheckpoint(created.checkpoint);
   const validated = validateRecoveryCheckpoint(serialized);
   assert.equal(validated.ok, true, validated.errors?.join(' '));
   assert.deepEqual(validated.checkpoint, created.checkpoint);
   assert.equal(Object.isFrozen(validated.checkpoint.records[0]), true);
+});
+
+test('signed v1 checkpoints remain valid and restore a synthesized proof-ineligible Storyworld authority', () => {
+  const current = createRecoveryCheckpoint(
+    new MemoryStorage(completeEntries()),
+    { createdAtEpochMs: 1_700_000_000_001 },
+  ).checkpoint;
+  const legacy = legacyV1Checkpoint(current);
+  const validated = validateRecoveryCheckpoint(legacy);
+  assert.equal(validated.ok, true, validated.errors?.join(' '));
+  assert.equal(validated.sourceSchemaVersion, 1);
+  assert.equal(validated.requiresMigration, true);
+  assert.equal(validated.states.storyworld.runId, RUN_ID);
+  assert.equal(validated.states.storyworld.coverageStartBeatIndex, 60);
+  assert.equal(validated.states.storyworld.proofEligible, false);
+  assert.equal(validated.migrationRecord.id, 'storyworld');
+  assert.equal(validated.migratedRunReceiptRecord.key, DEFAULT_RUN_RECEIPT_SAVE_KEY);
+
+  const prior = RECOVERY_CHECKPOINT_AUTHORITIES.map(({ id, key }) => [key, `later-${id}`]);
+  const destination = new MemoryStorage(prior);
+  const restored = restoreRecoveryCheckpoint(destination, legacy);
+  assert.equal(restored.ok, true, restored.errors?.join(' '));
+  assert.equal(restored.migratedFromSchemaVersion, 1);
+  assert.equal(restored.writesApplied, 14);
+  const storyworldRecord = RECOVERY_CHECKPOINT_AUTHORITIES.at(-1);
+  const migrated = loadStoryworldState(destination.getItem(storyworldRecord.key));
+  assert.equal(migrated.ok, true, migrated.errors?.join(' '));
+  assert.equal(migrated.state.proofEligible, false);
+  assert.equal(migrated.state.coverageStartBeatIndex, 60);
+  for (const record of legacy.records.filter(({ id }) => id !== 'runReceipt')) {
+    assert.equal(destination.getItem(record.key), record.serialized);
+  }
+  const migratedReceipt = loadRunReceipt(destination.getItem(DEFAULT_RUN_RECEIPT_SAVE_KEY));
+  assert.equal(migratedReceipt.ok, true, migratedReceipt.errors?.join(' '));
+  assert.equal(migratedReceipt.state.schemaVersion, 3);
+  assert.equal(migratedReceipt.state.runId, RUN_ID);
+  assert.equal(destination.getItem(LEGACY_RUN_RECEIPT_V2_SAVE_KEY), null,
+    'restore writes the migrated receipt to the active key instead of a stale fallback key');
 });
 
 test('checkpoint creation and validation reject omissions, corruption, mixed runs, and signature drift before writes', () => {
@@ -116,11 +218,21 @@ test('checkpoint creation and validation reject omissions, corruption, mixed run
   corrupt.setItem(RECOVERY_CHECKPOINT_AUTHORITIES[4].key, '{}');
   assert.match(createRecoveryCheckpoint(corrupt).errors.join(' '), /quests is invalid/u);
 
+  const corruptStoryworld = new MemoryStorage(entries);
+  corruptStoryworld.setItem(RECOVERY_CHECKPOINT_AUTHORITIES.at(-1).key, '{}');
+  assert.match(createRecoveryCheckpoint(corruptStoryworld).errors.join(' '), /storyworld is invalid/u);
+
   const mixed = new MemoryStorage(entries);
   const other = JSON.parse(mixed.getItem(RECOVERY_CHECKPOINT_AUTHORITIES[10].key));
   other.runId = 'recovery-checkpoint-other-run';
   mixed.setItem(RECOVERY_CHECKPOINT_AUTHORITIES[10].key, JSON.stringify(other));
   assert.match(createRecoveryCheckpoint(mixed).errors.join(' '), /campConversations is not bound/u);
+
+  const mixedStoryworld = new MemoryStorage(entries);
+  const otherStoryworld = JSON.parse(mixedStoryworld.getItem(RECOVERY_CHECKPOINT_AUTHORITIES.at(-1).key));
+  otherStoryworld.runId = 'recovery-checkpoint-other-run';
+  mixedStoryworld.setItem(RECOVERY_CHECKPOINT_AUTHORITIES.at(-1).key, JSON.stringify(otherStoryworld));
+  assert.match(createRecoveryCheckpoint(mixedStoryworld).errors.join(' '), /storyworld is not bound/u);
 
   const valid = createRecoveryCheckpoint(new MemoryStorage(entries), { createdAtEpochMs: 42 }).checkpoint;
   assert.equal(validateRecoveryCheckpoint({ ...valid, createdAtEpochMs: 43 }).ok, false);
@@ -135,9 +247,22 @@ test('restore replaces the whole snapshot exactly and never merges later progres
   const destination = new MemoryStorage(destinationEntries);
   const restored = restoreRecoveryCheckpoint(destination, checkpoint);
   assert.equal(restored.ok, true, restored.errors?.join(' '));
-  assert.equal(restored.writesApplied, 13);
+  assert.equal(restored.writesApplied, 14);
   assert.deepEqual(snapshot(destination), checkpoint.records.map(({ key, serialized }) => [key, serialized]));
   assert.doesNotMatch(JSON.stringify(snapshot(destination)), /later-/u);
+});
+
+test('v1 migration rolls all thirteen legacy writes back if the synthesized Storyworld write fails', () => {
+  const current = createRecoveryCheckpoint(new MemoryStorage(completeEntries()), { createdAtEpochMs: 78 }).checkpoint;
+  const legacy = legacyV1Checkpoint(current);
+  const prior = RECOVERY_CHECKPOINT_AUTHORITIES.map(({ id, key }) => [key, `prior-${id}`]);
+  const destination = new OneShotFailingStorage(prior, 14);
+  const restored = restoreRecoveryCheckpoint(destination, legacy);
+  assert.equal(restored.ok, false);
+  assert.equal(restored.code, 'restore-write-failed');
+  assert.equal(restored.writesApplied, 13);
+  assert.equal(restored.rollbackComplete, true, restored.errors.join(' '));
+  assert.deepEqual(snapshot(destination), prior);
 });
 
 test('every injected restore write failure rolls all prior raw values back exactly', async (t) => {

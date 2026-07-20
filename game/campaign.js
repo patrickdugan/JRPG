@@ -87,8 +87,10 @@ import {
   createRunReceipt,
   createRunReceiptStorageAdapter,
   getRunProofReport,
+  recordRunStoryworldDecision,
   recordRunBeatCompletion,
   recordRunPlaytime,
+  RUN_RECEIPT_PROFILE_IDS,
 } from './run-receipt.mjs';
 import {
   acceptQuest,
@@ -105,6 +107,20 @@ import {
   createNarrativeStorageAdapter,
   getNarrativeProgress,
 } from './narrative-runtime.mjs';
+import {
+  advanceStoryworldEncounter,
+  beginStoryworldEncounter,
+  chooseStoryworldOption,
+  createLegacyStoryworldState,
+  createStoryworldState,
+  createStoryworldStorageAdapter,
+  deriveStoryworldProjection,
+  getStoryworldClusterForBeat,
+  getStoryworldGateForBeat,
+  getStoryworldProgress,
+  getVisibleStoryworldOptions,
+} from './storyworld-runtime.mjs';
+import { STORYWORLD_CLUSTERS } from './content/storyworld-encounters.generated.mjs';
 import {
   PARTY_ATLAS,
   PARTY_ATLAS_FIELD_POSES,
@@ -282,6 +298,15 @@ const dialogueProgress = document.querySelector('#dialogueProgress');
 const continueDialogue = document.querySelector('#continueDialogue');
 const choiceDeck = document.querySelector('#choiceDeck');
 const choiceResult = document.querySelector('#choiceResult');
+const storyworldPanel = document.querySelector('#storyworldPanel');
+const storyworldPlacement = document.querySelector('#storyworldPlacement');
+const storyworldTitle = document.querySelector('#storyworldTitle');
+const storyworldProgress = document.querySelector('#storyworldProgress');
+const storyworldText = document.querySelector('#storyworldText');
+const storyworldOptionDeck = document.querySelector('#storyworldOptionDeck');
+const storyworldReaction = document.querySelector('#storyworldReaction');
+const storyworldStateSummary = document.querySelector('#storyworldStateSummary');
+const storyworldContinue = document.querySelector('#storyworldContinue');
 const previousScene = document.querySelector('#previousScene');
 const nextScene = document.querySelector('#nextScene');
 const progressLabel = document.querySelector('#progressLabel');
@@ -345,6 +370,16 @@ let playtimeState = loadedPlaytime.ok ? loadedPlaytime.state : createPlaytimeSta
 const runReceiptAdapter = createRunReceiptStorageAdapter();
 const loadedRunReceipt = runReceiptAdapter.load();
 let runReceiptState = loadedRunReceipt.ok && loadedRunReceipt.found ? loadedRunReceipt.state : null;
+const storyworldAdapter = createStoryworldStorageAdapter();
+const loadedStoryworld = storyworldAdapter.load();
+const fallbackStoryworldRunId = runReceiptState?.runId ?? `legacy-unverified-${CAMPAIGN.id}`;
+let storyworldState = loadedStoryworld.ok && loadedStoryworld.found
+  && (!runReceiptState || loadedStoryworld.state.runId === runReceiptState.runId)
+  ? loadedStoryworld.state
+  : createLegacyStoryworldState({
+    runId: fallbackStoryworldRunId,
+    coverageStartBeatIndex: campaignState.completedBeatIds.length,
+  });
 const campConversationAdapter = createCampConversationStorageAdapter();
 const loadedCampConversations = campConversationAdapter.load();
 let campConversationState = loadedCampConversations.state ?? createCampConversationState(runReceiptState?.runId);
@@ -1082,6 +1117,10 @@ function fieldEventMessage(level, result) {
 }
 
 function launchPlacedEncounter(event, beat) {
+  if (currentStoryworldBeforeBeatBlocked(beat)) {
+    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before entering combat.';
+    return;
+  }
   const parameters = new URLSearchParams({
     encounter: event.encounterId,
     return: 'campaign.html',
@@ -1092,6 +1131,10 @@ function launchPlacedEncounter(event, beat) {
 }
 
 function attemptFieldMove(dx, dy) {
+  if (currentStoryworldBeforeBeatBlocked()) {
+    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before moving through the level.';
+    return;
+  }
   playtimeCategory = 'exploration';
   fieldFacing = atlasDirectionForMovement(dx, dy, fieldFacing);
   const chapter = getChapter();
@@ -1552,6 +1595,143 @@ function currentChoicesComplete(beat = getBeat()) {
   if (isBeatCompleted(campaignState, beat.id) || !(beat.choices ?? []).length) return true;
   const selected = getSelectedChoiceIds(campaignState, beat.id);
   return isMultiSelectBeat(beat) ? selected.length >= beat.choices.length : selected.length >= 1;
+}
+
+function currentStoryworldPresentation(beat = getBeat(), baseBeatReady = false) {
+  const cluster = getStoryworldClusterForBeat(beat.id);
+  if (!cluster || isBeatCompleted(campaignState, beat.id)) {
+    return Object.freeze({ cluster, progress: null, shouldPresent: false, blocksBeforeBeat: false });
+  }
+  const gate = getStoryworldGateForBeat(storyworldState, beat.id, cluster.placement);
+  const shouldPresent = gate.required
+    && !gate.complete
+    && (cluster.placement === 'before-beat' || baseBeatReady);
+  return Object.freeze({
+    cluster,
+    progress: getStoryworldProgress(storyworldState, cluster.id),
+    shouldPresent,
+    blocksBeforeBeat: shouldPresent && cluster.placement === 'before-beat',
+  });
+}
+
+function currentStoryworldBeforeBeatBlocked(beat = getBeat()) {
+  const cluster = getStoryworldClusterForBeat(beat.id);
+  if (!cluster || cluster.placement !== 'before-beat' || isBeatCompleted(campaignState, beat.id)) return false;
+  const gate = getStoryworldGateForBeat(storyworldState, beat.id, cluster.placement);
+  return gate.required && !gate.complete;
+}
+
+function storyworldReactionForProgress(progress) {
+  const record = progress?.record;
+  if (!record) return null;
+  if (progress.phase === 'entry-reaction') {
+    const option = progress.cluster.entry.options.find(({ id }) => id === record.entryOptionId);
+    return option?.reactions.find(({ id }) => id === record.entryReactionId) ?? null;
+  }
+  if (progress.phase === 'outcome-reaction') {
+    const option = progress.outcome?.options.find(({ id }) => id === record.outcomeOptionId);
+    return option?.reactions.find(({ id }) => id === record.outcomeReactionId) ?? null;
+  }
+  return null;
+}
+
+function storyworldPlacementLabel(cluster) {
+  if (cluster.sequenceRole === 'before-boss-decision') return `Before encounter · ${cluster.relatedEncounterIds.join(' · ')}`;
+  if (cluster.sequenceRole === 'after-boss-consequence') return `After encounter · ${cluster.relatedEncounterIds.join(' · ')}`;
+  return 'After level · consequence scene';
+}
+
+function renderStoryworldPanel(presentation) {
+  const { cluster, progress, shouldPresent } = presentation;
+  storyworldPanel.hidden = !shouldPresent;
+  storyworldOptionDeck.replaceChildren();
+  storyworldReaction.textContent = '';
+  if (!shouldPresent || !cluster || !progress) return;
+  const clusterNumber = STORYWORLD_CLUSTERS.findIndex(({ id }) => id === cluster.id) + 1;
+  storyworldPanel.dataset.clusterId = cluster.id;
+  storyworldPanel.dataset.phase = progress.phase;
+  storyworldPlacement.textContent = storyworldPlacementLabel(cluster);
+  storyworldProgress.textContent = `Storyworld ${clusterNumber}/${STORYWORLD_CLUSTERS.length} · authored path scene`;
+  const projection = deriveStoryworldProjection(storyworldState);
+  storyworldStateSummary.textContent = `Working state · proof ${Math.round(projection.proof_integrity * 100)} · consent ${Math.round(projection.network_consent * 100)} · witness safety ${Math.round(projection.witness_safety * 100)}`;
+
+  const encounter = ['outcome', 'outcome-reaction'].includes(progress.phase) ? progress.outcome : cluster.entry;
+  storyworldTitle.textContent = encounter?.title ?? cluster.entry.title;
+  storyworldText.textContent = encounter?.text ?? cluster.entry.text;
+  const reaction = storyworldReactionForProgress(progress);
+  storyworldReaction.textContent = reaction?.text ?? '';
+
+  const options = getVisibleStoryworldOptions(storyworldState, cluster.id);
+  storyworldOptionDeck.replaceChildren(...options.map((option, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'storyworld-option';
+    button.dataset.storyworldOptionId = option.id;
+    button.textContent = `${index + 1}. ${option.text}`;
+    return button;
+  }));
+
+  storyworldContinue.hidden = false;
+  storyworldContinue.disabled = false;
+  if (progress.phase === 'unseen') storyworldContinue.textContent = 'Begin reaction encounter';
+  else if (progress.phase === 'entry-reaction') storyworldContinue.textContent = 'See consequence scene';
+  else if (progress.phase === 'outcome' && progress.outcome?.terminal) storyworldContinue.textContent = 'Complete consequence';
+  else if (progress.phase === 'outcome-reaction') storyworldContinue.textContent = 'Carry consequence forward';
+  else {
+    storyworldContinue.hidden = true;
+    storyworldContinue.disabled = true;
+  }
+}
+
+function applyStoryworldBeforeBeatLock(locked) {
+  for (const button of fieldControls.querySelectorAll('button')) button.disabled = locked;
+  if (locked) {
+    interactFieldButton.disabled = true;
+    fieldLeaderSelect.disabled = true;
+    continueDialogue.disabled = true;
+    for (const button of choiceDeck.querySelectorAll('button')) button.disabled = true;
+    launchBattle.removeAttribute('href');
+    launchBattle.setAttribute('aria-disabled', 'true');
+    launchBattle.textContent = 'Resolve the pre-encounter Storyworld scene';
+    battleStatus.textContent = 'This decision resolves before field and battle control.';
+  }
+}
+
+function commitStoryworldTransition(action, result) {
+  if (!result.ok) {
+    fieldFeedback.textContent = `${action} could not continue (${result.code}).`;
+    return false;
+  }
+  let nextRunReceiptState = runReceiptState;
+  if (result.progress?.complete
+    && runReceiptState?.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H) {
+    const receiptResult = recordRunStoryworldDecision(
+      runReceiptState,
+      runReceiptState.runId,
+      result.progress.cluster.id,
+    );
+    if (!receiptResult.ok) {
+      fieldFeedback.textContent = `${action} could not update the narrative receipt (${receiptResult.code}).`;
+      return false;
+    }
+    nextRunReceiptState = receiptResult.state;
+  }
+  if (!commitStateChanges(action, [
+    { id: 'storyworld', adapter: storyworldAdapter, previousState: storyworldState, nextState: result.state },
+    ...(nextRunReceiptState !== runReceiptState ? [{
+      id: 'run-receipt',
+      adapter: runReceiptAdapter,
+      previousState: runReceiptState,
+      nextState: nextRunReceiptState,
+    }] : []),
+  ]).ok) return false;
+  storyworldState = result.state;
+  runReceiptState = nextRunReceiptState;
+  playtimeCategory = 'narrative';
+  pageAudio.playCue('uiConfirm');
+  render();
+  if (!storyworldPanel.hidden) storyworldPanel.focus({ preventScroll: true });
+  return true;
 }
 
 function renderDialogue(beat) {
@@ -2095,16 +2275,16 @@ function renderRequiredRouteLedger(progress) {
     routeStatus.textContent = `Route evidence is unavailable for: ${invalidSources.join(', ')}. Progress fails closed.`;
   } else if (progress.creditsGate.creditsReady) {
     routeStatus.dataset.state = 'ready';
-    routeStatus.textContent = 'All 215 activities are complete. The intended route is ready for credits.';
+    routeStatus.textContent = 'All 215 optional activities are complete. Completionist route status is ready.';
   } else if (totals.entryDueActivityCount > 0) {
-    routeStatus.dataset.state = 'due';
-    routeStatus.textContent = `${totals.entryDueActivityCount} unlocked ${totals.entryDueActivityCount === 1 ? 'entry must' : 'entries must'} be started before the next story frontier closes.`;
+    routeStatus.dataset.state = 'ready';
+    routeStatus.textContent = `${totals.entryDueActivityCount} optional ${totals.entryDueActivityCount === 1 ? 'entry is' : 'entries are'} newly available; the narrative route can continue.`;
   } else if (totals.dueActivityCount > 0) {
     routeStatus.dataset.state = 'ready';
-    routeStatus.textContent = `${totals.dueActivityCount} entered ${totals.dueActivityCount === 1 ? 'activity remains' : 'activities remain'} finite; story may continue, but credits will wait.`;
+    routeStatus.textContent = `${totals.dueActivityCount} entered optional ${totals.dueActivityCount === 1 ? 'activity remains' : 'activities remain'} finite; narrative credits do not wait for it.`;
   } else {
     routeStatus.dataset.state = 'ready';
-    routeStatus.textContent = 'No intended-route entry is due at this story frontier.';
+    routeStatus.textContent = 'No optional completionist entry is currently due.';
   }
 
   const prioritized = progress.entryDueActivityIds.length > 0
@@ -2197,14 +2377,16 @@ function render() {
   const fieldRouteCleared = currentFieldRouteComplete();
   const narrativeCleared = currentNarrativeComplete(beat);
   const choicesCleared = currentChoicesComplete(beat);
+  const baseBeatReady = operationCleared && battlesCleared && fieldRouteCleared && narrativeCleared && choicesCleared;
+  const storyworldPresentation = currentStoryworldPresentation(beat, baseBeatReady);
+  const storyworldCleared = !storyworldPresentation.shouldPresent;
   const campaignComplete = isCampaignComplete(campaignState);
   const routeProgress = requiredRouteProgress();
-  const routeEntryCleared = routeProgress.metrics.total.entryDueActivityCount === 0;
   nextScene.disabled = !campaignComplete
-    && (!routeEntryCleared || !operationCleared || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared);
+    && (!storyworldCleared || !operationCleared || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared);
   nextScene.textContent = isCampaignComplete(campaignState)
     ? 'View credits & seal run →'
-    : !routeEntryCleared ? `Start ${routeProgress.metrics.total.entryDueActivityCount} route ${routeProgress.metrics.total.entryDueActivityCount === 1 ? 'entry' : 'entries'}`
+    : !storyworldCleared ? `${storyworldPresentation.cluster.placement === 'before-beat' ? 'Resolve pre-encounter' : 'Record consequence'} Storyworld scene`
       : !operationCleared ? 'Complete the scene operation'
       : !battlesCleared ? 'Clear encounter to continue'
       : !narrativeCleared ? 'Finish the scene dialogue'
@@ -2223,6 +2405,8 @@ function render() {
   renderRequiredRouteLedger(routeProgress);
   renderChapterList();
   renderBattleLaunch(beat, beatBattleState);
+  renderStoryworldPanel(storyworldPresentation);
+  applyStoryworldBeforeBeatLock(storyworldPresentation.blocksBeforeBeat);
   const completionNotices = [
     questSettlements.completedTitles.length ? `Side story complete: ${questSettlements.completedTitles.join(', ')}.` : '',
     witnessSettlements.completedTitles.length ? `Witness chronicle complete: ${witnessSettlements.completedTitles.join(', ')}.` : '',
@@ -2244,6 +2428,21 @@ function renderRunProofStatus() {
   }
   const report = getRunProofReport(runReceiptState);
   const elapsed = formatPlaytime(report.totalMs);
+  if (report.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H) {
+    if (report.durationProven) {
+      runProofStatus.dataset.proof = 'proven';
+      runProofStatus.textContent = `Narrative run proven · ${report.playedSceneCount}/${report.requiredPlayedSceneCount} played scenes · ${elapsed}`;
+      return;
+    }
+    if (report.storyComplete && !report.creditsComplete) {
+      runProofStatus.dataset.proof = 'active';
+      runProofStatus.textContent = `80-scene story complete · ${elapsed} active · ${formatPlaytime(report.remainingMs)} to five-hour seal floor`;
+      return;
+    }
+    runProofStatus.dataset.proof = 'active';
+    runProofStatus.textContent = `Narrative run ${runReceiptState.runId.slice(0, 8)} · ${report.playedSceneCount}/${report.requiredPlayedSceneCount} played scenes · ${elapsed} active`;
+    return;
+  }
   if (report.durationProven) {
     runProofStatus.dataset.proof = 'proven';
     runProofStatus.textContent = `20-hour run proven · ${elapsed} · ${report.requiredBeatCount} scenes · ${report.requiredFirstClearCount} first clears`;
@@ -2265,6 +2464,10 @@ function renderRunProofStatus() {
 
 function choose(choiceId) {
   const beat = getBeat();
+  if (currentStoryworldBeforeBeatBlocked(beat)) {
+    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before recording the canonical scene decision.';
+    return;
+  }
   if (isBeatCompleted(campaignState, beat.id)) {
     fieldFeedback.textContent = 'Completed-scene decisions are read-only in replay.';
     return;
@@ -2287,12 +2490,16 @@ function choose(choiceId) {
 }
 
 function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene completion' } = {}) {
-  const routeProgress = requiredRouteProgress();
-  if (routeProgress.metrics.total.entryDueActivityCount > 0) {
-    fieldFeedback.textContent = `${action} is paused until the ${routeProgress.metrics.total.entryDueActivityCount} unlocked intended-route ${routeProgress.metrics.total.entryDueActivityCount === 1 ? 'entry is' : 'entries are'} started.`;
-    return false;
+  const beat = getBeat();
+  const storyworldCluster = getStoryworldClusterForBeat(beat.id);
+  if (storyworldCluster) {
+    const storyworldGate = getStoryworldGateForBeat(storyworldState, beat.id, storyworldCluster.placement);
+    if (storyworldGate.required && !storyworldGate.complete) {
+      fieldFeedback.textContent = `${action} is paused until the ${storyworldCluster.placement === 'before-beat' ? 'pre-encounter decision' : 'consequence scene'} is resolved.`;
+      return false;
+    }
   }
-  const completedBeatId = getBeat().id;
+  const completedBeatId = beat.id;
   const completedCount = campaignState.completedBeatIds.length;
   const flushed = flushRunReceiptPlaytime();
   if (!flushed.ok) {
@@ -2363,11 +2570,6 @@ function advance(direction) {
     window.location.href = 'credits.html';
     return;
   }
-  const routeProgress = requiredRouteProgress();
-  if (routeProgress.metrics.total.entryDueActivityCount > 0) {
-    fieldFeedback.textContent = `Start the ${routeProgress.metrics.total.entryDueActivityCount} unlocked intended-route ${routeProgress.metrics.total.entryDueActivityCount === 1 ? 'entry' : 'entries'} shown in the route ledger before closing this story frontier.`;
-    return;
-  }
   if (!currentSceneOperationComplete()) {
     fieldFeedback.textContent = 'Complete every ordered field node in this scene operation before advancing the story.';
     return;
@@ -2420,7 +2622,31 @@ choiceDeck.addEventListener('click', (event) => {
   }
 });
 
+storyworldOptionDeck.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-storyworld-option-id]');
+  if (!button || storyworldPanel.hidden) return;
+  const clusterId = storyworldPanel.dataset.clusterId;
+  commitStoryworldTransition(
+    'Storyworld reaction',
+    chooseStoryworldOption(storyworldState, clusterId, button.dataset.storyworldOptionId),
+  );
+});
+
+storyworldContinue.addEventListener('click', () => {
+  if (storyworldPanel.hidden) return;
+  const clusterId = storyworldPanel.dataset.clusterId;
+  const progress = getStoryworldProgress(storyworldState, clusterId);
+  const result = progress.phase === 'unseen'
+    ? beginStoryworldEncounter(storyworldState, clusterId)
+    : advanceStoryworldEncounter(storyworldState, clusterId);
+  commitStoryworldTransition('Storyworld progression', result);
+});
+
 continueDialogue.addEventListener('click', () => {
+  if (currentStoryworldBeforeBeatBlocked()) {
+    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before advancing the canonical dialogue.';
+    return;
+  }
   playtimeCategory = 'narrative';
   const beat = getBeat();
   const result = advanceNarrative(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
@@ -2553,6 +2779,10 @@ fieldControls.addEventListener('click', (event) => {
 });
 
 interactFieldButton.addEventListener('click', () => {
+  if (currentStoryworldBeforeBeatBlocked()) {
+    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before using field interactions.';
+    return;
+  }
   playtimeCategory = 'exploration';
   const chapter = getChapter();
   const beat = getBeat();
@@ -2817,7 +3047,7 @@ fieldLeaderSelect.addEventListener('change', () => {
 previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
-  if (!window.confirm('Start a clean New Game? This clears story, scene operations, battles, quests, companion conversations, party councils, public archive readings, camp inventory, field positions, playtime, and the prior run receipt.')) return;
+  if (!window.confirm('Start a clean New Game? This clears story, Storyworld reactions, scene operations, battles, quests, companion conversations, party councils, public archive readings, camp inventory, field positions, playtime, and the prior run receipt.')) return;
   const nextCampaignState = resetCampaignState();
   const pristineAdvancementState = createAdvancementState();
   const nextAdvancementState = unlockPartyMembers(pristineAdvancementState, getCurrentChapter(nextCampaignState).party);
@@ -2833,11 +3063,13 @@ resetCampaign.addEventListener('click', () => {
     runId: createBrowserRunUuid(),
     campaignState: nextCampaignState,
     advancementState: pristineAdvancementState,
+    profileId: RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H,
   });
   if (!receipt.ok) {
     fieldFeedback.textContent = 'The verified run receipt could not be created; the current game was left intact.';
     return;
   }
+  const nextStoryworldState = createStoryworldState({ runId: receipt.state.runId });
   const resetPersisted = commitStateChanges('New Game', [
     { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
     { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: nextAdvancementState },
@@ -2849,11 +3081,13 @@ resetCampaign.addEventListener('click', () => {
     { id: 'loadout', adapter: loadoutAdapter, previousState: loadoutState, nextState: nextLoadoutState },
     { id: 'playtime', adapter: playtimeAdapter, previousState: playtimeState, nextState: nextPlaytimeState },
     { id: 'run-receipt', adapter: runReceiptAdapter, previousState: runReceiptState, nextState: receipt.state },
+    { id: 'storyworld', adapter: storyworldAdapter, previousState: storyworldState, nextState: nextStoryworldState },
   ]);
   if (!resetPersisted.ok) return;
   campaignState = nextCampaignState;
   advancementState = nextAdvancementState;
   runReceiptState = receipt.state;
+  storyworldState = nextStoryworldState;
   clearPendingRunReceiptPlaytime();
   questState = nextQuestState;
   narrativeState = nextNarrativeState;
@@ -2892,7 +3126,10 @@ window.addEventListener('keydown', (event) => {
   }
   if (event.key.toLowerCase() === 'n') {
     event.preventDefault();
-    continueDialogue.click();
+    if (!storyworldPanel.hidden) {
+      if (!storyworldContinue.hidden) storyworldContinue.click();
+    }
+    else continueDialogue.click();
     return;
   }
   if ((event.key.toLowerCase() === 'x' || event.key === 'Enter') && !event.repeat) {
@@ -2909,7 +3146,16 @@ window.addEventListener('keydown', (event) => {
     advance(1);
   }
   const choiceNumber = Number(event.key);
+  if (!storyworldPanel.hidden) {
+    const storyworldOptions = [...storyworldOptionDeck.querySelectorAll('[data-storyworld-option-id]')];
+    if (choiceNumber > 0 && choiceNumber <= storyworldOptions.length) {
+      event.preventDefault();
+      storyworldOptions[choiceNumber - 1].click();
+    }
+    return;
+  }
   if (choiceNumber > 0 && choiceNumber <= (getBeat().choices ?? []).length) {
+    event.preventDefault();
     choose(getBeat().choices[choiceNumber - 1].id);
   }
 });
@@ -2934,6 +3180,7 @@ function persistRecoveryAuthorities() {
     campConversationAdapter.save(campConversationState),
     partyCouncilAdapter.save(partyCouncilState),
     archiveRecordAdapter.save(archiveRecordState),
+    storyworldAdapter.save(storyworldState),
   ];
   const failed = saves.find((entry) => !entry?.ok);
   return failed
@@ -2998,7 +3245,7 @@ recoveryFile.addEventListener('change', async () => {
   const confirmed = window.confirm(
     `Restore the complete recovery-only checkpoint for run ${summary.runId.slice(0, 8)}?\n\n`
       + `${summary.completedBeatCount}/60 scenes · ${summary.routeCompletedActivityCount}/${summary.routeRequiredActivityCount} route activities · ${formatPlaytime(summary.activePlaytimeMs)} active play.\n\n`
-      + 'This replaces all thirteen current save records. Close other game tabs first. This is recovery, not independent playtest proof.',
+      + 'This replaces all fourteen current save records. Close other game tabs first. This is recovery, not independent playtest proof.',
   );
   if (!confirmed) return;
   recoveryReloadPending = true;
@@ -3010,7 +3257,7 @@ recoveryFile.addEventListener('change', async () => {
     return;
   }
   recoveryStatus.dataset.state = 'ready';
-  recoveryStatus.textContent = 'All thirteen save records restored exactly. Reloading the recovered run…';
+  recoveryStatus.textContent = 'All fourteen save records restored exactly. Reloading the recovered run…';
   window.location.reload();
 });
 
@@ -3057,6 +3304,14 @@ window.addEventListener('pageshow', (event) => {
   if (refreshedPlaytime.ok) playtimeState = refreshedPlaytime.state;
   const refreshedRunReceipt = runReceiptAdapter.load();
   runReceiptState = refreshedRunReceipt.ok && refreshedRunReceipt.found ? refreshedRunReceipt.state : null;
+  const refreshedStoryworld = storyworldAdapter.load();
+  storyworldState = refreshedStoryworld.ok && refreshedStoryworld.found
+    && (!runReceiptState || refreshedStoryworld.state.runId === runReceiptState.runId)
+    ? refreshedStoryworld.state
+    : createLegacyStoryworldState({
+      runId: runReceiptState?.runId ?? `legacy-unverified-${CAMPAIGN.id}`,
+      coverageStartBeatIndex: campaignState.completedBeatIds.length,
+    });
   const refreshedCampConversations = campConversationAdapter.load();
   if (refreshedCampConversations.ok) campConversationState = refreshedCampConversations.state;
   const refreshedPartyCouncils = partyCouncilAdapter.load();
@@ -3080,6 +3335,7 @@ window.addEventListener('pagehide', () => {
   witnessAdapter.save(witnessChronicleState);
   sceneOperationAdapter.save(sceneOperationState);
   fieldAdapter.save(fieldRuntimeState);
+  storyworldAdapter.save(storyworldState);
 });
 document.addEventListener('visibilitychange', () => {
   playtimeLastSample = performance.now();
@@ -3093,6 +3349,7 @@ document.addEventListener('visibilitychange', () => {
     witnessAdapter.save(witnessChronicleState);
     sceneOperationAdapter.save(sceneOperationState);
     fieldAdapter.save(fieldRuntimeState);
+    storyworldAdapter.save(storyworldState);
   }
 });
 window.addEventListener('pointerdown', () => { playtimeLastActivity = performance.now(); }, { passive: true });

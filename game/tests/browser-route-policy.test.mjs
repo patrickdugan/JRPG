@@ -52,13 +52,13 @@ test('exact field navigation balances target distance with bounded revisit press
   assert.match(routeSource, /self\.page\.wait_for_timeout\(50\)/);
 });
 
-test('a route exit blocked by newly due work hands control back to the rendered route ledger', () => {
+test('completionist fieldwork can hand newly due work back to the rendered route ledger', () => {
   const finishField = routeSource.slice(
     routeSource.indexOf('    def finish_published_field_objectives'),
     routeSource.indexOf('    def finish_dialogue_and_choices', routeSource.indexOf('    def finish_published_field_objectives')),
   );
   assert.match(finishField, /interaction\.click\(\)/);
-  assert.match(finishField, /self\.page\.locator\("#routeDueList \[data-route-activity-id\]"\)\.count\(\)/);
+  assert.match(finishField, /self\.completionist and self\.page\.locator\("#routeDueList \[data-route-activity-id\]"\)\.count\(\)/);
   assert.match(finishField, /self\.drain_due_route_work\(scene_key\)/);
   assert.match(finishField, /if self\.field_objective_target\(\) != published:\s+continue/);
 });
@@ -88,17 +88,46 @@ test('published field objectives yield to newly ready story gates and fail fast 
   assert.match(finishField, /feedback=feedback/);
 });
 
-test('story and pending-battle convergence helpers use rendered controls and exclude grind replays', () => {
+test('Storyworld, story, and pending-battle convergence helpers use rendered controls and exclude grind replays', () => {
   const helpers = routeSource.slice(
-    routeSource.indexOf('    def advance_story_if_ready'),
+    routeSource.indexOf('    def finish_visible_storyworld'),
     routeSource.indexOf('    def finish_published_field_objectives', routeSource.indexOf('    def advance_story_if_ready')),
   );
+  assert.match(helpers, /self\.page\.locator\("#storyworldPanel"\)/);
+  assert.match(helpers, /self\.finish_visible_storyworld\(\)/);
   assert.match(helpers, /self\.page\.locator\("#nextScene"\)/);
   assert.match(helpers, /next_scene\.click\(\)/);
   assert.match(helpers, /self\.page\.locator\("#launchBattle"\)/);
   assert.match(helpers, /startswith\("Enter encounter:"\)/);
   assert.match(helpers, /launch\.click\(\)/);
   assert.doesNotMatch(helpers, /evaluate|local_storage|session_storage/);
+});
+
+test('visible Storyworld encounters choose a stable rendered option and never mutate runtime state directly', () => {
+  const storyworld = routeSource.slice(
+    routeSource.indexOf('    def finish_visible_storyworld'),
+    routeSource.indexOf('    def advance_story_if_ready', routeSource.indexOf('    def finish_visible_storyworld')),
+  );
+  assert.match(storyworld, /panel\.count\(\) == 0 or not panel\.is_visible\(\)/);
+  assert.match(storyworld, /self\.page\.locator\("#storyworldContinue"\)/);
+  assert.match(storyworld, /continuation\.is_visible\(\) and not continuation\.is_disabled\(\)/);
+  assert.match(storyworld, /self\.page\.locator\("\[data-storyworld-option-id\]:visible"\)/);
+  assert.match(storyworld, /visible_options\.append\(\(option_id, index\)\)/);
+  assert.match(storyworld, /_, selected_index = min\(visible_options\)/);
+  assert.match(storyworld, /options\.nth\(selected_index\)\.click\(\)/);
+  assert.doesNotMatch(storyworld, /evaluate|localStorage|sessionStorage|storage_adapter|chooseStoryworldOption/);
+});
+
+test('narrative mode leaves the 215-entry ledger optional while explicit completionist mode drains it', () => {
+  const finishScene = routeSource.slice(
+    routeSource.indexOf('    def finish_story_scene'),
+    routeSource.indexOf('\n\ndef find_chromium', routeSource.indexOf('    def finish_story_scene')),
+  );
+  assert.match(finishScene, /if self\.completionist:\s+self\.drain_due_route_work\(initial\)/);
+  assert.doesNotMatch(finishScene, /self\.finish_dialogue_and_choices\(\)\s+self\.drain_due_route_work\(initial\)/);
+  assert.match(routeSource, /parser\.add_argument\(\s+"--completionist"/);
+  assert.match(routeSource, /PlayerDriver\(page, budget, completionist=args\.completionist\)/);
+  assert.match(routeSource, /"routeMode": "completionist-215" if args\.completionist else "narrative-80-scenes"/);
 });
 
 test('multi-map route work cannot be abandoned merely because its activity ID stays stable', () => {
@@ -113,7 +142,7 @@ test('multi-map route work cannot be abandoned merely because its activity ID st
   assert.match(drain, /raise RouteBlocked\("route-work-loop"/);
 });
 
-test('story-complete recovery keeps the active clean receipt through the credits boundary', () => {
+test('credits sealing honors the selected rendered gate without inventing elapsed playtime', () => {
   assert.match(routeSource, /proof_badge = page\.locator\("#runProofStatus"\)/);
   assert.match(routeSource, /proof_badge\.get_attribute\("data-proof"\) != "active"/);
   assert.doesNotMatch(routeSource, /proof\.startswith\("Clean run "\)/);
@@ -123,8 +152,11 @@ test('story-complete recovery keeps the active clean receipt through the credits
   );
   assert.match(routeSource, /driver\.on_credits_page\(\):\s+driver\.seal_credits\(\)/);
   assert.match(routeSource, /self\.page\.locator\("#sealCredits"\)/);
-  assert.match(routeSource, /route_proof\.startswith\("215\/215 "\)/);
-  assert.match(routeSource, /status\.startswith\("Credits complete · receipt sealed"\)/);
+  assert.match(routeSource, /if self\.completionist and \(/);
+  assert.match(routeSource, /re\.search\(r"\\b215\/215\\b", route_proof\)/);
+  assert.match(routeSource, /if seal\.is_disabled\(\):\s+raise RouteBlocked\(\s+"credits-seal-gate"/);
+  assert.match(routeSource, /will not synthesize playtime or bypass it/);
+  assert.match(routeSource, /normalized_status\.startswith\("credits complete"\)/);
   assert.match(routeSource, /self\.page\.locator\("#exportEvidence"\)/);
   assert.match(routeSource, /evidence\["playtestEvidenceExport"\] = driver\.export_credits_evidence/);
 });

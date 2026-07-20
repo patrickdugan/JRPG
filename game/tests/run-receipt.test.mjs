@@ -19,9 +19,14 @@ import {
   loadRunReceipt,
   DEFAULT_RUN_RECEIPT_SAVE_KEY,
   LEGACY_RUN_RECEIPT_SAVE_KEY,
+  LEGACY_RUN_RECEIPT_V2_SAVE_KEY,
+  NARRATIVE_STORYWORLD_DECISION_IDS,
   recordRunBeatCompletion,
   recordRunFirstClear,
   recordRunPlaytime,
+  recordRunStoryworldDecision,
+  RUN_RECEIPT_PROFILE_CONTRACTS,
+  RUN_RECEIPT_PROFILE_IDS,
   RUN_RECEIPT_STATUSES,
   RUN_RECEIPT_SCHEMA_VERSION,
   serializeRunReceipt,
@@ -39,6 +44,34 @@ function start(runId = 'run-clean-0001') {
   });
   assert.equal(result.ok, true, result.errors?.join(' '));
   return result.state;
+}
+
+function startNarrative(runId = 'run-narrative-0001') {
+  const result = createRunReceipt({
+    runId,
+    campaignState: createCampaignState(),
+    advancementState: createAdvancementState(),
+    profileId: RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H,
+  });
+  assert.equal(result.ok, true, result.errors?.join(' '));
+  return result.state;
+}
+
+function completeNarrativeStory(state) {
+  let next = state;
+  for (const beatId of BEAT_IDS) next = recordRunBeatCompletion(next, next.runId, beatId).state;
+  for (const decisionId of NARRATIVE_STORYWORLD_DECISION_IDS) {
+    next = recordRunStoryworldDecision(next, next.runId, decisionId).state;
+  }
+  return next;
+}
+
+function recordMinutes(state, minutes, category = 'narrative') {
+  let next = state;
+  for (let minute = 0; minute < minutes; minute += 1) {
+    next = recordRunPlaytime(next, next.runId, category, 60_000).state;
+  }
+  return next;
 }
 
 class MemoryStorage {
@@ -59,6 +92,7 @@ test('a run receipt can start only beside pristine campaign and advancement stat
   assert.equal(clean.state.schemaVersion, RUN_RECEIPT_SCHEMA_VERSION);
   assert.equal(clean.state.cleanStart, true);
   assert.equal(clean.state.status, RUN_RECEIPT_STATUSES.ACTIVE);
+  assert.equal(clean.state.profileId, RUN_RECEIPT_PROFILE_IDS.COMPLETIONIST_20H);
   assert.equal(clean.state.playtime.totalMs, 0);
   assert.equal(Object.isFrozen(clean.state), true);
 
@@ -78,6 +112,100 @@ test('a run receipt can start only beside pristine campaign and advancement stat
   assert.equal(dirtyAdvancement.ok, false);
   assert.match(dirtyAdvancement.errors.join(' '), /advancement state must be.*pristine/);
   assert.equal(createRunReceipt({ runId: 'short' }).ok, false);
+  assert.equal(createRunReceipt({
+    runId: 'run-profile-bad',
+    campaignState: createCampaignState(),
+    advancementState: createAdvancementState(),
+    profileId: 'invented-profile',
+  }).ok, false);
+});
+
+test('narrative profile is explicit and records the ten Storyworld decisions in exact order', () => {
+  let state = startNarrative('run-narrative-order');
+  assert.equal(state.profileId, RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H);
+  assert.equal(RUN_RECEIPT_PROFILE_CONTRACTS[state.profileId].minimumActiveMinutes, 300);
+  assert.equal(RUN_RECEIPT_PROFILE_CONTRACTS[state.profileId].maximumActiveMinutes, 360);
+
+  const outOfOrder = recordRunStoryworldDecision(
+    state,
+    state.runId,
+    NARRATIVE_STORYWORLD_DECISION_IDS[1],
+  );
+  assert.equal(outOfOrder.ok, false);
+  assert.equal(outOfOrder.code, 'out-of-order-storyworld-decision');
+
+  state = recordRunStoryworldDecision(state, state.runId, NARRATIVE_STORYWORLD_DECISION_IDS[0]).state;
+  const duplicate = recordRunStoryworldDecision(state, state.runId, NARRATIVE_STORYWORLD_DECISION_IDS[0]);
+  assert.equal(duplicate.ok, true);
+  assert.equal(duplicate.recorded, false);
+  assert.equal(duplicate.state.revision, state.revision);
+
+  const completionist = start('run-no-storyworld');
+  const notTracked = recordRunStoryworldDecision(
+    completionist,
+    completionist.runId,
+    NARRATIVE_STORYWORLD_DECISION_IDS[0],
+  );
+  assert.equal(notTracked.ok, false);
+  assert.equal(notTracked.code, 'profile-does-not-track-storyworld');
+});
+
+test('narrative credits require 60 canonical scenes, 10 Storyworld decisions, and 300 active minutes', () => {
+  let state = startNarrative('run-narrative-proof');
+  for (const beatId of BEAT_IDS) state = recordRunBeatCompletion(state, state.runId, beatId).state;
+  for (const decisionId of NARRATIVE_STORYWORLD_DECISION_IDS.slice(0, -1)) {
+    state = recordRunStoryworldDecision(state, state.runId, decisionId).state;
+  }
+  state = recordMinutes(state, 300);
+  const missingDecision = completeRunCredits(state, state.runId);
+  assert.equal(missingDecision.ok, false);
+  assert.equal(missingDecision.code, 'story-incomplete');
+
+  state = recordRunStoryworldDecision(state, state.runId, NARRATIVE_STORYWORLD_DECISION_IDS.at(-1)).state;
+  const sealed = completeRunCredits(state, state.runId);
+  assert.equal(sealed.ok, true, sealed.errors?.join(' '));
+  const proof = getRunProofReport(sealed.state);
+  assert.equal(proof.profileId, RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H);
+  assert.equal(proof.profileLabel, 'Narrative 5-6 hour route');
+  assert.equal(proof.canonicalStoryComplete, true);
+  assert.equal(proof.storyworldDecisionsComplete, true);
+  assert.equal(proof.completedStoryworldDecisionCount, 10);
+  assert.equal(proof.requiredStoryworldDecisionCount, 10);
+  assert.equal(proof.completedStoryworldPlayedSceneCount, 20);
+  assert.equal(proof.requiredStoryworldPlayedSceneCount, 20);
+  assert.equal(proof.playedSceneCount, 80);
+  assert.equal(proof.requiredPlayedSceneCount, 80);
+  assert.equal(proof.firstClearCount, 0);
+  assert.equal(proof.requiredFirstClearCount, 0);
+  assert.equal(proof.firstClearsComplete, true);
+  assert.equal(proof.targetMinimumMinutes, 300);
+  assert.equal(proof.targetMaximumMinutes, 360);
+  assert.equal(proof.durationWithinTarget, true);
+  assert.equal(proof.durationProven, true);
+});
+
+test('narrative credits reject sub-five-hour receipts but do not disqualify overtime', () => {
+  let short = completeNarrativeStory(startNarrative('run-narrative-short'));
+  short = recordMinutes(short, 299);
+  const early = completeRunCredits(short, short.runId);
+  assert.equal(early.ok, false);
+  assert.equal(early.code, 'playtime-incomplete');
+
+  const forged = JSON.parse(serializeRunReceipt(short));
+  forged.status = RUN_RECEIPT_STATUSES.COMPLETE;
+  forged.creditsCompleted = true;
+  forged.revision += 1;
+  const forgedValidation = validateRunReceiptPayload(forged);
+  assert.equal(forgedValidation.ok, false);
+  assert.match(forgedValidation.errors.join(' '), /300 active minutes/);
+
+  let overtime = completeNarrativeStory(startNarrative('run-narrative-overtime'));
+  overtime = recordMinutes(overtime, 361);
+  overtime = completeRunCredits(overtime, overtime.runId).state;
+  const overtimeProof = getRunProofReport(overtime);
+  assert.equal(overtimeProof.durationWithinTarget, false);
+  assert.equal(overtimeProof.overTargetMs, 60_000);
+  assert.equal(overtimeProof.durationProven, true, 'the six-hour target is diagnostic, not a credits ceiling');
 });
 
 test('every sample and evidence transition requires the matching run ID', () => {
@@ -149,6 +277,8 @@ test('proof uses only same-run zero-based time, completion, and first-clear evid
   assert.equal(proof.creditsComplete, true);
   assert.equal(proof.firstClearsComplete, true);
   assert.equal(proof.durationProven, true);
+  assert.equal(proof.targetMinimumMinutes, 1_200);
+  assert.equal(proof.targetMaximumMinutes, null);
   assert.deepEqual(proof.missingBeatIds, []);
   assert.deepEqual(proof.missingFirstClearEncounterIds, []);
 
@@ -188,7 +318,7 @@ test('credits cannot seal an unfinished story and explicit completion survives s
   assert.equal(recordRunPlaytime(reloaded.state, reloaded.state.runId, 'narrative', 1).code, 'run-complete');
 });
 
-test('schema-one receipts migrate to an active unsealed v2 receipt and persist under the new key', () => {
+test('schema-one receipts migrate to an active unsealed current receipt and persist under the new key', () => {
   let oldState = start('run-legacy-0001');
   for (const beatId of BEAT_IDS) oldState = recordRunBeatCompletion(oldState, oldState.runId, beatId).state;
   const legacyPayload = {
@@ -224,7 +354,43 @@ test('schema-one receipts migrate to an active unsealed v2 receipt and persist u
   storage.setItem(LEGACY_RUN_RECEIPT_SAVE_KEY, JSON.stringify(legacyPayload));
   assert.equal(adapter.clear().ok, true);
   assert.equal(storage.getItem(DEFAULT_RUN_RECEIPT_SAVE_KEY), null);
+  assert.equal(storage.getItem(LEGACY_RUN_RECEIPT_V2_SAVE_KEY), null);
   assert.equal(storage.getItem(LEGACY_RUN_RECEIPT_SAVE_KEY), null, 'clear cannot resurrect a legacy receipt');
+});
+
+test('schema-two receipts migrate to the completionist profile before schema-one fallback', () => {
+  let current = start('run-v2-migration');
+  current = recordRunPlaytime(current, current.runId, 'narrative', 60_000).state;
+  current = recordRunBeatCompletion(current, current.runId, BEAT_IDS[0]).state;
+  const v2Payload = {
+    schemaVersion: 2,
+    campaignId: current.campaignId,
+    runId: current.runId,
+    cleanStart: true,
+    status: current.status,
+    creditsCompleted: current.creditsCompleted,
+    playtime: current.playtime,
+    completedBeatIds: current.completedBeatIds,
+    firstClearEncounterIds: current.firstClearEncounterIds,
+    revision: current.revision,
+  };
+  const migrated = loadRunReceipt(v2Payload);
+  assert.equal(migrated.ok, true, migrated.errors?.join(' '));
+  assert.equal(migrated.migrated, true);
+  assert.equal(migrated.fromSchemaVersion, 2);
+  assert.equal(migrated.state.schemaVersion, RUN_RECEIPT_SCHEMA_VERSION);
+  assert.equal(migrated.state.profileId, RUN_RECEIPT_PROFILE_IDS.COMPLETIONIST_20H);
+  assert.deepEqual(migrated.state.completedStoryworldDecisionIds, []);
+
+  const storage = new MemoryStorage();
+  storage.setItem(LEGACY_RUN_RECEIPT_V2_SAVE_KEY, JSON.stringify(v2Payload));
+  storage.setItem(LEGACY_RUN_RECEIPT_SAVE_KEY, '{invalid-but-lower-priority');
+  const loaded = createRunReceiptStorageAdapter(storage).load();
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.fromSchemaVersion, 2);
+  assert.equal(loaded.migrationPersisted, true);
+  assert.equal(storage.getItem(LEGACY_RUN_RECEIPT_V2_SAVE_KEY), null);
+  assert.ok(storage.getItem(DEFAULT_RUN_RECEIPT_SAVE_KEY));
 });
 
 test('run receipts round-trip, reject tampering, and persist independently', () => {
