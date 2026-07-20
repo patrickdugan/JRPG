@@ -727,6 +727,19 @@ class PlayerDriver:
         self.page.wait_for_url("**/campaign.html")
         self.page.locator("#sceneTitle").wait_for()
 
+    def return_to_campaign_for_recovery(self) -> bool:
+        """Reach Campaign through a visible link so a bounded run can export."""
+        if urlparse(self.page.url).path.endswith("campaign.html"):
+            return True
+        link = self.page.locator('a[href="campaign.html"]:visible').first
+        if link.count() == 0:
+            return False
+        link.click(no_wait_after=True)
+        self.controls += 1
+        self.page.wait_for_url("**/campaign.html")
+        self.page.locator("#sceneTitle").wait_for()
+        return True
+
     def recover_after_battle(self) -> None:
         self.page.locator('a[href="camp.html"]').first.click()
         self.controls += 1
@@ -1143,10 +1156,11 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                         "checkpoint": driver.checkpoint(),
                     }
             except (RouteBlocked, PlaywrightTimeoutError) as error:
-                evidence["status"] = "blocked"
                 if isinstance(error, RouteBlocked):
+                    evidence["status"] = "bounded" if error.code == "time-budget" and args.recovery_out else "blocked"
                     evidence["blocker"] = {"code": error.code, "message": str(error), **error.details}
                 else:
+                    evidence["status"] = "blocked"
                     evidence["blocker"] = {
                         "code": "playwright-timeout",
                         "message": str(error),
@@ -1154,6 +1168,13 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     }
             if args.recovery_out:
                 recovery_out = Path(args.recovery_out).resolve()
+                if not urlparse(page.url).path.endswith("campaign.html"):
+                    prior_page = urlparse(page.url).path.rsplit("/", 1)[-1]
+                    returned = driver.return_to_campaign_for_recovery()
+                    evidence["recoveryFrontierReturn"] = {
+                        "from": prior_page,
+                        "throughRenderedCampaignLink": returned,
+                    }
                 if urlparse(page.url).path.endswith("campaign.html"):
                     with page.expect_download() as download_info:
                         page.locator("#exportRecovery").click()
