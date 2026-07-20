@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import {
   BATTLE_SYSTEM_FEEDBACK_MS,
+  createBattleDefeatAccent,
   createBattleHealFeedback,
   createBattleMoveFeedback,
   createBattleTempoPresentation,
@@ -283,6 +284,24 @@ test('victory accent follows only the actual terminal victory result and freezes
   );
 });
 
+test('defeat accent follows only the actual terminal defeat result and freezes for reduced motion', () => {
+  assert.equal(createBattleDefeatAccent({ result: null, actors: [{ faction: 'party', hp: 0 }] }), null);
+  assert.equal(createBattleDefeatAccent({ result: 'victory', log: [{ type: 'party-defeated' }] }), null);
+  const snapshot = { result: 'defeat', actors: [{ instanceId: 'ren', hp: 0 }] };
+  const ordinary = createBattleDefeatAccent(snapshot, { visualNowMs: 400 });
+  assert.equal(ordinary.kind, 'defeat-accent');
+  assert.equal(ordinary.result, 'defeat');
+  assert.equal(ordinary.announcement, 'Party defeated.');
+  assert.equal(Object.isFrozen(ordinary), true);
+  assert.equal(Object.isFrozen(snapshot), false);
+  assert.deepEqual(snapshot, { result: 'defeat', actors: [{ instanceId: 'ren', hp: 0 }] });
+  assert.notEqual(ordinary.kind, createBattleVictoryAccent({ result: 'victory' }).kind);
+  assert.deepEqual(
+    createBattleDefeatAccent({ result: 'defeat' }, { visualNowMs: 1, reducedMotion: true }),
+    createBattleDefeatAccent({ result: 'defeat' }, { visualNowMs: 1_599, reducedMotion: true }),
+  );
+});
+
 test('browser wires move feedback through manual and Auto-Grind without joining simulation timing', async () => {
   const source = await readFile(new URL('../battle.js', import.meta.url), 'utf8');
   assert.match(source, /createBattleMoveFeedback\(\{/);
@@ -311,6 +330,11 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
   );
   assert.match(source, /function drawBattleVictoryAccent\(/);
   assert.match(source, /drawBattleVictoryAccent\(victoryAccent, geometry\)/);
+  assert.match(source, /createBattleDefeatAccent\(snapshot, \{/);
+  assert.match(source, /function drawBattleDefeatAccent\(/);
+  assert.match(source, /context\.rect\(geometry\.originX, geometry\.originY, geometry\.boardWidth, geometry\.boardHeight\);\s+context\.clip\(\);/,
+    'defeat accent remains clipped to the battle canvas board');
+  assert.match(source, /drawBattleDefeatAccent\(defeatAccent, geometry\)/);
   assert.doesNotMatch(source, /result\.finalDamage < 0[^\n]*combatHeal/,
     'absorbed damage cannot trigger the heal cue');
   assert.match(source, /partyPanel\.addEventListener\('click'/);
@@ -327,4 +351,6 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
     'system feedback cannot delay commands, Recovery, intent, or Auto-Grind');
   assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*victoryAccent/,
     'victory accent cannot extend the terminal hold or settlement boundary');
+  assert.doesNotMatch(source, /getBattlePresentationBoundary\([^)]*defeatAccent/,
+    'defeat accent cannot extend the terminal hold or settlement boundary');
 });

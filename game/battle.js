@@ -140,6 +140,7 @@ import {
   sampleBattleCommandPresentation,
 } from './battle-command-presentation.mjs';
 import {
+  createBattleDefeatAccent,
   createBattleHealFeedback,
   createBattleMoveFeedback,
   createBattleTempoPresentation,
@@ -1245,6 +1246,54 @@ function drawBattleVictoryAccent(frame, geometry) {
   context.restore();
 }
 
+function drawBattleDefeatAccent(frame, geometry) {
+  if (!frame) return;
+  const inset = Math.max(4, geometry.cell * 0.11);
+  const left = geometry.originX + inset;
+  const top = geometry.originY + inset;
+  const width = geometry.boardWidth - inset * 2;
+  const height = geometry.boardHeight - inset * 2;
+  const notch = Math.max(10, geometry.cell * 0.3);
+  const rail = Math.max(notch * 1.8, width * 0.23);
+  const fractureX = left + notch + ((width - notch * 2) * frame.fracture);
+  context.save();
+  context.beginPath();
+  context.rect(geometry.originX, geometry.originY, geometry.boardWidth, geometry.boardHeight);
+  context.clip();
+  context.globalAlpha = frame.opacity;
+  context.strokeStyle = '#d15468';
+  context.fillStyle = '#461421';
+  context.lineWidth = Math.max(2, geometry.cell * 0.055);
+  context.lineCap = 'square';
+
+  context.globalAlpha *= 0.22;
+  const band = Math.max(3, geometry.cell * 0.09);
+  context.fillRect(left + notch, top, width - notch * 2, band);
+  context.fillRect(left + notch, top + height - band, width - notch * 2, band);
+  context.globalAlpha = frame.opacity;
+
+  context.beginPath();
+  context.moveTo(left, top + rail); context.lineTo(left, top + notch); context.lineTo(left + notch, top);
+  context.lineTo(left + rail, top);
+  context.moveTo(left + width - rail, top); context.lineTo(left + width - notch, top);
+  context.lineTo(left + width, top + notch); context.lineTo(left + width, top + rail);
+  context.moveTo(left, top + height - rail); context.lineTo(left, top + height - notch);
+  context.lineTo(left + notch, top + height); context.lineTo(left + rail, top + height);
+  context.moveTo(left + width - rail, top + height); context.lineTo(left + width - notch, top + height);
+  context.lineTo(left + width, top + height - notch); context.lineTo(left + width, top + height - rail);
+  context.stroke();
+
+  context.globalAlpha = frame.reducedMotion ? 0.72 : 0.42 + (frame.pulse * 0.24);
+  const slash = Math.max(5, geometry.cell * 0.14);
+  context.beginPath();
+  context.moveTo(fractureX - slash, top); context.lineTo(fractureX, top + band * 1.8);
+  context.lineTo(fractureX + slash, top);
+  context.moveTo(fractureX + slash, top + height); context.lineTo(fractureX, top + height - band * 1.8);
+  context.lineTo(fractureX - slash, top + height);
+  context.stroke();
+  context.restore();
+}
+
 function drawBossIntent(snapshot, geometry) {
   const intent = snapshot.bossMechanic?.pendingIntent;
   if (!intent) return;
@@ -1292,6 +1341,10 @@ function drawBattle(now = performance.now()) {
     reducedMotion: reducedMotion.matches,
   });
   const victoryAccent = createBattleVictoryAccent(snapshot, {
+    visualNowMs: now,
+    reducedMotion: reducedMotion.matches,
+  });
+  const defeatAccent = createBattleDefeatAccent(snapshot, {
     visualNowMs: now,
     reducedMotion: reducedMotion.matches,
   });
@@ -1552,6 +1605,7 @@ function drawBattle(now = performance.now()) {
   drawBattleCommandPresentationFx(commandPresentation, geometry);
   drawBattleSystemFeedback(moveFeedback, selectedTargetFeedback, geometry);
   drawBattleVictoryAccent(victoryAccent, geometry);
+  drawBattleDefeatAccent(defeatAccent, geometry);
 }
 
 function createCombatantCard(actor, selected = false, targetable = true, partyCommandAttempt = false) {

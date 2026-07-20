@@ -298,6 +298,25 @@ export function createBattleVictoryAccent(snapshot, {
   });
 }
 
+/** Persistent defeat accent; it owns no terminal hold or settlement timing. */
+export function createBattleDefeatAccent(snapshot, {
+  visualNowMs = 0,
+  reducedMotion = false,
+} = {}) {
+  if (snapshot?.result !== 'defeat') return null;
+  const cycle = (safeTime(visualNowMs) % 1600) / 1600;
+  const pulse = reducedMotion ? 1 : 1 - Math.abs((cycle * 2) - 1);
+  return deepFreeze({
+    kind: 'defeat-accent',
+    result: 'defeat',
+    pulse: round(pulse),
+    opacity: round(reducedMotion ? 0.88 : 0.54 + (pulse * 0.26)),
+    fracture: round(reducedMotion ? 0.5 : cycle),
+    reducedMotion: Boolean(reducedMotion),
+    announcement: 'Party defeated.',
+  });
+}
+
 /**
  * Readiness is pulse-exact. visualNowMs only moves a scan across the proven fill;
  * it never advances the fill or changes Recovery arithmetic.
