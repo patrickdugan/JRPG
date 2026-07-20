@@ -62,6 +62,7 @@ import {
   useFieldExit,
 } from './field-runtime.mjs';
 import { selectNearbyFieldInteractable } from './field-interaction-priority.mjs';
+import { resolveIntendedRouteExit } from './field-route-policy.mjs';
 import {
   createLoadoutState,
   createLoadoutStorageAdapter,
@@ -1521,11 +1522,25 @@ function updateFieldDashboard(level) {
     delete mapCanvas.dataset.routeMarkerX;
     delete mapCanvas.dataset.routeMarkerY;
   }
-  // An `any(...)` exit is complete once one alternative is satisfied. Do not
-  // publish another incomplete atom as mandatory after the route is ready.
-  const unfinishedFieldRequirement = status.objective.completed
+  const beat = getBeat();
+  const storyRouteRequired = fieldRuntimeState.current.beatId === beat.id && beatRequiresFieldRoute(getChapter(), beat);
+  const nextStoryRecord = storyRouteRequired ? nextBeatRecord(beat) : null;
+  const nextStoryChapter = nextStoryRecord
+    ? chapters.find((chapter) => chapter.id === nextStoryRecord.chapterId)
+    : null;
+  const nextStoryLevel = nextStoryRecord
+    ? getLevelForBeat(nextStoryChapter, nextStoryRecord.beat)
+    : null;
+  const intendedRouteExit = storyRouteRequired && nextStoryLevel
+    ? resolveIntendedRouteExit(LEVELS, level.id, nextStoryLevel.id)
+    : null;
+  const scopedExit = storyRouteRequired
+    ? status.objective.exits.find((exit) => exit.id === intendedRouteExit?.id) ?? null
+    : status.objective.exits.find((exit) => exit.ready) ?? null;
+  const scopedRequirements = scopedExit?.requirements ?? (storyRouteRequired ? [] : status.objective.requirements);
+  const unfinishedFieldRequirement = scopedExit?.ready
     ? null
-    : status.objective.requirements.find((requirement) => !requirement.complete);
+    : scopedRequirements.find((requirement) => !requirement.complete);
   const requiredInteractable = unfinishedFieldRequirement?.type === 'interaction'
     ? (level.interactables ?? []).find((item) => item.id === unfinishedFieldRequirement.id)
     : unfinishedFieldRequirement?.type === 'flag'
@@ -1536,9 +1551,7 @@ function updateFieldDashboard(level) {
     level.interactables ?? [],
     status.flags,
   );
-  const readyExit = status.objective.completed
-    ? status.objective.exits.find((exit) => exit.ready) ?? null
-    : null;
+  const readyExit = scopedExit?.ready ? scopedExit : null;
   const exitBlockingInteractable = readyExit && authored?.available !== false && !authored?.consumed
     ? authored
     : null;
@@ -1563,8 +1576,8 @@ function updateFieldDashboard(level) {
   fieldObjective.textContent = sceneOperationMarker
     ? sceneOperationMarker.node.instruction
     : status.objective.text ?? level.objective ?? 'Explore the scene and follow its marked exit.';
-  const requirements = status.objective.requirements.length
-    ? status.objective.requirements.map((item) => `${item.complete ? '✓' : '○'} ${item.label}`).join(' · ')
+  const requirements = scopedRequirements.length
+    ? scopedRequirements.map((item) => `${item.complete ? '✓' : '○'} ${item.label}`).join(' · ')
     : `${(level.interactables ?? []).length} authored interactions`;
   fieldProgress.textContent = sceneOperationMarker
     ? `Story operation ${sceneOperationMarker.nodeIndex + 1}/${sceneOperationMarker.progress.nodeCount} · ${sceneOperationMarker.node.verb} · ${sceneOperationMarker.node.activityType}`
@@ -1572,7 +1585,7 @@ function updateFieldDashboard(level) {
       ? `Witness chronicle: ${witnessMarker.chronicle.title} · ${witnessMarker.task.verb} ${witnessMarker.taskIndex + 1}/${witnessMarker.fieldwork.nodes.length} · ${witnessMarker.task.instruction}`
     : marker
       ? `Side story: ${marker.quest.title} · ${marker.objective.instruction}`
-    : `${status.objective.completedCount}/${status.objective.totalCount} route requirements · ${requirements}`;
+    : `${scopedRequirements.filter((item) => item.complete).length}/${scopedRequirements.length} route requirements · ${requirements}`;
   interactFieldButton.disabled = !sceneOperationNearby && !witnessNearby && !markerNearby && !authored && !status.exit;
   interactFieldButton.textContent = sceneOperationNearby
     ? `${sceneOperationMarker.node.verb} story operation (X)`

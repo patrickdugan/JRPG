@@ -70,6 +70,20 @@ function flagsFromWonEncounters(encounterIds) {
   return flags;
 }
 
+function allExternalProducerFlags() {
+  const choiceFlags = CAMPAIGN.chapters
+    .flatMap((chapter) => chapter.beats)
+    .flatMap((beat) => beat.choices ?? [])
+    .map((choice) => choice.flag)
+    .filter(Boolean);
+  return [
+    ...choiceFlags,
+    ...flagsFromWonEncounters(ENCOUNTERS.map(({ id }) => id)),
+    // Campaign derives this field-facing alias from c3_genta_evidence_seen.
+    'lantern-route-chosen',
+  ];
+}
+
 function consumeAvailableInteractions(state, level, externalFlags) {
   let current = state;
   const remaining = new Set((level.interactables ?? []).map(({ id }) => id));
@@ -157,6 +171,58 @@ test('every canonical beat-to-next-map route has a satisfiable authored exit cha
       assert.fail(
         `No satisfiable route from ${startLevelId} to ${targetLevelId}. ${failures.join(' | ')}`,
       );
+    });
+  }
+});
+
+test('every battle board exit unlocks from its canonical victories and authored interactions', async (t) => {
+  const battleLevels = LEVELS.filter((level) => level.kind === 'battle' && (level.exits?.length ?? 0) > 0);
+
+  for (const level of battleLevels) {
+    const encounters = ENCOUNTERS.filter((encounter) => encounter.levelId === level.id);
+    await t.test(level.id, () => {
+      assert.ok(encounters.length > 0, `${level.id} has an exit but no canonical encounter.`);
+      const externalFlags = flagsFromWonEncounters(encounters.map(({ id }) => id));
+
+      for (const exit of level.exits) {
+        let state = createFieldState({
+          levelId: level.id,
+          beatId: `battle-exit-audit:${level.id}`,
+          position: exit.at,
+          flags: externalFlags,
+        });
+        state = consumeAvailableInteractions(state, level, externalFlags);
+        const result = useFieldExit(state, exit.id, { flags: externalFlags });
+        assert.equal(
+          result.ok,
+          true,
+          `${level.id}/${exit.id} remains locked by "${exit.condition ?? '(none)'}" after canonical victory.`,
+        );
+      }
+    });
+  }
+});
+
+test('every authored exit has a real external or local producer', async (t) => {
+  const externalFlags = allExternalProducerFlags();
+
+  for (const level of LEVELS.filter((candidate) => (candidate.exits?.length ?? 0) > 0)) {
+    await t.test(level.id, () => {
+      for (const exit of level.exits) {
+        let state = createFieldState({
+          levelId: level.id,
+          beatId: `producer-audit:${level.id}`,
+          position: exit.at,
+          flags: externalFlags,
+        });
+        state = consumeAvailableInteractions(state, level, externalFlags);
+        const result = useFieldExit(state, exit.id, { flags: externalFlags });
+        assert.equal(
+          result.ok,
+          true,
+          `${level.id}/${exit.id} has no reachable producer for "${exit.condition ?? '(none)'}".`,
+        );
+      }
     });
   }
 });

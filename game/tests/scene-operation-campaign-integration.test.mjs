@@ -61,7 +61,10 @@ test('the rendered map publishes and clears stable witness and side-story marker
 });
 
 test('the rendered map publishes the next incomplete field interaction or ready exit', () => {
-  assert.match(campaignSource, /unfinishedFieldRequirement = status\.objective\.completed\s+\? null\s+: status\.objective\.requirements\.find/);
+  assert.match(campaignSource, /from '\.\/field-route-policy\.mjs'/);
+  assert.match(campaignSource, /resolveIntendedRouteExit\(LEVELS, level\.id, nextStoryLevel\.id\)/);
+  assert.match(campaignSource, /scopedExit = storyRouteRequired[\s\S]*?status\.objective\.exits\.find\(\(exit\) => exit\.id === intendedRouteExit\?\.id\)/);
+  assert.match(campaignSource, /unfinishedFieldRequirement = scopedExit\?\.ready\s+\? null\s+: scopedRequirements\.find/);
   assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'interaction'/);
   assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'flag'/);
   assert.match(campaignSource, /item\.result === unfinishedFieldRequirement\.id \|\| item\.id === unfinishedFieldRequirement\.id/);
@@ -70,7 +73,7 @@ test('the rendered map publishes the next incomplete field interaction or ready 
   assert.match(campaignSource, /normalize\(item\.id\) === normalize\(requiredInteractable\.requires\)/);
   assert.match(campaignSource, /exitBlockingInteractable = readyExit && authored\?\.available !== false && !authored\?\.consumed/);
   assert.match(campaignSource, /nextRequiredInteractable = publishedRequiredInteractable \?\? exitBlockingInteractable/);
-  assert.match(campaignSource, /readyExit = status\.objective\.completed\s+\? status\.objective\.exits\.find\(\(exit\) => exit\.ready\)/);
+  assert.match(campaignSource, /readyExit = scopedExit\?\.ready \? scopedExit : null/);
   assert.match(campaignSource, /type: 'interaction'/);
   assert.match(campaignSource, /type: 'route-exit'/);
   for (const field of ['Type', 'Id', 'X', 'Y', 'Range']) {
