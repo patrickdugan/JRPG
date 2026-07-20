@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "campaignId": "bells-black-chrysanthemum",
-  "runId": "0a3402eb-e8a4-4dba-956b-67b0438400a2",
-  "receiptRevision": 6110,
+  "runId": "3163d10c-efff-4bcb-9de7-0f91e045ea7e",
+  "receiptRevision": 2348,
   "status": "complete",
   "cleanStart": true,
   "story": {
@@ -119,9 +119,9 @@
       "advancement": true
     },
     "runBinding": {
-      "campConversations": "0a3402eb-e8a4-4dba-956b-67b0438400a2",
-      "partyCouncils": "0a3402eb-e8a4-4dba-956b-67b0438400a2",
-      "archiveRecords": "0a3402eb-e8a4-4dba-956b-67b0438400a2"
+      "campConversations": "3163d10c-efff-4bcb-9de7-0f91e045ea7e",
+      "partyCouncils": "3163d10c-efff-4bcb-9de7-0f91e045ea7e",
+      "archiveRecords": "3163d10c-efff-4bcb-9de7-0f91e045ea7e"
     },
     "complete": true,
     "creditsGateReady": true,
@@ -375,132 +375,132 @@
     "remainingActivityIds": []
   },
   "playtime": {
-    "totalMs": 5565977,
-    "totalMinutes": 92.76628333333333,
+    "totalMs": 1725037,
+    "totalMinutes": 28.750616666666666,
     "targetMs": 72000000,
-    "percentOfTarget": 7.730523611111111,
-    "remainingMs": 66434023,
-    "fixedActualMs": 5501273,
+    "percentOfTarget": 2.395884722222222,
+    "remainingMs": 70274963,
+    "fixedActualMs": 1680334,
     "fixedTargetMs": 61200000,
-    "grindMs": 64704,
+    "grindMs": 44703,
     "categories": {
-      "narrative": 831453,
-      "exploration": 3531085,
-      "firstClearCombat": 466639,
-      "grind": 64704,
-      "menusAndRest": 672096
+      "narrative": 238609,
+      "exploration": 822278,
+      "firstClearCombat": 338753,
+      "grind": 44703,
+      "menusAndRest": 280694
     },
     "chapterMs": {
-      "prologue": 327825,
-      "chapter-1": 419579,
-      "chapter-2": 763905,
-      "chapter-3": 685993,
-      "chapter-4": 728075,
-      "chapter-5": 1258520,
-      "chapter-6": 528999,
-      "chapter-7": 169665,
-      "chapter-8": 308097,
-      "chapter-9": 212350,
-      "epilogue": 162969
+      "prologue": 67407,
+      "chapter-1": 157911,
+      "chapter-2": 244446,
+      "chapter-3": 132004,
+      "chapter-4": 144516,
+      "chapter-5": 164412,
+      "chapter-6": 145149,
+      "chapter-7": 123009,
+      "chapter-8": 214261,
+      "chapter-9": 209212,
+      "epilogue": 122710
     },
-    "attributedChapterMs": 5565977,
+    "attributedChapterMs": 1725037,
     "unattributedMs": 0
   },
   "pacing": {
     "diagnosticOnly": true,
     "observedPlaytimeProof": false,
     "checkpointSchemaVersion": 1,
-    "checkpointSignature": "fnv1a32:2d4d30fc",
+    "checkpointSignature": "fnv1a32:dab8e7de",
     "scope": "complete-215-activity-intended-route-at-1x",
-    "aggregateReferenceTargetMs": 73928133,
+    "aggregateReferenceTargetMs": 73928467,
     "chapters": [
       {
         "chapterId": "prologue",
         "complete": true,
-        "actualMs": 327825,
+        "actualMs": 67407,
         "referenceTargetMs": 3274233,
-        "deltaMs": -2946408,
-        "percentOfReference": 10.012
+        "deltaMs": -3206826,
+        "percentOfReference": 2.059
       },
       {
         "chapterId": "chapter-1",
         "complete": true,
-        "actualMs": 419579,
-        "referenceTargetMs": 3564933,
-        "deltaMs": -3145354,
-        "percentOfReference": 11.77
+        "actualMs": 157911,
+        "referenceTargetMs": 3565267,
+        "deltaMs": -3407356,
+        "percentOfReference": 4.429
       },
       {
         "chapterId": "chapter-2",
         "complete": true,
-        "actualMs": 763905,
+        "actualMs": 244446,
         "referenceTargetMs": 5355784,
-        "deltaMs": -4591879,
-        "percentOfReference": 14.263
+        "deltaMs": -5111338,
+        "percentOfReference": 4.564
       },
       {
         "chapterId": "chapter-3",
         "complete": true,
-        "actualMs": 685993,
+        "actualMs": 132004,
         "referenceTargetMs": 7328193,
-        "deltaMs": -6642200,
-        "percentOfReference": 9.361
+        "deltaMs": -7196189,
+        "percentOfReference": 1.801
       },
       {
         "chapterId": "chapter-4",
         "complete": true,
-        "actualMs": 728075,
+        "actualMs": 144516,
         "referenceTargetMs": 8475817,
-        "deltaMs": -7747742,
-        "percentOfReference": 8.59
+        "deltaMs": -8331301,
+        "percentOfReference": 1.705
       },
       {
         "chapterId": "chapter-5",
         "complete": true,
-        "actualMs": 1258520,
+        "actualMs": 164412,
         "referenceTargetMs": 8983030,
-        "deltaMs": -7724510,
-        "percentOfReference": 14.01
+        "deltaMs": -8818618,
+        "percentOfReference": 1.83
       },
       {
         "chapterId": "chapter-6",
         "complete": true,
-        "actualMs": 528999,
+        "actualMs": 145149,
         "referenceTargetMs": 5712950,
-        "deltaMs": -5183951,
-        "percentOfReference": 9.26
+        "deltaMs": -5567801,
+        "percentOfReference": 2.541
       },
       {
         "chapterId": "chapter-7",
         "complete": true,
-        "actualMs": 169665,
+        "actualMs": 123009,
         "referenceTargetMs": 6504610,
-        "deltaMs": -6334945,
-        "percentOfReference": 2.608
+        "deltaMs": -6381601,
+        "percentOfReference": 1.891
       },
       {
         "chapterId": "chapter-8",
         "complete": true,
-        "actualMs": 308097,
+        "actualMs": 214261,
         "referenceTargetMs": 5555550,
-        "deltaMs": -5247453,
-        "percentOfReference": 5.546
+        "deltaMs": -5341289,
+        "percentOfReference": 3.857
       },
       {
         "chapterId": "chapter-9",
         "complete": true,
-        "actualMs": 212350,
+        "actualMs": 209212,
         "referenceTargetMs": 11167550,
-        "deltaMs": -10955200,
-        "percentOfReference": 1.901
+        "deltaMs": -10958338,
+        "percentOfReference": 1.873
       },
       {
         "chapterId": "epilogue",
         "complete": true,
-        "actualMs": 162969,
+        "actualMs": 122710,
         "referenceTargetMs": 8005483,
-        "deltaMs": -7842514,
-        "percentOfReference": 2.036
+        "deltaMs": -7882773,
+        "percentOfReference": 1.533
       }
     ]
   },
@@ -512,5 +512,5 @@
     "durationProven": false,
     "releaseTargetProven": false
   },
-  "signature": "fnv1a32:f8d659a2"
+  "signature": "fnv1a32:90b7f4c8"
 }
