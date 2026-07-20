@@ -6,7 +6,7 @@
 
 This list is the art-production authority. Quantity is a planned final count, not a promise that every item must be unique. Reuse a carefully bounded kit aggressively; create bespoke assets only where story, navigation, or battle readability requires it.
 
-**Current authored-runtime status (2026-07-20):** all 19 current combat boards are authored: Takamine plus 18 regional boards. The party field foundation (6 × 10 directional idle/walk plus live interact/hurt), combat-action keys (6 × 10, including recovery and defeat), and portrait expressions (6 × 8) are integrated, as are eight regular-enemy families with seven key poses each (8 × 7, including defeat, recovery, and hurt), ten bosses with seven key poses each (10 × 7, including transition, defeat, and recovery), and nine delivery/essence VFX with six phase frames each (9 × 6). The VFX overlay retains the procedural impact beneath it as a load/error fallback. These integrations remain foundation/key-pose coverage rather than complete packages: full in-betweens, alternate action facings, variants, and remaining status/system effects are still absent. Human readability review, external cultural review, and Accepted/art lock remain pending.
+**Current authored-runtime status (2026-07-20):** all 19 current combat boards are authored: Takamine plus 18 regional boards. The party field foundation (6 × 10 directional idle/walk plus live interact/hurt), combat-action keys (6 × 10, including recovery and defeat), and portrait expressions (6 × 8) are integrated, as are eight regular-enemy families with seven key poses each (8 × 7, including defeat, recovery, and hurt), ten bosses with seven key poses each (10 × 7, including transition, defeat, and recovery), nine delivery/essence VFX with six phase frames each (9 × 6), six statuses with three lifecycle frames each (6 × 3), and a two-role metadata-only NPC field foundation. The VFX overlays retain procedural/generic fallback. These integrations remain foundation/key-pose coverage rather than complete packages: full in-betweens, alternate action facings, variants, the full named/generic NPC packages, an emitted Campaign heal, Campaign Dodge presentation, and a defeat-canvas accent are still absent. Human readability review, external cultural review, and Accepted/art lock remain pending.
 
 ## 1. Asset states, priorities, and naming
 
@@ -79,6 +79,8 @@ Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small
 
 **Character art total:** 6 party field sheets, 6 party battle sheets, 48 party portrait expressions, 84 regional/named NPC packages, and 48 generic NPC combinations.
 
+**Current NPC foundation receipt:** the live 64 × 48 atlas contains only `speaker` and `interviewee`, one 32 × 48 south-idle frame each with feet pivot `(16, 44)`. Exact metadata maps 8/71 side-story `talk` objectives and 37/183 scene-operation `interview` nodes. No label/name/prose inference exists; witness fieldwork and all prop, hazard, exit, evidence, mechanism, delivery, care/rescue, council, combat, and ambiguous markers retain geometric fallback. The planned totals above remain unchanged.
+
 ## 6. Enemy and boss production
 
 Enemy package = field silhouette where needed, combat idle, move, attack/telegraph, hit, defeat, 32 x 32 portrait, Ledger icon, and damage-type tag. A family shares base anatomy and has 2-4 palette/weapon variants.
@@ -126,8 +128,8 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 | --- | --- | ---: | --- | --- |
 | VFX-DEL-001-004 | delivery effects: Cut, Pierce, Crush, Arcane | 4 | P0 | wind-up/active/recovery marker, hit, weak/resist variation. |
 | VFX-ESS-001-005 | essence effects: Ember, Frost, Storm, Radiance, Umbral | 5 | P0 | cast, projectile/area, impact, linger, weak/resist variation. |
-| VFX-STA-001-006 | status effects: Bleed, Scorch, Chill, Shock, Dread, Bound | 6 | P1 | applied, persistent marker, cleansed/end; shape + color readable. |
-| VFX-SYS-001-012 | system feedback | 12 | P0 | move marker, selected cell, route, blocked, Guard, Dodge, recovery lock, tempo fill, defeat, victory, analyze, heal. |
+| VFX-STA-001-006 | status effects: Dread, Chill, Shock, Scorch, Bound, Overheated | 6 | P1 | Live authored apply/refreshed, persistent-active, and expire frames; cleanse is unsupported because Campaign has no cleanse event. |
+| VFX-SYS-001-012 | system feedback | 12 | P0 | Move, selected cell, blocked, Guard, Analyze, objectives, recovery lock, Tempo, and a non-locking victory accent are live; route preview remains one-step, heal is dormant, and Campaign Dodge plus the defeat-canvas accent are absent. |
 | UI-001-010 | battle UI kit | 10 panels | P0 | header/Tempo ribbon, Ledger, command row, recovery pips, HP/Spirit, damage log, tooltip, pause, victory, defeat. |
 | UI-011-020 | field/menu UI kit | 10 panels | P1 | dialogue, nameplate, journal, party, equipment, Vow board, shop, save, map, accessibility. |
 | ICO-001-036 | icon atlas | 36 | P0/P1 | 9 damage types, 6 statuses, 6 gear slots, 6 commands, navigation, currency, quest, danger, network, etc. |

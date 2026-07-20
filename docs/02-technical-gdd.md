@@ -12,6 +12,8 @@ Rules live in `game/engine.mjs`, which is DOM-free and covered by Node tests. `g
 
 Prototype fallback artwork remains original procedural pixel art. The current production replacements are deterministic editable pixel suites: all 19 combat boards; six-member ten-pose field atlases with live interact/hurt keys, ten-key combat atlases, and eight-expression portrait atlases; eight regular-enemy families with defeat/recovery/hurt keys; ten primary bosses with transition/defeat/recovery keys; and nine battle-VFX families. Generated concept sheets remain reference-only and are not shipped as runtime pixels. Full animation in-betweens, alternate action facings, variants, remaining status/system effects, and human review are still production work.
 
+Two additional fail-closed foundations are live. A 96 × 192 status atlas provides distinct 32 × 32 apply/refreshed, persistent-active, and expire frames for Dread, Chill, Shock, Scorch, Bound, and Overheated; no campaign cleanse event exists, so no cleanse state is authored. Unknown statuses and Final Ward Open retain generic/special fallback. A 64 × 48 NPC atlas supplies only two 32 × 48 south-idle roles: exact side-story `talk` objectives resolve `speaker`, and exact scene-operation `interview` nodes resolve `interviewee`. All other field markers stay geometric, with no prose, name, or label inference.
+
 ## 2. First-playable boundary
 
 The combat slice is **FP-0: Bell Court at Takamine**, a deliberately narrow proof before the planned 28–34 minute **FP-1 Takamine Vertical Slice**. Courier **Ren Ishikawa** reaches an abandoned temple gate with **Elisabet “Lise” Varga**, heir to a European hunter oath. A short in-game prelude makes clear that **Father Mateus Avelar**, the court’s vampire interpreter, has directed the search; Lise recognizes the oath he thought extinguished. They face an **Ashen Oni Tithe Enforcer**, an invented retainer of the Black Chrysanthemum court.
@@ -158,6 +160,8 @@ The Canvas is rendered at 320 × 180 logical pixels and integer-scaled with `ima
 - Footer: command buttons with range/recovery labels, combat log, explicit keyboard controls, restart/end card.
 
 Original procedural pixel primitives remain the resilient load/error fallback. Live presentation uses the authored board, actor, portrait, boss, and VFX suites described above. Their current key poses validate silhouette, value, material, exact addressing, and deterministic fallback behavior; complete animation and human readability approval remain art-production deliverables.
+
+Campaign Battle adds the authored six-status lifecycle overlay without joining command, animation, Recovery, terminal-hold, or settlement boundaries. Expiry lasts 520 ms at 1×, scales only with 2×/4× presentation speed, and becomes a static readable mark under reduced motion. The victory border/corner accent is likewise non-locking. An explicit-heal presentation seam exists but is dormant because Campaign emits no `heal`/`healing` resolution; positive absorption is rejected and remains hit feedback. Campaign has no Dodge event or presentation and no cleanse event. These Campaign limitations do not alter the FP-0 Dodge rules in sections 2, 6, and 9.
 
 ## 9. Acceptance and automated verification
 

@@ -5,7 +5,7 @@
 **Applies to:** field actors, combat actors, enemies, bosses, hazards, and battle VFX
 **Primary slice:** FP-1 Takamine Vertical Slice
 
-**Runtime note (2026-07-20):** original, editable, deterministic assets under `assets/art/` now replace the generated raster atlases in live rendering, and all 19 current combat boards are authored—Takamine plus 18 regional boards. Party rendering integrates the 6 × 10 field foundation with directional idle/walk and live interact/hurt keys, 6 × 10 combat-action keys including recovery/defeat, and 6 × 8 portrait-expression keys. Enemy rendering integrates eight regular families × seven key poses including defeat/recovery/hurt and ten bosses × seven key poses including transition/defeat/recovery. Battle VFX integrates nine delivery/essence effects × six authored 64 × 64 phase frames; the authored overlay remains above a procedural impact retained as the load/error fallback. Exact addressing, alpha gutters, source/export hashes, mappings, and fallback behavior are automated, but these remain key-pose foundations: full in-betweens, alternate action facings, variants, and remaining status/system effects are absent. Human readability review, external cultural review, and Accepted/art lock remain pending.
+**Runtime note (2026-07-20):** original, editable, deterministic assets under `assets/art/` now replace the generated raster atlases in live rendering, and all 19 current combat boards are authored—Takamine plus 18 regional boards. Party rendering integrates the 6 × 10 field foundation with directional idle/walk and live interact/hurt keys, 6 × 10 combat-action keys including recovery/defeat, and 6 × 8 portrait-expression keys. Enemy rendering integrates eight regular families × seven key poses including defeat/recovery/hurt and ten bosses × seven key poses including transition/defeat/recovery. Battle VFX integrates nine delivery/essence effects × six authored 64 × 64 phase frames plus six statuses × three distinct 32 × 32 lifecycle frames. Field rendering additionally has a metadata-only two-role NPC south-idle foundation. Exact addressing, alpha gutters, source/export hashes, mappings, dimension gates, and fallback behavior are automated, but these remain key-pose foundations: full in-betweens, alternate action facings, variants, a full NPC roster, emitted Campaign heal, Campaign Dodge, and defeat-canvas feedback remain absent. Human readability review, external cultural review, and Accepted/art lock remain pending.
 
 ## 1. Purpose and non-negotiables
 
@@ -51,7 +51,8 @@ Do not stretch a 24f swing across an entire 48f Recovery pulse merely to fill ti
 
 | Asset | Nominal frame | Pivot / foot point | Notes |
 | --- | ---: | --- | --- |
-| Field party / NPC | 32 x 48 px | `(16, 43)` | Foot box is 12 x 10 px; headwear and cloaks may extend upward only. |
+| Field party | 32 x 48 px | `(16, 43)` | Foot box is 12 x 10 px; headwear and cloaks may extend upward only. |
+| Current NPC foundation | 32 x 48 px | `(16, 44)` | Two south-idle role frames only; full directional packages remain planned. |
 | Standard combat actor | 48 x 64 px | `(24, 58)` | Center pivot aligns to a 32 px combat space. |
 | Broad combat actor | 64 x 80 px | `(32, 73)` | Use only when silhouette needs width; do not hide neighbors. |
 | Boss | 96 x 96 to 128 x 128 px | documented per boss | Supply a clean footprint and a separate hazard layer. |
@@ -202,12 +203,14 @@ Mateus is a named human/vampire opponent in FP-1. His defeat must be a nonlethal
 | Ordinary impact | 3-5f | 12-24 px focal spread; end before it masks a target. |
 | Skill impact | 6-10f | Wind-up/active/recovery shapes remain readable; no all-board cover beyond 2f. |
 | Projectile / arc | 4-12f travel | Follows resolved path; never interpolates a new legal target. |
-| Status marker | 4-6f loop | Shape plus color, small anchor near unit; no screen-covering halo. |
+| Status marker | Current: one key frame each for apply/refreshed, persistent-active, and expire. Planned polish: 4-6f active loop. | Shape plus color, small anchor near unit; no screen-covering halo. |
 | Rain | 4-8f modular loop | Sparse left-to-right 1-2 px streaks on separate layer. |
 | Candle / lantern | 4-6f loop | 3-4 hard value steps, no blurred bloom. |
 | Camera shake | fixed 4f maximum for FP-1 bell ring | Accessibility option must suppress it; no gameplay information depends on shake. |
 
 Keep audio hit timing aligned with the `active` event, not with a delayed visual flourish. Camera motion must be integer-pixel and must not make the 12 x 7 board appear to slide under a unit.
+
+The current status contract covers Dread, Chill, Shock, Scorch, Bound, and Overheated only. Application, persistence, and expiry are presentation-only and non-locking; the 520 ms expiry display scales with 1×/2×/4× presentation speed and becomes static under reduced motion. Campaign has no cleanse event, so no cleanse art may be inferred. Unknown statuses, Final Ward Open, atlas load failure, and wrong-size images retain their existing generic/special fallback.
 
 ## 9. Sheet layout, manifests, and export names
 
@@ -313,4 +316,4 @@ Do not use `final`, `new`, dates, arbitrary personal initials, spaces, or unclea
 
 ## 12. Production-reference limitation
 
-The keyframes, roster sheet, boss sheet, and superseded raster atlases in `assets/production/` remain generated **production references** for palette, silhouette, composition, and mood; their pixels are not runtime authority. The 19 authored combat boards and integrated party, regular-enemy, boss, and VFX suites in `assets/art/` are the current production authority, with original editable sources, deterministic builders, exports, manifests, and labeled review sheets. They remain foundation/key-pose packages rather than complete animation deliveries: full in-betweens, alternate action facings, variants, remaining status/system feedback, human readability review, and external cultural review remain required before Accepted/art lock.
+The keyframes, roster sheet, boss sheet, and superseded raster atlases in `assets/production/` remain generated **production references** for palette, silhouette, composition, and mood; their pixels are not runtime authority. The 19 authored combat boards and integrated party, regular-enemy, boss, delivery/essence VFX, six-status lifecycle, and two-role NPC suites in `assets/art/` are the current production authority, with original editable sources, deterministic builders, exports, manifests, and labeled review sheets. They remain foundation/key-pose packages rather than complete animation deliveries: full in-betweens, alternate action facings, variants, full NPC packages, missing Campaign system feedback, human readability review, and external cultural review remain required before Accepted/art lock.

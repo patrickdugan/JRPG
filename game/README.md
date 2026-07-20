@@ -12,6 +12,10 @@ This folder contains the playable browser runtime and the original small combat 
 - **Active-play telemetry:** narrative, exploration, first-clear battles, repeat grind, and camp/menu time accumulate in both a general record and a clean-start, UUID-bound run receipt. Samples suspend after 30 seconds without input. Campaign, Battle, Camp, and Credits attach every clean-run sample to a canonical chapter; Credits renders the live five-category ledger plus actual/reference time and completed-chapter gap for all eleven chapters. The 20:32:08.467 reference checkpoints are quantity-model diagnostics, never observed proof, and reconcile exactly to the complete 215-activity 1× route. The exported combined verdict requires zero unattributed time. The player-facing credits seal additionally requires completed evidence for all 215 intended-route activities; duration proof still needs 20 active hours from that same run, all 60 scenes, every canonical first clear, and explicit credits completion. Credits can export a signed schema-v2 JSON report containing every satisfied or missing proof condition plus the diagnostic checkpoint signature and per-chapter actual/reference deltas.
 - **Recovery checkpoints:** Campaign can export or import one portable, signed recovery-only JSON file containing the exact serialized values of all 13 save authorities. Restore validates every record, run binding, campaign/receipt beat agreement, first-clear support, route summary, and contract signature before writing; a failed write rolls every touched value back exactly. Restore replaces the whole bundle and reloads the recovered run. It never merges progress and never counts as independent duration or route proof.
 
+The current NPC art integration is deliberately narrow: exact side-story `objective.type === 'talk'` metadata resolves the `speaker` frame for 8 of 71 objectives, and exact scene-operation `activityType === 'interview'` metadata resolves the `interviewee` frame for 37 of 183 nodes. It never infers from prose, labels, or names. Witness fieldwork and props, hazards, exits, evidence, mechanisms, deliveries, care/rescue, councils, combat, and ambiguous groups retain geometric markers; interviewee number badges remain visible.
+
+Campaign Battle draws distinct authored apply/refreshed, persistent-active, and expire art for Dread, Chill, Shock, Scorch, Bound, and Overheated. Expiry is non-locking, 520 ms at 1× and presentation-scaled at 2×/4×; reduced motion holds a static readable frame. No cleanse event exists, so there is no cleanse frame. Unknown statuses and Final Ward Open retain their existing generic/special fallback. A non-locking victory border/corner accent is live. The explicit-heal seam is integrated but dormant because Campaign emits no `heal`/`healing` resolution; positive absorption remains hit feedback. Campaign Battle also has no Dodge event or distinct defeat-canvas accent, although FP-0 Dodge rules and authored actor defeat poses/holds remain valid.
+
 The rules contract is in [the technical GDD](../docs/02-technical-gdd.md). The prototype names Ren Ishikawa, Elisabet “Lise” Varga, and Father Mateus Avelar in its opening record so the intended narrative relationship is visible without pretending that this one-combatant proof has a full party or story implementation.
 
 ## Run it
@@ -43,6 +47,8 @@ python tools/browser-route-playthrough.py --max-scenes 10 --max-seconds 300
 
 That driver starts with the rendered New Game button, reads only published DOM text/`data-*` state, and mutates the game only through clicks, keys, and player-visible native prompt choices. Three chained sessions on runtime commit `d45dfb2` completed 60/60 scenes, 215/215 intended-route activities, and 23/23 durable first clears on clean run `ec3182b2-73b3-4b83-90b1-79a740e036ed`, then explicitly sealed Credits at 00:28:13. The [downloaded schema-v2 evidence](../docs/rendered-route-playtest-evidence.json) is byte-canonical with signature `fnv1a32:31d04d74` and SHA-256 `BDF021E41DC7DBD42948756D19DEC25E5BB25B682BB5874B19CB9F5366BAA57A`; it records zero unattributed milliseconds and correctly retains `durationProven: false`. Every segment recorded empty console/page error arrays. Rendered recovery import/export preserved continuity across fresh contexts, but each file remains labeled `recoveryOnly: true` and `proofClaimed: false`; the cumulative rendered logs and final signed evidence witness the current recorded route, while no checkpoint file independently proves route completion or duration. Add `--require-complete` and `--evidence-out` for an intentionally long full-route gate that must seal Credits and retain the downloaded evidence report.
 
+The segmented route receipt above covers only the recorded `d45dfb2` runtime. It predates the later status-VFX, NPC-foundation, and battle-feedback wave; that wave passes its own full unit, static-delivery, and Chrome gates but has not inherited a segmented route claim. `durationProven` remains false.
+
 Long QA routes can continue across bounded sessions without direct save injection. Export and restore the game's explicitly recovery-only 13-authority bundle through its rendered controls:
 
 ```powershell
@@ -59,7 +65,7 @@ To verify every shipped browser file over a real local HTTP boundary without ins
 python tools/static-delivery.py
 ```
 
-The current release manifest contains 125 byte-verified files: five pages, six stylesheets, five controllers, 80 modules, 28 PNG production assets, and one SVG favicon.
+The current release manifest contains 130 byte-verified files and 10,129,575 delivered bytes: five pages, six stylesheets, five controllers, 83 modules, 30 PNG production assets, and one SVG favicon.
 
 ## FP-0 controls
 
@@ -126,5 +132,7 @@ Each Ren Activation begins with two Pace. Move first if useful, then commit one 
 - The Oni’s Ledger reveals 125% Ember/Radiance weakness and 75% Umbral resistance; Ren has 75% Umbral resistance.
 - Every hit reports base damage, delivery, optional Essence, multiplier, Guard reduction, and final damage.
 - Guard applies to the next hit. Dodge only applies to the next dodgeable physical hit; `Moonless Thorns` is Arcane + Umbral and cannot consume it.
+
+The additional live authored suites are a 96 × 192 status atlas containing 18 distinct 32 × 32 lifecycle frames and a 64 × 48 NPC foundation atlas containing two 32 × 48 south-idle role frames. Both are dimension-gated and retain geometric/generic fallback behavior; neither should be read as complete animation or full named-NPC coverage.
 
 All shipped visuals are original project assets or Canvas pixel primitives. The live authored suites are editable, deterministic code-native pixel art: 19 combat boards, six-party field/combat/portrait atlases, an eight-family regular-enemy atlas, a ten-boss key-pose atlas, and a nine-family battle-VFX atlas. Generated concept sheets remain reference-only and are not runtime pixels. The battle renderer combines the authored suites with deterministic wind-up, exact-grid lunge, projectile/trail, impact, status, stagger, and recovery phases while retaining procedural load/error fallbacks. The assets explicitly exclude real-person likenesses; no copied character names or franchise assets are used.

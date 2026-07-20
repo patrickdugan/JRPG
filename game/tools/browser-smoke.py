@@ -95,11 +95,13 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(response is not None and response.status == 200, "Campaign did not return HTTP 200.")
             page.wait_for_function(
                 """() => document.querySelector('#mapCanvas')?.dataset.partyArtState === 'ready'
+                  && document.querySelector('#mapCanvas')?.dataset.npcArtState === 'ready'
                   && document.querySelector('#sceneFocusPortrait')?.dataset.artState === 'ready'"""
             )
             campaign_party_art = page.evaluate(
                 """() => ({
                   field: document.querySelector('#mapCanvas').dataset.partyArtState,
+                  npc: document.querySelector('#mapCanvas').dataset.npcArtState,
                   portrait: document.querySelector('#sceneFocusPortrait').dataset.artState,
                 })"""
             )
@@ -271,7 +273,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     && state?.partyArtState === 'ready'
                     && state?.enemyArtState === 'ready'
                     && state?.bossArtState === 'ready'
-                    && state?.vfxArtState === 'ready';
+                    && state?.vfxArtState === 'ready'
+                    && state?.statusVfxArtState === 'ready';
                 }""",
             )
             stage_art = stage_page.evaluate(
@@ -290,6 +293,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     enemyState: canvas.dataset.enemyArtState,
                     bossState: canvas.dataset.bossArtState,
                     vfxState: canvas.dataset.vfxArtState,
+                    statusVfxState: canvas.dataset.statusVfxArtState,
                   };
                 }"""
             )
@@ -305,6 +309,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     "enemyState": "ready",
                     "bossState": "ready",
                     "vfxState": "ready",
+                    "statusVfxState": "ready",
                 },
                 f"Takamine runtime art contract drifted: {stage_art}.",
             )
