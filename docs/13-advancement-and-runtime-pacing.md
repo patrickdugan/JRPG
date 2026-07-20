@@ -47,6 +47,10 @@ Only 0.614 reference minute at 1× belongs to the four required repeat presentat
 
 Optional leveling has a separate finite queue: after a manual first clear, Battle offers 1, 5, or 10 Auto-Grind wins. Each victory uses the normal durable reward transaction before the next engine begins; cancellation, defeat, restart, or reload stops the session-only queue. At base Cinder Hound conditions, five deterministic wins schedule 155.00 seconds at 1×, 77.50 seconds at 2×, and 38.75 seconds at 4×. That 116.25-second saving is player-visible leveling convenience, but these optional extra wins remain excluded from the intended-route duration estimate and proof.
 
+Auto-Grind never selects or consumes a Campaign Item, even when River Salve stock and a wounded active member are available. Manual River Salve use is attempt-local: defeat, restart, or reload reconstructs stock from the durable loadout authority. On victory, `settleBattleLoadout` validates the complete River Salve debit map, the encounter reward, and every deployed survivor HP record before returning one frozen loadout state with exactly one revision increment. Direct net arithmetic permits consume-and-reward at the 99-stack boundary. This loadout state then joins advancement and any requested quest, witness, field, or run-receipt changes in the existing compensating persistence transaction; it is not a crash journal or multi-tab compare-and-swap guarantee.
+
+The advancement inventory remains the gross, display-name reward ledger used by progression evidence. The loadout inventory is the spendable catalogue-ID authority used by Camp and Campaign Battle. Victory deliberately leaves the gross advancement reward record intact while the loadout settlement applies the net spendable result. Only `river-salve` is battle-eligible today. Spirit Tea is deferred because advancement/combat/loadout Spirit caps are not yet one coherent authority; Ward Tonic, Dawn Salt, and Traveler Plum are deferred because Campaign lacks matching MP and/or status vocabularies. They remain valid Camp consumables and must not be partially advertised in Battle.
+
 Chapter level targets rise from level 2 after the Prologue to level 40 for Chapter 9 and the Epilogue. Canonical first clears attain those targets; repeat grinding provides optional over-leveling, currency, recovery from skipped party participation, or a lower-difficulty route through later encounters.
 
 The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 186.728/309.135/499.277 minutes and the complete intended route at 776.805/1,232.141/1,918.255 minutes low/reference/high. The 1× reference route is 32.141 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
@@ -76,13 +80,16 @@ All state transitions return frozen snapshots. Serialization has canonical party
 
 ## Runtime integration
 
-On a battle victory:
+Advancement is one participant in victory settlement, not the whole persistence boundary. The browser first prepares a next advancement state and one validated next loadout state containing the net item debit, reward, and survivor HP. It adds any requested quest, witness, field, and clean-run receipt changes, then commits all save steps through the compensating transaction. Live in-memory authorities are replaced only after that transaction reports success. A failed write attempts exact rollback and keeps Continue locked; a rollback failure, process crash, or competing browser tab remains outside the guarantee.
+
+The advancement participant is still derived as follows:
 
 ```js
 advancement = recordEncounterWin(advancement, encounter.id, {
   partyIds: deployedPartyIds,
 });
-advancementStorage.save(advancement);
+// The browser does not save or publish this state alone; it joins the
+// compensating multi-authority transaction described above.
 ```
 
 The runtime should read `advancement.speedMultiplier` only for repeat-battle simulation, animation, and recovery timing. Reward amounts are independent of playback speed, so `4x` saves real time without multiplying XP per clear.
