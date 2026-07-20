@@ -69,6 +69,8 @@ test('a deterministic repeat policy clears an authored grind encounter', () => {
   assert.equal(run.result, 'victory');
   assert.equal(run.reward.repeat, true);
   assert.ok(run.decisions.some((decision) => decision.type === 'skill'));
+  assert.equal(run.decisions.some((decision) => decision.type === 'item'), false, 'repeat policy never selects Item');
+  assert.equal(run.combatLog.some((event) => event.type === 'item-used'), false, 'repeat traces never consume inventory');
   assert.ok(run.timeline.some((event) => event.type === 'enemyActivation'));
   assert.ok(run.timeline.some((event) => event.type === 'recovery'));
   assert.equal(run.simulatedDurationMs, run.baseDurationMs);
@@ -93,6 +95,18 @@ test('repeat automation can execute bounded Dodge without selecting it in the ag
     executeRepeatBattleCommand(engine, actorId, { type: 'unsupported' }).reason,
     /Unsupported repeat command/,
   );
+});
+
+test('repeat chooser remains Item-free even when usable River Salve stock is available', () => {
+  const engine = new CampaignCombatEngine({
+    encounterId: 'c1-cinder-hounds',
+    itemStock: { 'river-salve': 3 },
+  });
+  const actor = engine.getActor(engine.activeActorId);
+  actor.hp = Math.max(1, actor.maxHp - 20);
+  assert.equal(engine.getAvailableCommands().includes('item'), true);
+  assert.equal(engine.getBattleItemQuote(actor.instanceId, 'river-salve', actor.instanceId).usable, true);
+  assert.notEqual(chooseRepeatBattleCommand(engine)?.type, 'item');
 });
 
 test('1x, 2x, and 4x schedule the whole identical repeat loop at proven ratios', () => {
@@ -166,6 +180,8 @@ test('Auto-Grind clears every canonical encounter with exact 1x/2x/4x invariance
       assert.deepEqual(double.decisions, normal.decisions);
       assert.deepEqual(quadruple.combatLog, normal.combatLog);
       assert.deepEqual(quadruple.reward, normal.reward);
+      assert.equal(normal.decisions.some((decision) => decision.type === 'item'), false, 'Auto-Grind remains Item-free');
+      assert.equal(normal.combatLog.some((event) => event.type === 'item-used'), false, 'Auto-Grind has no item consumption log');
     });
   }
 });

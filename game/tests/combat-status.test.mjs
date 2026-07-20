@@ -263,6 +263,93 @@ test('Shock and loadout timing both apply to Dodge before the status expires', (
   assert.equal(engine.log.findLast(({ type }) => type === 'commit').command, 'dodge');
 });
 
+test('battle items use Recovery 2 with loadout/status modifiers, a one-pulse floor, and retained stance', () => {
+  const engine = new CampaignCombatEngine({
+    encounter: statusEncounter('shock'),
+    level: testLevel(),
+    itemStock: { 'river-salve': 1 },
+    partyProfiles: {
+      ren: {
+        ...profileWithSpirit(20),
+        loadout: { recoveryPulsesDelta: 1 },
+      },
+    },
+  });
+  assert.equal(engine.guard('ren').ok, true);
+  assert.equal(engine.advanceUntilPlayerCommand().enemyActivations, 1);
+  const commandPulse = engine.nowPulse;
+  const ren = engine.getActor('ren');
+  ren.stance = 'dodge';
+  const spiritBefore = ren.spirit;
+  assert.equal(engine.useItem('ren', 'river-salve', 'ren').ok, true);
+  assert.equal(ren.readyAtPulse, commandPulse + 4);
+  assert.equal(ren.spirit, spiritBefore);
+  assert.equal(ren.stance, 'dodge');
+  assert.deepEqual(engine.log.findLast((entry) => entry.type === 'status-effect' && entry.statusId === 'shock'), {
+    type: 'status-effect',
+    statusId: 'shock',
+    actorId: 'ren',
+    effect: 'recovery',
+    baseRecovery: 2,
+    loadoutDelta: 1,
+    statusDelta: 1,
+    totalStatusDelta: 1,
+    finalRecovery: 4,
+    readyAtPulse: commandPulse + 4,
+    pulse: commandPulse,
+  });
+  assert.equal(engine.log.findLast(({ type }) => type === 'commit').command, 'item');
+
+  const floored = new CampaignCombatEngine({
+    encounter: statusEncounter(),
+    level: testLevel(),
+    itemStock: { 'river-salve': 1 },
+    partyProfiles: {
+      ren: {
+        ...profileWithSpirit(20),
+        currentHp: 10,
+        loadout: { recoveryPulsesDelta: -99 },
+      },
+    },
+  });
+  floored.getActor('ren').stance = 'guard';
+  assert.equal(floored.useItem('ren', 'river-salve', 'ren').ok, true);
+  assert.equal(floored.getActor('ren').readyAtPulse, 1);
+  assert.equal(floored.getActor('ren').stance, 'guard');
+});
+
+test('item result and heal event retain pre-transition HP when the healed ally immediately triggers Scorch', () => {
+  const encounter = statusEncounter(null, {
+    party: {
+      roster: ['ren', 'aya'],
+      deployment: [{ actorId: 'ren', at: '1,3' }, { actorId: 'aya', at: '1,4' }],
+    },
+  });
+  const engine = new CampaignCombatEngine({
+    encounter,
+    level: testLevel(),
+    itemStock: { 'river-salve': 1 },
+  });
+  const aya = engine.getActor('aya');
+  aya.hp = 20;
+  aya.statuses.push({
+    id: 'scorch',
+    sourceActorId: 'status-attacker-1',
+    sourceSkillId: 'apply-scorch',
+    appliedAtPulse: 0,
+    durationActivations: 1,
+    remainingActivations: 1,
+    activeThisActivation: false,
+  });
+  const result = engine.useItem('ren', 'river-salve', 'aya');
+  const heal = engine.log.find(({ type }) => type === 'heal');
+  assert.equal(result.targetHp, 96);
+  assert.equal(heal.targetHp, 96);
+  assert.equal(aya.hp, 91);
+  assert.deepEqual(engine.log.slice(0, 2).map(({ type }) => type), ['item-used', 'heal']);
+  assert.equal(engine.log.some(({ type, targetId }) => type === 'status-damage' && targetId === 'aya'), true);
+});
+
 test('Dodge suppresses target status while preserving a source self-status', () => {
   const encounter = statusEncounter('bound');
   encounter.enemies[0].skills[0].dodgeable = true;

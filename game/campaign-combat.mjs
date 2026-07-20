@@ -8,10 +8,11 @@
 
 import { getEncounter, RECOVERY_PULSE_MS } from './content/encounters.mjs';
 import { getLevel, isBlocked, isInBounds, parseTileKey } from './content/levels.mjs';
+import { BATTLE_ITEM_IDS, ITEM_CATALOGUE, MAX_ITEM_STACK } from './loadout.mjs';
 
 export { RECOVERY_PULSE_MS };
 
-export const CAMPAIGN_COMBAT_SNAPSHOT_VERSION = 1;
+export const CAMPAIGN_COMBAT_SNAPSHOT_VERSION = 2;
 
 export const CAMPAIGN_COMBAT_PHASES = Object.freeze({
   PLAYER_COMMAND: 'player-command',
@@ -135,6 +136,28 @@ function deepFreeze(value) {
 
 function clone(value) {
   return value == null ? value : JSON.parse(JSON.stringify(value));
+}
+
+function isPlainObject(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+function canonicalBattleItemCounts(source = {}, label = 'itemStock') {
+  if (!isPlainObject(source)) throw new TypeError(`${label} must be a plain object.`);
+  for (const itemId of Object.keys(source)) {
+    if (!BATTLE_ITEM_IDS.includes(itemId)) throw new RangeError(`${label} contains unsupported battle item ${itemId}.`);
+  }
+  const result = {};
+  for (const itemId of BATTLE_ITEM_IDS) {
+    const quantity = source[itemId] ?? 0;
+    if (!Number.isSafeInteger(quantity) || quantity < 0 || quantity > MAX_ITEM_STACK) {
+      throw new RangeError(`${label}.${itemId} must be an integer from 0 to ${MAX_ITEM_STACK}.`);
+    }
+    result[itemId] = quantity;
+  }
+  return Object.freeze(result);
 }
 
 function positionFrom(value) {
@@ -345,6 +368,7 @@ export class CampaignCombatEngine {
     if (!this.level) throw new Error(`Unknown level: ${this.encounter.levelId}`);
     this.partyProfiles = { ...PARTY_PROFILES, ...(options.partyProfiles ?? {}) };
     this.pacePerActivation = options.pacePerActivation ?? DEFAULT_PACE;
+    this.initialItemStock = canonicalBattleItemCounts(options.itemStock);
     this.reset();
   }
 
@@ -363,6 +387,8 @@ export class CampaignCombatEngine {
     this.pace = 0;
     this.activationCount = 0;
     this.log = [];
+    this.itemStock = { ...this.initialItemStock };
+    this.itemConsumption = Object.fromEntries(BATTLE_ITEM_IDS.map((itemId) => [itemId, 0]));
     this.mateusMechanic = this.encounter.id === 'fp1-mateus' ? {
       wardCasts: 0,
       litanyCasts: 0,
@@ -395,6 +421,8 @@ export class CampaignCombatEngine {
       nowMs: this.nowPulse * RECOVERY_PULSE_MS,
       activeActorId: this.activeActorId,
       pace: this.pace,
+      itemStock: this.itemStock,
+      itemConsumption: this.itemConsumption,
       actors: this.actors,
       objective: this.getObjectiveStatus(),
       log: this.log,
@@ -530,7 +558,7 @@ export class CampaignCombatEngine {
   getAvailableCommands(actorId = this.activeActorId) {
     const actor = this.getActor(actorId);
     if (!actor || actor.faction !== 'party' || actor.hp <= 0 || actorId !== this.activeActorId || this.result) return [];
-    return ['move', 'guard', 'dodge', 'analyze', 'skill', ...(this.objectiveRequirements.some((item) => !item.automatic && (this.objectiveProgress[item.key] ?? 0) < item.count) ? ['objective'] : [])];
+    return ['move', 'guard', 'dodge', 'analyze', 'item', 'skill', ...(this.objectiveRequirements.some((item) => !item.automatic && (this.objectiveProgress[item.key] ?? 0) < item.count) ? ['objective'] : [])];
   }
 
   _occupied(exceptId) {
@@ -581,6 +609,103 @@ export class CampaignCombatEngine {
       spiritGain,
       affordable: actor.spirit >= spiritCost,
     });
+  }
+
+  /** Pure battle-item preview for command availability and exact healing UI. */
+  getBattleItemQuote(actorId, itemId, targetId) {
+    if (!BATTLE_ITEM_IDS.includes(itemId)) return null;
+    const item = ITEM_CATALOGUE[itemId];
+    const actor = this.getActor(actorId);
+    const target = this.getActor(targetId);
+    const validTarget = Boolean(target && target.faction === 'party' && target.active !== false && target.hp > 0);
+    const hpBefore = validTarget ? target.hp : null;
+    const maxHp = validTarget ? target.maxHp : null;
+    const amount = validTarget ? Math.min(item.effect.hp, Math.max(0, target.maxHp - target.hp)) : 0;
+    const targetHp = validTarget ? target.hp + amount : null;
+    const stock = this.itemStock[itemId];
+    const invalidActor = this._validatePartyCommand(actorId);
+    let reason = null;
+    if (invalidActor) reason = invalidActor.reason;
+    else if (!actor) reason = 'Actor cannot take a party command.';
+    else if (stock <= 0) reason = `${item.name} is not available in battle stock.`;
+    else if (!validTarget) reason = `${item.name} requires a living active party target.`;
+    else if (amount <= 0) reason = `${item.name} would have no effect.`;
+    return deepFreeze({
+      actorId,
+      itemId,
+      itemName: item.name,
+      target: item.battle.target,
+      targetId,
+      stock,
+      recoveryPulses: item.battle.recoveryPulses,
+      hpBefore,
+      maxHp,
+      amount,
+      targetHp,
+      usable: reason === null,
+      reason,
+    });
+  }
+
+  useItem(actorId, itemId, targetId) {
+    const invalid = this._validatePartyCommand(actorId);
+    if (invalid) return invalid;
+    if (!BATTLE_ITEM_IDS.includes(itemId)) return { ok: false, reason: 'Item is not battle-eligible.' };
+    const item = ITEM_CATALOGUE[itemId];
+    const stockBefore = this.itemStock[itemId];
+    if (stockBefore <= 0) return { ok: false, reason: `${item.name} is not available in battle stock.` };
+    const actor = this.getActor(actorId);
+    const target = this.getActor(targetId);
+    if (!target || target.faction !== 'party' || target.active === false || target.hp <= 0) {
+      return { ok: false, reason: `${item.name} requires a living active party target.` };
+    }
+    const hpBefore = target.hp;
+    const amount = Math.min(item.effect.hp, Math.max(0, target.maxHp - hpBefore));
+    if (amount <= 0) return { ok: false, reason: `${item.name} would have no effect.` };
+
+    const stockAfter = stockBefore - 1;
+    this.itemStock[itemId] = stockAfter;
+    this.itemConsumption[itemId] += 1;
+    target.hp = hpBefore + amount;
+    const healedTargetHp = target.hp;
+    this.log.push({
+      type: 'item-used',
+      actorId,
+      targetId,
+      itemId,
+      stockBefore,
+      stockAfter,
+      recoveryPulses: item.battle.recoveryPulses,
+      pulse: this.nowPulse,
+    });
+    this.log.push({
+      type: 'heal',
+      source: 'item',
+      sourceActorId: actorId,
+      targetId,
+      itemId,
+      amount,
+      hpBefore,
+      targetHp: healedTargetHp,
+      pulse: this.nowPulse,
+    });
+    this._commit(actor, item.battle.recoveryPulses, 'item');
+    return {
+      ok: true,
+      type: 'heal',
+      source: 'item',
+      sourceActorId: actorId,
+      actorId,
+      targetId,
+      itemId,
+      itemName: item.name,
+      amount,
+      hpBefore,
+      targetHp: healedTargetHp,
+      stockBefore,
+      stockAfter,
+      recoveryPulses: item.battle.recoveryPulses,
+    };
   }
 
   useSkill(actorId, skillId, targetId) {

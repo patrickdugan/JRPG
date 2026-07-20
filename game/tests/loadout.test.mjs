@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  BATTLE_ITEM_IDS,
   CAMP_CATALOGUE,
   ITEM_CATALOGUE,
   VOW_CATALOGUE,
@@ -18,12 +19,14 @@ import {
   learnVow,
   restAtCamp,
   sellItem,
+  settleBattleLoadout,
   serializeLoadoutState,
   setMemberVitals,
   syncPartyVitals,
   unequipItem,
   upgradeItem,
   useConsumable,
+  validateBattleItemCatalogue,
   validateLoadoutPayload,
 } from '../loadout.mjs';
 
@@ -33,6 +36,112 @@ test('catalogues provide original gear, consumables, Vows, and three camp tiers'
   assert.deepEqual(Object.keys(CAMP_CATALOGUE), ['roadside-lantern', 'lantern-safehouse', 'hidden-infirmary']);
   assert.equal(ITEM_CATALOGUE['dawnsteel-blade'].kind, 'equipment');
   assert.equal(ITEM_CATALOGUE['river-salve'].effect.hp, 80);
+});
+
+test('River Salve is the only exact fail-closed battle item', () => {
+  assert.deepEqual(BATTLE_ITEM_IDS, ['river-salve']);
+  assert.deepEqual(ITEM_CATALOGUE['river-salve'].battle, {
+    target: 'living-party',
+    recoveryPulses: 2,
+  });
+  const valid = validateBattleItemCatalogue();
+  assert.equal(valid.ok, true, valid.errors.join(' '));
+  assert.deepEqual(valid.value, BATTLE_ITEM_IDS);
+  assert.equal(Object.isFrozen(valid), true);
+  assert.equal(Object.isFrozen(valid.value), true);
+
+  const extraEffect = {
+    ...ITEM_CATALOGUE,
+    'river-salve': {
+      ...ITEM_CATALOGUE['river-salve'],
+      effect: { hp: 80, spirit: 1 },
+    },
+  };
+  assert.equal(validateBattleItemCatalogue(extraEffect).ok, false);
+  const wrongHeal = {
+    ...ITEM_CATALOGUE,
+    'river-salve': {
+      ...ITEM_CATALOGUE['river-salve'],
+      effect: { hp: 79 },
+    },
+  };
+  assert.equal(validateBattleItemCatalogue(wrongHeal).ok, false);
+  const extraBattleItem = {
+    ...ITEM_CATALOGUE,
+    'ward-tonic': {
+      ...ITEM_CATALOGUE['ward-tonic'],
+      battle: { target: 'living-party', recoveryPulses: 2 },
+    },
+  };
+  assert.equal(validateBattleItemCatalogue(extraBattleItem).ok, false);
+});
+
+test('battle settlement nets debits and rewards at stack 99 in one immutable revision', () => {
+  let start = grantInventory(createLoadoutState(), { items: [{ id: 'river-salve', quantity: 96 }] }).state;
+  start = setMemberVitals(start, 'ren', { hp: 10 }).state;
+  const beforeRevision = start.revision;
+  const settled = settleBattleLoadout(start, {
+    itemDebits: { 'river-salve': 1 },
+    reward: {
+      currency: 20,
+      items: [{ name: 'River Salve', quantity: 1 }, { id: 'traveler-plum', quantity: 1 }],
+    },
+    partyVitals: { ren: { hp: 90 }, aya: { hp: 50 } },
+  });
+  assert.equal(settled.ok, true, settled.reason);
+  assert.equal(settled.state.revision, beforeRevision + 1);
+  assert.equal(settled.state.currency, start.currency + 20);
+  assert.equal(settled.state.inventory['river-salve'], 99);
+  assert.equal(settled.state.inventory['traveler-plum'], 1);
+  assert.equal(settled.state.vitals.ren.hp, 90);
+  assert.equal(settled.state.vitals.aya.hp, 50);
+  assert.equal(start.inventory['river-salve'], 99);
+  assert.equal(start.vitals.ren.hp, 10);
+  assert.deepEqual(settled.receipt, {
+    type: 'battle-settlement',
+    itemDebits: [{ itemId: 'river-salve', quantity: 1, before: 99, afterDebit: 98, after: 99 }],
+    reward: {
+      currency: 20,
+      items: [{ itemId: 'river-salve', quantity: 1 }, { itemId: 'traveler-plum', quantity: 1 }],
+    },
+    partyVitals: [
+      { memberId: 'ren', hpBefore: 10, hpAfter: 90 },
+      { memberId: 'aya', hpBefore: 82, hpAfter: 50 },
+    ],
+    revision: beforeRevision + 1,
+  });
+  assert.equal(Object.isFrozen(settled.receipt), true);
+  assert.equal(Object.isFrozen(settled.receipt.reward.items), true);
+});
+
+test('battle settlement rejects unsupported, unknown, dead, and overflowing data atomically', () => {
+  const start = createLoadoutState();
+  const serialized = serializeLoadoutState(start);
+  const attempts = [
+    { itemDebits: { 'river-salve': 4 }, reward: { currency: 0, items: [] }, partyVitals: {} },
+    { itemDebits: { 'ward-tonic': 1 }, reward: { currency: 0, items: [] }, partyVitals: {} },
+    { itemDebits: { 'river-salve': 0 }, reward: { currency: 0, items: [{ name: 'Unknown Relic', quantity: 1 }] }, partyVitals: {} },
+    { itemDebits: { 'river-salve': 0 }, reward: { currency: 0, items: [] }, partyVitals: { ren: { hp: 0 } } },
+    { itemDebits: { 'river-salve': 0 }, reward: { currency: 0, items: [] }, partyVitals: { stranger: { hp: 1 } } },
+    { itemDebits: { 'river-salve': 0 }, reward: { currency: 0, items: [] }, partyVitals: { ren: { hp: start.vitals.ren.maxHp + 1 } } },
+    { itemDebits: { 'river-salve': 0 }, reward: { currency: 0, items: [], keyItems: [] }, partyVitals: {} },
+  ];
+  for (const attempt of attempts) {
+    const result = settleBattleLoadout(start, attempt);
+    assert.equal(result.ok, false);
+    assert.equal(result.state, start);
+    assert.equal(serializeLoadoutState(start), serialized);
+  }
+
+  const fullPlums = grantInventory(start, { items: [{ id: 'traveler-plum', quantity: 99 }] }).state;
+  const overflow = settleBattleLoadout(fullPlums, {
+    itemDebits: { 'river-salve': 0 },
+    reward: { currency: 0, items: [{ id: 'traveler-plum', quantity: 1 }] },
+    partyVitals: {},
+  });
+  assert.equal(overflow.ok, false);
+  assert.equal(overflow.state, fullPlums);
+  assert.equal(fullPlums.inventory['traveler-plum'], 99);
 });
 
 test('new state is immutable, canonical, and round-trips byte-for-byte', () => {

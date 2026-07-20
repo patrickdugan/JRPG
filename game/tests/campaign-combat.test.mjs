@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   buildObjectiveRequirements,
   calculateTypedDamage,
+  CAMPAIGN_COMBAT_SNAPSHOT_VERSION,
   CAMPAIGN_COMBAT_PHASES,
   CampaignCombatEngine,
   canMoveEightWay,
@@ -12,6 +13,7 @@ import {
   RECOVERY_PULSE_MS,
 } from '../campaign-combat.mjs';
 import { ENCOUNTERS } from '../content/encounters.mjs';
+import { BATTLE_ITEM_IDS } from '../loadout.mjs';
 
 function simpleLevel(blocked = []) {
   return { id: 'test-level', width: 6, height: 6, blocked, terrain: [], spawn: { x: 0, y: 0 } };
@@ -133,6 +135,149 @@ test('Dodge is an exact one-pulse party command with no Spirit transaction', () 
   guard.getActor('ren').stance = 'dodge';
   assert.equal(guard.guard('ren').ok, true);
   assert.equal(guard.getActor('ren').stance, 'guard', 'Guard replaces Dodge');
+});
+
+test('battle stock is copied, canonical, immutable in snapshots, and restored by reset', () => {
+  const itemStock = { 'river-salve': 2 };
+  const engine = new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel(), itemStock });
+  itemStock['river-salve'] = 0;
+  const snapshot = engine.snapshot();
+  assert.equal(snapshot.schemaVersion, CAMPAIGN_COMBAT_SNAPSHOT_VERSION);
+  assert.equal(snapshot.schemaVersion, 2);
+  assert.deepEqual(Object.keys(snapshot.itemStock), BATTLE_ITEM_IDS);
+  assert.deepEqual(snapshot.itemStock, { 'river-salve': 2 });
+  assert.deepEqual(snapshot.itemConsumption, { 'river-salve': 0 });
+  assert.equal(Object.isFrozen(snapshot.itemStock), true);
+  assert.equal(Object.isFrozen(snapshot.itemConsumption), true);
+  assert.throws(() => { snapshot.itemStock['river-salve'] = 0; }, TypeError);
+  assert.throws(() => new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel(), itemStock: { 'ward-tonic': 1 } }), /unsupported battle item/);
+
+  engine.getActor('ren').hp = 10;
+  assert.equal(engine.useItem('ren', 'river-salve', 'ren').ok, true);
+  assert.deepEqual(engine.snapshot().itemStock, { 'river-salve': 1 });
+  assert.deepEqual(engine.snapshot().itemConsumption, { 'river-salve': 1 });
+  engine.reset();
+  assert.deepEqual(engine.snapshot().itemStock, { 'river-salve': 2 });
+  assert.deepEqual(engine.snapshot().itemConsumption, { 'river-salve': 0 });
+
+  const empty = new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel() });
+  assert.equal(empty.getAvailableCommands('ren').includes('item'), true);
+  assert.deepEqual(empty.snapshot().itemStock, { 'river-salve': 0 });
+});
+
+test('River Salve quote and use heal any living active party target with exact audit logs', () => {
+  const engine = new CampaignCombatEngine({
+    encounter: simpleEncounter(),
+    level: simpleLevel(),
+    itemStock: { 'river-salve': 2 },
+  });
+  const ren = engine.getActor('ren');
+  const aya = engine.getActor('aya');
+  aya.hp = 20;
+  aya.pos = { x: 5, y: 5 };
+  ren.stance = 'dodge';
+  const spiritBefore = ren.spirit;
+  const quote = engine.getBattleItemQuote('ren', 'river-salve', 'aya');
+  assert.deepEqual(quote, {
+    actorId: 'ren',
+    itemId: 'river-salve',
+    itemName: 'River Salve',
+    target: 'living-party',
+    targetId: 'aya',
+    stock: 2,
+    recoveryPulses: 2,
+    hpBefore: 20,
+    maxHp: 96,
+    amount: 76,
+    targetHp: 96,
+    usable: true,
+    reason: null,
+  });
+  assert.equal(Object.isFrozen(quote), true);
+  assert.equal(engine.getBattleItemQuote('ren', 'ward-tonic', 'aya'), null);
+
+  const result = engine.useItem('ren', 'river-salve', 'aya');
+  assert.deepEqual(result, {
+    ok: true,
+    type: 'heal',
+    source: 'item',
+    sourceActorId: 'ren',
+    actorId: 'ren',
+    targetId: 'aya',
+    itemId: 'river-salve',
+    itemName: 'River Salve',
+    amount: 76,
+    hpBefore: 20,
+    targetHp: 96,
+    stockBefore: 2,
+    stockAfter: 1,
+    recoveryPulses: 2,
+  });
+  assert.equal(ren.spirit, spiritBefore);
+  assert.equal(ren.stance, 'dodge');
+  assert.equal(ren.readyAtPulse, 2);
+  assert.deepEqual(engine.log.slice(0, 3), [
+    {
+      type: 'item-used', actorId: 'ren', targetId: 'aya', itemId: 'river-salve',
+      stockBefore: 2, stockAfter: 1, recoveryPulses: 2, pulse: 0,
+    },
+    {
+      type: 'heal', source: 'item', sourceActorId: 'ren', targetId: 'aya', itemId: 'river-salve',
+      amount: 76, hpBefore: 20, targetHp: 96, pulse: 0,
+    },
+    { type: 'commit', actorId: 'ren', command: 'item', readyAtPulse: 2, pulse: 0 },
+  ]);
+  assert.equal(engine.log.some(({ type }) => type === 'spirit-change'), false);
+});
+
+test('invalid or effectless battle-item commands are fully nonmutating', () => {
+  const cases = [
+    {
+      prepare: (engine) => engine,
+      invoke: (engine) => engine.useItem('ren', 'river-salve', 'ren'),
+      reason: 'River Salve would have no effect.',
+    },
+    {
+      prepare: (engine) => engine,
+      invoke: (engine) => engine.useItem('ren', 'ward-tonic', 'ren'),
+      reason: 'Item is not battle-eligible.',
+    },
+    {
+      prepare: (engine) => engine,
+      invoke: (engine) => engine.useItem('ren', 'river-salve', 'dummy-1'),
+      reason: 'River Salve requires a living active party target.',
+    },
+    {
+      prepare: (engine) => { engine.getActor('aya').hp = 0; return engine; },
+      invoke: (engine) => engine.useItem('ren', 'river-salve', 'aya'),
+      reason: 'River Salve requires a living active party target.',
+    },
+    {
+      prepare: (engine) => { engine.getActor('aya').active = false; return engine; },
+      invoke: (engine) => engine.useItem('ren', 'river-salve', 'aya'),
+      reason: 'River Salve requires a living active party target.',
+    },
+  ];
+  for (const { prepare, invoke, reason } of cases) {
+    const engine = prepare(new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel(), itemStock: { 'river-salve': 1 } }));
+    const before = engine.serialize();
+    assert.deepEqual(invoke(engine), { ok: false, reason });
+    assert.equal(engine.serialize(), before);
+  }
+
+  const empty = new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel() });
+  empty.getActor('ren').hp = 10;
+  const beforeEmpty = empty.serialize();
+  assert.equal(empty.getBattleItemQuote('ren', 'river-salve', 'ren').usable, false);
+  assert.deepEqual(empty.useItem('ren', 'river-salve', 'ren'), { ok: false, reason: 'River Salve is not available in battle stock.' });
+  assert.equal(empty.serialize(), beforeEmpty);
+
+  const offTurn = new CampaignCombatEngine({ encounter: simpleEncounter(), level: simpleLevel(), itemStock: { 'river-salve': 1 } });
+  offTurn.getActor('ren').hp = 10;
+  assert.equal(offTurn.guard('ren').ok, true);
+  const beforeOffTurn = offTurn.serialize();
+  assert.deepEqual(offTurn.useItem('ren', 'river-salve', 'ren'), { ok: false, reason: 'Actor is not ready.' });
+  assert.equal(offTurn.serialize(), beforeOffTurn);
 });
 
 test('delivery and essence multipliers stack, including absorption', () => {

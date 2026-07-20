@@ -81,6 +81,8 @@ test('all canonical encounters have a deterministic valid first-clear victory tr
       assert.equal(first.solved, true, failureSummary(first));
       assert.ok(first.trace.some((entry) => ['skill', 'objective', 'guard'].includes(entry.type)), 'trace must contain an accepted committing command');
       assert.equal(first.trace.some((entry) => entry.type === 'dodge'), false, 'the canonical solver policy remains aggressive and trace-stable');
+      assert.equal(first.trace.some((entry) => entry.type === 'item'), false, 'the canonical solver never selects Item');
+      assert.equal(first.snapshot.log.some((entry) => entry.type === 'item-used'), false, 'first-clear automation never consumes inventory');
       assert.deepEqual(replay.trace, first.trace, 'solver trace must be deterministic');
       assert.equal(replay.result, 'victory');
     });

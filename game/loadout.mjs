@@ -56,7 +56,10 @@ export const ITEM_CATALOGUE = deepFreeze({
   'iron-knot': gear('iron-knot', 'Iron Anchor Knot', 'accessory', 95, [...PARTY_MEMBER_IDS], { stats: { guard: 3 }, delivery: { crush: 0.8 }, statusResistance: { bound: 0.35 } }, 'A weighted knot used by rescue crews in flood water.', { guard: 1 }),
   'cedar-route-note': gear('cedar-route-note', 'Cedar Route Note', 'accessory', 0, [...PARTY_MEMBER_IDS], { stats: { speed: 1 }, recoveryPulsesDelta: -1 }, 'A reward-only courier note with every safe turn marked.', {}, { rewardOnly: true }),
   'temple-charm': gear('temple-charm', 'Defaced Registry Token', 'accessory', 0, [...PARTY_MEMBER_IDS], { stats: { spirit: 6 }, essence: { radiance: 0.9 }, statusResistance: { dread: 0.15 } }, 'A secular court route tag with its stamped name removed, preserved as witness evidence.', {}, { rewardOnly: true, aliases: ['Temple Charm'] }),
-  'river-salve': supply('river-salve', 'River Salve', 28, { hp: 80 }, 'Restores 80 HP to one ally.', { aliases: ['River Salve'] }),
+  'river-salve': supply('river-salve', 'River Salve', 28, { hp: 80 }, 'Restores 80 HP to one ally.', {
+    aliases: ['River Salve'],
+    battle: { target: 'living-party', recoveryPulses: 2 },
+  }),
   'ward-tonic': supply('ward-tonic', 'Ward Tonic', 42, { mp: 35, clearStatuses: ['bound', 'silenced'] }, 'Restores 35 MP and clears Bound or Silenced.', { aliases: ['Ward Tonic'] }),
   'spirit-tea': supply('spirit-tea', 'Smoked Spirit Tea', 38, { spirit: 35 }, 'Restores 35 Spirit.', { aliases: ['Spirit Tea'] }),
   'dawn-salt': supply('dawn-salt', 'Dawn Salt Packet', 55, { clearStatuses: ['dread', 'cursed', 'umbral-mark'] }, 'Clears Dread, Curse, and Umbral Mark.', { aliases: ['Dawn Salt'] }),
@@ -87,6 +90,7 @@ export const CAMP_CATALOGUE = deepFreeze({
 });
 
 export const ITEM_IDS = Object.freeze(Object.keys(ITEM_CATALOGUE));
+export const BATTLE_ITEM_IDS = Object.freeze(ITEM_IDS.filter((id) => ITEM_CATALOGUE[id].battle));
 export const VOW_IDS = Object.freeze(Object.keys(VOW_CATALOGUE));
 
 const BASE_VITALS = deepFreeze({
@@ -172,6 +176,37 @@ const exactKeys = (object, keys, label, errors) => {
   for (const key of keys) if (!Object.hasOwn(object, key)) errors.push(`${label}.${key} is required.`);
   for (const key of Object.keys(object)) if (!expected.has(key)) errors.push(`${label}.${key} is not supported.`);
 };
+
+/** Validate the deliberately narrow battle-item catalogue contract. */
+export function validateBattleItemCatalogue(catalogue = ITEM_CATALOGUE) {
+  const errors = [];
+  if (!isPlainObject(catalogue)) return validation(false, undefined, ['Battle item catalogue must be a plain object.']);
+  const battleIds = [];
+  for (const [id, item] of Object.entries(catalogue)) {
+    if (!isPlainObject(item) || !Object.hasOwn(item, 'battle')) continue;
+    battleIds.push(id);
+    if (id !== 'river-salve') errors.push(`${id} is not an opted-in battle item.`);
+    if (item.kind !== 'consumable') errors.push(`${id} must be consumable to opt into battle use.`);
+    if (!isPlainObject(item.effect)) {
+      errors.push(`${id}.effect must be a plain object.`);
+    } else {
+      exactKeys(item.effect, ['hp'], `${id}.effect`, errors);
+      if (item.effect.hp !== 80) errors.push(`${id}.effect.hp must equal 80.`);
+    }
+    if (!isPlainObject(item.battle)) {
+      errors.push(`${id}.battle must be a plain object.`);
+      continue;
+    }
+    exactKeys(item.battle, ['target', 'recoveryPulses'], `${id}.battle`, errors);
+    if (item.battle.target !== 'living-party') errors.push(`${id}.battle.target must equal living-party.`);
+    if (item.battle.recoveryPulses !== 2) errors.push(`${id}.battle.recoveryPulses must equal 2.`);
+  }
+  if (!isPlainObject(catalogue['river-salve']) || !Object.hasOwn(catalogue['river-salve'], 'battle')) {
+    errors.push('river-salve must opt into battle use.');
+  }
+  if (battleIds.length !== 1 || battleIds[0] !== 'river-salve') errors.push('Battle item order must contain only river-salve.');
+  return validation(errors.length === 0, errors.length ? undefined : Object.freeze([...battleIds]), errors);
+}
 
 /** Validate and canonicalize an untrusted loadout payload. */
 export function validateLoadoutPayload(payload) {
@@ -345,6 +380,133 @@ function resolveItemId(idOrName) {
     const item = ITEM_CATALOGUE[id];
     return item.name.toLocaleLowerCase('en-US') === normalized || (item.aliases ?? []).some((alias) => alias.toLocaleLowerCase('en-US') === normalized);
   }) ?? null;
+}
+
+/**
+ * Atomically settle battle-only item spending, authored rewards, and survivor
+ * HP. This is the sole loadout transaction authorized to debit battle stock.
+ */
+export function settleBattleLoadout(state, settlement) {
+  const snapshot = assertState(state);
+  const errors = [];
+  if (!isPlainObject(settlement)) return failed(snapshot, 'Battle settlement must be a plain object.');
+  exactKeys(settlement, ['itemDebits', 'reward', 'partyVitals'], 'settlement', errors);
+
+  const itemDebits = isPlainObject(settlement.itemDebits) ? settlement.itemDebits : {};
+  if (!isPlainObject(settlement.itemDebits)) errors.push('settlement.itemDebits must be a plain object.');
+  else exactKeys(itemDebits, BATTLE_ITEM_IDS, 'settlement.itemDebits', errors);
+  for (const [itemId, quantity] of Object.entries(itemDebits)) {
+    if (!BATTLE_ITEM_IDS.includes(itemId)) continue;
+    if (!Number.isSafeInteger(quantity) || quantity < 0) {
+      errors.push(`settlement.itemDebits.${itemId} must be a non-negative safe integer.`);
+    } else if (quantity > (snapshot.inventory[itemId] ?? 0)) {
+      errors.push(`settlement.itemDebits.${itemId} exceeds available inventory.`);
+    }
+  }
+
+  const reward = isPlainObject(settlement.reward) ? settlement.reward : {};
+  if (!isPlainObject(settlement.reward)) errors.push('settlement.reward must be a plain object.');
+  else exactKeys(reward, ['currency', 'items'], 'settlement.reward', errors);
+  const rewardCurrency = reward.currency;
+  if (!Number.isSafeInteger(rewardCurrency) || rewardCurrency < 0) {
+    errors.push('settlement.reward.currency must be a non-negative safe integer.');
+  } else if (rewardCurrency > Number.MAX_SAFE_INTEGER - snapshot.currency) {
+    errors.push('settlement.reward.currency would exceed the safe integer limit.');
+  }
+
+  const rewardById = new Map();
+  if (!Array.isArray(reward.items)) {
+    errors.push('settlement.reward.items must be an array.');
+  } else {
+    reward.items.forEach((entry, index) => {
+      const label = `settlement.reward.items[${index}]`;
+      if (!isPlainObject(entry)) {
+        errors.push(`${label} must be a plain object.`);
+        return;
+      }
+      const identifierKeys = ['id', 'name'].filter((key) => Object.hasOwn(entry, key));
+      const expectedKeys = identifierKeys.length === 1 ? [identifierKeys[0], 'quantity'] : ['quantity'];
+      exactKeys(entry, expectedKeys, label, errors);
+      if (identifierKeys.length !== 1) errors.push(`${label} must contain exactly one item id or name.`);
+      const rawId = identifierKeys.length === 1 ? entry[identifierKeys[0]] : null;
+      if (typeof rawId !== 'string' || !rawId.trim() || rawId !== rawId.trim()) errors.push(`${label} item id or name must be a trimmed non-empty string.`);
+      if (!Number.isSafeInteger(entry.quantity) || entry.quantity < 1) errors.push(`${label}.quantity must be a positive safe integer.`);
+      const itemId = typeof rawId === 'string' && rawId.trim() === rawId ? resolveItemId(rawId) : null;
+      if (rawId && !itemId) errors.push(`${label} contains unknown item ${rawId}.`);
+      if (itemId && Number.isSafeInteger(entry.quantity) && entry.quantity > 0) {
+        const quantity = (rewardById.get(itemId) ?? 0) + entry.quantity;
+        if (!Number.isSafeInteger(quantity)) errors.push(`${label}.quantity would exceed the safe integer limit.`);
+        else rewardById.set(itemId, quantity);
+      }
+    });
+  }
+
+  const partyVitals = isPlainObject(settlement.partyVitals) ? settlement.partyVitals : {};
+  if (!isPlainObject(settlement.partyVitals)) errors.push('settlement.partyVitals must be a plain object.');
+  for (const [memberId, vitals] of Object.entries(partyVitals)) {
+    if (!memberExists(memberId)) {
+      errors.push(`settlement.partyVitals contains unknown party member ${memberId}.`);
+      continue;
+    }
+    if (!isPlainObject(vitals)) {
+      errors.push(`settlement.partyVitals.${memberId} must be a plain object.`);
+      continue;
+    }
+    exactKeys(vitals, ['hp'], `settlement.partyVitals.${memberId}`, errors);
+    const maxHp = snapshot.vitals[memberId].maxHp;
+    if (!Number.isSafeInteger(vitals.hp) || vitals.hp < 1 || vitals.hp > maxHp) {
+      errors.push(`settlement.partyVitals.${memberId}.hp must be between 1 and ${maxHp}.`);
+    }
+  }
+
+  const inventory = { ...snapshot.inventory };
+  const debitReceipt = [];
+  for (const itemId of BATTLE_ITEM_IDS) {
+    const quantity = itemDebits[itemId] ?? 0;
+    const before = snapshot.inventory[itemId] ?? 0;
+    const afterDebit = before - (Number.isSafeInteger(quantity) ? quantity : 0);
+    const after = afterDebit + (rewardById.get(itemId) ?? 0);
+    if (after > MAX_ITEM_STACK) errors.push(`${ITEM_CATALOGUE[itemId].name} would exceed the stack limit.`);
+    debitReceipt.push({ itemId, quantity, before, afterDebit, after });
+  }
+  for (const [itemId, quantity] of rewardById) {
+    if (BATTLE_ITEM_IDS.includes(itemId)) continue;
+    const after = (snapshot.inventory[itemId] ?? 0) + quantity;
+    if (after > MAX_ITEM_STACK) errors.push(`${ITEM_CATALOGUE[itemId].name} would exceed the stack limit.`);
+  }
+  if (errors.length) return failed(snapshot, errors.join(' '));
+
+  for (const itemId of ITEM_IDS) {
+    const afterDebit = (snapshot.inventory[itemId] ?? 0) - (itemDebits[itemId] ?? 0);
+    const after = afterDebit + (rewardById.get(itemId) ?? 0);
+    if (after > 0) inventory[itemId] = after;
+    else delete inventory[itemId];
+  }
+  const vitals = Object.fromEntries(PARTY_MEMBER_IDS.map((memberId) => [
+    memberId,
+    Object.hasOwn(partyVitals, memberId)
+      ? { ...snapshot.vitals[memberId], hp: partyVitals[memberId].hp }
+      : snapshot.vitals[memberId],
+  ]));
+  const updated = nextState(snapshot, {
+    currency: snapshot.currency + rewardCurrency,
+    inventory,
+    vitals,
+  });
+  return succeeded(updated, {
+    type: 'battle-settlement',
+    itemDebits: debitReceipt,
+    reward: {
+      currency: rewardCurrency,
+      items: ITEM_IDS.filter((itemId) => rewardById.has(itemId)).map((itemId) => ({ itemId, quantity: rewardById.get(itemId) })),
+    },
+    partyVitals: PARTY_MEMBER_IDS.filter((memberId) => Object.hasOwn(partyVitals, memberId)).map((memberId) => ({
+      memberId,
+      hpBefore: snapshot.vitals[memberId].hp,
+      hpAfter: partyVitals[memberId].hp,
+    })),
+    revision: updated.revision,
+  });
 }
 
 /** Grant battle/shop rewards by catalogue ID or authored display name. Unknown entries are reported and ignored. */

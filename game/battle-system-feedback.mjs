@@ -1,6 +1,7 @@
 /** Pure, code-native feedback records for exact board interaction. */
 
 import { calculateTypedDamage, COMBAT_STATUS_DEFINITIONS } from './campaign-combat.mjs';
+import { ITEM_CATALOGUE } from './loadout.mjs';
 
 export const BATTLE_SYSTEM_FEEDBACK_SPEEDS = Object.freeze([1, 2, 4]);
 
@@ -194,9 +195,193 @@ function logsShareExactPrefix(beforeLog, afterLog) {
   return beforeLog.every((entry, index) => JSON.stringify(entry) === JSON.stringify(afterLog[index]));
 }
 
+function filledString(value) {
+  return typeof value === 'string' && value.length > 0;
+}
+
+function finiteHealEvent(event) {
+  return event?.type === 'heal'
+    && event.absorbed !== true
+    && filledString(event.sourceActorId)
+    && filledString(event.targetId)
+    && Number.isSafeInteger(event.amount) && event.amount > 0
+    && Number.isSafeInteger(event.hpBefore) && event.hpBefore >= 0
+    && Number.isSafeInteger(event.targetHp) && event.targetHp >= 0
+    && event.hpBefore + event.amount === event.targetHp
+    && Number.isSafeInteger(event.pulse) && event.pulse >= 0;
+}
+
+function uniqueActor(snapshot, actorId) {
+  const matches = snapshot.actors.filter((actor) => actor?.instanceId === actorId);
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function finiteActorHp(actor) {
+  return Number.isSafeInteger(actor?.hp) && actor.hp >= 0
+    && Number.isSafeInteger(actor.maxHp) && actor.maxHp >= 1
+    && actor.hp <= actor.maxHp;
+}
+
+function finiteActorTile(actor) {
+  return Number.isSafeInteger(actor?.pos?.x) && Number.isSafeInteger(actor?.pos?.y);
+}
+
+function resolutionMatchesHealEvent(resolution, event, { itemHeal = false, itemEvent = null } = {}) {
+  if (resolution === undefined || resolution === null) return true;
+  if (!explicitHealResolution(resolution) || (resolution.ok !== undefined && resolution.ok !== true)) return false;
+  const sourceActorId = resolution.sourceActorId ?? resolution.attackerId ?? resolution.actorId;
+  if (sourceActorId !== event.sourceActorId || resolution.targetId !== event.targetId
+    || resolution.amount !== event.amount || resolution.hpBefore !== event.hpBefore
+    || resolution.targetHp !== event.targetHp) return false;
+  if (itemHeal) {
+    return resolution.source === 'item'
+      && resolution.itemId === event.itemId
+      && resolution.actorId === event.sourceActorId
+      && resolution.stockBefore === itemEvent?.stockBefore
+      && resolution.stockAfter === itemEvent?.stockAfter
+      && resolution.recoveryPulses === itemEvent?.recoveryPulses;
+  }
+  return resolution.source !== 'item' && resolution.itemId === undefined;
+}
+
+function preExistingStatusMaps(beforeSnapshot) {
+  const maps = new Map();
+  for (const actor of beforeSnapshot.actors) {
+    if (!filledString(actor?.instanceId)) return null;
+    const statuses = actor.statuses ?? [];
+    if (!Array.isArray(statuses)) return null;
+    const byId = new Map();
+    for (const status of statuses) {
+      if (!filledString(status?.id) || byId.has(status.id)
+        || !Number.isSafeInteger(status.remainingActivations) || status.remainingActivations < 1) return null;
+      byId.set(status.id, status);
+    }
+    maps.set(actor.instanceId, byId);
+  }
+  return maps;
+}
+
 /**
- * Build feedback only when an explicit heal resolution is corroborated by an
- * exact positive HP delta. Negative absorbed damage is deliberately excluded.
+ * Corroborate the heal event at its own HP boundary, then accept only a later
+ * exact activation of a pre-existing damage status. This keeps a subsequent
+ * Scorch from turning the displayed heal into a misleading net-snapshot delta.
+ */
+function corroborateHealHpTimeline(beforeSnapshot, afterSnapshot, newEvents, healEvent, healIndex) {
+  const beforeById = new Map(beforeSnapshot.actors.map((actor) => [actor?.instanceId, actor]));
+  const afterById = new Map(afterSnapshot.actors.map((actor) => [actor?.instanceId, actor]));
+  if (beforeById.size !== beforeSnapshot.actors.length || afterById.size !== afterSnapshot.actors.length) return false;
+  const statusMaps = preExistingStatusMaps(beforeSnapshot);
+  if (!statusMaps) return false;
+  const hpCursor = new Map();
+  for (const actor of beforeSnapshot.actors) {
+    if (!finiteActorHp(actor)) return false;
+    hpCursor.set(actor.instanceId, actor.hp);
+  }
+  const touchedActors = new Set();
+  const triggered = new Map();
+
+  for (const [index, event] of newEvents.entries()) {
+    if (!event || typeof event !== 'object') return false;
+    if (event.type === 'damage' || event.type === 'damage-mitigated' || event.type === 'dodge-resolved') return false;
+    if (event.type === 'heal') {
+      if (index !== healIndex || event !== healEvent || hpCursor.get(event.targetId) !== event.hpBefore) return false;
+      hpCursor.set(event.targetId, event.targetHp);
+      touchedActors.add(event.targetId);
+      continue;
+    }
+    if (event.type === 'status-triggered') {
+      const status = statusMaps.get(event.actorId)?.get(event.statusId);
+      const definition = COMBAT_STATUS_DEFINITIONS[event.statusId];
+      const key = `${event.actorId}:${event.statusId}`;
+      if (index <= healIndex || !status || !definition || triggered.has(key)
+        || event.sourceActorId !== status.sourceActorId
+        || event.sourceSkillId !== status.sourceSkillId
+        || event.remainingActivations !== status.remainingActivations
+        || !Number.isSafeInteger(event.pulse) || event.pulse < healEvent.pulse
+        || event.pulse > afterSnapshot.nowPulse) return false;
+      triggered.set(key, {
+        index,
+        pulse: event.pulse,
+        requiresDamage: Number.isSafeInteger(definition.activationDamage) && definition.activationDamage > 0,
+        damageResolved: false,
+      });
+      continue;
+    }
+    if (event.type === 'status-damage') {
+      const status = statusMaps.get(event.targetId)?.get(event.statusId);
+      const definition = COMBAT_STATUS_DEFINITIONS[event.statusId];
+      const trigger = triggered.get(`${event.targetId}:${event.statusId}`);
+      const priorHp = hpCursor.get(event.targetId);
+      const baseDamage = definition?.activationDamage;
+      const expectedDamage = Number.isSafeInteger(baseDamage) && baseDamage > 0 && Number.isSafeInteger(priorHp)
+        ? Math.min(priorHp, baseDamage)
+        : null;
+      if (!status || !trigger || trigger.damageResolved || index <= trigger.index || expectedDamage === null
+        || event.sourceActorId !== status.sourceActorId
+        || event.sourceSkillId !== status.sourceSkillId
+        || event.baseDamage !== baseDamage || event.hpBefore !== priorHp
+        || event.finalDamage !== expectedDamage || event.targetHp !== priorHp - expectedDamage
+        || !Number.isSafeInteger(event.pulse) || event.pulse !== trigger.pulse) return false;
+      hpCursor.set(event.targetId, event.targetHp);
+      touchedActors.add(event.targetId);
+      trigger.damageResolved = true;
+    }
+  }
+
+  if ([...triggered.values()].some((entry) => entry.requiresDamage && !entry.damageResolved)) return false;
+  for (const actorId of touchedActors) {
+    const afterActor = afterById.get(actorId);
+    if (!finiteActorHp(afterActor) || afterActor.maxHp !== beforeById.get(actorId)?.maxHp
+      || afterActor.hp !== hpCursor.get(actorId)) return false;
+  }
+  return true;
+}
+
+function corroborateBattleItemHeal(beforeSnapshot, afterSnapshot, newEvents, healEvent, healIndex) {
+  if (healEvent.source !== 'item' || !filledString(healEvent.itemId)) return false;
+  const item = ITEM_CATALOGUE[healEvent.itemId];
+  const effectKeys = Object.keys(item?.effect ?? {});
+  if (!item || item.kind !== 'consumable' || item.id !== healEvent.itemId
+    || item.battle?.target !== 'living-party'
+    || !Number.isSafeInteger(item.battle.recoveryPulses) || item.battle.recoveryPulses < 1
+    || effectKeys.length !== 1 || effectKeys[0] !== 'hp'
+    || !Number.isSafeInteger(item.effect.hp) || item.effect.hp < 1) return false;
+
+  const itemEvents = newEvents.filter((event) => event?.type === 'item-used');
+  if (itemEvents.length !== 1) return false;
+  const itemEvent = itemEvents[0];
+  const itemIndex = newEvents.indexOf(itemEvent);
+  if (itemIndex + 1 !== healIndex
+    || itemEvent.actorId !== healEvent.sourceActorId
+    || itemEvent.targetId !== healEvent.targetId
+    || itemEvent.itemId !== healEvent.itemId
+    || itemEvent.pulse !== healEvent.pulse
+    || !Number.isSafeInteger(itemEvent.pulse) || itemEvent.pulse < 0
+    || !Number.isSafeInteger(itemEvent.stockBefore) || itemEvent.stockBefore < 1
+    || !Number.isSafeInteger(itemEvent.stockAfter) || itemEvent.stockAfter !== itemEvent.stockBefore - 1
+    || itemEvent.recoveryPulses !== item.battle.recoveryPulses) return false;
+
+  const beforeSource = uniqueActor(beforeSnapshot, healEvent.sourceActorId);
+  const beforeTarget = uniqueActor(beforeSnapshot, healEvent.targetId);
+  if (beforeSource?.faction !== 'party' || beforeSource.hp <= 0 || beforeSource.active === false
+    || beforeTarget?.faction !== 'party' || beforeTarget.hp <= 0 || beforeTarget.active === false) return false;
+  const expectedAmount = Math.min(item.effect.hp, beforeTarget.maxHp - beforeTarget.hp);
+  if (expectedAmount <= 0 || healEvent.hpBefore !== beforeTarget.hp
+    || healEvent.amount !== expectedAmount || healEvent.targetHp !== beforeTarget.hp + expectedAmount) return false;
+
+  const beforeStock = beforeSnapshot.itemStock?.[healEvent.itemId];
+  const afterStock = afterSnapshot.itemStock?.[healEvent.itemId];
+  const beforeConsumption = beforeSnapshot.itemConsumption?.[healEvent.itemId];
+  const afterConsumption = afterSnapshot.itemConsumption?.[healEvent.itemId];
+  return beforeStock === itemEvent.stockBefore && afterStock === itemEvent.stockAfter
+    && Number.isSafeInteger(beforeConsumption) && beforeConsumption >= 0
+    && afterConsumption === beforeConsumption + 1;
+}
+
+/**
+ * Build feedback only from one exact appended heal event. Item healing also
+ * requires the immediately preceding inventory event and authored catalogue
+ * effect; generic explicit healing must provide the same event-level HP proof.
  */
 export function createBattleHealFeedback({
   resolution,
@@ -213,28 +398,33 @@ export function createBattleHealFeedback({
   }
   const beforeLog = Array.isArray(beforeSnapshot.log) ? beforeSnapshot.log : [];
   const afterLog = Array.isArray(afterSnapshot.log) ? afterSnapshot.log : [];
-  const newEvents = logsShareExactPrefix(beforeLog, afterLog)
-    ? afterLog.slice(beforeLog.length)
-    : [];
-  const healResolution = explicitHealResolution(resolution)
-    ? resolution
-    : newEvents.find(explicitHealResolution);
-  if (!healResolution) return null;
+  if (!logsShareExactPrefix(beforeLog, afterLog)) return null;
+  if (!Number.isSafeInteger(beforeSnapshot.nowPulse) || beforeSnapshot.nowPulse < 0
+    || !Number.isSafeInteger(afterSnapshot.nowPulse) || afterSnapshot.nowPulse < beforeSnapshot.nowPulse) return null;
+  const newEvents = afterLog.slice(beforeLog.length);
+  const healEvents = newEvents.filter((event) => event?.type === 'heal');
+  if (healEvents.length !== 1 || !finiteHealEvent(healEvents[0])) return null;
+  const healEvent = healEvents[0];
+  const healIndex = newEvents.indexOf(healEvent);
+  if (healEvent.pulse !== beforeSnapshot.nowPulse) return null;
 
-  const sourceId = String(healResolution.sourceActorId
-    ?? healResolution.attackerId
-    ?? healResolution.actorId
-    ?? '');
-  const targetId = String(healResolution.targetId ?? '');
-  if (!sourceId || !targetId) return null;
-  const source = beforeSnapshot.actors.find((actor) => actor.instanceId === sourceId)
-    ?? afterSnapshot.actors.find((actor) => actor.instanceId === sourceId);
-  const beforeTarget = beforeSnapshot.actors.find((actor) => actor.instanceId === targetId);
-  const afterTarget = afterSnapshot.actors.find((actor) => actor.instanceId === targetId);
-  if (!source || !beforeTarget || !afterTarget
-    || !Number.isFinite(beforeTarget.hp) || !Number.isFinite(afterTarget.hp)) return null;
-  const amount = afterTarget.hp - beforeTarget.hp;
-  if (!Number.isSafeInteger(amount) || amount <= 0) return null;
+  const sourceId = healEvent.sourceActorId;
+  const targetId = healEvent.targetId;
+  const source = uniqueActor(beforeSnapshot, sourceId);
+  const beforeTarget = uniqueActor(beforeSnapshot, targetId);
+  const afterTarget = uniqueActor(afterSnapshot, targetId);
+  if (!source || !beforeTarget || !afterTarget || !finiteActorTile(source) || !finiteActorTile(afterTarget)
+    || !finiteActorHp(beforeTarget) || !finiteActorHp(afterTarget)
+    || beforeTarget.maxHp !== afterTarget.maxHp || healEvent.targetHp > beforeTarget.maxHp) return null;
+
+  const itemHeal = healEvent.source === 'item' || healEvent.itemId !== undefined;
+  let itemEvent = null;
+  if (itemHeal) {
+    if (!corroborateBattleItemHeal(beforeSnapshot, afterSnapshot, newEvents, healEvent, healIndex)) return null;
+    [itemEvent] = newEvents.filter((event) => event?.type === 'item-used');
+  } else if (newEvents.some((event) => event?.type === 'item-used')) return null;
+  if (!resolutionMatchesHealEvent(resolution, healEvent, { itemHeal, itemEvent })
+    || !corroborateHealHpTimeline(beforeSnapshot, afterSnapshot, newEvents, healEvent, healIndex)) return null;
 
   const sourceName = String(source.name ?? sourceId);
   const targetName = String(afterTarget.name ?? targetId);
@@ -251,10 +441,10 @@ export function createBattleHealFeedback({
     targetName,
     sourceTile,
     targetTile,
-    amount,
-    targetHpBefore: beforeTarget.hp,
-    targetHpAfter: afterTarget.hp,
-    announcement: `${sourceName} restores ${amount} HP to ${targetName} at ${targetTile.x},${targetTile.y}.`,
+    amount: healEvent.amount,
+    targetHpBefore: healEvent.hpBefore,
+    targetHpAfter: healEvent.targetHp,
+    announcement: `${sourceName} restores ${healEvent.amount} HP to ${targetName} at ${targetTile.x},${targetTile.y}.`,
     baseDurationMs,
     durationMs,
     startedAt: safeStartedAt,

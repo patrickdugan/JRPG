@@ -57,6 +57,77 @@ function damageEvent(overrides = {}) {
   };
 }
 
+function healSnapshots({
+  beforeHp = 31,
+  maxHp = 100,
+  amount = 18,
+  afterHp = beforeHp + amount,
+  pulse = 4,
+  sourceOverrides = {},
+  beforeTargetOverrides = {},
+  afterTargetOverrides = {},
+  beforeLog = [],
+  afterEvents = null,
+  item = false,
+  stockBefore = 2,
+  consumptionBefore = 0,
+} = {}) {
+  const source = {
+    instanceId: 'aya', name: 'Aya', faction: 'party', hp: 80, maxHp: 80,
+    active: true, pos: { x: 2, y: 3 }, statuses: [], ...sourceOverrides,
+  };
+  const beforeTarget = {
+    instanceId: 'ren', name: 'Ren', faction: 'party', hp: beforeHp, maxHp,
+    active: true, pos: { x: 3, y: 3 }, statuses: [], ...beforeTargetOverrides,
+  };
+  const afterTarget = { ...beforeTarget, hp: afterHp, ...afterTargetOverrides };
+  const heal = {
+    type: 'heal', sourceActorId: source.instanceId, targetId: beforeTarget.instanceId,
+    amount, hpBefore: beforeHp, targetHp: beforeHp + amount, pulse,
+    ...(item ? { source: 'item', itemId: 'river-salve' } : {}),
+  };
+  const itemUsed = item ? {
+    type: 'item-used', actorId: source.instanceId, targetId: beforeTarget.instanceId,
+    itemId: 'river-salve', stockBefore, stockAfter: stockBefore - 1,
+    recoveryPulses: 2, pulse,
+  } : null;
+  const events = afterEvents ?? [...(item ? [itemUsed] : []), heal];
+  return {
+    heal,
+    itemUsed,
+    beforeSnapshot: {
+      nowPulse: pulse,
+      actors: [source, beforeTarget],
+      log: beforeLog,
+      ...(item ? {
+        itemStock: { 'river-salve': stockBefore },
+        itemConsumption: { 'river-salve': consumptionBefore },
+      } : {}),
+    },
+    afterSnapshot: {
+      nowPulse: pulse,
+      actors: [source, afterTarget],
+      log: [...beforeLog, ...events],
+      ...(item ? {
+        itemStock: { 'river-salve': stockBefore - 1 },
+        itemConsumption: { 'river-salve': consumptionBefore + 1 },
+      } : {}),
+    },
+  };
+}
+
+function itemHealResolution(snapshots, overrides = {}) {
+  return {
+    ok: true,
+    ...snapshots.heal,
+    actorId: snapshots.itemUsed.actorId,
+    stockBefore: snapshots.itemUsed.stockBefore,
+    stockAfter: snapshots.itemUsed.stockAfter,
+    recoveryPulses: snapshots.itemUsed.recoveryPulses,
+    ...overrides,
+  };
+}
+
 function dodgeSnapshots({
   eventOverrides = {},
   skillOverrides = {},
@@ -249,25 +320,10 @@ test('Tempo readiness refuses to invent a percentage without a matching commit',
   assert.equal(frame.readiness, 0);
 });
 
-test('heal feedback requires an explicit heal plus a corroborating exact HP increase', () => {
-  const beforeSnapshot = Object.freeze({
-    actors: Object.freeze([
-      Object.freeze({ instanceId: 'aya', name: 'Aya', hp: 80, pos: Object.freeze({ x: 2, y: 3 }) }),
-      Object.freeze({ instanceId: 'ren', name: 'Ren', hp: 31, pos: Object.freeze({ x: 3, y: 3 }) }),
-    ]),
-    log: Object.freeze([]),
-  });
-  const afterSnapshot = Object.freeze({
-    actors: Object.freeze([
-      Object.freeze({ instanceId: 'aya', name: 'Aya', hp: 80, pos: Object.freeze({ x: 2, y: 3 }) }),
-      Object.freeze({ instanceId: 'ren', name: 'Ren', hp: 49, pos: Object.freeze({ x: 3, y: 3 }) }),
-    ]),
-    log: Object.freeze([
-      Object.freeze({ type: 'heal', sourceActorId: 'aya', targetId: 'ren', amount: 18 }),
-    ]),
-  });
+test('generic heal feedback requires one exact appended event and matching explicit resolution', () => {
+  const { beforeSnapshot, afterSnapshot, heal } = healSnapshots();
   const record = createBattleHealFeedback({
-    resolution: { ok: true, type: 'heal', sourceActorId: 'aya', targetId: 'ren' },
+    resolution: { ok: true, ...heal },
     beforeSnapshot,
     afterSnapshot,
     startedAt: 500,
@@ -291,22 +347,186 @@ test('heal feedback requires an explicit heal plus a corroborating exact HP incr
     sampleBattleHealFeedback(record, 501, { reducedMotion: true }),
     sampleBattleHealFeedback(record, 859, { reducedMotion: true }),
   );
+  assert.equal(createBattleHealFeedback({ beforeSnapshot, afterSnapshot })?.kind, 'heal',
+    'the exact appended generic event is independently sufficient authority');
+  assert.equal(createBattleHealFeedback({
+    resolution: { ok: true, type: 'heal', sourceActorId: 'aya', targetId: 'ren' },
+    beforeSnapshot,
+    afterSnapshot,
+  }), null, 'a supplied generic resolution must carry the same exact HP boundary');
+  const missingPulse = structuredClone(afterSnapshot);
+  delete missingPulse.log[0].pulse;
+  assert.equal(createBattleHealFeedback({ beforeSnapshot, afterSnapshot: missingPulse }), null);
+});
+
+test('River Salve feedback is capped by authored HP recovery and exact attempt stock evidence', () => {
+  const snapshots = healSnapshots({ item: true, amount: 69, afterHp: 100 });
+  const record = createBattleHealFeedback({
+    resolution: itemHealResolution(snapshots),
+    beforeSnapshot: snapshots.beforeSnapshot,
+    afterSnapshot: snapshots.afterSnapshot,
+  });
+  assert.equal(record?.kind, 'heal');
+  assert.equal(record?.amount, 69, '31 HP plus the authored 80 HP effect caps at 100');
+  assert.equal(record?.targetHpBefore, 31);
+  assert.equal(record?.targetHpAfter, 100);
+});
+
+test('River Salve reports its heal event rather than a later exact Scorch net delta', () => {
+  const scorch = {
+    id: 'scorch', sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', appliedAtPulse: 1,
+    durationActivations: 1, remainingActivations: 1, activeThisActivation: false,
+  };
+  const snapshots = healSnapshots({
+    item: true,
+    beforeHp: 20,
+    amount: 80,
+    afterHp: 95,
+    beforeTargetOverrides: { statuses: [scorch] },
+  });
+  const triggered = {
+    type: 'status-triggered', statusId: 'scorch', actorId: 'ren',
+    sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', remainingActivations: 1, pulse: 5,
+  };
+  const statusDamage = {
+    type: 'status-damage', statusId: 'scorch', targetId: 'ren',
+    sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', baseDamage: 5,
+    finalDamage: 5, hpBefore: 100, targetHp: 95, pulse: 5,
+  };
+  snapshots.afterSnapshot.nowPulse = 5;
+  snapshots.afterSnapshot.log = [
+    snapshots.itemUsed,
+    snapshots.heal,
+    { type: 'commit', actorId: 'aya', command: 'item', readyAtPulse: 6, pulse: 4 },
+    triggered,
+    statusDamage,
+  ];
+
+  const record = createBattleHealFeedback({
+    resolution: itemHealResolution(snapshots),
+    beforeSnapshot: snapshots.beforeSnapshot,
+    afterSnapshot: snapshots.afterSnapshot,
+  });
+  assert.equal(record?.amount, 80);
+  assert.equal(record?.targetHpBefore, 20);
+  assert.equal(record?.targetHpAfter, 100, 'feedback preserves HP at the heal event, not final 95 HP');
+  assert.equal(record?.announcement, 'Aya restores 80 HP to Ren at 3,3.');
+
+  const malformed = [
+    { events: [snapshots.itemUsed, snapshots.heal, statusDamage], message: 'Scorch damage needs its exact trigger' },
+    { events: [snapshots.itemUsed, snapshots.heal, statusDamage, triggered], message: 'Scorch damage must follow its trigger' },
+    { events: [snapshots.itemUsed, snapshots.heal, triggered, { ...statusDamage, hpBefore: 99, targetHp: 94 }], message: 'Scorch continues the ordered HP cursor' },
+    { events: [snapshots.itemUsed, snapshots.heal, { ...triggered, sourceActorId: 'oni-1' }, statusDamage], message: 'Scorch trigger retains pre-existing source authority' },
+    { events: [snapshots.itemUsed, snapshots.heal, triggered], message: 'Scorch trigger cannot omit authored activation damage' },
+  ];
+  for (const fixture of malformed) {
+    assert.equal(createBattleHealFeedback({
+      resolution: itemHealResolution(snapshots),
+      beforeSnapshot: snapshots.beforeSnapshot,
+      afterSnapshot: { ...snapshots.afterSnapshot, log: fixture.events },
+    }), null, fixture.message);
+  }
+});
+
+test('River Salve feedback survives the real engine cadence that activates a pre-existing Scorch', () => {
+  const encounter = {
+    id: 'item-status-feedback', levelId: 'item-status-feedback-level', format: 'battle',
+    objective: { type: 'defeatAll', text: 'Defeat all.' },
+    party: {
+      roster: ['ren', 'aya'],
+      deployment: [{ actorId: 'ren', at: '1,3' }, { actorId: 'aya', at: '2,3' }],
+    },
+    enemies: [{
+      id: 'dummy', name: 'Dummy', count: 1, positions: ['4,3'], ledger: 'Test.',
+      stats: { hp: 40, power: 6, guard: 3, speed: 10 },
+      resistances: {
+        delivery: { cut: 1, pierce: 1, crush: 1, arcane: 1 },
+        essence: { ember: 1, frost: 1, storm: 1, radiance: 1, umbral: 1 },
+      },
+      skills: [{
+        id: 'poke', name: 'Poke', delivery: 'pierce', power: 4, range: 1,
+        recoveryPulses: 1, dodgeable: true,
+      }],
+    }],
+  };
+  const level = {
+    id: encounter.levelId, width: 6, height: 6, blocked: [], terrain: [], spawn: { x: 0, y: 0 },
+  };
+  const engine = new CampaignCombatEngine({ encounter, level, itemStock: { 'river-salve': 1 } });
+  engine.getActor('aya').hp = 20;
+  engine.getActor('aya').statuses.push({
+    id: 'scorch', sourceActorId: 'abbot-1', sourceSkillId: 'forge-sermon', appliedAtPulse: 0,
+    durationActivations: 1, remainingActivations: 1, activeThisActivation: false,
+  });
+  const beforeSnapshot = engine.snapshot();
+  const result = engine.useItem('ren', 'river-salve', 'aya');
+  const afterSnapshot = engine.snapshot();
+
+  assert.deepEqual(afterSnapshot.log.slice(beforeSnapshot.log.length).map((event) => event.type), [
+    'item-used', 'heal', 'commit', 'status-triggered', 'status-damage',
+  ]);
+  assert.equal(result.targetHp, 96, 'the engine result retains the heal-event HP');
+  assert.equal(afterSnapshot.actors.find((actor) => actor.instanceId === 'aya').hp, 91);
+  const record = createBattleHealFeedback({ resolution: result, beforeSnapshot, afterSnapshot });
+  assert.equal(record?.amount, 76);
+  assert.equal(record?.targetHpBefore, 20);
+  assert.equal(record?.targetHpAfter, 96, 'later Scorch cannot rewrite the heal feedback record');
+});
+
+test('River Salve heal authority fails closed on forged catalogue, inventory, relation, pulse, or HP evidence', () => {
+  const valid = healSnapshots({ item: true, amount: 69, afterHp: 100 });
+  const cases = [
+    { mutate: ({ heal }) => { heal.pulse = 1.5; }, message: 'pulse must be a safe integer' },
+    { mutate: ({ heal }) => { heal.pulse = -1; }, message: 'pulse cannot be negative' },
+    { mutate: ({ heal }) => { heal.pulse = Number.MAX_SAFE_INTEGER + 1; }, message: 'pulse cannot exceed safe integer authority' },
+    { mutate: ({ itemUsed }) => { itemUsed.actorId = 'ren'; }, message: 'item and heal source must match' },
+    { mutate: ({ itemUsed }) => { itemUsed.targetId = 'aya'; }, message: 'item and heal target must match' },
+    { mutate: ({ itemUsed }) => { itemUsed.itemId = 'spirit-tea'; }, message: 'item IDs must match' },
+    { mutate: ({ itemUsed }) => { itemUsed.stockAfter = itemUsed.stockBefore; }, message: 'stock must decrement exactly once' },
+    { mutate: ({ itemUsed }) => { itemUsed.recoveryPulses = 1; }, message: 'Recovery comes from authored battle metadata' },
+    { mutate: ({ heal }) => { heal.amount = 68; heal.targetHp = 99; }, message: 'amount must equal the capped catalogue effect' },
+    { mutate: ({ heal }) => { heal.hpBefore = 30; heal.targetHp = 99; }, message: 'event must begin at snapshot HP' },
+    { mutate: ({ heal }) => { heal.targetHp = 101; heal.amount = 70; }, message: 'event cannot exceed max HP' },
+    { mutate: ({ heal }) => { heal.itemId = 'traveler-plum'; }, message: 'an unopted mixed-effect consumable is not battle heal authority' },
+    { mutate: ({ heal }) => { heal.source = 'skill'; }, message: 'battle item healing requires an explicit item source' },
+    { mutate: ({ beforeSnapshot }) => { beforeSnapshot.itemStock['river-salve'] = 3; }, message: 'stock event needs snapshot corroboration' },
+    { mutate: ({ afterSnapshot }) => { afterSnapshot.itemConsumption['river-salve'] = 2; }, message: 'consumption must advance once' },
+    { mutate: ({ afterSnapshot }) => { afterSnapshot.actors[1].hp = 99; }, message: 'final cursor must match the snapshot' },
+    { mutate: ({ afterSnapshot }) => { afterSnapshot.log.reverse(); }, message: 'item-used must immediately precede heal' },
+    { mutate: ({ afterSnapshot }) => { afterSnapshot.log.push({ type: 'damage', attackerId: 'oni', targetId: 'ren', absorbed: true, finalDamage: -1, pulse: 4 }); }, message: 'absorbed damage cannot join heal authority' },
+  ];
+  for (const fixture of cases) {
+    const mutated = structuredClone(valid);
+    fixture.mutate(mutated);
+    assert.equal(createBattleHealFeedback({
+      resolution: itemHealResolution(mutated),
+      beforeSnapshot: mutated.beforeSnapshot,
+      afterSnapshot: mutated.afterSnapshot,
+    }), null, fixture.message);
+  }
+  assert.equal(createBattleHealFeedback({
+    resolution: itemHealResolution(valid, { amount: 68, targetHp: 99 }),
+    beforeSnapshot: valid.beforeSnapshot,
+    afterSnapshot: valid.afterSnapshot,
+  }), null, 'the explicit result must match the appended heal event exactly');
 });
 
 test('absorption and generic positive status never masquerade as heal feedback', () => {
   const beforeSnapshot = {
+    nowPulse: 4,
     actors: [
-      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
-      { instanceId: 'furnace', name: 'Furnace Abbot', hp: 100, pos: { x: 6, y: 2 } },
+      { instanceId: 'aya', name: 'Aya', hp: 80, maxHp: 80, pos: { x: 2, y: 3 }, statuses: [] },
+      { instanceId: 'furnace', name: 'Furnace Abbot', hp: 100, maxHp: 130, pos: { x: 6, y: 2 }, statuses: [] },
     ],
     log: [],
   };
   const afterSnapshot = {
+    nowPulse: 4,
     actors: [
-      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
-      { instanceId: 'furnace', name: 'Furnace Abbot', hp: 118, pos: { x: 6, y: 2 } },
+      { instanceId: 'aya', name: 'Aya', hp: 80, maxHp: 80, pos: { x: 2, y: 3 }, statuses: [] },
+      { instanceId: 'furnace', name: 'Furnace Abbot', hp: 118, maxHp: 130, pos: { x: 6, y: 2 }, statuses: [] },
     ],
-    log: [{ type: 'damage', attackerId: 'aya', targetId: 'furnace', absorbed: true, finalDamage: -18 }],
+    log: [{ type: 'damage', attackerId: 'aya', targetId: 'furnace', absorbed: true, finalDamage: -18, pulse: 4 }],
   };
   assert.equal(createBattleHealFeedback({
     resolution: { ok: true, attackerId: 'aya', targetId: 'furnace', absorbed: true, finalDamage: -18 },
@@ -322,20 +542,22 @@ test('absorption and generic positive status never masquerade as heal feedback',
 
 test('heal feedback cannot be inferred from a divergent snapshot log suffix', () => {
   const beforeSnapshot = {
+    nowPulse: 4,
     actors: [
-      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
-      { instanceId: 'ren', name: 'Ren', hp: 31, pos: { x: 3, y: 3 } },
+      { instanceId: 'aya', name: 'Aya', hp: 80, maxHp: 80, pos: { x: 2, y: 3 }, statuses: [] },
+      { instanceId: 'ren', name: 'Ren', hp: 31, maxHp: 100, pos: { x: 3, y: 3 }, statuses: [] },
     ],
     log: [{ type: 'unrelated-before', pulse: 1 }],
   };
   const afterSnapshot = {
+    nowPulse: 4,
     actors: [
-      { instanceId: 'aya', name: 'Aya', hp: 80, pos: { x: 2, y: 3 } },
-      { instanceId: 'ren', name: 'Ren', hp: 49, pos: { x: 3, y: 3 } },
+      { instanceId: 'aya', name: 'Aya', hp: 80, maxHp: 80, pos: { x: 2, y: 3 }, statuses: [] },
+      { instanceId: 'ren', name: 'Ren', hp: 49, maxHp: 100, pos: { x: 3, y: 3 }, statuses: [] },
     ],
     log: [
       { type: 'different-prefix', pulse: 1 },
-      { type: 'heal', sourceActorId: 'aya', targetId: 'ren', amount: 18 },
+      { type: 'heal', sourceActorId: 'aya', targetId: 'ren', amount: 18, hpBefore: 31, targetHp: 49, pulse: 4 },
     ],
   };
   assert.equal(createBattleHealFeedback({
@@ -803,11 +1025,11 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
   assert.match(source, /sampleBattleTelegraphEvadeFeedback\(activeBattleSystemFeedback, now, \{ reducedMotion: reducedMotion\.matches \}\)/);
   assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(before, after, \{ startedAt: now, speed: speedMultiplier \}\)/,
     'Auto-Grind consumes the same exact typed telegraph delta');
-  assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(snapshot, afterSnapshot, \{ startedAt: performance\.now\(\), speed: 1 \}\)/,
+  assert.match(source, /startBattleTelegraphEvadeSystemFeedback\(snapshot, afterSnapshot, \{ startedAt: presentationStartedAt, speed: 1 \}\)/,
     'manual commands consume the same exact typed telegraph delta');
   assert.match(source, /startBattleDamageOutcomeFeedback\(before, after, \{ startedAt: now, speed: speedMultiplier \}\)/,
     'Auto-Grind consumes the exact typed damage delta');
-  assert.match(source, /startBattleDamageOutcomeFeedback\(snapshot, afterSnapshot, \{ startedAt: performance\.now\(\), speed: 1 \}\)/,
+  assert.match(source, /startBattleDamageOutcomeFeedback\(snapshot, afterSnapshot, \{ startedAt: presentationStartedAt, speed: 1 \}\)/,
     'manual party commands consume the exact typed damage delta');
   const manualEnemyResolution = source.slice(
     source.indexOf('function tick(now)'),
@@ -825,10 +1047,12 @@ test('browser wires move feedback through manual and Auto-Grind without joining 
     'animation timing begins only after timeline preparation',
   );
   assert.ok(
-    combatAnimationSource.indexOf('const healFeedback = createBattleHealFeedback({')
+    combatAnimationSource.indexOf('const healFeedback = startBattleHealSystemFeedback(')
       > combatAnimationSource.indexOf('const startedAt = performance.now();'),
     'heal presentation shares the restored post-preparation animation timestamp',
   );
+  assert.match(source, /startBattleHealSystemFeedback\(result, snapshot, afterSnapshot, \{ startedAt: presentationStartedAt, speed: 1 \}\)/,
+    'manual Item consumes the same exact heal authority at its command-presentation timestamp');
   assert.match(source, /function drawBattleVictoryAccent\(/);
   assert.match(source, /drawBattleVictoryAccent\(victoryAccent, geometry\)/);
   assert.match(source, /createBattleDefeatAccent\(snapshot, \{/);
