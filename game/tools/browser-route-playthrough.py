@@ -393,8 +393,39 @@ class PlayerDriver:
                 return
         raise RouteBlocked("operation-node-loop", "More than 12 operation-node transitions occurred in one scene.")
 
+    def advance_story_if_ready(self) -> bool:
+        """Use the rendered scene control as soon as the current gate opens."""
+        next_scene = self.page.locator("#nextScene")
+        if next_scene.is_disabled():
+            return False
+        next_scene.click()
+        self.controls += 1
+        return True
+
+    def launch_pending_battle_if_ready(self) -> bool:
+        """Launch only a rendered pending encounter, never an enabled grind replay."""
+        launch = self.page.locator("#launchBattle")
+        if launch.get_attribute("aria-disabled") == "true":
+            return False
+        if not launch.inner_text().strip().startswith("Enter encounter:"):
+            return False
+        launch.click()
+        self.controls += 1
+        self.page.wait_for_url("**/battle.html**")
+        return True
+
     def finish_published_field_objectives(self, scene_key: str) -> bool:
         for _ in range(30):
+            # Completing a field interaction can enable story advancement while
+            # leaving the previous target rendered briefly. Always honor the
+            # newly enabled player control before considering that target again.
+            if self.advance_story_if_ready():
+                return True
+            # A pending authored encounter is part of the scene gate. It is safe
+            # to prioritize over unrelated fieldwork; an enabled grind replay is
+            # deliberately excluded by launch_pending_battle_if_ready().
+            if self.launch_pending_battle_if_ready():
+                return True
             published = self.field_objective_target()
             if not published:
                 return False
@@ -421,10 +452,48 @@ class PlayerDriver:
             self.controls += 1
             if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
                 return True
+            if self.advance_story_if_ready():
+                return True
+            if self.launch_pending_battle_if_ready():
+                return True
             if self.page.locator("#routeDueList [data-route-activity-id]").count():
                 self.drain_due_route_work(scene_key)
                 if self.on_battle_page() or self.scene_key() != scene_key:
                     return True
+                if self.advance_story_if_ready():
+                    return True
+                if self.launch_pending_battle_if_ready():
+                    return True
+            after_published = self.field_objective_target()
+            if after_published == published:
+                feedback = self.page.locator("#fieldFeedback").inner_text().strip()
+                normalized_feedback = feedback.casefold()
+                requirement_missing = " requires " in normalized_feedback
+                no_progress = (
+                    normalized_feedback.startswith("exit locked:")
+                    or normalized_feedback.startswith("interaction unavailable:")
+                    or "was already completed" in normalized_feedback
+                    or "no interaction is within" in normalized_feedback
+                )
+                blocker_code = (
+                    "field-objective-requirement-missing"
+                    if requirement_missing
+                    else "field-objective-no-progress"
+                )
+                blocker_message = (
+                    "The rendered field objective still requires unavailable story progress."
+                    if requirement_missing
+                    else "The rendered field objective did not change after one player interaction."
+                )
+                raise RouteBlocked(
+                    blocker_code,
+                    blocker_message,
+                    targetType=target_type,
+                    targetId=target_id,
+                    target=target,
+                    feedback=feedback,
+                    noProgressFeedback=no_progress,
+                )
         raise RouteBlocked("field-objective-loop", "More than 30 published field objective transitions occurred in one scene.")
 
     def finish_dialogue_and_choices(self) -> None:
@@ -952,10 +1021,7 @@ class PlayerDriver:
             if self.on_battle_page():
                 self.play_battle_and_resume_scene(initial)
             return
-        if self.page.locator("#launchBattle").get_attribute("aria-disabled") != "true":
-            self.page.locator("#launchBattle").click()
-            self.controls += 1
-            self.page.wait_for_url("**/battle.html**")
+        if self.launch_pending_battle_if_ready():
             self.play_battle_and_resume_scene(initial)
             return
         raise RouteBlocked(

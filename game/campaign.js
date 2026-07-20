@@ -886,6 +886,30 @@ function externalFieldFlags() {
   ];
 }
 
+/**
+ * Choose only an interaction the field can presently advance. A required
+ * interaction may depend on a same-level pickup, but an external future-story
+ * flag must not turn the locked interaction into a published route target.
+ */
+export function resolvePublishedFieldInteractable(requiredInteractable, levelInteractables = [], flags = []) {
+  const normalize = (value) => String(value ?? '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[â€™']/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+  const normalizedFlags = new Set(flags.map(normalize));
+  const available = (item) => Boolean(item)
+    && item.available !== false
+    && (!item.requires || normalizedFlags.has(normalize(item.requires)));
+  if (available(requiredInteractable)) return requiredInteractable;
+  const prerequisite = requiredInteractable?.requires
+    ? levelInteractables.find((item) => normalize(item.id) === normalize(requiredInteractable.requires))
+    : null;
+  return available(prerequisite) ? prerequisite : null;
+}
+
 function fieldPosition() {
   return getCurrentFieldContext(fieldRuntimeState).position;
 }
@@ -1507,17 +1531,18 @@ function updateFieldDashboard(level) {
     : unfinishedFieldRequirement?.type === 'flag'
       ? (level.interactables ?? []).find((item) => item.result === unfinishedFieldRequirement.id || item.id === unfinishedFieldRequirement.id)
       : null;
-  const missingInteractablePrerequisite = requiredInteractable?.requires
-    && !status.flags.includes(requiredInteractable.requires)
-    ? (level.interactables ?? []).find((item) => item.id === requiredInteractable.requires)
-    : null;
+  const publishedRequiredInteractable = resolvePublishedFieldInteractable(
+    requiredInteractable,
+    level.interactables ?? [],
+    status.flags,
+  );
   const readyExit = status.objective.completed
     ? status.objective.exits.find((exit) => exit.ready) ?? null
     : null;
   const exitBlockingInteractable = readyExit && authored?.available !== false && !authored?.consumed
     ? authored
     : null;
-  const nextRequiredInteractable = missingInteractablePrerequisite ?? requiredInteractable ?? exitBlockingInteractable;
+  const nextRequiredInteractable = publishedRequiredInteractable ?? exitBlockingInteractable;
   const fieldTarget = nextRequiredInteractable?.at
     ? { type: 'interaction', id: nextRequiredInteractable.id, at: nextRequiredInteractable.at, range: 1 }
     : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 0 } : null;

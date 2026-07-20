@@ -2,8 +2,17 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
+import { getLevel } from '../content/levels.mjs';
+
 const campaignSource = await readFile(new URL('../campaign.js', import.meta.url), 'utf8');
 const campaignHtml = await readFile(new URL('../campaign.html', import.meta.url), 'utf8');
+const publishedHelperSource = campaignSource.slice(
+  campaignSource.indexOf('export function resolvePublishedFieldInteractable'),
+  campaignSource.indexOf('\n\nfunction fieldPosition', campaignSource.indexOf('export function resolvePublishedFieldInteractable')),
+);
+const { resolvePublishedFieldInteractable } = await import(
+  `data:text/javascript;base64,${Buffer.from(publishedHelperSource).toString('base64')}`
+);
 
 test('campaign loads, renders, and gates all canonical scene operations', () => {
   assert.match(campaignSource, /from '\.\/content\/scene-operations\.mjs'/);
@@ -56,10 +65,11 @@ test('the rendered map publishes the next incomplete field interaction or ready 
   assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'interaction'/);
   assert.match(campaignSource, /unfinishedFieldRequirement\?\.type === 'flag'/);
   assert.match(campaignSource, /item\.result === unfinishedFieldRequirement\.id \|\| item\.id === unfinishedFieldRequirement\.id/);
-  assert.match(campaignSource, /missingInteractablePrerequisite = requiredInteractable\?\.requires/);
-  assert.match(campaignSource, /find\(\(item\) => item\.id === requiredInteractable\.requires\)/);
+  assert.match(campaignSource, /resolvePublishedFieldInteractable\(\s+requiredInteractable,\s+level\.interactables \?\? \[\],\s+status\.flags/);
+  assert.match(campaignSource, /item\.available !== false/);
+  assert.match(campaignSource, /normalize\(item\.id\) === normalize\(requiredInteractable\.requires\)/);
   assert.match(campaignSource, /exitBlockingInteractable = readyExit && authored\?\.available !== false && !authored\?\.consumed/);
-  assert.match(campaignSource, /nextRequiredInteractable = missingInteractablePrerequisite \?\? requiredInteractable \?\? exitBlockingInteractable/);
+  assert.match(campaignSource, /nextRequiredInteractable = publishedRequiredInteractable \?\? exitBlockingInteractable/);
   assert.match(campaignSource, /readyExit = status\.objective\.completed\s+\? status\.objective\.exits\.find\(\(exit\) => exit\.ready\)/);
   assert.match(campaignSource, /type: 'interaction'/);
   assert.match(campaignSource, /type: 'route-exit'/);
@@ -67,6 +77,45 @@ test('the rendered map publishes the next incomplete field interaction or ready 
     assert.match(campaignSource, new RegExp(`mapCanvas\\.dataset\\.fieldObjectiveTarget${field}`));
     assert.match(campaignSource, new RegExp(`delete mapCanvas\\.dataset\\.fieldObjectiveTarget${field}`));
   }
+});
+
+test('future story locks are not published, then become targets after their flag exists', () => {
+  const chapel = getLevel('tkm-abandoned-chapel');
+  const rearLock = chapel.interactables.find(({ id }) => id === 'rear-lock');
+
+  assert.equal(
+    resolvePublishedFieldInteractable(rearLock, chapel.interactables, []),
+    null,
+    'c2-02 cannot publish the rear lock before Lise entrusts her key',
+  );
+  assert.equal(
+    resolvePublishedFieldInteractable(rearLock, chapel.interactables, ['c2-lise-trusted-with-key']),
+    rearLock,
+    'c2-03 may publish the rear lock after its normalized campaign flag exists',
+  );
+  assert.equal(
+    resolvePublishedFieldInteractable({ ...rearLock, available: false }, chapel.interactables, ['c2_lise_trusted_with_key']),
+    null,
+    'an explicitly unavailable required interaction remains unpublished',
+  );
+});
+
+test('an actionable same-level prerequisite is published before its dependent interaction', () => {
+  const riverLane = getLevel('hsh-river-lane');
+  const medicineDoor = riverLane.interactables.find(({ id }) => id === 'mori-house-door');
+  const medicine = riverLane.interactables.find(({ id }) => id === 'medicine-bottle');
+
+  assert.equal(resolvePublishedFieldInteractable(medicineDoor, riverLane.interactables, []), medicine);
+  assert.equal(resolvePublishedFieldInteractable(medicineDoor, riverLane.interactables, ['medicine_bottle']), medicineDoor);
+  assert.equal(
+    resolvePublishedFieldInteractable(
+      medicineDoor,
+      riverLane.interactables.map((item) => (item.id === medicine.id ? { ...item, available: false } : item)),
+      [],
+    ),
+    null,
+    'an unavailable prerequisite cannot replace an unavailable required interaction',
+  );
 });
 
 test('dashboard and field action share ready-exit interaction priority', () => {

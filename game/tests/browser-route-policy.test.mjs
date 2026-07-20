@@ -62,6 +62,43 @@ test('a route exit blocked by newly due work hands control back to the rendered 
   assert.match(finishField, /if self\.field_objective_target\(\) != published:\s+continue/);
 });
 
+test('published field objectives yield to newly ready story gates and fail fast on a stable blocked target', () => {
+  const finishField = routeSource.slice(
+    routeSource.indexOf('    def finish_published_field_objectives'),
+    routeSource.indexOf('    def finish_dialogue_and_choices', routeSource.indexOf('    def finish_published_field_objectives')),
+  );
+  const firstPublishedRead = finishField.indexOf('published = self.field_objective_target()');
+  assert.ok(firstPublishedRead > 0);
+  assert.ok(
+    finishField.indexOf('if self.advance_story_if_ready():') < firstPublishedRead,
+    'the newly enabled Next scene control must win before another published-target interaction',
+  );
+  assert.ok(
+    finishField.indexOf('if self.launch_pending_battle_if_ready():') < firstPublishedRead,
+    'a pending authored battle must win before unrelated published fieldwork',
+  );
+  assert.match(
+    finishField,
+    /interaction\.click\(\)[\s\S]*if self\.advance_story_if_ready\(\):[\s\S]*after_published = self\.field_objective_target\(\)[\s\S]*if after_published == published:/,
+  );
+  assert.match(finishField, /"field-objective-requirement-missing"/);
+  assert.match(finishField, /"field-objective-no-progress"/);
+  assert.match(finishField, /feedback=feedback/);
+});
+
+test('story and pending-battle convergence helpers use rendered controls and exclude grind replays', () => {
+  const helpers = routeSource.slice(
+    routeSource.indexOf('    def advance_story_if_ready'),
+    routeSource.indexOf('    def finish_published_field_objectives', routeSource.indexOf('    def advance_story_if_ready')),
+  );
+  assert.match(helpers, /self\.page\.locator\("#nextScene"\)/);
+  assert.match(helpers, /next_scene\.click\(\)/);
+  assert.match(helpers, /self\.page\.locator\("#launchBattle"\)/);
+  assert.match(helpers, /startswith\("Enter encounter:"\)/);
+  assert.match(helpers, /launch\.click\(\)/);
+  assert.doesNotMatch(helpers, /evaluate|local_storage|session_storage/);
+});
+
 test('multi-map route work cannot be abandoned merely because its activity ID stays stable', () => {
   const drain = routeSource.slice(
     routeSource.indexOf('    def drain_due_route_work'),
