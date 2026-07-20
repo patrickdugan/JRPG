@@ -380,6 +380,177 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(final == {"wins": 6, "speed": 4}, "Five-win repeat queue or speed authority drifted.")
 
+            item_context = browser.new_context(viewport={"width": 1280, "height": 900})
+            item_page = item_context.new_page()
+            item_page.set_default_timeout(20_000)
+            item_page.set_default_navigation_timeout(45_000)
+            item_page.on(
+                "console",
+                lambda message: console_errors.append(
+                    {"text": message.text, "url": message.location.get("url", "")}
+                )
+                if message.type == "error"
+                else None,
+            )
+            item_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            item_page.on(
+                "response",
+                lambda response: delivery_errors.append({"status": response.status, "url": response.url})
+                if response.status >= 400
+                else None,
+            )
+            item_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            item_seed = item_page.evaluate(
+                """async id => {
+                  const advancement = await import('./advancement.mjs');
+                  const loadout = await import('./loadout.mjs');
+                  let advancementState = advancement.createAdvancementState();
+                  advancementState = advancement.preparePartyForEncounter(advancementState, id);
+                  advancementState = advancement.recordEncounterWin(advancementState, id);
+                  const training = advancement.grantRewardBundle(advancementState, {
+                    xpPerMember: advancement.MAX_MEMBER_XP,
+                    currency: 0,
+                    items: [],
+                    keyItems: [],
+                  });
+                  if (!training.ok) throw new Error(training.errors.join(' '));
+                  advancementState = advancement.setSpeedMultiplier(training.state, 4);
+                  if (!advancement.createAdvancementStorageAdapter().save(advancementState).ok) {
+                    throw new Error('Item QA advancement seed did not save.');
+                  }
+                  let loadoutState = loadout.createLoadoutState();
+                  const wounded = loadout.setMemberVitals(loadoutState, 'ren', { hp: 20 });
+                  if (!wounded.ok) throw new Error(wounded.reason);
+                  loadoutState = wounded.state;
+                  if (!loadout.createLoadoutStorageAdapter().save(loadoutState).ok) {
+                    throw new Error('Item QA loadout seed did not save.');
+                  }
+                  return {
+                    wins: advancement.getEncounterWinCount(advancementState, id),
+                    speed: advancementState.speedMultiplier,
+                    level: advancement.getPartyMember(advancementState, 'ren').level,
+                    stock: loadoutState.inventory['river-salve'],
+                    hp: loadoutState.vitals.ren.hp,
+                  };
+                }""",
+                encounter_id,
+            )
+            require(
+                item_seed == {"wins": 1, "speed": 4, "level": 50, "stock": 3, "hp": 20},
+                f"Campaign Item QA seed drifted: {item_seed}.",
+            )
+            item_page.goto(
+                f"{base}/battle.html?encounter={encounter_id}&return=campaign.html",
+                wait_until="domcontentloaded",
+            )
+            item_page.wait_for_function(
+                """() => document.querySelector('#battleCanvas')?.dataset.itemArtState === 'ready'
+                  && document.querySelector('#itemIconPreview')?.dataset.itemArtState === 'ready'
+                  && !document.querySelector('[data-command="item"]').disabled""",
+            )
+            item_initial = item_page.evaluate(
+                """async () => {
+                  const loadout = await import('./loadout.mjs');
+                  const loaded = loadout.createLoadoutStorageAdapter().load();
+                  return {
+                    hp: document.querySelector('[data-actor-id="ren"] .combatant-name span').textContent,
+                    itemLabel: document.querySelector('#itemSelect option[value="river-salve"]').textContent,
+                    canvasArt: document.querySelector('#battleCanvas').dataset.itemArtState,
+                    previewArt: document.querySelector('#itemIconPreview').dataset.itemArtState,
+                    revision: loaded.value.revision,
+                  };
+                }"""
+            )
+            require("3 held" in item_initial["itemLabel"], f"Battle did not expose three River Salves: {item_initial}.")
+            item_page.keyboard.press("i")
+            require(
+                item_page.locator('[data-command="item"]').get_attribute("aria-pressed") == "true",
+                "I did not select the Campaign Item command.",
+            )
+            item_page.locator("#targetSelect").select_option("ren")
+            item_page.locator("#confirmCommand").click()
+            item_page.wait_for_function(
+                """() => document.querySelector('#resultLog').textContent.includes('recovers 80 HP from River Salve')
+                  && document.querySelector('#itemSelect option[value="river-salve"]').textContent.includes('2 held')""",
+            )
+            item_provisional = {
+                "hp": item_page.locator('[data-actor-id="ren"] .combatant-name span').inner_text(),
+                "itemLabel": item_page.locator('#itemSelect option[value="river-salve"]').inner_text(),
+                "log": item_page.locator("#resultLog").inner_text(),
+            }
+            require(
+                item_provisional["hp"] != item_initial["hp"],
+                f"River Salve did not change the exact rendered HP: {item_initial} / {item_provisional}.",
+            )
+
+            item_page.reload(wait_until="domcontentloaded")
+            item_page.wait_for_function(
+                """() => document.querySelector('#battleCanvas')?.dataset.itemArtState === 'ready'
+                  && !document.querySelector('[data-command="item"]').disabled""",
+            )
+            item_refund = item_page.evaluate(
+                """async () => {
+                  const loadout = await import('./loadout.mjs');
+                  const loaded = loadout.createLoadoutStorageAdapter().load();
+                  return {
+                    hp: document.querySelector('[data-actor-id="ren"] .combatant-name span').textContent,
+                    itemLabel: document.querySelector('#itemSelect option[value="river-salve"]').textContent,
+                    revision: loaded.value.revision,
+                  };
+                }"""
+            )
+            require(
+                "3 held" in item_refund["itemLabel"] and item_refund["hp"] == item_initial["hp"],
+                f"Reload did not refund provisional River Salve stock and HP: {item_refund}.",
+            )
+            item_page.keyboard.press("i")
+            item_page.locator("#targetSelect").select_option("ren")
+            item_page.locator("#confirmCommand").click()
+            item_page.wait_for_function(
+                "() => document.querySelector('#itemSelect option[value=\"river-salve\"]').textContent.includes('2 held')",
+            )
+            item_page.wait_for_timeout(900)
+            item_page.locator("#autoGrindWins").select_option("1")
+            item_page.locator("#autoGrind").click()
+            item_page.wait_for_function(
+                """() => document.querySelector('#autoGrind').getAttribute('aria-pressed') === 'false'
+                  && !document.querySelector('#continueCampaign').hidden""",
+                timeout=120_000,
+            )
+            require(item_page.locator("#battleStateBadge").inner_text() == "VICTORY", "Item QA Auto-Grind did not win.")
+            item_durable = item_page.evaluate(
+                """async () => {
+                  const loadout = await import('./loadout.mjs');
+                  const loaded = loadout.createLoadoutStorageAdapter().load();
+                  if (!loaded.ok) throw new Error('Item QA durable loadout could not be read.');
+                  return {
+                    stock: loaded.value.inventory['river-salve'] ?? 0,
+                    revision: loaded.value.revision,
+                    hp: loaded.value.vitals.ren.hp,
+                  };
+                }"""
+            )
+            require(
+                item_durable["stock"] == 2
+                and item_durable["revision"] == item_refund["revision"] + 1,
+                f"Victory did not settle exactly one River Salve in one revision: {item_refund} / {item_durable}.",
+            )
+            item_page.reload(wait_until="domcontentloaded")
+            item_page.wait_for_function(
+                "() => document.querySelector('#itemSelect option[value=\"river-salve\"]').textContent.includes('2 held')",
+            )
+            item_result = {
+                "hpBefore": item_initial["hp"],
+                "hpAfterUse": item_provisional["hp"],
+                "provisionalStock": 2,
+                "reloadRefundStock": 3,
+                "durableStock": item_durable["stock"],
+                "durableRevisionDelta": item_durable["revision"] - item_refund["revision"],
+                "canvasArt": item_initial["canvasArt"],
+                "previewArt": item_initial["previewArt"],
+            }
+            item_context.close()
+
             stage_context = browser.new_context(viewport={"width": 1440, "height": 1000})
             stage_page = stage_context.new_page()
             stage_page.set_default_timeout(20_000)
@@ -1471,6 +1642,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
         camp_round_trip=True,
         first_clear_speed_locked=True,
         campaign_dodge=dodge_result,
+        campaign_item=item_result,
         repeat_seed=seed,
         repeat_terminal="VICTORY",
         repeat_queue_wins=5,

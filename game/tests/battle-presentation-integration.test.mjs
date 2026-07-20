@@ -438,7 +438,7 @@ test('browser Dodge wiring is targetless, engine-owned, presentation-bounded, an
   assert.match(html, /data-command="dodge" aria-keyshortcuts="F"/);
   assert.match(source, /if \(command\.type === 'dodge'\)[\s\S]*?engine\.dodge\(actorId\)[\s\S]*?type: 'dodge'/);
   assert.match(source, /selectedCommand === 'dodge'[\s\S]*?engine\.dodge\(actor\.instanceId\)/);
-  assert.match(source, /\['guard', 'dodge', 'analyze', 'objective'\]\.includes\(selectedCommand\)/);
+  assert.match(source, /\['guard', 'dodge', 'item', 'analyze', 'objective'\]\.includes\(selectedCommand\)/);
   assert.match(source, /dodged: Boolean\(result\.dodged\)/);
   const audio = source.slice(source.indexOf('const healFeedback ='), source.indexOf('const timelineEndsAt ='));
   assert.ok(audio.indexOf('result.dodged') >= 0 && audio.indexOf('result.dodged') < audio.indexOf('result.guarded'));
@@ -447,4 +447,50 @@ test('browser Dodge wiring is targetless, engine-owned, presentation-bounded, an
   assert.match(source, /actor\.stance === 'dodge'/);
   assert.match(source, /canvas\.dataset\.activeActorStance = actor\.stance/);
   assert.match(source, /if \(!\['attack', 'skill', 'analyze'\]\.includes\(selectedCommand\)\) return;/);
+});
+
+test('browser Item wiring is party-targeted, presentation-locked, engine-owned, and outside attack timelines', async () => {
+  const [source, html] = await Promise.all([
+    readFile(new URL('../battle.js', import.meta.url), 'utf8'),
+    readFile(new URL('../battle.html', import.meta.url), 'utf8'),
+  ]);
+  assert.match(html, /data-command="item" aria-keyshortcuts="I"/);
+  assert.match(html, /<label for="itemSelect">[\s\S]*?<select id="itemSelect"/);
+  assert.match(source, /result = engine\.useItem\(actor\.instanceId, itemSelect\.value, targetSelect\.value\)/);
+  assert.doesNotMatch(
+    source.slice(source.indexOf("} else if (selectedCommand === 'item')"), source.indexOf("} else if (selectedCommand === 'analyze')")),
+    /startCombatAnimation|useSkill/,
+  );
+  assert.match(source, /const presentationStartedAt = performance\.now\(\)/);
+  assert.match(source, /startBattleCommandPresentation\(\{[\s\S]*?type: selectedCommand,[\s\S]*?startedAt: presentationStartedAt/);
+  assert.match(source, /startBattleHealSystemFeedback\(result, snapshot, afterSnapshot, \{ startedAt: presentationStartedAt, speed: 1 \}\)/);
+  assert.match(source, /selectedCommand === 'item' && partyTarget/);
+  assert.match(source, /engine\.getBattleItemQuote\(actor\.instanceId, itemSelect\.value, partyTarget\.instanceId\)/);
+  assert.match(source, /if \(!\['attack', 'skill', 'analyze'\]\.includes\(selectedCommand\)\) return;/,
+    'enemy canvas targets are suppressed while Item is selected');
+  assert.match(source, /const itemMode = selectedCommand === 'item'/);
+  assert.match(source, /selectedItemTargetId/);
+  assert.match(source, /selectedEnemyTargetId/);
+  assert.match(source, /No item, Recovery, or turn will be spent/);
+  assert.match(source, /River Salve would have no effect on any living ally/);
+});
+
+test('victory settles provisional item debits atomically before replacing live loadout state', async () => {
+  const source = await readFile(new URL('../battle.js', import.meta.url), 'utf8');
+  const victory = source.slice(
+    source.indexOf('function recordVictoryIfNeeded(snapshot)'),
+    source.indexOf('\nfunction renderResult', source.indexOf('function recordVictoryIfNeeded(snapshot)')),
+  );
+  assert.match(victory, /settleBattleLoadout\(loadoutState, \{/);
+  assert.match(victory, /itemDebits: snapshot\.itemConsumption/);
+  assert.match(victory, /reward: \{ currency: reward\.currency, items: reward\.items \}/);
+  assert.match(victory, /partyVitals/);
+  assert.match(victory, /entry\.faction === 'party' && entry\.hp > 0/);
+  assert.doesNotMatch(victory, /Math\.max\(1, actor\.hp\)/);
+  assert.ok(victory.indexOf('settleBattleLoadout(loadoutState') < victory.indexOf('commitPersistenceTransaction('));
+  assert.ok(victory.indexOf('commitPersistenceTransaction(') < victory.indexOf('loadoutState = nextLoadoutState'));
+  assert.match(victory, /if \(rewardRecorded\) return true/);
+  const restart = source.slice(source.indexOf("restartBattle.addEventListener('click'"), source.indexOf("window.addEventListener('keydown'"));
+  assert.match(restart, /engine = createEngine\(\)/, 'restart reconstructs provisional stock from durable loadout authority');
+  assert.doesNotMatch(restart, /loadoutAdapter\.save|itemConsumption/, 'restart cannot persist an unearned debit');
 });

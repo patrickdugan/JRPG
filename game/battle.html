@@ -75,6 +75,7 @@
               <button type="button" data-command="skill" aria-keyshortcuts="3">3 · Skill</button>
               <button type="button" data-command="guard" aria-keyshortcuts="4">4 · Guard</button>
               <button type="button" data-command="dodge" aria-keyshortcuts="F">F · Dodge</button>
+              <button type="button" data-command="item" aria-keyshortcuts="I">I · Item</button>
               <button type="button" data-command="analyze" aria-keyshortcuts="5">5 · Analyze</button>
               <button type="button" data-command="objective" aria-keyshortcuts="6">6 · Objective</button>
             </div>
@@ -85,6 +86,15 @@
                 <select id="skillSelect" name="skill" disabled>
                   <option value="">Select an art</option>
                 </select>
+              </label>
+              <label for="itemSelect">
+                <span>Battle item</span>
+                <span class="item-select-control">
+                  <span id="itemIconPreview" class="battle-item-icon item-icon-fallback" aria-hidden="true" data-item-art-state="loading"></span>
+                  <select id="itemSelect" name="item" aria-describedby="commandHint" disabled>
+                    <option value="">Select an item</option>
+                  </select>
+                </span>
               </label>
               <label for="targetSelect">
                 <span>Target</span>

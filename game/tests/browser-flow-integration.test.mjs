@@ -195,7 +195,16 @@ test('battle victory is durable before the campaign continuation is exposed', ()
   assert.match(victory, /stateSaveStep\(id, adapter, previousState, nextState, \{ supportsOverwriteRollback: true \}\)/);
   assert.match(victory, /if \(!persisted\.ok\)[\s\S]*?return failSettlement/);
   assert.match(victory, /victorySaveRetryAt = performance\.now\(\) \+ 1000/);
-  assert.match(victory, /setMemberVitals\(nextLoadoutState/);
+  assert.match(victory, /const partyVitals = Object\.fromEntries\(snapshot\.actors/);
+  assert.match(victory, /entry\.faction === 'party' && entry\.hp > 0/,
+    'victory persists living survivor HP without inventing a one-HP revival');
+  assert.doesNotMatch(victory, /Math\.max\(1, actor\.hp\)/);
+  assert.match(victory, /settleBattleLoadout\(loadoutState, \{/);
+  assert.match(victory, /itemDebits: snapshot\.itemConsumption/);
+  assert.match(victory, /reward: \{ currency: reward\.currency, items: reward\.items \}/);
+  assert.match(victory, /partyVitals/);
+  assert.ok(victory.indexOf('settleBattleLoadout(loadoutState') < saveIndex,
+    'battle items, rewards, and vitals are prepared before the atomic write');
   assert.match(battleSource, /continueCampaign\.hidden = [^;]+\|\| !durableVictory;/);
 });
 

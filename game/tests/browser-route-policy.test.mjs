@@ -17,7 +17,8 @@ test('battle publishes one non-mutating competent command suggestion for rendere
   assert.match(publish, /canvas\.dataset\.suggestedDx = String\(suggestion\.dx\)/);
   assert.match(publish, /canvas\.dataset\.suggestedSkillId = suggestion\.skillId/);
   assert.match(publish, /canvas\.dataset\.suggestedTargetId = suggestion\.targetId/);
-  assert.doesNotMatch(publish, /engine\.(?:move|useSkill|guard|dodge|performObjectiveAction)\(/);
+  assert.doesNotMatch(publish, /engine\.(?:move|useSkill|useItem|guard|dodge|performObjectiveAction)\(/);
+  assert.doesNotMatch(publish, /itemConsumption\s*=/, 'render-time policy inspection cannot consume an item');
 });
 
 test('route runner executes suggestions only through visible controls and keyboard movement', () => {

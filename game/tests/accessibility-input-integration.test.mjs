@@ -66,21 +66,31 @@ test('battle target cards disable defeated and temporarily locked enemies', () =
   assert.match(battle, /card\.disabled = !targetable/);
   assert.match(battle, /const enemyTargetingAvailable = snapshot\.phase === CAMPAIGN_COMBAT_PHASES\.PLAYER_COMMAND[\s\S]*?!manualInputLocked\(\)/);
   assert.match(battle, /const targetable = enemyTargetingAvailable && actor\.active !== false && actor\.hp > 0/);
-  assert.match(battle, /if \(!targets\.some\(\(target\) => target\.instanceId === selectedTargetId\)\)/);
+  assert.match(battle, /actor\.instanceId === selectedEnemyTargetId/);
 });
 
-test('Campaign Dodge has one native touch control and an isolated non-repeating keyboard shortcut', () => {
+test('Campaign Dodge and Item have native controls and isolated non-repeating keyboard shortcuts', () => {
   const html = source('battle.html');
   const battle = source('battle.js');
   const css = source('battle.css');
   assert.match(html, /<button type="button" data-command="dodge" aria-keyshortcuts="F">F · Dodge<\/button>/);
   assert.equal((html.match(/data-command="dodge"/g) ?? []).length, 1);
+  assert.match(html, /<button type="button" data-command="item" aria-keyshortcuts="I">I · Item<\/button>/);
+  assert.equal((html.match(/data-command="item"/g) ?? []).length, 1);
+  assert.match(html, /<label for="itemSelect">[\s\S]*?<select id="itemSelect" name="item" aria-describedby="commandHint" disabled>/);
   assert.match(battle, /f: 'dodge'/);
+  assert.match(battle, /i: 'item'/);
   assert.match(battle, /if \(commandShortcuts\[key\] && !event\.repeat\)/);
+  assert.match(battle, /event\.target\.closest\('input, select, textarea, button, a, \[contenteditable="true"\]'\)/);
   assert.match(battle, /selectedCommand === 'dodge'[\s\S]*?engine\.dodge\(actor\.instanceId\)/);
-  assert.match(battle, /!\['attack', 'skill', 'analyze'\]\.includes\(selectedCommand\)/,
-    'targetless commands suppress enemy canvas targeting');
+  assert.match(battle, /selectedCommand === 'item'[\s\S]*?engine\.useItem\(actor\.instanceId, itemSelect\.value, targetSelect\.value\)/);
+  assert.match(battle, /if \(selectedCommand === 'item' && partyTarget\)/);
+  assert.match(battle, /if \(!\['attack', 'skill', 'analyze'\]\.includes\(selectedCommand\)\) return;/,
+    'Item and targetless commands suppress enemy canvas targeting');
+  assert.match(battle, /quote\?\.usable/);
+  assert.match(battle, /No item, Recovery, or turn will be spent/);
   assert.match(battle, /reducedMotion\.matches \? 0\.5 : \(visualNow % 640\) \/ 640/,
     'persistent Dodge cue has one static reduced-motion frame');
-  assert.match(css, /\.command-grid \{[^}]*repeat\(7, minmax\(64px, 1fr\)\)/);
+  assert.match(css, /\.command-grid \{[^}]*repeat\(8, minmax\(58px, 1fr\)\)/);
+  assert.match(css, /\.selection-grid \{[^}]*repeat\(3, minmax\(0, 1fr\)\)/);
 });

@@ -61,3 +61,26 @@ test('Camp keeps item icons decorative and text-authoritative with a load fallba
   assert.match(source, /itemIconAtlasState !== 'ready'/);
   assert.match(source, /card\.append\(itemIconElement\(item\.id\)/);
 });
+
+test('Battle reuses the canonical atlas as decorative exact-frame art with fallback readiness', async () => {
+  const [source, html, smoke] = await Promise.all([
+    readFile(new URL('../battle.js', import.meta.url), 'utf8'),
+    readFile(new URL('../battle.html', import.meta.url), 'utf8'),
+    readFile(new URL('../tools/browser-smoke.py', import.meta.url), 'utf8'),
+  ]);
+  assert.match(html, /id="itemIconPreview"[^>]*aria-hidden="true"[^>]*data-item-art-state="loading"/);
+  assert.match(html, /<select id="itemSelect"/);
+  assert.match(source, /ITEM_ICON_ATLAS/);
+  assert.match(source, /itemIconImageHasExpectedSize\(battleItemAtlasImage\)/);
+  assert.match(source, /itemIconPreview\.dataset\.itemArtState = state/);
+  assert.match(source, /function renderItemIconPreview\(itemId\)/);
+  assert.match(source, /getItemIconFrame\(itemId\)/);
+  assert.match(source, /itemIconPreview\.classList\.add\('item-icon-fallback'\)/);
+  assert.match(source, /context\.drawImage\([\s\S]*?battleItemAtlasImage[\s\S]*?frame\.x[\s\S]*?frame\.y/);
+  assert.match(source, /canvas\.dataset\.itemArtState/);
+  assert.match(smoke, /Campaign Item QA seed drifted/);
+  assert.match(smoke, /recovers 80 HP from River Salve/);
+  assert.match(smoke, /Reload did not refund provisional River Salve stock and HP/);
+  assert.match(smoke, /Victory did not settle exactly one River Salve in one revision/);
+  assert.match(smoke, /campaign_item=item_result/);
+});

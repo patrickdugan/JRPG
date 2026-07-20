@@ -71,9 +71,23 @@ test('audio hooks consume score metadata and fire transition cues outside animat
     battle.indexOf('function startCombatAnimation'),
     battle.indexOf('function currentBattleAnimationFrame'),
   );
-  for (const cue of ['combatHeal', 'combatGuard', 'combatCritical', 'combatHit']) {
+  for (const cue of ['combatGuard', 'combatCritical', 'combatHit']) {
     assert.match(animation, new RegExp(`pageAudio\\.playCue\\('${cue}'\\)`));
   }
+  const heal = battle.slice(
+    battle.indexOf('function startBattleHealSystemFeedback'),
+    battle.indexOf('function startCombatAnimation'),
+  );
+  assert.match(heal, /createBattleHealFeedback\(\{/);
+  assert.equal((heal.match(/pageAudio\.playCue\('combatHeal'\)/g) ?? []).length, 1,
+    'the shared exact-heal seam owns one heal cue');
+  assert.doesNotMatch(heal, /combatHit/);
+  const manualItem = battle.slice(
+    battle.indexOf("} else if (selectedCommand === 'item')"),
+    battle.indexOf("} else if (selectedCommand === 'analyze')"),
+  );
+  assert.match(manualItem, /engine\.useItem/);
+  assert.doesNotMatch(manualItem, /combatHit|startCombatAnimation/);
   const battleRender = battle.slice(battle.indexOf('function render()'), battle.indexOf('function executeRepeatPolicyCommand'));
   assert.doesNotMatch(battleRender, /pageAudio\.playCue/);
 });

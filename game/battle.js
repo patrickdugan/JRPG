@@ -35,13 +35,19 @@ import {
   resolveFieldEncounter,
 } from './field-runtime.mjs';
 import {
+  BATTLE_ITEM_IDS,
+  ITEM_CATALOGUE,
   applyLoadoutToPartyProfile,
   createLoadoutState,
   createLoadoutStorageAdapter,
-  grantInventory,
-  setMemberVitals,
+  settleBattleLoadout,
   syncPartyVitals,
 } from './loadout.mjs';
+import {
+  ITEM_ICON_ATLAS,
+  getItemIconFrame,
+  itemIconImageHasExpectedSize,
+} from './item-icon-atlas.mjs';
 import {
   chooseRepeatBattleCommand,
   getRepeatStepDelayMs,
@@ -180,6 +186,8 @@ const roundLabel = document.querySelector('#roundLabel');
 const phaseLabel = document.querySelector('#phaseLabel');
 const commandButtons = [...document.querySelectorAll('[data-command]')];
 const skillSelect = document.querySelector('#skillSelect');
+const itemSelect = document.querySelector('#itemSelect');
+const itemIconPreview = document.querySelector('#itemIconPreview');
 const targetSelect = document.querySelector('#targetSelect');
 const confirmCommand = document.querySelector('#confirmCommand');
 const commandHint = document.querySelector('#commandHint');
@@ -210,6 +218,7 @@ context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
 const battleEnemyAtlasImage = new Image();
 const battleBossAtlasImage = new Image();
+const battleItemAtlasImage = new Image();
 function loadCombatAtlas(image, { url, width, height, datasetKey }) {
   canvas.dataset[datasetKey] = 'loading';
   image.decoding = 'async';
@@ -226,6 +235,23 @@ function loadCombatAtlas(image, { url, width, height, datasetKey }) {
 loadCombatAtlas(battlePartyAtlasImage, { ...PARTY_COMBAT_ATLAS, datasetKey: 'partyArtState' });
 loadCombatAtlas(battleEnemyAtlasImage, { ...ENEMY_ATLAS, datasetKey: 'enemyArtState' });
 loadCombatAtlas(battleBossAtlasImage, { ...BOSS_COMBAT_ATLAS, datasetKey: 'bossArtState' });
+let battleItemAtlasState = 'loading';
+function setBattleItemArtState(state) {
+  battleItemAtlasState = state;
+  canvas.dataset.itemArtState = state;
+  itemIconPreview.dataset.itemArtState = state;
+}
+setBattleItemArtState(battleItemAtlasState);
+battleItemAtlasImage.decoding = 'async';
+battleItemAtlasImage.addEventListener('load', () => {
+  setBattleItemArtState(itemIconImageHasExpectedSize(battleItemAtlasImage) ? 'ready' : 'error');
+  if (engine) render();
+}, { once: true });
+battleItemAtlasImage.addEventListener('error', () => {
+  setBattleItemArtState('error');
+  if (engine) render();
+}, { once: true });
+battleItemAtlasImage.src = ITEM_ICON_ATLAS.url;
 const battleVfxAtlasImage = new Image();
 let battleVfxAtlasState = 'loading';
 battleVfxAtlasImage.decoding = 'async';
@@ -309,7 +335,8 @@ if (syncedLoadout.ok) {
   loadoutAdapter.save(loadoutState);
 }
 let selectedCommand = 'attack';
-let selectedTargetId = '';
+let selectedEnemyTargetId = '';
+let selectedItemTargetId = '';
 let rewardRecorded = false;
 let victoryPersistenceError = null;
 let victorySaveRetryAt = 0;
@@ -352,7 +379,8 @@ function combatProfiles() {
 }
 
 function createEngine() {
-  return new CampaignCombatEngine({ encounterId: encounter.id, partyProfiles: combatProfiles() });
+  const itemStock = Object.fromEntries(BATTLE_ITEM_IDS.map((itemId) => [itemId, loadoutState.inventory[itemId] ?? 0]));
+  return new CampaignCombatEngine({ encounterId: encounter.id, partyProfiles: combatProfiles(), itemStock });
 }
 
 function setBattleStageArtState(state) {
@@ -469,6 +497,24 @@ function scheduleEnemyIntent(now = performance.now()) {
   return enemyIntentSchedule;
 }
 
+function startBattleHealSystemFeedback(result, beforeSnapshot, afterSnapshot, {
+  startedAt = performance.now(),
+  speed = autoGrindActive ? speedMultiplier : 1,
+} = {}) {
+  const feedback = createBattleHealFeedback({
+    resolution: result,
+    beforeSnapshot,
+    afterSnapshot,
+    startedAt,
+    speed,
+  });
+  if (!feedback) return null;
+  activeBattleSystemFeedback = feedback;
+  announcements.textContent = feedback.announcement;
+  pageAudio.playCue('combatHeal');
+  return feedback;
+}
+
 function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapshot()) {
   if (!result?.ok || !attackerId || !result.targetId || !result.skillId) return null;
   const attacker = beforeSnapshot.actors.find((actor) => actor.instanceId === attackerId);
@@ -501,17 +547,9 @@ function startCombatAnimation(result, attackerId, beforeSnapshot = engine.snapsh
     ? createPartySkillTimeline(result.skillId, animationOptions)
     : createEnemyFamilyTimeline(attacker.templateId, { ...animationOptions, skill });
   const startedAt = performance.now();
-  const healFeedback = createBattleHealFeedback({
-    resolution: result,
-    beforeSnapshot,
-    afterSnapshot,
-    startedAt,
-    speed,
-  });
+  const healFeedback = startBattleHealSystemFeedback(result, beforeSnapshot, afterSnapshot, { startedAt, speed });
   if (healFeedback) {
-    activeBattleSystemFeedback = healFeedback;
-    announcements.textContent = healFeedback.announcement;
-    pageAudio.playCue('combatHeal');
+    // Exact heal feedback owns the one combatHeal cue.
   } else if (result.dodged) {
     // The exact evasion record owns its accessible cue; a miss never plays combatHit.
   } else if (result.guarded) pageAudio.playCue('combatGuard');
@@ -587,10 +625,10 @@ function startBattleCommandPresentation({
   if (!result?.ok) return null;
   const actor = beforeSnapshot.actors.find((candidate) => candidate.instanceId === actorId);
   if (!actor) return null;
-  const target = type === 'analyze'
+  const target = ['analyze', 'item'].includes(type)
     ? beforeSnapshot.actors.find((candidate) => candidate.instanceId === targetId)
     : null;
-  if (type === 'analyze' && !target) return null;
+  if (['analyze', 'item'].includes(type) && !target) return null;
   const objectivePresentation = type === 'objective'
     ? getObjectiveActionPresentation(requirement ?? { action: 'objective' })
     : null;
@@ -606,10 +644,16 @@ function startBattleCommandPresentation({
     targetName: type === 'objective' ? objectivePresentation.targetName : target?.name,
     targetTile: type === 'objective' ? objectiveTile : target?.pos,
     objectiveAction: requirement?.action,
+    itemId: type === 'item' ? result.itemId : null,
+    itemName: type === 'item' ? result.itemName : null,
     label: objectivePresentation?.label,
     marker: objectivePresentation?.marker,
     color: objectivePresentation?.color,
-    detail: type === 'analyze' && result.readout?.ledger ? `Ledger: ${result.readout.ledger}` : null,
+    detail: type === 'analyze' && result.readout?.ledger
+      ? `Ledger: ${result.readout.ledger}`
+      : type === 'item'
+        ? `Restored ${result.amount} HP; ${result.stockAfter} remaining.`
+        : null,
     startedAt,
     speed,
   });
@@ -698,9 +742,11 @@ function startRecoveryLockSystemFeedback(actor, snapshot = engine.snapshot(), st
 }
 
 function selectedBattleTargetFeedback(snapshot = engine.snapshot(), now = performance.now()) {
-  if (!['attack', 'skill', 'analyze'].includes(selectedCommand)) return null;
-  const target = snapshot.actors.find((actor) => actor.instanceId === selectedTargetId
-    && actor.faction === 'enemy' && actor.hp > 0 && actor.active !== false);
+  if (!['attack', 'skill', 'analyze', 'item'].includes(selectedCommand)) return null;
+  const itemTarget = selectedCommand === 'item';
+  const selectedId = itemTarget ? selectedItemTargetId : selectedEnemyTargetId;
+  const target = snapshot.actors.find((actor) => actor.instanceId === selectedId
+    && actor.faction === (itemTarget ? 'party' : 'enemy') && actor.hp > 0 && actor.active !== false);
   if (!target) return null;
   return createSelectedTargetFeedback({
     targetId: target.instanceId,
@@ -1082,6 +1128,37 @@ function drawBattleCommandPresentationFx(frame, geometry) {
     context.moveTo(-offset + span, -span); context.lineTo(-offset, 0); context.lineTo(-offset + span, span);
     context.moveTo(offset - span, -span); context.lineTo(offset, 0); context.lineTo(offset - span, span);
     context.stroke();
+  } else if (frame.type === 'item') {
+    const routeX = actor.x + ((target.x - actor.x) * frame.linkProgress);
+    const routeY = actor.y + ((target.y - actor.y) * frame.linkProgress);
+    const frameDefinition = getItemIconFrame(frame.itemId);
+    context.globalAlpha = Math.min(1, frame.opacity * 0.24);
+    context.beginPath();
+    context.arc(target.x, target.y, radius * 1.35, 0, Math.PI * 2);
+    context.fill();
+    context.globalAlpha = frame.opacity;
+    if (battleItemAtlasState === 'ready' && frameDefinition && itemIconImageHasExpectedSize(battleItemAtlasImage)) {
+      const size = Math.max(16, geometry.cell * 0.46);
+      context.imageSmoothingEnabled = false;
+      context.drawImage(
+        battleItemAtlasImage,
+        frameDefinition.x,
+        frameDefinition.y,
+        frameDefinition.width,
+        frameDefinition.height,
+        Math.round(routeX - size / 2),
+        Math.round(routeY - size / 2),
+        Math.round(size),
+        Math.round(size),
+      );
+    } else {
+      context.translate(routeX, routeY);
+      context.strokeStyle = frame.accentColor;
+      context.beginPath();
+      context.rect(-radius * 0.45, -radius * 0.5, radius * 0.9, radius);
+      context.moveTo(-radius * 0.24, -radius * 0.72); context.lineTo(radius * 0.24, -radius * 0.72);
+      context.stroke();
+    }
   } else if (frame.type === 'analyze') {
     context.translate(target.x, target.y);
     context.strokeStyle = frame.accentColor;
@@ -1800,13 +1877,18 @@ function drawBattle(now = performance.now()) {
   drawBattleDefeatAccent(defeatAccent, geometry);
 }
 
-function createCombatantCard(actor, selected = false, targetable = true, partyCommandAttempt = false) {
-  const interactive = actor.faction === 'enemy' || partyCommandAttempt;
+function createCombatantCard(actor, selected = false, targetable = true, partyCommandAttempt = false, itemTarget = false) {
+  const interactive = actor.faction === 'enemy' || partyCommandAttempt || itemTarget;
   const card = document.createElement(interactive ? 'button' : 'div');
   if (card instanceof HTMLButtonElement) {
     card.type = 'button';
     card.disabled = !targetable;
     if (actor.faction === 'enemy') card.setAttribute('aria-pressed', String(selected));
+    else if (itemTarget) {
+      card.dataset.itemTarget = 'true';
+      card.setAttribute('aria-pressed', String(selected));
+      card.setAttribute('aria-label', `${actor.name}, ${actor.hp} of ${actor.maxHp} HP, ${targetable ? 'select as River Salve target' : actor.hp <= 0 ? 'defeated; River Salve cannot revive' : 'River Salve would have no effect'}`);
+    }
     else {
       card.dataset.partyCommandAttempt = 'true';
       card.setAttribute('aria-label', `${actor.name}, check command readiness`);
@@ -1862,19 +1944,28 @@ function renderCombatants(snapshot) {
   const partyCommandAttemptAvailable = snapshot.phase === CAMPAIGN_COMBAT_PHASES.PLAYER_COMMAND
     && !snapshot.result
     && !manualInputLocked();
+  const itemTargetingAvailable = partyCommandAttemptAvailable && selectedCommand === 'item';
+  const activeActor = activePartyActor(snapshot);
   partyPanel.replaceChildren(...snapshot.actors
     .filter((actor) => actor.faction === 'party')
-    .map((actor) => createCombatantCard(
-      actor,
-      false,
-      partyCommandAttemptAvailable && actor.hp > 0 && actor.active !== false,
-      true,
-    )));
+    .map((actor) => {
+      const quote = itemTargetingAvailable && activeActor && itemSelect.value
+        ? engine.getBattleItemQuote(activeActor.instanceId, itemSelect.value, actor.instanceId)
+        : null;
+      const itemTargetable = Boolean(quote?.usable);
+      return createCombatantCard(
+        actor,
+        itemTargetingAvailable && actor.instanceId === selectedItemTargetId,
+        itemTargetingAvailable ? itemTargetable : partyCommandAttemptAvailable && actor.hp > 0 && actor.active !== false,
+        !itemTargetingAvailable,
+        itemTargetingAvailable,
+      );
+    }));
   enemyPanel.replaceChildren(...snapshot.actors
     .filter((actor) => actor.faction !== 'party' && (actor.active !== false || actor.hp <= 0))
     .map((actor) => {
       const targetable = enemyTargetingAvailable && actor.active !== false && actor.hp > 0;
-      return createCombatantCard(actor, targetable && actor.instanceId === selectedTargetId, targetable);
+      return createCombatantCard(actor, targetable && actor.instanceId === selectedEnemyTargetId, targetable);
     }));
 }
 
@@ -1884,6 +1975,7 @@ function publishRenderedBattleState(snapshot) {
     'activeActorId', 'activeActorX', 'activeActorY', 'activeActorStance',
     'objectiveAction', 'objectiveRequirementKey', 'objectiveTargetX', 'objectiveTargetY',
     'combatTargetId', 'combatTargetX', 'combatTargetY', 'combatSkillRange',
+    'selectedItemId', 'selectedItemStock', 'itemTargetId', 'itemTargetX', 'itemTargetY',
     'suggestedCommand', 'suggestedDx', 'suggestedDy', 'suggestedSkillId',
     'suggestedTargetId', 'suggestedObjectiveAction', 'suggestedObjectiveTargetId',
     'bossMechanicId', 'bossActiveWardCount', 'bossIncomingDamageMultiplier',
@@ -1933,6 +2025,18 @@ function publishRenderedBattleState(snapshot) {
       canvas.dataset.combatTargetX = String(target.pos.x);
       canvas.dataset.combatTargetY = String(target.pos.y);
       canvas.dataset.combatSkillRange = String(actor.skills[0].range ?? 1);
+    }
+    const itemId = itemSelect.value || BATTLE_ITEM_IDS[0];
+    const itemTarget = snapshot.actors.find((candidate) => candidate.instanceId === selectedItemTargetId
+      && candidate.faction === 'party' && candidate.active !== false);
+    if (itemId) {
+      canvas.dataset.selectedItemId = itemId;
+      canvas.dataset.selectedItemStock = String(snapshot.itemStock?.[itemId] ?? 0);
+    }
+    if (itemTarget) {
+      canvas.dataset.itemTargetId = itemTarget.instanceId;
+      canvas.dataset.itemTargetX = String(itemTarget.pos.x);
+      canvas.dataset.itemTargetY = String(itemTarget.pos.y);
     }
     const suggestion = chooseRepeatBattleCommand(engine);
     if (suggestion) {
@@ -2008,6 +2112,25 @@ function replaceOptions(select, entries, placeholder) {
   }
 }
 
+function renderItemIconPreview(itemId) {
+  itemIconPreview.classList.add('item-icon-fallback');
+  itemIconPreview.style.removeProperty('background-image');
+  itemIconPreview.style.removeProperty('background-size');
+  itemIconPreview.style.removeProperty('background-position');
+  itemIconPreview.dataset.itemId = itemId ?? '';
+  const frame = getItemIconFrame(itemId);
+  if (battleItemAtlasState !== 'ready' || !frame) return;
+  const scale = 2;
+  itemIconPreview.classList.remove('item-icon-fallback');
+  itemIconPreview.style.backgroundImage = `url("${ITEM_ICON_ATLAS.url}")`;
+  itemIconPreview.style.backgroundSize = `${ITEM_ICON_ATLAS.width * scale}px ${ITEM_ICON_ATLAS.height * scale}px`;
+  itemIconPreview.style.backgroundPosition = `${-frame.x * scale}px ${-frame.y * scale}px`;
+}
+
+function deployedParty(snapshot) {
+  return snapshot.actors.filter((actor) => actor.faction === 'party' && actor.active !== false);
+}
+
 function renderCommands(snapshot) {
   const actor = activePartyActor(snapshot);
   const inputLocked = manualInputLocked();
@@ -2037,17 +2160,69 @@ function renderCommands(snapshot) {
       disabled: !quote.affordable,
     };
   }), 'Select an art');
-  replaceOptions(targetSelect, livingEnemies(snapshot).map((target) => ({ value: target.instanceId, label: `${target.name} · space ${target.pos.x},${target.pos.y} · ${target.hp} HP` })), 'Select a target');
-  if (selectedTargetId && livingEnemies(snapshot).some((target) => target.instanceId === selectedTargetId)) targetSelect.value = selectedTargetId;
-  selectedTargetId = targetSelect.value;
+  const itemEntries = BATTLE_ITEM_IDS.map((itemId) => {
+    const item = ITEM_CATALOGUE[itemId];
+    const quantity = snapshot.itemStock?.[itemId] ?? 0;
+    return {
+      value: itemId,
+      label: `${item.name} · ${quantity} held · restores up to 80 HP`,
+      disabled: quantity <= 0,
+    };
+  });
+  const hasItemStock = itemEntries.some((entry) => !entry.disabled);
+  replaceOptions(itemSelect, itemEntries, hasItemStock ? 'Select an item' : 'No River Salve remains');
+  renderItemIconPreview(itemSelect.value || null);
+
+  const itemTargetEntries = deployedParty(snapshot).map((target) => {
+    const quote = actor && itemSelect.value
+      ? engine.getBattleItemQuote(actor.instanceId, itemSelect.value, target.instanceId)
+      : null;
+    const defeated = target.hp <= 0;
+    return {
+      value: target.instanceId,
+      label: `${target.name} · space ${target.pos.x},${target.pos.y} · ${target.hp}/${target.maxHp} HP${defeated ? ' · DEFEATED' : quote?.usable ? ` · +${quote.amount} HP` : ' · NO EFFECT'}`,
+      disabled: defeated || !quote?.usable,
+    };
+  });
+  const hasItemTarget = itemTargetEntries.some((entry) => !entry.disabled);
+  const enemyTargetEntries = livingEnemies(snapshot).map((target) => ({
+    value: target.instanceId,
+    label: `${target.name} · space ${target.pos.x},${target.pos.y} · ${target.hp} HP`,
+  }));
+  const itemMode = selectedCommand === 'item';
+  replaceOptions(
+    targetSelect,
+    itemMode ? itemTargetEntries : enemyTargetEntries,
+    itemMode ? (hasItemTarget ? 'Select a living ally' : 'No ally needs River Salve') : 'Select a target',
+  );
+  if (itemMode) {
+    if (selectedItemTargetId && itemTargetEntries.some((target) => target.value === selectedItemTargetId && !target.disabled)) {
+      targetSelect.value = selectedItemTargetId;
+    }
+    selectedItemTargetId = targetSelect.value;
+    const publishedItemTarget = snapshot.actors.find((target) => target.instanceId === selectedItemTargetId);
+    if (publishedItemTarget) {
+      canvas.dataset.itemTargetId = publishedItemTarget.instanceId;
+      canvas.dataset.itemTargetX = String(publishedItemTarget.pos.x);
+      canvas.dataset.itemTargetY = String(publishedItemTarget.pos.y);
+    }
+  } else {
+    if (selectedEnemyTargetId && enemyTargetEntries.some((target) => target.value === selectedEnemyTargetId)) {
+      targetSelect.value = selectedEnemyTargetId;
+    }
+    selectedEnemyTargetId = targetSelect.value;
+  }
 
   const needsSkill = ['attack', 'skill'].includes(selectedCommand);
-  const needsTarget = ['attack', 'skill', 'analyze'].includes(selectedCommand);
+  const needsItem = selectedCommand === 'item';
+  const needsTarget = ['attack', 'skill', 'analyze', 'item'].includes(selectedCommand);
   skillSelect.disabled = inputLocked || !actor || !needsSkill || selectedCommand === 'attack';
-  targetSelect.disabled = inputLocked || !actor || !needsTarget;
+  itemSelect.disabled = inputLocked || !actor || !needsItem || !hasItemStock;
+  targetSelect.disabled = inputLocked || !actor || !needsTarget || (needsItem && !hasItemTarget);
   confirmCommand.disabled = inputLocked || !actor || selectedCommand === 'move'
-    || (needsSkill && !skillSelect.value) || (needsTarget && !targetSelect.value)
+    || (needsSkill && !skillSelect.value) || (needsItem && !itemSelect.value) || (needsTarget && !targetSelect.value)
     || (needsSkill && skillSelect.selectedOptions[0]?.disabled)
+    || (needsItem && (itemSelect.selectedOptions[0]?.disabled || targetSelect.selectedOptions[0]?.disabled))
     || (selectedCommand === 'objective' && !available.has('objective'));
   const hints = {
     move: 'Use W/A/S/D, Q/E/Z/C, arrow keys, or click an adjacent space. Movement spends one Pace and does not end the activation.',
@@ -2055,6 +2230,11 @@ function renderCommands(snapshot) {
     skill: 'Choose an art and target. Recovery controls when this character returns to Tempo.',
     guard: 'Reduce the next incoming hit, then recover for one pulse.',
     dodge: 'Guarantee a miss from the next art explicitly marked dodgeable, then recover for one pulse. Arts not explicitly marked dodgeable pass through without consuming the stance.',
+    item: !hasItemStock
+      ? 'No River Salve remains. No item, Recovery, or turn will be spent.'
+      : !hasItemTarget
+        ? 'River Salve would have no effect on any living ally. No item, Recovery, or turn will be spent.'
+        : `Use River Salve on one living ally at any distance; restore up to 80 HP, then enter base Recovery ${engine.getBattleItemQuote(actor.instanceId, itemSelect.value, targetSelect.value)?.recoveryPulses ?? 2}.`,
     analyze: 'Reveal the selected enemy’s delivery and essence multipliers.',
     objective: pendingObjective ? objectivePresentation.hint : 'No manual encounter requirement remains.',
   };
@@ -2071,6 +2251,8 @@ function formatEngineLog(entry, actors) {
   if (entry.type === 'damage') return `${name(entry.attackerId)} uses ${entry.skillId} on ${name(entry.targetId)}: ${entry.finalDamage} damage (${Math.round(entry.deliveryMultiplier * 100)}% delivery${entry.essenceMultiplier !== 1 ? `, ${Math.round(entry.essenceMultiplier * 100)}% essence` : ''})${entry.statusApplied ? ` and applies ${COMBAT_STATUS_DEFINITIONS[entry.statusId]?.name ?? entry.statusId}` : ''}.`;
   if (entry.type === 'guard') return `${name(entry.actorId)} guards.`;
   if (entry.type === 'dodge') return `${name(entry.actorId)} readies Dodge; base Recovery ${entry.recoveryPulses}.`;
+  if (entry.type === 'item-used') return `${name(entry.actorId)} uses ${ITEM_CATALOGUE[entry.itemId]?.name ?? entry.itemId} on ${name(entry.targetId)}; ${entry.stockAfter} remaining; base Recovery ${entry.recoveryPulses}.`;
+  if (entry.type === 'heal') return `${name(entry.targetId)} recovers ${entry.amount} HP from ${ITEM_CATALOGUE[entry.itemId]?.name ?? entry.itemId} (${entry.targetHp} HP).`;
   if (entry.type === 'dodge-resolved') return `${name(entry.targetId)} evades ${name(entry.attackerId)}'s ${entry.skillId}; Dodge is consumed with HP unchanged at ${entry.targetHp}.`;
   if (entry.type === 'analyze') return `${name(entry.actorId)} analyzes ${name(entry.targetId)}.`;
   if (entry.type === 'spirit-change' && entry.delta !== 0) return `${name(entry.actorId)} Spirit ${entry.delta > 0 ? '+' : ''}${entry.delta} (${entry.after}/${entry.maxSpirit}).`;
@@ -2200,16 +2382,18 @@ function recordVictoryIfNeeded(snapshot) {
   }
 
   const nextAdvancementState = recordEncounterWin(advancementState, encounter.id, { partyIds: encounter.party?.roster });
-  const loadoutReward = grantInventory(loadoutState, { currency: reward.currency, items: reward.items });
-  if (!loadoutReward.ok) {
-    return failSettlement(`Victory is earned, but its camp reward could not be prepared: ${loadoutReward.reason}`);
+  const partyVitals = Object.fromEntries(snapshot.actors
+    .filter((entry) => entry.faction === 'party' && entry.hp > 0)
+    .map((actor) => [actor.templateId, { hp: actor.hp }]));
+  const loadoutSettlement = settleBattleLoadout(loadoutState, {
+    itemDebits: snapshot.itemConsumption,
+    reward: { currency: reward.currency, items: reward.items },
+    partyVitals,
+  });
+  if (!loadoutSettlement.ok) {
+    return failSettlement(`Victory is earned, but its item use, vitals, and camp reward could not be prepared: ${loadoutSettlement.reason}`);
   }
-  let nextLoadoutState = loadoutReward.state;
-  for (const actor of snapshot.actors.filter((entry) => entry.faction === 'party')) {
-    const vitals = setMemberVitals(nextLoadoutState, actor.templateId, { hp: Math.max(1, actor.hp) });
-    if (!vitals.ok) return failSettlement(`Victory is earned, but ${actor.name}'s camp vitals could not be prepared.`);
-    nextLoadoutState = vitals.state;
-  }
+  const nextLoadoutState = loadoutSettlement.state;
 
   const changes = [
     { id: 'advancement', adapter: advancementAdapter, previousState: advancementState, nextState: nextAdvancementState },
@@ -2351,8 +2535,8 @@ function render() {
   const snapshot = engine.snapshot();
   captureStatusVfxLifecycle(snapshot);
   const targets = livingEnemies(snapshot);
-  if (!targets.some((target) => target.instanceId === selectedTargetId)) {
-    selectedTargetId = targets[0]?.instanceId ?? null;
+  if (!targets.some((target) => target.instanceId === selectedEnemyTargetId)) {
+    selectedEnemyTargetId = targets[0]?.instanceId ?? null;
   }
   const settlementReady = isBattlePresentationSettled({
     result: snapshot.result,
@@ -2563,6 +2747,8 @@ function toggleAutoGrind() {
   })) return;
   repeatGrindQueue = startRepeatGrindQueue(createRepeatGrindQueue(Number(autoGrindWins.value)));
   queuedVictoryRecorded = false;
+  selectedEnemyTargetId = '';
+  selectedItemTargetId = '';
   autoGrindActive = true;
   activeBattleAnimation = null;
   activeCommandPresentation = null;
@@ -2582,7 +2768,8 @@ function restartQueuedAutoGrind(now) {
   queuedVictoryRecorded = false;
   victoryPersistenceError = null;
   victorySaveRetryAt = 0;
-  selectedTargetId = '';
+  selectedEnemyTargetId = '';
+  selectedItemTargetId = '';
   clearEnemyIntentSchedule();
   battleFacingByActor.clear();
   battleMotionUntil.clear();
@@ -2605,6 +2792,7 @@ function selectCommand(command) {
   selectedCommand = command;
   if (command === 'attack') skillSelect.selectedIndex = Math.min(1, skillSelect.options.length - 1);
   render();
+  if (command === 'item') announcements.textContent = commandHint.textContent;
 }
 
 function executeSelectedCommand() {
@@ -2622,6 +2810,8 @@ function executeSelectedCommand() {
     if (result.ok) pageAudio.playCue('combatGuard');
   } else if (selectedCommand === 'dodge') {
     result = engine.dodge(actor.instanceId);
+  } else if (selectedCommand === 'item') {
+    result = engine.useItem(actor.instanceId, itemSelect.value, targetSelect.value);
   } else if (selectedCommand === 'analyze') {
     result = engine.analyze(actor.instanceId, targetSelect.value);
   } else if (selectedCommand === 'objective') {
@@ -2631,39 +2821,43 @@ function executeSelectedCommand() {
       : { ok: false, reason: 'No objective action is pending.' };
   }
   const afterSnapshot = engine.snapshot();
+  const presentationStartedAt = performance.now();
   if (!result?.ok) addMessage(result?.reason ?? 'Command failed.');
   else if (result.readout) addMessage(`${targetSelect.options[targetSelect.selectedIndex]?.text ?? 'Target'} Ledger: ${result.readout.ledger || 'No note.'}`);
   else announceEngineLogDelta(snapshot, afterSnapshot);
   if (selectedCommand === 'attack' || selectedCommand === 'skill') {
     markCombatResolutionPose(result);
     startCombatAnimation(result, actor.instanceId, snapshot);
-  } else if (result?.ok && ['guard', 'dodge', 'analyze', 'objective'].includes(selectedCommand)) {
+  } else if (result?.ok && ['guard', 'dodge', 'item', 'analyze', 'objective'].includes(selectedCommand)) {
     startBattleCommandPresentation({
       type: selectedCommand,
       actorId: actor.instanceId,
-      targetId: selectedCommand === 'analyze' ? targetSelect.value : null,
+      targetId: ['analyze', 'item'].includes(selectedCommand) ? targetSelect.value : null,
       requirement: commandRequirement,
       result,
       beforeSnapshot: snapshot,
-      startedAt: performance.now(),
+      startedAt: presentationStartedAt,
       speed: 1,
     });
+    if (selectedCommand === 'item') {
+      startBattleHealSystemFeedback(result, snapshot, afterSnapshot, { startedAt: presentationStartedAt, speed: 1 });
+    }
   }
   if (result?.ok) {
-    startBattleStanceDodgeSystemFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
-    startBattleDamageOutcomeFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
-    startBattleTelegraphEvadeSystemFeedback(snapshot, afterSnapshot, { startedAt: performance.now(), speed: 1 });
+    startBattleStanceDodgeSystemFeedback(snapshot, afterSnapshot, { startedAt: presentationStartedAt, speed: 1 });
+    startBattleDamageOutcomeFeedback(snapshot, afterSnapshot, { startedAt: presentationStartedAt, speed: 1 });
+    startBattleTelegraphEvadeSystemFeedback(snapshot, afterSnapshot, { startedAt: presentationStartedAt, speed: 1 });
     activeBattleAnimation = mergeBossTerminalPresentationRecord(
       activeBattleAnimation,
       snapshot.actors,
       afterSnapshot.actors,
-      { startedAt: performance.now(), speed: 1 },
+      { startedAt: presentationStartedAt, speed: 1 },
     );
     activeBattleAnimation = mergeBossTransitionPresentationRecord(
       activeBattleAnimation,
       snapshot,
       afterSnapshot,
-      { startedAt: performance.now(), speed: 1 },
+      { startedAt: presentationStartedAt, speed: 1 },
     );
   }
   clearEnemyIntentSchedule();
@@ -2689,13 +2883,28 @@ function moveActive(dx, dy) {
 
 commandButtons.forEach((button) => button.addEventListener('click', () => selectCommand(button.dataset.command)));
 confirmCommand.addEventListener('click', executeSelectedCommand);
+itemSelect.addEventListener('change', () => {
+  selectedItemTargetId = '';
+  render();
+  announcements.textContent = commandHint.textContent;
+});
 targetSelect.addEventListener('change', () => {
-  selectedTargetId = targetSelect.value;
+  if (selectedCommand === 'item') selectedItemTargetId = targetSelect.value;
+  else selectedEnemyTargetId = targetSelect.value;
   drawBattle();
   announceSelectedBattleTarget();
 });
 partyPanel.addEventListener('click', (event) => {
   if (manualInputLocked()) return;
+  const itemCard = event.target.closest('[data-item-target="true"][data-actor-id]');
+  if (itemCard) {
+    selectedItemTargetId = itemCard.dataset.actorId;
+    targetSelect.value = selectedItemTargetId;
+    render();
+    announceSelectedBattleTarget();
+    partyPanel.querySelector(`[data-actor-id="${CSS.escape(selectedItemTargetId)}"]`)?.focus({ preventScroll: true });
+    return;
+  }
   const card = event.target.closest('[data-party-command-attempt="true"][data-actor-id]');
   if (!card) return;
   const snapshot = engine.snapshot();
@@ -2716,8 +2925,8 @@ enemyPanel.addEventListener('click', (event) => {
   const card = event.target.closest('[data-actor-id]');
   if (!card) return;
   const actorId = card.dataset.actorId;
-  selectedTargetId = actorId;
-  targetSelect.value = selectedTargetId;
+  selectedEnemyTargetId = actorId;
+  targetSelect.value = selectedEnemyTargetId;
   render();
   announceSelectedBattleTarget();
   enemyPanel.querySelector(`[data-actor-id="${CSS.escape(actorId)}"]`)?.focus({ preventScroll: true });
@@ -2751,7 +2960,8 @@ restartBattle.addEventListener('click', () => {
   queuedVictoryRecorded = false;
   victoryPersistenceError = null;
   victorySaveRetryAt = 0;
-  selectedTargetId = '';
+  selectedEnemyTargetId = '';
+  selectedItemTargetId = '';
   clearEnemyIntentSchedule();
   battleFacingByActor.clear();
   battleMotionUntil.clear();
@@ -2779,6 +2989,7 @@ window.addEventListener('keydown', (event) => {
     '5': 'analyze',
     '6': 'objective',
     f: 'dodge',
+    i: 'item',
   };
   if (commandShortcuts[key] && !event.repeat) {
     event.preventDefault();
@@ -2815,11 +3026,25 @@ canvas.addEventListener('click', (event) => {
   const snapshot = engine.snapshot();
   const actor = activePartyActor(snapshot);
   if (!actor) return;
+  const partyTarget = deployedParty(snapshot).find((entry) => entry.pos.x === tile.x && entry.pos.y === tile.y);
+  if (selectedCommand === 'item' && partyTarget) {
+    const quote = engine.getBattleItemQuote(actor.instanceId, itemSelect.value, partyTarget.instanceId);
+    if (!quote?.usable) {
+      addMessage(quote?.reason ?? 'River Salve cannot target that combatant.');
+      render();
+      return;
+    }
+    selectedItemTargetId = partyTarget.instanceId;
+    targetSelect.value = selectedItemTargetId;
+    render();
+    announceSelectedBattleTarget();
+    return;
+  }
   const enemy = livingEnemies(snapshot).find((entry) => entry.pos.x === tile.x && entry.pos.y === tile.y);
   if (enemy) {
     if (!['attack', 'skill', 'analyze'].includes(selectedCommand)) return;
-    selectedTargetId = enemy.instanceId;
-    targetSelect.value = selectedTargetId;
+    selectedEnemyTargetId = enemy.instanceId;
+    targetSelect.value = selectedEnemyTargetId;
     render();
     announceSelectedBattleTarget();
     return;
@@ -2889,6 +3114,7 @@ function tick(now) {
     if (result.ok) {
       startBattleStanceDodgeSystemFeedback(before, after, { startedAt: now, speed: 1 });
       startBattleDamageOutcomeFeedback(before, after, { startedAt: now, speed: 1 });
+      startBattleTelegraphEvadeSystemFeedback(before, after, { startedAt: now, speed: 1 });
     }
     markCombatResolutionPose({ ok: result.ok, ...result.resolution }, enemyActorId);
     startCombatAnimation({ ok: result.ok, ...result.resolution }, enemyActorId, before);

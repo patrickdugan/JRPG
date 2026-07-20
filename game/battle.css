@@ -140,7 +140,7 @@ button.combatant-card { cursor: pointer; }
 .command-panel { margin-top: 12px; border: 1px solid #3d4866; background: rgba(8, 11, 23, 0.68); }
 .command-panel-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; padding: 10px 12px; border-bottom: 1px solid #303a56; }
 .active-actor { margin: 0; color: var(--aqua); font-size: 0.66rem; text-align: right; }
-.command-grid { display: grid; grid-template-columns: repeat(7, minmax(64px, 1fr)); gap: 6px; padding: 10px; }
+.command-grid { display: grid; grid-template-columns: repeat(8, minmax(58px, 1fr)); gap: 6px; padding: 10px; }
 .command-grid button, .confirm-command, .speed-options button, .auto-grind-button {
   border: 1px solid #4a5878;
   border-radius: 3px;
@@ -151,9 +151,12 @@ button.combatant-card { cursor: pointer; }
 .command-grid button { min-height: 42px; padding: 8px 5px; font-size: 0.67rem; }
 .command-grid button:hover, .command-grid button[aria-pressed="true"] { border-color: var(--gold); color: #fff0bb; background: #352d1a; }
 
-.selection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; padding: 0 10px 10px; }
+.selection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; padding: 0 10px 10px; }
 .selection-grid label { display: grid; gap: 5px; color: var(--gold); font-size: 0.61rem; text-transform: uppercase; letter-spacing: 0.07em; }
 .selection-grid select { width: 100%; min-height: 35px; padding: 6px 8px; border: 1px solid #485675; border-radius: 3px; color: var(--paper); background: #0e1426; font-size: 0.68rem; text-transform: none; letter-spacing: 0; }
+.item-select-control { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 6px; align-items: center; }
+.battle-item-icon { width: 32px; height: 32px; image-rendering: pixelated; background-repeat: no-repeat; border: 1px solid #4a5877; box-shadow: inset 0 0 0 1px #111827; }
+.item-icon-fallback { background: repeating-linear-gradient(135deg, #263044 0 4px, #344058 4px 8px); }
 
 .commit-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px; border-top: 1px solid #303a56; }
 .command-hint { margin: 0; color: var(--muted); font-size: 0.64rem; line-height: 1.45; }
