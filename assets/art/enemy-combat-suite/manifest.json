@@ -1,12 +1,12 @@
 {
   "assetId": "enemy-combat-suite",
   "status": "editable-production-key-pose-suite",
-  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat-recovery",
+  "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat-recovery-hurt",
   "canonicalSource": "enemy-combat-suite.source.json",
   "builder": "build_enemy_combat_suite.py",
   "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",
   "geometry": {
-    "columns": 6,
+    "columns": 7,
     "rows": 8,
     "cellWidth": 64,
     "cellHeight": 80,
@@ -19,7 +19,8 @@
     "attack",
     "stagger",
     "defeat",
-    "recovery"
+    "recovery",
+    "hurt"
   ],
   "familyOrder": [
     "hound",
@@ -194,12 +195,12 @@
     {
       "path": "enemy-combat-suite.source.json",
       "format": "json",
-      "sha256": "f34f5827a60cf4acccdbfa2ed3dc74c6423841089b2c42421a353c8a8a5a201e"
+      "sha256": "97c0c67a6b16b66e1dd3c0ba29424cac2172c19b202ce5a87be8dc9546de5b6b"
     },
     {
       "path": "build_enemy_combat_suite.py",
       "format": "python",
-      "sha256": "4fe7f9380730b4ed929321f4cdb71476c3904aaf2e98a4ee29049a7326e48dfa"
+      "sha256": "b24c55975c9cd196dcf9fa82d78520683e8f3ea3e8da6505efaab2ba83d356bc"
     }
   ],
   "exports": [
@@ -207,9 +208,9 @@
       "path": "enemy-combat-atlas.png",
       "role": "transparent-runtime-atlas",
       "runtime": true,
-      "sha256": "fcac5d3df2960322ce1bcc52891b04560a3ca290c1234a50682916f81c874a95",
+      "sha256": "f02ae8e5cdefcf7e1c69d780a0b00fdd445d1ef7908167bc234badaf3c24c4e1",
       "ihdr": {
-        "width": 384,
+        "width": 448,
         "height": 640,
         "bitDepth": 8,
         "colorType": 6,
@@ -222,9 +223,9 @@
       "path": "enemy-combat-contact-sheet.png",
       "role": "labeled-review-contact-sheet",
       "runtime": false,
-      "sha256": "13335c0597eb3214909e0e06eb92a56cd341eef257c8383d9d777685d06616e6",
+      "sha256": "0443fb35d4b85e2a2f2bb959fcb3f95940cb7a49d70ec8725199fc96bd35f5eb",
       "ihdr": {
-        "width": 832,
+        "width": 968,
         "height": 1500,
         "bitDepth": 8,
         "colorType": 2,
@@ -498,6 +499,50 @@
       },
       "opaquePixelCount": 985,
       "rgbaSha256": "f041065c321c68885f1028c4e298678a07a00fd17526e36f5685b14a7a828df1"
+    },
+    {
+      "id": "hound:hurt",
+      "familyId": "hound",
+      "templateIds": [
+        "cinder-hound",
+        "tithe-hound"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-HOUND-01",
+      "rect": {
+        "x": 384,
+        "y": 0,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        26,
+        65
+      ],
+      "ground": [
+        26,
+        72
+      ],
+      "contact": [
+        13,
+        50
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 37,
+        "width": 48,
+        "height": 38
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 37,
+        "right": 11,
+        "bottom": 5
+      },
+      "opaquePixelCount": 927,
+      "rgbaSha256": "66be063320ce9261887ddc1a2789ea5644b3023992e8dc8c47497aac2a01b95f"
     },
     {
       "id": "wisp:neutral",
@@ -774,6 +819,52 @@
       },
       "opaquePixelCount": 1240,
       "rgbaSha256": "b22704f6297eaf100c1717d44d567e3dd9ccb0857b7af649a9519d453b8b2e81"
+    },
+    {
+      "id": "wisp:hurt",
+      "familyId": "wisp",
+      "templateIds": [
+        "ash-wisp",
+        "bell-moth",
+        "fog-skimmer",
+        "unfiled-testimony"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-WISP-01",
+      "rect": {
+        "x": 384,
+        "y": 80,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        53
+      ],
+      "ground": [
+        27,
+        72
+      ],
+      "contact": [
+        13,
+        42
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 25,
+        "width": 52,
+        "height": 50
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 25,
+        "right": 7,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1247,
+      "rgbaSha256": "a08dde7bfefe5a576dd40647c971cd8cc12a1048e8bbefa28ea19ec300f07158"
     },
     {
       "id": "ashen-oni:neutral",
@@ -1082,6 +1173,57 @@
       "rgbaSha256": "5ae752e2f7cea268b87e38b45367e3424cd78a2bdbbd0a7ce646056cd6bb5e4f"
     },
     {
+      "id": "ashen-oni:hurt",
+      "familyId": "ashen-oni",
+      "templateIds": [
+        "ashen-bailiff",
+        "tithe-seal",
+        "tithe-enforcer",
+        "blood-ward-west",
+        "blood-ward-east",
+        "bound-ashen-oni",
+        "bound-ashen-patrol",
+        "ashen-garrison",
+        "archive-warden"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-ONI-01",
+      "rect": {
+        "x": 384,
+        "y": 160,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        64
+      ],
+      "ground": [
+        27,
+        73
+      ],
+      "contact": [
+        12,
+        45
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 20,
+        "width": 48,
+        "height": 55
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 20,
+        "right": 11,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1686,
+      "rgbaSha256": "f6d2973f38ce9277da3b4c63fa2a68fb1fe36f5f882a7a6bcdf2da85c2a071d6"
+    },
+    {
       "id": "court-retainer:neutral",
       "familyId": "court-retainer",
       "templateIds": [
@@ -1364,6 +1506,53 @@
       "rgbaSha256": "13316913d59c910110d7b936552c4c1f5ae35d8728139f2a9fb33ce5967262e8"
     },
     {
+      "id": "court-retainer:hurt",
+      "familyId": "court-retainer",
+      "templateIds": [
+        "mateus",
+        "dock-retainer",
+        "captain-kaji",
+        "masked-clerk",
+        "ujiro"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-RETAINER-01",
+      "rect": {
+        "x": 384,
+        "y": 240,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        26,
+        63
+      ],
+      "ground": [
+        26,
+        72
+      ],
+      "contact": [
+        12,
+        42
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 19,
+        "width": 45,
+        "height": 56
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 19,
+        "right": 14,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1400,
+      "rgbaSha256": "530ddacbfb24fd56dc3b2db70778ca887a57c58c35da9febe0548f5f682d5c17"
+    },
+    {
       "id": "widow:neutral",
       "familyId": "widow",
       "templateIds": [
@@ -1620,6 +1809,49 @@
       },
       "opaquePixelCount": 1299,
       "rgbaSha256": "56755d4dcac583173e2eb1730c4ed3ea9a3dce9d85a460af7fda0ca91b379a00"
+    },
+    {
+      "id": "widow:hurt",
+      "familyId": "widow",
+      "templateIds": [
+        "widow-of-fog"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-WIDOW-01",
+      "rect": {
+        "x": 384,
+        "y": 320,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        56
+      ],
+      "ground": [
+        27,
+        72
+      ],
+      "contact": [
+        11,
+        45
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 24,
+        "width": 47,
+        "height": 51
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 24,
+        "right": 11,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1279,
+      "rgbaSha256": "a1500eaa5a33397cbab3fc9f7c30b4fe4ff56c9b4becf0df40a490dc8758591f"
     },
     {
       "id": "furnace:neutral",
@@ -1886,6 +2118,50 @@
       "rgbaSha256": "3bcef8040baddf03a864cfd4ab248e8ad02bdc4fd9af412caf362debe3963f8f"
     },
     {
+      "id": "furnace:hurt",
+      "familyId": "furnace",
+      "templateIds": [
+        "furnace-abbot",
+        "lady-enma"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-FURNACE-01",
+      "rect": {
+        "x": 384,
+        "y": 400,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        63
+      ],
+      "ground": [
+        27,
+        73
+      ],
+      "contact": [
+        12,
+        43
+      ],
+      "alphaBounds": {
+        "x": 6,
+        "y": 19,
+        "width": 46,
+        "height": 56
+      },
+      "transparentGutter": {
+        "left": 6,
+        "top": 19,
+        "right": 12,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1786,
+      "rgbaSha256": "b0255899da08c16822e200605c2d4901cbf862e94100651f884bd1d1e9600f8d"
+    },
+    {
       "id": "bell-warden:neutral",
       "familyId": "bell-warden",
       "templateIds": [
@@ -2150,6 +2426,50 @@
       "rgbaSha256": "3564bbe423c72c21b8e509db7b8995cb0056b9cf04d8808d0f9894610a75dbff"
     },
     {
+      "id": "bell-warden:hurt",
+      "familyId": "bell-warden",
+      "templateIds": [
+        "bell-warden-chiyo",
+        "yearless-bell"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-WARDEN-01",
+      "rect": {
+        "x": 384,
+        "y": 480,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        63
+      ],
+      "ground": [
+        27,
+        73
+      ],
+      "contact": [
+        12,
+        44
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 20,
+        "width": 47,
+        "height": 55
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 20,
+        "right": 12,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1719,
+      "rgbaSha256": "ca8544d96c390daa60219a5389a1b6cf9fbc1eb4d7f66e9bc1898aa4b8d7d724"
+    },
+    {
       "id": "black-court:neutral",
       "familyId": "black-court",
       "templateIds": [
@@ -2412,6 +2732,50 @@
       },
       "opaquePixelCount": 1547,
       "rgbaSha256": "9572d80ca781561de35074802300e5d89d34af1087b973ba19deaa6006baa364"
+    },
+    {
+      "id": "black-court:hurt",
+      "familyId": "black-court",
+      "templateIds": [
+        "kurozane",
+        "court-clone"
+      ],
+      "pose": "hurt",
+      "tag": "hit-reaction",
+      "event": "impact",
+      "paletteId": "PAL-ENM-COURT-01",
+      "rect": {
+        "x": 384,
+        "y": 560,
+        "width": 64,
+        "height": 80
+      },
+      "pivot": [
+        27,
+        62
+      ],
+      "ground": [
+        27,
+        73
+      ],
+      "contact": [
+        12,
+        43
+      ],
+      "alphaBounds": {
+        "x": 5,
+        "y": 14,
+        "width": 45,
+        "height": 61
+      },
+      "transparentGutter": {
+        "left": 5,
+        "top": 14,
+        "right": 14,
+        "bottom": 5
+      },
+      "opaquePixelCount": 1536,
+      "rgbaSha256": "d60059b7ae2f8604d08f38978b650e589dbd6acba687e780c65ed3c51ad37ef3"
     }
   ]
 }

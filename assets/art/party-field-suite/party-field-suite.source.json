@@ -18,9 +18,15 @@
       "south-idle",
       "south-walk",
       "west-idle",
-      "west-walk"
+      "west-walk",
+      "south-interact",
+      "south-hurt"
     ],
     "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku"]
+  },
+  "poseSemantics": {
+    "interact": "brief front-facing reach used by the live field Interact control",
+    "hurt": "brief non-gory front-facing recoil used only by committed hazard-hit events"
   },
   "sharedPalette": {
     "outline": "#0b1020",

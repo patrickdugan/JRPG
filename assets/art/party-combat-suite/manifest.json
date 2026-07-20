@@ -2331,7 +2331,7 @@
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-silhouette-contract",
-      "sha256": "548623d253501404e2e3f1ddf915207ed60791701c91313695f905140a4e72eb"
+      "sha256": "23db57aa81f14f2d858cce7a337c0e4c0f3edd55d3166d0624729579e0195a13"
     },
     {
       "path": "build_party_combat_suite.py",

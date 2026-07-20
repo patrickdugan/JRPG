@@ -12,6 +12,7 @@ const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
 const COLUMNS = [
   'north-idle', 'north-walk', 'east-idle', 'east-walk',
   'south-idle', 'south-walk', 'west-idle', 'west-walk',
+  'south-interact', 'south-hurt',
 ];
 
 function sha256(bytes) {
@@ -74,7 +75,7 @@ function alphaAt(image, x, y) {
   return image.pixels[(y * image.width + x) * 4 + 3];
 }
 
-test('party field source fixes the canonical six-by-eight frame and palette contract', async () => {
+test('party field source fixes the canonical six-by-ten frame and palette contract', async () => {
   const source = JSON.parse(await readFile(resolve(SUITE_ROOT, 'party-field-suite.source.json'), 'utf8'));
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.deepEqual(source.frame, {
@@ -91,23 +92,24 @@ test('party field source fixes the canonical six-by-eight frame and palette cont
   assert.match(source.characters.find(({ id }) => id === 'mateus').likenessPolicy, /original fictional face and proportions/u);
 });
 
-test('manifest maps all 48 frames to stable pivots and exact row-major rectangles', async () => {
+test('manifest maps all 60 frames to stable pivots and exact row-major rectangles', async () => {
   const manifest = JSON.parse(await readFile(resolve(SUITE_ROOT, 'manifest.json'), 'utf8'));
   assert.deepEqual(manifest.rowOrder, ROWS);
   assert.deepEqual(manifest.columnOrder, COLUMNS);
   assert.deepEqual(manifest.geometry, {
     frameWidth: 32,
     frameHeight: 48,
-    columns: 8,
+    columns: 10,
     rows: 6,
-    sheetWidth: 256,
+    sheetWidth: 320,
     sheetHeight: 288,
     pivot: [16, 44],
     footPoint: [16, 44],
     transparentGutter: 1,
-    alphaBoundingBox: [2, 4, 254, 285],
+    alphaBoundingBox: [2, 4, 319, 285],
   });
-  assert.equal(manifest.frames.length, 48);
+  assert.equal(manifest.frames.length, 60);
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 60);
   manifest.frames.forEach((frame, index) => {
     const row = Math.floor(index / COLUMNS.length);
     const column = index % COLUMNS.length;
@@ -118,8 +120,8 @@ test('manifest maps all 48 frames to stable pivots and exact row-major rectangle
     assert.deepEqual(frame.footPoint, [16, 44]);
   });
   assert.deepEqual(Object.keys(manifest.paletteIds), ROWS);
-  assert.equal(manifest.review.runtimeIntegration, 'current-browser-field-and-battle-idle-walk');
-  assert.equal(manifest.review.fullAnimationExpansion, 'pending');
+  assert.equal(manifest.review.runtimeIntegration, 'current-browser-field-idle-walk-interact-hurt');
+  assert.equal(manifest.review.fullAnimationExpansion, 'alternate-action-facings-and-inbetweens-pending');
 });
 
 test('transparent runtime PNG matches its manifest and shipped hashes and preserves every frame gutter', async () => {
@@ -135,7 +137,7 @@ test('transparent runtime PNG matches its manifest and shipped hashes and preser
   assert.equal(sha256(runtimeBytes), record.sha256);
   assert.equal(runtimeBytes.equals(bytes), true);
   const image = decodeRgbaPng(bytes);
-  assert.deepEqual([image.width, image.height], [256, 288]);
+  assert.deepEqual([image.width, image.height], [320, 288]);
   for (let row = 0; row < ROWS.length; row += 1) {
     for (let column = 0; column < COLUMNS.length; column += 1) {
       const x0 = column * 32;
@@ -162,7 +164,7 @@ test('contact sheet is labeled review material and builder has no generated-art 
   ]);
   const manifest = JSON.parse(manifestText);
   const contact = manifest.exports.find(({ purpose }) => purpose === 'labeled-review-only-not-runtime');
-  assert.deepEqual([contact.width, contact.height], [1120, 1210]);
+  assert.deepEqual([contact.width, contact.height], [1376, 1210]);
   assert.equal(sha256(contactBytes), contact.sha256);
   assert.doesNotMatch(builderText, /assets[\\/](?:production|concepts)/iu);
   assert.doesNotMatch(builderText, /Adam Driver|celebrity likeness|\bofuda\b|\bkamon\b/iu);

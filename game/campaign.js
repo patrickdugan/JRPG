@@ -100,7 +100,9 @@ import {
 } from './narrative-runtime.mjs';
 import {
   PARTY_ATLAS,
+  PARTY_ATLAS_FIELD_POSES,
   atlasDirectionForMovement,
+  getPartyAtlasFieldPoseFrame,
   getPartyAtlasFrame,
   partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
@@ -297,6 +299,15 @@ let recoveryReloadPending = false;
 let animationNow = 0;
 let fieldFacing = 'south';
 let fieldWalkUntil = 0;
+let fieldPose = null;
+let fieldPoseUntil = 0;
+const PARTY_FIELD_POSE_MS = Object.freeze({ interact: 360, hurt: 420 });
+
+function holdPartyFieldPose(pose) {
+  if (!PARTY_ATLAS_FIELD_POSES.includes(pose)) throw new RangeError(`Unknown party field pose: ${pose}`);
+  fieldPose = pose;
+  fieldPoseUntil = performance.now() + PARTY_FIELD_POSE_MS[pose];
+}
 const openingLevel = getLevelForBeat(getCurrentChapter(campaignState), getCurrentBeat(campaignState));
 const fieldAdapter = createFieldStorageAdapter();
 const loadedField = fieldAdapter.load({ levelId: openingLevel.id, beatId: getCurrentBeat(campaignState).id });
@@ -540,6 +551,7 @@ function sampleFieldRuntime(now) {
     if (!commitStateChanges('Field hazard', changes).ok) return;
     fieldRuntimeState = result.state;
     loadoutState = consequence.state;
+    holdPartyFieldPose('hurt');
     fieldFeedback.textContent = `Hazard ${important.hazardId} triggered${consequence.message ? `; ${consequence.message}` : ''}. The last safe tile is preserved.`;
     return;
   }
@@ -968,7 +980,8 @@ function attemptFieldMove(dx, dy) {
   const result = moveFieldBy(fieldRuntimeState, dx, dy, { flags: externalFieldFlags() });
   let nextLoadoutState = loadoutState;
   const consequenceMessages = [];
-  for (const event of result.events.filter((entry) => entry.type === 'hazard-hit')) {
+  const hazardHits = result.events.filter((entry) => entry.type === 'hazard-hit');
+  for (const event of hazardHits) {
     const consequence = getFieldHazardConsequence(event, nextLoadoutState);
     nextLoadoutState = consequence.state;
     if (consequence.message) consequenceMessages.push(consequence.message);
@@ -982,6 +995,7 @@ function attemptFieldMove(dx, dy) {
   if (!commitStateChanges('Field movement', changes).ok) return;
   fieldRuntimeState = result.state;
   loadoutState = nextLoadoutState;
+  if (hazardHits.length) holdPartyFieldPose('hurt');
   if (result.moved) {
     fieldWalkUntil = performance.now() + 320;
     pageAudio.playCue('fieldStep');
@@ -1143,9 +1157,16 @@ function drawMap(level, encounter, now) {
   mapCtx.ellipse(partyX, partyY + cell * 0.27, cell * 0.25, cell * 0.09, 0, 0, Math.PI * 2);
   mapCtx.fill();
   if (partyAtlasState === 'ready' && partyAtlasImageHasExpectedSize(partyAtlasImage)) {
+    const heldPose = fieldPose && performance.now() < fieldPoseUntil ? fieldPose : null;
+    if (!heldPose && fieldPose) {
+      fieldPose = null;
+      fieldPoseUntil = 0;
+    }
     const moving = now < fieldWalkUntil;
     const phase = moving ? Math.floor(now / 110) % 2 : 0;
-    const frame = getPartyAtlasFrame('ren', fieldFacing, phase);
+    const frame = heldPose
+      ? getPartyAtlasFieldPoseFrame('ren', heldPose)
+      : getPartyAtlasFrame('ren', fieldFacing, phase);
     const drawHeight = cell * 1.38;
     const drawWidth = drawHeight * (frame.width / frame.height);
     mapCtx.drawImage(
@@ -2180,6 +2201,7 @@ interactFieldButton.addEventListener('click', () => {
   const beat = getBeat();
   const level = getActiveLevelForBeat(chapter, beat);
   if (!ensureFieldPosition(level).ok) return;
+  holdPartyFieldPose('interact');
   const sceneOperationMarker = getActiveSceneOperationMarker(level, beat);
   if (sceneOperationMarker && onExactFieldPosition(fieldPosition(), sceneOperationMarker.position)) {
     const result = advanceSceneOperation(

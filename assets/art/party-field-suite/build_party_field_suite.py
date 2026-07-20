@@ -25,6 +25,7 @@ FRAME_H = 48
 SHEET_COLUMNS = (
     "north-idle", "north-walk", "east-idle", "east-walk",
     "south-idle", "south-walk", "west-idle", "west-walk",
+    "south-interact", "south-hurt",
 )
 SHEET_ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
 
@@ -55,12 +56,13 @@ def load_source() -> dict:
 
 
 class Sprite:
-    def __init__(self, palette: dict[str, str], direction: str, walk: bool):
+    def __init__(self, palette: dict[str, str], direction: str, state: str):
         self.image = Image.new("RGBA", (FRAME_W, FRAME_H), (0, 0, 0, 0))
         self.draw = ImageDraw.Draw(self.image)
         self.c = {name: rgba(value) for name, value in palette.items()}
         self.direction = direction
-        self.walk = walk
+        self.state = state
+        self.walk = state == "walk"
         self.mirror = direction == "west"
 
     def _x(self, x: int) -> int:
@@ -286,10 +288,39 @@ DRAWERS = {
 }
 
 
+def draw_field_pose_overlay(sprite: Sprite, character_id: str, state: str):
+    """Add small event-readable gestures without introducing prop iconography."""
+    if state == "interact":
+        reaches = {
+            "ren": ((18, 25), (23, 23), (27, 20)),
+            "aya": ((18, 25), (23, 22), (27, 21)),
+            "lise": ((19, 25), (23, 23), (27, 22)),
+            "mateus": ((19, 25), (23, 24), (27, 21)),
+            "genta": ((19, 26), (23, 25), (27, 23)),
+            "kiku": ((18, 25), (23, 24), (27, 22)),
+        }
+        start, elbow, hand = reaches[character_id]
+        sprite.line([start, elbow, hand], "outline", 4)
+        sprite.line([start, elbow, hand], "primary", 2)
+        sprite.rect((hand[0] - 1, hand[1] - 1, hand[0] + 1, hand[1] + 1), "skin")
+        sprite.line([(27, 16), (29, 14)], "candle")
+        sprite.line([(28, 18), (30, 18)], "brass")
+    elif state == "hurt":
+        # Cross-body brace and two plain recoil ticks; no wound, blood, or injury detail.
+        sprite.line([(21, 22), (17, 27), (12, 25)], "outline", 5)
+        sprite.line([(20, 22), (17, 26), (13, 25)], "primary", 2)
+        sprite.rect((11, 24, 13, 27), "skinShadow")
+        sprite.line([(26, 16), (29, 13)], "candle", 2)
+        sprite.line([(27, 20), (30, 19)], "brass", 2)
+        sprite.line([(24, 13), (25, 10)], "outline")
+
+
 def render_sprite(source: dict, character: dict, column: str) -> Image.Image:
-    direction, state = column.split("-")
-    sprite = Sprite(base_palette(source, character), direction, state == "walk")
+    direction, state = column.split("-", 1)
+    sprite = Sprite(base_palette(source, character), direction, state)
     DRAWERS[character["id"]](sprite)
+    if state in source["poseSemantics"]:
+        draw_field_pose_overlay(sprite, character["id"], state)
     validate_frame(sprite.image, character["id"], column)
     return sprite.image
 
@@ -328,12 +359,15 @@ def render_runtime(source: dict) -> tuple[Image.Image, list[dict]]:
                 "rect": [x, y, FRAME_W, FRAME_H],
                 "pivot": [16, 44],
                 "footPoint": [16, 44],
+                "localAlphaBounds": list(sprite.getchannel("A").getbbox()),
+                "rgbaSha256": sha256(sprite.tobytes()),
             })
     return sheet, frames
 
 
 FONT = {
     "A": ("01110", "10001", "10001", "11111", "10001", "10001", "10001"),
+    "C": ("01111", "10000", "10000", "10000", "10000", "10000", "01111"),
     "D": ("11110", "10001", "10001", "10001", "10001", "10001", "11110"),
     "E": ("11111", "10000", "10000", "11110", "10000", "10000", "11111"),
     "G": ("01111", "10000", "10000", "10111", "10001", "10001", "01111"),
@@ -434,6 +468,7 @@ def build_files() -> dict[str, bytes]:
         "layerOrder": ["rear-tools", "feet", "body-and-cloth", "front-tools", "head-and-face", "one-pixel-material-highlights"],
         "rowOrder": list(SHEET_ROWS),
         "columnOrder": list(SHEET_COLUMNS),
+        "poseSemantics": source["poseSemantics"],
         "paletteIds": palettes,
         "frames": frames,
         "sources": [
@@ -454,18 +489,12 @@ def build_files() -> dict[str, bytes]:
         "review": {
             "internalArtDirectionConstraints": "applied",
             "externalCulturalReview": "pending",
-            "runtimeIntegration": "current-browser-field-and-battle-idle-walk",
-            "fullAnimationExpansion": "pending",
+            "runtimeIntegration": "current-browser-field-idle-walk-interact-hurt",
+            "fullAnimationExpansion": "alternate-action-facings-and-inbetweens-pending",
         },
     }
     manifest_data = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
-    readme = f"""# Party field suite foundation\n\nThis directory contains an original, code-authored 32 x 48 field-sprite foundation for the six canonical party members. Pixels are drawn from the editable JSON palette and deterministic Pillow primitives; no generated atlas or concept pixels are inputs.\n\n## Files\n\n- `{SOURCE_PATH.name}`: editable frame, palette, silhouette, row, and column contract.\n- `{Path(__file__).name}`: deterministic native-resolution pixel builder.\n- `{RUNTIME_PNG}`: transparent 256 x 288 flattened sheet; candidate runtime input.\n- `{CONTACT_PNG}`: labeled 1104 x 1210 review sheet with checkerboard and cyan pivot marks; never use it at runtime.\n- `{MANIFEST_JSON}`: frame rectangles, stable pivots, palette IDs, dimensions, hashes, and review state.\n\nRows are `ren`, `aya`, `lise`, `mateus`, `genta`, `kiku`. Columns are north idle/walk, east idle/walk, south idle/walk, and west idle/walk. Every frame has a 32 x 48 logical box, pivot/foot point `(16, 44)`, a transparent outer border, and three transparent rows below the feet.\n\nRun `python build_party_field_suite.py` to rebuild. Run `python build_party_field_suite.py --check` to build in memory and byte-compare all generated outputs.\n\n## Scope and limits\n\nThis is a readable field/combat-foundation key-pose suite, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, facing, foot registration, palette ownership, and sheet layout. Animation in-betweens, combat-scale actors, hit/guard/action poses, portraits, runtime wiring, and external cultural review remain separate approval work. Mateus uses an original fictional face and proportions. Costume and tool marks use only plain, invented geometry.\n"""
-    readme = readme.replace("1104 x 1210", "1120 x 1210")
-    readme = readme.replace("candidate runtime input", "current browser runtime input")
-    readme = readme.replace(
-        "portraits, runtime wiring, and external cultural review remain separate approval work.",
-        "portraits and external cultural review remain separate approval work. The browser currently uses this sheet for field, Camp, and battle idle/walk presentation.",
-    )
+    readme = f"""# Party field suite foundation\n\nThis directory contains an original, code-authored 32 x 48 field-sprite foundation for the six canonical party members. Pixels are drawn from the editable JSON palette and deterministic Pillow primitives; no generated atlas or concept pixels are inputs.\n\n## Files\n\n- `{SOURCE_PATH.name}`: editable frame, palette, silhouette, row, and column contract.\n- `{Path(__file__).name}`: deterministic native-resolution pixel builder.\n- `{RUNTIME_PNG}`: transparent {runtime.width} x {runtime.height} flattened sheet; current browser runtime input.\n- `{CONTACT_PNG}`: labeled {contact.width} x {contact.height} review sheet with checkerboard and cyan pivot marks; never use it at runtime.\n- `{MANIFEST_JSON}`: frame rectangles, stable pivots, per-cell RGBA hashes, palette IDs, dimensions, and review state.\n\nRows are `ren`, `aya`, `lise`, `mateus`, `genta`, `kiku`. Columns are north idle/walk, east idle/walk, south idle/walk, west idle/walk, south interact, and south hurt. Interact is a brief reach driven by the rendered field control; hurt is a non-gory recoil driven only by committed `hazard-hit` events. Every frame has a 32 x 48 logical box, pivot/foot point `(16, 44)`, a transparent outer border, and three transparent rows below the feet.\n\nRun `python build_party_field_suite.py` to rebuild. Run `python build_party_field_suite.py --check` to build in memory and byte-compare all generated outputs.\n\n## Scope and limits\n\nThis is a readable field key-pose suite, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, four-direction movement, foot registration, palette ownership, and live interaction/hazard reactions. Alternate facings and in-betweens for interaction and recoil, portraits, and external cultural review remain separate approval work. Mateus uses an original fictional face and proportions. Costume and tool marks use only plain, invented geometry; there are no sacred-object props.\n"""
     return {
         RUNTIME_PNG: runtime_data,
         CONTACT_PNG: contact_data,

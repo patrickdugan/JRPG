@@ -1,8 +1,8 @@
 /**
- * Addressing contract for the authored 8 x 6 enemy combat key-pose atlas.
+ * Addressing contract for the authored 8 x 7 enemy combat key-pose atlas.
  *
  * Rows are reusable silhouette families rather than one-off encounter IDs.
- * Columns are neutral, wind-up, attack, stagger, defeat, and recovery poses. Combat rules never
+ * Columns are neutral, wind-up, attack, stagger, defeat, recovery, and hurt poses. Combat rules never
  * depend on this mapping; an unknown enemy safely falls back to Ashen Oni.
  */
 
@@ -31,9 +31,9 @@ const ENEMY_ROW_CELLS = deepFreeze([
 
 export const ENEMY_ATLAS = deepFreeze({
   url: './assets/art/enemy-combat-suite/enemy-combat-atlas.png',
-  width: 384,
+  width: 448,
   height: 640,
-  columns: 6,
+  columns: 7,
   rows: 8,
   cellWidth: ENEMY_CELL_WIDTH,
   cellHeight: ENEMY_CELL_HEIGHT,
@@ -41,7 +41,7 @@ export const ENEMY_ATLAS = deepFreeze({
   sourceWidth: ENEMY_SOURCE_WIDTH,
   sourceHeight: ENEMY_SOURCE_HEIGHT,
   rowCells: ENEMY_ROW_CELLS,
-  poses: ['neutral', 'windup', 'attack', 'stagger', 'defeat', 'recovery'],
+  poses: ['neutral', 'windup', 'attack', 'stagger', 'defeat', 'recovery', 'hurt'],
 });
 
 export const ENEMY_DEFEAT_HOLD_MS = 420;
@@ -110,7 +110,9 @@ export function getEnemyCombatPresentationPose({
 } = {}) {
   if (!active || hp <= 0) return 'defeat';
   if (phase === 'recovery') return 'recovery';
+  if (animationPose === 'stagger') return 'hurt';
   if (ENEMY_ATLAS.poses.includes(animationPose)) return animationPose;
+  if (transientPose === 'stagger') return 'hurt';
   if (ENEMY_ATLAS.poses.includes(transientPose)) return transientPose;
   return windingUp ? 'windup' : 'neutral';
 }

@@ -20,7 +20,7 @@ SOURCE_PATH = ROOT / "enemy-combat-suite.source.json"
 ATLAS_PATH = ROOT / "enemy-combat-atlas.png"
 CONTACT_PATH = ROOT / "enemy-combat-contact-sheet.png"
 MANIFEST_PATH = ROOT / "manifest.json"
-POSES = ("neutral", "windup", "attack", "stagger", "defeat", "recovery")
+POSES = ("neutral", "windup", "attack", "stagger", "defeat", "recovery", "hurt")
 FAMILIES = (
     "hound", "wisp", "ashen-oni", "court-retainer",
     "widow", "furnace", "bell-warden", "black-court",
@@ -38,7 +38,7 @@ def load_source() -> dict:
     source = json.loads(SOURCE_PATH.read_text(encoding="utf-8"))
     geometry = source.get("geometry", {})
     expected_geometry = {
-        "columns": 6,
+        "columns": 7,
         "rows": 8,
         "cellWidth": 64,
         "cellHeight": 80,
@@ -49,7 +49,7 @@ def load_source() -> dict:
         raise ValueError(f"Geometry contract changed: {geometry!r}")
     if tuple(pose.get("id") for pose in source.get("poses", [])) != POSES:
         raise ValueError(
-            "Pose order must be neutral, windup, attack, stagger, defeat, recovery"
+            "Pose order must be neutral, windup, attack, stagger, defeat, recovery, hurt"
         )
     families = source.get("families", [])
     if tuple(family.get("id") for family in families) != FAMILIES:
@@ -1005,6 +1005,179 @@ def recovery_black_court(s: PixelSurface) -> None:
     s.rect((37, 64, 44, 73), "shade")
 
 
+def hurt_hound(s: PixelSurface) -> None:
+    """Compressed hit reaction: shoulder folds and all paws remain grounded."""
+    s.shadow(7, 49)
+    s.polygon([(36, 50), (45, 44), (52, 47), (47, 53), (42, 59)], "shade")
+    s.polygon([(16, 49), (27, 46), (41, 50), (45, 57), (38, 65),
+               (21, 63), (13, 56)], "body")
+    s.polygon([(20, 50), (34, 50), (40, 54), (26, 56)], "light")
+    s.polygon([(9, 45), (15, 41), (22, 45), (23, 53), (17, 58), (10, 53)], "body")
+    s.polygon([(5, 48), (12, 47), (12, 52), (7, 53)], "shade")
+    s.polygon([(12, 43), (15, 37), (18, 44)], "shade")
+    s.rect((18, 51, 23, 55), "metal")
+    s.rect((19, 52, 20, 53), "accent")
+    s.rect((13, 47, 14, 48), "metal")
+    s.polygon([(17, 60), (24, 61), (21, 71), (14, 71)], "shade")
+    s.polygon([(34, 62), (41, 59), (47, 68), (43, 71), (38, 65)], "shade")
+    s.rect((13, 70, 22, 72), "body")
+    s.rect((42, 68, 49, 71), "body")
+
+
+def hurt_wisp(s: PixelSurface) -> None:
+    """Hard-facet recoil: the core shifts off-center without organic injury."""
+    s.shadow(9, 44)
+    s.polygon([(9, 39), (18, 31), (29, 34), (41, 43), (38, 57),
+               (25, 65), (12, 58), (7, 48)], "body")
+    s.polygon([(15, 41), (24, 35), (34, 42), (34, 53), (25, 60), (14, 53)], "light")
+    s.rect((17, 44, 30, 55), "shade")
+    s.rect((20, 46, 27, 53), "metal")
+    s.rect((22, 48, 25, 51), "accent")
+    s.polygon([(5, 31), (11, 28), (15, 35), (9, 39)], "metal")
+    s.polygon([(34, 25), (41, 29), (38, 36), (31, 32)], "body")
+    s.polygon([(40, 50), (50, 54), (45, 61), (36, 57)], "metal")
+    s.polygon([(16, 62), (23, 67), (18, 72), (11, 67)], "light")
+    s.rect((52, 42, 56, 46), "accent")
+    s.rect((45, 33, 49, 37), "metal")
+
+
+def hurt_bailiff(s: PixelSurface) -> None:
+    """Armored recoil: ledger plates close and the maul braces the fall."""
+    s.shadow(6, 52)
+    s.polygon([(14, 40), (24, 34), (39, 38), (47, 48), (45, 63),
+               (37, 70), (18, 68), (11, 57)], "body")
+    s.polygon([(12, 43), (21, 37), (21, 51), (9, 55)], "light")
+    s.polygon([(37, 40), (47, 46), (50, 57), (41, 55)], "light")
+    s.polygon([(21, 27), (34, 24), (41, 31), (38, 42), (24, 43), (18, 35)], "body")
+    s.polygon([(18, 24), (34, 20), (41, 24), (32, 28), (19, 30)], "shade")
+    s.rect((25, 33, 36, 36), "shade")
+    s.rect((25, 33, 28, 34), "accent")
+    for plate_x in (21, 27, 33):
+        s.rect((plate_x, 49, plate_x + 4, 53), "shade")
+        s.rect((plate_x + 1, 49, plate_x + 3, 51), "metal")
+    s.rect((20, 56, 37, 59), "accent")
+    s.polygon([(16, 65), (26, 66), (24, 73), (13, 72)], "shade")
+    s.polygon([(33, 65), (43, 63), (47, 72), (37, 73)], "shade")
+    s.line([(12, 42), (8, 57)], "metal", 3)
+    s.rect((5, 54, 14, 63), "metal")
+    s.rect((8, 56, 12, 61), "shade")
+
+
+def hurt_retainer(s: PixelSurface) -> None:
+    """Disrupted guard: visor and hooked blade recoil on separate lines."""
+    s.shadow(7, 49)
+    s.polygon([(17, 36), (27, 32), (39, 38), (43, 51), (40, 66),
+               (32, 70), (17, 68), (12, 55)], "body")
+    s.polygon([(19, 38), (27, 35), (34, 40), (29, 49), (19, 46)], "light")
+    s.polygon([(22, 20), (33, 19), (38, 29), (35, 37), (24, 37), (19, 28)], "shade")
+    s.rect((22, 28, 35, 31), "metal")
+    s.rect((22, 29, 26, 30), "accent")
+    s.polygon([(22, 40), (28, 46), (25, 51), (20, 47)], "shade")
+    s.polygon([(35, 41), (30, 46), (34, 51), (38, 46)], "accent")
+    s.line([(28, 50), (28, 63)], "metal", 1)
+    s.rect((20, 53, 25, 59), "shade")
+    s.rect((21, 54, 24, 57), "metal")
+    s.polygon([(16, 65), (24, 65), (22, 72), (14, 72)], "shade")
+    s.polygon([(32, 65), (40, 63), (44, 70), (37, 72)], "shade")
+    s.rect((14, 42, 18, 47), "shade")
+    s.line([(16, 44), (8, 36)], "metal", 2)
+    s.line([(16, 44), (8, 36)], "light", 1)
+    s.polygon([(7, 33), (13, 36), (9, 40), (5, 36)], "accent")
+
+
+def hurt_widow(s: PixelSurface) -> None:
+    """Impact contraction: hood, spindle, and fog ribbons recoil together."""
+    s.shadow(7, 48)
+    s.polygon([(18, 36), (27, 28), (37, 36), (42, 49), (37, 61),
+               (28, 68), (17, 62), (12, 49)], "body")
+    s.polygon([(21, 35), (27, 31), (34, 37), (33, 44), (27, 48), (19, 43)], "light")
+    s.polygon([(19, 32), (27, 24), (37, 33), (33, 40), (23, 40)], "shade")
+    s.rect((24, 48, 31, 57), "shade")
+    s.rect((26, 49, 29, 56), "metal")
+    s.rect((24, 52, 31, 54), "accent")
+    s.line([(14, 46), (24, 54), (37, 47)], "metal", 1)
+    s.line([(16, 41), (27, 54), (38, 42)], "light", 1)
+    s.rect((8, 44, 13, 49), "shade")
+    s.rect((10, 45, 14, 47), "accent")
+    s.polygon([(16, 58), (10, 62), (6, 68), (16, 71), (23, 64)], "light")
+    s.polygon([(36, 58), (44, 61), (52, 67), (45, 71), (32, 64)], "body")
+    s.rect((48, 42, 52, 46), "metal")
+
+
+def hurt_furnace(s: PixelSurface) -> None:
+    """Buckled impact: mantle shifts while the clinker rake grounds safely."""
+    s.shadow(6, 51)
+    s.polygon([(14, 36), (23, 30), (38, 33), (46, 43), (46, 62),
+               (39, 70), (17, 69), (10, 59), (10, 45)], "body")
+    s.polygon([(16, 38), (22, 34), (39, 36), (43, 44), (35, 47), (18, 44)], "light")
+    s.rect((19, 48, 40, 64), "metal")
+    s.rect((22, 51, 37, 62), "shade")
+    s.rect((25, 53, 34, 59), "accent")
+    s.rect((27, 54, 32, 57), "metal")
+    s.rect((18, 20, 28, 33), "shade")
+    s.rect((19, 19, 27, 22), "metal")
+    s.rect((32, 23, 41, 35), "shade")
+    s.rect((33, 22, 40, 25), "light")
+    s.polygon([(12, 44), (6, 49), (8, 60), (14, 58)], "shade")
+    s.polygon([(45, 44), (51, 49), (49, 60), (43, 58)], "shade")
+    s.polygon([(15, 66), (24, 67), (22, 73), (12, 72)], "shade")
+    s.polygon([(35, 66), (44, 64), (49, 72), (39, 73)], "shade")
+    s.line([(13, 43), (8, 58)], "metal", 3)
+    s.line([(6, 58), (15, 60)], "accent", 2)
+
+
+def hurt_warden(s: PixelSurface) -> None:
+    """Damped impact: yoke and block dampers kick out of alignment."""
+    s.shadow(6, 51)
+    s.polygon([(14, 36), (23, 31), (39, 34), (47, 45), (45, 62),
+               (37, 70), (18, 69), (10, 58)], "body")
+    s.polygon([(17, 37), (25, 34), (40, 37), (44, 45), (35, 48), (18, 44)], "light")
+    s.rect((14, 26, 19, 39), "shade")
+    s.rect((15, 28, 18, 36), "metal")
+    s.rect((21, 20, 29, 25), "light")
+    s.rect((22, 21, 28, 25), "metal")
+    s.rect((33, 22, 41, 28), "body")
+    s.rect((37, 24, 45, 32), "metal")
+    s.rect((40, 26, 44, 30), "shade")
+    s.line([(19, 34), (25, 39), (39, 38), (44, 34)], "light", 1)
+    s.rect((10, 44, 17, 53), "shade")
+    s.rect((11, 45, 15, 51), "metal")
+    s.rect((40, 43, 48, 52), "shade")
+    s.rect((42, 44, 46, 50), "metal")
+    s.rect((20, 45, 38, 60), "shade")
+    s.rect((23, 47, 36, 58), "metal")
+    s.rect((26, 49, 33, 56), "accent")
+    s.rect((28, 51, 31, 54), "light")
+    s.polygon([(15, 66), (25, 67), (23, 73), (12, 72)], "shade")
+    s.polygon([(34, 66), (44, 64), (49, 72), (38, 73)], "shade")
+    s.line([(12, 45), (8, 58)], "metal", 3)
+    s.rect((5, 55, 15, 63), "accent")
+
+
+def hurt_black_court(s: PixelSurface) -> None:
+    """Mantle recoil: the decree blade checks the non-gory backward fold."""
+    s.shadow(6, 49)
+    s.polygon([(21, 28), (35, 29), (41, 43), (46, 67), (35, 71),
+               (28, 60), (22, 71), (11, 68), (17, 44)], "body")
+    s.polygon([(22, 33), (34, 33), (37, 49), (29, 58), (20, 49)], "light")
+    s.polygon([(24, 16), (34, 18), (38, 27), (34, 36), (24, 35), (20, 26)], "shade")
+    s.polygon([(22, 19), (29, 14), (37, 20), (33, 24), (24, 23)], "body")
+    s.rect((24, 26, 35, 28), "metal")
+    s.rect((24, 26, 28, 27), "accent")
+    s.polygon([(12, 48), (18, 44), (22, 48), (17, 53), (8, 54)], "shade")
+    s.polygon([(40, 44), (48, 48), (45, 54), (37, 50)], "light")
+    s.polygon([(22, 44), (29, 48), (35, 44), (34, 53), (29, 59), (24, 53)], "accent")
+    s.line([(29, 48), (29, 59)], "body", 1)
+    s.rect((20, 56, 26, 61), "shade")
+    s.rect((21, 57, 25, 59), "metal")
+    s.rect((13, 43, 18, 48), "shade")
+    s.line([(15, 46), (8, 36)], "metal", 3)
+    s.line([(15, 46), (8, 36)], "light", 1)
+    s.polygon([(6, 33), (12, 36), (8, 40), (5, 36)], "accent")
+    s.rect((19, 66, 25, 73), "shade")
+    s.rect((34, 65, 41, 73), "shade")
+
+
 DRAWERS = {
     "hound": draw_hound,
     "wisp": draw_wisp,
@@ -1047,6 +1220,17 @@ RECOVERY_DRAWERS = {
     "furnace": recovery_furnace,
     "bell-warden": recovery_warden,
     "black-court": recovery_black_court,
+}
+
+HURT_DRAWERS = {
+    "hound": hurt_hound,
+    "wisp": hurt_wisp,
+    "ashen-oni": hurt_bailiff,
+    "court-retainer": hurt_retainer,
+    "widow": hurt_widow,
+    "furnace": hurt_furnace,
+    "bell-warden": hurt_warden,
+    "black-court": hurt_black_court,
 }
 
 
@@ -1170,6 +1354,8 @@ def build_artifacts() -> dict[str, bytes]:
                 DEFEAT_DRAWERS[family["id"]](surface)
             elif pose == "recovery":
                 RECOVERY_DRAWERS[family["id"]](surface)
+            elif pose == "hurt":
+                HURT_DRAWERS[family["id"]](surface)
             else:
                 DRAWERS[family["id"]](surface, pose)
                 DETAILERS[family["id"]](surface, pose)
@@ -1190,7 +1376,7 @@ def build_artifacts() -> dict[str, bytes]:
     manifest = {
         "assetId": SOURCE["assetId"],
         "status": "editable-production-key-pose-suite",
-        "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat-recovery",
+        "runtimeIntegration": "current-browser-neutral-windup-attack-stagger-defeat-recovery-hurt",
         "canonicalSource": SOURCE_PATH.name,
         "builder": Path(__file__).name,
         "originality": "Original integer-pixel primitives; no generated or external raster pixels used.",

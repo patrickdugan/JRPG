@@ -69,6 +69,17 @@ const RECOVERY_EXPECTATIONS = Object.freeze({
   'black-court': ['9572d80ca781561de35074802300e5d89d34af1087b973ba19deaa6006baa364', [30, 62], [30, 73], [49, 53], [9, 13, 6, 5]],
 });
 
+const HURT_EXPECTATIONS = Object.freeze({
+  hound: ['66be063320ce9261887ddc1a2789ea5644b3023992e8dc8c47497aac2a01b95f', [26, 65], [26, 72], [13, 50], [5, 37, 11, 5]],
+  wisp: ['a08dde7bfefe5a576dd40647c971cd8cc12a1048e8bbefa28ea19ec300f07158', [27, 53], [27, 72], [13, 42], [5, 25, 7, 5]],
+  'ashen-oni': ['f6d2973f38ce9277da3b4c63fa2a68fb1fe36f5f882a7a6bcdf2da85c2a071d6', [27, 64], [27, 73], [12, 45], [5, 20, 11, 5]],
+  'court-retainer': ['530ddacbfb24fd56dc3b2db70778ca887a57c58c35da9febe0548f5f682d5c17', [26, 63], [26, 72], [12, 42], [5, 19, 14, 5]],
+  widow: ['a1500eaa5a33397cbab3fc9f7c30b4fe4ff56c9b4becf0df40a490dc8758591f', [27, 56], [27, 72], [11, 45], [6, 24, 11, 5]],
+  furnace: ['b0255899da08c16822e200605c2d4901cbf862e94100651f884bd1d1e9600f8d', [27, 63], [27, 73], [12, 43], [6, 19, 12, 5]],
+  'bell-warden': ['ca8544d96c390daa60219a5389a1b6cf9fbc1eb4d7f66e9bc1898aa4b8d7d724', [27, 63], [27, 73], [12, 44], [5, 20, 12, 5]],
+  'black-court': ['d60059b7ae2f8604d08f38978b650e589dbd6acba687e780c65ed3c51ad37ef3', [27, 62], [27, 73], [12, 43], [5, 14, 14, 5]],
+});
+
 function pngIhdr(bytes) {
   assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
   assert.equal(bytes.subarray(12, 16).toString('ascii'), 'IHDR');
@@ -95,7 +106,7 @@ test('enemy combat production suite rebuild is byte-identical', () => {
 
 test('enemy combat suite publishes exact transparent atlas geometry and review-only sheet', () => {
   assert.deepEqual(manifest.geometry, {
-    columns: 6,
+    columns: 7,
     rows: 8,
     cellWidth: 64,
     cellHeight: 80,
@@ -116,7 +127,7 @@ test('enemy combat suite publishes exact transparent atlas geometry and review-o
   assert.deepEqual(pngIhdr(atlas), atlasExport.ihdr);
   assert.deepEqual(pngIhdr(contact), contactExport.ihdr);
   assert.deepEqual(atlasExport.ihdr, {
-    width: 384,
+    width: 448,
     height: 640,
     bitDepth: 8,
     colorType: 6,
@@ -124,27 +135,27 @@ test('enemy combat suite publishes exact transparent atlas geometry and review-o
     filter: 0,
     interlace: 0,
   });
-  assert.equal(contactExport.ihdr.width, 832);
+  assert.equal(contactExport.ihdr.width, 968);
   assert.equal(contactExport.ihdr.height, 1500);
   assert.equal(contactExport.ihdr.colorType, 2);
-  assert.equal(manifest.runtimeIntegration, 'current-browser-neutral-windup-attack-stagger-defeat-recovery');
+  assert.equal(manifest.runtimeIntegration, 'current-browser-neutral-windup-attack-stagger-defeat-recovery-hurt');
 });
 
-test('all live enemy families and templates map to six distinct anchored frames', () => {
-  assert.deepEqual(manifest.poseOrder, ['neutral', 'windup', 'attack', 'stagger', 'defeat', 'recovery']);
+test('all live enemy families and templates map to seven distinct anchored frames', () => {
+  assert.deepEqual(manifest.poseOrder, ['neutral', 'windup', 'attack', 'stagger', 'defeat', 'recovery', 'hurt']);
   assert.deepEqual(
     manifest.familyMappings.map(({ id, row, templateIds }) => ({ id, row, templateIds })),
     ENEMY_FAMILIES.map(({ id, row, templateIds }) => ({ id, row, templateIds })),
   );
-  assert.equal(manifest.frames.length, 48);
+  assert.equal(manifest.frames.length, 56);
   const rects = new Set();
   for (const family of ENEMY_FAMILIES) {
     const frames = manifest.frames.filter(({ familyId }) => familyId === family.id);
     assert.deepEqual(frames.map(({ pose }) => pose), manifest.poseOrder);
-    assert.equal(new Set(frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 6);
+    assert.equal(new Set(frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 7);
     assert.equal(new Set(frames.map(({ rgbaSha256, alphaBounds }) => (
       `${rgbaSha256}:${JSON.stringify(alphaBounds)}`
-    ))).size, 6);
+    ))).size, 7);
     for (const [column, frame] of frames.entries()) {
       assert.deepEqual(frame.rect, {
         x: column * 64,
@@ -167,7 +178,7 @@ test('all live enemy families and templates map to six distinct anchored frames'
         : source.families.find(({ id }) => id === family.id).paletteId);
     }
   }
-  assert.equal(rects.size, 48);
+  assert.equal(rects.size, 56);
 });
 
 test('the appended recovery column preserves all 40 prior RGBA hashes exactly', () => {
@@ -181,14 +192,51 @@ test('the appended recovery column preserves all 40 prior RGBA hashes exactly', 
 });
 
 test('all eight recovery frames have exact column, anchor, gutter, and RGBA receipts', () => {
-  assert.equal(source.poses.at(-1).id, 'recovery');
-  assert.equal(source.poses.at(-1).column, 5);
+  const recoveryPose = source.poses.find(({ id }) => id === 'recovery');
+  assert.equal(recoveryPose.column, 5);
   for (const [familyId, expectation] of Object.entries(RECOVERY_EXPECTATIONS)) {
     const [hash, pivot, ground, contact, gutters] = expectation;
     const frame = manifest.frames.find(({ id }) => id === `${familyId}:recovery`);
     const family = ENEMY_FAMILIES.find(({ id }) => id === familyId);
     assert.ok(frame, familyId);
     assert.deepEqual(frame.rect, { x: 320, y: family.row * 80, width: 64, height: 80 });
+    assert.equal(frame.rgbaSha256, hash);
+    assert.deepEqual(frame.pivot, pivot);
+    assert.deepEqual(frame.ground, ground);
+    assert.deepEqual(frame.contact, contact);
+    assert.deepEqual(
+      [frame.transparentGutter.left, frame.transparentGutter.top,
+        frame.transparentGutter.right, frame.transparentGutter.bottom],
+      gutters,
+    );
+  }
+});
+
+test('the appended hurt column preserves all 48 preceding RGBA hashes exactly', () => {
+  const precedingHashes = {
+    ...LEGACY_RGBA_SHA256_BY_FRAME,
+    ...Object.fromEntries(Object.entries(RECOVERY_EXPECTATIONS).map(([familyId, [hash]]) => (
+      [`${familyId}:recovery`, hash]
+    ))),
+  };
+  assert.equal(Object.keys(precedingHashes).length, 48);
+  for (const [frameId, expectedHash] of Object.entries(precedingHashes)) {
+    const frame = manifest.frames.find(({ id }) => id === frameId);
+    assert.ok(frame, frameId);
+    assert.equal(frame.rgbaSha256, expectedHash, frameId);
+    assert.ok(frame.rect.x < 384, `${frameId} moved into the appended hurt column`);
+  }
+});
+
+test('all eight hurt frames have exact column, anchor, gutter, and RGBA receipts', () => {
+  assert.equal(source.poses.at(-1).id, 'hurt');
+  assert.equal(source.poses.at(-1).column, 6);
+  for (const [familyId, expectation] of Object.entries(HURT_EXPECTATIONS)) {
+    const [hash, pivot, ground, contact, gutters] = expectation;
+    const frame = manifest.frames.find(({ id }) => id === `${familyId}:hurt`);
+    const family = ENEMY_FAMILIES.find(({ id }) => id === familyId);
+    assert.ok(frame, familyId);
+    assert.deepEqual(frame.rect, { x: 384, y: family.row * 80, width: 64, height: 80 });
     assert.equal(frame.rgbaSha256, hash);
     assert.deepEqual(frame.pivot, pivot);
     assert.deepEqual(frame.ground, ground);
