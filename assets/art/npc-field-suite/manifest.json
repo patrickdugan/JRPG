@@ -30,7 +30,7 @@
     "interviewee"
   ],
   "mappingContracts": {
-    "speaker": "side-story objective.type equals talk",
+    "speaker": "side-story objective.type equals talk and targetKind equals person",
     "interviewee": "scene-operation activityType equals interview"
   },
   "paletteIds": {
@@ -116,6 +116,7 @@
       "mechanisms",
       "deliveries",
       "care and rescue procedure nodes",
+      "group-target talk objectives",
       "councils and ambiguous groups",
       "combat markers",
       "sacred or devotional objects",

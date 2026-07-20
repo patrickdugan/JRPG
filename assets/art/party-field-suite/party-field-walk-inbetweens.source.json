@@ -1,0 +1,30 @@
+{
+  "assetId": "party-field-directional-walk-inbetweens-v1",
+  "formatVersion": 1,
+  "authorship": "original-code-native-pixel-primitives",
+  "canonicalSource": "party-field-suite.source.json",
+  "appendColumns": [
+    "north-walk-b",
+    "east-walk-b",
+    "south-walk-b",
+    "west-walk-b"
+  ],
+  "frameContract": {
+    "width": 32,
+    "height": 48,
+    "pivot": [16, 44],
+    "footPoint": [16, 44],
+    "transparentGutter": 1
+  },
+  "animationSemantics": {
+    "directionalWalkCycle": ["walk", "walk-b"],
+    "standingFrame": "idle",
+    "reducedMotionFrame": "idle",
+    "legacyFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2"
+  },
+  "safety": {
+    "characterContract": "inherits the six original fictional character designs and palettes from the canonical source",
+    "mateusLikenessPolicy": "original fictional face and proportions",
+    "propPolicy": "no new props, insignia, or sacred-object motifs"
+  }
+}

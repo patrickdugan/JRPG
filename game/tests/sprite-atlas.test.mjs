@@ -10,6 +10,7 @@ import {
   atlasDirectionForMovement,
   getPartyAtlasFieldPoseFrame,
   getPartyAtlasFrame,
+  getPartyAtlasWalkFrame,
   partyAtlasImageHasExpectedSize,
 } from '../sprite-atlas.mjs';
 
@@ -60,12 +61,37 @@ test('party atlas addresses every member directional pair and appended live fiel
       rectangles.add(`${frame.x}:${frame.y}:${frame.width}:${frame.height}`);
     }
   }
-  assert.equal(keys.size, PARTY_ATLAS.rows * PARTY_ATLAS.columns);
-  assert.equal(rectangles.size, PARTY_ATLAS.rows * PARTY_ATLAS.columns);
+  assert.equal(keys.size, PARTY_ATLAS.rows * 10);
+  assert.equal(rectangles.size, PARTY_ATLAS.rows * 10);
   assert.equal(PARTY_ATLAS.width, PARTY_ATLAS.cellWidth * PARTY_ATLAS.columns);
   assert.equal(PARTY_ATLAS.rowCells.length, PARTY_ATLAS.rows);
   assert.deepEqual(PARTY_ATLAS.rowCells.map(({ y }) => y), [0, 48, 96, 144, 192, 240]);
   assert.equal(Object.isFrozen(PARTY_ATLAS.rowCells), true);
+});
+
+test('every party member has two distinct directional walk keys appended without moving legacy cells', () => {
+  const expectedWalkColumns = {
+    north: [1, 10], east: [3, 11], south: [5, 12], west: [7, 13],
+  };
+  const rectangles = new Set();
+  for (const memberId of PARTY_ATLAS_MEMBERS) {
+    for (const direction of PARTY_ATLAS_DIRECTIONS) {
+      const legacy = getPartyAtlasFrame(memberId, direction, 1);
+      const walkA = getPartyAtlasWalkFrame(memberId, direction, 0);
+      const walkB = getPartyAtlasWalkFrame(memberId, direction, 1);
+      assert.deepEqual(
+        ['row', 'column', 'x', 'y', 'width', 'height'].map((field) => walkA[field]),
+        ['row', 'column', 'x', 'y', 'width', 'height'].map((field) => legacy[field]),
+      );
+      assert.deepEqual([walkA.column, walkB.column], expectedWalkColumns[direction]);
+      assert.equal(walkB.row, PARTY_ATLAS_MEMBERS.indexOf(memberId));
+      assert.equal(Object.isFrozen(walkB), true);
+      rectangles.add(`${walkA.row}:${walkA.column}`);
+      rectangles.add(`${walkB.row}:${walkB.column}`);
+    }
+  }
+  assert.equal(rectangles.size, PARTY_ATLAS_MEMBERS.length * PARTY_ATLAS_DIRECTIONS.length * 2);
+  assert.throws(() => getPartyAtlasWalkFrame('ren', 'south', -1), /non-negative/);
 });
 
 test('field event pose addressing is exact and rejects unsupported authored states', () => {
@@ -85,9 +111,11 @@ test('campaign wires authored event poses only to live interaction input and haz
   const draw = sourceSection('function drawMap', 'function formatEnemies');
 
   assert.match(timedHazard, /important\?\.type === 'hazard-hit'[\s\S]*holdPartyFieldPose\('hurt'\)/u);
+  assert.match(movement, /moveFieldBy\(fieldRuntimeState, dx, dy[\s\S]*commitStateChanges\('Field movement'[\s\S]*fieldWalkUntil = performance\.now\(\) \+ 320/u);
   assert.match(movement, /const hazardHits = result\.events\.filter[\s\S]*if \(hazardHits\.length\) holdPartyFieldPose\('hurt'\)/u);
+  assert.doesNotMatch(movement, /getPartyAtlasWalkFrame/u, 'walk-frame sampling must remain outside movement authority');
   assert.match(interaction, /ensureFieldPosition\(level\)[\s\S]*holdPartyFieldPose\('interact'\)/u);
-  assert.match(draw, /heldPose[\s\S]*getPartyAtlasFieldPoseFrame\('ren', heldPose\)[\s\S]*getPartyAtlasFrame\('ren', fieldFacing, phase\)/u);
+  assert.match(draw, /const moving = !reducedMotion\.matches && now < fieldWalkUntil[\s\S]*getPartyAtlasWalkFrame\('ren', fieldFacing, phase\)[\s\S]*getPartyAtlasFrame\('ren', fieldFacing, 0\)/u);
 });
 
 test('party frame identity, authored pose mapping, and source scale stay stable', () => {
@@ -125,8 +153,8 @@ test('eight-way movement resolves deterministically to four authored facings', (
 });
 
 test('party atlas image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 320, naturalHeight: 288 }), true);
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 319, naturalHeight: 288 }), false);
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 320, naturalHeight: 287 }), false);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 448, naturalHeight: 288 }), true);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 447, naturalHeight: 288 }), false);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 448, naturalHeight: 287 }), false);
   assert.equal(partyAtlasImageHasExpectedSize(null), false);
 });

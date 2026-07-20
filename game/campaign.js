@@ -104,6 +104,7 @@ import {
   atlasDirectionForMovement,
   getPartyAtlasFieldPoseFrame,
   getPartyAtlasFrame,
+  getPartyAtlasWalkFrame,
   partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
 import {
@@ -1174,6 +1175,7 @@ function drawMap(level, encounter, now) {
     const role = resolveNpcFieldRole({
       markerType: 'side-story',
       objectiveType: questMarker.objective.type,
+      targetKind: questMarker.objective.targetKind,
     });
     if (!drawNpcFieldMarker(role, px, py, cell)) {
       const pulse = 0.68 + (Math.sin(now / 210) * 0.15);
@@ -1236,11 +1238,13 @@ function drawMap(level, encounter, now) {
       fieldPose = null;
       fieldPoseUntil = 0;
     }
-    const moving = now < fieldWalkUntil;
+    const moving = !reducedMotion.matches && now < fieldWalkUntil;
     const phase = moving ? Math.floor(now / 110) % 2 : 0;
     const frame = heldPose
       ? getPartyAtlasFieldPoseFrame('ren', heldPose)
-      : getPartyAtlasFrame('ren', fieldFacing, phase);
+      : moving
+        ? getPartyAtlasWalkFrame('ren', fieldFacing, phase)
+        : getPartyAtlasFrame('ren', fieldFacing, 0);
     const drawHeight = cell * 1.38;
     const drawWidth = drawHeight * (frame.width / frame.height);
     mapCtx.drawImage(

@@ -17,8 +17,8 @@ export const NPC_FIELD_ATLAS = Object.freeze({
  * are intentionally ignored so props and ambiguous operation points stay on
  * Campaign's existing geometric fallback path.
  */
-export function resolveNpcFieldRole({ markerType, objectiveType, activityType } = {}) {
-  if (markerType === 'side-story' && objectiveType === 'talk') return 'speaker';
+export function resolveNpcFieldRole({ markerType, objectiveType, targetKind, activityType } = {}) {
+  if (markerType === 'side-story' && objectiveType === 'talk' && targetKind === 'person') return 'speaker';
   if (markerType === 'scene-operation' && activityType === 'interview') return 'interviewee';
   return null;
 }

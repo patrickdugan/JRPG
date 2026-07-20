@@ -2,7 +2,7 @@
 
 This directory contains an original, deterministic 32 x 48 pixel-art foundation for Campaign markers that the live data explicitly identifies as people. It is code-authored from editable JSON palettes and Pillow primitives; generated or borrowed art is not an input.
 
-The two canonical roles are `speaker` (a person or spokesperson reached by a side-story `talk` objective) and `interviewee` (a person named by the scene-operation interview schema). The runtime does not infer roles from names or prose. Witness fieldwork currently emits only its first and final blueprint nodes, so its unused `Invite` blueprint is deliberately not mapped. Props, hazards, exits, evidence, mechanisms, deliveries, care/rescue procedures, councils or ambiguous groups, combat markers, devotional objects, and every other unmapped marker retain Campaign's geometric art.
+The two canonical roles are `speaker` (an individual reached by a side-story `talk` objective with exact `targetKind: 'person'`) and `interviewee` (a person named by the scene-operation interview schema). Four collective talk targets carry `targetKind: 'group'` and retain geometric markers. The runtime does not infer roles from IDs, names, labels, or prose. Witness fieldwork currently emits only its first and final blueprint nodes, so its unused `Invite` blueprint is deliberately not mapped. Props, hazards, exits, evidence, mechanisms, deliveries, care/rescue procedures, councils or ambiguous groups, combat markers, devotional objects, and every other unmapped marker retain Campaign's geometric art.
 
 Files:
 

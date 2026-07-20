@@ -16,8 +16,8 @@
   "roleTaxonomy": [
     {
       "id": "speaker",
-      "meaning": "A generic person or spokesperson explicitly addressed by a side-story talk objective.",
-      "liveContract": "side-story objective.type equals talk",
+      "meaning": "A generic individual person explicitly addressed by a side-story talk objective.",
+      "liveContract": "side-story objective.type equals talk and targetKind equals person",
       "paletteId": "npc-speaker-rain-clay-v1",
       "silhouette": "layered civilian coat, open hand, no insignia or carried prop",
       "colors": {"primary": "#5d4a3b", "secondary": "#315b62", "light": "#8b7057", "accent": "#c19a61", "hair": "#211b1a"}
@@ -33,7 +33,7 @@
   ],
   "exclusions": [
     "props", "hazards", "exits", "evidence", "mechanisms", "deliveries",
-    "care and rescue procedure nodes", "councils and ambiguous groups",
+    "care and rescue procedure nodes", "group-target talk objectives", "councils and ambiguous groups",
     "combat markers", "sacred or devotional objects", "untyped label guesses"
   ],
   "likenessPolicy": "generic fictional people only; no real-person likenesses",

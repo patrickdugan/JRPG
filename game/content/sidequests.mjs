@@ -7,7 +7,7 @@
  * Reward bundles deliberately match advancement.mjs vocabulary.
  */
 
-export const SIDE_QUEST_SCHEMA_VERSION = 1;
+export const SIDE_QUEST_SCHEMA_VERSION = 2;
 
 const deepFreeze = (value) => {
   if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
@@ -118,7 +118,7 @@ export const SIDE_QUESTS = deepFreeze([
       encounterIds: [],
     },
     objectives: [
-      { id: 'ask-sayo-format', order: 1, type: 'talk', mapId: 'c1-ferry-landing', targetId: 'sayo-ferry-clerk', instruction: 'Ask Sayo which details travelers agreed to preserve.' },
+      { id: 'ask-sayo-format', order: 1, type: 'talk', targetKind: 'person', mapId: 'c1-ferry-landing', targetId: 'sayo-ferry-clerk', instruction: 'Ask Sayo which details travelers agreed to preserve.' },
       { id: 'compare-shrine-copy', order: 2, type: 'inspect', mapId: 'c1-shrine-archive', targetId: 'omission-register', instruction: 'Compare Sayo\'s list with the shrine copy without adding unconfirmed names.' },
       { id: 'recover-blank-paper', order: 3, type: 'collect', mapId: 'c1-tax-storehouse', targetId: 'unsealed-paper-bale', instruction: 'Take unsealed paper that cannot be mistaken for an official writ.' },
       { id: 'return-consent-copy', order: 4, type: 'deliver', mapId: 'c1-ferry-landing', targetId: 'sayo-ferry-clerk', instruction: 'Return the consent copy to Sayo for correction before it travels.' },
@@ -179,7 +179,7 @@ export const SIDE_QUESTS = deepFreeze([
       encounterIds: [],
     },
     objectives: [
-      { id: 'take-reader-instructions', order: 1, type: 'talk', mapId: 'tkm-abandoned-chapel', targetId: 'tama-caretaker', instruction: 'Record Tama\'s reader instructions before touching the letters.' },
+      { id: 'take-reader-instructions', order: 1, type: 'talk', targetKind: 'person', mapId: 'tkm-abandoned-chapel', targetId: 'tama-caretaker', instruction: 'Record Tama\'s reader instructions before touching the letters.' },
       { id: 'recover-dry-letter', order: 2, type: 'collect', mapId: 'tkm-abandoned-chapel', targetId: 'letter-altar-step', instruction: 'Recover the letter meant for any surviving relative.' },
       { id: 'recover-sealed-letter', order: 3, type: 'collect', mapId: 'tkm-flooded-undercroft', targetId: 'letter-waterproof-tube', instruction: 'Recover the sealed letter whose text must remain closed.' },
       { id: 'recover-cell-letter', order: 4, type: 'collect', mapId: 'tkm-cell-block', targetId: 'letter-cell-brick', instruction: 'Recover the cell letter addressed to a named neighbor.' },
@@ -271,7 +271,7 @@ export const SIDE_QUESTS = deepFreeze([
       encounterIds: [],
     },
     objectives: [
-      { id: 'learn-knot-marks', order: 1, type: 'talk', mapId: 'ngi-fishing-village', targetId: 'tomoe-net-mender', instruction: 'Learn the village marks for working rope, memorial rope, and fouled rope.' },
+      { id: 'learn-knot-marks', order: 1, type: 'talk', targetKind: 'person', mapId: 'ngi-fishing-village', targetId: 'tomoe-net-mender', instruction: 'Learn the village marks for working rope, memorial rope, and fouled rope.' },
       { id: 'collect-working-rope', order: 2, type: 'collect', mapId: 'ngi-wrecked-carrack', targetId: 'working-rope-coil', instruction: 'Collect only the coil marked for reuse.' },
       { id: 'wash-ash-rope', order: 3, type: 'interact', mapId: 'ngi-tide-caves', targetId: 'rope-washing-pool', instruction: 'Wash the fouled coil in the declared current until its ash cue clears.' },
       { id: 'leave-memorial-knot', order: 4, type: 'inspect', mapId: 'ngi-wrecked-carrack', targetId: 'memorial-rope-knot', instruction: 'Record the memorial knot and leave it where survivors placed it.' },
@@ -369,7 +369,7 @@ export const SIDE_QUESTS = deepFreeze([
       { id: 'mute-road-bell', order: 2, type: 'interact', mapId: 'hsh-prison-ferry', targetId: 'court-road-bell', instruction: 'Wrap the court road bell without removing the ferry\'s hand signal.' },
       { id: 'break-aqueduct-clapper', order: 3, type: 'interact', mapId: 'hsh-bell-aqueduct', targetId: 'aqueduct-command-clapper', instruction: 'Break the command clapper after its declared pulse.' },
       { id: 'update-safe-map', order: 4, type: 'interact', mapId: 'hsh-map-table', targetId: 'roadside-bell-map', instruction: 'Mark the remaining civilian signals and muted court bells on the route map.' },
-      { id: 'confirm-fog-signal', order: 5, type: 'talk', mapId: 'hsh-post-town', targetId: 'noe-post-keeper', instruction: 'Let Noe confirm that the fog signal still carries.' },
+      { id: 'confirm-fog-signal', order: 5, type: 'talk', targetKind: 'person', mapId: 'hsh-post-town', targetId: 'noe-post-keeper', instruction: 'Let Noe confirm that the fog signal still carries.' },
     ],
     linkedEncounterIds: ['c7-name-slip-release'],
     rewards: { firstClear: rewardBundle(650, 252, [['Ward Tonic', 2]]) },
@@ -397,9 +397,9 @@ export const SIDE_QUESTS = deepFreeze([
       encounterIds: [],
     },
     objectives: [
-      { id: 'record-hoshigawa-offer', order: 1, type: 'talk', mapId: 'c8-hoshigawa-return', targetId: 'hoshigawa-council', instruction: 'Record Hoshigawa\'s medicine offer and its refusal to send untrained fighters.' },
-      { id: 'record-sodegaura-offer', order: 2, type: 'talk', mapId: 'c8-sodegaura-return', targetId: 'sodegaura-boat-circle', instruction: 'Record Sodegaura\'s two boats and the quay that must remain defended.' },
-      { id: 'record-takamine-offer', order: 3, type: 'talk', mapId: 'c8-takamine-return', targetId: 'takamine-repair-group', instruction: 'Record Takamine\'s rope and its protected evacuation stores.' },
+      { id: 'record-hoshigawa-offer', order: 1, type: 'talk', targetKind: 'group', mapId: 'c8-hoshigawa-return', targetId: 'hoshigawa-council', instruction: 'Record Hoshigawa\'s medicine offer and its refusal to send untrained fighters.' },
+      { id: 'record-sodegaura-offer', order: 2, type: 'talk', targetKind: 'group', mapId: 'c8-sodegaura-return', targetId: 'sodegaura-boat-circle', instruction: 'Record Sodegaura\'s two boats and the quay that must remain defended.' },
+      { id: 'record-takamine-offer', order: 3, type: 'talk', targetKind: 'group', mapId: 'c8-takamine-return', targetId: 'takamine-repair-group', instruction: 'Record Takamine\'s rope and its protected evacuation stores.' },
       { id: 'post-limits-at-gate', order: 4, type: 'deliver', mapId: 'c8-black-gate', targetId: 'lantern-command-board', instruction: 'Post both contributions and limits where every assault leader can read them.' },
       { id: 'confirm-no-conscription', order: 5, type: 'interact', mapId: 'c8-black-gate', targetId: 'consent-ledger-seal', instruction: 'Seal the plan only after every stated limit is represented.' },
     ],
@@ -461,7 +461,7 @@ export const SIDE_QUESTS = deepFreeze([
     },
     objectives: [
       { id: 'take-correction-slips', order: 1, type: 'collect', mapId: 'epi-hoshigawa-archive', targetId: 'public-correction-box', instruction: 'Take only signed or witnessed correction slips.' },
-      { id: 'verify-storehouse-date', order: 2, type: 'talk', mapId: 'epi-sodegaura-storehouse', targetId: 'storehouse-care-circle', instruction: 'Verify a disputed arrival date with the care circle, not one official.' },
+      { id: 'verify-storehouse-date', order: 2, type: 'talk', targetKind: 'group', mapId: 'epi-sodegaura-storehouse', targetId: 'storehouse-care-circle', instruction: 'Verify a disputed arrival date with the care circle, not one official.' },
       { id: 'post-corrections', order: 3, type: 'deliver', mapId: 'epi-takamine-tower', targetId: 'tower-correction-margin', instruction: 'Post the corrections beside the original page so the change remains visible.' },
       { id: 'leave-blank-line', order: 4, type: 'interact', mapId: 'epi-takamine-tower', targetId: 'tower-unknown-name-line', instruction: 'Leave a ruled blank for the name no witness can yet supply.' },
     ],

@@ -38,9 +38,11 @@ test('NPC field taxonomy and frame geometry are compact and exact', () => {
 });
 
 test('resolver uses authored person metadata and never guesses from labels', () => {
-  assert.equal(resolveNpcFieldRole({ markerType: 'side-story', objectiveType: 'talk' }), 'speaker');
+  assert.equal(resolveNpcFieldRole({ markerType: 'side-story', objectiveType: 'talk', targetKind: 'person' }), 'speaker');
   assert.equal(resolveNpcFieldRole({ markerType: 'scene-operation', activityType: 'interview' }), 'interviewee');
   for (const record of [
+    { markerType: 'side-story', objectiveType: 'talk' },
+    { markerType: 'side-story', objectiveType: 'talk', targetKind: 'group', label: 'council' },
     { markerType: 'side-story', objectiveType: 'collect', label: 'person' },
     { markerType: 'scene-operation', activityType: 'care-rescue', instruction: 'a person' },
     { markerType: 'scene-operation', activityType: 'council' },
@@ -52,7 +54,10 @@ test('resolver uses authored person metadata and never guesses from labels', () 
 test('every mapped live record is covered only by exact metadata contracts', () => {
   const objectives = ALL_OPTIONAL_QUESTS.flatMap((quest) => quest.objectives);
   assert.equal(objectives.filter(({ type }) => type === 'talk').length, 8);
-  assert.equal(objectives.filter((objective) => resolveNpcFieldRole({ markerType: 'side-story', objectiveType: objective.type })).length, 8);
+  assert.equal(objectives.filter((objective) => resolveNpcFieldRole({
+    markerType: 'side-story', objectiveType: objective.type, targetKind: objective.targetKind,
+  })).length, 4);
+  assert.equal(objectives.filter(({ type, targetKind }) => type === 'talk' && targetKind === 'group').length, 4);
 
   const operationNodes = SCENE_OPERATIONS.operations.flatMap((operation) => operation.nodes);
   assert.equal(operationNodes.filter(({ activityType }) => activityType === 'interview').length, 37);

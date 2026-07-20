@@ -1,4 +1,4 @@
-/** DOM-free frame addressing for the authored six-by-ten party field atlas. */
+/** DOM-free frame addressing for the authored six-by-fourteen party field atlas. */
 
 const PARTY_SOURCE_INSET = 0;
 const PARTY_CELL_WIDTH = 32;
@@ -17,9 +17,9 @@ const PARTY_ROW_CELLS = Object.freeze([
 
 export const PARTY_ATLAS = Object.freeze({
   url: './assets/art/party-field-suite/party-field-foundation.png',
-  width: 320,
+  width: 448,
   height: 288,
-  columns: 10,
+  columns: 14,
   rows: 6,
   cellWidth: PARTY_CELL_WIDTH,
   cellHeight: PARTY_CELL_HEIGHT,
@@ -42,6 +42,12 @@ export const PARTY_ATLAS_DIRECTIONS = Object.freeze(['north', 'east', 'south', '
 export const PARTY_ATLAS_FIELD_POSES = Object.freeze(['interact', 'hurt']);
 
 const DIRECTION_COLUMN = Object.freeze({ north: 0, east: 2, south: 4, west: 6 });
+const WALK_COLUMN = Object.freeze({
+  north: Object.freeze([1, 10]),
+  east: Object.freeze([3, 11]),
+  south: Object.freeze([5, 12]),
+  west: Object.freeze([7, 13]),
+});
 const FIELD_POSE_COLUMN = Object.freeze({ interact: 8, hurt: 9 });
 
 /** Resolve one stable source rectangle. Walking phase alternates idle/walk cells. */
@@ -59,6 +65,36 @@ export function getPartyAtlasFrame(memberId, direction = 'south', walkingPhase =
     memberId,
     direction,
     walkingPhase: walkingPhase % 2,
+    row,
+    column,
+    cellX,
+    cellY: cell.y,
+    cellWidth: PARTY_ATLAS.cellWidth,
+    cellHeight: cell.height,
+    sourceInset: PARTY_ATLAS.sourceInset,
+    x: cellX + PARTY_ATLAS.sourceInset,
+    y: cell.y + PARTY_ATLAS.sourceInset,
+    width: PARTY_ATLAS.sourceWidth,
+    height: PARTY_ATLAS.sourceHeight,
+  });
+}
+
+/** Resolve the two authored walk keys without using the standing idle cell. */
+export function getPartyAtlasWalkFrame(memberId, direction = 'south', walkingPhase = 0) {
+  const row = PARTY_ATLAS_MEMBERS.indexOf(memberId);
+  if (row < 0) throw new RangeError(`Unknown party atlas member: ${memberId}`);
+  if (!PARTY_ATLAS_DIRECTIONS.includes(direction)) throw new RangeError(`Unknown party atlas direction: ${direction}`);
+  if (!Number.isSafeInteger(walkingPhase) || walkingPhase < 0) {
+    throw new RangeError('Walking phase must be a non-negative safe integer.');
+  }
+  const resolvedPhase = walkingPhase % 2;
+  const column = WALK_COLUMN[direction][resolvedPhase];
+  const cellX = column * PARTY_ATLAS.cellWidth;
+  const cell = PARTY_ATLAS.rowCells[row];
+  return Object.freeze({
+    memberId,
+    direction,
+    walkingPhase: resolvedPhase,
     row,
     column,
     cellX,

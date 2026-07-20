@@ -39,7 +39,7 @@ function assertRewardBundle(bundle, label) {
 }
 
 test('optional-content module has a versioned, immutable public contract', () => {
-  assert.equal(SIDE_QUEST_SCHEMA_VERSION, 1);
+  assert.equal(SIDE_QUEST_SCHEMA_VERSION, 2);
   assert.equal(SIDE_QUESTS.length, 13);
   assert.equal(REPEATABLE_CONTRACTS.length, 4);
   assert.equal(ALL_OPTIONAL_QUESTS.length, 17);
@@ -48,6 +48,20 @@ test('optional-content module has a versioned, immutable public contract', () =>
   assert.equal(Object.isFrozen(ALL_OPTIONAL_QUESTS), true);
   assert.equal(Object.isFrozen(ALL_OPTIONAL_QUESTS[0].objectives), true);
   assert.ok(OPTIONAL_CONTENT_GUARDRAILS.length >= 5);
+});
+
+test('talk objectives explicitly distinguish individual people from collectives', () => {
+  const talks = ALL_OPTIONAL_QUESTS.flatMap((quest) => quest.objectives).filter(({ type }) => type === 'talk');
+  assert.equal(talks.length, 8);
+  assert.deepEqual(
+    talks.filter(({ targetKind }) => targetKind === 'person').map(({ id }) => id),
+    ['ask-sayo-format', 'take-reader-instructions', 'learn-knot-marks', 'confirm-fog-signal'],
+  );
+  assert.deepEqual(
+    talks.filter(({ targetKind }) => targetKind === 'group').map(({ id }) => id),
+    ['record-hoshigawa-offer', 'record-sodegaura-offer', 'record-takamine-offer', 'verify-storehouse-date'],
+  );
+  assert.equal(talks.every(({ targetKind }) => ['person', 'group'].includes(targetKind)), true);
 });
 
 test('quest, save, objective, and completion identifiers are unique and deterministic', () => {

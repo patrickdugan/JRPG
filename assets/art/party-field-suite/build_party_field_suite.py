@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent
 SOURCE_PATH = ROOT / "party-field-suite.source.json"
+EXTENSION_SOURCE_PATH = ROOT / "party-field-walk-inbetweens.source.json"
 RUNTIME_PNG = "party-field-foundation.png"
 CONTACT_PNG = "party-field-foundation-contact-sheet.png"
 MANIFEST_JSON = "manifest.json"
@@ -22,11 +23,13 @@ README_MD = "README.md"
 
 FRAME_W = 32
 FRAME_H = 48
-SHEET_COLUMNS = (
+LEGACY_COLUMNS = (
     "north-idle", "north-walk", "east-idle", "east-walk",
     "south-idle", "south-walk", "west-idle", "west-walk",
     "south-interact", "south-hurt",
 )
+WALK_B_COLUMNS = ("north-walk-b", "east-walk-b", "south-walk-b", "west-walk-b")
+SHEET_COLUMNS = LEGACY_COLUMNS + WALK_B_COLUMNS
 SHEET_ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
 
 
@@ -45,14 +48,19 @@ def png_bytes(image: Image.Image) -> bytes:
     return output.getvalue()
 
 
-def load_source() -> dict:
+def load_source() -> tuple[dict, dict]:
     source = json.loads(SOURCE_PATH.read_text(encoding="utf-8"))
+    extension = json.loads(EXTENSION_SOURCE_PATH.read_text(encoding="utf-8"))
     frame = source["frame"]
     assert (frame["width"], frame["height"]) == (FRAME_W, FRAME_H)
-    assert tuple(source["sheet"]["columns"]) == SHEET_COLUMNS
+    assert tuple(source["sheet"]["columns"]) == LEGACY_COLUMNS
     assert tuple(source["sheet"]["rows"]) == SHEET_ROWS
     assert tuple(character["id"] for character in source["characters"]) == SHEET_ROWS
-    return source
+    assert extension["canonicalSource"] == SOURCE_PATH.name
+    assert extension["authorship"] == source["authorship"]
+    assert tuple(extension["appendColumns"]) == WALK_B_COLUMNS
+    assert extension["frameContract"] == frame
+    return source, extension
 
 
 class Sprite:
@@ -62,7 +70,8 @@ class Sprite:
         self.c = {name: rgba(value) for name, value in palette.items()}
         self.direction = direction
         self.state = state
-        self.walk = state == "walk"
+        self.walk = state in ("walk", "walk-b")
+        self.walk_phase = "b" if state == "walk-b" else "a"
         self.mirror = direction == "west"
 
     def _x(self, x: int) -> int:
@@ -145,7 +154,14 @@ def draw_legs(s: Sprite, primary: str = "primary", long_coat: bool = False):
     if long_coat:
         s.polygon([(12, 29), (19, 29), (21, 39), (18, 42), (13, 42), (10, 39)], "outline")
         s.polygon([(13, 29), (18, 29), (19, 38), (17, 40), (14, 40), (12, 38)], primary)
-    if s.walk:
+    if s.walk and s.walk_phase == "b":
+        s.rect((11, 35, 14, 41), "outline")
+        s.rect((18, 36, 21, 42), "outline")
+        s.rect((9, 41, 14, 43), "outline")
+        s.rect((18, 42, 23, 44), "outline")
+        s.pixel(10, 41, primary)
+        s.pixel(19, 42, primary)
+    elif s.walk:
         s.rect((11, 36, 14, 42), "outline")
         s.rect((18, 35, 21, 41), "outline")
         s.rect((9, 42, 14, 44), "outline")
@@ -355,7 +371,7 @@ def render_runtime(source: dict) -> tuple[Image.Image, list[dict]]:
                 "characterId": character_id,
                 "tag": tag,
                 "direction": tag.split("-")[0],
-                "state": tag.split("-")[1],
+                "state": tag.split("-", 1)[1],
                 "rect": [x, y, FRAME_W, FRAME_H],
                 "pivot": [16, 44],
                 "footPoint": [16, 44],
@@ -367,6 +383,7 @@ def render_runtime(source: dict) -> tuple[Image.Image, list[dict]]:
 
 FONT = {
     "A": ("01110", "10001", "10001", "11111", "10001", "10001", "10001"),
+    "B": ("11110", "10001", "10001", "11110", "10001", "10001", "11110"),
     "C": ("01111", "10000", "10000", "10000", "10000", "10000", "01111"),
     "D": ("11110", "10001", "10001", "10001", "10001", "10001", "11110"),
     "E": ("11111", "10000", "10000", "11110", "10000", "10000", "11111"),
@@ -439,12 +456,25 @@ def render_contact(runtime: Image.Image) -> Image.Image:
 
 
 def build_files() -> dict[str, bytes]:
-    source = load_source()
+    source, extension = load_source()
     runtime, frames = render_runtime(source)
+    legacy_lines = [
+        f"{frame['id']}:{frame['rgbaSha256']}"
+        for frame in frames
+        if frame["tag"] in LEGACY_COLUMNS
+    ]
+    legacy_digest = sha256(("\n".join(legacy_lines) + "\n").encode("utf-8"))
+    expected_legacy_digest = extension["animationSemantics"]["legacyFrameRgbaSha256Digest"]
+    if legacy_digest != expected_legacy_digest:
+        raise ValueError(
+            "legacy party-field frame pixels changed: "
+            f"expected {expected_legacy_digest}, got {legacy_digest}"
+        )
     contact = render_contact(runtime)
     runtime_data = png_bytes(runtime)
     contact_data = png_bytes(contact)
     source_data = SOURCE_PATH.read_bytes()
+    extension_source_data = EXTENSION_SOURCE_PATH.read_bytes()
     builder_data = Path(__file__).read_bytes()
     palettes = {entry["id"]: entry["paletteId"] for entry in source["characters"]}
     alpha = runtime.getchannel("A")
@@ -469,10 +499,12 @@ def build_files() -> dict[str, bytes]:
         "rowOrder": list(SHEET_ROWS),
         "columnOrder": list(SHEET_COLUMNS),
         "poseSemantics": source["poseSemantics"],
+        "animationSemantics": extension["animationSemantics"],
         "paletteIds": palettes,
         "frames": frames,
         "sources": [
             {"path": SOURCE_PATH.name, "format": "json", "sha256": sha256(source_data)},
+            {"path": EXTENSION_SOURCE_PATH.name, "format": "json", "sha256": sha256(extension_source_data)},
             {"path": Path(__file__).name, "format": "python", "sha256": sha256(builder_data)},
         ],
         "exports": [
@@ -481,6 +513,8 @@ def build_files() -> dict[str, bytes]:
         ],
         "validation": {
             "frameCount": len(frames),
+            "legacyFrameCount": len(legacy_lines),
+            "legacyFrameRgbaSha256Digest": legacy_digest,
             "uniqueRgbaValues": len(unique_rgba),
             "allOuterFrameBordersTransparent": True,
             "bottomTransparentRowsPerFrame": 3,
@@ -489,12 +523,12 @@ def build_files() -> dict[str, bytes]:
         "review": {
             "internalArtDirectionConstraints": "applied",
             "externalCulturalReview": "pending",
-            "runtimeIntegration": "current-browser-field-idle-walk-interact-hurt",
-            "fullAnimationExpansion": "alternate-action-facings-and-inbetweens-pending",
+            "runtimeIntegration": "current-browser-ren-leader-two-phase-walk-all-member-keys-authored-interact-hurt",
+            "fullAnimationExpansion": "alternate-action-facings-and-additional-inbetweens-pending",
         },
     }
     manifest_data = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
-    readme = f"""# Party field suite foundation\n\nThis directory contains an original, code-authored 32 x 48 field-sprite foundation for the six canonical party members. Pixels are drawn from the editable JSON palette and deterministic Pillow primitives; no generated atlas or concept pixels are inputs.\n\n## Files\n\n- `{SOURCE_PATH.name}`: editable frame, palette, silhouette, row, and column contract.\n- `{Path(__file__).name}`: deterministic native-resolution pixel builder.\n- `{RUNTIME_PNG}`: transparent {runtime.width} x {runtime.height} flattened sheet; current browser runtime input.\n- `{CONTACT_PNG}`: labeled {contact.width} x {contact.height} review sheet with checkerboard and cyan pivot marks; never use it at runtime.\n- `{MANIFEST_JSON}`: frame rectangles, stable pivots, per-cell RGBA hashes, palette IDs, dimensions, and review state.\n\nRows are `ren`, `aya`, `lise`, `mateus`, `genta`, `kiku`. Columns are north idle/walk, east idle/walk, south idle/walk, west idle/walk, south interact, and south hurt. Interact is a brief reach driven by the rendered field control; hurt is a non-gory recoil driven only by committed `hazard-hit` events. Every frame has a 32 x 48 logical box, pivot/foot point `(16, 44)`, a transparent outer border, and three transparent rows below the feet.\n\nRun `python build_party_field_suite.py` to rebuild. Run `python build_party_field_suite.py --check` to build in memory and byte-compare all generated outputs.\n\n## Scope and limits\n\nThis is a readable field key-pose suite, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, four-direction movement, foot registration, palette ownership, and live interaction/hazard reactions. Alternate facings and in-betweens for interaction and recoil, portraits, and external cultural review remain separate approval work. Mateus uses an original fictional face and proportions. Costume and tool marks use only plain, invented geometry; there are no sacred-object props.\n"""
+    readme = f"""# Party field suite foundation\n\nThis directory contains an original, code-authored 32 x 48 field-sprite foundation for the six canonical party members. Pixels are drawn from the editable JSON palette and deterministic Pillow primitives; no generated atlas or concept pixels are inputs.\n\n## Files\n\n- `{SOURCE_PATH.name}`: byte-stable canonical frame, palette, silhouette, row, and legacy-column contract shared by the combat and portrait pipelines.\n- `{EXTENSION_SOURCE_PATH.name}`: editable four-column directional-walk in-between extension and legacy-hash contract.\n- `{Path(__file__).name}`: deterministic native-resolution pixel builder.\n- `{RUNTIME_PNG}`: transparent {runtime.width} x {runtime.height} flattened sheet; current browser runtime input.\n- `{CONTACT_PNG}`: labeled {contact.width} x {contact.height} review sheet with checkerboard and cyan pivot marks; never use it at runtime.\n- `{MANIFEST_JSON}`: frame rectangles, stable pivots, per-cell RGBA hashes, palette IDs, dimensions, and review state.\n\nRows are `ren`, `aya`, `lise`, `mateus`, `genta`, `kiku`. The first ten columns retain the original north/east/south/west idle/walk cells plus south interact and south hurt. Four appended `walk-b` cells provide the complementary directional step. All six rows are authored and addressable; the current field leader is Ren, so live Campaign movement samples Ren's pair while the other five pairs are ready for a future leader/formation authority. Standing and reduced-motion presentation use the original idle cell. Interact is a brief reach driven by the rendered field control; hurt is a non-gory recoil driven only by committed `hazard-hit` events. Every frame has a 32 x 48 logical box, pivot/foot point `(16, 44)`, a transparent outer border, and three transparent rows below the feet. The builder verifies a single digest over all 60 legacy frame IDs and RGBA hashes before it can emit files.\n\nRun `python build_party_field_suite.py` to rebuild. Run `python build_party_field_suite.py --check` to build in memory and byte-compare all generated outputs.\n\n## Scope and limits\n\nThis is a readable field key-pose suite with a minimal two-phase directional walk for the active Ren field leader and authored matching keys for the other five members, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, four-direction movement, foot registration, palette ownership, and live interaction/hazard reactions. A selectable leader or visible formation, alternate facings and in-betweens for interaction and recoil, portraits, and external cultural review remain separate approval work. Mateus uses an original fictional face and proportions. Costume and tool marks use only plain, invented geometry; there are no sacred-object props.\n"""
     return {
         RUNTIME_PNG: runtime_data,
         CONTACT_PNG: contact_data,

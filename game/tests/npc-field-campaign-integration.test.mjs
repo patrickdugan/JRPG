@@ -14,7 +14,7 @@ test('Campaign loads the NPC atlas with a published ready/error state', () => {
 
 test('only exact marker metadata is sent to the NPC resolver', () => {
   assert.match(campaignSource, /markerType: 'scene-operation',[\s\S]*?activityType: sceneOperationMarker\.node\.activityType/u);
-  assert.match(campaignSource, /markerType: 'side-story',[\s\S]*?objectiveType: questMarker\.objective\.type/u);
+  assert.match(campaignSource, /markerType: 'side-story',[\s\S]*?objectiveType: questMarker\.objective\.type,[\s\S]*?targetKind: questMarker\.objective\.targetKind/u);
   assert.doesNotMatch(campaignSource, /markerType: 'witness-chronicle'/u,
     'the current witness fieldwork catalogue exposes no metadata-proven person node');
 });
