@@ -9,20 +9,24 @@
     "minimumTransparentGutter": 4
   },
   "atlas": {
-    "width": 384,
+    "width": 512,
     "height": 384,
-    "contentWidth": 256,
-    "transparentRightPadding": 128
+    "contentWidth": 512,
+    "transparentRightPadding": 0
   },
   "sheet": {
     "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku"],
-    "columns": ["neutral", "resolve", "strain", "soften"]
+    "columns": ["neutral", "resolve", "strain", "soften", "concern", "anger", "surprise", "quiet"]
   },
   "expressions": {
     "neutral": {"affect": "attentive restraint", "brow": "level", "eyes": "open", "mouth": "closed", "semantic": "listening or awaiting a command"},
     "resolve": {"affect": "deliberate commitment", "brow": "inward-down", "eyes": "focused", "mouth": "firm", "semantic": "decision made without triumphal posing"},
     "strain": {"affect": "cost or pressure", "brow": "uneven-raised", "eyes": "tight", "mouth": "parted", "semantic": "pain, fatigue, or difficult admission without caricature"},
-    "soften": {"affect": "guarded warmth", "brow": "relaxed", "eyes": "gentle", "mouth": "small-upturn", "semantic": "relief or care without glamour pose"}
+    "soften": {"affect": "guarded warmth", "brow": "relaxed", "eyes": "gentle", "mouth": "small-upturn", "semantic": "relief or care without glamour pose"},
+    "concern": {"affect": "guarded worry", "brow": "inward-raised", "eyes": "searching", "mouth": "small-downturn", "semantic": "careful alarm or concern for another person"},
+    "anger": {"affect": "controlled outrage", "brow": "sharply-inward-down", "eyes": "narrowed", "mouth": "compressed", "semantic": "anger held under discipline rather than a caricatured snarl"},
+    "surprise": {"affect": "immediate alarm", "brow": "high-raised", "eyes": "wide", "mouth": "small-open", "semantic": "unexpected revelation or sudden threat"},
+    "quiet": {"affect": "inward composure", "brow": "softened-low", "eyes": "lowered", "mouth": "closed-soft", "semantic": "silence, reflection, prayer, or a restrained pause"}
   },
   "characters": [
     {"id": "ren", "faceShape": "square-tapered", "hairShape": "short-forward", "costumeMotif": "rain-blue courier collar and cedar satchel strap", "anchors": {"eyeLine": [20, 27, 43, 27], "mouth": [35, 37], "focus": [35, 27]}},

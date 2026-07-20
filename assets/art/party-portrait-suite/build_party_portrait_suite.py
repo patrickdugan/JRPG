@@ -21,7 +21,7 @@ CONTACT_NAME = "party-portrait-expressions-contact-sheet.png"
 MANIFEST_NAME = "manifest.json"
 README_NAME = "README.md"
 ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
-COLUMNS = ("neutral", "resolve", "strain", "soften")
+COLUMNS = ("neutral", "resolve", "strain", "soften", "concern", "anger", "surprise", "quiet")
 CELL = 64
 GUTTER = 4
 
@@ -50,7 +50,13 @@ def load_contracts() -> tuple[dict, dict]:
     assert tuple(entry["id"] for entry in source["characters"]) == ROWS
     assert tuple(entry["id"] for entry in field["characters"]) == ROWS
     assert source["frame"] == {"width": CELL, "height": CELL, "minimumTransparentGutter": GUTTER}
-    assert source["atlas"] == {"width": 384, "height": 384, "contentWidth": 256, "transparentRightPadding": 128}
+    content_width = CELL * len(COLUMNS)
+    assert source["atlas"] == {
+        "width": content_width,
+        "height": CELL * len(ROWS),
+        "contentWidth": content_width,
+        "transparentRightPadding": 0,
+    }
     return source, field
 
 
@@ -188,6 +194,28 @@ def draw_features(p: Portrait, character_id: str, f: dict):
         p.px(27,eye_y,"eyeLight"); p.px(39,eye_y,"eyeLight")
         p.line([(32,mouth_y),(35,mouth_y+1),(39,mouth_y-1)],"lip",2)
         p.px(41,mouth_y-3,"cheek")
+    elif p.expression == "concern":
+        p.line([(22,eye_y-3),(28,eye_y-5)],"hair",2); p.line([(35,eye_y-5),(41,eye_y-3)],"hair",2)
+        p.rect((23,eye_y,28,eye_y+2),"eye"); p.rect((35,eye_y,40,eye_y+2),"eye")
+        p.px(27,eye_y,"eyeLight"); p.px(39,eye_y,"eyeLight")
+        p.line([(32,mouth_y+1),(35,mouth_y),(39,mouth_y+2)],"lip",2)
+        p.px(41,mouth_y-4,"cheek")
+    elif p.expression == "anger":
+        p.line([(21,eye_y-5),(28,eye_y-1)],"hair",2); p.line([(35,eye_y-1),(42,eye_y-5)],"hair",2)
+        p.line([(23,eye_y+1),(29,eye_y)],"eye",2); p.line([(35,eye_y),(41,eye_y+1)],"eye",2)
+        p.px(28,eye_y,"eyeLight"); p.px(36,eye_y,"eyeLight")
+        p.line([(31,mouth_y),(40,mouth_y+1)],"lip",2)
+        p.line([(30,mouth_y-2),(39,mouth_y-2)],"faceDeep")
+    elif p.expression == "surprise":
+        p.line([(22,eye_y-6),(28,eye_y-6)],"hair",2); p.line([(35,eye_y-6),(41,eye_y-6)],"hair",2)
+        p.rect((23,eye_y-1,28,eye_y+3),"eye"); p.rect((35,eye_y-1,40,eye_y+3),"eye")
+        p.rect((25,eye_y,27,eye_y+1),"eyeLight"); p.rect((37,eye_y,39,eye_y+1),"eyeLight")
+        p.rect((33,mouth_y-1,39,mouth_y+4),"lip"); p.rect((35,mouth_y,37,mouth_y+2),"eye")
+    elif p.expression == "quiet":
+        p.line([(22,eye_y-2),(28,eye_y-2)],"hair"); p.line([(35,eye_y-2),(41,eye_y-2)],"hair")
+        p.line([(23,eye_y+1),(28,eye_y+2)],"eye",2); p.line([(35,eye_y+2),(40,eye_y+1)],"eye",2)
+        p.line([(33,mouth_y+1),(38,mouth_y+1)],"lip")
+        p.px(31,mouth_y-2,"skinLight")
     else:
         p.line([(22,eye_y-3),(28,eye_y-3)],"hair"); p.line([(35,eye_y-3),(41,eye_y-3)],"hair")
         p.rect((23,eye_y,28,eye_y+1),"eye"); p.rect((35,eye_y,40,eye_y+1),"eye")
@@ -219,9 +247,7 @@ def render_portrait(field: dict, character_id: str, expression: str) -> Image.Im
 
 
 def render_atlas(source: dict, field: dict) -> tuple[Image.Image,list[dict]]:
-    # The requested 384 x 384 delivery surface retains a transparent 128 px
-    # right reserve after the exact four-column (256 px) content grid.
-    atlas=Image.new("RGBA",(384,384),(0,0,0,0)); frames=[]
+    atlas=Image.new("RGBA",(CELL*len(COLUMNS),CELL*len(ROWS)),(0,0,0,0)); frames=[]
     by_id={entry["id"]:entry for entry in source["characters"]}
     for row,character_id in enumerate(ROWS):
         for column,expression in enumerate(COLUMNS):
@@ -234,17 +260,17 @@ def render_atlas(source: dict, field: dict) -> tuple[Image.Image,list[dict]]:
                 "expressionSemantic":source["expressions"][expression],
                 "localAlphaBounds":list(portrait.getchannel("A").getbbox()),"rgbaSha256":sha256(portrait.tobytes()),
             })
-    if len({frame["rgbaSha256"] for frame in frames})!=24: raise ValueError("portrait cels must be distinct")
+    if len({frame["rgbaSha256"] for frame in frames})!=len(frames): raise ValueError("portrait cels must be distinct")
     return atlas,frames
 
 
 FONT={
-"A":("01110","10001","10001","11111","10001","10001","10001"),"E":("11111","10000","10000","11110","10000","10000","11111"),
+"A":("01110","10001","10001","11111","10001","10001","10001"),"C":("01111","10000","10000","10000","10000","10000","01111"),"E":("11111","10000","10000","11110","10000","10000","11111"),
 "F":("11111","10000","10000","11110","10000","10000","10000"),"G":("01111","10000","10000","10111","10001","10001","01111"),
 "I":("11111","00100","00100","00100","00100","00100","11111"),"K":("10001","10010","10100","11000","10100","10010","10001"),
 "L":("10000","10000","10000","10000","10000","10000","11111"),"M":("10001","11011","10101","10101","10001","10001","10001"),
 "N":("10001","11001","10101","10011","10001","10001","10001"),"O":("01110","10001","10001","10001","10001","10001","01110"),
-"R":("11110","10001","10001","11110","10100","10010","10001"),"S":("01111","10000","10000","01110","00001","00001","11110"),
+"P":("11110","10001","10001","11110","10000","10000","10000"),"Q":("01110","10001","10001","10001","10101","10010","01101"),"R":("11110","10001","10001","11110","10100","10010","10001"),"S":("01111","10000","10000","01110","00001","00001","11110"),
 "T":("11111","00100","00100","00100","00100","00100","00100"),"U":("10001","10001","10001","10001","10001","10001","01110"),
 "V":("10001","10001","10001","10001","10001","01010","00100"),"Y":("10001","10001","01010","00100","00100","00100","00100"),
 " ":("00000",)*7}
@@ -261,11 +287,11 @@ def label(draw,x,y,text,fill,scale=1):
 
 def render_contact(atlas: Image.Image) -> Image.Image:
     scale,left,top=3,96,52; cw=ch=CELL*scale
-    contact=Image.new("RGBA",(left+cw*4+16,top+ch*6+16),rgba("#0b1020")); draw=ImageDraw.Draw(contact)
+    contact=Image.new("RGBA",(left+cw*len(COLUMNS)+16,top+ch*len(ROWS)+16),rgba("#0b1020")); draw=ImageDraw.Draw(contact)
     for column,text in enumerate(COLUMNS): label(draw,left+column*cw+12,18,text,rgba("#d7c99a"))
     for row,character_id in enumerate(ROWS): label(draw,8,top+row*ch+86,character_id,rgba("#d7c99a"),2)
-    for row in range(6):
-        for column in range(4):
+    for row in range(len(ROWS)):
+        for column in range(len(COLUMNS)):
             x,y=left+column*cw,top+row*ch
             checker=Image.new("RGBA",(cw,ch),rgba("#16233a")); cd=ImageDraw.Draw(checker)
             for cy in range(0,ch,12):
@@ -285,7 +311,7 @@ def build_files() -> dict[str,bytes]:
     palette_reuse={entry["id"]:{"paletteId":entry["paletteId"],"colors":entry["colors"],"silhouette":entry["silhouette"]} for entry in field["characters"]}
     manifest={
         "assetId":source["assetId"],"status":"editable-production-portrait-expression-suite","runtimeIntegration":"current-browser-camp-and-scene-focus","authorship":source["authorship"],
-        "geometry":{"columns":4,"rows":6,"cellWidth":CELL,"cellHeight":CELL,"contentWidth":256,"contentHeight":384,"sheetWidth":atlas.width,"sheetHeight":atlas.height,"transparentRightPadding":128,"minimumTransparentGutter":GUTTER},
+        "geometry":{"columns":len(COLUMNS),"rows":len(ROWS),"cellWidth":CELL,"cellHeight":CELL,"contentWidth":CELL*len(COLUMNS),"contentHeight":CELL*len(ROWS),"sheetWidth":atlas.width,"sheetHeight":atlas.height,"transparentRightPadding":atlas.width-CELL*len(COLUMNS),"minimumTransparentGutter":GUTTER},
         "rowOrder":list(ROWS),"columnOrder":list(COLUMNS),"expressionSemantics":source["expressions"],"paletteCostumeReuse":palette_reuse,"frames":frames,
         "sources":[
             {"path":SOURCE_PATH.name,"role":"editable-portrait-contract","sha256":sha256(SOURCE_PATH.read_bytes())},
@@ -294,10 +320,10 @@ def build_files() -> dict[str,bytes]:
         "exports":[
             {"path":ATLAS_NAME,"role":"transparent-runtime-candidate","width":atlas.width,"height":atlas.height,"mode":atlas.mode,"sha256":sha256(atlas_data)},
             {"path":CONTACT_NAME,"role":"labeled-review-only-not-runtime","width":contact.width,"height":contact.height,"mode":contact.mode,"sha256":sha256(contact_data)}],
-        "validation":{"frameCount":24,"distinctRgbaFrameHashes":24,"binaryTransparency":True,"minimumObservedGutter":GUTTER,"deterministicCommand":"python build_party_portrait_suite.py --check"},
+        "validation":{"frameCount":len(frames),"distinctRgbaFrameHashes":len({frame["rgbaSha256"] for frame in frames}),"binaryTransparency":True,"minimumObservedGutter":GUTTER,"deterministicCommand":"python build_party_portrait_suite.py --check"},
         "review":{"visualInspection":"pending","humanExpressionReadability":"pending","externalCulturalReview":"pending","mateusOriginalityConstraint":"applied"}}
     manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode("utf-8")
-    readme=f"""# Party portrait expression suite\n\nOriginal, code-authored portrait-scale redraws for all six canonical party members. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input. Every face is a fictional design. Mateus has original age lines, facial proportions, and hair with no real-person reference.\n\n- `{SOURCE_PATH.name}`: editable face-shape, costume, expression, and anchor contract.\n- `{ATLAS_NAME}`: transparent 384 × 384 runtime candidate; six rows × four columns × 64 × 64.\n- `{CONTACT_NAME}`: labeled {contact.width} × {contact.height} checkerboard review sheet; not for runtime use.\n- `{MANIFEST_NAME}`: exact frame rectangles, eye lines, mouth/focus anchors, expression semantics, source/export hashes, and review state.\n\nColumns are neutral, resolve, strain, and soften. Camp uses the neutral column and Campaign scene focus selects one of the four keys from its authored gesture cue, with dimension-gated loading and procedural fallbacks. These are production expression keys, not a full eight-expression dialogue set. Additional emotions, speaking in-betweens, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_portrait_suite.py` to rebuild or `python build_party_portrait_suite.py --check` to byte-compare all generated outputs.\n"""
+    readme=f"""# Party portrait expression suite\n\nOriginal, code-authored portrait-scale redraws for all six canonical party members. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input. Every face is a fictional design. Mateus has original age lines, facial proportions, and hair with no real-person reference.\n\n- `{SOURCE_PATH.name}`: editable face-shape, costume, expression, and anchor contract.\n- `{ATLAS_NAME}`: transparent {atlas.width} × {atlas.height} runtime candidate; {len(ROWS)} rows × {len(COLUMNS)} columns × {CELL} × {CELL}, with no transparent reserve columns.\n- `{CONTACT_NAME}`: labeled {contact.width} × {contact.height} checkerboard review sheet; not for runtime use.\n- `{MANIFEST_NAME}`: exact frame rectangles, eye lines, mouth/focus anchors, expression semantics, source/export hashes, and review state.\n\nColumns are neutral, resolve, strain, soften, concern, anger, surprise, and quiet. These are the complete eight production expression keys; speaking in-betweens, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_portrait_suite.py` to rebuild or `python build_party_portrait_suite.py --check` to byte-compare all generated outputs.\n"""
     return {ATLAS_NAME:atlas_data,CONTACT_NAME:contact_data,MANIFEST_NAME:manifest_data,README_NAME:readme.encode("utf-8")}
 
 

@@ -12,15 +12,19 @@ export const PARTY_PORTRAIT_EXPRESSIONS = Object.freeze([
   'resolve',
   'strain',
   'soften',
+  'concern',
+  'anger',
+  'surprise',
+  'quiet',
 ]);
 
 export const PARTY_PORTRAIT_ATLAS = Object.freeze({
   url: './assets/art/party-portrait-suite/party-portrait-expressions.png',
-  width: 384,
+  width: 512,
   height: 384,
-  contentWidth: 256,
-  transparentReserveWidth: 128,
-  columns: 4,
+  contentWidth: 512,
+  transparentReserveWidth: 0,
+  columns: 8,
   rows: 6,
   cellWidth: 64,
   cellHeight: 64,
@@ -98,6 +102,10 @@ export function getPartyPortraitBackgroundPlacement(frame, { cropWidth, cropHeig
 export function portraitExpressionForGesture(cue = '') {
   const text = String(cue).toLowerCase();
   if (/wince|flinch|strain|pain|stagger|recoil|trembl|bleed|clench|brace/u.test(text)) return 'strain';
+  if (/\b(?:anger|angry|glare|glares|scowl|scowls|fury|furious|snarl|snarls|shout|shouts|strike|strikes|struck|slam|slams|slammed)\b/u.test(text)) return 'anger';
+  if (/surprise|startl|gasp|eyes? widen|wide eyes|sudden|reveal/u.test(text)) return 'surprise';
+  if (/concern|worr|uneasy|frown|shield|patient|medicine|check|protect|careful|safe/u.test(text)) return 'concern';
+  if (/quiet|silence|still|whisper|bow(?:s|ed)? (?:his|her|their) head|look down|face down|lower (?:his|her|their)/u.test(text)) return 'quiet';
   if (/smile|soften|relax|exhale|gentl|laugh|open palm|unclench/u.test(text)) return 'soften';
   if (/raise|point|plant|draw|stand|step forward|square|set |face |hold|lift/u.test(text)) return 'resolve';
   return 'neutral';

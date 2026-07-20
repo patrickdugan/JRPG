@@ -11,7 +11,7 @@ const REPO_ROOT = resolve(GAME_ROOT, '..');
 const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-portrait-suite');
 const FIELD_SOURCE_PATH = resolve(REPO_ROOT, 'assets', 'art', 'party-field-suite', 'party-field-suite.source.json');
 const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
-const COLUMNS = ['neutral', 'resolve', 'strain', 'soften'];
+const COLUMNS = ['neutral', 'resolve', 'strain', 'soften', 'concern', 'anger', 'surprise', 'quiet'];
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 function paeth(left, above, upperLeft) {
@@ -76,12 +76,12 @@ function cellBytes(image, column, row) {
   return output;
 }
 
-test('portrait source defines the exact six-by-four expression and originality contract', async () => {
+test('portrait source defines the exact six-by-eight expression and originality contract', async () => {
   const source = JSON.parse(await readFile(resolve(SUITE_ROOT, 'party-portrait-suite.source.json'), 'utf8'));
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.equal(source.canonicalFieldSource, '../party-field-suite/party-field-suite.source.json');
   assert.deepEqual(source.frame, { width: 64, height: 64, minimumTransparentGutter: 4 });
-  assert.deepEqual(source.atlas, { width: 384, height: 384, contentWidth: 256, transparentRightPadding: 128 });
+  assert.deepEqual(source.atlas, { width: 512, height: 384, contentWidth: 512, transparentRightPadding: 0 });
   assert.deepEqual(source.sheet.rows, ROWS);
   assert.deepEqual(source.sheet.columns, COLUMNS);
   assert.deepEqual(Object.keys(source.expressions), COLUMNS);
@@ -101,15 +101,15 @@ test('manifest preserves canonical palette/costume motifs and exact expression a
   const source = JSON.parse(sourceText);
   const field = JSON.parse(fieldText);
   assert.deepEqual(manifest.geometry, {
-    columns: 4,
+    columns: 8,
     rows: 6,
     cellWidth: 64,
     cellHeight: 64,
-    contentWidth: 256,
+    contentWidth: 512,
     contentHeight: 384,
-    sheetWidth: 384,
+    sheetWidth: 512,
     sheetHeight: 384,
-    transparentRightPadding: 128,
+    transparentRightPadding: 0,
     minimumTransparentGutter: 4,
   });
   assert.deepEqual(manifest.rowOrder, ROWS);
@@ -123,8 +123,8 @@ test('manifest preserves canonical palette/costume motifs and exact expression a
   }
   const byId = Object.fromEntries(source.characters.map((entry) => [entry.id, entry]));
   manifest.frames.forEach((frame, index) => {
-    const row = Math.floor(index / 4);
-    const column = index % 4;
+    const row = Math.floor(index / 8);
+    const column = index % 8;
     const anchors = byId[ROWS[row]].anchors;
     assert.equal(frame.id, `${ROWS[row]}:${COLUMNS[column]}`);
     assert.deepEqual(frame.rect, [column * 64, row * 64, 64, 64]);
@@ -145,17 +145,17 @@ test('transparent portrait atlas is exact, binary-alpha, guttered, hashed, disti
   ]);
   const manifest = JSON.parse(manifestText);
   const record = manifest.exports.find(({ role }) => role === 'transparent-runtime-candidate');
-  assert.deepEqual([record.width, record.height, record.mode], [384, 384, 'RGBA']);
+  assert.deepEqual([record.width, record.height, record.mode], [512, 384, 'RGBA']);
   assert.equal(sha256(bytes), record.sha256);
   assert.equal(runtimeBytes.equals(bytes), true, 'browser and production portrait atlases must be byte-identical');
   const image = decodeRgbaPng(bytes);
-  assert.deepEqual([image.width, image.height], [384, 384]);
+  assert.deepEqual([image.width, image.height], [512, 384]);
   const alphaValues = new Set();
   for (let index = 3; index < image.pixels.length; index += 4) alphaValues.add(image.pixels[index]);
   assert.deepEqual([...alphaValues].sort((a, b) => a - b), [0, 255]);
   const actualHashes = new Set();
   for (let row = 0; row < 6; row += 1) {
-    for (let column = 0; column < 4; column += 1) {
+    for (let column = 0; column < 8; column += 1) {
       actualHashes.add(sha256(cellBytes(image, column, row)));
       const x0 = column * 64;
       const y0 = row * 64;
@@ -171,11 +171,8 @@ test('transparent portrait atlas is exact, binary-alpha, guttered, hashed, disti
       }
     }
   }
-  assert.equal(actualHashes.size, 24);
-  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 24);
-  for (let y = 0; y < image.height; y += 1) {
-    for (let x = 256; x < image.width; x += 1) assert.equal(alphaAt(image, x, y), 0);
-  }
+  assert.equal(actualHashes.size, 48);
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 48);
 });
 
 test('labeled contact sheet is review-only and builder has no generated raster dependency', async () => {
@@ -186,7 +183,7 @@ test('labeled contact sheet is review-only and builder has no generated raster d
   ]);
   const manifest = JSON.parse(manifestText);
   const contact = manifest.exports.find(({ role }) => role === 'labeled-review-only-not-runtime');
-  assert.deepEqual([contact.width, contact.height], [880, 1220]);
+  assert.deepEqual([contact.width, contact.height], [1648, 1220]);
   assert.equal(sha256(contactBytes), contact.sha256);
   assert.equal(manifest.runtimeIntegration, 'current-browser-camp-and-scene-focus');
   assert.equal(manifest.review.mateusOriginalityConstraint, 'applied');

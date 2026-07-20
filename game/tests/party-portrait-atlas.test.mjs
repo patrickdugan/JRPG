@@ -14,10 +14,11 @@ import {
   partyPortraitImageHasExpectedSize,
   portraitExpressionForGesture,
 } from '../party-portrait-atlas.mjs';
+import { SCENE_DIRECTIONS } from '../content/scene-direction.mjs';
 
 const GAME_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-test('portrait atlas exposes 24 exact frames and a declared transparent reserve', () => {
+test('portrait atlas exposes 48 exact frames without an unused reserve', () => {
   const rectangles = new Set();
   for (const [row, memberId] of PARTY_PORTRAIT_MEMBERS.entries()) {
     assert.equal(hasPartyPortraitMember(memberId), true);
@@ -37,22 +38,33 @@ test('portrait atlas exposes 24 exact frames and a declared transparent reserve'
       rectangles.add(`${frame.x},${frame.y},${frame.width},${frame.height}`);
     }
   }
-  assert.equal(rectangles.size, 24);
+  assert.equal(rectangles.size, 48);
   assert.equal(PARTY_PORTRAIT_ATLAS.contentWidth, PARTY_PORTRAIT_ATLAS.columns * 64);
-  assert.equal(PARTY_PORTRAIT_ATLAS.width - PARTY_PORTRAIT_ATLAS.contentWidth, 128);
+  assert.equal(PARTY_PORTRAIT_ATLAS.width - PARTY_PORTRAIT_ATLAS.contentWidth, 0);
   assert.equal(hasPartyPortraitMember('unknown'), false);
   assert.throws(() => getPartyPortraitFrame('unknown'), /Unknown party portrait member/);
 });
 
-test('gesture vocabulary selects only the four authored expression keys', () => {
+test('gesture vocabulary selects only the eight authored expression keys', () => {
   assert.equal(portraitExpressionForGesture('points toward the open gate'), 'resolve');
   assert.equal(portraitExpressionForGesture('winces and braces the ledger'), 'strain');
   assert.equal(portraitExpressionForGesture('softens, then opens one palm'), 'soften');
+  assert.equal(portraitExpressionForGesture('checks the patient and shields the child'), 'concern');
+  assert.equal(portraitExpressionForGesture('glares, then strikes through the purge claim'), 'anger');
+  assert.equal(portraitExpressionForGesture('gasps at the sudden reveal'), 'surprise');
+  assert.equal(portraitExpressionForGesture('bows her head through the silence'), 'quiet');
   assert.equal(portraitExpressionForGesture('reads the page'), 'neutral');
   assert.ok(PARTY_PORTRAIT_EXPRESSIONS.includes(portraitExpressionForGesture(null)));
 });
 
-test('Camp crop placement derives all six rows and four columns from authored frames', () => {
+test('authored scene gestures exercise every speaking portrait expression', () => {
+  const usedExpressions = new Set(SCENE_DIRECTIONS.map((direction) => (
+    portraitExpressionForGesture(direction.gestureCue.action)
+  )));
+  assert.deepEqual([...usedExpressions].sort(), [...PARTY_PORTRAIT_EXPRESSIONS].sort());
+});
+
+test('Camp crop placement derives all six rows and eight columns from authored frames', () => {
   for (const [row, memberId] of PARTY_PORTRAIT_MEMBERS.entries()) {
     for (const [column, expression] of PARTY_PORTRAIT_EXPRESSIONS.entries()) {
       const frame = getPartyPortraitFrame(memberId, expression);
@@ -60,11 +72,11 @@ test('Camp crop placement derives all six rows and four columns from authored fr
       assert.equal(placement.cropWidth, 52);
       assert.equal(placement.cropHeight, 60);
       assert.equal(placement.scale, 0.9375);
-      assert.equal(placement.backgroundWidth, 360);
+      assert.equal(placement.backgroundWidth, 480);
       assert.equal(placement.backgroundHeight, 360);
       assert.equal(placement.x, -4 - column * 60);
       assert.equal(placement.y, -row * 60);
-      assert.equal(placement.backgroundSize, '360px 360px');
+      assert.equal(placement.backgroundSize, '480px 360px');
       assert.equal(placement.backgroundPosition, `${-4 - column * 60}px ${-row * 60}px`);
       assert.equal(Object.isFrozen(placement), true);
     }
@@ -75,14 +87,14 @@ test('portrait placement rejects invalid crop dimensions and frames outside auth
   const frame = getPartyPortraitFrame('ren', 'neutral');
   assert.throws(() => getPartyPortraitBackgroundPlacement(frame), /positive crop dimensions/);
   assert.throws(() => getPartyPortraitBackgroundPlacement(frame, { cropWidth: 61, cropHeight: 60 }), /cannot be wider/);
-  assert.throws(() => getPartyPortraitBackgroundPlacement({ ...frame, x: 256 }, { cropWidth: 52, cropHeight: 60 }), /content grid/);
+  assert.throws(() => getPartyPortraitBackgroundPlacement({ ...frame, x: 512 }, { cropWidth: 52, cropHeight: 60 }), /content grid/);
   assert.throws(() => getPartyPortraitBackgroundPlacement(null, { cropWidth: 52, cropHeight: 60 }), /valid source frame/);
 });
 
 test('portrait image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 384, naturalHeight: 384 }), true);
-  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 383, naturalHeight: 384 }), false);
-  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 384, naturalHeight: 383 }), false);
+  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 512, naturalHeight: 384 }), true);
+  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 511, naturalHeight: 384 }), false);
+  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 512, naturalHeight: 383 }), false);
   assert.equal(partyPortraitImageHasExpectedSize(null), false);
 });
 

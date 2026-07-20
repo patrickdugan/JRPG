@@ -4,15 +4,15 @@
   "runtimeIntegration": "current-browser-camp-and-scene-focus",
   "authorship": "original-code-native-pixel-primitives",
   "geometry": {
-    "columns": 4,
+    "columns": 8,
     "rows": 6,
     "cellWidth": 64,
     "cellHeight": 64,
-    "contentWidth": 256,
+    "contentWidth": 512,
     "contentHeight": 384,
-    "sheetWidth": 384,
+    "sheetWidth": 512,
     "sheetHeight": 384,
-    "transparentRightPadding": 128,
+    "transparentRightPadding": 0,
     "minimumTransparentGutter": 4
   },
   "rowOrder": [
@@ -27,7 +27,11 @@
     "neutral",
     "resolve",
     "strain",
-    "soften"
+    "soften",
+    "concern",
+    "anger",
+    "surprise",
+    "quiet"
   ],
   "expressionSemantics": {
     "neutral": {
@@ -57,6 +61,34 @@
       "eyes": "gentle",
       "mouth": "small-upturn",
       "semantic": "relief or care without glamour pose"
+    },
+    "concern": {
+      "affect": "guarded worry",
+      "brow": "inward-raised",
+      "eyes": "searching",
+      "mouth": "small-downturn",
+      "semantic": "careful alarm or concern for another person"
+    },
+    "anger": {
+      "affect": "controlled outrage",
+      "brow": "sharply-inward-down",
+      "eyes": "narrowed",
+      "mouth": "compressed",
+      "semantic": "anger held under discipline rather than a caricatured snarl"
+    },
+    "surprise": {
+      "affect": "immediate alarm",
+      "brow": "high-raised",
+      "eyes": "wide",
+      "mouth": "small-open",
+      "semantic": "unexpected revelation or sudden threat"
+    },
+    "quiet": {
+      "affect": "inward composure",
+      "brow": "softened-low",
+      "eyes": "lowered",
+      "mouth": "closed-soft",
+      "semantic": "silence, reflection, prayer, or a restrained pause"
     }
   },
   "paletteCostumeReuse": {
@@ -285,6 +317,162 @@
       "rgbaSha256": "d165a45970d38137cd04fa6d465d29d39ccb7352ff0bda923e3261bd1bb5ab55"
     },
     {
+      "id": "ren:concern",
+      "characterId": "ren",
+      "expression": "concern",
+      "rect": [
+        256,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "b57b4b792d00b807d6a4b67de66f0e0a1a18836c58a4006ee36cbad3f4ebe290"
+    },
+    {
+      "id": "ren:anger",
+      "characterId": "ren",
+      "expression": "anger",
+      "rect": [
+        320,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "457b5ddda94df021a4ffc1f0f126b57f1b1d708d6c8c4b127823caf2184488d5"
+    },
+    {
+      "id": "ren:surprise",
+      "characterId": "ren",
+      "expression": "surprise",
+      "rect": [
+        384,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "35e09968d8b4fcea9402cbb533659c3360db1cff0dca572e71eae785a6ba18ef"
+    },
+    {
+      "id": "ren:quiet",
+      "characterId": "ren",
+      "expression": "quiet",
+      "rect": [
+        448,
+        0,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        7,
+        8,
+        59,
+        60
+      ],
+      "rgbaSha256": "10395fe8698a94224a9a40e2c27d38b13f3d3df26fc9264dede9c816753fe825"
+    },
+    {
       "id": "aya:neutral",
       "characterId": "aya",
       "expression": "neutral",
@@ -439,6 +627,162 @@
         60
       ],
       "rgbaSha256": "a4423e6a4d13a5b38dc0da267b6059418c70af0431da01438766bb09f9c14f26"
+    },
+    {
+      "id": "aya:concern",
+      "characterId": "aya",
+      "expression": "concern",
+      "rect": [
+        256,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "75913f2c60a6ae54ca202699a61039d5c01a350b25106a14963c697ae915a7b9"
+    },
+    {
+      "id": "aya:anger",
+      "characterId": "aya",
+      "expression": "anger",
+      "rect": [
+        320,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "e38206eed8eb8415865ff91b31fa09e968fd3fd9e6f95d4b74714792eba34e37"
+    },
+    {
+      "id": "aya:surprise",
+      "characterId": "aya",
+      "expression": "surprise",
+      "rect": [
+        384,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "350639680fbada2a1b328ab7edd4f8502ea7b2f6984c5a3912b1301f37293b32"
+    },
+    {
+      "id": "aya:quiet",
+      "characterId": "aya",
+      "expression": "quiet",
+      "rect": [
+        448,
+        64,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        7,
+        6,
+        59,
+        60
+      ],
+      "rgbaSha256": "8aff101e9162272ddcfc561f32a62a0f88c77beccc9820d9e275a7911ceb7b17"
     },
     {
       "id": "lise:neutral",
@@ -597,6 +941,162 @@
       "rgbaSha256": "6895906074a4eb47165eec60318cce15eae388ac5f99328dce5d2973ea4170fa"
     },
     {
+      "id": "lise:concern",
+      "characterId": "lise",
+      "expression": "concern",
+      "rect": [
+        256,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "3a0b0a6d7416a116e2a935d84e56f001d5d48f71fa5ee91624d4f2ef5e96f5b0"
+    },
+    {
+      "id": "lise:anger",
+      "characterId": "lise",
+      "expression": "anger",
+      "rect": [
+        320,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "4eaa6989ebae06dee83e6855b555e59fbf8cdc56d3978aaa256a5f8cfaf36bd8"
+    },
+    {
+      "id": "lise:surprise",
+      "characterId": "lise",
+      "expression": "surprise",
+      "rect": [
+        384,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "d0aca5e98b26ab4520f533fa5209444f951ce69ccc871471c01aa4fe426752af"
+    },
+    {
+      "id": "lise:quiet",
+      "characterId": "lise",
+      "expression": "quiet",
+      "rect": [
+        448,
+        128,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        26,
+        43,
+        26
+      ],
+      "mouthAnchor": [
+        36,
+        37
+      ],
+      "focusAnchor": [
+        36,
+        26
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "ea7897315320dbc7891037a7941094bafc88800aa09cd825e98bf160b4b1e83e"
+    },
+    {
       "id": "mateus:neutral",
       "characterId": "mateus",
       "expression": "neutral",
@@ -751,6 +1251,162 @@
         60
       ],
       "rgbaSha256": "6d1d4c94056df58b49386a687335af59dbbb39432a77e6eff6f69e139741df70"
+    },
+    {
+      "id": "mateus:concern",
+      "characterId": "mateus",
+      "expression": "concern",
+      "rect": [
+        256,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "6dd48b9ffa3c4322d4ee3162bd27d1b1ac4a2e911202c0c9cc9e9bc332238d7f"
+    },
+    {
+      "id": "mateus:anger",
+      "characterId": "mateus",
+      "expression": "anger",
+      "rect": [
+        320,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "26d2ac5af7a819bf54c2e225249d8575b3af9a1659b07e5667dd017a84fc0c00"
+    },
+    {
+      "id": "mateus:surprise",
+      "characterId": "mateus",
+      "expression": "surprise",
+      "rect": [
+        384,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "14c58fa5c8953f565719c2ecab702a36abfba3ca33158718f43570bc040b943b"
+    },
+    {
+      "id": "mateus:quiet",
+      "characterId": "mateus",
+      "expression": "quiet",
+      "rect": [
+        448,
+        192,
+        64,
+        64
+      ],
+      "eyeLine": [
+        21,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        36,
+        38
+      ],
+      "focusAnchor": [
+        36,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        10,
+        6,
+        56,
+        60
+      ],
+      "rgbaSha256": "ec942c0d4fceb52aa36d16aeebf802f2dc78700ed7f1c7427731315a1bd5d9cf"
     },
     {
       "id": "genta:neutral",
@@ -909,6 +1565,162 @@
       "rgbaSha256": "4b8876d81b571e535c3aac2d852a980124e2be49e488ac885d697c18afe251e3"
     },
     {
+      "id": "genta:concern",
+      "characterId": "genta",
+      "expression": "concern",
+      "rect": [
+        256,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "e9061aceada083df741f732931524c34ae98713c51c5cbf12280eff43685310a"
+    },
+    {
+      "id": "genta:anger",
+      "characterId": "genta",
+      "expression": "anger",
+      "rect": [
+        320,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "7e4b8077312acfa461d5848dbbf1f6a455e619dcf74637c97c319c4d61e90c24"
+    },
+    {
+      "id": "genta:surprise",
+      "characterId": "genta",
+      "expression": "surprise",
+      "rect": [
+        384,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "f260574fc86394dbea1d5eb53e4f7cf60e142af7ab121c1a2a15186f1d730019"
+    },
+    {
+      "id": "genta:quiet",
+      "characterId": "genta",
+      "expression": "quiet",
+      "rect": [
+        448,
+        256,
+        64,
+        64
+      ],
+      "eyeLine": [
+        19,
+        27,
+        44,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        38
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        6,
+        8,
+        60,
+        60
+      ],
+      "rgbaSha256": "3e9fc6e547670777f435bb5b98db5f5bdf3fd40a55126a7634a974fd9937d5b9"
+    },
+    {
       "id": "kiku:neutral",
       "characterId": "kiku",
       "expression": "neutral",
@@ -1063,13 +1875,169 @@
         60
       ],
       "rgbaSha256": "0f33064b2af624db52268de8130e8456bf402c4c86f46f580d405a3a63e93aab"
+    },
+    {
+      "id": "kiku:concern",
+      "characterId": "kiku",
+      "expression": "concern",
+      "rect": [
+        256,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "bdc58a1c84aa00a60d4840545204dfa7c92c4d69539af5966633ca918ebe19bb"
+    },
+    {
+      "id": "kiku:anger",
+      "characterId": "kiku",
+      "expression": "anger",
+      "rect": [
+        320,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "983fbe07f36700b14ee0aa9833c413df334b20b906273ac3a648c742c7502c26"
+    },
+    {
+      "id": "kiku:surprise",
+      "characterId": "kiku",
+      "expression": "surprise",
+      "rect": [
+        384,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "0274544c5496e1429b430782290b2fdff07adfc172429c9d305d702651c5a6bc"
+    },
+    {
+      "id": "kiku:quiet",
+      "characterId": "kiku",
+      "expression": "quiet",
+      "rect": [
+        448,
+        320,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        7,
+        7,
+        59,
+        60
+      ],
+      "rgbaSha256": "c215703962d8cd990e6311cad9707c10d996ac00a8b43164a964bfd6fb52fb80"
     }
   ],
   "sources": [
     {
       "path": "party-portrait-suite.source.json",
       "role": "editable-portrait-contract",
-      "sha256": "611a6c808f5000d2011b5d8a18f4e5713214cd486f882facdc6ed53f571297e3"
+      "sha256": "dc6f6a0957aeec98d9c5dc74b67a5c610cdb575a069a0e9e2999af59ac818075"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
@@ -1079,30 +2047,30 @@
     {
       "path": "build_party_portrait_suite.py",
       "role": "deterministic-builder",
-      "sha256": "cac03bf4ebab9bc7b8810f6e2514607afbc97f619211b482666059bcbce9c129"
+      "sha256": "bfefeaa9ad4ed8177dc5a276e191dacdc7b80266ebf8e1b6b5735bcf2ac1923a"
     }
   ],
   "exports": [
     {
       "path": "party-portrait-expressions.png",
       "role": "transparent-runtime-candidate",
-      "width": 384,
+      "width": 512,
       "height": 384,
       "mode": "RGBA",
-      "sha256": "025c04b4522a9156b525fe797d1158eade766747b9b5712fe648c52ec4897a77"
+      "sha256": "b44aa433fbc3c7bed5961af597560515d5333faec2bc737c08f95fc9a7317f75"
     },
     {
       "path": "party-portrait-expressions-contact-sheet.png",
       "role": "labeled-review-only-not-runtime",
-      "width": 880,
+      "width": 1648,
       "height": 1220,
       "mode": "RGBA",
-      "sha256": "0a80f4c4d2968d2ee227f7b7060c99acf3c3e92b8460ae5ad18550555db5a4d0"
+      "sha256": "4ef10266561714f119fcd25e02a6186d434848f2cbb4176191238697a1f712a5"
     }
   ],
   "validation": {
-    "frameCount": 24,
-    "distinctRgbaFrameHashes": 24,
+    "frameCount": 48,
+    "distinctRgbaFrameHashes": 48,
     "binaryTransparency": true,
     "minimumObservedGutter": 4,
     "deterministicCommand": "python build_party_portrait_suite.py --check"
