@@ -15,7 +15,7 @@ import { ENCOUNTERS, getEncounter, RECOVERY_PULSE_MS } from './content/encounter
 import { getLevel, parseTileKey } from './content/levels.mjs';
 import { BATTLE_ITEM_IDS } from './loadout.mjs';
 
-export const ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION = 1;
+export const ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION = 2;
 export const ACTION_ENCOUNTER_IDS = Object.freeze(ENCOUNTERS.map(({ id }) => id));
 export const ACTION_TILE_PX = 64;
 export const ACTION_STAGE_GROUND_Y = 320;
@@ -221,7 +221,7 @@ function partyActor(deployment, index, context) {
     id: actorId,
     name: profile.name,
     faction: 'player',
-    ai: null,
+    ai: 'deterministic-companion',
     level: partyLevel(actorId, context.chapterTarget, context.progress, context.options.partyLevels),
     hp: currentHpFor(actorId, stats.hp, context.options.partyVitals),
     maxHp: stats.hp,
@@ -390,6 +390,8 @@ export function adaptActionEncounter(encounterId, options = {}) {
       stage,
       attacks,
       actors: [...partyActors, ...enemyActors],
+      controlledActorId: options.controlledActorId ?? partyActors.find(({ hp }) => hp > 0)?.id ?? null,
+      automaticVictory: options.automaticVictory !== false,
     },
     dormantActors,
     profiles: {

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08070d">
+  <title>Campaign Action Battle · Bells of the Black Chrysanthemum</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="action-campaign-battle.css">
+</head>
+<body>
+  <a class="skip-link" href="#battleReadout">Skip the battle canvas</a>
+  <main class="battle-shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">NON-CANONICAL CAMPAIGN ACTION CONTROLLER</p>
+        <h1 id="encounterTitle">Loading encounter…</h1>
+        <p id="encounterSubtitle" class="subtitle">Side-view combat with free movement and post-animation cooldowns.</p>
+      </div>
+      <a id="campaignLink" class="quiet-link" href="campaign.html">Leave battle</a>
+    </header>
+
+    <section id="storyworldCard" class="context-card" aria-labelledby="storyworldTitle" hidden>
+      <p id="storyworldEyebrow" class="eyebrow"></p>
+      <h2 id="storyworldTitle"></h2>
+      <p id="storyworldDecision"></p>
+      <p id="storyworldConsequence" class="muted"></p>
+    </section>
+
+    <section class="battle-frame" aria-labelledby="stageLabel">
+      <header class="stage-heading">
+        <div>
+          <p class="eyebrow" id="stageLabel">AUTHORED SIDE-VIEW STAGE</p>
+          <h2 id="stageName">Preparing stage…</h2>
+        </div>
+        <span id="battleStateBadge" class="state-badge">LOADING</span>
+      </header>
+
+      <div class="canvas-wrap">
+        <canvas
+          id="actionCampaignCanvas"
+          width="960"
+          height="540"
+          tabindex="0"
+          aria-label="Side-view action battle. Move the controlled party member freely, commit attacks, and satisfy the authored objective."
+          aria-describedby="battleInstructions battleReadout"
+        >
+          Canvas is unavailable. The complete battle state is in the text readout below.
+        </canvas>
+        <div id="pauseCurtain" class="pause-curtain" hidden>PAUSED WHILE TAB IS HIDDEN</div>
+      </div>
+
+      <div class="control-ribbon" id="battleInstructions">
+        <div class="key-guide">
+          <span><kbd>A</kbd><kbd>D</kbd> Move</span>
+          <span><kbd>W</kbd> Jump</span>
+          <span><kbd>J</kbd> Weapon</span>
+          <span><kbd>K</kbd> Art</span>
+          <span><kbd>E</kbd> Hold objective action</span>
+          <span><kbd>Tab</kbd> Switch party</span>
+          <span><kbd>R</kbd> Restart</span>
+        </div>
+        <button id="restartBattle" type="button">Restart encounter</button>
+      </div>
+    </section>
+
+    <section id="battleReadout" class="readout-grid" aria-label="Text battle state" tabindex="-1">
+      <article class="panel party-panel" aria-labelledby="partyTitle">
+        <p class="panel-kicker">PARTY · LIVE AUTHORITY</p>
+        <h2 id="partyTitle">Controlled fighter</h2>
+        <div id="controlledActor"></div>
+        <ul id="partyReadout" class="actor-list" aria-label="Party health"></ul>
+      </article>
+
+      <article class="panel objective-panel" aria-labelledby="objectiveTitle">
+        <p class="panel-kicker">AUTHORED OBJECTIVE CONTRACT</p>
+        <h2 id="objectiveTitle">Objective</h2>
+        <p id="objectiveText"></p>
+        <p id="objectiveRuntimeStatus" class="runtime-status"></p>
+        <ul id="objectiveRequirements" class="requirement-list"></ul>
+      </article>
+
+      <article class="panel enemy-panel" aria-labelledby="enemyTitle">
+        <p class="panel-kicker">HOSTILES · LIVE AUTHORITY</p>
+        <h2 id="enemyTitle">Enemy formation</h2>
+        <ul id="enemyReadout" class="actor-list" aria-label="Enemy health"></ul>
+      </article>
+    </section>
+
+    <section class="lower-grid">
+      <article class="panel cooldown-panel" aria-labelledby="cooldownTitle">
+        <p class="panel-kicker">POST-ANIMATION RECOVERY</p>
+        <h2 id="cooldownTitle">Attack timers</h2>
+        <div id="attackTimers" class="attack-timers"></div>
+        <p class="muted">Attack animation commitment stops movement. Cooldowns begin only when the animation finishes; movement is free while they count down.</p>
+      </article>
+
+      <article class="panel log-panel" aria-labelledby="logTitle">
+        <p class="panel-kicker">ACCESSIBLE EVENT AUTHORITY</p>
+        <h2 id="logTitle">Battle callout</h2>
+        <p id="battleAnnouncement" role="status" aria-live="polite" aria-atomic="true">Loading battle…</p>
+        <ol id="eventLog" aria-label="Recent battle events"></ol>
+      </article>
+
+      <article class="panel settlement-panel" aria-labelledby="settlementTitle">
+        <p class="panel-kicker">CAMPAIGN TRANSACTION</p>
+        <h2 id="settlementTitle">Continue gate</h2>
+        <p id="settlementStatus">Continue stays locked until an objective-authoritative victory is durably settled.</p>
+        <a id="continueCampaign" class="continue-link" href="campaign.html" hidden aria-disabled="true">Continue campaign</a>
+      </article>
+    </section>
+
+    <div class="touch-controls" aria-label="On-screen battle controls">
+      <button type="button" data-held-control="left" aria-label="Move left">←</button>
+      <button type="button" data-action-control="jump">Jump</button>
+      <button type="button" data-action-control="attack-0" class="weapon-button">Weapon</button>
+      <button type="button" data-action-control="attack-1" class="art-button">Art</button>
+      <button type="button" data-held-control="interact">Objective</button>
+      <button type="button" data-action-control="switch">Switch</button>
+      <button type="button" data-held-control="right" aria-label="Move right">→</button>
+    </div>
+  </main>
+  <script type="module" src="action-campaign-battle.js"></script>
+</body>
+</html>

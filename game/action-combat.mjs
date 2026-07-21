@@ -17,7 +17,7 @@
  */
 
 export const ACTION_FIXED_STEP_MS = 20;
-export const ACTION_COMBAT_SNAPSHOT_VERSION = 1;
+export const ACTION_COMBAT_SNAPSHOT_VERSION = 2;
 export const MINIMUM_COOLDOWN_MULTIPLIER = 0.55;
 export const COOLDOWN_REDUCTION_PER_LEVEL = 0.0125;
 
@@ -84,6 +84,15 @@ function clamp(value, minimum, maximum) {
 
 function normalizeIntent(intent = {}) {
   return { x: clamp(finiteNumber(intent.x ?? 0, 'movement x'), -1, 1), y: 0 };
+}
+
+function factionsAreHostile(first, second) {
+  if (first === 'neutral' || second === 'neutral' || first === second) return false;
+  if (first === 'player' || second === 'player') {
+    return (first === 'player' && second === 'enemy')
+      || (first === 'enemy' && second === 'player');
+  }
+  return true;
 }
 
 function normalizeLevel(level) {
@@ -295,6 +304,25 @@ export class ActionCombatKernel {
       this.actors.set(actor.id, actor);
     }
     if (this.actorOrder.length === 0) throw new RangeError('Action combat requires at least one actor.');
+    this.automaticVictory = options.automaticVictory !== false;
+    const requestedControlledActorId = options.controlledActorId == null
+      ? null
+      : String(options.controlledActorId);
+    const livingPartyIds = this.actorOrder.filter((actorId) => {
+      const actor = this.getActor(actorId);
+      return actor.faction === 'player' && actor.hp > 0;
+    });
+    if (requestedControlledActorId != null) {
+      const requestedActor = this.getActor(requestedControlledActorId);
+      if (!requestedActor) throw new RangeError(`Unknown controlled actor ${requestedControlledActorId}.`);
+      if (requestedActor.faction !== 'player') {
+        throw new RangeError(`Controlled actor ${requestedControlledActorId} must belong to the player faction.`);
+      }
+      if (requestedActor.hp <= 0) {
+        throw new RangeError(`Controlled actor ${requestedControlledActorId} must be living.`);
+      }
+    }
+    this.controlledActorId = requestedControlledActorId ?? livingPartyIds[0] ?? null;
     this.nowMs = 0;
     this.accumulatorMs = 0;
     this.eventSequence = 0;
@@ -306,10 +334,56 @@ export class ActionCombatKernel {
     return this.actors.get(actorId) ?? null;
   }
 
+  /** Transfer player input authority without mutating either actor's live state. */
+  switchControlledActor(actorId) {
+    const requestedActorId = String(actorId ?? '');
+    const actor = this.getActor(requestedActorId);
+    if (!actor) return { ok: false, reason: 'unknown-actor' };
+    if (actor.faction !== 'player') return { ok: false, reason: 'not-party-actor' };
+    if (actor.hp <= 0) return { ok: false, reason: 'actor-defeated' };
+    if (this.outcome) return { ok: false, reason: 'combat-ended' };
+    const previousActorId = this.controlledActorId;
+    if (previousActorId === requestedActorId) {
+      return { ok: true, changed: false, previousActorId, controlledActorId: requestedActorId };
+    }
+    this.controlledActorId = requestedActorId;
+    this._emit('control-switch', {
+      previousActorId,
+      actorId: requestedActorId,
+      reason: 'player-request',
+    });
+    return { ok: true, changed: true, previousActorId, controlledActorId: requestedActorId };
+  }
+
+  /** Alias for adapters that model control assignment rather than tag switching. */
+  setControlledActor(actorId) {
+    return this.switchControlledActor(actorId);
+  }
+
+  /** End an objective-driven battle while leaving automatic defeat authoritative. */
+  conclude(outcome) {
+    if (outcome !== 'victory' && outcome !== 'defeat') {
+      return { ok: false, reason: 'invalid-outcome' };
+    }
+    if (this.outcome) return { ok: false, reason: 'combat-ended', outcome: this.outcome };
+    this.outcome = outcome;
+    const winner = outcome === 'victory' ? 'player' : 'enemy';
+    this._emit('combat-end', { outcome, winner, reason: 'explicit-conclusion' });
+    return { ok: true, outcome };
+  }
+
+  _playerControlFailure(actor) {
+    return actor.faction === 'player' && actor.id !== this.controlledActorId
+      ? { ok: false, reason: 'not-controlled-actor', controlledActorId: this.controlledActorId }
+      : null;
+  }
+
   setMovement(actorId, intent) {
     const actor = this.getActor(actorId);
     if (!actor) return { ok: false, reason: 'unknown-actor' };
     if (actor.hp <= 0) return { ok: false, reason: 'actor-defeated' };
+    const controlFailure = this._playerControlFailure(actor);
+    if (controlFailure) return controlFailure;
     actor.movementIntent = normalizeIntent(intent);
     return { ok: true, intent: { ...actor.movementIntent } };
   }
@@ -319,6 +393,8 @@ export class ActionCombatKernel {
     if (!actor) return { ok: false, reason: 'unknown-actor' };
     if (actor.hp <= 0) return { ok: false, reason: 'actor-defeated' };
     if (this.outcome) return { ok: false, reason: 'combat-ended' };
+    const controlFailure = this._playerControlFailure(actor);
+    if (controlFailure) return controlFailure;
     if (actor.activeAttack) return { ok: false, reason: 'animation-commitment' };
     if (!actor.grounded) return { ok: false, reason: 'airborne' };
     actor.grounded = false;
@@ -358,6 +434,15 @@ export class ActionCombatKernel {
   }
 
   requestAttack(actorId, attackId) {
+    const actor = this.getActor(actorId);
+    if (actor) {
+      const controlFailure = this._playerControlFailure(actor);
+      if (controlFailure) return controlFailure;
+    }
+    return this._beginAttack(actorId, attackId);
+  }
+
+  _beginAttack(actorId, attackId) {
     const state = this.getAttackState(actorId, attackId);
     if (!state) return { ok: false, reason: 'unknown-attack' };
     if (!state.ready) return { ok: false, reason: state.reason, remainingMs: state.effectiveCooldownRemainingMs };
@@ -453,6 +538,8 @@ export class ActionCombatKernel {
       fixedStepMs: this.fixedStepMs,
       nowMs: this.nowMs,
       accumulatorMs: this.accumulatorMs,
+      automaticVictory: this.automaticVictory,
+      controlledActorId: this.controlledActorId,
       stage: { ...this.stage },
       outcome: this.outcome,
       actors,
@@ -463,9 +550,10 @@ export class ActionCombatKernel {
     this.nowMs += this.fixedStepMs;
     this._tickCooldowns();
     this._advanceAttackAnimations();
+    this._ensureLivingControlledActor();
     this._updateOutcome();
     if (!this.outcome) {
-      this._updateEnemyActions();
+      this._updateAiActions();
       this._applyMovement();
     }
     this.statusHooks.onFixedStep?.({
@@ -520,7 +608,7 @@ export class ActionCombatKernel {
     const targetIds = [];
     for (const targetId of this.actorOrder) {
       const target = this.getActor(targetId);
-      if (target.hp <= 0 || target.faction === attacker.faction) continue;
+      if (target.hp <= 0 || !factionsAreHostile(attacker.faction, target.faction)) continue;
       if (!overlaps(hitbox, actorHurtbox(target))) continue;
       let resolution = calculateActionDamage(attacker, target, attack);
       const modified = this.statusHooks.modifyDamage?.({
@@ -582,10 +670,31 @@ export class ActionCombatKernel {
     });
   }
 
-  _updateEnemyActions() {
+  _ensureLivingControlledActor() {
+    const controlled = this.getActor(this.controlledActorId);
+    if (controlled?.faction === 'player' && controlled.hp > 0) return;
+    const previousActorId = this.controlledActorId;
+    const replacementActorId = this.actorOrder.find((actorId) => {
+      const actor = this.getActor(actorId);
+      return actor.faction === 'player' && actor.hp > 0;
+    }) ?? null;
+    if (replacementActorId === previousActorId) return;
+    this.controlledActorId = replacementActorId;
+    if (replacementActorId) {
+      this._emit('control-switch', {
+        previousActorId,
+        actorId: replacementActorId,
+        reason: 'actor-defeated',
+      });
+    }
+  }
+
+  _updateAiActions() {
     for (const actorId of this.actorOrder) {
       const actor = this.getActor(actorId);
-      if (actor.hp <= 0 || actor.ai !== 'deterministic-chase' || actor.activeAttack) continue;
+      const isCompanion = actor.faction === 'player' && actor.id !== this.controlledActorId;
+      const isEnemy = actor.faction === 'enemy' && actor.ai === 'deterministic-chase';
+      if (actor.hp <= 0 || (!isCompanion && !isEnemy) || actor.activeAttack) continue;
       const target = this._nearestOpponent(actor);
       if (!target) {
         actor.movementIntent = { x: 0, y: 0 };
@@ -600,13 +709,23 @@ export class ActionCombatKernel {
       });
       if (usableAttack) {
         actor.movementIntent = { x: 0, y: 0 };
-        this.requestAttack(actor.id, usableAttack);
-        this._emit('enemy-decision', { actorId: actor.id, action: 'attack', attackId: usableAttack, targetId: target.id });
+        this._beginAttack(actor.id, usableAttack);
+        this._emit(isCompanion ? 'companion-decision' : 'enemy-decision', {
+          actorId: actor.id,
+          action: 'attack',
+          attackId: usableAttack,
+          targetId: target.id,
+        });
         continue;
       }
       const delta = { x: target.position.x - actor.position.x };
       actor.movementIntent = normalizeIntent(delta);
-      this._emit('enemy-decision', { actorId: actor.id, action: 'move', targetId: target.id, intent: { ...actor.movementIntent } });
+      this._emit(isCompanion ? 'companion-decision' : 'enemy-decision', {
+        actorId: actor.id,
+        action: 'move',
+        targetId: target.id,
+        intent: { ...actor.movementIntent },
+      });
     }
   }
 
@@ -615,7 +734,7 @@ export class ActionCombatKernel {
     let bestDistance = Infinity;
     for (const candidateId of this.actorOrder) {
       const candidate = this.getActor(candidateId);
-      if (candidate.hp <= 0 || candidate.faction === actor.faction) continue;
+      if (candidate.hp <= 0 || !factionsAreHostile(actor.faction, candidate.faction)) continue;
       const dx = candidate.position.x - actor.position.x;
       const dy = candidate.position.y - actor.position.y;
       const squaredDistance = dx * dx + dy * dy;
@@ -685,12 +804,21 @@ export class ActionCombatKernel {
   }
 
   _updateOutcome() {
-    const livingFactions = new Set(this.actorOrder
-      .map((actorId) => this.getActor(actorId))
+    if (this.outcome) return;
+    const actors = this.actorOrder.map((actorId) => this.getActor(actorId));
+    const hasPlayerRoster = actors.some((actor) => actor.faction === 'player');
+    const hasLivingPlayer = actors.some((actor) => actor.faction === 'player' && actor.hp > 0);
+    if (hasPlayerRoster && !hasLivingPlayer) {
+      this.outcome = 'defeat';
+      this._emit('combat-end', { outcome: this.outcome, winner: 'enemy' });
+      return;
+    }
+    const livingFactions = new Set(actors
       .filter((actor) => actor.hp > 0 && actor.faction !== 'neutral')
       .map((actor) => actor.faction));
-    if (livingFactions.size > 1 || livingFactions.size === 0 || this.outcome) return;
+    if (livingFactions.size > 1 || livingFactions.size === 0) return;
     const [winner] = livingFactions;
+    if (winner === 'player' && !this.automaticVictory) return;
     this.outcome = winner === 'player' ? 'victory' : winner === 'enemy' ? 'defeat' : `${winner}-wins`;
     this._emit('combat-end', { outcome: this.outcome, winner });
   }

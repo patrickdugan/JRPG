@@ -162,12 +162,29 @@ test('all specs are structurally accepted by ActionCombatKernel; representative 
   const teaching = createActionEncounterKernel('c1-cinder-hounds');
   assert.equal(teaching.kernel.snapshot().actors.length, 4);
   assert.deepEqual(teaching.kernel.snapshot().actors.map(({ id }) => id), ['ren', 'aya', 'cinder-hound-1', 'cinder-hound-2']);
+  assert.equal(teaching.kernel.snapshot().controlledActorId, 'ren');
+  assert.equal(teaching.spec.kernelConfig.actors
+    .filter(({ faction }) => faction === 'player')
+    .every(({ ai }) => ai === 'deterministic-companion'), true);
 
   const boss = createActionEncounterKernel('fp1-mateus');
   assert.deepEqual(boss.kernel.snapshot().actors.map(({ id }) => id), ['ren', 'aya', 'lise', 'mateus-1']);
 
   const finalBoss = createActionEncounterKernel('c9-kurozane');
   assert.equal(finalBoss.kernel.snapshot().actors.some(({ id }) => id === 'kurozane-1'), true);
+});
+
+test('encounter construction accepts explicit control and objective-owned victory options', () => {
+  const { spec, kernel } = createActionEncounterKernel('fp1-mateus', {
+    controlledActorId: 'lise',
+    automaticVictory: false,
+  });
+  assert.equal(spec.kernelConfig.controlledActorId, 'lise');
+  assert.equal(spec.kernelConfig.automaticVictory, false);
+  assert.equal(kernel.snapshot().controlledActorId, 'lise');
+  assert.equal(kernel.snapshot().automaticVictory, false);
+  assert.equal(kernel.setMovement('ren', { x: 1 }).reason, 'not-controlled-actor');
+  assert.equal(kernel.setMovement('lise', { x: 1 }).ok, true);
 });
 
 test('noncombat resolution remains explicitly outside action objective authority', () => {

@@ -4,7 +4,7 @@
 
 `action-battle-prototype.html` is the non-canonical side-view real-time feel proof. Ren runs and jumps freely except during fixed wind-up, active-hit, and recovery animation commitment. A shared weapon cooldown and longer Cinder Route cooldown begin only afterward, remain visible in milliseconds, and permit immediate movement. Level changes timers through `max(0.55, 1 - 0.0125 × (level - 1))` without accelerating animation.
 
-The separate DOM-free `action-combat.mjs` kernel supplies fixed-step movement, gravity/platform hooks, one-shot hitboxes, delivery/Essence damage, shared/per-art cooldown gates, status hooks, and deterministic enemy decisions. The existing Campaign Battle remains canonical until action objectives and atomic victory settlement are integrated.
+`action-campaign-battle.html?encounter=c1-cinder-hounds` is the non-canonical integrated campaign controller. It uses real encounter/stage data, the fixed-step action kernel, deterministic companion AI, one directly controlled fighter, live-state-preserving party switching, all 18 objective contracts through the shared evaluator, and the existing atomic victory transaction. Twelve objective families are fully connected. Six families that need escort/incapacitation tokens, protected scenery, or attackable phase objects explicitly keep settlement locked. The existing Campaign Battle remains canonical until those families and full boss/effect behavior migrate.
 
 This folder contains the playable browser runtime and the original small combat proof. The campaign, field, quest, battle, advancement, loadout, Storyworld, and playtime saves share one browser runtime. The ordinary 5–6 hour narrative target and optional 20-hour completionist target remain production claims until measured by end-to-end human playtests.
 
@@ -78,7 +78,7 @@ To verify every shipped browser file over a real local HTTP boundary without ins
 python tools/static-delivery.py
 ```
 
-The current release manifest contains 155 byte-verified files and 10,658,411 delivered bytes: six pages, seven stylesheets, six controllers, 102 modules, 33 PNG production assets, and one SVG favicon.
+The current release manifest contains 160 byte-verified files and 10,746,705 delivered bytes: seven pages, eight stylesheets, seven controllers, 104 modules, 33 PNG production assets, and one SVG favicon.
 
 ## FP-0 controls
 

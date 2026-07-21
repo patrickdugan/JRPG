@@ -1,6 +1,6 @@
 # Real-time action-combat pivot
 
-**Status:** playable feel proof and full migration contracts implemented; canonical campaign controller pending
+**Status:** integrated campaign action controller implemented and browser-proven; canonical link cutover held behind six objective/effect families
 
 ## Canonical combat identity
 
@@ -52,4 +52,8 @@ Combat begins with a short cut rather than a long transition. Common enemies sho
 
 The existing turn-based engine remains a rollback/reference implementation until action combat preserves campaign victory settlement and all authored objective families. The action kernel and browser prototype must prove fixed-step determinism, free movement during cooldown, one-hit active windows, level scaling, typed damage, enemy telegraphs, victory/defeat, and safe pause/visibility behavior before the campaign's battle links switch permanently.
 
-The current implementation now supplies the kernel, an isolated installed-Chrome feel proof, all-encounter actor/attack adaptation, 20 explicit side-view stage contracts, all 18 real-time objective contracts, a strict terminal-result projection, and engine-independent atomic victory settlement. The integrated automated suite passes 962/962 tests and static delivery passes 155/155 files. The remaining cutover work is the shared campaign action controller, companion AI/control switching, full boss/effect execution, action presentation for every stage, and human feel/readability tuning. No action-combat balance or canonical route-completion claim is made yet.
+The current implementation supplies the kernel, the isolated feel proof, all-encounter actor/attack adaptation, 20 explicit side-view stage contracts, all 18 real-time objective contracts and their DOM-free evaluator, strict terminal-result projection, and engine-independent atomic victory settlement. `action-campaign-battle.html` composes those systems over real encounter data with one controlled party member, deterministic companions, cooldown-preserving tag switches, shipped side-view art, keyboard/touch input, hidden-tab pause, Storyworld context, and the existing durable campaign transaction.
+
+Twelve objective families are settlement-authoritative in the integrated page: ordinary defeat, boss defeat, nonlethal threshold, survival/exit, timed route clearing, target release, carried-item return, relay activation, post-boss release, bell-key object breaking, post-boss evacuation, and memorial interactions. Six families that require escorted/incapacitated tokens, protected scenery, or attackable phase objects deliberately remain settlement-locked. The legacy `battle.html` route therefore remains canonical and available as the rollback/reference controller; campaign links have not been switched.
+
+The integrated automated suite passes 985/985 tests in 350.078 seconds, syntax checks pass, and static delivery passes 160/160 files. The installed-Chrome action-controller probe verifies real movement during a live post-animation cooldown, a decreasing timer, decoded stage/party/enemy art, a locked pre-settlement Continue gate, empty isolated storage, and zero console, page, or HTTP errors. Remaining cutover work is the six locked objective families, full boss/effect/status/summon execution, defensive verbs, telemetry parity, balance, and human feel/readability tuning. No action-combat balance or canonical route-completion claim is made yet.

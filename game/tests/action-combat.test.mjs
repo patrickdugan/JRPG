@@ -80,6 +80,56 @@ function kernel(options = {}) {
     actors: actors(options.actorOverrides),
     statusHooks: options.statusHooks,
     physicsHooks: options.physicsHooks,
+    controlledActorId: options.controlledActorId,
+    automaticVictory: options.automaticVictory,
+  });
+}
+
+function partyKernel(options = {}) {
+  const [ren, oni] = actors({
+    ren: { position: { x: 100, y: 300 }, ...options.actorOverrides?.ren },
+    oni: {
+      ai: options.enemyAi ?? 'deterministic-chase',
+      hp: 400,
+      maxHp: 400,
+      position: { x: 300, y: 300 },
+      ...options.actorOverrides?.oni,
+    },
+  });
+  return createActionCombat({
+    stage: { minX: 0, maxX: 500, minY: 0, maxY: 300, groundY: 300 },
+    attacks: ATTACKS,
+    actors: [
+      ren,
+      {
+        id: 'aya',
+        faction: 'player',
+        ai: 'deterministic-companion',
+        level: 1,
+        hp: 240,
+        maxHp: 240,
+        power: 9,
+        guard: 5,
+        moveSpeed: 110,
+        offensiveCooldownMs: 400,
+        position: { x: 80, y: 300 },
+        attackIds: ['slash'],
+        ...options.actorOverrides?.aya,
+      },
+      oni,
+      ...(options.includeNeutral ? [{
+        id: 'witness',
+        faction: 'neutral',
+        ai: null,
+        hp: 50,
+        maxHp: 50,
+        moveSpeed: 1,
+        position: { x: 110, y: 300 },
+        attackIds: [],
+      }] : []),
+    ],
+    controlledActorId: options.controlledActorId ?? 'ren',
+    automaticVictory: options.automaticVictory,
   });
 }
 
@@ -261,6 +311,112 @@ test('deterministic enemy chase, attack choice, and events replay identically ac
   assert.deepEqual(chunked.snapshot(), whole.snapshot());
   assert.deepEqual(chunked.drainEvents(), whole.drainEvents());
   assert.equal(actorSnapshot(whole, 'ren').hp < 200, true);
+});
+
+test('exactly one party actor accepts player input and tag switching preserves live actor state', () => {
+  const engine = partyKernel({ enemyAi: null });
+  assert.equal(engine.snapshot().controlledActorId, 'ren');
+  assert.deepEqual(engine.setMovement('aya', { x: 1 }), {
+    ok: false,
+    reason: 'not-controlled-actor',
+    controlledActorId: 'ren',
+  });
+  assert.deepEqual(engine.requestJump('aya'), {
+    ok: false,
+    reason: 'not-controlled-actor',
+    controlledActorId: 'ren',
+  });
+  assert.deepEqual(engine.requestAttack('aya', 'slash'), {
+    ok: false,
+    reason: 'not-controlled-actor',
+    controlledActorId: 'ren',
+  });
+
+  assert.equal(engine.requestAttack('ren', 'slash').ok, true);
+  engine.advance(20);
+  const actorsDuringCommitment = engine.snapshot().actors;
+  assert.equal(actorSnapshot(engine, 'ren').activeAttack.phase, 'windup');
+  assert.deepEqual(engine.switchControlledActor('aya'), {
+    ok: true,
+    changed: true,
+    previousActorId: 'ren',
+    controlledActorId: 'aya',
+  });
+  assert.deepEqual(engine.snapshot().actors, actorsDuringCommitment,
+    'switching changes input authority without touching HP, position, cooldown, or animation state');
+  assert.equal(engine.snapshot().controlledActorId, 'aya');
+  assert.equal(engine.setMovement('aya', { x: -1 }).ok, true);
+  assert.equal(engine.setMovement('ren', { x: 1 }).reason, 'not-controlled-actor');
+
+  engine.advance(120);
+  const actorsWithCooldown = engine.snapshot().actors;
+  assert.equal(actorSnapshot(engine, 'ren').offensiveCooldownRemainingMs, 400);
+  assert.equal(engine.setControlledActor('ren').ok, true);
+  assert.deepEqual(engine.snapshot().actors, actorsWithCooldown,
+    'switching back does not reset the former actor cooldown');
+  const switchEvents = engine.drainEvents().filter(({ type }) => type === 'control-switch');
+  assert.deepEqual(switchEvents.map(({ previousActorId, actorId, reason }) => ({ previousActorId, actorId, reason })), [
+    { previousActorId: 'ren', actorId: 'aya', reason: 'player-request' },
+    { previousActorId: 'aya', actorId: 'ren', reason: 'player-request' },
+  ]);
+});
+
+test('companion and enemy AI are deterministic, target only hostile factions, and ignore neutral actors', () => {
+  const options = { includeNeutral: true };
+  const whole = partyKernel(options);
+  const chunked = partyKernel(options);
+  whole.advance(2400);
+  for (const elapsed of [133, 7, 260, 401, 99, 500, 1000]) chunked.advance(elapsed);
+  assert.deepEqual(chunked.snapshot(), whole.snapshot());
+  const wholeEvents = whole.drainEvents();
+  assert.deepEqual(chunked.drainEvents(), wholeEvents);
+
+  const companionDecisions = wholeEvents.filter(({ type }) => type === 'companion-decision');
+  const enemyDecisions = wholeEvents.filter(({ type }) => type === 'enemy-decision');
+  assert.equal(companionDecisions.length > 0, true);
+  assert.equal(enemyDecisions.length > 0, true);
+  assert.equal(companionDecisions.every(({ actorId, targetId }) => actorId === 'aya' && targetId === 'oni'), true);
+  assert.equal(enemyDecisions.every(({ actorId, targetId }) => actorId === 'oni' && ['ren', 'aya'].includes(targetId)), true);
+  assert.equal(wholeEvents.some(({ type, targetId }) => type === 'hit' && targetId === 'witness'), false);
+  assert.equal(actorSnapshot(whole, 'witness').hp, 50);
+});
+
+test('a defeated controlled actor deterministically transfers control to the next living party actor', () => {
+  const engine = partyKernel({ enemyAi: null });
+  engine.getActor('ren').hp = 0;
+  engine.step();
+  assert.equal(engine.snapshot().controlledActorId, 'aya');
+  assert.equal(engine.snapshot().outcome, null);
+  assert.equal(engine.setMovement('aya', { x: 1 }).ok, true);
+  assert.deepEqual(engine.drainEvents().filter(({ type }) => type === 'control-switch').map((event) => ({
+    previousActorId: event.previousActorId,
+    actorId: event.actorId,
+    reason: event.reason,
+  })), [{ previousActorId: 'ren', actorId: 'aya', reason: 'actor-defeated' }]);
+});
+
+test('objective-driven battles can suppress automatic victory and conclude explicitly without suppressing defeat', () => {
+  const objectiveBattle = partyKernel({ automaticVictory: false, enemyAi: null });
+  objectiveBattle.getActor('oni').hp = 0;
+  objectiveBattle.step();
+  assert.equal(objectiveBattle.snapshot().automaticVictory, false);
+  assert.equal(objectiveBattle.snapshot().outcome, null);
+  assert.deepEqual(objectiveBattle.conclude('retreat'), { ok: false, reason: 'invalid-outcome' });
+  assert.deepEqual(objectiveBattle.conclude('victory'), { ok: true, outcome: 'victory' });
+  assert.equal(objectiveBattle.snapshot().outcome, 'victory');
+  assert.deepEqual(objectiveBattle.conclude('defeat'), {
+    ok: false,
+    reason: 'combat-ended',
+    outcome: 'victory',
+  });
+
+  const wipedParty = partyKernel({ automaticVictory: false, enemyAi: null });
+  wipedParty.getActor('ren').hp = 0;
+  wipedParty.getActor('aya').hp = 0;
+  wipedParty.getActor('oni').hp = 0;
+  wipedParty.step();
+  assert.equal(wipedParty.snapshot().controlledActorId, null);
+  assert.equal(wipedParty.snapshot().outcome, 'defeat', 'party wipe wins over a simultaneous hostile wipe');
 });
 
 test('attack animation timings must align to the fixed step', () => {
