@@ -71,6 +71,10 @@ const elements = {
   objectiveRuntimeStatus: document.querySelector('#objectiveRuntimeStatus'),
   objectiveRequirements: document.querySelector('#objectiveRequirements'),
   attackTimers: document.querySelector('#attackTimers'),
+  comboAvailability: document.querySelector('#comboAvailability'),
+  comboArts: document.querySelector('#comboArts'),
+  comboProximity: document.querySelector('#comboProximity'),
+  comboTitle: document.querySelector('#comboTitle'),
   announcement: document.querySelector('#battleAnnouncement'),
   eventLog: document.querySelector('#eventLog'),
   settlementStatus: document.querySelector('#settlementStatus'),
@@ -85,7 +89,7 @@ const elements = {
 const context = elements.canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
 const held = { left: false, right: false, interact: false };
-const pressed = { jump: false, attackIndex: null };
+const pressed = { jump: false, attackIndex: null, combo: false };
 let lastTimestamp = performance.now();
 let hidden = document.hidden;
 let settled = false;
@@ -149,11 +153,14 @@ function clearHeld() {
   held.interact = false;
   pressed.jump = false;
   pressed.attackIndex = null;
+  pressed.combo = false;
 }
 
 function announce(message) {
   if (!message) return;
-  if (recentMessages[0] !== message) recentMessages.unshift(message);
+  const existingIndex = recentMessages.indexOf(message);
+  if (existingIndex >= 0) recentMessages.splice(existingIndex, 1);
+  recentMessages.unshift(message);
   recentMessages.splice(8);
   elements.announcement.textContent = message;
 }
@@ -169,15 +176,39 @@ function attackName(attackId) {
 function describeEvent(event, snapshot) {
   const actor = snapshot.kernel.actors.find(({ id }) => id === event.actorId);
   const target = snapshot.kernel.actors.find(({ id }) => id === event.targetId);
-  if (event.type === 'attack-start') return `${actor?.name ?? event.actorId} commits ${attackName(event.attackId)}.`;
-  if (event.type === 'attack-complete') return `${actor?.name ?? event.actorId} recovers movement; offense cooldown ${event.sharedCooldownMs} ms.`;
+  if (event.type === 'combo-start') {
+    const arts = snapshot.combo.participants.map(({ attackName }) => attackName).join(' + ');
+    return `${snapshot.combo.name} begins atomically: ${arts}.`;
+  }
+  if (event.type === 'combo-blocked') {
+    return `${event.name} unavailable: ${formatComboReason(event.reasons?.[0])}.`;
+  }
+  if (event.type === 'attack-start') return event.comboId
+    ? `${actor?.name ?? event.actorId} links ${attackName(event.attackId)} into ${snapshot.combo.name}.`
+    : `${actor?.name ?? event.actorId} commits ${attackName(event.attackId)}.`;
+  if (event.type === 'attack-complete') return event.comboId
+    ? `${actor?.name ?? event.actorId}'s linked ${attackName(event.attackId)} completes; its own cooldown is preserved at ${event.individualCooldownMs} ms.`
+    : `${actor?.name ?? event.actorId} recovers movement; offense cooldown ${event.sharedCooldownMs} ms.`;
   if (event.type === 'hit') {
     flyouts.push({ x: target?.position.x ?? 480, y: (target?.position.y ?? 400) - 70, text: `${event.damage} ${event.delivery ?? ''}`.trim(), life: 850 });
-    return `${actor?.name ?? event.actorId} hits ${target?.name ?? event.targetId} with ${attackName(event.attackId)}: ${event.damage} ${event.delivery ?? 'typed'} damage${event.essence ? ` · ${event.essence}` : ''}.`;
+    return `${event.comboId ? `${snapshot.combo.name} linked hit — ` : ''}${actor?.name ?? event.actorId} hits ${target?.name ?? event.targetId} with ${attackName(event.attackId)}: ${event.damage} ${event.delivery ?? 'typed'} damage${event.essence ? ` · ${event.essence}` : ''}.`;
   }
   if (event.type === 'control-switch') return `${actor?.name ?? event.actorId} is now under direct control.`;
   if (event.type === 'combat-end') return event.outcome === 'victory' ? 'Objective and combat conditions complete.' : 'The active party has fallen.';
   return null;
+}
+
+function formatComboReason(reason) {
+  if (!reason) return 'formation is not ready';
+  if (reason.code === 'initiator-not-participant') return 'control Lise or Mateus to initiate';
+  if (reason.code === 'participant-missing') return `${reason.actorId} is not deployed`;
+  if (reason.code === 'participant-defeated') return `${reason.actorId} is defeated`;
+  if (reason.code === 'participant-committed') return `${reason.actorId} is committed to another animation`;
+  if (reason.code === 'signature-attack-unavailable') return `${reason.actorId}'s contributing art is unavailable`;
+  if (reason.code === 'signature-attack-not-ready') return `${reason.actorId}'s contributing art has ${Math.ceil(reason.remainingMs ?? 0)} ms cooldown`;
+  if (reason.code === 'allies-too-far') return `allies are ${Math.round(reason.separationPx)} px apart; maximum ${reason.maxAllySeparationPx} px`;
+  if (reason.code === 'combat-ended') return 'combat has ended';
+  return String(reason.code).replaceAll('-', ' ');
 }
 
 function flushRunReceiptPlaytime() {
@@ -452,6 +483,22 @@ function renderDom(snapshot) {
     return item;
   }));
 
+  elements.comboTitle.textContent = snapshot.combo.name;
+  elements.comboAvailability.dataset.available = String(snapshot.combo.available || snapshot.combo.active);
+  elements.comboAvailability.textContent = snapshot.combo.active
+    ? 'LINKED · both contributing arts are committed atomically'
+    : snapshot.combo.available
+      ? 'READY · press L to invoke the linked cast'
+      : `LOCKED · ${formatComboReason(snapshot.combo.reasons[0])}`;
+  elements.comboArts.replaceChildren(...snapshot.combo.participants.map((participant) => {
+    const item = document.createElement('li');
+    item.textContent = `${participant.role.toUpperCase()} · ${participant.attackName} · ${participant.delivery} · ${participant.essence}`;
+    return item;
+  }));
+  elements.comboProximity.textContent = snapshot.combo.separationPx == null
+    ? `Proximity unavailable · maximum ${snapshot.combo.maxAllySeparationPx} px`
+    : `Lise ↔ Mateus ${Math.round(snapshot.combo.separationPx)} px · maximum ${snapshot.combo.maxAllySeparationPx} px`;
+
   const choices = getActionCampaignAttackChoices(session, snapshot.kernel.controlledActorId);
   elements.attackTimers.replaceChildren(...choices.map((choice) => {
     const row = document.createElement('div');
@@ -487,6 +534,10 @@ function renderDom(snapshot) {
   elements.canvas.dataset.objectiveComplete = String(snapshot.objective.complete);
   elements.canvas.dataset.combatSatisfied = String(snapshot.combatSatisfied);
   elements.canvas.dataset.controlledActorId = snapshot.kernel.controlledActorId ?? '';
+  elements.canvas.dataset.comboId = snapshot.combo.comboId;
+  elements.canvas.dataset.comboAvailable = String(snapshot.combo.available);
+  elements.canvas.dataset.comboActive = String(snapshot.combo.active);
+  elements.canvas.dataset.comboSeparationPx = snapshot.combo.separationPx == null ? '' : String(Math.round(snapshot.combo.separationPx));
   elements.canvas.dataset.paused = String(hidden);
 }
 
@@ -513,6 +564,7 @@ window.addEventListener('keydown', (event) => {
   else if ((key === 'w' || key === 'arrowup') && !event.repeat) pressed.jump = true;
   else if ((key === 'j' || key === ' ') && !event.repeat) pressed.attackIndex = 0;
   else if (key === 'k' && !event.repeat) pressed.attackIndex = 1;
+  else if (key === 'l' && !event.repeat) pressed.combo = true;
   else if (key === 'e') held.interact = true;
   else if (key === 'tab' && !event.repeat) switchActionCampaignActor(session, event.shiftKey ? -1 : 1);
   else if (key === 'r' && !event.repeat) restart();
@@ -557,6 +609,7 @@ for (const button of document.querySelectorAll('[data-action-control]')) {
     if (action === 'jump') pressed.jump = true;
     else if (action === 'attack-0') pressed.attackIndex = 0;
     else if (action === 'attack-1') pressed.attackIndex = 1;
+    else if (action === 'combo') pressed.combo = true;
     else if (action === 'switch') switchActionCampaignActor(session, 1);
     elements.canvas.focus();
   });
@@ -576,12 +629,18 @@ function frame(timestamp) {
       right: held.right,
       jumpPressed: pressed.jump,
       attackIndex: pressed.attackIndex,
+      comboPressed: pressed.combo,
       interactHeld: held.interact,
       interactPressed: held.interact,
     });
     pressed.jump = false;
     pressed.attackIndex = null;
+    pressed.combo = false;
     for (const event of snapshot.recentEvents) announce(describeEvent(event, snapshot));
+    const comboResponseEvent = snapshot.recentEvents.find((event) => (
+      event.type === 'combo-start' || event.type === 'combo-blocked'
+    ));
+    if (comboResponseEvent) announce(describeEvent(comboResponseEvent, snapshot));
   } else {
     snapshot = snapshotActionCampaignBattle(session);
   }

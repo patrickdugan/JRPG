@@ -89,7 +89,7 @@ function partyKernel(options = {}) {
   const [ren, oni] = actors({
     ren: { position: { x: 100, y: 300 }, ...options.actorOverrides?.ren },
     oni: {
-      ai: options.enemyAi ?? 'deterministic-chase',
+      ai: Object.hasOwn(options, 'enemyAi') ? options.enemyAi : 'deterministic-chase',
       hp: 400,
       maxHp: 400,
       position: { x: 300, y: 300 },
@@ -359,6 +359,170 @@ test('exactly one party actor accepts player input and tag switching preserves l
     { previousActorId: 'ren', actorId: 'aya', reason: 'player-request' },
     { previousActorId: 'aya', actorId: 'ren', reason: 'player-request' },
   ]);
+});
+
+test('synchronized combos start atomically, retain provenance, and replay deterministically', () => {
+  const participants = [
+    { actorId: 'ren', attackId: 'slash' },
+    { actorId: 'aya', attackId: 'slash' },
+  ];
+  const comboOptions = {
+    enemyAi: null,
+    actorOverrides: { oni: { ai: null, position: { x: 130, y: 300 } } },
+  };
+  const whole = partyKernel(comboOptions);
+  const chunked = partyKernel(comboOptions);
+  const expectedStart = {
+    ok: true,
+    comboId: 'hunter-priest',
+    initiatorActorId: 'ren',
+    startedAtMs: 0,
+    participants,
+  };
+  assert.deepEqual(whole.requestCombo(' hunter-priest ', 'ren', participants), expectedStart);
+  assert.deepEqual(chunked.requestCombo('hunter-priest', 'ren', participants), expectedStart);
+
+  for (const engine of [whole, chunked]) {
+    assert.deepEqual(actorSnapshot(engine, 'ren').activeAttack, {
+      attackId: 'slash',
+      elapsedMs: 0,
+      hitboxResolved: false,
+      startedAtMs: 0,
+      comboId: 'hunter-priest',
+      phase: 'windup',
+    });
+    assert.equal(actorSnapshot(engine, 'aya').activeAttack.comboId, 'hunter-priest');
+    assert.equal(actorSnapshot(engine, 'aya').activeAttack.startedAtMs, 0);
+  }
+
+  whole.advance(140);
+  for (const elapsed of [13, 7, 41, 19, 40, 20]) chunked.advance(elapsed);
+  assert.deepEqual(chunked.snapshot(), whole.snapshot());
+  const events = whole.drainEvents();
+  assert.deepEqual(chunked.drainEvents(), events);
+  assert.deepEqual(events.slice(0, 3).map((event) => ({
+    type: event.type,
+    nowMs: event.nowMs,
+    comboId: event.comboId,
+    actorId: event.actorId,
+  })), [
+    { type: 'combo-start', nowMs: 0, comboId: 'hunter-priest', actorId: undefined },
+    { type: 'attack-start', nowMs: 0, comboId: 'hunter-priest', actorId: 'ren' },
+    { type: 'attack-start', nowMs: 0, comboId: 'hunter-priest', actorId: 'aya' },
+  ]);
+  const comboStart = events.find(({ type }) => type === 'combo-start');
+  assert.equal(comboStart.initiatorActorId, 'ren');
+  assert.deepEqual(comboStart.participants, participants);
+  assert.deepEqual(events.filter(({ type }) => type === 'attack-complete').map((event) => ({
+    actorId: event.actorId,
+    comboId: event.comboId,
+  })), [
+    { actorId: 'ren', comboId: 'hunter-priest' },
+    { actorId: 'aya', comboId: 'hunter-priest' },
+  ]);
+  assert.equal(events
+    .filter(({ type }) => type === 'hitbox-resolved')
+    .every(({ comboId }) => comboId === 'hunter-priest'), true);
+  assert.deepEqual(events.filter(({ type }) => type === 'hit').map((event) => ({
+    actorId: event.actorId,
+    targetId: event.targetId,
+    comboId: event.comboId,
+  })), [
+    { actorId: 'ren', targetId: 'oni', comboId: 'hunter-priest' },
+    { actorId: 'aya', targetId: 'oni', comboId: 'hunter-priest' },
+  ]);
+});
+
+test('combo validation failures are atomic and emit no partial lifecycle events', () => {
+  const validParticipants = [
+    { actorId: 'ren', attackId: 'slash' },
+    { actorId: 'aya', attackId: 'slash' },
+  ];
+  const cases = [
+    {
+      request: ['', 'ren', validParticipants],
+      expected: { ok: false, reason: 'invalid-combo-id' },
+    },
+    {
+      request: ['solo', 'ren', [validParticipants[0]]],
+      expected: { ok: false, reason: 'invalid-participants' },
+    },
+    {
+      request: ['duplicate', 'ren', [validParticipants[0], { actorId: 'ren', attackId: 'thrust' }]],
+      expected: { ok: false, reason: 'duplicate-participant', actorId: 'ren' },
+    },
+    {
+      request: ['wrong-lead', 'aya', validParticipants],
+      expected: { ok: false, reason: 'not-controlled-actor', controlledActorId: 'ren' },
+    },
+    {
+      request: ['absent-lead', 'ren', [validParticipants[1], { actorId: 'oni', attackId: 'thrust' }]],
+      expected: { ok: false, reason: 'initiator-not-participant', actorId: 'ren' },
+    },
+    {
+      request: ['mixed-side', 'ren', [validParticipants[0], { actorId: 'oni', attackId: 'thrust' }]],
+      expected: { ok: false, reason: 'faction-mismatch', actorId: 'oni' },
+    },
+    {
+      request: ['bad-attack', 'ren', [validParticipants[0], { actorId: 'aya', attackId: 'thrust' }]],
+      expected: { ok: false, reason: 'unknown-attack', actorId: 'aya', attackId: 'thrust' },
+    },
+  ];
+
+  for (const { request, expected } of cases) {
+    const engine = partyKernel({ enemyAi: null });
+    const before = engine.snapshot();
+    assert.deepEqual(engine.requestCombo(...request), expected);
+    assert.deepEqual(engine.snapshot(), before, expected.reason);
+    assert.deepEqual(engine.drainEvents(), [], expected.reason);
+  }
+
+  const defeatedCompanion = partyKernel({ enemyAi: null });
+  defeatedCompanion.getActor('aya').hp = 0;
+  const beforeDefeatedRequest = defeatedCompanion.snapshot();
+  assert.deepEqual(defeatedCompanion.requestCombo('fallen-pair', 'ren', validParticipants), {
+    ok: false,
+    reason: 'actor-defeated',
+    actorId: 'aya',
+  });
+  assert.deepEqual(defeatedCompanion.snapshot(), beforeDefeatedRequest);
+  assert.deepEqual(defeatedCompanion.drainEvents(), []);
+
+  const committedInitiator = partyKernel({ enemyAi: null });
+  committedInitiator.requestAttack('ren', 'slash');
+  committedInitiator.drainEvents();
+  const beforeCommittedRequest = committedInitiator.snapshot();
+  assert.deepEqual(committedInitiator.requestCombo('late-link', 'ren', validParticipants), {
+    ok: false,
+    reason: 'animation-commitment',
+    actorId: 'ren',
+    attackId: 'slash',
+    remainingMs: 0,
+  });
+  assert.deepEqual(committedInitiator.snapshot(), beforeCommittedRequest);
+  assert.deepEqual(committedInitiator.drainEvents(), []);
+
+  const ended = partyKernel({ enemyAi: null });
+  ended.conclude('defeat');
+  ended.drainEvents();
+  const beforeEndedRequest = ended.snapshot();
+  assert.deepEqual(ended.requestCombo('too-late', 'ren', validParticipants), {
+    ok: false,
+    reason: 'combat-ended',
+  });
+  assert.deepEqual(ended.snapshot(), beforeEndedRequest);
+  assert.deepEqual(ended.drainEvents(), []);
+});
+
+test('ordinary attacks retain their pre-combo snapshot and event shapes', () => {
+  const engine = partyKernel({ enemyAi: null });
+  engine.requestAttack('ren', 'slash');
+  assert.equal(Object.hasOwn(actorSnapshot(engine, 'ren').activeAttack, 'comboId'), false);
+  const start = engine.drainEvents().find(({ type }) => type === 'attack-start');
+  assert.equal(Object.hasOwn(start, 'comboId'), false);
+  engine.advance(140);
+  const complete = engine.drainEvents().find((event) => event.type === 'attack-complete' && event.actorId === 'ren');
+  assert.equal(Object.hasOwn(complete, 'comboId'), false);
 });
 
 test('companion and enemy AI are deterministic, target only hostile factions, and ignore neutral actors', () => {

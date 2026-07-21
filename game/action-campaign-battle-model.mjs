@@ -8,6 +8,10 @@
 
 import { ActionCombatKernel } from './action-combat.mjs';
 import {
+  HUNTER_PRIEST_COMBO_CONTRACT,
+  getHunterPriestComboAvailability,
+} from './action-combos.mjs';
+import {
   actionCooldownForRecovery,
   adaptActionEncounter,
   projectActionTerminalResult,
@@ -58,6 +62,10 @@ function deepFreeze(value) {
 
 function clone(value) {
   return value == null ? value : structuredClone(value);
+}
+
+function readableId(value) {
+  return String(value ?? '').split('-').map((part) => part ? `${part[0].toUpperCase()}${part.slice(1)}` : '').join(' ');
 }
 
 function actorTemplateMap(spec) {
@@ -364,6 +372,29 @@ export function getActionCampaignAttackChoices(session, actorId = session.kernel
   }));
 }
 
+/** UI-ready Hunter–Priest availability derived only from the shared contract. */
+export function getActionCampaignComboState(session, initiatorActorId = session.kernel.snapshot().controlledActorId) {
+  const kernelSnapshot = session.kernel.snapshot();
+  const availability = getHunterPriestComboAvailability({
+    kernelSnapshot,
+    initiatorActorId,
+    getAttackState: (actorId, attackId) => session.kernel.getAttackState(actorId, attackId),
+  });
+  const participants = availability.participants.map((participant) => ({
+    ...participant,
+    attackName: session.spec.kernelConfig.attacks[participant.attackId]?.name ?? readableId(participant.sourceSkillId),
+  }));
+  const active = kernelSnapshot.actors.some((actor) => (
+    actor.activeAttack?.comboId === HUNTER_PRIEST_COMBO_CONTRACT.id
+  ));
+  return deepFreeze({
+    ...availability,
+    active,
+    status: active ? 'active' : availability.available ? 'ready' : 'locked',
+    participants,
+  });
+}
+
 export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
   if (session.outcome) return snapshotActionCampaignBattle(session);
   const controlledActorId = session.kernel.snapshot().controlledActorId;
@@ -378,8 +409,34 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
       if (attackId) session.kernel.requestAttack(controlledActorId, attackId);
     }
   }
+  const controllerEvents = [];
+  if (input.comboPressed) {
+    const combo = getActionCampaignComboState(session, controlledActorId);
+    if (combo.available) {
+      const started = session.kernel.requestCombo(
+        HUNTER_PRIEST_COMBO_CONTRACT.id,
+        controlledActorId,
+        combo.attackRequests.map(({ actorId, attackId }) => ({ actorId, attackId })),
+      );
+      if (!started.ok) {
+        controllerEvents.push({
+          type: 'combo-blocked',
+          comboId: combo.comboId,
+          name: combo.name,
+          reasons: [{ code: started.reason, ...started }],
+        });
+      }
+    } else {
+      controllerEvents.push({
+        type: 'combo-blocked',
+        comboId: combo.comboId,
+        name: combo.name,
+        reasons: combo.reasons,
+      });
+    }
+  }
   session.kernel.advance(Math.max(0, Math.min(100, Math.round(Number(elapsedMs) || 0))));
-  const events = session.kernel.drainEvents();
+  const events = [...controllerEvents, ...session.kernel.drainEvents()];
   const kernelSnapshot = session.kernel.snapshot();
   session.recentEvents = events;
   const signals = objectiveSignals(session, kernelSnapshot, input);
@@ -408,6 +465,7 @@ export function snapshotActionCampaignBattle(session) {
     outcome: session.outcome,
     kernel: kernelSnapshot,
     objective: objectiveSnapshot(session, kernelSnapshot),
+    combo: getActionCampaignComboState(session, kernelSnapshot.controlledActorId),
     combatSatisfied: combatSatisfied(session, kernelSnapshot),
     recentEvents: clone(session.recentEvents),
   });

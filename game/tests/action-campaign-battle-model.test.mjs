@@ -5,10 +5,12 @@ import {
   advanceActionCampaignBattle,
   createActionCampaignBattleResult,
   createActionCampaignBattleSession,
+  getActionCampaignComboState,
   parseActionCampaignBattleQuery,
   settleActionCampaignBattleVictory,
   snapshotActionCampaignBattle,
 } from '../action-campaign-battle-model.mjs';
+import { HUNTER_PRIEST_COMBO_CONTRACT } from '../action-combos.mjs';
 import { createAdvancementState, getEncounterWinCount } from '../advancement.mjs';
 import { validateBattleResultRecord } from '../battle-result-contract.mjs';
 import { createLoadoutState } from '../loadout.mjs';
@@ -79,6 +81,67 @@ test('session composes the real encounter, authored action stage, loadout vitals
   const ren = snapshot.kernel.actors.find(({ id }) => id === 'ren');
   assert.equal(ren.position.x, session.stage.spawns.party[0].x);
   assert.equal(ren.maxHp > 104, true, 'shipped loadout HP modifier is applied over advancement HP');
+});
+
+test('Hunter–Priest combo is contract-locked when Lise and Mateus are absent', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c1-cinder-hounds',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const combo = getActionCampaignComboState(session);
+  assert.equal(combo.comboId, HUNTER_PRIEST_COMBO_CONTRACT.id);
+  assert.equal(combo.available, false);
+  assert.equal(combo.active, false);
+  assert.deepEqual(combo.participants.map(({ attackName }) => attackName), ['Dawn Bolt', 'Penitent Night']);
+  assert.ok(combo.reasons.some(({ code, actorId }) => code === 'participant-missing' && actorId === 'lise'));
+  assert.ok(combo.reasons.some(({ code, actorId }) => code === 'participant-missing' && actorId === 'mateus'));
+
+  const snapshot = advanceActionCampaignBattle(session, 0, { comboPressed: true });
+  assert.equal(snapshot.recentEvents.some(({ type }) => type === 'combo-start'), false);
+  assert.equal(snapshot.recentEvents.some(({ type }) => type === 'combo-blocked'), true);
+  assert.equal(snapshot.kernel.actors.every(({ activeAttack }) => activeAttack == null), true);
+});
+
+test('Hunter and Priest start atomically and retain both contributing-art cooldowns', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c4-widow-of-fog',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  assert.equal(session.kernel.switchControlledActor('lise').ok, true);
+  const ready = getActionCampaignComboState(session);
+  assert.equal(ready.available, true, JSON.stringify(ready.reasons));
+  assert.equal(ready.separationPx <= ready.maxAllySeparationPx, true);
+
+  let snapshot = advanceActionCampaignBattle(session, 0, { comboPressed: true });
+  const comboEvents = snapshot.recentEvents.filter(({ comboId }) => comboId === ready.comboId);
+  assert.equal(comboEvents.filter(({ type }) => type === 'combo-start').length, 1);
+  assert.equal(comboEvents.filter(({ type }) => type === 'attack-start').length, 2);
+  assert.equal(new Set(comboEvents.map(({ nowMs }) => nowMs)).size, 1, 'atomic start shares one kernel timestamp');
+  for (const participant of ready.participants) {
+    const actor = snapshot.kernel.actors.find(({ id }) => id === participant.actorId);
+    assert.equal(actor.activeAttack.attackId, participant.attackId);
+    assert.equal(actor.activeAttack.comboId, ready.comboId);
+    assert.equal(actor.attackCooldowns[participant.attackId], 0, 'cooldown begins after animation, not at combo request');
+  }
+
+  const completed = [];
+  for (let step = 0; step < 60; step += 1) {
+    snapshot = advanceActionCampaignBattle(session, 20);
+    completed.push(...snapshot.recentEvents.filter(({ type, comboId }) => type === 'attack-complete' && comboId === ready.comboId));
+    if (ready.participants.every(({ actorId }) => session.kernel.getActor(actorId).activeAttack == null)) break;
+  }
+  assert.deepEqual(completed.map(({ actorId }) => actorId).sort(), ['lise', 'mateus']);
+  for (const participant of ready.participants) {
+    const actor = session.kernel.getActor(participant.actorId);
+    assert.equal(actor.attackCooldowns[participant.attackId] > 0, true);
+    assert.equal(actor.offensiveCooldownRemainingMs > 0, true);
+  }
+  assert.equal(session.kernel.getActor('lise').attackCooldowns['party:lise:hunter-thrust'], 0,
+    'the combo preserves separate cooldown ownership and does not reset unrelated arts');
 });
 
 test('objective-authoritative terminal projection passes battle-result-contract', () => {

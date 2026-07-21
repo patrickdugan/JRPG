@@ -79,6 +79,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
                   return canvas?.dataset.partyArtState === 'ready'
                     && canvas?.dataset.enemyArtState === 'ready'
                     && canvas?.dataset.stageArtState === 'ready'
+                    && canvas?.dataset.comboAvailable === 'false'
                     && globalThis.__ACTION_CAMPAIGN_BATTLE__?.getSnapshot().kernel.nowMs > 0;
                 }"""
             )
@@ -96,6 +97,11 @@ def run_probe(chromium: Path) -> dict[str, object]:
                     continueHidden: document.querySelector('#continueCampaign').hidden,
                     returnTarget: document.querySelector('#continueCampaign').getAttribute('href'),
                     storageKeys: Object.keys(localStorage),
+                    comboAvailable: snapshot.combo.available,
+                    comboReasonCodes: snapshot.combo.reasons.map(reason => reason.code),
+                    comboName: document.querySelector('#comboTitle').textContent,
+                    comboArts: [...document.querySelectorAll('#comboArts li')].map(row => row.textContent),
+                    comboProximity: document.querySelector('#comboProximity').textContent,
                   };
                 }"""
             )
@@ -106,6 +112,15 @@ def run_probe(chromium: Path) -> dict[str, object]:
             require(before["continueHidden"] is True, f"Continue exposed before settlement: {before}")
             require(before["returnTarget"] == "campaign.html?probe=1", f"Return handoff drifted: {before}")
             require(before["storageKeys"] == [], f"Page load touched the isolated persistent profile: {before}")
+            require(before["comboAvailable"] is False, f"Cinder Hounds incorrectly exposed Hunter-Priest combo: {before}")
+            require("participant-missing" in before["comboReasonCodes"], f"Missing participant lock reason: {before}")
+            require(before["comboName"] == "Black Sun Concord", f"Combo contract name drifted: {before}")
+            require(len(before["comboArts"]) == 2, f"Contributing arts are not text-authoritative: {before}")
+            require("Proximity unavailable" in before["comboProximity"], f"Missing proximity readout: {before}")
+
+            page.locator("#actionCampaignCanvas").focus()
+            page.keyboard.press("l")
+            page.wait_for_function("() => document.querySelector('#eventLog').textContent.includes('unavailable')")
 
             page.locator("#actionCampaignCanvas").focus()
             page.keyboard.down("d")
@@ -158,6 +173,168 @@ def run_probe(chromium: Path) -> dict[str, object]:
             require(not page_errors, f"Page errors: {page_errors}")
             require(not delivery_errors, f"Delivery errors: {delivery_errors}")
             context.close()
+
+            combo_context = browser.new_context(viewport={"width": 1440, "height": 1200})
+            combo_page = combo_context.new_page()
+            combo_page.set_default_timeout(15_000)
+            combo_page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
+            combo_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            combo_page.on(
+                "response",
+                lambda response: delivery_errors.append({"url": response.url, "status": response.status})
+                if response.status >= 400
+                else None,
+            )
+            combo_response = combo_page.goto(
+                f"{base}/action-campaign-battle.html?encounter=c4-widow-of-fog"
+                "&return=campaign.html%3Fcombo-probe%3D1",
+                wait_until="domcontentloaded",
+            )
+            require(combo_response is not None and combo_response.status == 200,
+                    "Widow of Fog action page did not return HTTP 200.")
+            combo_page.wait_for_function(
+                """() => {
+                  const canvas = document.querySelector('#actionCampaignCanvas');
+                  return canvas?.dataset.partyArtState === 'ready'
+                    && canvas?.dataset.enemyArtState === 'ready'
+                    && canvas?.dataset.stageArtState === 'ready'
+                    && globalThis.__ACTION_CAMPAIGN_BATTLE__?.getSnapshot().kernel.nowMs > 0;
+                }"""
+            )
+            combo_page.locator("#actionCampaignCanvas").focus()
+            combo_page.keyboard.press("Tab")
+            combo_page.keyboard.press("Tab")
+            combo_page.wait_for_function(
+                """() => {
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  return snapshot.encounterId === 'c4-widow-of-fog'
+                    && snapshot.kernel.controlledActorId === 'lise'
+                    && snapshot.combo.available === true;
+                }"""
+            )
+            combo_ready = combo_page.evaluate(
+                """() => {
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  return {
+                    encounterId: snapshot.encounterId,
+                    controlledActorId: snapshot.kernel.controlledActorId,
+                    comboId: snapshot.combo.comboId,
+                    comboAvailable: snapshot.combo.available,
+                    participants: snapshot.combo.participants.map(({ actorId, attackId }) => ({ actorId, attackId })),
+                    separationPx: snapshot.combo.separationPx,
+                    storageKeys: Object.keys(localStorage),
+                  };
+                }"""
+            )
+            require(combo_ready["comboAvailable"] is True, f"Widow combo was not ready: {combo_ready}")
+            require(combo_ready["controlledActorId"] == "lise", f"Two Tab presses did not select Lise: {combo_ready}")
+            require(combo_ready["storageKeys"] == [], f"Fresh combo context had persistent storage: {combo_ready}")
+            require(
+                {participant["actorId"] for participant in combo_ready["participants"]} == {"lise", "mateus"},
+                f"Wrong combo participants: {combo_ready}",
+            )
+
+            combo_page.evaluate(
+                """() => {
+                  const events = [];
+                  const seen = new Set();
+                  const collect = () => {
+                    const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                    for (const event of snapshot.recentEvents) {
+                      if (event.comboId !== snapshot.combo.comboId) continue;
+                      const key = JSON.stringify([
+                        event.nowMs, event.type, event.actorId, event.attackId, event.targetActorId,
+                      ]);
+                      if (!seen.has(key)) {
+                        seen.add(key);
+                        events.push(event);
+                      }
+                    }
+                    requestAnimationFrame(collect);
+                  };
+                  globalThis.__ACTION_COMBO_PROBE_EVENTS__ = events;
+                  requestAnimationFrame(collect);
+                }"""
+            )
+            combo_page.keyboard.press("l")
+            combo_page.wait_for_function(
+                """() => {
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  const active = snapshot.kernel.actors.filter(actor => actor.activeAttack?.comboId === snapshot.combo.comboId);
+                  return active.length === 2
+                    && active.some(actor => actor.id === 'lise')
+                    && active.some(actor => actor.id === 'mateus');
+                }"""
+            )
+            combo_started = combo_page.evaluate(
+                """() => {
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  return snapshot.kernel.actors
+                    .filter(actor => actor.activeAttack?.comboId === snapshot.combo.comboId)
+                    .map(actor => ({
+                      actorId: actor.id,
+                      attackId: actor.activeAttack.attackId,
+                      comboId: actor.activeAttack.comboId,
+                    }));
+                }"""
+            )
+            require(
+                {actor["actorId"] for actor in combo_started} == {"lise", "mateus"},
+                f"Combo did not atomically commit exactly Lise and Mateus: {combo_started}",
+            )
+            require(
+                all(actor["comboId"] == combo_ready["comboId"] for actor in combo_started),
+                f"Active attacks lost combo provenance: {combo_started}",
+            )
+            combo_page.wait_for_function(
+                """() => {
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  const completions = globalThis.__ACTION_COMBO_PROBE_EVENTS__
+                    .filter(event => event.type === 'attack-complete' && event.comboId === snapshot.combo.comboId);
+                  const completedActors = new Set(completions.map(event => event.actorId));
+                  const lise = snapshot.kernel.actors.find(actor => actor.id === 'lise');
+                  const mateus = snapshot.kernel.actors.find(actor => actor.id === 'mateus');
+                  return completedActors.has('lise')
+                    && completedActors.has('mateus')
+                    && lise?.activeAttack === null
+                    && mateus?.activeAttack === null
+                    && lise.attackCooldowns['party:lise:dawn-bolt'] > 0
+                    && mateus.attackCooldowns['party:mateus:penitent-night'] > 0
+                    && lise.attackCooldowns['party:lise:hunter-thrust'] === 0;
+                }"""
+            )
+            combo_after = combo_page.evaluate(
+                """() => {
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  const lise = snapshot.kernel.actors.find(actor => actor.id === 'lise');
+                  const mateus = snapshot.kernel.actors.find(actor => actor.id === 'mateus');
+                  return {
+                    completedActorIds: [...new Set(globalThis.__ACTION_COMBO_PROBE_EVENTS__
+                      .filter(event => event.type === 'attack-complete' && event.comboId === snapshot.combo.comboId)
+                      .map(event => event.actorId))].sort(),
+                    liseDawnBoltCooldownMs: lise.attackCooldowns['party:lise:dawn-bolt'],
+                    mateusPenitentNightCooldownMs: mateus.attackCooldowns['party:mateus:penitent-night'],
+                    liseHunterThrustCooldownMs: lise.attackCooldowns['party:lise:hunter-thrust'],
+                    activeComboActorIds: snapshot.kernel.actors
+                      .filter(actor => actor.activeAttack?.comboId === snapshot.combo.comboId)
+                      .map(actor => actor.id),
+                    storageKeys: Object.keys(localStorage),
+                  };
+                }"""
+            )
+            require(combo_after["completedActorIds"] == ["lise", "mateus"],
+                    f"Both linked arts did not complete: {combo_after}")
+            require(combo_after["liseDawnBoltCooldownMs"] > 0, f"Dawn Bolt cooldown missing: {combo_after}")
+            require(combo_after["mateusPenitentNightCooldownMs"] > 0,
+                    f"Penitent Night cooldown missing: {combo_after}")
+            require(combo_after["liseHunterThrustCooldownMs"] == 0,
+                    f"Combo incorrectly touched Hunter Thrust cooldown: {combo_after}")
+            require(combo_after["activeComboActorIds"] == [], f"Combo attacks did not finish: {combo_after}")
+            require(combo_after["storageKeys"] == [], f"Combo flow touched persistent storage: {combo_after}")
+            require(not console_errors, f"Console errors: {console_errors}")
+            require(not page_errors, f"Page errors: {page_errors}")
+            require(not delivery_errors, f"Delivery errors: {delivery_errors}")
+            combo_context.close()
             browser.close()
             return {
                 "ok": True,
@@ -169,7 +346,20 @@ def run_probe(chromium: Path) -> dict[str, object]:
                 "cooldownTimerDeltaMs": cooldown_before["remainingMs"] - after["offenseCooldownMs"],
                 "objectiveSupported": before["objectiveSupported"],
                 "continueLocked": before["continueHidden"],
+                "comboLocked": not before["comboAvailable"],
+                "comboReasonCodes": before["comboReasonCodes"],
+                "comboEncounterId": combo_ready["encounterId"],
+                "comboReady": combo_ready["comboAvailable"],
+                "comboParticipants": combo_ready["participants"],
+                "comboStartedActors": combo_started,
+                "comboCompletedActorIds": combo_after["completedActorIds"],
+                "comboCooldownsMs": {
+                    "liseDawnBolt": combo_after["liseDawnBoltCooldownMs"],
+                    "mateusPenitentNight": combo_after["mateusPenitentNightCooldownMs"],
+                    "liseHunterThrust": combo_after["liseHunterThrustCooldownMs"],
+                },
                 "isolatedStorageKeys": after["storageKeys"],
+                "comboStorageKeys": combo_after["storageKeys"],
                 "consoleErrors": console_errors,
                 "pageErrors": page_errors,
                 "deliveryErrors": delivery_errors,

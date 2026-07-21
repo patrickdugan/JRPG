@@ -56,6 +56,7 @@
           <span><kbd>W</kbd> Jump</span>
           <span><kbd>J</kbd> Weapon</span>
           <span><kbd>K</kbd> Art</span>
+          <span><kbd>L</kbd> Hunter–Priest combo</span>
           <span><kbd>E</kbd> Hold objective action</span>
           <span><kbd>Tab</kbd> Switch party</span>
           <span><kbd>R</kbd> Restart</span>
@@ -95,6 +96,14 @@
         <p class="muted">Attack animation commitment stops movement. Cooldowns begin only when the animation finishes; movement is free while they count down.</p>
       </article>
 
+      <article class="panel combo-panel" aria-labelledby="comboTitle">
+        <p class="panel-kicker">LINKED PARTY ART</p>
+        <h2 id="comboTitle">Hunter–Priest combo</h2>
+        <p id="comboAvailability" class="combo-availability">Checking party formation…</p>
+        <ul id="comboArts" class="combo-arts" aria-label="Contributing combo arts"></ul>
+        <p id="comboProximity" class="muted"></p>
+      </article>
+
       <article class="panel log-panel" aria-labelledby="logTitle">
         <p class="panel-kicker">ACCESSIBLE EVENT AUTHORITY</p>
         <h2 id="logTitle">Battle callout</h2>
@@ -115,6 +124,7 @@
       <button type="button" data-action-control="jump">Jump</button>
       <button type="button" data-action-control="attack-0" class="weapon-button">Weapon</button>
       <button type="button" data-action-control="attack-1" class="art-button">Art</button>
+      <button type="button" data-action-control="combo" class="combo-button">Hunter + Priest</button>
       <button type="button" data-held-control="interact">Objective</button>
       <button type="button" data-action-control="switch">Switch</button>
       <button type="button" data-held-control="right" aria-label="Move right">→</button>

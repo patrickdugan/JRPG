@@ -442,29 +442,121 @@ export class ActionCombatKernel {
     return this._beginAttack(actorId, attackId);
   }
 
+  /** Atomically begin a synchronized attack for two or more living party actors. */
+  requestCombo(comboId, initiatorActorId, participants) {
+    const normalizedComboId = typeof comboId === 'string' ? comboId.trim() : '';
+    if (!normalizedComboId) return { ok: false, reason: 'invalid-combo-id' };
+    if (this.outcome) return { ok: false, reason: 'combat-ended' };
+    if (!Array.isArray(participants) || participants.length < 2) {
+      return { ok: false, reason: 'invalid-participants' };
+    }
+
+    const normalizedInitiatorActorId = String(initiatorActorId ?? '');
+    const initiator = this.getActor(normalizedInitiatorActorId);
+    if (!initiator) return { ok: false, reason: 'unknown-actor', actorId: normalizedInitiatorActorId };
+    if (initiator.faction !== 'player' || initiator.id !== this.controlledActorId) {
+      return { ok: false, reason: 'not-controlled-actor', controlledActorId: this.controlledActorId };
+    }
+    if (initiator.hp <= 0) return { ok: false, reason: 'actor-defeated', actorId: initiator.id };
+
+    const normalizedParticipants = [];
+    const participantActorIds = new Set();
+    for (const [participantIndex, participant] of participants.entries()) {
+      if (!participant || typeof participant !== 'object') {
+        return { ok: false, reason: 'invalid-participant', participantIndex };
+      }
+      const actorId = String(participant.actorId ?? '');
+      const attackId = String(participant.attackId ?? '');
+      if (!actorId || !attackId) {
+        return { ok: false, reason: 'invalid-participant', participantIndex };
+      }
+      if (participantActorIds.has(actorId)) {
+        return { ok: false, reason: 'duplicate-participant', actorId };
+      }
+      participantActorIds.add(actorId);
+      normalizedParticipants.push({ actorId, attackId });
+    }
+    if (!participantActorIds.has(initiator.id)) {
+      return { ok: false, reason: 'initiator-not-participant', actorId: initiator.id };
+    }
+
+    const validatedParticipants = [];
+    for (const participant of normalizedParticipants) {
+      const actor = this.getActor(participant.actorId);
+      if (!actor) return { ok: false, reason: 'unknown-actor', actorId: participant.actorId };
+      if (actor.hp <= 0) return { ok: false, reason: 'actor-defeated', actorId: actor.id };
+      if (actor.faction !== initiator.faction) {
+        return { ok: false, reason: 'faction-mismatch', actorId: actor.id };
+      }
+      const attack = this.attacks[participant.attackId];
+      if (!attack || !actor.attackIds.includes(participant.attackId)) {
+        return {
+          ok: false,
+          reason: 'unknown-attack',
+          actorId: actor.id,
+          attackId: participant.attackId,
+        };
+      }
+      const state = this.getAttackState(actor.id, attack.id);
+      if (!state.ready) {
+        return {
+          ok: false,
+          reason: state.reason,
+          actorId: actor.id,
+          attackId: attack.id,
+          remainingMs: state.effectiveCooldownRemainingMs,
+        };
+      }
+      validatedParticipants.push({ actor, attack });
+    }
+
+    this._emit('combo-start', {
+      comboId: normalizedComboId,
+      initiatorActorId: initiator.id,
+      participants: normalizedParticipants,
+    });
+    for (const { actor, attack } of validatedParticipants) {
+      this._startAttack(actor, attack, { comboId: normalizedComboId });
+    }
+    return {
+      ok: true,
+      comboId: normalizedComboId,
+      initiatorActorId: initiator.id,
+      startedAtMs: this.nowMs,
+      participants: normalizedParticipants,
+    };
+  }
+
   _beginAttack(actorId, attackId) {
     const state = this.getAttackState(actorId, attackId);
     if (!state) return { ok: false, reason: 'unknown-attack' };
     if (!state.ready) return { ok: false, reason: state.reason, remainingMs: state.effectiveCooldownRemainingMs };
     const actor = this.getActor(actorId);
     const attack = this.attacks[attackId];
+    return this._startAttack(actor, attack);
+  }
+
+  _startAttack(actor, attack, { comboId = null } = {}) {
     actor.activeAttack = {
-      attackId,
+      attackId: attack.id,
       elapsedMs: 0,
       hitboxResolved: false,
       startedAtMs: this.nowMs,
+      ...(comboId == null ? {} : { comboId }),
     };
     actor.movementIntent = { ...actor.movementIntent };
     this._emit('attack-start', {
-      actorId,
-      attackId,
+      actorId: actor.id,
+      attackId: attack.id,
+      ...(comboId == null ? {} : { comboId }),
       phase: phaseFor(actor.activeAttack, attack),
       animationDurationMs: attack.windupMs + attack.activeMs + attack.recoveryMs,
     });
     return {
       ok: true,
-      actorId,
-      attackId,
+      actorId: actor.id,
+      attackId: attack.id,
+      ...(comboId == null ? {} : { comboId }),
       startedAtMs: this.nowMs,
       animationEndsAtMs: this.nowMs + attack.windupMs + attack.activeMs + attack.recoveryMs,
     };
@@ -598,7 +690,7 @@ export class ActionCombatKernel {
         this._resolveHitbox(actor, attack, active);
       }
       const animationDurationMs = attack.windupMs + attack.activeMs + attack.recoveryMs;
-      if (active.elapsedMs >= animationDurationMs) this._completeAttack(actor, attack);
+      if (active.elapsedMs >= animationDurationMs) this._completeAttack(actor, attack, active);
     }
   }
 
@@ -635,6 +727,7 @@ export class ActionCombatKernel {
         actorId: attacker.id,
         targetId,
         attackId: attack.id,
+        ...(active.comboId == null ? {} : { comboId: active.comboId }),
         delivery: attack.delivery,
         essence: attack.essence,
         ...resolution,
@@ -646,12 +739,13 @@ export class ActionCombatKernel {
     this._emit('hitbox-resolved', {
       actorId: attacker.id,
       attackId: attack.id,
+      ...(active.comboId == null ? {} : { comboId: active.comboId }),
       targetIds,
       hitbox,
     });
   }
 
-  _completeAttack(actor, attack) {
+  _completeAttack(actor, attack, active) {
     const sharedCooldownMs = levelAdjustedCooldownMs(actor.offensiveCooldownMs, actor.level);
     const authoredIndividualMs = attack.cooldownMs == null
       ? 0
@@ -665,6 +759,7 @@ export class ActionCombatKernel {
     this._emit('attack-complete', {
       actorId: actor.id,
       attackId: attack.id,
+      ...(active.comboId == null ? {} : { comboId: active.comboId }),
       sharedCooldownMs,
       individualCooldownMs,
     });
