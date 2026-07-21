@@ -82,7 +82,7 @@ test('catalogue and neutral fallback are deeply immutable and exact-only', () =>
   assert.equal(deeplyFrozen(NEUTRAL_FIELD_INTERACTION_COPY), true);
 
   const strongbox = getFieldInteractionCopy('ngi-wrecked-carrack', 'reliquary-lock');
-  assert.equal(strongbox.label, 'Varga Strongbox');
+  assert.equal(strongbox.label, 'Dražanić Strongbox');
   assert.equal(getFieldInteractionCopy('ngi-wrecked-carrack', 'RELIQUARY-LOCK'), NEUTRAL_FIELD_INTERACTION_COPY);
   assert.equal(getFieldInteractionCopy('wrong-level', 'reliquary-lock'), NEUTRAL_FIELD_INTERACTION_COPY);
   assert.equal(getFieldInteractionCopy(null, 'reliquary-lock'), NEUTRAL_FIELD_INTERACTION_COPY);
@@ -110,7 +110,7 @@ test('visible field copy contains no machine slugs or superseded devotional-obje
   assert.equal(getFieldInteractionCopy('tkm-cedar-service-path', 'temple-charm-chest').label, 'Tampered registry cache');
   assert.match(getFieldInteractionCopy('tkm-cedar-service-path', 'temple-charm-chest').completion, /Defaced Registry Token/u);
   assert.equal(getFieldInteractionCopy('sdg-market-lane', 'printer-stall').label, 'Sayo’s Print Stall');
-  assert.equal(getFieldInteractionCopy('ngi-wrecked-carrack', 'reliquary-lock').label, 'Varga Strongbox');
+  assert.equal(getFieldInteractionCopy('ngi-wrecked-carrack', 'reliquary-lock').label, 'Dražanić Strongbox');
 });
 
 test('Campaign uses exact presentation copy while retaining stable runtime IDs', () => {

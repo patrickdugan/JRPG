@@ -14,6 +14,19 @@ import { getDefaultBrowserStorage } from './browser-storage.mjs';
 export const STORYWORLD_SCHEMA_VERSION = 1;
 export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWORLD_SCHEMA_VERSION}`;
 
+// Prose-only catalog migrations retain every cluster, option, reaction, and
+// property key.  Exact former identities are accepted once, validated against
+// the current structural catalog, and immediately re-frozen with current
+// hashes.  This keeps authored-character revisions from discarding a run.
+export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:0066e58a7aaf8d749c2937c356015210277a86b730f467c032c6ceec9f1156c5',
+    catalogSignature: 'sha256:fc3584c223773b6df0da2986a26a9393aba46a6d749d2d2b8186b22898c0a3ec',
+    migrationId: 'lise-to-nikola-canon-v1',
+  }),
+]);
+
 const CAMPAIGN_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
 const CAMPAIGN_BEAT_INDEX = new Map(CAMPAIGN_BEAT_IDS.map((beatId, index) => [beatId, index]));
 const CLUSTER_INDEX = new Map(STORYWORLD_CLUSTERS.map((cluster, index) => [cluster.id, index]));
@@ -415,11 +428,32 @@ export function serializeStoryworldState(state) {
 }
 
 export function loadStoryworldState(serializedOrPayload) {
+  let payload = serializedOrPayload;
   if (typeof serializedOrPayload === 'string') {
-    try { return validateStoryworldPayload(JSON.parse(serializedOrPayload)); }
+    try { payload = JSON.parse(serializedOrPayload); }
     catch { return Object.freeze({ ok: false, errors: Object.freeze(['Storyworld save is not valid JSON.']) }); }
   }
-  return validateStoryworldPayload(serializedOrPayload);
+  const current = validateStoryworldPayload(payload);
+  if (current.ok) return current;
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES.find((identity) => (
+    payload?.sourceIFID === identity.sourceIFID
+      && payload?.sourceHash === identity.sourceHash
+      && payload?.catalogSignature === identity.catalogSignature
+  ));
+  if (!legacyIdentity) return current;
+  const migrated = validateStoryworldPayload({
+    ...payload,
+    sourceIFID: STORYWORLD_CATALOG.sourceIFID,
+    sourceHash: STORYWORLD_CATALOG.sourceHash,
+    catalogSignature: STORYWORLD_CATALOG_SIGNATURE,
+  });
+  if (!migrated.ok) return migrated;
+  return Object.freeze({
+    ...migrated,
+    migrated: true,
+    migrationId: legacyIdentity.migrationId,
+    previousIdentity: legacyIdentity,
+  });
 }
 
 export function createStoryworldStorageAdapter(storage = getDefaultBrowserStorage(), key = DEFAULT_STORYWORLD_SAVE_KEY) {
@@ -430,8 +464,16 @@ export function createStoryworldStorageAdapter(storage = getDefaultBrowserStorag
         const serialized = storage?.getItem?.(key);
         if (serialized == null) return Object.freeze({ ok: true, found: false });
         const loaded = loadStoryworldState(serialized);
+        if (loaded.ok && loaded.migrated) {
+          storage?.setItem?.(key, serializeStoryworldState(loaded.state));
+        }
         return loaded.ok
-          ? Object.freeze({ ok: true, found: true, state: loaded.state })
+          ? Object.freeze({
+            ok: true,
+            found: true,
+            state: loaded.state,
+            ...(loaded.migrated ? { migrated: true, migrationId: loaded.migrationId } : {}),
+          })
           : Object.freeze({ ok: false, found: true, errors: loaded.errors });
       } catch {
         return Object.freeze({ ok: false, found: false, errors: Object.freeze(['Storyworld storage could not be read.']) });

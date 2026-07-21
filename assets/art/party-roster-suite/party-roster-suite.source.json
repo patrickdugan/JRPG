@@ -1,0 +1,20 @@
+{
+  "assetId": "party-roster-key-art-v2",
+  "formatVersion": 2,
+  "authorship": "original-code-native-pixel-composition",
+  "canonicalCombatAtlas": "../party-combat-suite/party-combat-actions.png",
+  "canonicalFieldSource": "../party-field-suite/party-field-suite.source.json",
+  "canvas": {"width": 1440, "height": 900},
+  "sprite": {"pose": "idle", "sourceWidth": 48, "sourceHeight": 64, "integerScale": 5, "baselineY": 748},
+  "rowOrder": ["ren", "aya", "lise", "mateus", "genta", "kiku"],
+  "presentationNames": {
+    "ren": "Ren Ishikawa",
+    "aya": "Aya Shinohara",
+    "lise": "Nikola Dražanić",
+    "mateus": "Father Mateus Avelar",
+    "genta": "Genta Mononobe",
+    "kiku": "Kiku Nawa"
+  },
+  "legacyCompatibility": {"lise": "stable internal actor and atlas row key retained for Nikola Dražanić"},
+  "visualContract": "six original party silhouettes on a rain-dark cedar stage; no lettering, logos, sacred-object props, generated-raster inputs, or real-person likenesses"
+}

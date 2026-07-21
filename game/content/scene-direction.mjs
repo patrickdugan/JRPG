@@ -158,14 +158,14 @@ export const SCENE_DIRECTIONS = deepFreeze([
     entranceCue: 'Ren and Aya slow before the first grate after clearing the path; the prisoner chooses when to approach the bars.',
     gestureCue: ['AYA', 'Hold up the open casebook at a readable angle and wait for assent before writing a witness note.'],
     blockingCue: 'Keep the route forward clear while Ren marks the return path, making the promise actionable rather than ornamental.',
-    transitionCue: 'A key turns offscreen; cut to the rear lock just before Lise’s hand enters frame.',
+    transitionCue: 'A key turns offscreen; cut to the rear lock just before Nikola’s hand enters frame.',
   }),
   scene('chapter-2', 'c2-03-lises-interruption', {
     atmosphere: 'A torn paper screen stirs between three strangers, each carrying a different piece of court access.',
     musicCue: 'A taut bowed line meets two clipped plucks, then pauses beneath the exchange of names.',
     cameraCue: 'Use a triangular composition that shifts toward balance as introductions replace weapons and permits.',
-    entranceCue: 'Lise drops from the stair landing beside the rear lock, blade low but route-commanding; Ren turns without drawing first.',
-    gestureCue: ['LISE', 'Show the stolen key in an open palm after naming herself, keeping the blade pointed at the floor.'],
+    entranceCue: 'Nikola drops from the stair landing beside the rear lock, blade low but route-commanding; Ren turns without drawing first.',
+    gestureCue: ['NIKOLA', 'Show the stolen key in an open palm after naming himself, keeping the blade pointed at the floor.'],
     blockingCue: 'Aya stands at the triangle’s open side with the fragment visible, preventing either armed figure from owning the frame.',
     transitionCue: 'Match the key’s rotation to the first moving beam on the bell stair.',
   }),
@@ -173,7 +173,7 @@ export const SCENE_DIRECTIONS = deepFreeze([
     atmosphere: 'Wind pushes rain through the open tower while old beams telegraph every sweep with a cedar groan.',
     musicCue: 'A climbing five-note figure resets at each safe landing; beam creaks remain louder than the score.',
     cameraCue: 'Tilt up the full stair once, then lock to readable side angles that preserve hazard lanes and landing depth.',
-    entranceCue: 'Lise tests the first landing from the front, Ren watches the beam cycle, and Aya approaches the checkpoint lantern.',
+    entranceCue: 'Nikola tests the first landing from the front, Ren watches the beam cycle, and Aya approaches the checkpoint lantern.',
     gestureCue: ['REN', 'Raise two fingers with the beam rhythm, then lower them on the safe crossing beat.'],
     blockingCue: 'Stage one character per landing so no sprite obscures a warning tile or implies a missing jump mechanic.',
     transitionCue: 'The checkpoint flame bends downward and becomes its reflection in the undercrypt water.',
@@ -182,26 +182,26 @@ export const SCENE_DIRECTIONS = deepFreeze([
     atmosphere: 'Name slips tremble above shin-deep water; storm charge turns marked pools briefly glass-blue.',
     musicCue: 'Submerged chimes answer a low pulse, with dry lantern notes marking safe ground.',
     cameraCue: 'Move from the slips to their bell cords, then pull wide to include brazier warning, water lanes, and enemies.',
-    entranceCue: 'Aya enters first with her brush raised above the water; Lise follows the cords while Ren checks the dry alcove.',
-    gestureCue: ['LISE', 'Separate one loose slip from the feeding cord with the flat of her glove, careful not to tear the name.'],
+    entranceCue: 'Aya enters first with her brush raised above the water; Nikola follows the cords while Ren checks the dry alcove.',
+    gestureCue: ['NIKOLA', 'Separate one loose slip from the feeding cord with the flat of his glove, careful not to tear the name.'],
     blockingCue: 'Keep all three on distinct terrain tags so the spoken truth and tactical water rule occupy one composition.',
     transitionCue: 'A released slip drifts toward the sealed chamber door; cut as the lock answers from within.',
   }),
   scene('chapter-2', 'c2-06-name-from-europe', {
     atmosphere: 'The cracked bell chamber exhales cold dust into the cell block; open locks answer a fight ended without execution.',
     musicCue: 'The European bowed motif and evidence theme share a wary minor interval, neither resolving into reconciliation.',
-    cameraCue: 'Begin with Mateus below the broken ward, then widen to include Lise, witnesses, and the physical cell lever.',
-    entranceCue: 'Mateus steps away from the guards’ passage with empty hands; Lise approaches only far enough to see the Varga mark.',
+    cameraCue: 'Begin with Mateus below the broken ward, then widen to include Nikola, witnesses, and the physical cell lever.',
+    entranceCue: 'Mateus steps away from the guards’ passage with empty hands; Nikola approaches only far enough to see the Dražanić mark.',
     gestureCue: ['MATEUS', 'Place the bell key on the floor between himself and the party, then turn toward the approaching guards.'],
-    blockingCue: 'Keep Ren beside the lever, Aya with the freed witnesses, and Lise between Mateus and neither exit nor absolution.',
+    blockingCue: 'Keep Ren beside the lever, Aya with the freed witnesses, and Nikola between Mateus and neither exit nor absolution.',
     transitionCue: 'The pulled lever opens six cell doors; their vertical bars dissolve into Sodegaura’s dock masts.',
   }),
 
   scene('chapter-3', 'c3-01-separate-arrivals', {
     atmosphere: 'Market awnings divide a busy port into overlapping errands, languages, and watchful inspection lanes.',
     musicCue: 'Three compact motifs enter from separate registers and align only at the eastern supply gate.',
-    cameraCue: 'Follow Ren, Aya, and Lise in successive lateral passes before joining them in a reflected shop window.',
-    entranceCue: 'Ren carries supply tags, Aya joins a paper queue, and Lise approaches ship brokers from another street.',
+    cameraCue: 'Follow Ren, Aya, and Nikola in successive lateral passes before joining them in a reflected shop window.',
+    entranceCue: 'Ren carries supply tags, Aya joins a paper queue, and Nikola approaches ship brokers from another street.',
     gestureCue: ['AYA', 'Adjust one route marker on the shared map, then fold it so no single traveler carries the full plan.'],
     blockingCue: 'Keep the party separated by civilian traffic but within mutual sightlines, showing coordination without procession.',
     transitionCue: 'A customs pole lowers across frame and becomes the checkpoint’s dividing line.',
@@ -212,7 +212,7 @@ export const SCENE_DIRECTIONS = deepFreeze([
     cameraCue: 'Hold a level two-shot between Genta and Ren, inserting only the mismatched permit and copied evidence.',
     entranceCue: 'Genta steps from the customs booth before the party crosses; Ren stops openly and leaves his hands visible.',
     gestureCue: ['GENTA', 'Turn the permit sideways to expose the prisoner tag, then lower his inspection staff rather than wave them through.'],
-    blockingCue: 'Aya keeps the evidence between both men while Lise watches the gate mechanism instead of threatening the guard.',
+    blockingCue: 'Aya keeps the evidence between both men while Nikola watches the gate mechanism instead of threatening the guard.',
     transitionCue: 'Genta’s lowered staff points toward the archive door; the camera follows it inside.',
   }),
   scene('chapter-3', 'c3-03-ledger-customs-house', {
@@ -228,7 +228,7 @@ export const SCENE_DIRECTIONS = deepFreeze([
     atmosphere: 'Rain docks glow in three route colors while families study risks beside a waiting low boat.',
     musicCue: 'Three route variations share the same calm pulse, refusing to label one choice morally superior.',
     cameraCue: 'Survey each route from the witnesses’ position, then return to the map without privileging the party’s viewpoint.',
-    entranceCue: 'Aya carries the route board to the families; Ren and Lise take stations only after a witness indicates a preference.',
+    entranceCue: 'Aya carries the route board to the families; Ren and Nikola take stations only after a witness indicates a preference.',
     gestureCue: ['AYA', 'Turn the board outward and trace each danger with the same measured pace before stepping back.'],
     blockingCue: 'Place witnesses closest to the choice markers, party members at possible escort positions, and the boat operator at the exit.',
     transitionCue: 'The selected lantern color fills the frame and clears into the chosen playable route.',
@@ -272,11 +272,11 @@ export const SCENE_DIRECTIONS = deepFreeze([
   }),
   scene('chapter-4', 'c4-03-varga-journal', {
     atmosphere: 'The captain’s cabin lists with every swell; salt-stiff pages expose a family legend built over a sale.',
-    musicCue: 'Lise’s bowed theme loses its heroic upper note while Mateus’s cipher pulse remains quietly underneath.',
-    cameraCue: 'Hold the journal open between Lise and Mateus, giving the incriminating entry more weight than either reaction.',
-    entranceCue: 'Lise retrieves the journal from a collapsed locker; Mateus remains at the cabin door until she reads aloud.',
-    gestureCue: ['LISE', 'Close the journal around Aya’s evidence marker, not around the page that would flatter her inheritance.'],
-    blockingCue: 'Keep Aya’s empty evidence sleeve visible beside Lise and Mateus separated by the tilted chart table.',
+    musicCue: 'Nikola’s bowed theme loses its heroic upper note while Mateus’s cipher pulse remains quietly underneath.',
+    cameraCue: 'Hold the journal open between Nikola and Mateus, giving the incriminating entry more weight than either reaction.',
+    entranceCue: 'Nikola retrieves the journal from a collapsed locker; Mateus remains at the cabin door until he reads aloud.',
+    gestureCue: ['NIKOLA', 'Close the journal around Aya’s evidence marker, not around the page that would flatter his inheritance.'],
+    blockingCue: 'Keep Aya’s empty evidence sleeve visible beside Nikola and Mateus separated by the tilted chart table.',
     transitionCue: 'The journal enters the sleeve; a wave rocks the lamp and reveals the survivors’ hatch below.',
   }),
   scene('chapter-4', 'c4-04-survivors-hold', {
@@ -391,11 +391,11 @@ export const SCENE_DIRECTIONS = deepFreeze([
   }),
   scene('chapter-6', 'c6-04-printmaker-flight', {
     atmosphere: 'Rain slicks roof tiles around a civilian courier whose lighter bundle still cannot outrun armed clerks.',
-    musicCue: 'Fast roof percussion follows foot placement, with Lise’s protection motif anchored to the courier’s pace.',
-    cameraCue: 'Track beside the courier and preserve landing tiles ahead; cut to Lise only when she chooses the person over the crate.',
-    entranceCue: 'The courier climbs from the workshop hatch; Lise arrives from the rear roof as clerks close the other approach.',
-    gestureCue: ['LISE', 'Push the heavy crate into cover, then offer the courier a steady forearm across the roof gap.'],
-    blockingCue: 'Keep the courier on the protected inside line, Lise between them and attackers, and the bundle attached to the person.',
+    musicCue: 'Fast roof percussion follows foot placement, with Nikola’s protection motif anchored to the courier’s pace.',
+    cameraCue: 'Track beside the courier and preserve landing tiles ahead; cut to Nikola only when he chooses the person over the crate.',
+    entranceCue: 'The courier climbs from the workshop hatch; Nikola arrives from the rear roof as clerks close the other approach.',
+    gestureCue: ['NIKOLA', 'Push the heavy crate into cover, then offer the courier a steady forearm across the roof gap.'],
+    blockingCue: 'Keep the courier on the protected inside line, Nikola between them and attackers, and the bundle attached to the person.',
     transitionCue: 'The courier descends beyond the last roof; tilt down with them to the canal lock.',
   }),
   scene('chapter-6', 'c6-05-all-copies-leave', {
@@ -437,10 +437,10 @@ export const SCENE_DIRECTIONS = deepFreeze([
   }),
   scene('chapter-7', 'c7-04-lises-revised-oath', {
     atmosphere: 'A single road lantern lights the inherited oath beside a clean page that has not yet claimed authority.',
-    musicCue: 'Lise’s bowed theme returns without its hunting cadence, supported by a plain sustained note.',
-    cameraCue: 'Frame Lise writing at the alcove ledge with Mateus outside her shoulder line, present but not made her subject.',
-    entranceCue: 'Lise enters alone and opens the family text; Mateus stops at the lantern edge when he recognizes it.',
-    gestureCue: ['LISE', 'Strike through the purge claim once, then write the protective promise on a separate titled page.'],
+    musicCue: 'Nikola’s bowed theme returns without its hunting cadence, supported by a plain sustained note.',
+    cameraCue: 'Frame Nikola writing at the alcove ledge with Mateus outside his shoulder line, present but not made his subject.',
+    entranceCue: 'Nikola enters alone and opens the family text; Mateus stops at the lantern edge when he recognizes it.',
+    gestureCue: ['NIKOLA', 'Strike through the purge claim once, then write the protective promise on a separate titled page.'],
     blockingCue: 'Keep the revised oath nearest the public route and the inherited text farther inside the alcove for evidence storage.',
     transitionCue: 'The fresh ink dries under lantern heat; its protective line becomes the rescue-route boundary.',
   }),
@@ -475,9 +475,9 @@ export const SCENE_DIRECTIONS = deepFreeze([
   scene('chapter-8', 'c8-03-black-gate-bargain', {
     atmosphere: 'The causeway is flanked by visible evacuation boats and witnesses, making the offered exchange impossible to privatize.',
     musicCue: 'Enma’s polished bell chord meets the network motif as an unbroken, collective low note.',
-    cameraCue: 'Keep the representative in the four-person confrontation; avoid isolating Mateus or Lise as sacrificial portraits.',
+    cameraCue: 'Keep the representative in the four-person confrontation; avoid isolating Mateus or Nikola as sacrificial portraits.',
     entranceCue: 'Lady Enma descends from the sealed gate while network representatives arrive from the protected causeway lanes.',
-    gestureCue: ['MATEUS', 'Step beside Lise rather than in front of her, then turn to hear the representative’s refusal.'],
+    gestureCue: ['MATEUS', 'Step beside Nikola rather than in front of him, then turn to hear the representative’s refusal.'],
     blockingCue: 'Place the offered pair within the network line and Enma alone before the closed gate, with no surrender lane between.',
     transitionCue: 'The representative raises the agreed lantern; its blue flare becomes the breach signal.',
   }),
@@ -538,9 +538,9 @@ export const SCENE_DIRECTIONS = deepFreeze([
   }),
   scene('chapter-9', 'c9-05-dawn-at-observatory', {
     atmosphere: 'First daylight reaches the observatory through cracked wards while the final bell shadow still covers the floor.',
-    musicCue: 'Mateus’s cipher motif sheds its destructive bass and joins Lise’s revised theme on a spare protective chord.',
+    musicCue: 'Mateus’s cipher motif sheds its destructive bass and joins Nikola’s revised theme on a spare protective chord.',
     cameraCue: 'Hold the blood rite as a boundary opening, not a bodily spectacle; track its light to the route it creates for others.',
-    entranceCue: 'Mateus approaches the ward from the party line; Lise holds the rear path open and Ren waits at the exposed threshold.',
+    entranceCue: 'Mateus approaches the ward from the party line; Nikola holds the rear path open and Ren waits at the exposed threshold.',
     gestureCue: ['MATEUS', 'Press his marked palm to the ward, then deliberately close the destructive rite sigil with his other hand.'],
     blockingCue: 'Keep companions behind and beside Mateus, with the opened door extending past him rather than ending on him.',
     transitionCue: 'The ward cracks into a sunrise line that becomes the final battle boundary.',
@@ -568,7 +568,7 @@ export const SCENE_DIRECTIONS = deepFreeze([
     atmosphere: 'Sodegaura’s storehouse is busy with medicine inventories, road tools, testimony appointments, and supervised cache maps.',
     musicCue: 'Care, road, oath, and admission motifs pass quietly between work stations without a reunion fanfare.',
     cameraCue: 'Move through each party member’s concrete task in one continuous warehouse path, ending at the outgoing crates.',
-    entranceCue: 'Kiku opens the storehouse for deliveries; Genta, Lise, and Mateus arrive separately with labeled work records.',
+    entranceCue: 'Kiku opens the storehouse for deliveries; Genta, Nikola, and Mateus arrive separately with labeled work records.',
     gestureCue: ['KIKU', 'Check the first crate seal, hand its inventory to a local carrier, and lift the next box with Ren.'],
     blockingCue: 'Assign each speaker a working station under local oversight, with clear routes for staff to enter and correct them.',
     transitionCue: 'The delivered crate passes through the door; its lantern mark leads up Takamine’s repaired stair.',
@@ -647,7 +647,9 @@ export function validateSceneDirections(directions = SCENE_DIRECTIONS, campaign 
   const canonical = canonicalBeatEntries(campaign);
   const canonicalByKey = new Map(canonical.map((entry) => [entry.key, entry]));
   const canonicalByBeatId = new Map(canonical.map((entry) => [entry.beat.id, entry]));
-  const castSpeakers = new Set(Object.values(campaign.cast).map((member) => String(member.id).toUpperCase()));
+  const castSpeakers = new Set(Object.values(campaign.cast).map((member) => (
+    member.speakerId ?? String(member.id).toUpperCase()
+  )));
   const records = Array.isArray(directions) ? directions : [];
 
   if (!Array.isArray(directions)) addError(errors, 'invalid-collection', 'Scene directions must be an array.');

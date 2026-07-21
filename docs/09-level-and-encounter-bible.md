@@ -34,7 +34,7 @@ The FP-1 route is 28–34 minutes on first clear. It contains no random encounte
 | `tkm-rain-gate` | 20 × 12 | Closed main gate is physically blocked; the right service opening is visible. | Inspect the supply cart, then use the service path. Teach interaction range and eight-way field movement. |
 | `tkm-cedar-service-path` | 20 × 12 | Retaining wall, low cart, optional chest route, and chapel door. | One authored encounter trigger, then a careful optional chest route. |
 | `fp1-wet-cedar-stage` | 12 × 7 | Two cedar-root blockers and two harmless puddles split approach lanes. | Cinder Hounds teach Cut 75% / Pierce 125%; Wisp teaches Radiance 125% / Umbral 0%. |
-| `tkm-abandoned-chapel` | 20 × 12 | Grates and paper screens make prisoner interactions visible; rear door requires Lise’s key. | Witness notes are optional; Lise changes the party without a forced battle. |
+| `tkm-abandoned-chapel` | 20 × 12 | Grates and paper screens make prisoner interactions visible; rear door requires Nikola’s key. | Witness notes are optional; Nikola changes the party without a forced battle. |
 | `tkm-bell-stair` | 20 × 12 | One-space beam lane, three cracked boards, safe landings, checkpoint lantern. | Creak cue is 0.5 seconds before a 2.5-second beam cycle; hit is 15% max HP, returns to safe landing, and cannot kill. |
 | `tkm-flooded-undercroft` | 20 × 12 | Archive shelves frame a water lane and lantern alcove. | Inspect brazier before battle: Storm + marked water applies Chill; dry lantern space is safe. |
 | `fp1-flooded-archive-stage` | 12 × 7 | Shelves at the rear, water in the middle, dry spaces on both flanks. | Flank a Guarded Enforcer with Pierce/Radiance; avoid a forced move into conditional water. |
@@ -43,7 +43,7 @@ The FP-1 route is 28–34 minutes on first clear. It contains no random encounte
 
 ### FP-1 battle-board legend
 
-`#` blocker; `~` water or harmless puddle; `L` dry lantern; `R` Ren; `A` Aya; `L` next to a party position means Lise only where stated; `H` Cinder Hound; `W` Ash Wisp or ward; `M` hostile boss; `E` Enforcer. Board data, not these diagrams, is authoritative.
+`#` blocker; `~` water or harmless puddle; `L` dry lantern; `R` Ren; `A` Aya; `N` Nikola; `H` Cinder Hound; `W` Ash Wisp or ward; `M` hostile boss; `E` Enforcer. Board data, not these diagrams, is authoritative.
 
 #### Wet Cedar Path — `fp1-wet-cedar-stage`
 
@@ -72,7 +72,7 @@ y2  ....~~E~....
 y3  ....~..~....
 y4  #L........L#
 y5  #..........#
-y6  ....ARL.....
+y6  ....ARN.....
     012345678901
 ```
 
@@ -87,7 +87,7 @@ y6  ....ARL.....
 y0  ###......###
 y1  ...L.W......
 y2  #....##.....
-y3  #.RL.....M..
+y3  #.RN.....M..
 y4  #.A.........
 y5  ...L..W.....
 y6  ###......###
@@ -104,8 +104,8 @@ y6  ###......###
 | Encounter | Enemy Ledger / intent | Telegraphed answer | Reward |
 | --- | --- | --- | --- |
 | `fp1-cedar-path` | Hounds: Cut 75%, Pierce 125%, Ember 75%. Wisp: Radiance 125%, Umbral 0%. | Spend Pace out of the Lunge line or Guard; analyze voluntarily or after the second resisted Cut. | River Salve; path clear. |
-| `fp1-flooded-archive` | Enforcer: Cut 75%, Pierce/Radiance 125%, Guard prevents pushes. Moths: Ember 125%, Frost 75%. | Use Lise’s angle, keep an ally from Shield Hook water pull, commit after moth Recovery 2. | Bell-room key and Ward Tonic. |
-| `fp1-mateus` | Mateus has a targetable Blood Ward; seals are Pierce/Radiance weak. | Avoid Litany line, then use its Recovery 3 for seal damage, healing, or setup. | Temple key; Lise permanent; Mateus becomes an accountable source. |
+| `fp1-flooded-archive` | Enforcer: Cut 75%, Pierce/Radiance 125%, Guard prevents pushes. Moths: Ember 125%, Frost 75%. | Use Nikola’s angle, keep an ally from Shield Hook water pull, commit after moth Recovery 2. | Bell-room key and Ward Tonic. |
+| `fp1-mateus` | Mateus has a targetable Blood Ward; seals are Pierce/Radiance weak. | Avoid Litany line, then use its Recovery 3 for seal damage, healing, or setup. | Temple key; Nikola permanent; Mateus becomes an accountable source. |
 
 ## Campaign encounter kits
 

@@ -21,6 +21,7 @@ CONTACT_NAME = "party-portrait-expressions-contact-sheet.png"
 MANIFEST_NAME = "manifest.json"
 README_NAME = "README.md"
 ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
+REVIEW_ROW_LABELS = {"lise": "NIKOLA"}
 COLUMNS = ("neutral", "resolve", "strain", "soften", "concern", "anger", "surprise", "quiet")
 CELL = 64
 GUTTER = 4
@@ -87,7 +88,9 @@ class Portrait:
 FACE = {
     "ren": {"left":18,"right":45,"top":12,"jaw":44,"chin":48,"eyeY":27,"mouthY":37},
     "aya": {"left":19,"right":44,"top":11,"jaw":43,"chin":48,"eyeY":27,"mouthY":37},
-    "lise": {"left":19,"right":45,"top":10,"jaw":44,"chin":49,"eyeY":26,"mouthY":37},
+    # The legacy `lise` atlas key is Nikola Dražanić. His broader jaw, high
+    # forehead, moustache and clipped beard must read distinctly from Mateus.
+    "lise": {"left":17,"right":47,"top":9,"jaw":45,"chin":51,"eyeY":27,"mouthY":38},
     "mateus": {"left":20,"right":45,"top":10,"jaw":43,"chin":50,"eyeY":27,"mouthY":38},
     "genta": {"left":16,"right":47,"top":11,"jaw":46,"chin":49,"eyeY":27,"mouthY":38},
     "kiku": {"left":18,"right":44,"top":11,"jaw":43,"chin":48,"eyeY":27,"mouthY":37},
@@ -100,6 +103,15 @@ def draw_shoulders(p: Portrait, character_id: str):
         p.poly([(9,59),(11,51),(20,46),(44,46),(55,51),(57,59)], "primary")
         p.rect((27,45,38,51), "secondary")
         p.rect((39,47,44,52), "brass")
+    elif character_id == "lise":
+        # Square aristocratic doublet beneath a practical rain cloak.
+        p.poly([(5,59),(8,49),(19,42),(46,42),(57,49),(59,59)], "outline")
+        p.poly([(8,59),(11,50),(21,45),(44,45),(54,51),(57,59)], "primary")
+        p.poly([(20,45),(31,50),(43,45),(48,59),(16,59)], "secondary")
+        # Plain falling band: historical clothing, not a sacred-object motif.
+        p.poly([(24,43),(31,49),(39,43),(42,48),(34,54),(29,54),(21,48)], "paper")
+        p.rect((43,47,48,52), "brass")
+        p.px(45,48,"candle")
     elif character_id == "mateus":
         p.poly([(10,59),(15,48),(25,43),(40,43),(50,49),(55,59)], "outline")
         p.poly([(13,59),(17,49),(27,45),(38,45),(47,50),(52,59)], "primary")
@@ -114,10 +126,6 @@ def draw_shoulders(p: Portrait, character_id: str):
         elif character_id == "aya":
             p.poly([(17,50),(26,46),(32,55),(39,46),(48,51),(46,59),(18,59)], "secondary")
             p.rect((46,51,51,58), "paper")
-        elif character_id == "lise":
-            p.poly([(11,54),(24,46),(37,50),(50,53),(53,59),(10,59)], "secondary")
-            p.rect((39,48,44,53), "brass")
-            p.px(41,49,"paper")
         elif character_id == "kiku":
             p.poly([(15,51),(24,46),(31,54),(41,46),(49,52),(47,59),(16,59)], "primary")
             p.rect((45,50,51,57), "secondary")
@@ -135,6 +143,9 @@ def draw_face_shape(p: Portrait, character_id: str):
     left,right,top,jaw,chin=f["left"],f["right"],f["top"],f["jaw"],f["chin"]
     if character_id == "genta":
         points=[(left+2,top),(right-3,top),(right,top+8),(right,jaw-5),(right-5,jaw+2),(36,chin),(24,chin),(left,jaw-6),(left,top+8)]
+    elif character_id == "lise":
+        points=[(left+3,top),(right-4,top),(right+1,top+9),(right,jaw-4),
+                (right-5,jaw+2),(38,chin),(28,chin),(left+1,jaw-4),(left,top+9)]
     elif character_id == "mateus":
         points=[(left+3,top),(right-4,top),(right,top+8),(right-1,jaw-2),(38,chin),(30,chin),(left+1,jaw-4),(left,top+9)]
     elif character_id == "aya":
@@ -160,8 +171,12 @@ def draw_hair(p: Portrait, character_id: str, f: dict):
         p.rect((15,25,20,42),"hair"); p.rect((43,23,48,42),"hair")
         p.px(16,39,"accent")
     elif character_id == "lise":
-        p.poly([(left-2,top+9),(left,top-2),(30,top-5),(right-4,top-3),(right+2,top+4),(41,top+7),(34,top+4),(28,top+10),(21,top+15)],"hair")
-        p.poly([(18,19),(20,11),(27,8),(26,24)],"hair"); p.line([(24,10),(35,7),(42,11)],"light")
+        # Backswept dark hair exposes a high forehead and widow's peak.
+        p.poly([(left-2,top+9),(left,top-1),(27,top-5),(39,top-4),
+                (right+2,top+2),(right,top+8),(42,top+4),(36,top+2),
+                (32,top+7),(27,top+3),(21,top+10)],"hair")
+        p.line([(20,13),(29,7),(40,8),(46,12)],"light")
+        p.rect((16,17,19,25),"hair")
     elif character_id == "mateus":
         p.poly([(left-1,top+9),(left+3,top-2),(30,top-4),(right-5,top-1),(right+1,top+7),(40,top+5),(35,top+1),(30,top+3),(24,top+9),(22,25)],"hair")
         p.line([(26,11),(32,8),(39,10)],"light")
@@ -226,6 +241,14 @@ def draw_features(p: Portrait, character_id: str, f: dict):
     if character_id == "mateus":
         p.line([(23,eye_y+5),(25,eye_y+9)],"faceDeep")
         p.line([(40,eye_y+4),(41,eye_y+8)],"faceDeep")
+    if character_id == "lise":
+        # Narrow moustache and clipped pointed beard stay visible through all
+        # eight expression mouths without masking their semantic shapes.
+        p.line([(28,mouth_y-3),(33,mouth_y-2)],"hair",2)
+        p.line([(36,mouth_y-2),(42,mouth_y-3)],"hair",2)
+        p.line([(31,mouth_y+3),(36,mouth_y+6),(40,mouth_y+3)],"hair",2)
+        p.rect((34,mouth_y+5,37,mouth_y+9),"hair")
+        p.px(38,mouth_y+7,"hair")
     if character_id == "genta":
         p.line([(23,eye_y+6),(28,eye_y+8)],"faceDeep")
 
@@ -289,7 +312,8 @@ def render_contact(atlas: Image.Image) -> Image.Image:
     scale,left,top=3,96,52; cw=ch=CELL*scale
     contact=Image.new("RGBA",(left+cw*len(COLUMNS)+16,top+ch*len(ROWS)+16),rgba("#0b1020")); draw=ImageDraw.Draw(contact)
     for column,text in enumerate(COLUMNS): label(draw,left+column*cw+12,18,text,rgba("#d7c99a"))
-    for row,character_id in enumerate(ROWS): label(draw,8,top+row*ch+86,character_id,rgba("#d7c99a"),2)
+    for row,character_id in enumerate(ROWS):
+        label(draw,8,top+row*ch+86,REVIEW_ROW_LABELS.get(character_id,character_id),rgba("#d7c99a"),2)
     for row in range(len(ROWS)):
         for column in range(len(COLUMNS)):
             x,y=left+column*cw,top+row*ch
@@ -323,7 +347,7 @@ def build_files() -> dict[str,bytes]:
         "validation":{"frameCount":len(frames),"distinctRgbaFrameHashes":len({frame["rgbaSha256"] for frame in frames}),"binaryTransparency":True,"minimumObservedGutter":GUTTER,"deterministicCommand":"python build_party_portrait_suite.py --check"},
         "review":{"visualInspection":"pending","humanExpressionReadability":"pending","externalCulturalReview":"pending","mateusOriginalityConstraint":"applied"}}
     manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode("utf-8")
-    readme=f"""# Party portrait expression suite\n\nOriginal, code-authored portrait-scale redraws for all six canonical party members. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input. Every face is a fictional design. Mateus has original age lines, facial proportions, and hair with no real-person reference.\n\n- `{SOURCE_PATH.name}`: editable face-shape, costume, expression, and anchor contract.\n- `{ATLAS_NAME}`: transparent {atlas.width} × {atlas.height} runtime candidate; {len(ROWS)} rows × {len(COLUMNS)} columns × {CELL} × {CELL}, with no transparent reserve columns.\n- `{CONTACT_NAME}`: labeled {contact.width} × {contact.height} checkerboard review sheet; not for runtime use.\n- `{MANIFEST_NAME}`: exact frame rectangles, eye lines, mouth/focus anchors, expression semantics, source/export hashes, and review state.\n\nColumns are neutral, resolve, strain, soften, concern, anger, surprise, and quiet. These are the complete eight production expression keys; speaking in-betweens, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_portrait_suite.py` to rebuild or `python build_party_portrait_suite.py --check` to byte-compare all generated outputs.\n"""
+    readme=f"""# Party portrait expression suite\n\nOriginal, code-authored portrait-scale redraws for Ren, Aya, Nikola, Mateus, Genta, and Kiku. The stable third-row key remains `lise` for runtime compatibility, but its pixels and NIKOLA review label present Nikola Dražanić with an original broad male face, high forehead, narrow moustache, clipped beard, oxblood doublet, and plain falling band. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input and no face uses a real-person likeness.\n\n- `{SOURCE_PATH.name}`: editable face-shape, costume, expression, and anchor contract.\n- `{ATLAS_NAME}`: transparent {atlas.width} × {atlas.height} runtime candidate; {len(ROWS)} rows × {len(COLUMNS)} columns × {CELL} × {CELL}, with no transparent reserve columns.\n- `{CONTACT_NAME}`: labeled {contact.width} × {contact.height} checkerboard review sheet; not for runtime use.\n- `{MANIFEST_NAME}`: exact frame rectangles, eye lines, mouth/focus anchors, expression semantics, source/export hashes, and review state.\n\nColumns are neutral, resolve, strain, soften, concern, anger, surprise, and quiet. These are the complete eight production expression keys; speaking in-betweens, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_portrait_suite.py` to rebuild or `python build_party_portrait_suite.py --check` to byte-compare all generated outputs.\n"""
     return {ATLAS_NAME:atlas_data,CONTACT_NAME:contact_data,MANIFEST_NAME:manifest_data,README_NAME:readme.encode("utf-8")}
 
 

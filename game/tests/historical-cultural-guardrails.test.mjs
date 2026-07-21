@@ -52,7 +52,7 @@ test('sacred-object display corrections preserve save-stable identifiers', () =>
 
   const strongbox = getLevel('ngi-wrecked-carrack').interactables.find(({ id }) => id === 'reliquary-lock');
   assert.equal(strongbox.id, 'reliquary-lock');
-  assert.equal(strongbox.label, 'Varga Strongbox');
+  assert.equal(strongbox.label, 'Dražanić Strongbox');
 });
 
 test('canonical content and production directions avoid superseded sacred-object language', () => {
@@ -84,8 +84,8 @@ test('travel, confession, and consultant requirements are explicit', () => {
 
   assert.match(CAMPAIGN.cast.mateus.background, /Goa and Macao before 1614/u);
   assert.match(CAMPAIGN.cast.mateus.background, /remained clandestinely after the ban/u);
-  assert.match(CAMPAIGN.cast.lise.background, /Adriatic–Goa–Macao route/u);
-  assert.match(CAMPAIGN.cast.lise.background, /displaced Christians, brokers, and copied mission correspondence/u);
+  assert.match(CAMPAIGN.cast.lise.background, /Ragusa–Lisbon–Goa–Melaka–Macao route/u);
+  assert.match(CAMPAIGN.cast.lise.background, /almost no Japanese beyond memorized port phrases/u);
   assert.match(camp, /hears confession, imposes penance, and guards the sacramental seal/u);
   assert.match(audit, /external consultant review remains pending/u);
   assert.match(audit, /https:\/\/www\.mlit\.go\.jp\/tagengo-db\/en\/R1-00781\.html/u);

@@ -122,7 +122,8 @@ const partyProfile = (id, name, stats, skillIds, resistances = {}) => Object.fre
 export const PARTY_PROFILES = Object.freeze({
   ren: partyProfile('ren', 'Ren Ishikawa', { hp: 118, spirit: 32, power: 12, guard: 10, speed: 104 }, ['courier-cut', 'cinder-route']),
   aya: partyProfile('aya', 'Aya', { hp: 96, spirit: 36, power: 10, guard: 9, speed: 101 }, ['warding-script'], { essence: { umbral: 0.75 } }),
-  lise: partyProfile('lise', 'Lise Varga', { hp: 108, spirit: 30, power: 13, guard: 10, speed: 108 }, ['hunter-thrust', 'dawn-bolt']),
+  // The `lise` key remains opaque save compatibility for Nikola's party slot.
+  lise: partyProfile('lise', 'Nikola Dražanić', { hp: 108, spirit: 30, power: 13, guard: 10, speed: 108 }, ['hunter-thrust', 'dawn-bolt']),
   mateus: partyProfile('mateus', 'Father Mateus Avelar', { hp: 126, spirit: 42, power: 14, guard: 12, speed: 94 }, ['penitent-night'], { essence: { umbral: 0.5 } }),
   genta: partyProfile('genta', 'Genta', { hp: 148, spirit: 26, power: 15, guard: 15, speed: 84 }, ['pilgrim-maul']),
   kiku: partyProfile('kiku', 'Kiku', { hp: 102, spirit: 34, power: 11, guard: 10, speed: 99 }, ['cold-medicine'], { essence: { frost: 0.75 } }),

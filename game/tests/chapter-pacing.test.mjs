@@ -10,7 +10,7 @@ const audit = createChapterPacingAudit();
 
 test('checked-in chapter checkpoints exactly match the quantity-derived audit', () => {
   assert.deepEqual(CHAPTER_PACING_CHECKPOINTS, audit.checkpoints);
-  assert.equal(CHAPTER_PACING_CHECKPOINTS.signature, 'fnv1a32:dd7a4469');
+  assert.equal(CHAPTER_PACING_CHECKPOINTS.signature, 'fnv1a32:9d08b163');
   assert.equal(Object.isFrozen(CHAPTER_PACING_CHECKPOINTS), true);
   assert.equal(Object.isFrozen(CHAPTER_PACING_CHECKPOINTS.chapters[0]), true);
   assert.equal(serializeChapterPacingCheckpoints(audit.checkpoints), `${JSON.stringify(audit.checkpoints, null, 2)}\n`);
@@ -26,9 +26,9 @@ test('chapter checkpoints cover the canonical campaign and reconcile to the refe
     CHAPTER_PACING_CHECKPOINTS.chapters.reduce((total, chapter) => total + chapter.targetMs, 0),
     CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs,
   );
-  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs, 73_915_967);
-  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMinutes, 1_231.933);
-  assert.equal(audit.reconciliation.durationAuditEstimatedMinutes, 1_231.933);
+  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs, 73_937_967);
+  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMinutes, 1_232.299);
+  assert.equal(audit.reconciliation.durationAuditEstimatedMinutes, 1_232.299);
   assert.equal(audit.reconciliation.chapterTargetMs, CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs);
   assert.equal(audit.reconciliation.requiredRepeatPresentationMs, 36_800);
   for (const chapter of CAMPAIGN.chapters) {

@@ -29,6 +29,7 @@ import {
 import { serializeSceneOperationState } from '../scene-operation-runtime.mjs';
 import {
   createStoryworldState,
+  LEGACY_STORYWORLD_CATALOG_IDENTITIES,
   loadStoryworldState,
   serializeStoryworldState,
 } from '../storyworld-runtime.mjs';
@@ -145,6 +146,32 @@ function legacyV1Checkpoint(currentCheckpoint) {
   return { ...body, signature: `fnv1a32:${fnv1a32(JSON.stringify(body))}` };
 }
 
+function preNikolaStoryworldCheckpoint(currentCheckpoint) {
+  const identity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[0];
+  const records = currentCheckpoint.records.map((record) => {
+    if (record.id !== 'storyworld') return record;
+    const state = JSON.parse(record.serialized);
+    return {
+      ...record,
+      serialized: JSON.stringify({
+        ...state,
+        sourceIFID: identity.sourceIFID,
+        sourceHash: identity.sourceHash,
+        catalogSignature: identity.catalogSignature,
+      }),
+    };
+  });
+  const body = {
+    ...Object.fromEntries(Object.entries(currentCheckpoint).filter(([key]) => key !== 'signature')),
+    summary: {
+      ...currentCheckpoint.summary,
+      storyworldCatalogSignature: identity.catalogSignature,
+    },
+    records,
+  };
+  return { ...body, signature: `fnv1a32:${fnv1a32(JSON.stringify(body))}` };
+}
+
 test('recovery checkpoint round-trips all fourteen exact authorities with a reconciled Storyworld summary', () => {
   const storage = new MemoryStorage(completeEntries());
   const created = createRecoveryCheckpoint(storage, { createdAtEpochMs: 1_700_000_000_000 });
@@ -207,6 +234,33 @@ test('signed v1 checkpoints remain valid and restore a synthesized proof-ineligi
   assert.equal(migratedReceipt.state.runId, RUN_ID);
   assert.equal(destination.getItem(LEGACY_RUN_RECEIPT_V2_SAVE_KEY), null,
     'restore writes the migrated receipt to the active key instead of a stale fallback key');
+});
+
+test('signed pre-Nikola checkpoints restore all fourteen authorities with migrated Storyworld identity', () => {
+  const current = createRecoveryCheckpoint(
+    new MemoryStorage(completeEntries()),
+    { createdAtEpochMs: 1_700_000_000_002 },
+  ).checkpoint;
+  const legacy = preNikolaStoryworldCheckpoint(current);
+  const validated = validateRecoveryCheckpoint(legacy);
+  assert.equal(validated.ok, true, validated.errors?.join(' '));
+  assert.equal(validated.requiresMigration, true);
+  assert.equal(validated.sourceSchemaVersion, 2);
+  assert.equal(validated.migrationId, 'lise-to-nikola-canon-v1');
+  assert.equal(validated.migrationRecord.id, 'storyworld');
+
+  const destination = new MemoryStorage(
+    RECOVERY_CHECKPOINT_AUTHORITIES.map(({ id, key }) => [key, `later-${id}`]),
+  );
+  const restored = restoreRecoveryCheckpoint(destination, legacy);
+  assert.equal(restored.ok, true, restored.errors?.join(' '));
+  assert.equal(restored.writesApplied, 14);
+  assert.equal(restored.migrationId, 'lise-to-nikola-canon-v1');
+  const storyworldRecord = RECOVERY_CHECKPOINT_AUTHORITIES.at(-1);
+  const loaded = loadStoryworldState(destination.getItem(storyworldRecord.key));
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(Object.hasOwn(loaded, 'migrated'), false, 'restored authority already uses current hashes');
+  assert.notEqual(loaded.state.catalogSignature, LEGACY_STORYWORLD_CATALOG_IDENTITIES[0].catalogSignature);
 });
 
 test('checkpoint creation and validation reject omissions, corruption, mixed runs, and signature drift before writes', () => {

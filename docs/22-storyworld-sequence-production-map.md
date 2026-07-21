@@ -11,7 +11,7 @@ This is the production map for the ten implemented Storyworld clusters. The auth
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 1,653 words and at most 19 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 14.598 reference minutes. Combined with the current 308.927-minute canonical reference, the 80-scene route is 323.525 minutes (about 5.39 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 1,757 words and at most 19 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 15.118 reference minutes. Combined with the current 309.249-minute canonical reference, the 80-scene route is 324.367 minutes (about 5.41 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
 
 ## Carry-forward contract
 
@@ -39,10 +39,10 @@ For a related battle, the presentation card carries the selected decision text, 
    - Consequences: **Two Routes, Two Custodians** / **Capacity Chooses the Order**.
    - Carry-forward: **Decision carried into encounter** context for `c3-dock-patrol`, including Sayo's selected route conditions and their resolved consequence.
 
-4. **A Margin in the Varga Journal** (`sw4-margin-varga-journal`)
+4. **A Margin in the Dražanić Ledger** (`sw4-margin-varga-journal`, save-stable legacy ID)
    - Anchor: `c4-03-varga-journal`; placement: **after level** (`after-beat`, `after-level-consequence`).
    - Related encounter IDs: none.
-   - Consequences: **An Inheritance Entered as Evidence** / **The Deadline Beside the Gap**.
+   - Consequences: **A House Entered as Evidence** / **The Deadline Beside the Gap**.
    - Carry-forward: durable inheritance, custody, and archive-limit context for later Storyworld reactions; no battle card.
 
 5. **The Cipher Handoff** (`sw5-cipher-handoff`)

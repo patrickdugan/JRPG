@@ -1,6 +1,6 @@
 # Party portrait expression suite
 
-Original, code-authored portrait-scale redraws for all six canonical party members. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input. Every face is a fictional design. Mateus has original age lines, facial proportions, and hair with no real-person reference.
+Original, code-authored portrait-scale redraws for Ren, Aya, Nikola, Mateus, Genta, and Kiku. The stable third-row key remains `lise` for runtime compatibility, but its pixels and NIKOLA review label present Nikola Dražanić with an original broad male face, high forehead, narrow moustache, clipped beard, oxblood doublet, and plain falling band. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input and no face uses a real-person likeness.
 
 - `party-portrait-suite.source.json`: editable face-shape, costume, expression, and anchor contract.
 - `party-portrait-expressions.png`: transparent 512 × 384 runtime candidate; 6 rows × 8 columns × 64 × 64, with no transparent reserve columns.

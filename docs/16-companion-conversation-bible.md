@@ -12,7 +12,7 @@
 
 The lantern talks carry relationship change that would overcrowd the route scenes. They are not confession dispensers or hidden romance points. Each pairing begins with a concrete disagreement about evidence, custody, violence, care, faith, or responsibility and revisits that disagreement as the campaign changes what both people know.
 
-Mateus's participation follows the story's central limit: useful testimony and changed conduct do not purchase pardon. Lise can recognize an action without becoming responsible for his redemption. Persecuted communities retain agency and are never reduced to scenery for a European character's moral crisis.
+Mateus's participation follows the story's central limit: useful testimony and changed conduct do not purchase pardon. Nikola can recognize an action without becoming responsible for his redemption. Their abrasive hunter–priest rapport may carry humor and tactical trust, but it does not let either European decide Japanese stakes. Persecuted communities retain agency and are never reduced to scenery for a European character's moral crisis.
 
 The talks introduce no historical official, real-person likeness, borrowed franchise terminology, traversal ability, collectible sacred object, or secret ending requirement.
 
@@ -20,9 +20,9 @@ The talks introduce no historical official, real-person likeness, borrowed franc
 
 | Production pack | Pairings |
 | --- | --- |
-| Early | Ren–Aya, Ren–Lise, Aya–Lise, Ren–Mateus, Aya–Mateus |
-| Middle | Lise–Mateus, Ren–Genta, Aya–Genta, Lise–Genta, Mateus–Genta |
-| Late | Ren–Kiku, Aya–Kiku, Lise–Kiku, Mateus–Kiku, Genta–Kiku |
+| Early | Ren–Aya, Ren–Nikola, Aya–Nikola, Ren–Mateus, Aya–Mateus |
+| Middle | Nikola–Mateus, Ren–Genta, Aya–Genta, Nikola–Genta, Mateus–Genta |
+| Late | Ren–Kiku, Aya–Kiku, Nikola–Kiku, Mateus–Kiku, Genta–Kiku |
 
 Every pairing has six canonical slots. A later talk requires the prior talk for that pair, even if a late save has already passed all story unlock beats. This prevents character development from appearing out of order.
 
@@ -78,7 +78,7 @@ The quantity audit counts only text a canonical first-choice playthrough can act
 
 The canonical visible path contains 3,914 acknowledged dialogue lines and 76,547 visible words. These quantities are derived from the exact shipped records; no authored activity-minute declaration is added.
 
-The bounded completion witness starts from the zero-time canonical campaign result, completes all 90 talks through public runtime transitions, records the first response for each, refuses all 90 replay attempts, and keeps recorded playtime at zero. All 90 talks are also placed at exact unlock frontiers in the optional 215-activity completionist route. Its prose-bound catalogue signature is `fnv1a32:f5d8ce7d`; the completion signature is `fnv1a32:f248f943`. This proves deterministic reachability and line coverage. It does not prove how long a person reads, reflects, or chooses.
+The bounded completion witness starts from the zero-time canonical campaign result, completes all 90 talks through public runtime transitions, records the first response for each, refuses all 90 replay attempts, and keeps recorded playtime at zero. All 90 talks are also placed at exact unlock frontiers in the optional 215-activity completionist route. Its prose-bound catalogue signature is `fnv1a32:27c27bb7`; the completion signature is `fnv1a32:316369e1`. This proves deterministic reachability and line coverage. It does not prove how long a person reads, reflects, or chooses.
 
 ## Writing review checklist
 

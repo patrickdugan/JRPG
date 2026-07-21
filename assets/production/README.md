@@ -1,12 +1,12 @@
 # Bells of the Black Chrysanthemum - Production References
 
-These original, project-bound PNG files were generated with the built-in image-generation workflow. All six files are production references only. The 2026-07-18 party and enemy atlases formerly supplied provisional runtime pixels, but the browser build now uses deterministic editable suites under `assets/art/`; the generated copies stay here solely as design and migration receipts.
+These original, project-bound PNG files were generated with the built-in image-generation workflow. All six files are production references only. The 2026-07-18 party and enemy atlases formerly supplied provisional runtime pixels, but the browser build now uses deterministic editable suites under `assets/art/`; the generated copies stay here solely as design and migration receipts. The former roster depicts the retired Lise concept and is explicitly obsolete: no browser surface may load it after the Nikola Dražanić migration.
 
 Use [the animation bible](../../docs/10-animation-bible.md) and [the art-direction contract](../../docs/05-art-direction.md) to rebuild all game art as editable, authored assets. Do not cut pixels, text, or UI out of these images.
 
 | Filename | Dimensions | SHA-256 | Purpose | Acceptance result |
 | --- | ---: | --- | --- | --- |
-| `bells-party-roster-v1.png` | 1448 x 1086 | `f6b28f192a35f19bbc60efd366cf88af10b0b79c2f2b4aa788d59ec749fe95c5` | Six-party silhouette, palette, and costume-layering reference | Accepted: Ren, Aya, Lise, Mateus, Genta, and Kiku read as distinct roles before facial detail; no text or real-person likeness. |
+| `bells-party-roster-v1.png` | 1448 x 1086 | `f6b28f192a35f19bbc60efd366cf88af10b0b79c2f2b4aa788d59ec749fe95c5` | Retired six-party identity receipt | Obsolete and non-runtime: the third figure is the superseded Lise concept. The live deterministic roster under `assets/art/party-roster-suite/` presents Nikola Dražanić and is the only current party-roster authority. |
 | `bells-enemy-bosses-v1.png` | 1448 x 1086 | `5b02d5144c4c5ec1e6557df672848ce8d8037103485af01b3bebc67f6f1b17df` | Enemy hierarchy and boss-scale silhouette reference | Accepted: Cinder Hound, Ash Wisp, Bell Moth, Tithe Enforcer, Tithe Enforcer Ascendant, and Takamine Bell Warden stay distinct with clean size escalation; no text or gore. |
 | `bells-takamine-keyframe-v1.png` | 1448 x 1086 | `17aea41ebe154d79fcdd509c2951a6a5a3b0273d7c4fe569c5e40561d6be16ac` | FP-1 Takamine Rain Gate environment/keyframe reference | Accepted: gate, wet approach, service-route read, warm lantern destination, and cold court pressure are legible; no text. |
 | `bells-party-field-atlas-v1.png` | 1536 x 1024 | `df3600769c333788126c50390fa36e3ccc4d1436578c2bf8503749617ec0c4b3` | Superseded six-row, eight-column party field/camp reference | Reference-only: it retains the original silhouette and directional-pose study, but no shipped browser surface loads these pixels. |
@@ -20,6 +20,10 @@ Use [the animation bible](../../docs/10-animation-bible.md) and [the art-directi
 - **Enemy-atlas processing:** generated against flat chroma magenta, converted locally to RGBA with the installed image-generation chroma helper, then nearest-neighbor normalized to exact 224 x 224 cells and visually checked after extraction.
 - **Review:** each generated image was visually inspected for original character design, no readable text, no logos/watermarks, no celebrity likeness, no direct franchise imitation, and consistency with the project's historical/sensitivity constraints before it was copied here.
 - **Source copies:** the original generated files remain in the Codex generated-image directory. These stable filenames are the project copies to reference in production planning.
+
+## Current deterministic roster authority
+
+`../art/party-roster-suite/party-roster-key-art.png` is the player-facing roster. Its builder composes only the canonical code-native combat atlas at integer scale over a deterministic rain-dark cedar stage. It contains no generated-raster input or lettering. The third atlas row keeps the internal compatibility key `lise`, while its source name and pixels present Nikola Dražanić: an original Croatian minor aristocrat in a dusk-blue rain cloak, dark oxblood doublet, plain falling band, rapier, narrow moustache, and clipped beard. The generated prompts below remain unchanged historical receipts and must not be reused as the current character brief.
 
 ## Exact prompt: `bells-party-roster-v1.png`
 

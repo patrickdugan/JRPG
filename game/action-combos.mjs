@@ -11,7 +11,9 @@ export const ACTION_COMBO_SCHEMA_VERSION = 1;
 export const ACTION_COMBO_COOLDOWN_POLICY = 'preserve-participant-cooldowns';
 export const ACTION_COMBO_RESOLUTION_POLICY = 'separate-participant-hits';
 
-export const LISE_DAWN_BOLT_ACTION_ATTACK_ID = 'party:lise:dawn-bolt';
+export const HUNTER_DAWN_BOLT_ACTION_ATTACK_ID = 'party:lise:dawn-bolt';
+// Backward-compatible code alias; the serialized attack ID retains its old slot.
+export const LISE_DAWN_BOLT_ACTION_ATTACK_ID = HUNTER_DAWN_BOLT_ACTION_ATTACK_ID;
 export const MATEUS_PENITENT_NIGHT_ACTION_ATTACK_ID = 'party:mateus:penitent-night';
 
 function deepFreeze(value) {
@@ -32,7 +34,7 @@ export const HUNTER_PRIEST_COMBO_CONTRACT = deepFreeze({
   schemaVersion: ACTION_COMBO_SCHEMA_VERSION,
   id: 'hunter-priest:black-sun-concord',
   name: 'Black Sun Concord',
-  description: 'Lise pins the quarry in dawnfire while Mateus drives a penitent night through the same wound—a radiant and umbral verdict struck in perfect accord.',
+  description: 'Nikola pins the quarry in dawnfire while Mateus drives a penitent night through the same wound—a radiant and umbral verdict struck in perfect accord.',
   participantActorIds: ['lise', 'mateus'],
   initiatorActorIds: ['lise', 'mateus'],
   maxAllySeparationPx: 180,
@@ -43,7 +45,7 @@ export const HUNTER_PRIEST_COMBO_CONTRACT = deepFreeze({
       actorId: 'lise',
       role: 'hunter',
       sourceSkillId: 'dawn-bolt',
-      attackId: LISE_DAWN_BOLT_ACTION_ATTACK_ID,
+      attackId: HUNTER_DAWN_BOLT_ACTION_ATTACK_ID,
       delivery: 'arcane',
       essence: 'radiance',
     },
@@ -265,7 +267,7 @@ export function getActionComboAvailability(contract, options) {
   });
 }
 
-/** Convenience evaluator for the canonical Lise + Mateus contract. */
+/** Convenience evaluator for the canonical Nikola + Mateus contract. */
 export function getHunterPriestComboAvailability(options) {
   return getActionComboAvailability(HUNTER_PRIEST_COMBO_CONTRACT, options);
 }

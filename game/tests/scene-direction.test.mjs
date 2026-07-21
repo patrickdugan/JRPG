@@ -41,7 +41,7 @@ test('presentation script covers every canonical beat exactly once and in determ
 
 test('every beat has bespoke authored cues and a valid speaking cast gesture focus', () => {
   const canonicalByBeat = new Map(canonicalBeats().map((entry) => [entry.beatId, entry]));
-  const castSpeakers = new Set(Object.values(CAMPAIGN.cast).map(({ id }) => id.toUpperCase()));
+  const castSpeakers = new Set(Object.values(CAMPAIGN.cast).map(({ id, speakerId }) => speakerId ?? id.toUpperCase()));
   const cueBundles = new Set();
 
   for (const direction of SCENE_DIRECTIONS) {

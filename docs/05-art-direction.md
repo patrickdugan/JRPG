@@ -4,7 +4,7 @@
 **Audience:** art director, environment artists, character artists, UI/UX, VFX, animation, technical art<br>
 **Scope:** 2D pixel-art JRPG, 320 x 180 logical pixels, integer-scaled; the first playable and the 20-25 hour production target.
 
-**Runtime note (2026-07-20):** the current Campaign reuses its original 84-frame party field atlas for visible formation followers. Only successful persisted departures enter a bounded presentation trail; followers disappear on context changes and never imply collision, hazard, interaction, or save authority. Campaign Battle also uses code-native typed damage flyouts for exact values and WEAK/RESIST/IMMUNE/ABSORB/GUARD/WARD reads. These are production-foundation implementations, not final subjective readability approval.
+**Runtime note (2026-07-20):** the current Campaign reuses its original 84-frame party field atlas for visible formation followers. The stable third-row key remains `lise` solely for save, formation, and atlas compatibility, while every authored pixel and visible/source name in that row presents Nikola Dražanić. A deterministic player-facing roster is composed from the same combat atlas, replacing the obsolete generated female roster. Only successful persisted departures enter a bounded presentation trail; followers disappear on context changes and never imply collision, hazard, interaction, or save authority. Campaign Battle also uses code-native typed damage flyouts for exact values and WEAK/RESIST/IMMUNE/ABSORB/GUARD/WARD reads. These are production-foundation implementations, not final subjective readability approval.
 
 ## 1. Visual thesis
 
@@ -108,7 +108,7 @@ At 32 x 48, each party member must be identifiable in monochrome, from either fi
 | --- | --- | --- | --- |
 | Ren Ishikawa | courier satchel, short spear, forward-leaning coat | cedar brown + rain blue | quick measured step; spear line makes Pierce range clear |
 | Aya Shinohara | squared archive case, folded record-seal fan, layered sleeves | parchment + muted teal | deliberate seal placement; paper arc stays readable; no devotional talismans |
-| Lise Varga | long travel coat, compact crossbow/rapier profile, sea-weather cape | desaturated blue + brass | precise lunge and recoil; no glamorous pose dependence |
+| Nikola Dražanić | square-shouldered rain cloak over a fitted oxblood doublet and plain falling band; compact crossbow, long rapier, brass signet clasp | dusk blue + dark oxblood + brass | proud upright idle, exact rapier lunge, controlled recoil; high forehead, narrow moustache, and clipped beard establish an original Croatian male face distinct from Mateus |
 | Father Mateus Avelar | narrow cassock-derived coat, high collar, ring of keys, controlled posture | charcoal + dried-wine accent | a held stillness that breaks into costly blood-rite motion; original face and proportions |
 | Genta Mononobe | broad shoulder mantle, tetsubo or shield mass | earth gray + oxidized gold | braced stance and lane-blocking impact |
 | Kiku Nawa | medicine box, short cloak, bottle/packet read | herb green + candle ivory | toss, mix, and terrain placement instead of attack flourishes |

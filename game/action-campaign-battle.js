@@ -200,7 +200,7 @@ function describeEvent(event, snapshot) {
 
 function formatComboReason(reason) {
   if (!reason) return 'formation is not ready';
-  if (reason.code === 'initiator-not-participant') return 'control Lise or Mateus to initiate';
+  if (reason.code === 'initiator-not-participant') return 'control Nikola or Mateus to initiate';
   if (reason.code === 'participant-missing') return `${reason.actorId} is not deployed`;
   if (reason.code === 'participant-defeated') return `${reason.actorId} is defeated`;
   if (reason.code === 'participant-committed') return `${reason.actorId} is committed to another animation`;
@@ -497,7 +497,7 @@ function renderDom(snapshot) {
   }));
   elements.comboProximity.textContent = snapshot.combo.separationPx == null
     ? `Proximity unavailable · maximum ${snapshot.combo.maxAllySeparationPx} px`
-    : `Lise ↔ Mateus ${Math.round(snapshot.combo.separationPx)} px · maximum ${snapshot.combo.maxAllySeparationPx} px`;
+    : `Nikola ↔ Mateus ${Math.round(snapshot.combo.separationPx)} px · maximum ${snapshot.combo.maxAllySeparationPx} px`;
 
   const choices = getActionCampaignAttackChoices(session, snapshot.kernel.controlledActorId);
   elements.attackTimers.replaceChildren(...choices.map((choice) => {

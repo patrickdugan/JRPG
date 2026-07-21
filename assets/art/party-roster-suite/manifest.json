@@ -1,0 +1,68 @@
+{
+  "assetId": "party-roster-key-art-v2",
+  "status": "deterministic-runtime-key-art",
+  "authorship": "original-code-native-pixel-composition",
+  "geometry": {
+    "width": 1440,
+    "height": 900,
+    "mode": "RGBA"
+  },
+  "rowOrder": [
+    "ren",
+    "aya",
+    "lise",
+    "mateus",
+    "genta",
+    "kiku"
+  ],
+  "presentationNames": {
+    "ren": "Ren Ishikawa",
+    "aya": "Aya Shinohara",
+    "lise": "Nikola Dražanić",
+    "mateus": "Father Mateus Avelar",
+    "genta": "Genta Mononobe",
+    "kiku": "Kiku Nawa"
+  },
+  "sources": [
+    {
+      "path": "party-roster-suite.source.json",
+      "role": "editable-composition-contract",
+      "sha256": "1d6476ef415e8325c0d0370c592138914114b93bf628af00ddde06cf913f68e8"
+    },
+    {
+      "path": "../party-combat-suite/party-combat-actions.png",
+      "role": "canonical-authored-sprite-input",
+      "sha256": "5bc36a20307177c0b1fddeb73668bd89f5b39de9b601114c1330b2773a9020b7"
+    },
+    {
+      "path": "../party-field-suite/party-field-suite.source.json",
+      "role": "canonical-palette-and-name-contract",
+      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
+    },
+    {
+      "path": "build_party_roster_suite.py",
+      "role": "deterministic-builder",
+      "sha256": "ba486fb2597ec2e1a06d9ca7d0d80b7feac1ab676d263f2a5d79cf11c0762aa3"
+    }
+  ],
+  "exports": [
+    {
+      "path": "party-roster-key-art.png",
+      "role": "player-facing-runtime-key-art",
+      "width": 1440,
+      "height": 900,
+      "mode": "RGBA",
+      "sha256": "2fff1fe8b443c65b984eb271efd3641d4a6a3872a8c674401030dff625dca999"
+    }
+  ],
+  "validation": {
+    "deterministicCommand": "python build_party_roster_suite.py --check",
+    "integerScalingOnly": true,
+    "containsText": false
+  },
+  "review": {
+    "visualInspection": "pending",
+    "externalCulturalReview": "pending",
+    "realPersonLikeness": "excluded-by-code-native-source"
+  }
+}

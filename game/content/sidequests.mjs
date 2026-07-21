@@ -171,7 +171,7 @@ export const SIDE_QUESTS = deepFreeze([
     mapIds: ['tkm-abandoned-chapel', 'tkm-flooded-undercroft', 'tkm-cell-block'],
     estimatedMinutes: 18,
     questGiver: { id: 'tama', name: 'Tama, a fictional chapel caretaker', mapId: 'tkm-abandoned-chapel' },
-    setup: 'Tama hid three letters written in mixed Portuguese and Japanese. Lise can translate them, but each author left different instructions about who may read the result.',
+    setup: 'Tama hid three letters written in mixed Portuguese and Japanese. Nikola can translate them, but each author left different instructions about who may read the result.',
     prerequisites: {
       opensAfterBeatId: 'c2-03-lises-interruption',
       questIds: [],
@@ -190,7 +190,7 @@ export const SIDE_QUESTS = deepFreeze([
       mode: 'ordered',
       requiredObjectiveIds: ['take-reader-instructions', 'recover-dry-letter', 'recover-sealed-letter', 'recover-cell-letter', 'prepare-three-answers'],
       setsFlags: ['optional.letters-routed-by-consent'],
-      resolution: 'Lise treats translation as custody rather than ownership, and Tama chooses the couriers.',
+      resolution: 'Nikola treats translation as custody rather than ownership, and Tama chooses the couriers.',
     },
   }),
 

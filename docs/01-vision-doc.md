@@ -95,7 +95,7 @@ Status conditions are intentionally few: Bleed (damage on activation), Scorch (d
 
 * **Ren:** adaptive Cut/Pierce attacker; marks a target’s facing and can redirect a foe one space.
 * **Aya:** wards, healing, Radiance/Umbral analysis, and safe positioning tools.
-* **Lise:** rapid Pierce and anti-undead techniques; converts an enemy’s revealed weakness into a one-use opening.
+* **Nikola:** rapid Pierce and anti-undead techniques; converts an enemy’s revealed weakness into a one-use opening. His exact execution rewards discipline that his impatient, rank-conscious temperament initially lacks.
 * **Mateus:** Umbral magic, self-damaging blood rites, and late-game ally manipulation; his redemption is reflected mechanically by learning protective rather than extractive rites.
 * **Genta:** Crush tank and battlefield anchor; locks lanes and absorbs forced movement.
 * **Kiku:** Ember/Frost mixtures, remedies, and terrain effects that alter a small number of spaces.
@@ -133,7 +133,7 @@ Reference mood is late-sixteenth/early-seventeenth-century architecture, garment
 The first art package should prove the whole visual thesis with one playable shrine complex:
 
 * Rain gate, cedar path, abandoned chapel interior, bell stair, and flooded undercroft tiles.
-* Ren, Aya, Lise, and Mateus full combat/field sprites.
+* Ren, Aya, Nikola, and Mateus full combat/field sprites.
 * Cinder Hound, Ash Wisp, Bell Moth, Tithe Enforcer, and Mateus boss forms.
 * Cut, Pierce, Crush, Ember, Frost, Storm, Radiance, and Umbral hit/readability effects.
 * A Ledger panel and Tempo/Recovery UI in the final palette.
@@ -148,13 +148,15 @@ Ren, 20, carried dispatches between mountain villages because he could read weat
 
 Aya, 26, is a shrine archivist whose family records births, land promises, floods, and local prayers. She joins when the court begins replacing those records with its own ledger of loyalty. Her rites come from attentive stewardship, not “exotic magic.” Aya leads the party’s investigation and repeatedly challenges the assumption that foreign and domestic traditions are clean, opposing sides.
 
-### Elisabet “Lise” Varga — the oath carried across the sea
+### Lord Nikola Dražanić — the title carried too far
 
-Lise, 24, is a Venetian-Dalmatian translator and last public heir of the Varga household, a fictional European lineage that catalogued and hunted predatory immortals. Her family taught her that monsters exploit institutions before they drink blood. She follows a fictional Adriatic–Goa–Macao route through Portuguese-linked ports, learning practical Japanese from displaced Christians, brokers, and copied mission correspondence before her final passage toward Hirado and Nagasaki. Shipwrecked while tracking an illicit strongbox, she comes to Japan seeking the shogun’s source. She begins certain that killing the monster is sufficient and learns that people trapped in its system must also be freed.
+Nikola, born around 1590, is the younger son of a fictional minor Croatian frontier house from the Senj–Brinje hinterland. The settlement imposed after the Uskok conflict displaced him from the martial future he considered his birthright. Abroad he styles himself “Count Dražanić,” an inflated title that survives mainly because distant merchants find it convenient not to challenge an armed passenger. He is brave, technically accomplished, class-entitled, honor-obsessed, and paternalistic. He distrusts merchants while depending on their ships, letters of credit, and rumor networks at every stage of his journey.
+
+He travels Ragusa–Lisbon–Goa–Melaka–Macao–Nagasaki while pursuing a Dražanić ledger and the predatory immortals named within it. Nikola speaks native Chakavian/Croatian, Italian/Venetian, Latin, and rough Portuguese, but almost no Japanese. He therefore cannot interpret Japanese motives or negotiate local authority into irrelevance; Aya, Sayo, Ren, and other local actors must mediate what he sees and decide whether his skills are useful. The wrecked house ledger reveals that his forebears sold confiscated books, escort access, and vampire-hunting knowledge through the same mercantile system he despises. His arc is not the purification of a bloodline. It is the harder surrender of assumed command: learning to place courage and exact violence under earned, revocable discipline.
 
 ### Father Mateus Avelar — the apostate at the bell
 
-Mateus, 43 in appearance, is a Portuguese-born former Jesuit priest turned vampire. He reached Japan through Goa and Macao before the 1614 nationwide ban, remained as a clandestine missionary after the expulsion order, and later sold the routes and language entrusted to him when he accepted the shogun’s blood. He became an interpreter and collector who persuades frightened communities to submit. His sophistication and survival are not signs of moral depth; he has rationalized cowardice as pragmatism. Meeting Lise confronts him with an oath he assumed had died in Europe, and with someone able to name what he has become without granting him absolution. He changes course through costly actions—protecting victims, exposing the court, and surrendering power—not because a stranger forgives him.
+Mateus, 43 in appearance, is a Portuguese-born former Jesuit priest turned vampire. He reached Japan through Goa and Macao before the 1614 nationwide ban, remained as a clandestine missionary after the expulsion order, and later sold the routes and language entrusted to him when he accepted the shogun’s blood. He became an interpreter and collector who persuades frightened communities to submit. His sophistication and survival are not signs of moral depth; he has rationalized cowardice as pragmatism. Meeting Nikola confronts him with a fellow European who can read his Latin evasions, recognizes the ports and brokers behind his betrayal, and despises cowardice almost as much as he misunderstands humility. Their abrasive, darkly comic partnership works because each man attacks the other’s favorite lie: Mateus punctures Nikola’s borrowed grandeur; Nikola refuses to let Mateus rename surrender as prudence. Mateus changes course through costly actions—protecting victims, exposing the court, and surrendering power—not because Nikola forgives him.
 
 Mateus has no visual, vocal, biographical, or behavioral relationship to a real actor or any existing film’s priest character.
 
@@ -194,9 +196,9 @@ Farmers, artisans, displaced families, local officials, clergy, and sailors form
 
 ## Highest-level plot beats
 
-In alternate Genna 8 (1622), Black Chrysanthemum inspectors destroy a rural meeting and seize a fragment of a forbidden bell. Courier Ren Ishikawa survives and joins archivist Aya to trace the fragment to Takamine Bell Temple. There they meet Lise Varga, a European hunter-descendant pursuing the same strongbox and bell network, and confront Father Mateus Avelar, the apostate vampire priest who serves the court.
+In alternate Genna 8 (1622), Black Chrysanthemum inspectors destroy a rural meeting and seize a fragment of a forbidden bell. Courier Ren Ishikawa survives and joins archivist Aya to trace the fragment to Takamine Bell Temple. There they meet Lord Nikola Dražanić, a displaced Croatian frontier noble pursuing his house ledger and the same bell network, and confront Father Mateus Avelar, the apostate vampire priest who serves the court.
 
-Mateus recognizes Lise’s household seal and begins to betray Kurozane, but the group learns the shogun’s persecution apparatus is also a supernatural machine: every forced denunciation feeds a network of black bells that turns the disappeared into Ashen Oni. The party crosses the coast, mountain routes, and forge fields to gather proof, allies, and the three bell keys needed to break the network.
+Mateus recognizes the Dražanić household marks and the mercantile route behind them, then begins to betray Kurozane. The group learns the shogun’s persecution apparatus is also a supernatural machine: every forced denunciation feeds a network of black bells that turns the disappeared into Ashen Oni. The party crosses the coast, mountain routes, and forge fields to gather proof, allies, and the three bell keys needed to break the network.
 
 At the midpoint, they discover Kurozane engineered the policy’s worst terror to make himself indispensable; the conflict is neither an ancient cultural curse nor solely a foreign intrusion, but a power structure built by named people making choices. In the final chapters, the party dismantles its human officers, turns the Lantern Network from survival into collective resistance, enters Kurohana Castle, and faces Kurozane. The ending breaks the bells, restores names erased from the ledger, and lets each survivor decide what repair—not conquest—looks like.
 
@@ -207,8 +209,8 @@ At the midpoint, they discover Kurozane engineered the policy’s worst terror t
 * Treat the current historical and cultural audit as provisional until that external consultant review is complete.
 * Depict conversion, apostasy, and resistance as personal and political pressures with varied voices; no group is inherently pure, gullible, or evil.
 * Never use celebrity likenesses, actor references, or scene-for-scene adaptations.
-* **FP-0 Combat Proof** is a narrow 5–10 minute, one-combat technical build. It validates exact board movement, Tempo/Pace/Recovery, Guard/Dodge, and the damage Ledger with Ren, Lise named in the prelude, and an Ashen Oni Tithe Enforcer. It is deliberately not the template’s full first playable.
-* **FP-1 Takamine Vertical Slice** is the 28–34 minute first-playable target defined in the detailed outline. It adds the rain-gate approach, field movement, three-party teaching encounters, Lise’s arrival, and the Mateus boss. It begins only after FP-0’s combat contract passes testing.
+* **FP-0 Combat Proof** is a narrow 5–10 minute, one-combat technical build. It validates exact board movement, Tempo/Pace/Recovery, Guard/Dodge, and the damage Ledger with Ren, Nikola named in the prelude, and an Ashen Oni Tithe Enforcer. It is deliberately not the template’s full first playable.
+* **FP-1 Takamine Vertical Slice** is the 28–34 minute first-playable target defined in the detailed outline. It adds the rain-gate approach, field movement, three-party teaching encounters, Nikola’s arrival, and the Mateus boss. It begins only after FP-0’s combat contract passes testing.
 * FP-1 does not include the full world map, shopping, crafting, or every later-game system.
 
 ## Sources

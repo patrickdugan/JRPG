@@ -227,7 +227,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
                 }"""
             )
             require(combo_ready["comboAvailable"] is True, f"Widow combo was not ready: {combo_ready}")
-            require(combo_ready["controlledActorId"] == "lise", f"Two Tab presses did not select Lise: {combo_ready}")
+            require(combo_ready["controlledActorId"] == "lise", f"Two Tab presses did not select Nikola: {combo_ready}")
             require(combo_ready["storageKeys"] == [], f"Fresh combo context had persistent storage: {combo_ready}")
             require(
                 {participant["actorId"] for participant in combo_ready["participants"]} == {"lise", "mateus"},
@@ -280,7 +280,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
             )
             require(
                 {actor["actorId"] for actor in combo_started} == {"lise", "mateus"},
-                f"Combo did not atomically commit exactly Lise and Mateus: {combo_started}",
+                f"Combo did not atomically commit exactly Nikola and Mateus: {combo_started}",
             )
             require(
                 all(actor["comboId"] == combo_ready["comboId"] for actor in combo_started),

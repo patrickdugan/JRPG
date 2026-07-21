@@ -57,10 +57,13 @@
     },
     {
       "id": "lise",
-      "name": "Lise Varga",
-      "paletteId": "party-lise-sea-brass-v1",
-      "silhouette": "travel coat, sea cape, compact crossbow and rapier",
-      "colors": {"primary": "#355775", "secondary": "#263e59", "light": "#61809a", "accent": "#a08b58", "hair": "#8f7b55"}
+      "name": "Nikola Dražanić",
+      "legacyCompatibilityId": "lise",
+      "origin": "Croatian minor aristocrat travelling through the Adriatic, Goa, and Macao in 1622",
+      "paletteId": "party-nikola-oxblood-dusk-v2",
+      "silhouette": "square-shouldered rain cloak over a fitted doublet and falling band, compact crossbow, long rapier, proud upright posture",
+      "colors": {"primary": "#304967", "secondary": "#5b2d38", "light": "#6b7e99", "accent": "#b09155", "hair": "#281c1b"},
+      "likenessPolicy": "original fictional Croatian male face and proportions; no real-person or actor reference"
     },
     {
       "id": "mateus",

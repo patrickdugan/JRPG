@@ -124,9 +124,9 @@ const TASKS_BY_BEAT = {
     task('combat-evidence', 'Secure', 'Bind the already-registered Cedar Service Path defense to this witness route; do not start a second fight.'),
   ],
   'c2-03-lises-interruption': [
-    task('inspect', 'Compare', 'Compare Lise\'s stolen key with the party\'s supply permit before judging either introduction.'),
-    task('interview', 'Ask', 'Ask what Lise knows about the black alloy and the bell below Takamine.'),
-    task('carry-deliver', 'Show', 'Show Lise the black bell fragment while Aya keeps possession of the evidence.'),
+    task('inspect', 'Compare', 'Compare Nikola\'s stolen key with the party\'s supply permit before judging either introduction.'),
+    task('interview', 'Ask', 'Ask what Nikola knows about the black alloy and the bell below Takamine.'),
+    task('carry-deliver', 'Show', 'Show Nikola the black bell fragment while Aya keeps possession of the evidence.'),
   ],
   'c2-04-bell-stair': [
     task('inspect', 'Watch', 'Watch one full bell-beam cycle and confirm the creak precedes the swing.'),
@@ -139,7 +139,7 @@ const TASKS_BY_BEAT = {
     task('combat-evidence', 'Recover', 'Resolve the registered Flooded Archive encounter and recover its bell-room key once.'),
   ],
   'c2-06-name-from-europe': [
-    task('interview', 'Confront', 'Confront Mateus with the Varga mark and record his part in the denunciation cipher.'),
+    task('interview', 'Confront', 'Confront Mateus with the Dražanić mark and record his part in the denunciation cipher.'),
     task('mechanism', 'Release', 'Pull the cell-block lever so the witnesses leave by their own route.'),
     task('combat-evidence', 'Stay', 'Resolve the registered nonlethal Mateus encounter and preserve his testimony without granting forgiveness.'),
   ],
@@ -184,8 +184,8 @@ const TASKS_BY_BEAT = {
     task('care-rescue', 'Guide', 'Guide the party between safe markers without leaving an injured traveler in cold water.'),
   ],
   'c4-03-varga-journal': [
-    task('inspect', 'Read', 'Read the port-list entry in the Varga journal without treating inheritance as a defense.'),
-    task('interview', 'Record', 'Record Lise and Mateus naming their separate choices around the wreck.'),
+    task('inspect', 'Read', 'Read the port-list entry in the Dražanić journal without treating inheritance as a defense.'),
+    task('interview', 'Record', 'Record Nikola and Mateus naming their separate choices around the wreck.'),
     task('carry-deliver', 'File', 'File the journal with Aya\'s evidence and keep the ownership history attached.'),
   ],
   'c4-04-survivors-hold': [
@@ -276,7 +276,7 @@ const TASKS_BY_BEAT = {
     task('combat-evidence', 'Release', 'Resolve the registered name-slip encounter by release wherever its humane objective permits.'),
   ],
   'c7-04-lises-revised-oath': [
-    task('interview', 'Hear', 'Hear Lise reject an inherited right to target a bloodline.'),
+    task('interview', 'Hear', 'Hear Nikola reject an inherited right to target a bloodline.'),
     task('council', 'Review', 'Review the revised promise with Mateus absent from any claim of mercy.'),
     task('carry-deliver', 'Write', 'Write the named-person protection oath into Aya\'s correctable casebook.'),
   ],
@@ -296,7 +296,7 @@ const TASKS_BY_BEAT = {
     task('care-rescue', 'Reserve', 'Reserve the gate\'s medical and evacuation lanes before any breach begins.'),
   ],
   'c8-03-black-gate-bargain': [
-    task('interview', 'Hear', 'Hear Lady Enma\'s demand without letting Mateus or Lise answer for villages.'),
+    task('interview', 'Hear', 'Hear Lady Enma\'s demand without letting Mateus or Nikola answer for villages.'),
     task('council', 'Reject', 'Reject the exchange with the network representatives present.'),
     task('mechanism', 'Hold', 'Hold the gate signal at closed until the agreed breach, not the bargain, opens it.'),
   ],
@@ -322,7 +322,7 @@ const TASKS_BY_BEAT = {
   ],
   'c9-03-conservatory-offers': [
     task('interview', 'Hear', 'Hear each tailored offer without allowing Kurozane to address the party as one will.'),
-    task('council', 'Refuse', 'Let Ren, Aya, and Lise state their own refusals.'),
+    task('council', 'Refuse', 'Let Ren, Aya, and Nikola state their own refusals.'),
     task('council', 'Refuse', 'Let Mateus, Genta, and Kiku state their own refusals.'),
     task('inspect', 'Record', 'Record all six refusals as choices, never as proof that the offers were harmless.'),
   ],

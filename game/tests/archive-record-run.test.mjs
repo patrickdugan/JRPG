@@ -22,8 +22,8 @@ function recursivelyFrozen(value, seen = new Set()) {
 test('all finite archive records complete deterministically at exact hard bounds', () => {
   const replay = runArchiveRecordCompletion(EXACT_BOUNDS);
   assert.equal(RUN.ok, true);
-  assert.equal(RUN.signature, 'fnv1a32:40aa43df');
-  assert.equal(RUN.catalogueSignature, 'fnv1a32:afd97309');
+  assert.equal(RUN.signature, 'fnv1a32:d5cae18f');
+  assert.equal(RUN.catalogueSignature, 'fnv1a32:b98f9711');
   assert.equal(replay.signature, RUN.signature);
   assert.deepEqual(replay.summary, RUN.summary);
   assert.deepEqual(replay.trace, RUN.trace);

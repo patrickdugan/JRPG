@@ -21,6 +21,7 @@ CONTACT_NAME = "party-combat-actions-contact-sheet.png"
 MANIFEST_NAME = "manifest.json"
 README_NAME = "README.md"
 ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
+REVIEW_ROW_LABELS = {"lise": "NIKOLA"}
 COLUMNS = ("idle", "move", "guard", "hit", "basic-strike-windup", "basic-strike-active", "signature-a", "signature-b", "recovery", "defeat")
 W, H = 48, 64
 PIVOT = (24, 58)
@@ -109,9 +110,16 @@ def draw_head(cel: Cel, character_id: str, x: int, y: int):
         cel.rect((x - 7, y + 1, x - 5, y + 10), "hair")
         cel.px(x - 8, y + 8, "hair")
     if character_id == "lise":
-        cel.rect((x - 6, y, x - 3, y + 8), "hair")
-        cel.px(x - 7, y + 6, "hair")
-        cel.px(x + 3, y + 1, "light")
+        # Legacy key `lise` presents Nikola's high forehead, backswept hair,
+        # narrow moustache, and clipped beard.
+        cel.rect((x - 6, y - 1, x + 3, y + 1), "hair")
+        cel.px(x - 7, y + 1, "hair")
+        cel.px(x - 5, y + 2, "hair")
+        cel.px(x + 3, y, "light")
+        cel.px(x - 1, y + 8, "hair")
+        cel.px(x + 1, y + 8, "hair")
+        cel.px(x, y + 9, "hair")
+        cel.px(x, y + 10, "hair")
     if character_id == "mateus":
         cel.rect((x - 5, y - 1, x + 3, y + 1), "hair")
         cel.px(x - 6, y + 2, "hair")
@@ -182,9 +190,11 @@ def draw_defeat_head(cel: Cel, character_id: str, x=11, y=44):
         cel.rect((x - 6, y - 2, x - 4, y + 6), "hair")
         cel.px(x - 5, y + 7, "hair")
     if character_id == "lise":
-        cel.rect((x - 6, y - 4, x - 3, y + 5), "hair")
-        cel.px(x - 6, y + 5, "hair")
-        cel.px(x + 3, y - 3, "light")
+        cel.rect((x - 5, y - 5, x + 4, y - 3), "hair")
+        cel.px(x - 6, y - 3, "hair")
+        cel.px(x + 3, y - 4, "light")
+        cel.px(x, y + 2, "hair")
+        cel.px(x + 1, y + 3, "hair")
     if character_id == "mateus":
         cel.rect((x - 5, y - 5, x + 4, y - 3), "hair")
         cel.px(x - 6, y - 2, "hair")
@@ -321,24 +331,42 @@ def draw_aya(cel: Cel):
     if cel.pose == "hit": cel.line([(8,24),(15,31)], "impact", 2)
 
 
+def draw_nikola_doublet(cel: Cel, x: int):
+    """Overlay Nikola's square 1620s doublet and plain falling band."""
+    cel.poly([(x - 11, 25), (x - 8, 21), (x + 7, 21), (x + 11, 25),
+              (x + 8, 40), (x - 8, 40)], "outline")
+    cel.poly([(x - 9, 25), (x - 7, 23), (x + 6, 23), (x + 9, 26),
+              (x + 6, 38), (x - 6, 38)], "primary")
+    cel.poly([(x - 5, 24), (x + 3, 24), (x + 5, 37),
+              (x - 4, 37)], "secondary")
+    cel.poly([(x - 5, 21), (x + 4, 21), (x + 5, 25),
+              (x, 28), (x - 6, 25)], "white")
+    cel.px(x + 7, 25, "accent")
+    cel.line([(x - 7, 34), (x + 7, 34)], "brass")
+
+
 def draw_lise(cel: Cel):
     if cel.pose == "recovery":
         x = draw_recovery_body(cel, "lise", long=True)
+        draw_nikola_doublet(cel, x)
         cel.poly([(x - 9, 24), (x - 14, 31), (x - 10, 47), (x - 5, 40)], "outline")
-        cel.poly([(x - 9, 26), (x - 12, 32), (x - 9, 43), (x - 6, 38)], "secondary")
+        cel.poly([(x - 9, 26), (x - 12, 32), (x - 9, 43), (x - 6, 38)], "primary")
         cel.line([(x + 14, 22), (x + 14, 57)], "outline", 3); cel.line([(x + 14, 23), (x + 14, 55)], "metal")
         cel.line([(x + 9, 30), (x + 18, 30)], "brass", 2)
         return
     if cel.pose == "defeat":
         draw_defeat_body(cel, "lise", long=True)
         cel.poly([(16, 43), (20, 39), (32, 43), (29, 56), (18, 54)], "outline")
-        cel.poly([(18, 44), (21, 42), (30, 44), (27, 53), (19, 52)], "secondary")
+        cel.poly([(18, 44), (21, 42), (30, 44), (27, 53), (19, 52)], "primary")
+        cel.poly([(21, 43), (27, 44), (26, 50), (22, 49)], "secondary")
+        cel.line([(19, 42), (25, 43)], "white", 2)
         cel.line([(27, 39), (42, 53)], "outline", 3); cel.line([(28, 40), (41, 52)], "metal")
         cel.poly([(42, 53), (37, 50), (39, 55)], "white")
         return
     x = body(cel, "lise", long=True)
+    draw_nikola_doublet(cel, x)
     cel.poly([(x-9,23),(x-14,30),(x-11,45),(x-5,40)], "outline")
-    cel.poly([(x-9,25),(x-12,31),(x-10,41),(x-6,38)], "secondary")
+    cel.poly([(x-9,25),(x-12,31),(x-10,41),(x-6,38)], "primary")
     if cel.pose == "guard":
         cel.line([(x+1,24),(x+12,41)], "metal", 2); cel.line([(x+9,22),(x+15,31)], "brass", 2)
     elif cel.pose == "basic-strike-windup":
@@ -546,7 +574,8 @@ def render_contact(atlas: Image.Image) -> Image.Image:
         "signature-a":"SIG-A", "signature-b":"SIG-B", "recovery":"RECOVER", "defeat":"DEFEAT",
     }
     for column, pose in enumerate(COLUMNS): label(draw, left+column*cw+8, 18, short[pose], color("#d7c99a"))
-    for row, character_id in enumerate(ROWS): label(draw, 8, top+row*ch+84, character_id, color("#d7c99a"), 2)
+    for row, character_id in enumerate(ROWS):
+        label(draw, 8, top+row*ch+84, REVIEW_ROW_LABELS.get(character_id, character_id), color("#d7c99a"), 2)
     for row in range(len(ROWS)):
         for column in range(len(COLUMNS)):
             x, y = left+column*cw, top+row*ch
@@ -589,7 +618,7 @@ def build_files() -> dict[str, bytes]:
         "review": {"visualInspection":"pending","externalCulturalReview":"pending","fullInbetweens":"pending","portraits":"not-in-this-suite"},
     }
     manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode("utf-8")
-    readme=f"""# Party combat action suite\n\nOriginal, code-authored combat key poses for Ren, Aya, Lise, Mateus, Genta, and Kiku. The builder reads the canonical palette IDs, colors, and silhouette descriptions from `../party-field-suite/party-field-suite.source.json`; it does not use generated concepts or raster atlases as input. Mateus has an original fictional face and proportions.\n\n- `{SOURCE_PATH.name}` is the editable action and event contract.\n- `{ATLAS_NAME}` is the transparent {atlas.width} × {atlas.height} runtime candidate: {len(ROWS)} rows, {len(COLUMNS)} columns, {W} × {H} per cell.\n- `{CONTACT_NAME}` is a labeled {contact.width} × {contact.height} checkerboard review sheet and is not for runtime use.\n- `{MANIFEST_NAME}` records exact frames, pivots `(24, 58)`, foot points, hit anchors, action semantics, palette reuse, hashes, and review state.\n\nColumns are idle, move, guard, hit, basic-strike wind-up, basic-strike active, signature A, signature B, a braced post-action recovery hold, and a non-gory collapsed defeat hold. These are silhouette-defining production keys, not complete animation clips. In-betweens, full recovery and defeat transitions, alternate facings, portraits, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_combat_suite.py` to rebuild or `python build_party_combat_suite.py --check` to byte-compare every generated file.\n"""
+    readme=f"""# Party combat action suite\n\nOriginal, code-authored combat key poses for Ren, Aya, Nikola, Mateus, Genta, and Kiku. The stable third-row key remains `lise` for runtime compatibility, but its pixels and NIKOLA review label present Nikola Dražanić: an original male Croatian minor aristocrat with a square doublet, falling band, moustache, clipped beard, rapier, and no real-person likeness. The builder reads canonical palette IDs, colors, and silhouettes from `../party-field-suite/party-field-suite.source.json`; it does not use generated concepts or raster atlases as input.\n\n- `{SOURCE_PATH.name}` is the editable action and event contract.\n- `{ATLAS_NAME}` is the transparent {atlas.width} × {atlas.height} runtime candidate: {len(ROWS)} rows, {len(COLUMNS)} columns, {W} × {H} per cell.\n- `{CONTACT_NAME}` is a labeled {contact.width} × {contact.height} checkerboard review sheet and is not for runtime use.\n- `{MANIFEST_NAME}` records exact frames, pivots `(24, 58)`, foot points, hit anchors, action semantics, palette reuse, hashes, and review state.\n\nColumns are idle, move, guard, hit, basic-strike wind-up, basic-strike active, signature A, signature B, a braced post-action recovery hold, and a non-gory collapsed defeat hold. These are silhouette-defining production keys, not complete animation clips. In-betweens, full recovery and defeat transitions, alternate facings, portraits, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_combat_suite.py` to rebuild or `python build_party_combat_suite.py --check` to byte-compare every generated file.\n"""
     return {ATLAS_NAME:atlas_data,CONTACT_NAME:contact_data,MANIFEST_NAME:manifest_data,README_NAME:readme.encode("utf-8")}
 
 

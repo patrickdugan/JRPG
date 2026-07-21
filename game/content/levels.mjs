@@ -354,7 +354,7 @@ export const LEVELS = [
     hazards: [],
     spawn: { x: 2, y: 9, facing: 'north', formation: ['ren', 'aya'] },
     exits: [{ id: 'rear-door', at: '18,5', destinationLevelId: 'tkm-bell-stair', condition: 'lise-key-used' }],
-    objective: 'Speak to witnesses, meet Lise, and open the rear door with her stolen key.',
+    objective: 'Speak to witnesses, meet Nikola, and open the rear door with his stolen key.',
     palette: archivePalette,
     interactables: [
       { id: 'prisoner-grate-west', at: '4,5', action: 'talk', optional: true, result: 'casebook-note-west', fieldCharacter: { kind: 'npc', role: 'confined-person' } },
@@ -413,7 +413,7 @@ export const LEVELS = [
     ],
     spawn: { x: 6, y: 10, facing: 'north', formation: ['ren', 'aya', 'lise'] },
     exits: [{ id: 'undercroft-hatch', at: '13,2', destinationLevelId: 'tkm-flooded-undercroft', condition: 'inspect-varga-mark' }],
-    objective: 'Cross the beam and cracked boards, light the checkpoint lantern, then inspect the Varga mark.',
+    objective: 'Cross the beam and cracked boards, light the checkpoint lantern, then inspect the Dražanić mark.',
     palette: rainPalette,
     interactables: [
       { id: 'checkpoint-lantern', at: '11,6', action: 'checkpoint', saves: true, restores: false },
@@ -1225,8 +1225,8 @@ export const LEVELS = [
     terrain: [{ at: '3,9', tag: 'water' }, { at: '4,9', tag: 'water' }, { at: '15,9', tag: 'water' }, { at: '16,9', tag: 'water' }, { at: '9,4', tag: 'paper-litter' }],
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'reef-deck', at: '18,4', destinationLevelId: 'ngi-storm-reef', condition: 'survivor-choice-complete' }],
-    objective: 'Find the Varga journal, protect survivors, and choose Kiku’s initial rescue position.',
-    interactables: [{ id: 'varga-journal', at: '9,4', action: 'read', result: 'varga-archive-truth' }, { id: 'survivor-hold', at: '15,5', action: 'choose-support', options: ['send-kiku', 'keep-kiku'] }, { id: 'reliquary-lock', label: 'Varga Strongbox', at: '11,5', action: 'inspect', result: 'second-key-lead' }],
+    objective: 'Find the Dražanić journal, protect survivors, and choose Kiku’s initial rescue position.',
+    interactables: [{ id: 'varga-journal', at: '9,4', action: 'read', result: 'varga-archive-truth' }, { id: 'survivor-hold', at: '15,5', action: 'choose-support', options: ['send-kiku', 'keep-kiku'] }, { id: 'reliquary-lock', label: 'Dražanić Strongbox', at: '11,5', action: 'inspect', result: 'second-key-lead' }],
     lesson: 'Heritage is evidence to examine, not a moral credential.',
   }),
   sceneHub({

@@ -18,9 +18,9 @@ The side-story person contract is now explicit: only `type: 'talk'` plus `target
 
 ## 2. First-playable boundary
 
-The combat slice is **FP-0: Bell Court at Takamine**, a deliberately narrow proof before the planned 28–34 minute **FP-1 Takamine Vertical Slice**. Courier **Ren Ishikawa** reaches an abandoned temple gate with **Elisabet “Lise” Varga**, heir to a European hunter oath. A short in-game prelude makes clear that **Father Mateus Avelar**, the court’s vampire interpreter, has directed the search; Lise recognizes the oath he thought extinguished. They face an **Ashen Oni Tithe Enforcer**, an invented retainer of the Black Chrysanthemum court.
+The combat slice is **FP-0: Bell Court at Takamine**, a deliberately narrow proof before the planned 28–34 minute **FP-1 Takamine Vertical Slice**. Courier **Ren Ishikawa** reaches an abandoned temple gate with **Nikola Dražanić**, a fictional minor Croatian frontier noble, vampire hunter, and self-proclaimed Count whose title exceeds his actual standing. A short in-game prelude makes clear that **Father Mateus Avelar**, the court’s vampire interpreter, has directed the search; Nikola recognizes the cipher tradition Mateus thought extinguished. They face an **Ashen Oni Tithe Enforcer**, an invented retainer of the Black Chrysanthemum court.
 
-The encounter establishes the central reversal without a full party system: Mateus begins as a court servant, while Lise’s arrival supplies the moral and historical challenge that will later force his costly change of course. It makes no use of a real actor’s likeness, a named film character, real victims, or sacred objects as enemy props.
+The encounter establishes the central reversal without a full party system: Mateus begins as a court servant, while Nikola’s arrival supplies the European hunter counterweight that will later force his costly change of course. Nikola is capable, vain, title-conscious, and initially treats travel papers and ancestry as authority; the story challenges those assumptions through his abrasive buddy dynamic with Mateus and the limits imposed by Japanese allies. It makes no use of a real actor’s likeness, a named film character, real victims, or sacred objects as enemy props.
 
 Included:
 
@@ -173,7 +173,7 @@ Campaign Item uses a separate 720 ms command record and exact `item-used` plus `
 
 The slice is acceptable when:
 
-1. It loads from a local static server to a visible Ren command turn and explicitly names Ren, Lise, and Mateus in the opening/log.
+1. It loads from a local static server to a visible Ren command turn and explicitly names Ren, Nikola, and Mateus in the opening/log.
 2. Movement never enters an invalid cell; a valid command changes exactly one 8-way space and consumes exactly one Pace.
 3. One command ends an Activation; no action is accepted during recovery. The initiative ribbon makes the return order clear.
 4. Out-of-range attacks cost nothing and leave the command turn open.

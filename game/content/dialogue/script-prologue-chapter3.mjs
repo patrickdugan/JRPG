@@ -735,103 +735,103 @@ PRISONER|Go. The footsteps are counting again, and the rear lock is deciding for
     beatId: 'c2-03-lises-interruption',
     before: dialogue(`
 NARRATOR|A torn paper screen stirs between three strangers, one stolen key, and a corridor about to fill with guards.
-LISE|Your permit says supply carrier. Your stance says you have never lifted a temple oil jar correctly.
+NIKOLA|That permit bears a lawful Takamine seal. Explain why an authorized carrier is opening a court lock incorrectly.
 REN|Your key says thief. Your boots say you landed on the expensive side of quiet.
-LISE|I landed where the guard stopped being attached to it.
+NIKOLA|I landed where the guard stopped being attached to it.
 AYA|Is he dead?
-LISE|Sleeping with a headache and fewer professional options.
+NIKOLA|Sleeping with a headache and fewer professional options.
 REN|That answer was almost reassuring.
-LISE|I was not offering reassurance. I was measuring whether you would shout before thinking.
+NIKOLA|I was not offering reassurance. I was measuring whether you would shout before thinking.
 AYA|The prisoners behind us have already endured enough measurements made without consent.
-LISE|Then explain why two apparent carriers are mapping their locks.
+NIKOLA|Then explain why two apparent carriers are mapping their locks.
 REN|Explain why an armed foreign traveler is collecting keys from a prison chapel.
-LISE|Because a black-alloy bell crossed an ocean after burning an archive that should have remained beyond its reach.
+NIKOLA|Because a black-alloy bell crossed an ocean after burning an archive that should have remained beyond its reach.
 AYA|That is a claim, not an introduction.
-LISE|Names are expensive in buildings that stamp blank confessions.
+NIKOLA|Names are expensive in buildings that stamp blank confessions.
 AYA|So are misunderstandings when a patrol is thirty steps away.
 REN|Twenty-four now. The guard shortens his western circuit when the rain strikes that window.
-LISE|You counted. Good. You may be an unusually observant liar.
+NIKOLA|You counted. Good. You may be an unusually observant liar.
 REN|And you may be an unusually talkative thief.
-LISE|Elisabet Varga. Most people with knives call me Lise because it saves time.
-AYA|Aya Shinohara. I preserve records people in authority prefer to edit.
-REN|Ren Ishikawa. I carried one of those edits before choosing to stop.
-LISE|That is either honesty or a sophisticated attempt to become sympathetic.
+NIKOLA|Count Nikola Dražanić of Branik. In your language, I seek the evil bell beneath this honorable prison.
+AYA|Aya Shinohara. You called the prison seasick, but your meaning survived.
+REN|Ren Ishikawa. Is Branik a county, or does the Count title travel without one?
+NIKOLA|A frontier does not wait for a distant clerk to ratify the man defending it. Dražanić will suffice here.
 AYA|Suspicion can remain. The local task cannot. We need the rear cell lock opened before midnight.
-LISE|I need the bell-room route before whoever owns this key notices his belt feels philosophical.
+NIKOLA|I need the bell-room route before whoever owns this key notices his belt feels philosophical.
 REN|Those goals share a stair.
-LISE|Until the landing, perhaps. After that, no one stands behind me.
+NIKOLA|Until the landing, perhaps. After that, no one stands behind me.
 AYA|Reasonable. No one stands behind Ren either; his pride takes the entire width.
 REN|I had begun to respect your mediation.
-LISE|I respect it more with each sentence.
-NARRATOR|Lise shows the key in an open palm while keeping her blade lowered and the escape route unobstructed.
+NIKOLA|I respect it more with each sentence.
+NARRATOR|Nikola shows the key in an open palm while keeping his blade lowered and the escape route unobstructed.
 AYA|You mentioned black alloy. We carry evidence from a bell used against Hoshigawa households.
-LISE|Evidence in what form?
+NIKOLA|Evidence in what form?
 REN|A fragment with Takamine's store seal, wrapped and recorded.
 AYA|We can show it without surrendering custody, if doing so creates a shared factual basis.
     `),
     after: dialogue(`
-LISE|If the fracture shows three hooked veins, it belongs to a network larger than this tower.
+NIKOLA|If the fracture shows three hooked veins, it belongs to a network larger than this tower.
 REN|And if it does not?
-LISE|I return the key to no one, open your prisoners' door, and continue alone with less certainty.
+NIKOLA|I return the key to no one, open your prisoners' door, and continue alone with less certainty.
 AYA|If it matches, you join this route temporarily and explain only what you can substantiate.
-LISE|Temporarily is an excellent length for trust.
+NIKOLA|Temporarily is an excellent length for trust.
 REN|You keep the blade low, I keep the fragment wrapped, and Aya keeps both of us from improving the corridor with blood.
 AYA|I will keep the evidence centered. Your choices remain your own responsibility.
-LISE|The patrol is sixteen steps away. Your decision should become practical soon.
-REN|The fragment can identify her claim, and her key can open the route we promised.
+NIKOLA|The patrol is sixteen steps away. Your decision should become practical soon.
+REN|The fragment can identify his claim, and his key can open the route we promised.
 AYA|Neither exchange purchases loyalty. It creates one testable cooperation.
-NARRATOR|Aya raises the wrapped alloy into the open side of their triangle as the stolen key turns in Lise's palm.
-LISE|Show me the fracture, and we will learn whether three separate hunts have found the same stair.
+NARRATOR|Aya raises the wrapped alloy into the open side of their triangle as the stolen key turns in Nikola's palm.
+NIKOLA|Show me the fracture, and we will learn whether three separate hunts have found the same stair.
     `),
   },
   {
     beatId: 'c2-04-bell-stair',
     before: dialogue(`
 NARRATOR|Wind drives rain through the open tower while an old beam sweeps each landing after a readable cedar groan.
-LISE|The fragment has all three veins. Someone recast the same alloy through at least four bell mouths.
+NIKOLA|The fragment has all three veins. Someone recast the same alloy through at least four bell mouths.
 AYA|You said larger network. What establishes four?
-LISE|Three cuts converge toward a missing center. The pattern marks this node as an outer branch.
+NIKOLA|Three cuts converge toward a missing center. The pattern marks this node as an outer branch.
 REN|Explain while facing the stair. The beam has begun another cycle.
-LISE|A man who jokes during danger is either calm or desperate to be mistaken for calm.
-REN|A woman who analyzes jokes during danger is using the same time less efficiently.
+NIKOLA|A man who jokes during danger is either calm or desperate to be mistaken for calm.
+REN|A man who analyzes jokes during danger is using the same time less efficiently.
 AYA|The beam groans high, pauses, sweeps low, and resets. Both of you may compete after crossing.
 REN|First landing is six exact steps. No jump, no need to race the entire arc.
-LISE|The loose board at step four tilts toward the drop.
+NIKOLA|The loose board at step four tilts toward the drop.
 AYA|Then we mark it and leave a clear lane beside it.
 REN|I cross on the low sweep, stop before the board, then signal from the landing.
-LISE|I go first. My coat catches less wind.
+NIKOLA|I go first. My coat catches less wind.
 REN|Your stolen key catches more attention if it falls three floors.
-LISE|The key is tied. Is your confidence?
-AYA|Lise tests the first landing. Ren counts. I mark the checkpoint. That uses the strengths already visible.
-NARRATOR|Lise advances only when the beam's shadow clears, then plants both feet inside the painted safe square.
-LISE|Landing holds. The second beam begins half a beat after the first returns.
+NIKOLA|The key is tied. Is your confidence?
+AYA|Nikola tests the first landing. Ren counts. I mark the checkpoint. That uses the strengths already visible.
+NARRATOR|Nikola advances only when the beam's shadow clears, then plants both feet inside the painted safe square.
+NIKOLA|Landing holds. The second beam begins half a beat after the first returns.
 REN|I see it. High groan, pause, low sweep, two-count opening.
 AYA|Say the count with your fingers. Wind steals voices before it steals footing.
 REN|One, two, move. One, two, stop.
-LISE|Your silent counting is less irritating.
+NIKOLA|Your silent counting is less irritating.
 REN|Your safe arrival has improved my mood enough to ignore that.
 AYA|The checkpoint lantern sits after the second landing. Its oil channel is dry but intact.
-LISE|Lighting it may reveal us below.
+NIKOLA|Lighting it may reveal us below.
 REN|Not lighting it means one mistake repeats the entire climb.
 AYA|The shutter directs light inward. A guard outside would see only a brief edge during ignition.
-LISE|Then the trade is a momentary detection risk for a reliable recovery point.
+NIKOLA|Then the trade is a momentary detection risk for a reliable recovery point.
 REN|And we choose after reaching it, not while balancing on this beam.
 NARRATOR|A collapse marker sheds pale dust two beats before a stair section drops into a catch frame below.
 AYA|The falling boards reset through counterweights. The hazard is designed to frighten workers into rushing.
 REN|We refuse the invitation. Step, wait, read, step.
-LISE|An undignified method. I approve completely.
+NIKOLA|An undignified method. I approve completely.
     `),
     after: dialogue(`
 REN|Second landing secure. The lantern wick is fresh, which means someone expects this route to be used tonight.
 AYA|The flame would also mark this as our return point when we bring prisoners through.
-LISE|Assuming the return route survives what waits above.
+NIKOLA|Assuming the return route survives what waits above.
 REN|We promised a mechanism, not certainty. This is one piece we can make real now.
 AYA|If lit, failure returns us here without injury or repeated performance. If dark, stealth improves slightly.
-LISE|The exterior patrol is facing north for another ten counts.
+NIKOLA|The exterior patrol is facing north for another ten counts.
 REN|Enough time to spark, shutter, and move before the next beam cycle.
 AYA|The choice is visible: a recoverable landing against a small chance of attention.
-LISE|Whatever you decide, do it before the wind drowns the striker.
-REN|I have the beam rhythm. Aya has the shutter. Lise watches the patrol reflection.
+NIKOLA|Whatever you decide, do it before the wind drowns the striker.
+REN|I have the beam rhythm. Aya has the shutter. Nikola watches the patrol reflection.
 NARRATOR|The checkpoint wick bends toward the undercrypt while the ignition striker waits beside Ren's hand.
 AYA|One deliberate light can turn this dangerous stair into a route people may traverse twice.
     `),
@@ -842,50 +842,50 @@ AYA|One deliberate light can turn this dangerous stair into a route people may t
 NARRATOR|Name slips tremble above shin-deep water as cords descend from them into a buried bell mechanism.
 AYA|Do not pull the first cord. It crosses five others beneath the surface.
 REN|The dry alcove holds a brazier and a warning plate covered in mineral scale.
-LISE|The nearest slip bears a Varga cut beneath the court annotation.
+NIKOLA|The nearest slip bears a Dražanić cut beneath the court annotation.
 AYA|Can you separate the marks without touching the name?
-LISE|Yes. My family's mark is three shallow angles made before the alloy cooled.
+NIKOLA|Yes. My family's mark is three shallow angles made before the alloy cooled.
 REN|Why would it appear on a bell beneath a Japanese temple?
-LISE|Because someone brought captured knowledge east, or someone from my line helped build what hunted us.
+NIKOLA|Because someone brought captured knowledge east, or someone from my line helped build what hunted us.
 AYA|Those are different histories. Which does the metal support?
-LISE|Neither alone. I can recognize the tool, not the hand that held it.
+NIKOLA|Neither alone. I can recognize the tool, not the hand that held it.
 REN|A useful limit stated without argument. We are all growing.
-LISE|Do not become accustomed to it.
-NARRATOR|Lise lifts one loose slip with the flat of her glove, preserving the ink while exposing its feeding cord.
+NIKOLA|Do not become accustomed to it.
+NARRATOR|Nikola lifts one loose slip with the flat of his glove, preserving the ink while exposing its feeding cord.
 AYA|The court annotation pairs a household name with a charge written later in different ink.
 REN|Like the blank confessions above.
 AYA|Worse in reach. These cords make every later charge feed the same bell network.
-LISE|Someone made accusation into fuel and bureaucracy into a mouth.
+NIKOLA|Someone made accusation into fuel and bureaucracy into a mouth.
 REN|Can we cut the cords without harming the people named?
 AYA|Paper is not the person, but destroying the only surviving relation can help the court erase them.
-LISE|We release each slip, copy its routing mark, and sever only the metal feed.
+NIKOLA|We release each slip, copy its routing mark, and sever only the metal feed.
 REN|That takes time in water already reacting to the charged pillars.
 AYA|Which is why the warning plate matters before anyone uses Storm delivery.
-LISE|I can scrape mineral scale without damaging the inscription.
+NIKOLA|I can scrape mineral scale without damaging the inscription.
 REN|Use the wood edge, not your blade. We need readable grooves, not faster scratches.
-LISE|Your precision becomes charming when it stops being aimed at my motives.
+NIKOLA|Your precision becomes charming when it stops being aimed at my motives.
 REN|I am conserving suspicion for the sealed door.
 NARRATOR|A blue charge travels through one marked pool, glassing its surface with cold before fading into the drain.
 AYA|The water lanes change state after the pillar discharges. Dry lantern tiles remain stable.
 REN|Storm may spread through the marked pools and leave Chill behind.
-LISE|Which can trap the person who casts it if they mistake range for safety.
+NIKOLA|Which can trap the person who casts it if they mistake range for safety.
 AYA|The plate likely states duration and affected markings. Reading it turns hazard into a rule.
 REN|The lock beyond us just moved.
-LISE|Someone has been listening from the bell chamber.
+NIKOLA|Someone has been listening from the bell chamber.
     `),
     after: dialogue(`
 AYA|The slips are evidence and people’s relations, not switches for us to pull until a door opens.
-LISE|Agreed. I can release the nearest cord while Ren keeps the dry path clear.
+NIKOLA|Agreed. I can release the nearest cord while Ren keeps the dry path clear.
 REN|First we decide whether to clean and read the warning or enter with only our observation.
 AYA|Reading costs one activation of time and may prevent repeated Chill across the party.
-LISE|Ignoring it preserves surprise against whoever waits beyond the lock.
+NIKOLA|Ignoring it preserves surprise against whoever waits beyond the lock.
 REN|They already know we are here. The moving bolt settled that argument.
 AYA|Then knowledge has the stronger claim, but the player still chooses when to spend the moment.
-LISE|The inscription edge shows a three-pulse symbol. Likely duration, not damage.
+NIKOLA|The inscription edge shows a three-pulse symbol. Likely duration, not damage.
 REN|Likely remains a word that can freeze a boot to the floor.
 AYA|The warning is ready to inspect, the dry alcove is safe, and no sacred practice is being disturbed.
 NARRATOR|A released name slip drifts toward the chamber door while the scaled brazier plate waits beside blue water.
-LISE|Read the rule or accept the uncertainty; afterward, we meet the person holding that bolt.
+NIKOLA|Read the rule or accept the uncertainty; afterward, we meet the person holding that bolt.
     `),
   },
   {
@@ -894,47 +894,47 @@ LISE|Read the rule or accept the uncertainty; afterward, we meet the person hold
 NARRATOR|The cracked bell chamber exhales cold dust after Mateus's Blood Ward breaks and his final rite gutters harmlessly.
 REN|Stay down. The next strike will not stop at your ward.
 MATEUS|The ward is finished. I have neither breath nor argument enough to rebuild it.
-LISE|You had argument enough to order guards against prisoners and call it necessity before the whole chamber heard us.
+NIKOLA|You had argument enough to order guards against prisoners and call it necessity before the whole chamber heard us.
 MATEUS|Yes.
 AYA|Do not make a single word perform the labor of an account.
-MATEUS|I ordered the witnesses contained. I intended to take the Varga heir alive. I intended to burn these records.
+MATEUS|I ordered the witnesses contained. I intended to take the Dražanić heir alive. I intended to burn these records.
 REN|And the rite that drank your blood?
 MATEUS|A threat designed to look like sacrifice. It harmed me visibly so others would mistake spectacle for reluctance.
-LISE|Was the reluctance false?
+NIKOLA|Was the reluctance false?
 MATEUS|The pain was real. The moral use I made of it was false.
 AYA|That distinction belongs in the record.
-NARRATOR|Mateus moves away from the guards' passage with empty hands while Lise keeps the broken ward between them.
-LISE|Turn your left cuff outward.
+NARRATOR|Mateus moves away from the guards' passage with empty hands while Nikola keeps the broken ward between them.
+NIKOLA|Turn your left cuff outward.
 MATEUS|You recognize the stitch.
-LISE|My teacher used that cipher to mark compromised correspondence. You wear it as court embroidery.
-MATEUS|I adapted his method after his death.
-LISE|After whose death?
-MATEUS|Miklos Varga's, outside Branik. I was told no student survived the archive fire.
-LISE|You were told what made your theft feel ownerless.
+NIKOLA|That cipher belonged to my teacher. You are the quarry named in the last letter he sent west.
+MATEUS|I adapted his method after his death. Your hunt found the correct thief.
+NIKOLA|A correct answer does not yet earn you the dignity of surrender. After whose death?
+MATEUS|Miklos Dražanić's, outside Branik. I was told no student survived the archive fire.
+NIKOLA|You were told what made your theft feel ownerless.
 MATEUS|I accepted what made it useful.
 REN|There. A complete sentence with the person responsible still inside it.
 AYA|What did you adapt the cipher to do?
 MATEUS|Translate denunciations into categories the court could route without carrying witnesses alongside them.
-LISE|You made accusation portable.
+NIKOLA|You made accusation portable.
 MATEUS|And made distance resemble verification. A copied mark could condemn someone no listener had ever met.
 AYA|Who commissioned the network?
 MATEUS|Shogun Kurozane. Magistrate Ujiro standardized the local records. I joined their work willingly for access and protection.
 REN|Protection from what?
 MATEUS|Consequences I considered unbearable when they belonged to me, and manageable when assigned to strangers.
-LISE|Do not call cowardice a spell.
+NIKOLA|Do not call cowardice a spell.
 MATEUS|I do not. Whatever else has changed in me, I signed before any compulsion was needed.
-NARRATOR|Lise notices the Varga mark inside the fallen bell key while approaching only far enough to read it.
+NARRATOR|Nikola notices the Dražanić mark inside the fallen bell key while approaching only far enough to read it.
     `),
     after: dialogue(`
-LISE|The mark names a sea route and a hunter's warning. You inverted both into a transport key.
+NIKOLA|The mark names a sea route and a hunter's warning. You inverted both into a transport key.
 MATEUS|Yes. I can identify the remaining keys, but that knowledge does not make me safe company.
 AYA|It makes you a source whose claims require corroboration and whose movements require boundaries.
 REN|The cell lever is here. Guards are moving through the passage you controlled.
 MATEUS|Pull it. I can delay them by giving the counter-order in the same cipher.
-LISE|Another performance of helpful pain will not purchase forgiveness.
+NIKOLA|You remain my quarry, Avelar. Opening these cells changes how I take you, not whether I do.
 MATEUS|I am not asking for forgiveness. I am naming one action available before my superiors revoke it.
 AYA|The witnesses decide whether to leave. We open the doors and the marked route; we do not command their gratitude.
-REN|Lise, you stay between him and neither exit. Aya, signal the two grates. I hold the lever.
+REN|Nikola, you stay between him and neither exit. Aya, signal the two grates. I hold the lever.
 MATEUS|Place the bell key on the floor after the doors open. Do not accept it from my hand as though this were a pledge.
 NARRATOR|Six cell locks wait on the lever while approaching boots answer Mateus from the dark passage.
 REN|Opening the block begins an escape we can support. Whatever happens to Mateus is not absolution attached to the handle.
@@ -945,48 +945,48 @@ REN|Opening the block begins an escape we can support. Whatever happens to Mateu
     before: dialogue(`
 NARRATOR|Market awnings divide Sodegaura into overlapping errands, languages, cargo lanes, and inspections that never quite meet.
 AYA|The eastern market offers three entries and only one shared mistake: arriving together.
-REN|The patrol description includes a courier, an archivist, and a foreign swordswoman. They were thorough.
-LISE|They omitted my better coat, which wounds me more than the accusation.
+REN|The patrol description includes a courier, an archivist, and a foreign swordsman. They were thorough.
+NIKOLA|They omitted my better coat, which wounds me more than the accusation.
 AYA|Your coat is exactly why you take the broker street. Traders expect foreign cloth there.
-LISE|I can discuss sail grades in four languages and insult pricing in six.
+NIKOLA|My Japanese is sufficient for prices, directions, and obvious lies. Its habit of omitting subjects is the language's defect.
 REN|Use whichever insult does not close the gate.
-LISE|Conversation opens information, not gates. I listened when you explained that distinction repeatedly.
+NIKOLA|Conversation opens information, not gates. I listened when you explained that distinction repeatedly.
 AYA|Good. Ren carries supply tags through the east queue. I join the registry line with copied ferry receipts.
 REN|And Mateus?
 AYA|He enters later with the salt porters, face covered by an ordinary rain hood and no court permit displayed.
-LISE|His old permit would pass faster.
+NIKOLA|His old permit would pass faster.
 AYA|It would also compel local clerks to serve the authority that harmed them. We do not use it without consent.
 REN|He agreed to wait at the rope yard.
-LISE|He agreed because I kept his cipher ring and the porters refused to be ordered.
+NIKOLA|He agreed because I kept his cipher ring and the porters refused to be ordered.
 AYA|Both boundaries can be true. Neither transforms him into a trusted companion.
 NARRATOR|Aya shifts one marker on the shared map, then folds it so no traveler carries the complete route.
 REN|My segment ends at the grain scales. If the customs pole lowers, I set the blue tag on the second sack.
 AYA|That means inspection delayed, not danger. Do not turn every inconvenience into an alarm.
-LISE|My yellow cord on the broker rail means a patrol asked after Takamine.
+NIKOLA|My yellow cord on the broker rail means a patrol asked after Takamine.
 REN|And no signal?
-LISE|We continue separately until the printer's reflected window aligns with the awning stripe.
+NIKOLA|We continue separately until the printer's reflected window aligns with the awning stripe.
 AYA|The local printer chose the meeting point. We follow her conditions and never enter the back room uninvited.
 REN|What exactly do we need from her?
 AYA|Port closure notices, a current customs layout, and whether witness families have a route to the lantern boats.
-LISE|I need a broker who knows which sealed warehouse received black-alloy salvage.
+NIKOLA|I need a broker who knows which sealed warehouse received black-alloy salvage.
 AYA|Ask as trade history. Do not expose our witnesses to improve your family search.
-LISE|You believe I might.
+NIKOLA|You believe I might.
 AYA|I believe grief narrows vision. Mine does too, which is why we state boundaries before the street tests them.
 REN|The supply cover is ordinary enough to survive one bored inspection.
-LISE|Nothing survives a bored official like giving him a small error he can correct.
+NIKOLA|Nothing survives a bored official like giving him a small error he can correct.
 AYA|The third tag uses last month's rope rate. Let the clerk amend it and feel the system functioning.
 REN|I dislike plans that depend on satisfying a petty appetite.
 AYA|Then remember the plan serves families waiting at the docks, not your satisfaction.
     `),
     after: dialogue(`
-LISE|Broker street is clear for six minutes. After that, a court launch unloads inspectors near the west arch.
+NIKOLA|Broker street is clear for six minutes. After that, a court launch unloads inspectors near the west arch.
 AYA|Registry queue advances slowly enough for me to observe the customs cage without forcing conversation.
 REN|The eastern supply gate has one guard and a lowering pole. My wrong rope rate will occupy his brush.
-LISE|If your charm fails, do not improvise a speech about justice.
+NIKOLA|If your charm fails, do not improvise a speech about justice.
 REN|I had planned a brief complaint about accounting.
 AYA|Even worse. Use the cover, accept correction, and place the blue tag only if movement stops.
 REN|Our paths cross once in the printer's window, but we do not gather there.
-LISE|A reflection confirms survival without advertising companionship.
+NIKOLA|A reflection confirms survival without advertising companionship.
 AYA|Exactly. Local workers remain people conducting business, not scenery behind our clever entry.
 REN|Then each errand stands alone, and the supply route gives us the least coercive first contact.
 NARRATOR|Civilian traffic separates the three while keeping their chosen signals visible beneath the eastern awnings.
@@ -1004,11 +1004,11 @@ AYA|Nor does the lane alter why our permit names an eastern delivery during open
 GENTA|The rope rate is obsolete.
 REN|We were told a clerk might enjoy correcting it.
 GENTA|Do not mistake a visible error for innocence. Smugglers often carry one flaw to distract from another.
-LISE|And officials often discover smuggling after deciding whom they dislike. We can both recite patterns.
+NIKOLA|And officials often discover smuggling after deciding whom they dislike. We can both recite patterns.
 GENTA|You are not standing at the broker desk.
-LISE|The broker sent me to confirm whether your east gate accepts imported cordage.
+NIKOLA|The broker sent me to confirm whether your east gate accepts imported cordage.
 GENTA|Name the broker.
-LISE|No. Her trade survives this conversation only if your question remains unanswered.
+NIKOLA|No. Her trade survives this conversation only if your question remains unanswered.
 REN|Inspect the goods or reject the permit in writing. We are blocking workers behind us.
 GENTA|You presume to instruct my station.
 AYA|We are asking for a decision the next person can see instead of an indefinite delay no one owns.
@@ -1018,7 +1018,7 @@ REN|From a Takamine supply bundle whose declared cargo did not match its destina
 GENTA|This is not a supply annotation.
 AYA|Then identify it before your staff moves anyone attached to it.
 GENTA|It marks prisoner transport through a civilian gate.
-LISE|Your surprise is limited. How many times have you seen it?
+NIKOLA|Your surprise is limited. How many times have you seen it?
 GENTA|Enough to know it is usually covered by a valid inspection seal.
 REN|And you let those covered tags pass.
 GENTA|I verified seals assigned by my captain.
@@ -1028,7 +1028,7 @@ REN|This one did not arrive complete, so now your conscience has found punctuati
 GENTA|Your anger is earned. It does not tell me whether your evidence is genuine.
 AYA|We carry copied Takamine records with custody marks, witness limits, and the cipher used to detach accusations from speakers.
 GENTA|Show the copy here and you expose it to every inspector entering this booth.
-LISE|At last, a useful objection.
+NIKOLA|At last, a useful objection.
 GENTA|The archive door behind my station has a blind angle from the inspection lane.
     `),
     after: dialogue(`
@@ -1036,7 +1036,7 @@ REN|A blind angle chosen by the person who controlled this checkpoint does not b
 GENTA|It becomes a place where evidence can be compared before Captain Kaji seizes it.
 AYA|You may inspect one copied annotation while I retain the bundle and record exactly what you see.
 GENTA|If the handwriting matches the port ledger, the transport system reaches beyond my captain's orders.
-LISE|And if the handwriting refuses the match?
+NIKOLA|And if the handwriting refuses the match?
 GENTA|I still must account for the prisoner mark on a false supply permit issued through this station.
 REN|You do not join us, command us, or make detained families wait while you reconsider your career.
 GENTA|Agreed. I lower my staff, not the gate. You choose whether to show the copy.
@@ -1106,7 +1106,7 @@ BOAT OPERATOR|I can hold departure for one tide turn. After that, the patrol cha
 AYA|We need enough time for each traveler to hear all three routes without turning urgency into command.
 WITNESS|Say first who knows these risks and who only copied them from a patrol slate.
 REN|I walked the warehouse lane. Cover is strong until the final crane platform.
-LISE|I observed the crowded market from the broker rail. Many eyes discourage arrests, but movement is slow.
+NIKOLA|I observed the crowded market from the broker rail. Many eyes discourage arrests, but movement is slow.
 GENTA|The quiet canal schedule comes from my station. A small patrol crosses twice, and water leaves little lateral cover.
 WITNESS|You controlled the patrol schedule.
 GENTA|I enforced it and approved prior transport through that canal.
@@ -1116,14 +1116,14 @@ NARRATOR|Genta steps behind the party line while Aya turns the map outward towar
 AYA|Warehouse route: strongest cover, shortest distance, one crane hook may already be armed.
 REN|I can hold the narrow defense point, but the platform offers little room if we are forced sideways.
 AYA|Crowded route: no expected battle, many independent observers, enough delay for Kaji to prepare machinery.
-LISE|The crowd is not a shield we own. We move at its pace and never draw danger toward a stall deliberately.
+NIKOLA|The crowd is not a shield we own. We move at its pace and never draw danger toward a stall deliberately.
 AYA|Quiet route: fastest access to the boat, one small patrol likely, water hazards visible under blue lanterns.
 GENTA|My schedule may be stale because Kaji noticed the archive delay.
 WITNESS|Which route keeps children away from the cranes?
 REN|Crowded market, though the extra time could arm both hooks at the boss platform later.
 WITNESS|Our safety now is not less important because a later fight becomes harder for you.
 REN|Agreed. I gave the tradeoff badly.
-LISE|The party can handle prepared hooks. Families should not be priced against our convenience.
+NIKOLA|The party can handle prepared hooks. Families should not be priced against our convenience.
 SECOND WITNESS|The market includes people who may recognize us from the stamping room.
 AYA|Recognition could bring assistance, fear, or unwanted attention. We cannot guarantee which.
 BOAT OPERATOR|The warehouse lane has a covered waiting alcove if anyone needs to stop.
@@ -1138,7 +1138,7 @@ AYA|No route is the righteous answer. Each preserves something and exposes somet
 WITNESS|Show us the final turns again, beginning from where the boat will actually wait.
 AYA|Quiet canal ends at the blue post. Crowded market joins the green stair. Warehouse lane exits beneath the amber crane.
 REN|I can take front or rear position after you choose, depending on which danger needs the clearest response.
-LISE|I can watch the water lane or broker crossings. I do not decide whose family accepts which exposure.
+NIKOLA|I can watch the water lane or broker crossings. I do not decide whose family accepts which exposure.
 GENTA|I can signal a false inspection delay once. Using it may reveal my refusal to Kaji before we reach him.
 SECOND WITNESS|That cost belongs to you, not to us. Do not attach a debt to it later.
 GENTA|I will not.
@@ -1161,7 +1161,7 @@ KAJI|A private receipt does not outrank port security.
 AYA|Show the security order, its issue time, and the charge attached to each person.
 KAJI|Archivists do not conduct examinations on my platform.
 AYA|Then stop presenting unsupported commands as records.
-LISE|The western crane is armed. Its hook line reaches the boat path if he starts the engine.
+NIKOLA|The western crane is armed. Its hook line reaches the boat path if he starts the engine.
 REN|I can move the family behind the salt stacks, but only if workers keep the east lane clear.
 DOCK WORKER|We will clear it if the family asks us, not because an armed stranger orders the pier.
 WITNESS|Clear the east lane. Keep the children beside me and do not separate our bundles.
@@ -1194,7 +1194,7 @@ REN|The workers need the exact order before the cranes start, not a speech about
 AYA|Genta can name who commanded what, which manifest concealed it, and what he previously approved.
 WITNESS|If he speaks, he does it facing us and leaves the boat path open.
 GENTA|Agreed. I remove my retainer token and place it on the manifest, not in anyone's hands.
-LISE|Kaji is reaching for the crane signal. The public account must be brief enough to become action.
+NIKOLA|Kaji is reaching for the crane signal. The public account must be brief enough to become action.
 DOCK WORKER|We are listening by our own choice. Say the order plainly if the party permits the delay.
 REN|This is the handoff: let him testify before the fight, or move immediately and preserve the account for custody.
 NARRATOR|Genta's token waits above the hidden prisoner mark while workers, family, and open route remain in one frame.
@@ -1217,11 +1217,11 @@ WITNESS|All present, all bundles present, and no one separated for questioning.
 AYA|I will record that count only if you want it attached to the route account.
 WITNESS|Record the number, not our names. We choose names after reaching the safe landing.
 AYA|The boundary is written first.
-LISE|Kaji's mechanism has a black-alloy core beneath the crane brake.
+NIKOLA|Kaji's mechanism has a black-alloy core beneath the crane brake.
 REN|The hook housing opened when his Guard broke. Is that the bell key?
-LISE|One of three, shaped to align a network node toward its paired route.
+NIKOLA|One of three, shaped to align a network node toward its paired route.
 AYA|We need custody before interpretation. Who recovered it?
-DOCK WORKER|I lifted the brake plate. Genta stopped the engine. Lise identified the alloy without touching it.
+DOCK WORKER|I lifted the brake plate. Genta stopped the engine. Nikola identified the alloy without touching it.
 AYA|Good. Each hand remains distinct.
 KAJI|The key belongs to the Shogun's port authority.
 REN|Then the authority may explain why its key sat inside a weapon aimed at civilians.
@@ -1239,7 +1239,7 @@ GENTA|No. I will give him my account if he requests it and accept if he refuses 
 REN|The immediate platform is secure. Accountability continues beyond our party formation.
     `),
     after: dialogue(`
-LISE|The key's inner point swings seaward no matter how I turn the housing.
+NIKOLA|The key's inner point swings seaward no matter how I turn the housing.
 AYA|Toward which chart line?
 DOCK WORKER|Nagi Sea Road. A foreign wreck lies beyond the fog bank, and court divers hired passage this morning.
 REN|Then they know the key's pair is still aboard.
@@ -1248,7 +1248,7 @@ WITNESS|First help the port write what happened tonight in words Kaji cannot sea
 GENTA|Yes. The next objective does not erase this consequence.
 KAJI|You think a ledger can survive the court because laborers watched one fight?
 AYA|No single copy survives by confidence. We make several, assign custody by consent, and let testimony travel with context.
-LISE|Then we follow the key before the divers strip the wreck, carrying evidence instead of a victory story.
+NIKOLA|Then we follow the key before the divers strip the wreck, carrying evidence instead of a victory story.
 REN|Families depart first. Copies depart separately. Kaji remains alive to answer the voices around him.
 NARRATOR|The key's point carries the frame across black water until Sodegaura's lanterns vanish inside the Nagi fog.
     `),

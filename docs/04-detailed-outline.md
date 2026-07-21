@@ -3,13 +3,13 @@
 ## Detailed script outline
 
 **Narrative target:** a focused 60-beat JRPG story whose scenes make the villain’s system concrete: a false record, a frightened person, an order given, a choice made, and a consequence carried forward. The story-only quantity estimate is about 5.15 reference hours; the intended 20-hour route comes from the explicitly interleaved 215-activity contract, not an unsupported critical-path claim.<br>
-**Canonical names:** Ren Ishikawa; Aya Shinohara; Elisabet “Lise” Varga; Father Mateus Avelar; Genta Mononobe; Kiku Nawa; Shogun Kurozane; Magistrate Ujiro Arata.<br>
+**Canonical names:** Ren Ishikawa; Aya Shinohara; Lord Nikola Dražanić; Father Mateus Avelar; Genta Mononobe; Kiku Nawa; Shogun Kurozane; Magistrate Ujiro Arata.<br>
 **Format note:** Scene titles are production IDs. Dialogue below is first-draft intent and can be revised for localization and historical review; plot function, speaker ownership, and exit state are locked unless a later design review changes them.
 
 ## Scene-writing rules
 
 1. A scene should change a relationship, a goal, or the player’s understanding of a system. If it only repeats atmosphere, cut or merge it.
-2. Japanese characters lead the local stakes, decisions, and knowledge. Lise and Mateus are not given authority simply because they are European.
+2. Japanese characters lead the local stakes, decisions, and knowledge. Nikola and Mateus are not given authority simply because they are European; Nikola arrives with almost no Japanese.
 3. Do not turn faith, cultural practice, or historical suffering into a puzzle prop. The supernatural threat is Kurozane’s invented bell system and the choices of its agents.
 4. Keep normal scene length below 90 seconds. Major turning-point scenes may run 2–3 minutes; use player movement or a battle before another long dialogue sequence.
 5. Every boss gets an aftermath scene. Victory must create a human consequence, not merely a key item.
@@ -105,9 +105,9 @@ Ren and Aya arrive with a forged supply permit. The public gate is closed, forci
 
 The party finds prisoners forced to stamp blank forms. A stealth-like observation scene has no fail state: if the player is seen, two guards become the next combat encounter. If unseen, one guard remains asleep and the party gains a minor item.
 
-### C2-03 — Lise’s interruption
+### C2-03 — Nikola’s interruption
 
-Lise steals the bell-room key from the same guard Ren is stalking. She assumes Ren works for the court; he assumes she is a foreign relic thief. Aya defuses the argument by identifying that both are following the same black alloy.
+Nikola steals the bell-room key from the same guard Ren is stalking. He assumes Ren is a court servant and tries to order him aside in Italian, then rough Portuguese; Ren assumes Nikola is a foreign relic thief. Aya defuses the argument and denies Nikola command of the group by identifying that both are following the same black alloy.
 
 ### C2-04 — Bell stair
 
@@ -115,22 +115,22 @@ The three use a narrow service stair. A slow swinging bell beam and collapse mar
 
 ### C2-05 — Undercrypt truth
 
-The group discovers name slips wired to a buried bell. Lise recognizes a Varga hunter mark cut into the alloy. Mateus, who has been watching, orders the guards out and confronts the party alone.
+The group discovers name slips wired to a buried bell. Nikola recognizes a Dražanić escort mark cut into the alloy. Mateus, who has been watching, orders the guards out and confronts the party alone.
 
 ### C2-06 — Boss: Father Mateus Avelar
 
-Mateus attempts to seize Lise and destroy the witnesses. His Blood Ward makes direct damage ineffective until the party understands the recovery window after Crimson Litany. The fight ends at 20% health, not death.
+Mateus attempts to seize Nikola and destroy the witnesses. His Blood Ward makes direct damage ineffective until the party understands the recovery window after Crimson Litany. The fight ends at 20% health, not death.
 
 ### C2-07 — A name from Europe
 
-Lise identifies Mateus’s former teacher and says the Varga oath did not die with its European archive. Mateus tells the truth in pieces: Kurozane uses bells to turn denunciation into power, and he wrote part of the translation cipher. He opens the cell block, stays behind to delay soldiers, then returns at camp asking to be treated as evidence, not family.<br>
-**Exit:** Lise joins. Mateus becomes camp-available; the Sodegaura key becomes next objective.
+Nikola identifies the Ragusan broker and Latin cipher attached to Mateus’s passage. Mateus retaliates by naming the Dražanić house’s profits, then tells the truth in pieces: Kurozane uses bells to turn denunciation into power, and Mateus wrote part of the translation cipher. He opens the cell block, stays behind to delay soldiers, then returns at camp asking to be treated as evidence, not family.<br>
+**Exit:** Nikola joins. Mateus becomes camp-available; the Sodegaura key becomes next objective. Their abrasive partnership begins under Aya’s authority rather than either European man’s.
 
 ## Chapter 3 — Sodegaura Lanterns
 
 ### C3-01 — Separate arrivals
 
-The group enters the port separately under conditions set by Sayo of Sodegaura, a fictional Japanese Kirishitan lay catechist, printer, and route organizer. The early camp scene **“An Alias at the Lantern Dock”** states her consequential choice: Sayo has already concealed her community’s prayer sheets, assigns the Takamine families to her warehouse route, and carries their testimony copy separately so one seizure cannot expose both people and evidence. Lise’s scene is about navigating trade etiquette and suspicion, not overriding Sayo’s conditions. No single player dialogue choice determines success.
+The group enters the port separately under conditions set by Sayo of Sodegaura, a fictional Japanese Kirishitan lay catechist, printer, and route organizer. The early camp scene **“An Alias at the Lantern Dock”** states her consequential choice: Sayo has already concealed her community’s prayer sheets, assigns the Takamine families to her warehouse route, and carries their testimony copy separately so one seizure cannot expose both people and evidence. Nikola can read an Italian cargo mark but cannot conduct a Japanese negotiation; his scene is about resenting and finally obeying Sayo’s conditions. No single player dialogue choice determines success.
 
 ### C3-02 — The checkpoint
 
@@ -163,9 +163,9 @@ Nagi fishers cannot launch boats because bell fog pulls their nets toward the re
 
 The route teaches Frost pools, Ember lantern spaces, and tide timing. Kiku is a temporary guest; she has one field remedy interaction and one combat assist before joining.
 
-### C4-03 — The Varga journal
+### C4-03 — The Dražanić ledger
 
-On the wreck, Lise finds proof that an ancestor used the family’s hunt to acquire relics and sell information. She cannot claim heritage alone makes her righteous. Mateus admits he knew the wreck carried a bell key.
+On the wreck, Nikola finds proof that his minor house converted wartime escorts, confiscated books, and anti-vampire knowledge into private fees. He cannot claim heritage or an inflated title makes him righteous. Mateus admits he knew the wreck carried a bell key.
 
 ### C4-04 — Survivors’ hold
 
@@ -223,7 +223,7 @@ Ujiro calls the party foreign agents and presents Mateus’s real past crimes. M
 
 ### C6-04 — Printmaker flight
 
-Masked clerks pursue the copies through lanes and rooftops. Aya directs the escape; Lise protects a civilian courier rather than the most valuable item.
+Masked clerks pursue the copies through lanes and rooftops. Aya directs the escape; Nikola obeys her route and protects a civilian courier rather than the most valuable item.
 
 ### C6-05 — Boss: Magistrate Ujiro Arata
 
@@ -248,9 +248,9 @@ Genta meets old soldiers. Some support the rescue; one insists on orders. Genta 
 
 The party learns that returning name slips to flowing water releases Ashen Oni. Encounters add a nonlethal objective: release at least one bound enemy to earn a safety path.
 
-### C7-04 — Lise’s revised oath
+### C7-04 — Nikola relinquishes the title
 
-Lise burns the old Varga seal and writes a new oath: protect named people, do not claim a right to purge a lineage. Mateus witnesses but does not frame it as absolution for himself.
+Nikola breaks the seal with which he styled himself Count and records the actual limits of his minor house. He writes a new field rule: protect named people, accept revocable command, and claim no hereditary right to purge a lineage. Mateus witnesses but does not frame Nikola’s correction as absolution for either man.
 
 ### C7-05 — Boss: Bell Warden Chiyo
 
@@ -269,7 +269,7 @@ Ren asks communities what they can offer. A clear UI lists contribution, risk, a
 
 ### C8-03 — Black Gate bargain
 
-Lady Enma offers selected villages safety for Mateus and Lise. Mateus refuses to trade others’ safety for his own life. Lise refuses to decide on villages’ behalf. Network representatives answer together: no one is handed over.
+Lady Enma offers selected villages safety for Mateus and Nikola. Mateus refuses to trade others’ safety for his own life. Nikola begins to answer as a lord, stops, and yields the decision to the network representatives. They answer together: no one is handed over.
 
 ### C8-04 — Lantern breach
 
@@ -311,7 +311,7 @@ The party escapes with the archive. The castle only collapses where bell tissue 
 
 ### E00 — Open archive
 
-Aya establishes a public archive with corrections, testimony, and acknowledged gaps. Kiku opens a medical storehouse. Genta offers testimony before rebuilding a road. Lise leaves a revised oath and local self-defense notes. Mateus records his crimes under supervision and begins locating remaining caches. Ren delivers a packet of people asking after one another.
+Aya establishes a public archive with corrections, testimony, and acknowledged gaps. Kiku opens a medical storehouse. Genta offers testimony before rebuilding a road. Nikola leaves the broken false-count seal, a bounded field manual, and local self-defense notes under Japanese custody. Mateus records his crimes under supervision and begins locating remaining caches. Ren delivers a packet of people asking after one another.
 
 ### E01 — Repaired tower
 
@@ -323,14 +323,14 @@ The last image is a lantern in a repaired Takamine bell tower. The bell does not
 
 This is **FP-1 Takamine Vertical Slice**, the middle section of Chapter 2 from the Takamine rain gate to Mateus opening the cell block. It is deliberately a vertical slice, not the game’s opening tutorial.
 
-**FP-0 Bell Court Combat Proof comes first.** FP-0 is the current 5–10 minute, one-combat browser build: Ren faces an Ashen Oni Tithe Enforcer on a 12 × 7 rain-gate board, Lise and Mateus are named in its short prelude/log, and it validates exact movement, Tempo, Pace, recovery, Guard/Dodge, and Ledger math. FP-0 is an implementation-risk gate, not the 20–40 minute first playable called for by the project template.
+**FP-0 Bell Court Combat Proof comes first.** FP-0 is the current 5–10 minute, one-combat browser build: Ren faces an Ashen Oni Tithe Enforcer on a 12 × 7 rain-gate board, Nikola and Mateus are named in its short prelude/log, and it validates exact movement, Tempo, Pace, recovery, Guard/Dodge, and Ledger math. FP-0 is an implementation-risk gate, not the 20–40 minute first playable called for by the project template.
 
 FP-1 begins only after FP-0 passes its automated and new-player comprehension checks. It reuses FP-0’s combat contract, then adds field navigation, a three-character party, two teaching battles, and Mateus’s boss encounter.
 
 **Expected first clear:** 28–34 minutes.<br>
 **Fast clear target:** 24–26 minutes.<br>
 **Cautious or retry target:** 35–40 minutes.<br>
-**Playable party:** Ren and Aya at start; Lise joins before Battle 2. Mateus is the boss only.<br>
+**Playable party:** Ren and Aya at start; Nikola joins before Battle 2. Mateus is the boss only.<br>
 **Explicitly out of scope:** overworld map, shop, crafting, party-respec menu, save-anywhere, later party members, a full stealth system, and all late-game statuses.
 
 The slice validates the player promise:
@@ -350,7 +350,7 @@ These are first-pass implementation values, not final balance:
 | --- | ---: | ---: | --- |
 | Ren, level 3 | 180 | 35 | Courier Cut, Reed Thrust, Shoulder Turn, Guard |
 | Aya, level 3 | 150 | 60 | Analyze, Paper Ward, Dawn Thread, Restore |
-| Lise, level 3 | 165 | 40 | Needlepoint, Hawthorn Pique, Mark Quarry, Guard |
+| Nikola, level 3 | 165 | 40 | Needlepoint, Hawthorn Pique, Mark Quarry, Guard |
 | Mateus, boss | 760 | 120 | Pale Cut, Blood Ward, Crimson Litany, Sanguine Step |
 
 Starting inventory: 2 River Salves, 1 Ward Tonic. A checkpoint lantern refills nothing; it only saves progress and can be revisited before the boss.
@@ -361,13 +361,13 @@ Starting inventory: 2 River Salves, 1 Ward Tonic. A checkpoint lantern refills n
 | --- | --- | ---: | --- |
 | FP-00 | Rain Gate | 2 min | entry scene, camera pan, move prompt |
 | FP-01 | Cedar Service Path | 4 min | Battle 1, one optional chest |
-| FP-02 | Abandoned Chapel | 4 min | prisoner scene, Lise reveal |
+| FP-02 | Abandoned Chapel | 4 min | prisoner scene, Nikola reveal |
 | FP-03 | Bell Stair | 4 min | deliberate movement hazard, checkpoint |
 | FP-04 | Flooded Undercroft | 5 min | Battle 2, Ledger/terrain read |
 | FP-05 | Bell Chamber | 8–10 min | Mateus scene, boss, aftermath |
 | FP-06 | Cell Block Exit | 3–4 min | escape scene, slice end card |
 
-Required encounters: two normal battles and one boss. The intended number of field interactables is eight: supply cart, rain basin, torn confession sheet, two prisoner grates, Varga seal, checkpoint lantern, bell mechanism, and cell lever. No random encounters.
+Required encounters: two normal battles and one boss. The intended number of field interactables is eight: supply cart, rain basin, torn confession sheet, two prisoner grates, Dražanić seal, checkpoint lantern, bell mechanism, and cell lever. No random encounters.
 
 ## FP-00 — Rain Gate
 
@@ -439,23 +439,25 @@ Required encounters: two normal battles and one boss. The intended number of fie
 
 **Interaction rule:** The player can speak to both prisoner grates. Each adds a one-line note to Aya’s casebook; neither is required for progression. A third optional inspect reveals a court clerk has hidden a key behind a screen.
 
-**Trigger FP02-B, Lise entrance**
+**Trigger FP02-B, Nikola entrance**
 
-Lise drops from the balcony into the doorway, holding the key and a narrow crossbow-like needle tool. She points it at Ren. Her silhouette is a practical sea-travel coat over period-appropriate layers, short dark hair, no celebrity reference.
+Nikola drops from the balcony into the doorway, holding the key and a weather-cased wheellock pistol that the rain has made dubious. His squared doublet, falling band, repaired cloak, rapier, narrow moustache, and lifted chin advertise money and rank more reliably than his papers do. He points the pistol at Ren; Aya notices the pan is wet. He has an original fictional face and no celebrity reference.
 
-> LISE: “Step away from the lock.”<br>
+> NIKOLA: “Step away from the lock.”<br>
 > REN: “You first.”<br>
-> LISE: “You wear their permit.”<br>
+> NIKOLA: “You wear their permit.”<br>
 > AYA: “And you stole their key. Neither is an introduction.”<br>
-> LISE: “Elisabet Varga. Lise, if you prefer it short. I am looking for a bell that should not be here.”<br>
+> NIKOLA: “Count Nikola Dražanić. I require that bell.”<br>
+> AYA: “Your Japanese requires more work than your title.”<br>
+> NIKOLA: “You understood me.”<br>
 > AYA: “That makes three of us.”<br>
 > REN: “It makes two of us and one person holding a weapon at my throat.”<br>
-> LISE: “Then we are improving.”
+> NIKOLA: “The powder is wet. Your throat was never in danger.”
 
 **Gameplay**
 
-* Lise joins as a temporary third party member with two commands: Needlepoint and Mark Quarry.
-* Show a non-blocking toast: “Lise: Pierce specialist. Inspect Hawthorn Pique in Skill.”
+* Nikola joins as a temporary third party member with two commands: Needlepoint and Mark Quarry.
+* Show a non-blocking toast: “Nikola: Pierce specialist. Inspect Hawthorn Pique in Skill.”
 * Player uses the stolen key on rear door. No combat in this scene.
 
 **Exit:** The bell rings once, lights dim, and the screen shake is exactly four frames at 60 FPS with an accessibility option to disable camera shake.
@@ -475,11 +477,11 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 
 **Banter by landing**
 
-> LISE: “In my country, old towers lean. Here they attack.”<br>
+> NIKOLA: “In my country, old towers lean. Here they attack.”<br>
 > REN: “It is not the tower.”<br>
 > AYA: “It is the people who left a bell above a stair.”
 
-**Exit:** At the top landing, Lise discovers a shallow Varga mark cut into black metal. She becomes quiet; Aya records it before the player descends into the undercroft.
+**Exit:** At the top landing, Nikola discovers a shallow Dražanić escort mark cut into black metal. He first calls it counterfeit, then becomes quiet when Aya identifies the matching account stroke and records it before the player descends into the undercroft.
 
 ## FP-04 — Flooded Undercroft
 
@@ -489,7 +491,7 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 **Trigger FP04-A**
 
 > AYA: “These slips are tied to the bell.”<br>
-> LISE: “Not tied. Fed. Someone made a mouth and gave it names.”<br>
+> NIKOLA: “Not tied. Fed. Someone made a mouth and gave it names.”<br>
 > REN: “Then we break its teeth.”
 
 **Battle 2: Tithe Enforcer ×1 + Bell Moth ×2**
@@ -506,7 +508,7 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 **Expected player pattern**
 
 1. Aya Analyses the Enforcer.
-2. Lise moves one Pace around its shield and uses Hawthorn Pique.
+2. Nikola moves one Pace around its shield and uses Hawthorn Pique.
 3. Ren either redirects the Enforcer with Shoulder Turn or uses Guard to prevent an ally being forced into water.
 4. The player sees that an aggressive skill with 2 Recovery can be correct only after the moths have committed their charge.
 
@@ -523,19 +525,19 @@ Lise drops from the balcony into the doorway, holding the key and a narrow cross
 Mateus enters from the gallery in a worn black clerical coat and court sash, pale but not modeled after a real actor. He does not pose as a glamorous savior; his body language is controlled, tired, and complicit.
 
 > MATEUS: “You took longer than the bell predicted.”<br>
-> LISE: “It does not predict. It listens to frightened men.”<br>
+> NIKOLA: “It does not predict. It listens to frightened men.”<br>
 > MATEUS: “That distinction has kept you alive?”<br>
 > AYA: “It has kept us honest.”<br>
 > MATEUS: “Honesty is an expensive habit in this country.”<br>
 > REN: “Then you must be rich.”<br>
 > MATEUS: “No. I am what happens when a man pays with other people.”
 
-Mateus sees Lise’s Varga seal. One beat of silence.
+Mateus sees Nikola’s Dražanić seal. One beat of silence.
 
-> MATEUS: “Varga.”<br>
-> LISE: “You know the mark.”<br>
-> MATEUS: “I knew the grave it was meant to be on.”<br>
-> LISE: “Then you know why I am here.”<br>
+> MATEUS: “Dražanić. A small house for so large a title.”<br>
+> NIKOLA: “You know the mark.”<br>
+> MATEUS: “I knew the invoices attached to it.”<br>
+> NIKOLA: “Then you know why I am here.”<br>
 > MATEUS: “I know why Kurozane sent me.”
 
 **Boss goal:** reduce Mateus to 20% health or break both Blood Ward seals after phase two. A defeat returns to the checkpoint lantern with a concise tip showing Crimson Litany’s Recovery.
@@ -558,7 +560,7 @@ Mateus uses Pale Cut, Sanguine Step, then Blood Ward. He does not use Crimson Li
 **Phase 2 trigger, 55% health**
 
 > MATEUS: “There is still time to leave with the living.”<br>
-> LISE: “You mean leave them to become ash.”<br>
+> NIKOLA: “You mean leave them to become ash.”<br>
 > MATEUS: “I mean I have watched brave people die for a sentence.”<br>
 > AYA: “And you have watched quiet people die for yours.”
 
@@ -583,9 +585,9 @@ Battle ends. No kill animation, no experience bonus from a named human character
 
 Mateus opens the cell lever. The player is allowed to move Ren to the lever and interact, so the rescue is not entirely a cutscene.
 
-> LISE: “Avelar. My grandmother kept a page with your name.”<br>
-> MATEUS: “Then she knew more than I deserved.”<br>
-> LISE: “It said you carried a lantern through a siege.”<br>
+> NIKOLA: “Avelar. My father’s ledger kept a page with your name.”<br>
+> MATEUS: “Then he knew more than you have admitted.”<br>
+> NIKOLA: “It said you carried a lantern through a siege.”<br>
 > MATEUS: “I did. I sold the road behind it.”<br>
 > AYA: “You can tell us where it leads now.”<br>
 > MATEUS: “To three bells. To Kurohana. To every name I helped turn into a number.”
@@ -594,9 +596,9 @@ Mateus opens the cell lever. The player is allowed to move Ren to the lever and 
 
 > REN: “You are coming with us?”<br>
 > MATEUS: “I am coming far enough to answer questions. Do not mistake that for being welcomed.”<br>
-> LISE: “I will not.”
+> NIKOLA: “I had not mistaken it for anything so pleasant.”
 
-Mateus remains behind to hold the service passage. Lise receives the bell-room key and joins permanently. A final HUD card reads:
+Mateus remains behind to hold the service passage. Nikola receives the bell-room key and joins permanently. A final HUD card reads:
 
 > FIRST PLAYABLE COMPLETE<br>
 > Validated: field precision, Pace, Ledger, Recovery, three-party battle, boss readability.
@@ -612,7 +614,7 @@ The first playable is ready for external testing when all of the following are t
 * Fewer than 10% of players fail the Bell Stair twice; no player reports needing a jump or suffering unpredictable collision.
 * At least 70% of testers identify Crimson Litany’s recovery window as the intended boss answer after one failed attempt.
 * The boss clear rate on first session is 55–80%; lower means its counterplay is unclear, higher means the pattern or health is under-tuned.
-* Testers can state why Lise distrusts Mateus and why Mateus opens the cells without describing him as “forgiven.”
+* Testers can state why Nikola and Mateus despise one another’s evasions, why their forced partnership works, and why Mateus opens the cells without describing him as “forgiven.”
 * All attacks, target zones, damage types, and recovery values remain legible at 320 × 180 logical pixels and with camera shake disabled.
 
 ## Sources

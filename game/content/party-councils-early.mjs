@@ -38,7 +38,7 @@ const AUTHORED_EARLY_COUNCILS = [
       L('You recognized my family mark and spoke as though an old grave had finally entered the room.'),
       M('I knew the mark from court reports, not from any honorable acquaintance with your dead.'),
       A('Then give us the boundary of your knowledge before offering another useful revelation.'),
-      M('I wrote one conversion table for denunciations, interpreted prisoner lists, and heard only fragments about the Varga seizure.'),
+      M('I wrote one conversion table for denunciations, interpreted prisoner lists, and heard only fragments about the Dražanić seizure.'),
       R('You also delayed the guards, which is why we are speaking here rather than fighting in the corridor.'),
       A('A helpful act can be entered beside harmful acts without becoming a solvent poured over them.'),
       L('I want his cipher knowledge, but I will not make the freed witnesses sit through his explanation.'),
@@ -78,7 +78,7 @@ const AUTHORED_EARLY_COUNCILS = [
         },
         {
           label: 'Prepare a supervised cipher map',
-          summary: 'Mateus diagrams only the court mechanism under Aya and Lise’s scrutiny while witness custodians control whether its contents enter their record.',
+          summary: 'Mateus diagrams only the court mechanism under Aya and Nikola’s scrutiny while witness custodians control whether its contents enter their record.',
           response: [
             L('I will challenge each claimed symbol against the fragments I carry, without presenting my lineage as proof.'),
             M('The map will distinguish what I designed, what other clerks added, and what I still cannot identify.'),
@@ -151,7 +151,7 @@ const AUTHORED_EARLY_COUNCILS = [
   {
     sequence: 7,
     title: 'Dry Stones Through the Tide Caves',
-    theme: 'Walking the cave route again in memory, Ren, Lise, Mateus, and Genta redesign its markers around bodies, changing tides, and local guidance rather than fighter assumptions.',
+    theme: 'Walking the cave route again in memory, Ren, Nikola, Mateus, and Genta redesign its markers around bodies, changing tides, and local guidance rather than fighter assumptions.',
     dialogue: [
       R('Start at the first cold pool: I stepped through because the water reached only my calves and the lantern marker looked close.'),
       G('Your stride cleared the submerged crack; mine caught on the edge because armor shifted my balance.'),
@@ -213,9 +213,9 @@ const AUTHORED_EARLY_COUNCILS = [
   {
     sequence: 8,
     title: 'The Hold Speaks Before the Journal',
-    theme: 'After the sailors’ evacuation decision, Aya, Lise, Mateus, and Genta prevent a dramatic family journal and reef battle from eclipsing survivor accounts and present care.',
+    theme: 'After the sailors’ evacuation decision, Aya, Nikola, Mateus, and Genta prevent a dramatic family journal and reef battle from eclipsing survivor accounts and present care.',
     dialogue: [
-      A('The sailors asked why the Varga journal reached our evidence cloth before their account of the hold.'),
+      A('The sailors asked why the Dražanić journal reached our evidence cloth before their account of the hold.'),
       L('Because I carried it here first, still furious, and placed my family discovery at the center without asking.'),
       G('The hold account is not late merely because injured people needed treatment before speaking.'),
       M('Nor does the journal become urgent because its betrayal provides a cleaner story than damaged lungs and divided choices.'),
@@ -253,7 +253,7 @@ const AUTHORED_EARLY_COUNCILS = [
       options: [
         {
           label: 'Center a survivor-controlled account',
-          summary: 'Sailor delegates define the scope of the primary hold record while technical statements and the Varga journal remain separate, linked appendices under distinct custody.',
+          summary: 'Sailor delegates define the scope of the primary hold record while technical statements and the Dražanić journal remain separate, linked appendices under distinct custody.',
           response: [
             A('The survivor record will state exactly which matters its delegates may represent and which remain individual decisions.'),
             G('My route description enters only after sailors correct where commands, refusals, and local knowledge changed it.'),
@@ -410,7 +410,7 @@ const AUTHORED_EARLY_COUNCILS = [
       L('My ship-broker accent may open conversation, but anyone from the northern piers will hear that it is borrowed.'),
       M('The court archive lists three brokers who disappeared; using their names would endanger families still answering questions about them.'),
       A('No stolen identities. Our covers describe tasks we can actually perform if a gate clerk tests us.'),
-      R('I carry salt invoices, Aya carries herb tallies, and Lise asks about passage without promising a vessel.'),
+      R('I carry salt invoices, Aya carries herb tallies, and Nikola asks about passage without promising a vessel.'),
       L('What does Mateus carry besides a face that some customs clerks may remember from court work?'),
       M('Nothing through the public gate. I take the drainage path only if its local keeper renews yesterday’s permission.'),
       R('If permission is withdrawn, where do you wait without drawing patrols toward the witness carts?'),
@@ -464,7 +464,7 @@ const AUTHORED_EARLY_COUNCILS = [
   {
     sequence: 3,
     title: 'Salt Dust Across the Handwriting',
-    theme: 'Aya, Lise, and Mateus separate authorship, mechanism, and hearsay after his customs-ledger admission, preserving the port clerk’s authority over possible testimony.',
+    theme: 'Aya, Nikola, and Mateus separate authorship, mechanism, and hearsay after his customs-ledger admission, preserving the port clerk’s authority over possible testimony.',
     dialogue: [
       A('Leave the ledger open to the page the clerk selected; the folded corners on either side remain outside our permission.'),
       M('The slanted annotation is mine, including the small hook that routes an accusation past its original witness.'),
@@ -524,7 +524,7 @@ const AUTHORED_EARLY_COUNCILS = [
   {
     sequence: 4,
     title: 'The Refusal After the Shout',
-    theme: 'Ren and Lise press Genta to turn one public refusal into accountable practice without making dock workers certify his reform or forgetting earlier orders he obeyed.',
+    theme: 'Ren and Nikola press Genta to turn one public refusal into accountable practice without making dock workers certify his reform or forgetting earlier orders he obeyed.',
     dialogue: [
       G('The infirmary attendant put my spear outside, though I had already bound it for travel.'),
       L('She did not know your knots, and a former retainer entering with a spear is still a former retainer entering armed.'),
@@ -611,7 +611,7 @@ const AUTHORED_EARLY_COUNCILS = [
       L('Until then, two carriers keep separate seals so none of us can open the case alone.'),
       G('Choose carriers who are not Mateus and not me; our court histories add avoidable pressure.'),
       M('Agreed. Exclusion from custody is a boundary, not a symbolic punishment requiring debate.'),
-      A('Lise can carry one seal and Ren the other while I keep the condition tracing.'),
+      A('Nikola can carry one seal and Ren the other while I keep the condition tracing.'),
       L('My family history also touches maritime seizures, so Nagi must hear that before accepting me as neutral.'),
       R('None of us is neutral. The useful question is whether the custody method remains challengeable.'),
       G('The workers may recall the key if our route creates a risk they did not authorize.'),
@@ -630,7 +630,7 @@ const AUTHORED_EARLY_COUNCILS = [
       options: [
         {
           label: 'Present sealed joint custody',
-          summary: 'Ren and Lise bring the unopened key under separate seals while Nagi’s council hears its known history and chooses whether to appoint a custodian.',
+          summary: 'Ren and Nikola bring the unopened key under separate seals while Nagi’s council hears its known history and chooses whether to appoint a custodian.',
           response: [
             R('I will open neither seal unless the dock workers and the Nagi council authorize the same transfer.'),
             L('My family’s maritime record will be disclosed before anyone decides whether I remain an acceptable carrier.'),

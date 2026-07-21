@@ -89,7 +89,7 @@ test('future story locks are not published, then become targets after their flag
   assert.equal(
     resolvePublishedFieldInteractable(rearLock, chapel.interactables, []),
     null,
-    'c2-02 cannot publish the rear lock before Lise entrusts her key',
+    'c2-02 cannot publish the rear lock before Nikola entrusts his key',
   );
   assert.equal(
     resolvePublishedFieldInteractable(rearLock, chapel.interactables, ['c2-lise-trusted-with-key']),

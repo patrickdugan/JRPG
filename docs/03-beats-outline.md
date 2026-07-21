@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.645/308.927/498.860 minutes low/reference/high (about 3.11/5.15/8.31 hours)<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.721/1,231.933/1,917.838 minutes (about 12.95/20.53/31.96 hours), not measured playtime<br>
+**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.868/309.249/499.306 minutes low/reference/high (about 3.11/5.15/8.32 hours)<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.975/1,232.299/1,918.346 minutes (about 12.95/20.54/31.97 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 
@@ -21,9 +21,9 @@
 | --- | --- | --- | --- | --- | --- |
 | Prologue | Escape the Night Census | Hoshigawa | Ren protects neighbors instead of a state dispatch | Ashen Bailiff | Pace and telegraphs |
 | 1. River of Names | Find the stolen bell fragment | Hoshigawa, Shrine Archive | Aya joins; records become a form of resistance | Tithe Hound | Analyze and delivery type |
-| 2. Bell at Takamine | Stop Kurozane’s experimental local bell registry | Takamine Bell Temple | Lise arrives; Mateus meets her and breaks rank | Father Mateus Avelar | Recovery and boss phase readability |
+| 2. Bell at Takamine | Stop Kurozane’s experimental local bell registry | Takamine Bell Temple | Nikola arrives; Mateus meets his abrasive European foil and breaks rank | Father Mateus Avelar | Recovery and boss phase readability |
 | 3. Sodegaura Lanterns | Move witnesses through a closed port | Sodegaura, rain docks | Genta defects; the party learns who profits from the ban | Captain Kaji | Facing, Guard, forced movement |
-| 4. The Sea Keeps No Ledger | Recover a lost bell key from a wreck | Nagi Sea Road, wrecked carrack | Kiku joins; Lise confronts inherited vengeance | Widow-of-Fog | elemental terrain |
+| 4. The Sea Keeps No Ledger | Recover a lost bell key from a wreck | Nagi Sea Road, wrecked carrack | Kiku joins; Nikola confronts his house’s complicity | Widow-of-Fog | elemental terrain |
 | 5. Ash in Kagura Pass | Destroy the forge that makes Ashen Oni | Kagura Pass, Ash Fields | Mateus admits his ledger work; midpoint reveal | Furnace Abbot | Resist/absorb and recovery economy |
 | 6. The Court of Masks | Publish the proof before it is erased | Kōzui relay city, tribunal | Aya leads; human collaborators make their choices visible | Magistrate Ujiro Arata | multi-target threat triage |
 | 7. The Road of the Dead | Recover survivors taken for the final bell | Hushroad tunnels, prison ferries | Ren chooses rescue over a direct strike at Kurozane | Bell Warden Chiyo | swap and positional rescue |
@@ -78,22 +78,22 @@
 
 **Places:** Takamine rain gate; cedar stair; abandoned chapel; bell tower; flooded undercroft.
 
-**Characters:** Lise Varga arrives while tracking a relic from a wrecked ship. Father Mateus Avelar is introduced as the court’s polished foreign interpreter and an enemy. When he sees Lise’s Varga seal, he realizes the lineage he believed extinguished in Europe has reached Japan.
+**Characters:** Lord Nikola Dražanić arrives while tracking a ledger and relic from a wrecked ship. He is a displaced Croatian frontier noble who calls himself Count abroad, though the title is inflated. Father Mateus Avelar is introduced as the court’s polished foreign interpreter and an enemy. When Mateus sees the Dražanić seal, he recognizes a minor house entangled in the Adriatic sale network—and a fellow European stubborn enough to follow it to Japan.
 
 **Major beats**
 
 1. Ren and Aya enter the temple disguised as supply carriers, only to find prisoners being made to stamp blank confessions.
-2. Lise steals a key at the same moment, mistakes Ren for a court scout, and forces a tense but comic mistrust scene.
+2. Nikola steals a key at the same moment, mistakes Ren for a court scout, and tries to order him aside in rough Portuguese and Italian. Ren understands none of it; Aya deflates the attempted command by identifying their shared target.
 3. The group uses the chapel’s service route to bypass the public stair. Field hazards test careful walking but never require a reflex jump.
-4. Lise recognizes the black bell alloy as the same substance that destroyed her family archive; the temple’s bell is one node of a larger network.
-5. Mateus intercepts them in the bell chamber. He is ordered to retrieve Lise and erase the witnesses.
+4. Nikola recognizes a Dražanić escort mark cut beside the black bell alloy; the same brokers named in his missing house ledger helped move it, and the temple’s bell is one node of a larger network.
+5. Mateus intercepts them in the bell chamber. He is ordered to retrieve Nikola and erase the witnesses.
 6. During the boss fight, Mateus casts a blood rite that harms him more than the party. His private hesitation becomes a phase change, not an instant redemption.
-7. After the fight, Lise names his former teacher and the Varga oath. Mateus admits he helped make the registry work and reveals Kurozane’s name for the first time.
+7. After the fight, Nikola names the Ragusan broker and Latin cipher attached to Mateus’s earlier passage. Mateus answers by exposing the Dražanić house’s profits, admits he helped make the registry work, and reveals Kurozane’s name for the first time.
 8. He lets the prisoners escape, gives the party the temple key, and remains behind to delay court soldiers. At the chapter close he returns voluntarily, asking to be used as a source rather than trusted as a friend.
 
 **Boss:** Father Mateus Avelar. The fight teaches Recovery: his spectacular Crimson Litany has 3 Recovery, creating a short safe window after it resolves. He is defeated by breaking his Blood Ward, not by killing him.
 
-**Exit state:** Lise joins permanently; Mateus becomes a limited fourth party member at the camp. The party learns three bell keys can sever the network, and one lies at Sodegaura.
+**Exit state:** Nikola joins permanently; Mateus becomes a limited fourth party member at the camp. The party learns three bell keys can sever the network, and one lies at Sodegaura. Their buddy-cop friction begins under Aya’s authority: Nikola can challenge Mateus in Latin, but neither European gets to interpret Japanese stakes for the group.
 
 **Vertical-slice selection:** FP-0 is a 5–10 minute, one-combat Bell Court proof used to validate the core engine first. The section from Takamine’s rain gate through Mateus’s escape is FP-1, the 28–34 minute first-playable target required by the production template. FP-1 is detailed in the detailed outline.
 
@@ -107,7 +107,7 @@
 
 **Major beats**
 
-1. The party enters the port separately to avoid an obvious foreigner-and-priest patrol profile. Sayo has already concealed her community’s prayer sheets; she assigns the Takamine families to her warehouse route and carries their testimony copy separately. Her decision is stated in the early camp scene **“An Alias at the Lantern Dock.”** Lise’s language skills open a trade conversation but do not overrule Sayo or solve the chapter.
+1. The party enters the port separately to avoid an obvious foreigner-and-priest patrol profile. Sayo has already concealed her community’s prayer sheets; she assigns the Takamine families to her warehouse route and carries their testimony copy separately. Her decision is stated in the early camp scene **“An Alias at the Lantern Dock.”** Nikola’s Italian and rough Portuguese help identify a foreign cargo mark, but his almost nonexistent Japanese makes him dependent on Aya and Sayo; he neither overrules Sayo nor solves the chapter.
 2. Aya identifies the port registry as another copy of Ujiro’s falsified system. Mateus recognizes his own coded annotations in the margins.
 3. Genta stops Ren at a checkpoint. When a detained family is marked for disappearance rather than trial, Genta disobeys an order and creates the party’s escape.
 4. The party escorts witnesses through dockside lanes, using lantern signals and a simple route-choice sequence rather than stealth failure loops.
@@ -116,7 +116,7 @@
 
 **Boss:** Captain Kaji on a cargo platform. He drags characters with hook chains; facing, Guard, and Genta’s anchor command prevent a player from being shoved into an electric water lane.
 
-**Exit state:** First bell key secured. Genta joins permanently. A departing boat brings word of a wreck on the Nagi Sea Road carrying a locked Varga strongbox.
+**Exit state:** First bell key secured. Genta joins permanently. A departing boat brings word of a wreck on the Nagi Sea Road carrying a locked Dražanić strongbox.
 
 ## Chapter 4 — The Sea Keeps No Ledger
 
@@ -124,13 +124,13 @@
 
 **Places:** Nagi fishing village; tide caves; a wrecked carrack; storm-broken reef.
 
-**Characters:** Kiku arrives after following Lantern Network messages to treat coastal refugees. Lise finds a Varga journal on the wreck, which says the family oath was once used by nobles to seize relics as well as kill vampires.
+**Characters:** Kiku arrives after following Lantern Network messages to treat coastal refugees. Nikola finds a Dražanić ledger on the wreck. It shows that his house used frontier escorts and anti-vampire knowledge to seize books, levy private fees, and sell access through merchant networks.
 
 **Major beats**
 
 1. Nagi’s fishers refuse to help strangers until the party clears bell-tainted fog from their nets; Kiku demands practical aid rather than a speech.
 2. The tide caves introduce elemental ground: cold pools inflict Chill, while dry lantern spaces can be created with Ember tools.
-3. In the wreck, Lise finds evidence that an ancestor sold information to a European vampire court. Her heritage is not a pure credential.
+3. In the wreck, Nikola finds evidence that his house sold information to a European vampire court while publicly condemning the merchants who carried it. His rank is evidence of inherited complicity, not a pure credential.
 4. Mateus admits he knew the ship’s purpose and chose not to warn anyone because the court rewarded silence.
 5. Kiku stabilizes survivors and joins, insisting the group’s plans must account for those who cannot fight.
 6. The party defeats the Widow-of-Fog, a bell-made ghost collecting sailors’ unrecorded names, and recovers the key.
@@ -189,7 +189,7 @@
 1. The party faces a hard strategic choice: attack Kurohana early with the three keys, or spend precious time rescuing prisoners. Ren chooses the rescue.
 2. Genta meets former subordinates; some aid him, some refuse, and one dies saving civilians after being given a chance to stand down. The scene preserves accountability without flattening everyone into a villain.
 3. The aqueduct shows that Ashen Oni can be released when their name slips are returned to water, creating a nonlethal battle objective.
-4. Lise discards the Varga family’s unilateral “right to purge” and rewrites the oath as a promise to protect named people, not hunt a bloodline.
+4. Nikola stops styling himself Count in the party record and renounces his house’s claimed right to command a hunt. He writes a narrower discipline: protect named people, submit force to the authority of those endangered, and claim no bloodright over the result.
 5. The Bell Warden Chiyo uses chained prisoners as positional hazards. The battle tests swaps, rescue spaces, and restraint.
 6. The party rescues enough people to expose Kurozane’s plan throughout the Lantern Network. The villain begins the final ritual anyway.
 
@@ -207,12 +207,12 @@
 
 1. The party returns to the three hubs. Each community sets its own contribution: records, boats, supplies, shelter, or a safe route—not a generic “rebel meter.”
 2. Optional quests resolve named local consequences: the clerk from Chapter 1 chooses to testify, Nagi’s fishers carry evacuation boats, and a Genta subordinate distributes food rather than weapons.
-3. At the Black Gate, Lady Enma of Ash offers a bargain: Kurozane will spare selected villages if the party hands over Mateus and Lise.
-4. Mateus refuses to trade another group’s safety for his own life, while Lise refuses to decide for the villages. The network rejects the bargain together.
+3. At the Black Gate, Lady Enma of Ash offers a bargain: Kurozane will spare selected villages if the party hands over Mateus and Nikola.
+4. Mateus refuses to trade another group’s safety for his own life, while Nikola begins an honor-bound refusal, catches himself, and yields the decision to the villages. The network rejects the bargain together.
 5. Lady Enma reveals that Kurozane’s castle feeds on fear of abandonment. The group uses lantern signals to show the people inside that the outer routes are not gone.
 6. The party defeats Enma, releasing the final Ashen garrison and opening the castle.
 
-**Boss:** Lady Enma of Ash. She creates Ember and Umbral hazard zones that become safe only through character combinations: Aya wards, Kiku changes terrain, Genta anchors, Ren redirects, Lise exposes, and Mateus protects.
+**Boss:** Lady Enma of Ash. She creates Ember and Umbral hazard zones that become safe only through character combinations: Aya wards, Kiku changes terrain, Genta anchors, Ren redirects, Nikola exposes, and Mateus protects.
 
 **Exit state:** The network holds the gate while the six heroes enter Kurohana Castle. No ally is sent on a suicide mission off-screen.
 
@@ -227,7 +227,7 @@
 1. The castle’s first rooms resemble an efficient government archive, then gradually reveal pulsing veins under lacquer and paper. The horror is that administrative order has become a body.
 2. The party uses the three keys to break bell nodes, opening routes and freeing named spirits. This is an authored dungeon sequence, not a backtracking maze.
 3. Ujiro makes a final attempt to survive by delivering Kurozane more names. Ren confronts him with the copied ledgers; Ujiro is arrested by people he treated as inventory, not executed as spectacle.
-4. Kurozane offers each hero a precise version of their desire: Ren safety through obedience, Aya a perfect archive, Lise an end to monsters, Mateus freedom from guilt, Genta restored rank, and Kiku a village untouched by pain.
+4. Kurozane offers each hero a precise version of their desire: Ren safety through obedience, Aya a perfect archive, Nikola a recognized title and a war that makes his class necessary again, Mateus freedom from guilt, Genta restored rank, and Kiku a village untouched by pain.
 5. Each party member rejects the offer in a short playable interaction that changes the final boss’s opening resistance but not its required outcome.
 6. Kurozane rings the Yearless Bell. The party breaks it on the battle stage while protecting the archive of names.
 7. In the final phase, Kurozane becomes a winged, black-lacquer vampire monarch. Mateus uses his own blood to expose the boss’s Umbral ward and permanently loses access to his most destructive rite.
@@ -239,7 +239,7 @@
 
 ## Epilogue — Names at Daybreak
 
-Three months later, Hoshigawa holds a rain-clearing ceremony that is deliberately plural: people bring their own forms of mourning and remembrance. Aya oversees a public archive with testimony, corrections, and blank spaces marked honestly as unknown. Genta gives testimony before helping rebuild a road. Kiku returns medical stores to the villages. Lise leaves a revised Varga oath with the network and stays long enough to teach self-defense without making herself indispensable. Mateus publicly records his crimes and works under supervision to identify the court’s remaining caches; redemption is a process, not a reward scene.
+Three months later, Hoshigawa holds a rain-clearing ceremony that is deliberately plural: people bring their own forms of mourning and remembrance. Aya oversees a public archive with testimony, corrections, and blank spaces marked honestly as unknown. Genta gives testimony before helping rebuild a road. Kiku returns medical stores to the villages. Nikola enters the Dražanić ledger as evidence, leaves locally controlled self-defense notes, and stays long enough to teach without taking command. Mateus publicly records his crimes and works under supervision to identify the court’s remaining caches; redemption is a process, not a reward scene. The two Europeans still quarrel, but now over who must carry the boxes rather than who is entitled to give the order.
 
 Ren delivers a new packet between Hoshigawa and Sodegaura. It contains not a command but a list of people asking after one another. The final image is a small lantern lit at a repaired bell tower, with no bell ringing.
 

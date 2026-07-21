@@ -12,7 +12,7 @@
 
 Party councils let three to six companions deliberate together after the campaign has changed the evidence in front of them. They are not majority-vote minigames, approval meters, or a place where the protagonists decide what affected communities must accept. Each scene begins from a specific operational conflict: prisoner care versus route pressure, testimony versus exposure, local custody versus centralized efficiency, or immediate defense versus the right to refuse.
 
-No useful act automatically absolves Mateus. His technical knowledge and admissions can be relevant while remaining compromised by his service to the court. Lise and the rest of the party are never assigned responsibility for completing his redemption. Workers, survivors, patients, families, route keepers, and community representatives retain authority over testimony, care, names, shelter, and correction.
+No useful act automatically absolves Mateus. His technical knowledge and admissions can be relevant while remaining compromised by his service to the court. Nikola and the rest of the party are never assigned responsibility for completing his redemption. Nikola’s claimed rank also grants him no default chair, veto, custody, or interpretive authority. Workers, survivors, patients, families, route keepers, and community representatives retain authority over testimony, care, names, shelter, and correction.
 
 The councils grant no XP, currency, equipment, combat modifier, collectible, sacred loot, score, or elapsed-time credit. Their consequences are finite narrative records, not optimization rewards or hidden progression gates.
 
@@ -36,7 +36,7 @@ The authored plan never schedules a speaker before that character's canonical jo
 | --- | --- |
 | Ren | `p00-delivery-in-rain` |
 | Aya | `p05-archive-promise` |
-| Lise | `c2-06-name-from-europe` |
+| Nikola | `c2-06-name-from-europe` |
 | Mateus | `c2-06-name-from-europe` |
 | Genta | `c3-05-gentas-order` |
 | Kiku | `c4-06-kikus-terms` |
@@ -118,7 +118,7 @@ The 25,072-word visible path includes title, theme, prompt, both option labels, 
 | Trace events | 1,174 |
 | Recorded timed duration | 0 ms / 0 minutes |
 
-The 1,143 successful transitions are 30 starts, 993 main-line acknowledgements, 30 choices, and 90 response acknowledgements. The 1,174-event trace adds one canonical-seed event and 30 replay-refusal events. Its prose-bound catalogue signature is `fnv1a32:01bf3c11`; the completion signature is `fnv1a32:e19cc4d8`.
+The 1,143 successful transitions are 30 starts, 993 main-line acknowledgements, 30 choices, and 90 response acknowledgements. The 1,174-event trace adds one canonical-seed event and 30 replay-refusal events. Its prose-bound catalogue signature is `fnv1a32:10ab0f26`; the completion signature is `fnv1a32:3d9bf1af`.
 
 This witness proves deterministic reachability, authored-line coverage, canonical first-choice settlement, unique consequence flags, exact bounds, and once-per-save replay refusal. It does not exercise human reading, reflection, browser presentation, accessibility, or elapsed play.
 

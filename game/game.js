@@ -137,7 +137,7 @@ function drawHeader() {
   drawPixelChrysanthemum(36, 35);
   drawText('BELLS OF THE BLACK CHRYSANTHEMUM', 62, 29, 16, palette.parchment);
   drawText('BELL COURT AT TAKAMINE  ·  FP-0 COMBAT PROOF', 62, 49, 9, palette.gold);
-  drawText('REN + LISE  /  MATEUS’S SEAL  /  ASHEN ONI TITHE', 30, 83, 10, palette.muted);
+  drawText('REN + NIKOLA  /  MATEUS’S SEAL  /  ASHEN ONI TITHE', 30, 83, 10, palette.muted);
 
   drawPanel(560, 14, 370, 72, '#171b32', '#4d567e');
   const phaseName = {
@@ -452,7 +452,7 @@ function drawOutcomeOverlay() {
   drawPixelChrysanthemum(480, 209, victory ? palette.gold : palette.vermilion);
   drawText(victory ? 'THE BANNER FALLS' : 'THE COURT COLLECTS', 480, 251, 18, palette.parchment, 'center');
   const copy = victory
-    ? 'Lise finds Mateus’s seal beneath the lacquer. The next bell has a name.'
+    ? 'Nikola finds Mateus’s seal beneath the lacquer. The next bell has a name.'
     : 'Ren is taken beneath the bell. Read the ledger, reposition, and try again.';
   drawWrappedText(copy, 281, 274, 398, 15, 10, palette.parchment, 3);
   drawText('PRESS R OR USE RESTART TO RESET THE ENCOUNTER', 480, 319, 9, palette.gold, 'center');

@@ -48,7 +48,7 @@ The core shape is intentionally small:
 
 All player-visible text belongs in the data. Consumers may add presentation-only properties at runtime, but must not rewrite canonical dialogue, names, choices, or reward descriptions.
 
-Field interactables use a separate exact presentation layer in `game/content/field-interaction-copy.mjs`. Its schema-v1 catalogue covers all 113 `(levelId, interactableId)` pairs in canonical level order and supplies an English copy key, label, completion, repeat, blocked text, and exact choice rows where required. Runtime interaction IDs, choice IDs, actions, flags, rewards, and save records remain unchanged. Lookup never derives visible copy from an ID, action, result slug, requirement, reward, or prose fragment; an unknown pair fails closed to neutral human text instead of exposing a machine identifier. Save-stable `temple-charm-chest` and `reliquary-lock` therefore remain internal while the browser publishes the corrected Tampered Registry Cache / Defaced Registry Token and Varga Strongbox language.
+Field interactables use a separate exact presentation layer in `game/content/field-interaction-copy.mjs`. Its schema-v1 catalogue covers all 113 `(levelId, interactableId)` pairs in canonical level order and supplies an English copy key, label, completion, repeat, blocked text, and exact choice rows where required. Runtime interaction IDs, choice IDs, actions, flags, rewards, and save records remain unchanged. Lookup never derives visible copy from an ID, action, result slug, requirement, reward, or prose fragment; an unknown pair fails closed to neutral human text instead of exposing a machine identifier. Save-stable `temple-charm-chest` and `reliquary-lock` therefore remain internal while the browser publishes the corrected Tampered Registry Cache / Defaced Registry Token and Dražanić Strongbox language.
 
 `party` is the ordered roster available by the chapter's conclusion; `partyMeta` records its start state, joins, guest support, and camp availability. This keeps simple UI consumption (`chapter.party`) separate from progression metadata.
 
@@ -83,7 +83,7 @@ FP-1 is the Chapter 2 slice from the rain gate to the cell-block exit. Its requi
 | --- | ---: | --- |
 | FP-00 Rain Gate | 2 min | Field movement, interaction highlight, no combat |
 | FP-01 Cedar Service Path | 4 min | Pace, Analyze, Ledger, telegraph battle |
-| FP-02 Abandoned Chapel | 4 min | Witness notes and Lise party join |
+| FP-02 Abandoned Chapel | 4 min | Witness notes and Nikola party join |
 | FP-03 Bell Stair | 4 min | Exact but non-lethal field hazard; no jump |
 | FP-04 Flooded Undercroft | 5 min | Terrain/Ledger teaching battle |
 | FP-05 Bell Chamber | 9 min | Mateus boss, Blood Ward, Crimson Litany Recovery 3 |
@@ -106,7 +106,7 @@ The 32-minute expected clear remains a first-playable target, not permission to 
 
 - All people, institutions, sacred objects, events, and supernatural systems are fictional. Do not turn real victims, historical officials, or living religious practice into enemy fodder.
 - The historical backdrop needs Japanese cultural-historian and sensitivity review before production dialogue, garments, practices, or regional details are locked.
-- Japanese characters retain local authority and decision-making. Lise and Mateus cannot become default interpreters of Japanese stakes because they are European.
+- Japanese characters retain local authority and decision-making. Nikola and Mateus cannot become default interpreters of Japanese stakes because they are European.
 - Mateus is original. Do not use a celebrity likeness, a real actor reference, copied scene behavior, or a film adaptation shorthand.
 - The Ashen Oni use a contested in-world label and a deliberate fictional synthesis; they must not claim one canonical Japanese oni design or copy a sacred figure, ceremonial mask, or identifiable local tradition.
 - Redemption is evidence-based and ongoing: Mateus protects people, confesses, loses power, and remains under supervision. The content must never turn a single helpful act into forgiveness owed by victims.

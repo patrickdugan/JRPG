@@ -138,8 +138,9 @@ function parseCheckpoint(input) {
 function inspectRecords(records, authorityConfig = AUTHORITY_CONFIG) {
   const errors = [];
   const states = {};
+  const migrations = {};
   if (!Array.isArray(records) || records.length !== authorityConfig.length) {
-    return { errors: [`Recovery checkpoint must contain exactly ${authorityConfig.length} authority records.`], states };
+    return { errors: [`Recovery checkpoint must contain exactly ${authorityConfig.length} authority records.`], states, migrations };
   }
   authorityConfig.forEach((config, index) => {
     const record = records[index];
@@ -162,8 +163,14 @@ function inspectRecords(records, authorityConfig = AUTHORITY_CONFIG) {
       return;
     }
     states[config.id] = state;
+    if (loaded.migrated) {
+      migrations[config.id] = {
+        migrationId: loaded.migrationId,
+        previousIdentity: loaded.previousIdentity,
+      };
+    }
   });
-  return { errors, states };
+  return { errors, states, migrations };
 }
 
 function deriveSummary(states, schemaVersion = RECOVERY_CHECKPOINT_SCHEMA_VERSION) {
@@ -266,18 +273,36 @@ export function validateRecoveryCheckpoint(input) {
     : AUTHORITY_CONFIG;
   const inspected = supportedSchema
     ? inspectRecords(checkpoint.records, authorityConfig)
-    : { errors: [], states: {} };
+    : { errors: [], states: {}, migrations: {} };
   errors.push(...inspected.errors);
   let legacyStoryworld = null;
+  let migratedStoryworld = null;
   if (supportedSchema && inspected.errors.length === 0) {
     if (checkpoint.schemaVersion === LEGACY_RECOVERY_CHECKPOINT_SCHEMA_VERSION) {
       legacyStoryworld = synthesizeLegacyStoryworldAuthority(inspected.states);
       inspected.states.storyworld = legacyStoryworld.state;
+    } else if (inspected.migrations.storyworld) {
+      migratedStoryworld = {
+        state: inspected.states.storyworld,
+        previousIdentity: inspected.migrations.storyworld.previousIdentity,
+        record: {
+          id: 'storyworld',
+          key: DEFAULT_STORYWORLD_SAVE_KEY,
+          serialized: serializeStoryworldState(inspected.states.storyworld),
+        },
+      };
     }
     errors.push(...crossStateErrors(inspected.states));
     if (errors.length === 0) {
       const expectedSummary = deriveSummary(inspected.states, checkpoint.schemaVersion);
-      if (JSON.stringify(checkpoint.summary) !== JSON.stringify(expectedSummary)) {
+      const migratedSummary = migratedStoryworld
+        ? {
+          ...expectedSummary,
+          storyworldCatalogSignature: migratedStoryworld.previousIdentity.catalogSignature,
+        }
+        : null;
+      if (JSON.stringify(checkpoint.summary) !== JSON.stringify(expectedSummary)
+        && JSON.stringify(checkpoint.summary) !== JSON.stringify(migratedSummary)) {
         errors.push('Recovery checkpoint summary does not reconcile with its authority states.');
       }
     }
@@ -287,14 +312,17 @@ export function validateRecoveryCheckpoint(input) {
     : result(true, {
       checkpoint: deepFreeze(checkpoint),
       states: deepFreeze(inspected.states),
-      migrationRecord: legacyStoryworld ? deepFreeze(legacyStoryworld.record) : null,
+      migrationRecord: legacyStoryworld
+        ? deepFreeze(legacyStoryworld.record)
+        : migratedStoryworld ? deepFreeze(migratedStoryworld.record) : null,
       migratedRunReceiptRecord: legacyStoryworld ? deepFreeze({
         id: 'runReceipt',
         key: DEFAULT_RUN_RECEIPT_SAVE_KEY,
         serialized: serializeRunReceipt(inspected.states.runReceipt),
       }) : null,
       sourceSchemaVersion: checkpoint.schemaVersion,
-      requiresMigration: checkpoint.schemaVersion !== RECOVERY_CHECKPOINT_SCHEMA_VERSION,
+      requiresMigration: checkpoint.schemaVersion !== RECOVERY_CHECKPOINT_SCHEMA_VERSION || Boolean(migratedStoryworld),
+      ...(migratedStoryworld ? { migrationId: inspected.migrations.storyworld.migrationId } : {}),
       errors: [],
     });
 }
@@ -343,14 +371,19 @@ export function restoreRecoveryCheckpoint(storage, input) {
   } catch (error) {
     return result(false, { code: 'storage-unavailable', errors: [error.message], writesApplied: 0, rollbackComplete: true });
   }
-  const restoreRecords = validation.migrationRecord
-    ? [
-      ...validation.checkpoint.records.map((record) => (
-        record.id === 'runReceipt' ? validation.migratedRunReceiptRecord : record
-      )),
-      validation.migrationRecord,
-    ]
-    : validation.checkpoint.records;
+  let restoreRecords = validation.checkpoint.records;
+  if (validation.migrationRecord) {
+    restoreRecords = validation.checkpoint.records.map((record) => {
+      if (record.id === 'runReceipt' && validation.migratedRunReceiptRecord) {
+        return validation.migratedRunReceiptRecord;
+      }
+      if (record.id === 'storyworld') return validation.migrationRecord;
+      return record;
+    });
+    if (!restoreRecords.some(({ id }) => id === 'storyworld')) {
+      restoreRecords = [...restoreRecords, validation.migrationRecord];
+    }
+  }
   const prior = [];
   let writesApplied = 0;
   try {
@@ -365,6 +398,7 @@ export function restoreRecoveryCheckpoint(storage, input) {
       checkpoint: validation.checkpoint,
       summary: validation.checkpoint.summary,
       migratedFromSchemaVersion: validation.requiresMigration ? validation.sourceSchemaVersion : null,
+      ...(validation.migrationId ? { migrationId: validation.migrationId } : {}),
       writesApplied,
       rollbackComplete: true,
       errors: [],

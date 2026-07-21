@@ -116,7 +116,7 @@ const AUTHORED_MIDDLE_COUNCILS = [
   },
   {
     title: 'Three Women Refuse a Single City Queue',
-    theme: 'Aya, Lise, and Kiku test Kozui requests against distinct community costs instead of making urgency a hierarchy of deserving help.',
+    theme: 'Aya, Nikola, and Kiku test Kozui requests against distinct community costs instead of making urgency a hierarchy of deserving help.',
     dialogue: [
       L('aya', 'The printer needs wages and master notes, the canal crew needs ration cards, and the elder needs a protected meeting.'),
       L('lise', 'Three asks, three exposures, and only enough daylight to prepare one escape before we knock.'),
@@ -467,7 +467,7 @@ const AUTHORED_MIDDLE_COUNCILS = [
   },
   {
     title: 'No Person Becomes the Price at the Gate',
-    theme: 'Lise, Mateus, Genta, and Kiku prepare to keep Enma’s exchange public, community-decided, and free of sacrificial ownership.',
+    theme: 'Nikola, Mateus, Genta, and Kiku prepare to keep Enma’s exchange public, community-decided, and free of sacrificial ownership.',
     dialogue: [
       L('lise', 'Enma will name Mateus and me as the price, then speak of villages as if she owns their answer.'),
       L('mateus', 'I may want to offer myself, which is exactly why I cannot decide what other people must risk around that offer.'),

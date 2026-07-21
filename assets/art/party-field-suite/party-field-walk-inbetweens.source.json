@@ -20,10 +20,11 @@
     "directionalWalkCycle": ["walk", "walk-b"],
     "standingFrame": "idle",
     "reducedMotionFrame": "idle",
-    "legacyFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2"
+    "legacyFrameRgbaSha256Digest": "794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25",
+    "supersededPreNikolaFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2"
   },
   "safety": {
-    "characterContract": "inherits the six original fictional character designs and palettes from the canonical source",
+    "characterContract": "inherits the six original fictional character designs and palettes from the canonical source; stable row lise visibly presents Nikola Dražanić",
     "mateusLikenessPolicy": "original fictional face and proportions",
     "propPolicy": "no new props, insignia, or sacred-object motifs"
   }

@@ -1814,7 +1814,9 @@ function renderSceneDirection(beat, activeLevelId) {
   sceneBlockingCue.textContent = direction.blockingCue;
   sceneTransitionCue.textContent = direction.transitionCue;
   scenePortraitCtx.clearRect(0, 0, sceneFocusPortrait.width, sceneFocusPortrait.height);
-  const portraitMemberId = direction.gestureCue.speaker.toLowerCase();
+  const portraitMemberId = Object.values(CAMPAIGN.cast).find(({ id, speakerId }) => (
+    (speakerId ?? id.toUpperCase()) === direction.gestureCue.speaker
+  ))?.id ?? direction.gestureCue.speaker.toLowerCase();
   if (partyPortraitState === 'ready' && partyPortraitImageHasExpectedSize(partyPortraitImage)
     && hasPartyPortraitMember(portraitMemberId)) {
     const frame = getPartyPortraitFrame(
@@ -2219,8 +2221,8 @@ function setKeyArt(chapter) {
     },
   };
   const selected = artByChapter[chapter.id] ?? {
-    path: 'assets/production/bells-party-roster-v1.png',
-    alt: 'Original Bells of the Black Chrysanthemum party production reference',
+    path: 'assets/art/party-roster-suite/party-roster-key-art.png',
+    alt: 'Original pixel-art roster of Ren, Aya, Nikola, Mateus, Genta, and Kiku',
   };
   keyArt.src = selected.path;
   keyArt.alt = selected.alt;

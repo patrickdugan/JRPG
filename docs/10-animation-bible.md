@@ -109,7 +109,7 @@ The field game is fixed-step, eight-direction navigation at 60 FPS. It has no ju
 | --- | --- | --- | --- |
 | Ren Ishikawa | Satchel settles after a forward-leaning measured step; spear remains a clean diagonal | Checks dispatch pouch or lowers spear to inspect | Wide heroic spinning or a spear that crosses his face. |
 | Aya Shinohara | Sleeve and archive-case weight settle; paper edge moves one pixel | Opens case or angles a folded ward toward a record | Constant flutter that looks like ambient magic. |
-| Lise Varga | Sea-weather coat hem and compact tool silhouette stay practical | Checks key, seal, or needle tool | Glamorous cape flourishes or a borrowed hunter archetype pose. |
+| Nikola Dražanić (`lise` compatibility row) | Square-shouldered rain cloak and fitted doublet settle around an upright, impatient stride; rapier stays clear of the legs | Checks crossbow latch, signet clasp, or written commission | Courtly flourishes that erase his practical hunter read, glamorous cape posing, or a borrowed hunter archetype pose. |
 | Father Mateus Avelar | Controlled stillness, keys shift only once | Holds a document or releases a court seal | Constant vampire fangs, animal motion, or celebrity-like posing. |
 | Genta Mononobe | Broad mantle has slow weight; shield/tetsubo preserves side clearance | Braces a blocker or lifts debris | Bouncy run cycle that loses his mass. |
 | Kiku Nawa | Medicine case and bottle packets give a small counter-swing | Selects a remedy or tests water | Throwing bottles during idle. |
@@ -162,7 +162,7 @@ The event manifest must mark `windupStart`, `activeStart`, `activeEnd`, `recover
 | --- | --- | --- | --- |
 | Ren | Short spear establishes Pierce lines and redirection | Low target notice, rearward load, line-extension hit, one-foot braced recovery | Spear point drops one quadrant and satchel pulls him off balance. |
 | Aya | Record-seal placement and careful Radiance arcs | Case-open load, squared archive-seal fan, eight-ray disc active, sleeves settle | Seal hand remains extended, head turns to check allies; no devotional talismans. |
-| Lise | Precise lunge / recoil with compact tool | Narrow side profile, low rear heel, clean pierce line, immediate withdrawal | Sea coat trails behind a controlled recoil; no pose-glamour. |
+| Nikola (`lise` compatibility row) | Precise aristocratic rapier lunge / controlled recoil | Square shoulder load, low rear heel, clean pierce line, clipped withdrawal; moustache, beard, falling band, and oxblood doublet remain readable | Rain cloak trails behind a controlled recoil; no pose-glamour, swashbuckling spin, or similarity to Mateus's narrow clerical silhouette. |
 | Mateus | Stillness breaks into costly blood rite; no gore | Locked hands, controlled raised palm, thorned crescent line, low kneel-like recovery | Dried-wine accent dims; shoulders drop and keys go still. |
 | Genta | Weight, bracing, and lane control | Shield/tetsubo mass planted, wide shoulder load, square impact, planted recovery | Feet remain separated; center of mass stays low. |
 | Kiku | Toss, mix, and terrain placement | Medicine case open, packet/bottle arc, local terrain bloom, reaching recovery | Case remains in one hand; packet source is clear. |
@@ -313,7 +313,7 @@ Do not use `final`, `new`, dates, arbitrary personal initials, spaces, or unclea
 | --- | --- | --- |
 | P0 | Ren field/combat package | four field facings; idle, walk, interact, hurt; combat idle, move, Guard, hit, Cut/Pierce actions, defeat. |
 | P0 | Aya field/combat package | four field facings; ward/read gestures; combat idle, move, Analyze/Radiance, Guard, hit, defeat. |
-| P0 | Lise temporary-party package | field entrance/read; combat idle, move, Needlepoint/Hawthorn Pique, Guard, hit, defeat. |
+| P0 | Nikola temporary-party package (`lise` compatibility row) | field entrance/read; combat idle, move, Hunter Thrust/Dawn Bolt, Guard, hit, recovery, defeat; stable row geometry and pivots. |
 | P0 | Tithe Enforcer and Bell Moth package | idle, intent, two attack reads, hit, defeat, Ledger portrait. |
 | P0 | Cinder Hound and Ash Wisp package | idle, intent, attack, hit, defeat, Ledger portrait. |
 | P0 | Mateus boss package | all five moves in section 7.2, phase-3 nonlethal defeat, 320 x 180 telegraph review. |

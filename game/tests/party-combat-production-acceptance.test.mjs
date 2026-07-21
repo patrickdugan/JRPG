@@ -100,6 +100,10 @@ test('combat source fixes the canonical six-by-ten 48x64 action contract', async
   assert.equal(source.actions['basic-strike-active'].event, 'damage');
   assert.equal(source.actions['signature-a'].event, 'skill-a');
   assert.equal(source.actions['signature-b'].event, 'skill-b');
+  const nikola = source.characters.find(({ id }) => id === 'lise');
+  assert.equal(nikola.name, 'Nikola Dražanić');
+  assert.equal(nikola.legacyCompatibilityId, 'lise');
+  assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
   assert.match(source.characters.find(({ id }) => id === 'mateus').likenessPolicy, /original fictional face and proportions; no real-person reference/u);
 });
 

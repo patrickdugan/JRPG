@@ -74,7 +74,7 @@ export const VOW_CATALOGUE = deepFreeze({
   'shared-burden': vow('shared-burden', 'Vow of the Shared Burden', 0, [...PARTY_MEMBER_IDS], { stats: { hp: 16, guard: 2 }, statusResistance: { bound: 0.15 } }, 'Stand where another person would otherwise be struck.'),
   'unbroken-route': vow('unbroken-route', 'Courier\'s Vow: Unbroken Route', 0, ['ren'], { stats: { speed: 3, power: 2 }, paceDelta: 1 }, 'Ren finishes the route even after the plan changes.'),
   'witnessing-ink': vow('witnessing-ink', 'Scribe\'s Vow: Witnessing Ink', 0, ['aya'], { stats: { arcana: 4, mp: 8 }, skillIds: ['warding-script'] }, 'Aya records a name before she records a victory.'),
-  'hunter-dawn': vow('hunter-dawn', 'Hunter\'s Vow: Answer the Dawn', 0, ['lise'], { stats: { power: 3 }, essence: { radiance: 0.85 }, skillIds: ['dawn-bolt'] }, 'Lise turns inherited knowledge toward rescue.'),
+  'hunter-dawn': vow('hunter-dawn', 'Hunter\'s Vow: Answer the Dawn', 0, ['lise'], { stats: { power: 3 }, essence: { radiance: 0.85 }, skillIds: ['dawn-bolt'] }, 'Nikola turns inherited knowledge toward rescue.'),
   'returned-name': vow('returned-name', 'Vow of the Returned Name', 0, ['mateus'], { stats: { arcana: 4, spirit: 10 }, essence: { umbral: 0.8 }, statusResistance: { dread: 0.3 } }, 'Mateus refuses the title the court made for him.'),
   'standing-bridge': vow('standing-bridge', 'Vow of the Standing Bridge', 0, ['genta'], { stats: { hp: 24, guard: 4 }, delivery: { crush: 0.85 } }, 'Genta holds until every traveler is across.'),
   'cold-remedy': vow('cold-remedy', 'Vow of the Cold Remedy', 0, ['kiku'], { stats: { arcana: 3, mp: 6 }, essence: { frost: 0.8 }, statusResistance: { burn: 0.35 } }, 'Kiku treats the wound and the cause.'),

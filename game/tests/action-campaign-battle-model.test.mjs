@@ -83,7 +83,7 @@ test('session composes the real encounter, authored action stage, loadout vitals
   assert.equal(ren.maxHp > 104, true, 'shipped loadout HP modifier is applied over advancement HP');
 });
 
-test('Hunter–Priest combo is contract-locked when Lise and Mateus are absent', () => {
+test('Hunter–Priest combo is contract-locked when Nikola and Mateus are absent', () => {
   const states = coreStates();
   const session = createActionCampaignBattleSession({
     encounterId: 'c1-cinder-hounds',

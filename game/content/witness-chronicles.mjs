@@ -208,18 +208,18 @@ const AUTHORED_CHRONICLES = [
       stage('inspect-the-open-latch', 'tkm-abandoned-chapel', 'inspect', 4, 'Inspect the ordinary latch and the posted guest rules.', [
         dialogue('REN', 'No secret lock. No hidden passage.'),
         dialogue('TAMA', 'The dangerous part was leaving it open.'),
-        dialogue('LISE', 'Then we show the rule board, not turn the room into a legend.'),
+        dialogue('NIKOLA', 'Then we show the rule board, not turn the room into a legend.'),
         dialogue('TRAVELER', 'The latch stuck in wet weather. Ordinary trouble belongs in the account too.'),
       ]),
       stage('compare-the-seizure-list', 'tkm-flooded-undercroft', 'archive', 5, 'Compare seized bedding and kettles with the court\'s accusation list.', [
         dialogue('AYA', 'They have named blankets as contraband and a kettle as foreign supply.'),
         dialogue('TAMA', 'The kettle came from the next valley.'),
         dialogue('REN', 'Ordinary things made suspicious by the people who needed them.'),
-        dialogue('LISE', 'We list use and origin, then let the accusation collapse under its own excess.'),
+        dialogue('NIKOLA', 'We list use and origin, then let the accusation collapse under its own excess.'),
       ]),
       stage('return-the-guest-board', 'tkm-cell-block', 'deliver', 4, 'Return a copy of the guest rules to Tama after the cells open.', [
         dialogue('TAMA', 'The door can open again, but not because you say it is safe.'),
-        dialogue('LISE', 'You choose the hours and who stands watch.'),
+        dialogue('NIKOLA', 'You choose the hours and who stands watch.'),
         dialogue('TAMA', 'Then write: open when the caretakers agree.'),
         dialogue('AYA', 'And closed without explanation whenever the caretakers judge the risk too high.'),
       ]),
@@ -237,29 +237,29 @@ const AUTHORED_CHRONICLES = [
     title: 'A Testimony Without Pardon',
     chapterId: 'chapter-2',
     opensAfterBeatId: 'c2-04-bell-stair',
-    setup: 'After the bell chamber confrontation, Mateus offers his first precise account of a registry transfer. Lise insists that information is not absolution.',
+    setup: 'After the bell chamber confrontation, Mateus offers his first precise account of a registry transfer. Nikola insists that information is not absolution.',
     stages: [
       stage('collect-independent-marks', 'tkm-cedar-service-path', 'inspect', 4, 'Record cart ruts and crate marks before hearing Mateus\'s version.', [
-        dialogue('LISE', 'We begin with what the road says, not what he wants us to believe.'),
+        dialogue('NIKOLA', 'We begin with what the road says, not what he wants us to believe.'),
         dialogue('REN', 'Three axle cuts. One cart returned lighter.'),
         dialogue('AYA', 'And the black alloy mark was scraped after the rain.'),
-        dialogue('LISE', 'Photograph it in memory, copy it in charcoal, and leave the road itself untouched.'),
+        dialogue('NIKOLA', 'Photograph it in memory, copy it in charcoal, and leave the road itself untouched.'),
       ]),
       stage('hear-tamas-timeline', 'tkm-abandoned-chapel', 'interview', 5, 'Let Tama establish the prisoner timeline in her own words.', [
         dialogue('TAMA', 'The cart arrived before midnight. The cells answered after the second bell.'),
-        dialogue('LISE', 'Did you see the interpreter?'),
+        dialogue('NIKOLA', 'Did you see the interpreter?'),
         dialogue('TAMA', 'I heard his voice. I will not claim the face I did not see.'),
         dialogue('AYA', 'That limit strengthens the account. We mark heard, not seen.'),
       ]),
       stage('survive-the-bell-chamber', 'tkm-bell-chamber', 'combat', 10, 'Complete the canonical Mateus confrontation and preserve both ward records.', [
         dialogue('MATEUS', 'Break the wards, then hear what I carried for them.'),
-        dialogue('LISE', 'You do not set the price of being heard.'),
+        dialogue('NIKOLA', 'You do not set the price of being heard.'),
         dialogue('AYA', 'Recovery window now. Evidence after everyone is standing.'),
         dialogue('REN', 'Left ward is open. We finish the danger without destroying the transfer seals.'),
       ], 'fp1-mateus'),
       stage('take-a-bounded-statement', 'tkm-cell-block', 'interview', 6, 'Record only claims Mateus can locate, date, and expose to contradiction.', [
         dialogue('MATEUS', 'I translated twelve names onto the transfer order. I knew the cells were full.'),
-        dialogue('LISE', 'Say what you chose, not only what you knew.'),
+        dialogue('NIKOLA', 'Say what you chose, not only what you knew.'),
         dialogue('MATEUS', 'I chose the court because I feared what waited outside it. Others paid for that choice.'),
         dialogue('TAMA', 'Your fear enters the record after the names of those you delivered.'),
       ]),
@@ -361,7 +361,7 @@ const AUTHORED_CHRONICLES = [
     stages: [
       stage('hear-the-boat-limits', 'ngi-fishing-village', 'council', 6, 'Record each boat offer together with its non-negotiable limit.', [
         dialogue('TOMOE', 'One skiff can guide you. Two remain for anyone the fog sends home.'),
-        dialogue('LISE', 'We could reach the wreck faster with all three.'),
+        dialogue('NIKOLA', 'We could reach the wreck faster with all three.'),
         dialogue('KIKU', 'And leave no village boat for the people already here.'),
         dialogue('REN', 'One guide skiff, then. The expedition fits the village\'s limit.'),
       ]),
@@ -369,27 +369,27 @@ const AUTHORED_CHRONICLES = [
         dialogue('TOMOE', 'White knot is working rope. Black knot stays where the family tied it.'),
         dialogue('REN', 'We cut only the bell-fouled strands.'),
         dialogue('AYA', 'Cold current is opening. Move after the warning fades.'),
-        dialogue('LISE', 'North anchor loosening. I will mark it without touching the memorial knot.'),
+        dialogue('NIKOLA', 'North anchor loosening. I will mark it without touching the memorial knot.'),
       ], 'c4-fog-nets'),
       stage('read-the-return-cuts', 'ngi-wrecked-carrack', 'inspect', 5, 'Inspect hull cuts that show which boats returned under their own crews.', [
-        dialogue('LISE', 'My family journal calls these boats deserters.'),
+        dialogue('NIKOLA', 'My family journal calls these boats deserters.'),
         dialogue('TOMOE', 'These cuts mean they carried survivors against the reef.'),
-        dialogue('LISE', 'Then the journal mistook rescue for retreat.'),
+        dialogue('NIKOLA', 'Then the journal mistook rescue for retreat.'),
         dialogue('TOMOE', 'Ask the hull before you ask an officer who wanted every boat for himself.'),
       ]),
       stage('revise-the-tide-list', 'ngi-wrecked-carrack', 'archive', 4, 'Add the rescue boats without exposing current evacuation coves.', [
         dialogue('AYA', 'We can name the action and omit the living route.'),
         dialogue('TOMOE', 'Name the crews who agreed. Leave a line for the boat we cannot identify.'),
-        dialogue('LISE', 'And I will correct the Varga copy in my own hand.'),
+        dialogue('NIKOLA', 'And I will correct the Dražanić copy in my own hand.'),
         dialogue('KIKU', 'The village keeps the full cove list; our correction needs no such danger.'),
       ]),
     ],
-    choice: choice('revise-the-tide-list', 'How should Lise correct the inherited journal?', [
+    choice: choice('revise-the-tide-list', 'How should Nikola correct the inherited journal?', [
       option('lise-adds-visible-margin', 'Write the correction in its margin.', 'The old error remains visible beside testimony from the village.'),
-      option('lise-inserts-witness-leaf', 'Insert a separate witness leaf.', 'Tomoe\'s tide list stands in its own voice rather than beneath Varga text.'),
+      option('lise-inserts-witness-leaf', 'Insert a separate witness leaf.', 'Tomoe\'s tide list stands in its own voice rather than beneath Dražanić text.'),
     ]),
     reward: reward(300, 132, [['River Salve', 2]], ['Revised tide list']),
-    resolution: 'The record recognizes local rescue work and Lise changes an inherited accusation without claiming ownership of the testimony.',
+    resolution: 'The record recognizes local rescue work and Nikola changes an inherited accusation without claiming ownership of the testimony.',
   }),
 
   chronicle({
@@ -412,7 +412,7 @@ const AUTHORED_CHRONICLES = [
         dialogue('KIKU', 'The mineral line can support the water level, not tell us who lifted the cup.'),
       ]),
       stage('recover-the-cargo-board', 'ngi-wrecked-carrack', 'archive', 6, 'Stabilize the ordinary cargo board without opening private letters.', [
-        dialogue('LISE', 'The board belongs with the people who survived it.'),
+        dialogue('NIKOLA', 'The board belongs with the people who survived it.'),
         dialogue('HAMA', 'Make a rubbing. The wood comes back to the village.'),
         dialogue('AYA', 'Your custody, our copy, and the closed circles remain closed.'),
         dialogue('REN', 'I will brace the split edge while Hama decides where the paper touches.'),
@@ -421,7 +421,7 @@ const AUTHORED_CHRONICLES = [
         dialogue('HAMA', 'Some want their names. Some survived under names they no longer use.'),
         dialogue('KIKU', 'Then one line cannot answer for everyone.'),
         dialogue('REN', 'We can record both the named hands and the unnamed circle.'),
-        dialogue('LISE', 'And the officer\'s accusation stays beside the correction where readers can see it fail.'),
+        dialogue('NIKOLA', 'And the officer\'s accusation stays beside the correction where readers can see it fail.'),
       ]),
     ],
     choice: choice('name-the-shared-rations', 'How should the ration-sharing entry be written?', [
@@ -527,7 +527,7 @@ const AUTHORED_CHRONICLES = [
       ]),
       stage('defend-the-moving-blocks', 'kzu-archive-roof', 'combat', 9, 'Clear the canonical Masked Clerks while the print blocks remain in motion.', [
         dialogue('RIN', 'They are marking the north block for seizure.'),
-        dialogue('LISE', 'Keep moving. Their line commits before it turns.'),
+        dialogue('NIKOLA', 'Keep moving. Their line commits before it turns.'),
         dialogue('AYA', 'Protect the courier, not the perfect page.'),
         dialogue('REN', 'South stair is clear. The blocks leave in different hands.'),
       ], 'c6-masked-clerks'),
@@ -612,7 +612,7 @@ const AUTHORED_CHRONICLES = [
       stage('release-the-ferry-patrol', 'hsh-prison-ferry', 'combat', 9, 'Complete the canonical Name Slip Release before loading rescue boats.', [
         dialogue('REN', 'The slip is bound to the patrol at the chain wall.'),
         dialogue('NOE', 'Return the name north. The current does the carrying.'),
-        dialogue('LISE', 'We open the lane and leave no trophy behind.'),
+        dialogue('NIKOLA', 'We open the lane and leave no trophy behind.'),
         dialogue('GENTA', 'Boat crews wait beyond the post. Our recovery ends before they enter.'),
       ], 'c7-name-slip-release'),
       stage('post-capacity-not-routes', 'hsh-bell-aqueduct', 'deliver', 5, 'Post boat and medicine capacity without shelter positions.', [
@@ -650,7 +650,7 @@ const AUTHORED_CHRONICLES = [
         dialogue('KIKU', 'Count people who cannot walk before counting anyone assigned to a wall.'),
       ]),
       stage('hold-the-civilian-lane', 'c8-black-gate', 'combat', 10, 'Clear the canonical Outer Court while keeping the evacuation lane open.', [
-        dialogue('LISE', 'Court line turning toward the lantern wagons.'),
+        dialogue('NIKOLA', 'Court line turning toward the lantern wagons.'),
         dialogue('REN', 'Draw it east. The west lane belongs to evacuees.'),
         dialogue('KIKU', 'The care teams move on their own signal, not ours.'),
         dialogue('GENTA', 'I anchor the east tiles. No unit crosses the marked civilian lane.'),
@@ -728,7 +728,7 @@ const AUTHORED_CHRONICLES = [
         dialogue('HALL KEEPER', 'Put it back on the hook now. Medicine workers still need an ordinary key.'),
       ]),
       stage('carry-the-refusals-upward', 'krh-bell-spine', 'escort', 6, 'Escort the witness packet through declared pulse tiles without making workers join combat.', [
-        dialogue('LISE', 'Pulse on the lacquer lane. Wait, then cross.'),
+        dialogue('NIKOLA', 'Pulse on the lacquer lane. Wait, then cross.'),
         dialogue('COPYIST', 'We carry our own packet. You keep the path readable.'),
         dialogue('GENTA', 'Your testimony stays in your hands.'),
         dialogue('ATTENDANT', 'The rear pulse is fading. We move together on the next clear tile.'),

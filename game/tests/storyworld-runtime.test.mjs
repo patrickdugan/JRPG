@@ -15,6 +15,7 @@ import {
   getStoryworldProgress,
   getVisibleStoryworldOptions,
   isStoryworldNarrativeComplete,
+  LEGACY_STORYWORLD_CATALOG_IDENTITIES,
   loadStoryworldState,
   selectStoryworldReaction,
   serializeStoryworldState,
@@ -127,4 +128,36 @@ test('storage adapter round-trips exact run-bound history and clears only its ow
   assert.deepEqual(adapter.load().state, state);
   assert.equal(adapter.clear().ok, true);
   assert.deepEqual(adapter.load(), { ok: true, found: false });
+});
+
+test('the exact pre-Nikola Storyworld identity migrates once without changing branch history', () => {
+  const storage = new MemoryStorage();
+  const adapter = createStoryworldStorageAdapter(storage);
+  const current = resolveCluster(
+    createStoryworldState({ runId: 'storyworld-nikola-migration-0001' }),
+    STORYWORLD_CLUSTERS[0],
+    1,
+  );
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[0];
+  const legacy = {
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  };
+  storage.setItem(adapter.key, JSON.stringify(legacy));
+
+  const loaded = adapter.load();
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'lise-to-nikola-canon-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+  assert.equal(loaded.state.revision, current.revision);
+  assert.equal(loaded.state.sourceHash, current.sourceHash);
+  assert.equal(loaded.state.catalogSignature, current.catalogSignature);
+  assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
+
+  const secondLoad = adapter.load();
+  assert.equal(secondLoad.ok, true);
+  assert.equal(Object.hasOwn(secondLoad, 'migrated'), false, 'migration is not repeated after rewrite');
 });

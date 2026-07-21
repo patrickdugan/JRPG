@@ -86,6 +86,12 @@ test('portrait source defines the exact six-by-eight expression and originality 
   assert.deepEqual(source.sheet.columns, COLUMNS);
   assert.deepEqual(Object.keys(source.expressions), COLUMNS);
   assert.deepEqual(source.characters.map(({ id }) => id), ROWS);
+  const nikola = source.characters.find(({ id }) => id === 'lise');
+  assert.equal(nikola.name, 'Nikola Dražanić');
+  assert.equal(nikola.legacyCompatibilityId, 'lise');
+  assert.equal(nikola.faceShape, 'square-angular-male');
+  assert.equal(nikola.facialHair, 'narrow-moustache-and-trim-pointed-beard');
+  assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
   const mateus = source.characters.find(({ id }) => id === 'mateus');
   assert.match(mateus.likenessPolicy, /original fictional face, age lines, proportions, and hair; no real-person or actor reference/u);
   assert.doesNotMatch(JSON.stringify(source), /Adam Driver|celebrity likeness/iu);

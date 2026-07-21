@@ -8,12 +8,12 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:fc3584c223773b6df0da2986a26a9393aba46a6d749d2d2b8186b22898c0a3ec";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:7f439953b6dac6d20d1283f0c3b564005aa99770584cbe9838cd55deee962fee";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
   "sourceVersion": 1,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:0066e58a7aaf8d749c2937c356015210277a86b730f467c032c6ceec9f1156c5",
+  "sourceHash": "sha256:3ea35ca34387a6844506552dc52f8edef4844859c568d5a1c236aa6ae93510f5",
   "bindingHash": "sha256:2941f64bb1518de310c77474a487f523a53f91c2622adc7e3a9dee30a3118233",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
@@ -54,7 +54,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
     },
     {
       "id": "lise_oath_revision",
-      "label": "Lise oath revision",
+      "label": "Nikola earned discipline",
       "defaultValue": 0.35
     },
     {
@@ -455,7 +455,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entry": {
         "id": "page_sw02_decision",
         "title": "Witness, Not Family",
-        "text": "Mateus has named the European cipher and admitted the hand that taught it to Kurozane's clerks. Lise recognizes a hunter's inheritance in the technique, but recognition does not make him kin and remorse does not make him safe. Freed prisoners wait beyond the stair while the party defines whether Mateus may speak, move, or advise.",
+        "text": "Mateus has named the European cipher and admitted the hand that taught it to Kurozane's clerks. Lord Nikola Dražanić recognizes Adriatic merchant marks that his own frontier house once taxed, protected, and quietly profited from. Shared Latin and a European route make the two men useful to one another, not kin, and remorse does not make Mateus safe. Freed prisoners wait beyond the stair while the party defines whether he may speak, move, or advise.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -492,7 +492,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw02_decision_opt_confined-witness_r_revision",
-                "text": "He bargains for proximity to the records and is refused. Aya takes only his route facts, while Lise writes the attempted condition beside them.",
+                "text": "He bargains for proximity to the records and is refused. Aya takes only his route facts, while Nikola writes the attempted condition beside them and, for once, does not add his borrowed title.",
                 "consequenceId": "page_sw02_revision",
                 "score": {
                   "propertyId": "mateus_accountability",
@@ -639,7 +639,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_sw02_accord",
           "title": "Terms of Distant Testimony",
-          "text": "A guard repeats the terms before Mateus speaks: no command, no private approach, no claim on forgiveness. He answers beneath those limits and corrects one location in the copied route. Lise watches for evasion; Aya watches the record; neither lets useful knowledge become a shortcut around the people who survived it.",
+          "text": "A guard repeats the terms before Mateus speaks: no command, no private approach, no claim on forgiveness. He answers beneath those limits and corrects one location in the copied route. Nikola follows the Latin for evasion; Aya governs the record and decides what is relevant. Neither man is allowed to turn foreign knowledge into a shortcut around the people who survived it.",
           "prompt": "Choose what must be logged beside his testimony.",
           "terminal": false,
           "options": [
@@ -676,7 +676,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw02_accord_opt_carry_r_revision",
-                  "text": "Mateus tries to explain motive before completing the sequence. Lise returns him to actions and omissions, preserving a usable account without granting interpretation control.",
+                  "text": "Mateus tries to explain motive before completing the sequence. Nikola cuts across him in formal Latin; Aya cuts across both men and returns the account to actions and omissions, preserving evidence without granting either foreigner interpretation control.",
                   "consequenceId": "page_sw03_decision",
                   "score": {
                     "propertyId": "mateus_accountability",
@@ -974,7 +974,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_sw03_accord",
           "title": "Two Routes, Two Custodians",
-          "text": "The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Lise supplies patrol observations without choosing a route; Mateus remains outside the planning circle. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy.",
+          "text": "The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Nikola supplies patrol observations through Aya, then bristles when Sayo refuses his offer to command an escort; Mateus remains outside the planning circle. Nikola obeys. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy.",
           "prompt": "Confirm which authority can halt the movement.",
           "terminal": false,
           "options": [
@@ -1122,8 +1122,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "entry": {
         "id": "page_sw04_decision",
-        "title": "A Margin in the Varga Journal",
-        "text": "The wreck has preserved a Varga journal page that links hunter knowledge to a sale network serving Kurozane's officers. Lise can read the family shorthand, but inherited expertise also implicates her house. Survivors retain the original while Aya asks what may travel onward and how delay, context, and custody will be made visible.",
+        "title": "A Margin in the Dražanić Ledger",
+        "text": "The wreck has preserved a Dražanić ledger page. It shows that Nikola's minor frontier house converted wartime escorts, confiscated books, and anti-vampire knowledge into fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward and how delay, context, and custody will be made visible.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -1135,7 +1135,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
             "reactions": [
               {
                 "id": "page_sw04_decision_opt_publish-passage_r_accord",
-                "text": "Lise supplies context without asking the record to defend her family. The passage travels with a note distinguishing inheritance from present consent.",
+                "text": "Nikola supplies context without asking the record to rescue his house. The passage travels with a note distinguishing inherited liability from his present choices.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
                   "propertyId": "lise_oath_revision",
@@ -1160,7 +1160,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw04_decision_opt_publish-passage_r_revision",
-                "text": "Lise argues from Varga authority, hears herself, and retracts it. Aya records both the passage and the attempted claim rather than smoothing the moment.",
+                "text": "Nikola invokes the authority of a count he never legally was. Aya makes him retract the claim in the record, preserving both the passage and the attempted use of rank.",
                 "consequenceId": "page_sw04_revision",
                 "score": {
                   "propertyId": "lise_oath_revision",
@@ -1193,7 +1193,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
             "reactions": [
               {
                 "id": "page_sw04_decision_opt_copy-context_r_accord",
-                "text": "The surrounding pages expose the sale route and prevent one line from carrying more certainty than it can bear. Lise accepts the slower publication.",
+                "text": "The surrounding pages expose the sale route and prevent one line from carrying more certainty than it can bear. Nikola accepts the slower publication despite the injury to his house name.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
                   "propertyId": "proof_integrity",
@@ -1218,7 +1218,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw04_decision_opt_copy-context_r_revision",
-                "text": "Delay begins to resemble concealment. Lise accepts a public deadline, and Aya releases an index that names what remains under review.",
+                "text": "Delay begins to resemble noble concealment. Nikola accepts a public deadline, and Aya releases an index that names what remains under review.",
                 "consequenceId": "page_sw04_revision",
                 "score": {
                   "propertyId": "proof_integrity",
@@ -1251,7 +1251,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
             "reactions": [
               {
                 "id": "page_sw04_decision_opt_survivor-custody_r_accord",
-                "text": "The survivors authorize an excerpt and retain the original. Their custody terms travel with every copy, limiting both Varga and party claims.",
+                "text": "The survivors authorize an excerpt and retain the original. Their custody terms travel with every copy, limiting Dražanić, mercantile, and party claims alike.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
                   "propertyId": "network_consent",
@@ -1306,20 +1306,20 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "outcomes": [
         {
           "id": "page_sw04_accord",
-          "title": "An Inheritance Entered as Evidence",
-          "text": "Lise reads the family marks without claiming that blood grants custody. Aya places the Varga passage beside survivor terms and a visible chain of copies. The page becomes evidence of choices made by named institutions, not proof that foreign hunters were destined either to save Japan or corrupt it. That distinction remains attached.",
-          "prompt": "Choose the sentence that limits Varga authority.",
+          "title": "A House Entered as Evidence",
+          "text": "Nikola reads the family marks without claiming that blood or an inflated title grants custody. Aya places the Dražanić passage beside survivor terms and a visible chain of copies. The page becomes evidence of choices made by named houses and brokers, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached.",
+          "prompt": "Choose the sentence that limits Nikola's inherited authority.",
           "terminal": false,
           "options": [
             {
               "id": "page_sw04_accord_opt_carry",
-              "text": "Choose the sentence that limits Varga authority.",
+              "text": "Choose the sentence that limits Nikola's inherited authority.",
               "visible": true,
               "performable": true,
               "reactions": [
                 {
                   "id": "page_sw04_accord_opt_carry_r_accord",
-                  "text": "Lise writes that technical knowledge grants no right to command its use. The survivors approve the sentence and retain the original page.",
+                  "text": "Nikola writes that technical knowledge and noble birth grant no right to command their use. The survivors approve the sentence and retain the original page.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
                     "propertyId": "lise_oath_revision",
@@ -1344,7 +1344,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw04_accord_opt_carry_r_revision",
-                  "text": "Her first sentence still centers family redemption. Aya removes it, and Lise replaces it with the concrete custody limit the survivors requested.",
+                  "text": "His first sentence still centers restoration of the Dražanić name. Aya removes it, and Nikola replaces it with the concrete custody limit the survivors requested.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
                     "propertyId": "lise_oath_revision",
@@ -1374,7 +1374,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_sw04_revision",
           "title": "The Deadline Beside the Gap",
-          "text": "The page cannot yet be published without risking distortion or unwanted custody. Aya posts what is known, what is withheld, and when the decision will be reviewed. Lise accepts that transparency about delay is not the same as entitlement to the source, and the survivors keep control of the original.",
+          "text": "The page cannot yet be published without risking distortion or unwanted custody. Aya posts what is known, what is withheld, and when the decision will be reviewed. Nikola accepts that transparency about delay is not the same as a gentleman's entitlement to the source, and the survivors keep control of the original.",
           "prompt": "Record the delay without turning it into suspicion.",
           "terminal": false,
           "options": [
@@ -1411,7 +1411,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw04_revision_opt_carry_r_revision",
-                  "text": "The first notice implies the survivors caused the delay. Ren corrects the wording, and Lise signs the change without defending the family claim.",
+                  "text": "The first notice implies the survivors caused the delay. Ren corrects the wording, and Nikola signs the change without defending his family claim or styling himself Count.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
                     "propertyId": "aya_archive_openness",
@@ -1746,7 +1746,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw05_revision_opt_carry_r_revision",
-                  "text": "The first test depends on a memory only Mateus controls. Lise rejects it, and the party substitutes a physical count from the lock mechanism.",
+                  "text": "The first test depends on a memory only Mateus controls. Nikola distrusts the priest's word; Aya rejects Nikola's honor test as equally private, and the party substitutes a physical count from the lock mechanism.",
                   "consequenceId": "page_sw06_decision",
                   "score": {
                     "propertyId": "proof_integrity",
@@ -3019,7 +3019,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw09_accord_opt_carry_r_revision",
-                  "text": "One draft thanks him in language that implies restoration. Lise removes it, and the final receipt records only the bounded work completed.",
+                  "text": "One draft thanks Mateus in language that implies restoration. Nikola removes it without substituting the language of noble honor, and the final receipt records only the bounded work completed.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
                     "propertyId": "mateus_accountability",
@@ -3086,7 +3086,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw09_revision_opt_carry_r_revision",
-                  "text": "The first copy omits the attempted control. Lise restores the note, refusing to make Mateus easier to forgive by making the record smoother.",
+                  "text": "The first copy omits the attempted control. Nikola restores the note, refusing to make Mateus easier to forgive or either man easier to honor by making the record smoother.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
                     "propertyId": "aya_archive_openness",

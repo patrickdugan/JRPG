@@ -268,7 +268,7 @@ export const ENCOUNTERS = [
     lesson: {
       primary: 'Combine flanking, delivery/essence weakness, forced movement prevention, and conditional water terrain.',
       playerRead: 'The brazier declares Storm-water Chill before the battle; the Enforcer Ledger explains its shield rule.',
-      successSignal: 'Lise can reach a Pierce angle after one Pace while Ren protects a water lane.',
+      successSignal: 'Nikola can reach a Pierce angle after one Pace while Ren protects a water lane.',
     },
     party: { roster: ['ren', 'aya', 'lise'], deployment: partyDeployment([['ren', '5,6'], ['aya', '4,6'], ['lise', '6,6']]) },
     enemies: [
@@ -284,7 +284,7 @@ export const ENCOUNTERS = [
           { id: 'shield-hook', name: 'Shield Hook', delivery: 'crush', power: 15, range: 2, shape: { type: 'line', length: 2, origin: 'enforcer-facing' }, telegraph: 'The shield rim points at a two-space pull line.', recoveryPulses: 1, dodgeable: true, effect: { pull: { spaces: 1 } } },
           { id: 'registry-guard', name: 'Registry Guard', delivery: 'arcane', essence: 'umbral', power: 0, range: 0, telegraph: 'The shield locks into a black stance.', recoveryPulses: 1, dodgeable: false, effect: { stance: 'guard', immuneToForcedMove: true } },
         ],
-        ai: ['If a target can be pulled into water, telegraph Shield Hook.', 'If not Guarded, use Registry Guard.', 'Otherwise advance toward Lise or Aya.'],
+        ai: ['If a target can be pulled into water, telegraph Shield Hook.', 'If not Guarded, use Registry Guard.', 'Otherwise advance toward Nikola or Aya.'],
       },
       {
         id: 'bell-moth', name: 'Bell Moth', count: 2, positions: ['4,1', '7,1'], role: 'group-pulse nuisance',
@@ -381,7 +381,7 @@ export const ENCOUNTERS = [
       ],
       counterplay: 'Leave the Litany line, then exploit its three Recovery pulses with Pierce/Radiance seal damage, healing, or setup.',
     },
-    reward: { keyItems: ['Bell-room key', 'Takamine temple key'], party: ['Lise joins permanently'], story: 'Mateus opens the cells and becomes a source, not a forgiven friend.' },
+    reward: { keyItems: ['Bell-room key', 'Takamine temple key'], party: ['Nikola joins permanently'], story: 'Mateus opens the cells and becomes a source, not a forgiven friend.' },
   },
 
   {
@@ -662,7 +662,7 @@ export const ENCOUNTERS = [
         ai: ['Guard the unlit relay.', 'Attack anyone carrying a revealed name slip.', 'Turn neutral once the relay release resolves.'],
       },
     ],
-    bossMechanic: { type: 'combination-relays', telegraphs: ['ash-lane-guard'], rule: 'Aya wards, Kiku alters terrain, Genta anchors, Ren redirects, Lise exposes, and Mateus protects; no role is mandatory for every action.' },
+    bossMechanic: { type: 'combination-relays', telegraphs: ['ash-lane-guard'], rule: 'Aya wards, Kiku alters terrain, Genta anchors, Ren redirects, Nikola exposes, and Mateus protects; no role is mandatory for every action.' },
     reward: { flags: ['outer-court-relays-lit'], story: 'Lantern signals show people inside the castle that outer routes remain open.' },
   },
 

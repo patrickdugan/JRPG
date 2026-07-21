@@ -150,7 +150,7 @@
     {
       "id": "lise_oath_revision",
       "property_name": "lise_oath_revision",
-      "property_label": "Lise oath revision",
+      "property_label": "Nikola earned discipline",
       "property_type": "bounded number",
       "default_value": 0.35,
       "depth": 0,
@@ -1889,7 +1889,7 @@
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Mateus has named the European cipher and admitted the hand that taught it to Kurozane's clerks. Lise recognizes a hunter's inheritance in the technique, but recognition does not make him kin and remorse does not make him safe. Freed prisoners wait beyond the stair while the party defines whether Mateus may speak, move, or advise."
+        "value": "Mateus has named the European cipher and admitted the hand that taught it to Kurozane's clerks. Lord Nikola Dražanić recognizes Adriatic merchant marks that his own frontier house once taxed, protected, and quietly profited from. Shared Latin and a European route make the two men useful to one another, not kin, and remorse does not make Mateus safe. Freed prisoners wait beyond the stair while the party defines whether he may speak, move, or advise."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -2054,7 +2054,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "He bargains for proximity to the records and is refused. Aya takes only his route facts, while Lise writes the attempted condition beside them."
+                "value": "He bargains for proximity to the records and is refused. Aya takes only his route facts, while Nikola writes the attempted condition beside them and, for once, does not add his borrowed title."
               },
               "consequence_id": "page_sw02_revision",
               "desirability_script": {
@@ -2763,7 +2763,7 @@
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "A guard repeats the terms before Mateus speaks: no command, no private approach, no claim on forgiveness. He answers beneath those limits and corrects one location in the copied route. Lise watches for evasion; Aya watches the record; neither lets useful knowledge become a shortcut around the people who survived it."
+        "value": "A guard repeats the terms before Mateus speaks: no command, no private approach, no claim on forgiveness. He answers beneath those limits and corrects one location in the copied route. Nikola follows the Latin for evasion; Aya governs the record and decides what is relevant. Neither man is allowed to turn foreign knowledge into a shortcut around the people who survived it."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
@@ -2933,7 +2933,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Mateus tries to explain motive before completing the sequence. Lise returns him to actions and omissions, preserving a usable account without granting interpretation control."
+                "value": "Mateus tries to explain motive before completing the sequence. Nikola cuts across him in formal Latin; Aya cuts across both men and returns the account to actions and omissions, preserving evidence without granting either foreigner interpretation control."
               },
               "consequence_id": "page_sw03_decision",
               "desirability_script": {
@@ -4271,7 +4271,7 @@
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Lise supplies patrol observations without choosing a route; Mateus remains outside the planning circle. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy."
+        "value": "The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Nikola supplies patrol observations through Aya, then bristles when Sayo refuses his offer to command an escort; Mateus remains outside the planning circle. Nikola obeys. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
@@ -4901,11 +4901,11 @@
     },
     {
       "id": "page_sw04_decision",
-      "title": "A Margin in the Varga Journal",
+      "title": "A Margin in the Dražanić Ledger",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The wreck has preserved a Varga journal page that links hunter knowledge to a sale network serving Kurozane's officers. Lise can read the family shorthand, but inherited expertise also implicates her house. Survivors retain the original while Aya asks what may travel onward and how delay, context, and custody will be made visible."
+        "value": "The wreck has preserved a Dražanić ledger page. It shows that Nikola's minor frontier house converted wartime escorts, confiscated books, and anti-vampire knowledge into fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward and how delay, context, and custody will be made visible."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -4943,7 +4943,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Lise supplies context without asking the record to defend her family. The passage travels with a note distinguishing inheritance from present consent."
+                "value": "Nikola supplies context without asking the record to rescue his house. The passage travels with a note distinguishing inherited liability from his present choices."
               },
               "consequence_id": "page_sw04_accord",
               "desirability_script": {
@@ -5070,7 +5070,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Lise argues from Varga authority, hears herself, and retracts it. Aya records both the passage and the attempted claim rather than smoothing the moment."
+                "value": "Nikola invokes the authority of a count he never legally was. Aya makes him retract the claim in the record, preserving both the passage and the attempted use of rank."
               },
               "consequence_id": "page_sw04_revision",
               "desirability_script": {
@@ -5224,7 +5224,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The surrounding pages expose the sale route and prevent one line from carrying more certainty than it can bear. Lise accepts the slower publication."
+                "value": "The surrounding pages expose the sale route and prevent one line from carrying more certainty than it can bear. Nikola accepts the slower publication despite the injury to his house name."
               },
               "consequence_id": "page_sw04_accord",
               "desirability_script": {
@@ -5351,7 +5351,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Delay begins to resemble concealment. Lise accepts a public deadline, and Aya releases an index that names what remains under review."
+                "value": "Delay begins to resemble noble concealment. Nikola accepts a public deadline, and Aya releases an index that names what remains under review."
               },
               "consequence_id": "page_sw04_revision",
               "desirability_script": {
@@ -5505,7 +5505,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The survivors authorize an excerpt and retain the original. Their custody terms travel with every copy, limiting both Varga and party claims."
+                "value": "The survivors authorize an excerpt and retain the original. Their custody terms travel with every copy, limiting Dražanić, mercantile, and party claims alike."
               },
               "consequence_id": "page_sw04_accord",
               "desirability_script": {
@@ -5775,16 +5775,16 @@
     },
     {
       "id": "page_sw04_accord",
-      "title": "An Inheritance Entered as Evidence",
+      "title": "A House Entered as Evidence",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Lise reads the family marks without claiming that blood grants custody. Aya places the Varga passage beside survivor terms and a visible chain of copies. The page becomes evidence of choices made by named institutions, not proof that foreign hunters were destined either to save Japan or corrupt it. That distinction remains attached."
+        "value": "Nikola reads the family marks without claiming that blood or an inflated title grants custody. Aya places the Dražanić passage beside survivor terms and a visible chain of copies. The page becomes evidence of choices made by named houses and brokers, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Choose the sentence that limits Varga authority."
+        "value": "Choose the sentence that limits Nikola's inherited authority."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -5812,7 +5812,7 @@
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Choose the sentence that limits Varga authority."
+            "value": "Choose the sentence that limits Nikola's inherited authority."
           },
           "visibility_script": true,
           "performability_script": true,
@@ -5822,7 +5822,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Lise writes that technical knowledge grants no right to command its use. The survivors approve the sentence and retain the original page."
+                "value": "Nikola writes that technical knowledge and noble birth grant no right to command their use. The survivors approve the sentence and retain the original page."
               },
               "consequence_id": "page_sw05_decision",
               "desirability_script": {
@@ -5949,7 +5949,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Her first sentence still centers family redemption. Aya removes it, and Lise replaces it with the concrete custody limit the survivors requested."
+                "value": "His first sentence still centers restoration of the Dražanić name. Aya removes it, and Nikola replaces it with the concrete custody limit the survivors requested."
               },
               "consequence_id": "page_sw05_decision",
               "desirability_script": {
@@ -6096,7 +6096,7 @@
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The page cannot yet be published without risking distortion or unwanted custody. Aya posts what is known, what is withheld, and when the decision will be reviewed. Lise accepts that transparency about delay is not the same as entitlement to the source, and the survivors keep control of the original."
+        "value": "The page cannot yet be published without risking distortion or unwanted custody. Aya posts what is known, what is withheld, and when the decision will be reviewed. Nikola accepts that transparency about delay is not the same as a gentleman's entitlement to the source, and the survivors keep control of the original."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
@@ -6266,7 +6266,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The first notice implies the survivors caused the delay. Ren corrects the wording, and Lise signs the change without defending the family claim."
+                "value": "The first notice implies the survivors caused the delay. Ren corrects the wording, and Nikola signs the change without defending his family claim or styling himself Count."
               },
               "consequence_id": "page_sw05_decision",
               "desirability_script": {
@@ -7774,7 +7774,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The first test depends on a memory only Mateus controls. Lise rejects it, and the party substitutes a physical count from the lock mechanism."
+                "value": "The first test depends on a memory only Mateus controls. Nikola distrusts the priest's word; Aya rejects Nikola's honor test as equally private, and the party substitutes a physical count from the lock mechanism."
               },
               "consequence_id": "page_sw06_decision",
               "desirability_script": {
@@ -13489,7 +13489,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "One draft thanks him in language that implies restoration. Lise removes it, and the final receipt records only the bounded work completed."
+                "value": "One draft thanks Mateus in language that implies restoration. Nikola removes it without substituting the language of noble honor, and the final receipt records only the bounded work completed."
               },
               "consequence_id": "page_sw10_decision",
               "desirability_script": {
@@ -13806,7 +13806,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The first copy omits the attempted control. Lise restores the note, refusing to make Mateus easier to forgive by making the record smoother."
+                "value": "The first copy omits the attempted control. Nikola restores the note, refusing to make Mateus easier to forgive or either man easier to honor by making the record smoother."
               },
               "consequence_id": "page_sw10_decision",
               "desirability_script": {

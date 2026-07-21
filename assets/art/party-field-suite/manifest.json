@@ -68,12 +68,13 @@
     ],
     "standingFrame": "idle",
     "reducedMotionFrame": "idle",
-    "legacyFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2"
+    "legacyFrameRgbaSha256Digest": "794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25",
+    "supersededPreNikolaFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2"
   },
   "paletteIds": {
     "ren": "party-ren-cedar-rain-v1",
     "aya": "party-aya-paper-teal-v1",
-    "lise": "party-lise-sea-brass-v1",
+    "lise": "party-nikola-oxblood-dusk-v2",
     "mateus": "party-mateus-charcoal-wine-v1",
     "genta": "party-genta-earth-metal-v1",
     "kiku": "party-kiku-herb-candle-v1"
@@ -886,10 +887,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "239dfd2961f7bd7420c8f1e9bcf69b3e3fb77fd87d72215fa78efa6c0e9448b4"
+      "rgbaSha256": "1083b034afcd56877bfdb4e6dc9c63b19924fcaa15eceadf8a649608f37789d9"
     },
     {
       "id": "lise-north-walk",
@@ -914,10 +915,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "74a058884f770bb7e744c95920eaac76592ab0a333535994cee14800f801b9cb"
+      "rgbaSha256": "48bca0d01fc4b2c066444f485b6d8141755e4b2a0ced8c0a921bad3a9dfd443d"
     },
     {
       "id": "lise-east-idle",
@@ -942,10 +943,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "7fc9cbd965e9a8c44d505e089c8a292b417a0f8505c6dfce6d75ed5310759e8d"
+      "rgbaSha256": "87629fdcc8079926f89b29bd683756a34ce6bdeffb9e1ae60f4329a3949dad76"
     },
     {
       "id": "lise-east-walk",
@@ -970,10 +971,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "a7ac22b98c8fd9150ca8c52dd55099c0fa15e0ba7b5926f565955dbe23d68cb3"
+      "rgbaSha256": "af5da9162982c6424f63f12c4ebba97f5b955b9f4f996e03a620bd6d1458ce7b"
     },
     {
       "id": "lise-south-idle",
@@ -998,10 +999,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "eee050f615d95ef4dbdf9747b8300f6d32e989b33cd3cd873357a456a79928ca"
+      "rgbaSha256": "f9402eca12394c20c6521dd9b7244cc90827251673da7059f413055437870daf"
     },
     {
       "id": "lise-south-walk",
@@ -1026,10 +1027,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "d0c5b44efc64b9bedcd398bd7a436bf62eaf9fdf662120b4c84199ee0d4ec9db"
+      "rgbaSha256": "2061cfa8b0bef5ccbf67c0d3f188b2bf2fda89980eb86ef3d54a547633949780"
     },
     {
       "id": "lise-west-idle",
@@ -1052,12 +1053,12 @@
         44
       ],
       "localAlphaBounds": [
-        4,
+        3,
         8,
         27,
         45
       ],
-      "rgbaSha256": "7feb2e75f655ef544a77a12c60256cdfdbca5d289e0528ccf6df9855670fa625"
+      "rgbaSha256": "21733730804c291e4c4321c3eee061675dfd54887d6e69a956993c552336d26e"
     },
     {
       "id": "lise-west-walk",
@@ -1080,12 +1081,12 @@
         44
       ],
       "localAlphaBounds": [
-        4,
+        3,
         8,
         27,
         45
       ],
-      "rgbaSha256": "1d8013b3c9b5d70bd256d4cc5cf2666234e0422469738c96be396fa87ed1553e"
+      "rgbaSha256": "507eac6c89a75b97b42ba2f3cda827badecb1842c190facf80f4145d16c4b30f"
     },
     {
       "id": "lise-south-interact",
@@ -1113,7 +1114,7 @@
         31,
         45
       ],
-      "rgbaSha256": "d5f4920a62862422c5e1783d98a36bf5a5fcc2201111915a1a0822f57165f5c5"
+      "rgbaSha256": "cf7fde39b559b1fb0ce0ec0e5c3af703de973c30f41252650515e57e225ad8e5"
     },
     {
       "id": "lise-south-hurt",
@@ -1141,7 +1142,7 @@
         31,
         45
       ],
-      "rgbaSha256": "0bb085044cbcab1921cfaf95a3e5fc5ba7e95cfb113e0e39bc92b238d48860ed"
+      "rgbaSha256": "5e34622d729ec7bacc681dfc224a49e5312be4c8bc8f11658ff9f449833cfae5"
     },
     {
       "id": "lise-north-walk-b",
@@ -1166,10 +1167,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "498b056837a3295a590ac5d3b420231774f463fc8b8a97e98a9059134e22a2e4"
+      "rgbaSha256": "4f01cac2320d6e501aa62a2f65565767b061338daa15457654bcba50a38316f7"
     },
     {
       "id": "lise-east-walk-b",
@@ -1194,10 +1195,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "3d6e2c84cc0f37c4502dea962d56c366cc8f104ef896467b6b414d19549500b6"
+      "rgbaSha256": "5f884c67776b231fc4fd80a518926e322a64710f816ee4c92a0e0aa7852014f1"
     },
     {
       "id": "lise-south-walk-b",
@@ -1222,10 +1223,10 @@
       "localAlphaBounds": [
         5,
         8,
-        28,
+        30,
         45
       ],
-      "rgbaSha256": "4bbd79c4599aa3da213481d394dc3de4ff51b392b8ab5cd80ce8292b5313d794"
+      "rgbaSha256": "6766b41c19ed5f12fadfc5610270f2f38853989291ead155ea7fd755d150b4e1"
     },
     {
       "id": "lise-west-walk-b",
@@ -1248,12 +1249,12 @@
         44
       ],
       "localAlphaBounds": [
-        4,
+        3,
         8,
         27,
         45
       ],
-      "rgbaSha256": "2c01caf89251e8b07c0d5a61af9ab7ce6bc43cf92fac1ffa382f8108db13c2f3"
+      "rgbaSha256": "566a13ccd105107ca6ad608b03867195789bf54c2b9c30188e974a81be8e5041"
     },
     {
       "id": "mateus-north-idle",
@@ -2436,17 +2437,17 @@
     {
       "path": "party-field-suite.source.json",
       "format": "json",
-      "sha256": "23db57aa81f14f2d858cce7a337c0e4c0f3edd55d3166d0624729579e0195a13"
+      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
     },
     {
       "path": "party-field-walk-inbetweens.source.json",
       "format": "json",
-      "sha256": "813dbe2b13e774a1d63695e6d83146fbcb4960ff8f8811294df052c1141637e1"
+      "sha256": "751a6f722fc585d8a6d86445fbe126ba6cf83da1d4ef3771f170091ca119543f"
     },
     {
       "path": "build_party_field_suite.py",
       "format": "python",
-      "sha256": "a37df9dc5f1b2adb51533f5758cf4b83c0d3e20676484d6c53a3a2a91176bccf"
+      "sha256": "f6cd4457d7935df3463c07383e991ef2b0b8af6ea008bb067de6990c7794eb0f"
     }
   ],
   "exports": [
@@ -2456,7 +2457,7 @@
       "width": 448,
       "height": 288,
       "mode": "RGBA",
-      "sha256": "32b12efc27c488ce3381e6584d21795e78014a7b8cf681947781c857cdeff732"
+      "sha256": "a241ffe4bfebb775aa21276e5b2ee53a299a2c1728303f1631d80f2109245228"
     },
     {
       "path": "party-field-foundation-contact-sheet.png",
@@ -2464,14 +2465,14 @@
       "width": 1888,
       "height": 1210,
       "mode": "RGBA",
-      "sha256": "e7b57c368504542b95ce451e704e1c2b471f0b91d2b9912aa91b5f5ae07f7bcd"
+      "sha256": "4ac888d11a824e732b7f91dc8eea7348bbda5177b731f6b45aed31b4b1e2383b"
     }
   ],
   "validation": {
     "frameCount": 84,
     "legacyFrameCount": 60,
-    "legacyFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2",
-    "uniqueRgbaValues": 34,
+    "legacyFrameRgbaSha256Digest": "794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25",
+    "uniqueRgbaValues": 35,
     "allOuterFrameBordersTransparent": true,
     "bottomTransparentRowsPerFrame": 3,
     "deterministicCommand": "python build_party_field_suite.py --check"

@@ -84,7 +84,7 @@ const AUTHORED_EARLY_SPECS = [
     title: 'Three Translations at the Rain Gate',
     theme: 'Ren challenges Ayas confidence in written evidence after competing translations reveal how expert certainty can reproduce court power.',
     dialogue: alternating('ren', 'aya', [
-      ['Lise says the inscription promises passage; Mateus says it warns of surrender.', 'Both readings fit the old trade word carved beneath the newer court mark.'],
+      ['Nikola says the inscription promises passage; Mateus says it warns of surrender.', 'Both readings fit the old trade word carved beneath the newer court mark.'],
       ['You frowned at their disagreement as if one of them had damaged the stone.', 'I frowned because the archive copy labels our translation verified.'],
       ['Verified by whom?', 'By my teacher, another shrine reader, and apparently nobody who used the gate.'],
       ['Then three trained eyes agreed while travelers carried a different meaning.', 'Agreement inside one room can preserve the rooms limits with great precision.'],
@@ -97,7 +97,7 @@ const AUTHORED_EARLY_SPECS = [
       ['A frightened traveler will not study a translation dispute in the rain.', 'Then lead with the immediate risk and provide the language history below.'],
       ['Something like guards demand papers here, regardless of the older promise.', 'Yes, with an alternate route chosen by people who crossed this week.'],
       ['Do we name Mateus as a source when his court service makes him useful?', 'Only with his consent, and never as the single authority on court intent.'],
-      ['Lise may dislike standing beside his interpretation after learning what he served.', 'Her refusal to share a byline would not erase the words she supplied.'],
+      ['Nikola may dislike standing beside his interpretation after learning what he served.', 'His refusal to share a byline would not erase the words he supplied.'],
       ['Can a source withdraw their name but leave their contribution?', 'If the contribution remains safely attributable to method rather than identity.'],
       ['You have designed many ways for a record to hold disagreement.', 'Because forcing harmony is one of the courts quietest habits.'],
       ['I used to think archives settled arguments so roads could reopen.', 'A good archive keeps an argument testable while people still choose a road.'],
@@ -339,7 +339,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'ren-lise',
     sequence: 1,
     title: 'A Hunter at the Service Door',
-    theme: 'Ren and Lise negotiate a working trust after her arrival disrupts both his route and her inherited certainty about Mateus.',
+    theme: 'Ren and Nikola negotiate a working trust after his arrival disrupts both Ren’s route and Nikola’s inherited certainty about Mateus.',
     dialogue: alternating('ren', 'lise', [
       ['You entered through the chapel service door without asking who watched it.', 'The front stair was trapped, and hesitation would have left Mateus alone below.'],
       ['That door also sheltered three caretakers who had refused armed visitors.', 'I saw an empty passage, not the agreement that made it empty.'],
@@ -363,7 +363,7 @@ const AUTHORED_EARLY_SPECS = [
       ['That is specific enough to answer and narrow enough not to demand comfort.', 'Perhaps we can build trust from sentences neither of us enjoys delivering.'],
     ]),
     choice: {
-      prompt: 'What rule should govern Ren and Lises next joint pursuit?',
+      prompt: 'What rule should govern Ren and Nikola’s next joint pursuit?',
       options: [
         {
           label: 'Threshold consent first',
@@ -376,7 +376,7 @@ const AUTHORED_EARLY_SPECS = [
         },
         {
           label: 'Separate pursuit zones',
-          summary: 'Ren and Lise receive explicit zones, handoff signals, and independent withdrawal authority before entering a contested route.',
+          summary: 'Ren and Nikola receive explicit zones, handoff signals, and independent withdrawal authority before entering a contested route.',
           response: [
             L('My zone ends where the shelter agreement begins, even if the target crosses first.'),
             R('I will not revise your boundary by gesture once the pursuit starts.'),
@@ -390,7 +390,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'ren-lise',
     sequence: 2,
     title: 'The Key and the Checkpoint',
-    theme: 'A disputed checkpoint plan exposes the difference between Lises decisive tactics and Rens knowledge of how ordinary travelers absorb retaliation.',
+    theme: 'A disputed checkpoint plan exposes the difference between Nikola’s decisive tactics and Ren’s knowledge of how ordinary travelers absorb retaliation.',
     dialogue: alternating('ren', 'lise', [
       ['The first bell key will draw every patrol once its absence reaches the captain.', 'Then we strike the checkpoint before the report leaves its tower.'],
       ['Striking it closes the market road used by families carrying ration tags.', 'Leaving it open lets patrols inspect those same families for our trail.'],
@@ -414,7 +414,7 @@ const AUTHORED_EARLY_SPECS = [
       ['Then we take both to the market council and offer three bounded plans.', 'And if they refuse all three, we reroute the key instead of punishing caution.'],
     ]),
     choice: {
-      prompt: 'What checkpoint proposal should Ren and Lise bring to the market council?',
+      prompt: 'What checkpoint proposal should Ren and Nikola bring to the market council?',
       options: [
         {
           label: 'Offer three bounded plans',
@@ -440,8 +440,8 @@ const AUTHORED_EARLY_SPECS = [
   {
     pairId: 'ren-lise',
     sequence: 3,
-    title: 'The Oath in Varga Ink',
-    theme: 'Lises recovered family journal forces her and Ren to distinguish inherited witness from inherited command while midpoint evidence changes the hunt.',
+    title: 'The Oath in Dražanić Ink',
+    theme: 'Nikola’s recovered family journal forces him and Ren to distinguish inherited witness from inherited command while midpoint evidence changes the hunt.',
     dialogue: alternating('ren', 'lise', [
       ['You have read the same journal paragraph until the lamp burned lower twice.', 'My grandmother wrote that mercy toward the changed betrays every future victim.'],
       ['She wrote it after losing her brother, according to the page before.', 'Grief explains the heat of the sentence without making it useless.'],
@@ -466,11 +466,11 @@ const AUTHORED_EARLY_SPECS = [
       ['That destination may keep changing long after our routes end.', 'Then the oath can remain alive without demanding anyone inherit my certainty.'],
     ]),
     choice: {
-      prompt: 'How should Lise place her revised oath beside the Varga journal?',
+      prompt: 'How should Nikola place his revised oath beside the Dražanić journal?',
       options: [
         {
           label: 'Write a dated counter-oath',
-          summary: 'Lise authors a dated practice of protection and review beside the inherited command without altering her grandmothers words.',
+          summary: 'Nikola authors a dated practice of protection and review beside the inherited command without altering his grandmother’s words.',
           response: [
             L('My hand will stand beside hers with its own date, losses, and uncertainty.'),
             R('Future readers can see inheritance become argument rather than invisible command.'),
@@ -479,7 +479,7 @@ const AUTHORED_EARLY_SPECS = [
         },
         {
           label: 'Invite affected annotations',
-          summary: 'Lise opens a copied margin to people living under hunter decisions while the fragile original remains safely preserved.',
+          summary: 'Nikola opens a copied margin to people living under hunter decisions while the fragile original remains safely preserved.',
           response: [
             R('Those protected, endangered, or refused by hunters receive equal room to annotate.'),
             L('Their accounts may challenge both my grandmother and my preferred correction.'),
@@ -493,7 +493,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'ren-lise',
     sequence: 4,
     title: 'The Rescue Line',
-    theme: 'Ren and Lise revise a dangerous rescue formation so tactical competence cannot override prisoners right to choose proximity and pace.',
+    theme: 'Ren and Nikola revise a dangerous rescue formation so tactical competence cannot override prisoners right to choose proximity and pace.',
     dialogue: alternating('ren', 'lise', [
       ['Your formation places rescued prisoners inside the spear ring until the aqueduct clears.', 'The ring keeps court hounds from dividing the group during withdrawal.'],
       ['It also surrounds frightened people with armed strangers moving at your command.', 'Open spacing gives the hounds lanes and leaves slower prisoners exposed.'],
@@ -544,7 +544,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'ren-lise',
     sequence: 5,
     title: 'The Enemy Left Alive on Paper',
-    theme: 'After Kurozanes fall, Ren and Lise decide how to preserve enemy evidence without keeping his spectacle or ideology alive.',
+    theme: 'After Kurozanes fall, Ren and Nikola decide how to preserve enemy evidence without keeping his spectacle or ideology alive.',
     dialogue: alternating('ren', 'lise', [
       ['The observatory banners are down, but archivists are asking which pieces to preserve.', 'Keep command maps, prisoner lists, payment books, and every record that supports a claim.'],
       ['What about the painted genealogies declaring his blood ordained to rule?', 'They show how he justified power, yet displaying them could repeat their intended awe.'],
@@ -560,7 +560,7 @@ const AUTHORED_EARLY_SPECS = [
       ['What purpose remains for your training now?', 'Protect witnesses, read predatory methods, teach defenses, and submit force to review.'],
       ['That answer could become a gentler banner hiding the same control.', 'Then measure whether communities can refuse hunters and retain every protection.'],
       ['You keep turning refusal into the test of every institution.', 'Because consent without a survivable no is decoration.'],
-      ['Ren the former courier agrees more strongly than he once could.', 'Lise the former unquestioning heir is trying to deserve the same change in tense.'],
+      ['Ren the former courier agrees more strongly than he once could.', 'Nikola the former unquestioning heir is trying to deserve the same change in tense.'],
       ['Former may be too clean; our habits still arrive before our judgment.', 'Then the record should say revised, contested, and under continuing review.'],
       ['We also need to decide what happens to his weapon collection.', 'Study mechanisms for defense, remove ceremonial display, and never distribute trophies.'],
       ['Melt what has no evidentiary value?', 'After independent cataloguing and permission from people whose property supplied the metal.'],
@@ -596,7 +596,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'ren-lise',
     sequence: 6,
     title: 'A Road Beyond the Family Map',
-    theme: 'At the open archive, Ren and Lise choose how her revised hunter knowledge can travel without becoming another hereditary order.',
+    theme: 'At the open archive, Ren and Nikola choose how his revised hunter knowledge can travel without becoming another hereditary order.',
     dialogue: alternating('ren', 'lise', [
       ['Three apprentices copied your ward diagram and each changed a different mark.', 'One corrected the western symbol, one adapted it for wet wood, one made nonsense.'],
       ['Can you tell which is nonsense without asking who drew it?', 'Yes, because the line closes inward and would trap the person it protects.'],
@@ -610,7 +610,7 @@ const AUTHORED_EARLY_SPECS = [
       ['Who decides when a shelter detail can open?', 'Its residents, not hunters, archivists, or future researchers alone.'],
       ['Your family map marks regions by creatures killed.', 'I want the new map to mark communities teaching defenses and routes they share.'],
       ['Some may refuse a place on any map after generations of pursuit.', 'Then absence remains an honored boundary, never an invitation to investigate.'],
-      ['Would you remove the Varga name from the training pages?', 'I would name sources where safe without branding the practice as family property.'],
+      ['Would you remove the Dražanić name from the training pages?', 'I would name sources where safe without branding the practice as family property.'],
       ['Your experience matters, even if inheritance no longer commands.', 'So do corrections from people my order never considered experts.'],
       ['The wet-wood apprentice should teach the next rain-country session.', 'Provided she wants teaching work and receives wages rather than gratitude.'],
       ['Kiku has trained us both to hear the unpaid labor hidden in praise.', 'And you have trained me to ask where knowledge travels after leaving my hands.'],
@@ -622,7 +622,7 @@ const AUTHORED_EARLY_SPECS = [
       ['The road beyond your family map has a return path, then.', 'A revisable one, contingent on welcome, weather, and our continued honesty.'],
     ]),
     choice: {
-      prompt: 'How should Lise release revised hunter knowledge through the archive?',
+      prompt: 'How should Nikola release revised hunter knowledge through the archive?',
       options: [
         {
           label: 'Publish defensive tests',
@@ -649,7 +649,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'aya-lise',
     sequence: 1,
     title: 'A Word With Two Edges',
-    theme: 'Aya and Lise test one another as translators, exposing how inherited expertise can turn a disputed word into a dangerous command.',
+    theme: 'Aya and Nikola test one another as translators, exposing how inherited expertise can turn a disputed word into a dangerous command.',
     dialogue: alternating('aya', 'lise', [
       ['You translated the chapel mark as corrupted blood without noting another reading.', 'In my order, that hooked stroke always marked a changed predator.'],
       ['Here it commonly marks a debt altered after witnessing.', 'Then the inscription may describe an account, not a body.'],
@@ -674,7 +674,7 @@ const AUTHORED_EARLY_SPECS = [
       ['Our joint note may disappoint both traditions.', 'Then it may finally describe the hooked stroke instead of defending its keepers.'],
     ]),
     choice: {
-      prompt: 'How should Aya and Lise publish the disputed chapel mark?',
+      prompt: 'How should Aya and Nikola publish the disputed chapel mark?',
       options: [
         {
           label: 'Preserve both readings',
@@ -687,7 +687,7 @@ const AUTHORED_EARLY_SPECS = [
         },
         {
           label: 'Ask living readers first',
-          summary: 'Consenting local readers frame present usage before Aya and Lise append their historical and foreign-language analysis.',
+          summary: 'Consenting local readers frame present usage before Aya and Nikola append their historical and foreign-language analysis.',
           response: [
             L('Our expertise enters after the people living with this mark define the question.'),
             A('They may decline, limit locations, or require the copy remain inside the chapel.'),
@@ -701,7 +701,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'aya-lise',
     sequence: 2,
     title: 'The Name the Checkpoint Invented',
-    theme: 'Aya and Lise reconstruct a travelers identity across court, harbor, and foreign records without treating any official spelling as the real person.',
+    theme: 'Aya and Nikola reconstruct a travelers identity across court, harbor, and foreign records without treating any official spelling as the real person.',
     dialogue: alternating('aya', 'lise', [
       ['The customs ledger calls her Maris, the ferry copy says Mari, and this note says Mae.', 'The final note uses a coastal abbreviation for mother, not necessarily a name.'],
       ['The checkpoint clerk may have mistaken a relationship for identity.', 'Or deliberately replaced a foreign name he refused to pronounce.'],
@@ -753,7 +753,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'aya-lise',
     sequence: 3,
     title: 'Instructions That Should Not Travel',
-    theme: 'The Varga journal makes Aya and Lise balance preserving evidence of hunter methods against preventing dangerous techniques from spreading.',
+    theme: 'The Dražanić journal makes Aya and Nikola balance preserving evidence of hunter methods against preventing dangerous techniques from spreading.',
     dialogue: alternating('aya', 'lise', [
       ['These four pages describe how to break a household ward from outside.', 'My order kept them so hunters could enter places controlled by changed masters.'],
       ['The method does not distinguish a prison ward from a families protection.', 'Tools rarely preserve the moral story their makers tell about them.'],
@@ -771,7 +771,7 @@ const AUTHORED_EARLY_SPECS = [
       ['That practice made the technique look inevitable once an expert arrived.', 'It also concealed how many households were damaged by experimentation.'],
       ['Do the journal margins name those places?', 'Initials, weather marks, and one village emblem I recognize with shame.'],
       ['Do not disclose the emblem until that village decides how to appear.', 'I will ask through an intermediary who does not reveal why I recognized it.'],
-      ['They may refuse contact with a Varga descendant entirely.', 'Then the intermediary returns only refusal, and the emblem remains restricted.'],
+      ['They may refuse contact with a Dražanić descendant entirely.', 'Then the intermediary returns only refusal, and the emblem remains restricted.'],
       ['You will have to live with a page you cannot publicly explain.', 'That is a small burden beside being made an example without consent.'],
       ['Would you teach the defensive method if communities request it?', 'Yes, with local teachers, open tests, and no oath binding them to my order.'],
       ['Then the dangerous pages become accountable evidence, not inherited property.', 'And the useful knowledge leaves my family without carrying its command structure.'],
@@ -792,7 +792,7 @@ const AUTHORED_EARLY_SPECS = [
           label: 'Let affected villages govern',
           summary: 'Communities identified in the margins decide whether evidence, emblems, defenses, or technical detail may leave restricted custody.',
           response: [
-            L('An intermediary offers control without requiring anyone to meet a Varga descendant.'),
+            L('An intermediary offers control without requiring anyone to meet a Dražanić descendant.'),
             A('Refusal closes our request while leaving future community review possible.'),
             L('The people used in the orders experiments finally govern what those pages do.'),
           ],
@@ -804,7 +804,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'aya-lise',
     sequence: 4,
     title: 'Two Accounts of the Aqueduct',
-    theme: 'Aya and Lise preserve incompatible battle testimony without forcing tactical and civilian witnesses into a single authoritative story.',
+    theme: 'Aya and Nikola preserve incompatible battle testimony without forcing tactical and civilian witnesses into a single authoritative story.',
     dialogue: alternating('aya', 'lise', [
       ['Your battle account says the eastern bell stopped before the prisoners moved.', 'That is what I heard from the upper channel beside the broken clapper.'],
       ['Noes roadkeepers heard two pulses after the first group reached the ferry.', 'Stone corridors can delay sound, and their position faced the lower arch.'],
@@ -829,7 +829,7 @@ const AUTHORED_EARLY_SPECS = [
       ['My tactical decision remains available for criticism under either version.', 'That is the point of testimony after victory, not a punishment for surviving.'],
     ]),
     choice: {
-      prompt: 'How should Aya and Lise preserve the conflicting bell accounts?',
+      prompt: 'How should Aya and Nikola preserve the conflicting bell accounts?',
       options: [
         {
           label: 'Keep positioned accounts',
@@ -856,16 +856,16 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'aya-lise',
     sequence: 5,
     title: 'A Catalogue Without Trophies',
-    theme: 'Aya and Lise classify the fallen regimes weapons as evidence, stolen material, and danger without turning them into heroic trophies.',
+    theme: 'Aya and Nikola classify the fallen regimes weapons as evidence, stolen material, and danger without turning them into heroic trophies.',
     dialogue: alternating('aya', 'lise', [
-      ['The inventory team labeled this silver lance Varga pattern, captured at dawn.', 'Remove captured; nobody won it from me, and its pattern predates my family.'],
+      ['The inventory team labeled this silver lance Dražanić pattern, captured at dawn.', 'Remove captured; nobody won it from me, and its pattern predates my family.'],
       ['What label would describe its route without granting ownership?', 'Recovered from the observatory armory, prior custody disputed, material under review.'],
       ['The shaft contains temple bronze according to the assayers scratch test.', 'Then some part may come from bells seized during the first purges.'],
       ['Communities may want material returned, buried, recast, or left as evidence.', 'No hunter should decide because the object resembles our tools.'],
       ['You held it for several minutes before bringing it to intake.', 'The balance felt like my training hall, and I wanted one familiar thing.'],
       ['Did you consider keeping it?', 'Yes, then I imagined explaining possession to someone whose bell became its blade.'],
       ['Wanting familiarity does not itself create a claim.', 'Nor does surrendering it make my first desire noble.'],
-      ['We can record your recognition as provenance evidence.', 'Only if the record also says the pattern was never exclusively Varga.'],
+      ['We can record your recognition as provenance evidence.', 'Only if the record also says the pattern was never exclusively Dražanić.'],
       ['Who else used it?', 'River guards, western caravan escorts, and at least two orders my family dismissed.'],
       ['Then the original label repeats a prestige claim those orders manufactured.', 'Catalogues can make hierarchy survive even after banners fall.'],
       ['They can also turn atrocities into attractive shelves for visitors.', 'Do not display polished weapons above the names of people they harmed.'],
@@ -908,7 +908,7 @@ const AUTHORED_EARLY_SPECS = [
     pairId: 'aya-lise',
     sequence: 6,
     title: 'The Translation Table Stays Open',
-    theme: 'Aya and Lise make their cross-language work correctable by ordinary readers while acknowledging friendship without claiming perfect understanding.',
+    theme: 'Aya and Nikola make their cross-language work correctable by ordinary readers while acknowledging friendship without claiming perfect understanding.',
     dialogue: alternating('aya', 'lise', [
       ['Someone corrected your word for estuary on the public copy.', 'They wrote meeting-water, which is more precise for that village usage.'],
       ['You sound pleased.', 'I spent years believing correction proved an enemy had found weakness.'],
@@ -963,7 +963,7 @@ const AUTHORED_EARLY_SPECS = [
     title: 'The Man Beyond the Cell Door',
     theme: 'Ren refuses easy kinship with Mateus while establishing concrete terms for traveling beside a former court interpreter.',
     dialogue: alternating('ren', 'mateus', [
-      ['You knew the undercroft locks before Lise showed us the hidden catch.', 'I reviewed their design when the court converted prayer rooms into cells.'],
+      ['You knew the undercroft locks before Nikola showed us the hidden catch.', 'I reviewed their design when the court converted prayer rooms into cells.'],
       ['Reviewed sounds cleaner than helped.', 'I recommended which doors needed double bars and which corridors required bells.'],
       ['People were held behind your recommendations tonight.', 'Yes, and my opening one door does not subtract the others.'],
       ['Do not agree so quickly that my anger loses somewhere to land.', 'You may direct it at me without inventing cruelty I did not commit.'],
@@ -1191,7 +1191,7 @@ const AUTHORED_EARLY_SPECS = [
       ['Then why is the death note already written?', 'Because wanting life felt indecent beside people whose deaths I enabled.'],
       ['Their deaths do not become balanced by adding yours.', 'Nor does my survival restore them; arithmetic fails in both directions.'],
       ['Living can create more occasions for accountability and more chances to fail.', 'The second prospect frightens me more than the latch.'],
-      ['Good; fear is information, not an oracle.', 'Lise has been teaching you her revised vocabulary.'],
+      ['Good; fear is information, not an oracle.', 'Nikola has been teaching you his revised vocabulary.'],
       ['We all steal useful sentences and cite poorly around campfires.', 'Then cite me accurately: I withdraw the unilateral sealing order.'],
       ['You may still volunteer it as an emergency fallback with an exit threshold.', 'Only after node failure is observed and the whole team receives the signal.'],
       ['And if the latch takes you?', 'Preserve the decision record without turning it into my absolution.'],

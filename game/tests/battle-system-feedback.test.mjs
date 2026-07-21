@@ -151,7 +151,7 @@ function dodgeSnapshots({
     ...attackerOverrides,
   };
   const beforeTarget = {
-    instanceId: 'lise', name: 'Lise Varga', faction: 'party', hp: 108, stance: 'dodge', pos: { x: 2, y: 2 },
+    instanceId: 'lise', name: 'Nikola Dražanić', faction: 'party', hp: 108, stance: 'dodge', pos: { x: 2, y: 2 },
     guard: 10, resistances: { delivery: { crush: 1 }, essence: {} }, statuses: [],
     ...beforeTargetOverrides,
   };
@@ -639,7 +639,7 @@ test('typed damage feedback keeps exact event order across multiple targets and 
   const beforeSnapshot = {
     actors: [
       { instanceId: 'mateus-1', name: 'Mateus', faction: 'enemy', hp: 200, pos: { x: 6, y: 3 } },
-      { instanceId: 'lise', name: 'Lise', faction: 'party', hp: 100, pos: { x: 3, y: 2 } },
+      { instanceId: 'lise', name: 'Nikola', faction: 'party', hp: 100, pos: { x: 3, y: 2 } },
       { instanceId: 'ren', name: 'Ren', faction: 'party', hp: 80, pos: { x: 4, y: 2 } },
     ],
     log: [{ type: 'intent-answered', intentId: 'crimson-litany-1' }],
@@ -655,7 +655,7 @@ test('typed damage feedback keeps exact event order across multiple targets and 
   const record = createBattleDamageOutcomeFeedback({ beforeSnapshot, afterSnapshot });
   assert.deepEqual(record.entries.map(({ targetId }) => targetId), ['lise', 'ren']);
   assert.deepEqual(record.entries.map(({ targetHpBefore, targetHpAfter }) => [targetHpBefore, targetHpAfter]), [[100, 80], [80, 70]]);
-  assert.match(record.announcement, /^Mateus deals 20 damage to Lise.*Mateus deals 10 damage to Ren/s);
+  assert.match(record.announcement, /^Mateus deals 20 damage to Nikola.*Mateus deals 10 damage to Ren/s);
 });
 
 test('typed damage feedback fails closed on divergent, malformed, or uncorroborated authority', () => {
@@ -722,10 +722,10 @@ test('stance Dodge feedback requires the exact authored engine result and unchan
   assert.deepEqual(record, {
     kind: 'stance-dodge',
     attackerId: 'oni-1', attackerName: 'Ashen Oni', attackerTile: { x: 6, y: 2 },
-    targetId: 'lise', targetName: 'Lise Varga', targetTile: { x: 2, y: 2 },
+    targetId: 'lise', targetName: 'Nikola Dražanić', targetTile: { x: 2, y: 2 },
     skillId: 'tetsubo-hew', skillName: 'Tetsubo Hew', delivery: 'crush', typedDamage: 24,
     targetHp: 108, sidestepVector: { x: 0, y: -1 }, displayLabel: 'DODGE',
-    announcement: 'Lise Varga dodges Tetsubo Hew from Ashen Oni. Dodge consumed.',
+    announcement: 'Nikola Dražanić dodges Tetsubo Hew from Ashen Oni. Dodge consumed.',
     baseDurationMs: 720, durationMs: 360, startedAt: 100, endsAt: 460, presentationSpeed: 2,
   });
   assert.equal(Object.isFrozen(record), true);
@@ -912,7 +912,7 @@ test('telegraph evasion requires an exact typed resolved-intent delta and party 
     type: 'intent-published', intentId: 'crimson-litany-1', targetIdsAtPublish: ['lise'], pulse: 3,
   };
   const beforeSnapshot = {
-    actors: [{ instanceId: 'lise', name: 'Lise Varga', faction: 'party', hp: 108, pos: { x: 3, y: 3 } }],
+    actors: [{ instanceId: 'lise', name: 'Nikola Dražanić', faction: 'party', hp: 108, pos: { x: 3, y: 3 } }],
     log: [published],
   };
   const resolved = {
@@ -920,7 +920,7 @@ test('telegraph evasion requires an exact typed resolved-intent delta and party 
     avoidedTargetIds: ['lise'], aftermath: { recoveryPulses: 3 }, pulse: 4,
   };
   const afterSnapshot = {
-    actors: [{ instanceId: 'lise', name: 'Lise Varga', faction: 'party', hp: 108, pos: { x: 3, y: 4 } }],
+    actors: [{ instanceId: 'lise', name: 'Nikola Dražanić', faction: 'party', hp: 108, pos: { x: 3, y: 4 } }],
     log: [published, resolved],
   };
   const record = createBattleTelegraphEvadeFeedback({
@@ -929,7 +929,7 @@ test('telegraph evasion requires an exact typed resolved-intent delta and party 
   assert.equal(record.kind, 'telegraph-evaded');
   assert.equal(record.intentId, 'crimson-litany-1');
   assert.equal(record.durationMs, BATTLE_SYSTEM_FEEDBACK_MS['telegraph-evaded'] / 2);
-  assert.deepEqual(record.targets, [{ actorId: 'lise', actorName: 'Lise Varga', tile: { x: 3, y: 4 } }]);
+  assert.deepEqual(record.targets, [{ actorId: 'lise', actorName: 'Nikola Dražanić', tile: { x: 3, y: 4 } }]);
   assert.match(record.announcement, /Telegraph evaded/);
   assert.equal(Object.isFrozen(record.targets[0].tile), true);
 

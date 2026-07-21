@@ -54,7 +54,8 @@ export const CAMPAIGN_PACING = deepFreeze({
 const PARTY_DEFINITIONS = deepFreeze([
   { id: 'ren', name: 'Ren Ishikawa', base: { hp: 104, mp: 24, power: 15, guard: 12, arcana: 8, speed: 15 }, growth: { hp: 9, mp: 2, power: 3, guard: 2, arcana: 1, speed: 2 } },
   { id: 'aya', name: 'Aya Shinohara', base: { hp: 82, mp: 42, power: 8, guard: 11, arcana: 16, speed: 12 }, growth: { hp: 7, mp: 4, power: 1, guard: 2, arcana: 3, speed: 2 } },
-  { id: 'lise', name: 'Lise Varga', base: { hp: 91, mp: 29, power: 16, guard: 10, arcana: 11, speed: 16 }, growth: { hp: 8, mp: 3, power: 3, guard: 2, arcana: 2, speed: 3 } },
+  // `lise` is the save-stable legacy slot for Nikola; never expose it as his name.
+  { id: 'lise', name: 'Nikola Dražanić', base: { hp: 91, mp: 29, power: 16, guard: 10, arcana: 11, speed: 16 }, growth: { hp: 8, mp: 3, power: 3, guard: 2, arcana: 2, speed: 3 } },
   { id: 'mateus', name: 'Father Mateus Avelar', base: { hp: 98, mp: 48, power: 12, guard: 12, arcana: 18, speed: 11 }, growth: { hp: 8, mp: 4, power: 2, guard: 2, arcana: 3, speed: 2 } },
   { id: 'genta', name: 'Genta Mononobe', base: { hp: 128, mp: 18, power: 17, guard: 18, arcana: 6, speed: 8 }, growth: { hp: 11, mp: 1, power: 3, guard: 3, arcana: 1, speed: 1 } },
   { id: 'kiku', name: 'Kiku Nawa', base: { hp: 86, mp: 45, power: 9, guard: 10, arcana: 17, speed: 13 }, growth: { hp: 7, mp: 4, power: 1, guard: 2, arcana: 3, speed: 2 } },

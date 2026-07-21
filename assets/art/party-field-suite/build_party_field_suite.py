@@ -31,6 +31,7 @@ LEGACY_COLUMNS = (
 WALK_B_COLUMNS = ("north-walk-b", "east-walk-b", "south-walk-b", "west-walk-b")
 SHEET_COLUMNS = LEGACY_COLUMNS + WALK_B_COLUMNS
 SHEET_ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
+REVIEW_ROW_LABELS = {"lise": "NIKOLA"}
 
 
 def rgba(hex_color: str, alpha: int = 255) -> tuple[int, int, int, int]:
@@ -127,9 +128,17 @@ def draw_head(s: Sprite, style: str):
         s.rect((14, 16, 17, 17), "skinShadow")
 
     if style == "lise":
-        s.rect((10, 9, 12, 15), "hair")
-        s.pixel(9, 13, "hair")
-        s.pixel(20, 10, "light")
+        # Legacy atlas key `lise` now presents Nikola: a high forehead,
+        # backswept dark hair, narrow moustache, and a clipped pointed beard.
+        s.rect((10, 8, 21, 10), "hair")
+        s.pixel(9, 10, "hair")
+        s.pixel(11, 11, "hair")
+        s.pixel(20, 9, "light")
+        if s.direction != "north":
+            s.pixel(14, 16, "hair")
+            s.pixel(17, 16, "hair")
+            s.pixel(15, 17, "hair")
+            s.pixel(16, 17, "hair")
     elif style == "mateus":
         s.rect((11, 8, 20, 10), "hair")
         s.pixel(10, 11, "hair")
@@ -219,16 +228,22 @@ def draw_aya(s: Sprite):
 
 def draw_lise(s: Sprite):
     draw_legs(s, long_coat=True)
-    # Wind-broken cape gives a different rear contour from the coat.
-    s.polygon([(9, 18), (20, 18), (24, 27), (22, 36), (17, 32), (11, 37), (7, 27)], "outline")
-    s.polygon([(10, 19), (19, 19), (22, 27), (20, 33), (16, 30), (12, 34), (9, 27)], "primary")
-    s.rect((12, 20, 19, 30), "secondary")
-    s.line([(13, 21), (18, 29)], "light")
-    # Compact crossbow held across body and needle-thin rapier at hip.
-    s.line([(5, 24), (24, 24)], "outline", 2)
-    s.line([(7, 23), (11, 20), (16, 24), (21, 20), (24, 23)], "brass")
-    s.line([(22, 27), (27, 40)], "metal")
-    s.pixel(27, 41, "paper")
+    # Nikola's square shoulders and upright doublet keep him distinct from
+    # Mateus's narrow unbroken clerical coat. The asymmetric rain cloak still
+    # reads in every direction without changing the shared feet pivot.
+    s.polygon([(7, 21), (10, 18), (21, 18), (25, 22), (24, 34), (20, 37), (16, 32), (11, 38), (7, 32)], "outline")
+    s.polygon([(9, 21), (11, 19), (20, 19), (23, 22), (22, 32), (19, 34), (16, 30), (12, 35), (9, 31)], "primary")
+    # Oxblood fitted doublet, plain falling band, brass signet clasp and belt.
+    s.polygon([(12, 21), (19, 21), (20, 32), (17, 35), (12, 32)], "secondary")
+    s.polygon([(13, 18), (18, 18), (19, 21), (16, 23), (12, 21)], "paper")
+    s.pixel(19, 21, "accent")
+    s.line([(11, 29), (21, 29)], "accent")
+    # Compact hunter crossbow held across the torso and a long rapier at hip.
+    s.line([(5, 25), (25, 25)], "outline", 2)
+    s.line([(7, 24), (11, 21), (16, 25), (21, 21), (25, 24)], "brass")
+    s.line([(22, 28), (28, 41)], "outline", 2)
+    s.line([(23, 28), (28, 40)], "metal")
+    s.pixel(28, 42, "paper")
     draw_head(s, "lise")
 
 
@@ -433,7 +448,13 @@ def render_contact(runtime: Image.Image) -> Image.Image:
         short = column.replace("north", "N").replace("east", "E").replace("south", "S").replace("west", "W").replace("idle", "IDLE").replace("walk", "WALK")
         draw_label(draw, (left + index * cell_w + 5, 10), short, rgba("#d7c99a"), 1)
     for index, character_id in enumerate(SHEET_ROWS):
-        draw_label(draw, (8, top + index * cell_h + 88), character_id, rgba("#d7c99a"), 2)
+        draw_label(
+            draw,
+            (8, top + index * cell_h + 88),
+            REVIEW_ROW_LABELS.get(character_id, character_id),
+            rgba("#d7c99a"),
+            2,
+        )
     for row in range(len(SHEET_ROWS)):
         for column in range(len(SHEET_COLUMNS)):
             frame = runtime.crop((column * FRAME_W, row * FRAME_H, (column + 1) * FRAME_W, (row + 1) * FRAME_H))
@@ -528,7 +549,7 @@ def build_files() -> dict[str, bytes]:
         },
     }
     manifest_data = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
-    readme = f"""# Party field suite foundation\n\nThis directory contains an original, code-authored 32 x 48 field-sprite foundation for the six canonical party members. Pixels are drawn from the editable JSON palette and deterministic Pillow primitives; no generated atlas or concept pixels are inputs.\n\n## Files\n\n- `{SOURCE_PATH.name}`: byte-stable canonical frame, palette, silhouette, row, and legacy-column contract shared by the combat and portrait pipelines.\n- `{EXTENSION_SOURCE_PATH.name}`: editable four-column directional-walk in-between extension and legacy-hash contract.\n- `{Path(__file__).name}`: deterministic native-resolution pixel builder.\n- `{RUNTIME_PNG}`: transparent {runtime.width} x {runtime.height} flattened sheet; current browser runtime input.\n- `{CONTACT_PNG}`: labeled {contact.width} x {contact.height} review sheet with checkerboard and cyan pivot marks; never use it at runtime.\n- `{MANIFEST_JSON}`: frame rectangles, stable pivots, per-cell RGBA hashes, palette IDs, dimensions, and review state.\n\nRows are `ren`, `aya`, `lise`, `mateus`, `genta`, `kiku`. The first ten columns retain the original north/east/south/west idle/walk cells plus south interact and south hurt. Four appended `walk-b` cells provide the complementary directional step. All six rows are authored and addressable; the current field leader is Ren, so live Campaign movement samples Ren's pair while the other five pairs are ready for a future leader/formation authority. Standing and reduced-motion presentation use the original idle cell. Interact is a brief reach driven by the rendered field control; hurt is a non-gory recoil driven only by committed `hazard-hit` events. Every frame has a 32 x 48 logical box, pivot/foot point `(16, 44)`, a transparent outer border, and three transparent rows below the feet. The builder verifies a single digest over all 60 legacy frame IDs and RGBA hashes before it can emit files.\n\nRun `python build_party_field_suite.py` to rebuild. Run `python build_party_field_suite.py --check` to build in memory and byte-compare all generated outputs.\n\n## Scope and limits\n\nThis is a readable field key-pose suite with a minimal two-phase directional walk for the active Ren field leader and authored matching keys for the other five members, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, four-direction movement, foot registration, palette ownership, and live interaction/hazard reactions. A selectable leader or visible formation, alternate facings and in-betweens for interaction and recoil, portraits, and external cultural review remain separate approval work. Mateus uses an original fictional face and proportions. Costume and tool marks use only plain, invented geometry; there are no sacred-object props.\n"""
+    readme = f"""# Party field suite foundation\n\nThis directory contains an original, code-authored 32 x 48 field-sprite foundation for the six canonical party members. Pixels are drawn from the editable JSON palette and deterministic Pillow primitives; no generated atlas or concept pixels are inputs. The stable third-row key `lise` now visibly presents Nikola Dražanić, an original male Croatian minor aristocrat in historically grounded 1622 rain-travel layers; its row ID, frame geometry, pivots, and action tags remain unchanged for runtime compatibility.\n\n## Files\n\n- `{SOURCE_PATH.name}`: byte-stable canonical frame, palette, silhouette, row, and legacy-column contract shared by the combat and portrait pipelines.\n- `{EXTENSION_SOURCE_PATH.name}`: editable four-column directional-walk in-between extension and legacy-hash contract.\n- `{Path(__file__).name}`: deterministic native-resolution pixel builder.\n- `{RUNTIME_PNG}`: transparent {runtime.width} x {runtime.height} flattened sheet; current browser runtime input.\n- `{CONTACT_PNG}`: labeled {contact.width} x {contact.height} review sheet with checkerboard and cyan pivot marks; never use it at runtime.\n- `{MANIFEST_JSON}`: frame rectangles, stable pivots, per-cell RGBA hashes, palette IDs, dimensions, and review state.\n\nRows are `ren`, `aya`, `lise`, `mateus`, `genta`, `kiku`; the review sheet labels the compatibility row NIKOLA. The first ten columns retain the original north/east/south/west idle/walk cells plus south interact and south hurt. Four appended `walk-b` cells provide the complementary directional step. All six rows are authored and addressable; the current field leader is Ren, so live Campaign movement samples Ren's pair while the other five pairs are ready for a future leader/formation authority. Standing and reduced-motion presentation use the original idle cell. Interact is a brief reach driven by the rendered field control; hurt is a non-gory recoil driven only by committed `hazard-hit` events. Every frame has a 32 x 48 logical box, pivot/foot point `(16, 44)`, a transparent outer border, and three transparent rows below the feet. The builder verifies a single digest over all 60 legacy-column frame IDs and current RGBA hashes before it can emit files.\n\nRun `python build_party_field_suite.py` to rebuild. Run `python build_party_field_suite.py --check` to build in memory and byte-compare all generated outputs.\n\n## Scope and limits\n\nThis is a readable field key-pose suite with a minimal two-phase directional walk for the active Ren field leader and authored matching keys for the other five members, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, four-direction movement, foot registration, palette ownership, and live interaction/hazard reactions. A selectable leader or visible formation, alternate facings and in-betweens for interaction and recoil, portraits, and external cultural review remain separate approval work. Nikola and Mateus use distinct original fictional male faces and proportions with no real-person references. Costume and tool marks use only plain, invented geometry; there are no sacred-object props.\n"""
     readme = readme.replace(
         "All six rows are authored and addressable; the current field leader is Ren, so live Campaign movement samples Ren's pair while the other five pairs are ready for a future leader/formation authority.",
         "All six rows are authored, addressable, and reachable through Campaign's level-formation-owned field-leader selector wherever that member is present. Old saves and formations without the preferred member fall back to the formation's first canonical member without erasing the preference.",

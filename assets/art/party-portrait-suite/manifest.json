@@ -115,15 +115,15 @@
       "silhouette": "layered sleeves, square archive case, folded record fan"
     },
     "lise": {
-      "paletteId": "party-lise-sea-brass-v1",
+      "paletteId": "party-nikola-oxblood-dusk-v2",
       "colors": {
-        "primary": "#355775",
-        "secondary": "#263e59",
-        "light": "#61809a",
-        "accent": "#a08b58",
-        "hair": "#8f7b55"
+        "primary": "#304967",
+        "secondary": "#5b2d38",
+        "light": "#6b7e99",
+        "accent": "#b09155",
+        "hair": "#281c1b"
       },
-      "silhouette": "travel coat, sea cape, compact crossbow and rapier"
+      "silhouette": "square-shouldered rain cloak over a fitted doublet and falling band, compact crossbow, long rapier, proud upright posture"
     },
     "mateus": {
       "paletteId": "party-mateus-charcoal-wine-v1",
@@ -795,18 +795,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "attentive restraint",
@@ -816,12 +816,12 @@
         "semantic": "listening or awaiting a command"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "362dc33a0bd7dc5624f943206282735dab45a838f6b7555570fec1947cbafcf5"
+      "rgbaSha256": "ee125d2b5d87349e58bb285b8f90eb3276526653484f2fc48a60af76e457ac1f"
     },
     {
       "id": "lise:resolve",
@@ -834,18 +834,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "deliberate commitment",
@@ -855,12 +855,12 @@
         "semantic": "decision made without triumphal posing"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "69e5b0558077498bbf73d968fb51b61c20943b1577edcfe1b6136fa87ead6c76"
+      "rgbaSha256": "93c4461a9a5e3c1dcf1d71f5592e28abba964543673471ac2a223ece5ccc994a"
     },
     {
       "id": "lise:strain",
@@ -873,18 +873,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "cost or pressure",
@@ -894,12 +894,12 @@
         "semantic": "pain, fatigue, or difficult admission without caricature"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "e71615066443260279b33f368c4a6f97470c84da8454d78f6c641a1735ab184f"
+      "rgbaSha256": "1ad66501fdf272586c5586469bdd7d3c31cdee8ea3dbc69191ea6a49d7eeda4f"
     },
     {
       "id": "lise:soften",
@@ -912,18 +912,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "guarded warmth",
@@ -933,12 +933,12 @@
         "semantic": "relief or care without glamour pose"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "6895906074a4eb47165eec60318cce15eae388ac5f99328dce5d2973ea4170fa"
+      "rgbaSha256": "549e5bd932e21c06eb7b45d966b567daecad21e642b8a3382f3232bfa0e2f2a8"
     },
     {
       "id": "lise:concern",
@@ -951,18 +951,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "guarded worry",
@@ -972,12 +972,12 @@
         "semantic": "careful alarm or concern for another person"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "3a0b0a6d7416a116e2a935d84e56f001d5d48f71fa5ee91624d4f2ef5e96f5b0"
+      "rgbaSha256": "13d110a3a45c28fed33e5c76ef800ffbf0f6053eae7d837d44b7571a6d2c0483"
     },
     {
       "id": "lise:anger",
@@ -990,18 +990,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "controlled outrage",
@@ -1011,12 +1011,12 @@
         "semantic": "anger held under discipline rather than a caricatured snarl"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "4eaa6989ebae06dee83e6855b555e59fbf8cdc56d3978aaa256a5f8cfaf36bd8"
+      "rgbaSha256": "87fa143c814e288fa87d6219aabb09a70a0502b06c71a7860e51bebdbe904855"
     },
     {
       "id": "lise:surprise",
@@ -1029,18 +1029,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "immediate alarm",
@@ -1050,12 +1050,12 @@
         "semantic": "unexpected revelation or sudden threat"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "d0aca5e98b26ab4520f533fa5209444f951ce69ccc871471c01aa4fe426752af"
+      "rgbaSha256": "ebdef57a3ba528da4461f3d5cc9a3d407c9d537f047d5aba9fa32ad85d3b7ce3"
     },
     {
       "id": "lise:quiet",
@@ -1068,18 +1068,18 @@
         64
       ],
       "eyeLine": [
-        20,
-        26,
-        43,
-        26
+        19,
+        27,
+        44,
+        27
       ],
       "mouthAnchor": [
         36,
-        37
+        38
       ],
       "focusAnchor": [
         36,
-        26
+        27
       ],
       "expressionSemantic": {
         "affect": "inward composure",
@@ -1089,12 +1089,12 @@
         "semantic": "silence, reflection, prayer, or a restrained pause"
       },
       "localAlphaBounds": [
-        7,
         5,
-        59,
+        4,
+        60,
         60
       ],
-      "rgbaSha256": "ea7897315320dbc7891037a7941094bafc88800aa09cd825e98bf160b4b1e83e"
+      "rgbaSha256": "e6cd9dd7ea11be21318a1c1007c45d7d764c713a78a942a6b74b79df75583c67"
     },
     {
       "id": "mateus:neutral",
@@ -2037,17 +2037,17 @@
     {
       "path": "party-portrait-suite.source.json",
       "role": "editable-portrait-contract",
-      "sha256": "dc6f6a0957aeec98d9c5dc74b67a5c610cdb575a069a0e9e2999af59ac818075"
+      "sha256": "67f5853643a74d60ffbec9c4d569c1e5af4590d7f8c513487aac73bc4b53b5df"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-costume-contract",
-      "sha256": "548623d253501404e2e3f1ddf915207ed60791701c91313695f905140a4e72eb"
+      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
     },
     {
       "path": "build_party_portrait_suite.py",
       "role": "deterministic-builder",
-      "sha256": "bfefeaa9ad4ed8177dc5a276e191dacdc7b80266ebf8e1b6b5735bcf2ac1923a"
+      "sha256": "e81a3985da76c893ee9d221ebec8605c1ab63f3bf9417d7a6d34c0fb903dc321"
     }
   ],
   "exports": [
@@ -2057,7 +2057,7 @@
       "width": 512,
       "height": 384,
       "mode": "RGBA",
-      "sha256": "b44aa433fbc3c7bed5961af597560515d5333faec2bc737c08f95fc9a7317f75"
+      "sha256": "869650b5da7e21f38285a40f10bfac421866bdeaa1339b11b3695f01dcfc162e"
     },
     {
       "path": "party-portrait-expressions-contact-sheet.png",
@@ -2065,7 +2065,7 @@
       "width": 1648,
       "height": 1220,
       "mode": "RGBA",
-      "sha256": "4ef10266561714f119fcd25e02a6186d434848f2cbb4176191238697a1f712a5"
+      "sha256": "7350611834e3408644ddad1c1c3f205b868e181c0865bf0a691b286130a8faa6"
     }
   ],
   "validation": {

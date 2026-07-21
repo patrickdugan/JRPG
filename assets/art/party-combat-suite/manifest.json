@@ -64,14 +64,14 @@
       }
     },
     "lise": {
-      "paletteId": "party-lise-sea-brass-v1",
-      "silhouette": "travel coat, sea cape, compact crossbow and rapier",
+      "paletteId": "party-nikola-oxblood-dusk-v2",
+      "silhouette": "square-shouldered rain cloak over a fitted doublet and falling band, compact crossbow, long rapier, proud upright posture",
       "colors": {
-        "primary": "#355775",
-        "secondary": "#263e59",
-        "light": "#61809a",
-        "accent": "#a08b58",
-        "hair": "#8f7b55"
+        "primary": "#304967",
+        "secondary": "#5b2d38",
+        "light": "#6b7e99",
+        "accent": "#b09155",
+        "hair": "#281c1b"
       }
     },
     "mateus": {
@@ -940,7 +940,7 @@
         36,
         59
       ],
-      "rgbaSha256": "2e17958a8f89cfa4db2bf1a61db8458e6f9df72640f743f0d507b6a964b5b960"
+      "rgbaSha256": "e439cc6a314bef1f41f65de4960a522fd79b11482795632830b2b4809742ce03"
     },
     {
       "id": "lise:move",
@@ -974,7 +974,7 @@
         39,
         59
       ],
-      "rgbaSha256": "47d42278cd70c11ffa87b0941077ae97e608c7ba5bc638618089e9cc71164652"
+      "rgbaSha256": "df9cb2be5ecfc22454799ba59f4d5e78d6e82d4c773985e243dba3f8dc8e06b5"
     },
     {
       "id": "lise:guard",
@@ -1008,7 +1008,7 @@
         40,
         59
       ],
-      "rgbaSha256": "015c26ea264c87f20a76955a5d3268590984705f4d4e4cba90645835e70a673a"
+      "rgbaSha256": "35a2ad5abb3e487e44b8ae15dc1aa11ccc0cd223fbf35b50e3106e87f4a95c84"
     },
     {
       "id": "lise:hit",
@@ -1042,7 +1042,7 @@
         32,
         60
       ],
-      "rgbaSha256": "45b30f12ff9cc8337c8d9daa95201bb373081ba9f98ce3622ddfa36ec37cfbd7"
+      "rgbaSha256": "4c32320029d32220e39c3eeb473b5789ffa17b27856a3155e96cf7e36f59b975"
     },
     {
       "id": "lise:basic-strike-windup",
@@ -1075,10 +1075,10 @@
       "localAlphaBounds": [
         6,
         9,
-        30,
+        32,
         59
       ],
-      "rgbaSha256": "b127f259bb9caea4e6adea8c3c62e3359829e7cb208eb9cd69de8e5ea8d9b53c"
+      "rgbaSha256": "c8cd8db9082f9df0c39251ab1700bcab83380ac4ee5510964fcbc0d9b4f0ca0d"
     },
     {
       "id": "lise:basic-strike-active",
@@ -1114,7 +1114,7 @@
         44,
         59
       ],
-      "rgbaSha256": "5293e5db885a550551fcc44aac6239ac61e05d19c25fd9402eceee77a5657560"
+      "rgbaSha256": "ce9ebf3e411777b42c22c556305a72fb42fed991f6c249d23abe7fd773d9ea73"
     },
     {
       "id": "lise:signature-a",
@@ -1152,7 +1152,7 @@
         44,
         59
       ],
-      "rgbaSha256": "91bb7f7ea140ddb0b1d8507fb438a8348082000138548e21206b795e9776e029"
+      "rgbaSha256": "411bab1f603e2ffcb8d9f3f4552aee0458c22cef7ab00337bf3fbe3259627e66"
     },
     {
       "id": "lise:signature-b",
@@ -1191,7 +1191,7 @@
         43,
         59
       ],
-      "rgbaSha256": "f7388bfe51869f2f9de7a5b6cf8f779833fc43433a73fe6e320081f3b0b2de9b"
+      "rgbaSha256": "45406b2bd51653c72db4bb83afbc0a20207674bca742d4b375a861caa4bc0beb"
     },
     {
       "id": "lise:recovery",
@@ -1225,7 +1225,7 @@
         41,
         59
       ],
-      "rgbaSha256": "0c6fe84eae5612cc89d28be580f68f0422ee1fcbd4923f41a9e334b18f9d99f3"
+      "rgbaSha256": "97fec713346e6e966d0d4d3f9d6fd789c18d6fcc5ae87dd73ad58c9c0d4081fc"
     },
     {
       "id": "lise:defeat",
@@ -1259,7 +1259,7 @@
         44,
         60
       ],
-      "rgbaSha256": "1a8269278e8aff39cce9cd75594b725124bf69fe148cbdc2784a3a8292a14dc3"
+      "rgbaSha256": "de922f980b0f9084cd250b01d932356a12695b7f00842f7bffc9d6611dc5c7c0"
     },
     {
       "id": "mateus:idle",
@@ -2326,17 +2326,17 @@
     {
       "path": "party-combat-suite.source.json",
       "role": "editable-combat-contract",
-      "sha256": "680b8e3e50404dfd88ae671ff36877e19bed7f0139df8dcd80cf7c493c272a69"
+      "sha256": "2300053eea80bc05bc8c35c97c5a0e3bd3efe9f606b24b0be63d02126f76e25e"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-silhouette-contract",
-      "sha256": "23db57aa81f14f2d858cce7a337c0e4c0f3edd55d3166d0624729579e0195a13"
+      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
     },
     {
       "path": "build_party_combat_suite.py",
       "role": "deterministic-builder",
-      "sha256": "b71d2056d938d865539ab9176ba168bce59bc668289ef7d7fb9b95f68d46677e"
+      "sha256": "177c3706fdbba0d2a5c351b3958ea5f459dfe91ba9fb15616909496a4c5f16a9"
     }
   ],
   "exports": [
@@ -2346,7 +2346,7 @@
       "width": 480,
       "height": 384,
       "mode": "RGBA",
-      "sha256": "9639b71f568f4b172dc57144640ff33c19d6ab456585b93fd24b7bbd2fa7092c"
+      "sha256": "5bc36a20307177c0b1fddeb73668bd89f5b39de9b601114c1330b2773a9020b7"
     },
     {
       "path": "party-combat-actions-contact-sheet.png",
@@ -2354,7 +2354,7 @@
       "width": 1556,
       "height": 1222,
       "mode": "RGBA",
-      "sha256": "c8eb38e41a39e81effa20c00f86f315ccedae7c3bb9f970fe1e7113ec73edb52"
+      "sha256": "b8d614722f8361a5fc9175dc98dff84ace0ef5513cda0e9b19576a75bd853e3e"
     }
   ],
   "validation": {

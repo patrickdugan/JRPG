@@ -46,7 +46,7 @@ test('Guard, Dodge, Item, Analyze, and Objective create exact bounded immutable 
     type: 'guard', actorId: 'ren', actorName: 'Ren', actorTile, startedAt: 1_000,
   });
   const dodge = createBattleCommandPresentation({
-    type: 'dodge', actorId: 'lise', actorName: 'Lise', actorTile, startedAt: 1_000,
+    type: 'dodge', actorId: 'lise', actorName: 'Nikola', actorTile, startedAt: 1_000,
   });
   const analyze = createBattleCommandPresentation({
     type: 'analyze', actorId: 'aya', actorName: 'Aya', actorTile,
@@ -59,7 +59,7 @@ test('Guard, Dodge, Item, Analyze, and Objective create exact bounded immutable 
     itemId: 'river-salve', itemName: 'River Salve', detail: 'HP +80.', startedAt: 1_000,
   });
   const objective = createBattleCommandPresentation({
-    type: 'objective', actorId: 'lise', actorName: 'Lise', actorTile,
+    type: 'objective', actorId: 'lise', actorName: 'Nikola', actorTile,
     targetId: 'east-node', targetName: 'East Node', targetTile,
     objectiveAction: 'breakObject', label: 'Break East Node', marker: 'node', color: '#e27d68',
     startedAt: 1_000, speed: 4,
@@ -76,7 +76,7 @@ test('Guard, Dodge, Item, Analyze, and Objective create exact bounded immutable 
   assert.deepEqual(guard.targetTile, guard.actorTile);
   assert.deepEqual(dodge.targetTile, dodge.actorTile);
   assert.equal(guard.announcement, 'Ren guards.');
-  assert.equal(dodge.announcement, 'Lise readies Dodge.');
+  assert.equal(dodge.announcement, 'Nikola readies Dodge.');
   assert.equal(dodge.marker, 'chevron');
   assert.equal(dodge.color, '#a98ae6');
   assert.equal(dodge.accentColor, '#f0e5ff');
@@ -87,7 +87,7 @@ test('Guard, Dodge, Item, Analyze, and Objective create exact bounded immutable 
   assert.equal(item.announcement, 'Ren uses River Salve on Aya. HP +80.');
   assert.equal(Object.isFrozen(item), true);
   assert.equal(analyze.announcement, 'Aya analyzes Ashen Oni. Ledger readout published.');
-  assert.equal(objective.announcement, 'Lise: Break East Node.');
+  assert.equal(objective.announcement, 'Nikola: Break East Node.');
   assert.equal(objective.marker, 'node');
   assert.equal(objective.color, '#e27d68');
   assert.equal(Object.isFrozen(objective), true);
@@ -124,7 +124,7 @@ test('sampling is deterministic, expires exactly, and reduced motion holds one s
 
 test('Dodge samples one actor-local violet chevron without a target link', () => {
   const record = createBattleCommandPresentation({
-    type: 'dodge', actorId: 'lise', actorName: 'Lise', actorTile: { x: 3, y: 2 }, startedAt: 500,
+    type: 'dodge', actorId: 'lise', actorName: 'Nikola', actorTile: { x: 3, y: 2 }, startedAt: 500,
   });
   const animated = sampleBattleCommandPresentation(record, 700);
   assert.equal(animated.type, 'dodge');
