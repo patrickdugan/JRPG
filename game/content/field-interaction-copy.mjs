@@ -147,6 +147,8 @@ const entries = [
   copy('c8-takamine-return', 'lantern-route-map', 'Takamine lantern route', 'The local safe route is recorded under Takamine’s stated limits.'),
   copy('krh-audience-hall', 'ujiro-ledger', 'Ujiro’s final ledger', 'The copied evidence places Ujiro under public custody rather than private revenge.'),
   copy('krh-audience-hall', 'witness-circle', 'Public custody circle', 'People harmed by the system take part in the custody decision and may refuse to speak.'),
+  copy('krh-audience-hall', 'living-martyr-west', 'Living prisoner on the west execution beam', 'The prisoner is cut down, stabilized, and passed to the castle evacuation route under their chosen name.'),
+  copy('krh-audience-hall', 'living-martyr-east', 'Living prisoner on the east impalement stake', 'The prisoner is lifted free, stabilized, and passed to the castle evacuation route under their chosen name.'),
   copy('krh-blood-conservatory', 'ren-offer', 'Ren’s court offer', 'Ren refuses power purchased with other people’s routes.'),
   copy('krh-blood-conservatory', 'aya-offer', 'Aya’s court offer', 'Aya refuses an archive that makes correction answer to one keeper.'),
   copy('krh-blood-conservatory', 'lise-offer', 'Nikola’s court offer', 'Nikola refuses to turn his inherited oath into authority over local lives.'),

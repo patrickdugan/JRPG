@@ -40,6 +40,19 @@ test('Sayo is a named Japanese Kirishitan organizer with consequential agency', 
   assert.equal(stall.label, 'Sayo’s Print Stall');
 });
 
+test('the audience-hall confrontation requires both living prisoners to be rescued in order', () => {
+  const audienceHall = getLevel('krh-audience-hall');
+  const west = audienceHall.interactables.find(({ id }) => id === 'living-martyr-west');
+  const east = audienceHall.interactables.find(({ id }) => id === 'living-martyr-east');
+  const ledger = audienceHall.interactables.find(({ id }) => id === 'ujiro-ledger');
+
+  assert.equal(west.action, 'cut-down-prisoner');
+  assert.equal(west.result, 'kurohana-martyr-west-rescued');
+  assert.equal(east.requires, west.result);
+  assert.equal(east.result, 'kurohana-martyr-east-rescued');
+  assert.equal(ledger.requires, east.result);
+});
+
 test('sacred-object display corrections preserve save-stable identifiers', () => {
   const token = ITEM_CATALOGUE['temple-charm'];
   assert.equal(token.id, 'temple-charm');
@@ -86,6 +99,8 @@ test('travel, confession, and consultant requirements are explicit', () => {
   assert.match(CAMPAIGN.cast.mateus.background, /remained clandestinely after the ban/u);
   assert.match(CAMPAIGN.cast.lise.background, /Ragusa–Lisbon–Goa–Melaka–Macao route/u);
   assert.match(CAMPAIGN.cast.lise.background, /almost no Japanese beyond memorized port phrases/u);
+  assert.match(CAMPAIGN.cast.lise.background, /fictional English Catholic noblewoman Margaret Wychmere/u);
+  assert.match(CAMPAIGN.cast.lise.background, /passing through noblewomen/u);
   assert.match(camp, /hears confession, imposes penance, and guards the sacramental seal/u);
   assert.match(audit, /external consultant review remains pending/u);
   assert.match(audit, /https:\/\/www\.mlit\.go\.jp\/tagengo-db\/en\/R1-00781\.html/u);
@@ -94,6 +109,9 @@ test('travel, confession, and consultant requirements are explicit', () => {
   assert.match(audit, /https:\/\/www\.vatican\.va/u);
   assert.match(audit, /do not back-project its objects wholesale into 1622/iu);
   assert.match(audit, /cannot approve it/iu);
+  assert.match(audit, /supposed male line or dynastic legal fiction/iu);
+  assert.match(audit, /mass display of crucified and impaled Kirishitan victims/iu);
+  assert.match(audit, /reduced-horror empty-structure variants/iu);
   assert.match(packet, /ready for independent review; no external approval recorded/iu);
   assert.match(packet, /Japanese organizers retain authority/iu);
   assert.match(packet, /named independent reviewer/iu);

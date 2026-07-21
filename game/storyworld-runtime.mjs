@@ -14,11 +14,13 @@ import { getDefaultBrowserStorage } from './browser-storage.mjs';
 export const STORYWORLD_SCHEMA_VERSION = 1;
 export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWORLD_SCHEMA_VERSION}`;
 
-// Exact former identities may migrate only while their record prefix predates
-// the structurally revised Chapter 9 sequence. Later saves are rejected rather
-// than reinterpreting the old Corrections Desk as a surrender or execution the
-// player never chose. Accepted early saves are validated against the current
-// structural catalog and immediately re-frozen with current hashes.
+// Exact former identities migrate only across revisions whose choice structure
+// remains compatible. The two pre-Severed-Dragon identities stop before the
+// structurally revised Chapter 9 sequence so the old Corrections Desk can never
+// become a surrender or execution the player did not choose. The later English-
+// heiress revision changes prose without changing any option, effect, or ending,
+// so its complete ten-record history is safe. Accepted saves are validated
+// against the current structural catalog and immediately re-frozen with hashes.
 export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
@@ -33,6 +35,13 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     catalogSignature: 'sha256:7f439953b6dac6d20d1283f0c3b564005aa99770584cbe9838cd55deee962fee',
     migrationId: 'severed-dragon-ending-v1',
     maximumCompatibleRecordCount: 8,
+  }),
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:dda93670de31a2df06e84f328edce857ffa606ea5f128df1fd481e0358c0f894',
+    catalogSignature: 'sha256:1c9a56037dbc2bf3f4a6f38f5bcc95e6fcbbfe152a9e7f24a919cf037ea5808d',
+    migrationId: 'english-heiress-lineage-v1',
+    maximumCompatibleRecordCount: 10,
   }),
 ]);
 

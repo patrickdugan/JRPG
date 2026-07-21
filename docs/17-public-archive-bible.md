@@ -6,7 +6,7 @@
 
 **Completion policy:** acknowledge every paragraph once per save; no reward, score, ownership claim, or replay loop
 
-**Shipped volume:** 60 records, 498 substantial paragraphs, and 31,171 counted visible words
+**Shipped volume:** 60 records, 498 substantial paragraphs, and 31,284 counted visible words
 
 ## Narrative purpose
 
@@ -54,7 +54,7 @@ New Game clears the reading save independently from companion conversations and 
 
 The bounded completion witness begins from the canonical zero-time campaign result, opens all 60 records, acknowledges every paragraph, refuses every replay attempt, and records zero elapsed time. It proves finite reachability and paragraph coverage only.
 
-The exact witness executes 558 successful transitions and records 619 trace events. Its prose-bound catalogue signature is `fnv1a32:46c6b812`; the completion signature is `fnv1a32:4c582420`.
+The exact witness executes 558 successful transitions and records 619 trace events. Its prose-bound catalogue signature is `fnv1a32:92ea7832`; the completion signature is `fnv1a32:be3b7c4b`.
 
 ## Duration boundary
 

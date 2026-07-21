@@ -54,9 +54,9 @@ export const CAMPAIGN = deepFreeze({
       id: 'lise',
       speakerId: 'NIKOLA',
       name: 'Nikola Dražanić',
-      role: 'Vampire hunter, Pierce specialist, translator, and self-styled Count of a Croatian house with claimed Wallachian roots',
-      arc: 'An abrasive, brave aristocrat who recovers his covenant’s purpose as a check on immortal rule while learning that competence and lineage grant neither command nor ownership.',
-      background: 'A minor Croatian frontier noble born around 1590 who falsely styles himself Count, Nikola claims descent from a fictional Wallachian branch that, in the game\'s invented 1462 history, carried the Severed Dragon counter-rite west after a vampire Vlad III fought the Ottomans. He followed a Ragusa–Lisbon–Goa–Melaka–Macao route toward Nagasaki with almost no Japanese beyond memorized port phrases.',
+      role: 'Vampire hunter, Pierce specialist, translator, and self-styled Count of a Croatian house with claimed Wallachian roots and English maternal blood',
+      arc: 'An abrasive, brave aristocrat who recovers his covenant’s purpose as a check on immortal rule while learning that competence, blood, and a negotiated pedigree grant neither command nor ownership.',
+      background: 'A minor Croatian frontier noble born around 1590 to Petar Dražanić and the fictional English Catholic noblewoman Margaret Wychmere, Nikola falsely styles himself Count. His official pedigree invents an unbroken male line from a Wallachian covenant-bearer, but the surviving contracts show the house, name, and Severed Dragon testament repeatedly passing through noblewomen whose marriages bartered refuge, shipping money, land, or armed protection. In the game\'s invented 1462 history, that covenant answered a vampire Vlad III after he fought the Ottomans. Nikola followed a Ragusa–Lisbon–Goa–Melaka–Macao route toward Nagasaki with almost no Japanese beyond memorized port phrases.',
     },
     mateus: {
       id: 'mateus',
@@ -1556,11 +1556,11 @@ export const CAMPAIGN = deepFreeze({
         story: 'Three months later, survivors build repair under a returned-seals truce or behind the guarded roads of the civil-war branch.',
       },
       maps: [
-        { id: 'krh-outer-archive', name: 'Kurohana Outer Archive', purpose: 'Break bell nodes and release named spirits.' },
-        { id: 'krh-audience-hall', name: 'Living Audience Hall', purpose: 'Ujiro confrontation.' },
-        { id: 'krh-blood-conservatory', name: 'Blood Conservatory', purpose: 'Six tailored offers.' },
-        { id: 'krh-bell-spine', name: 'Bell Spine', purpose: 'Yearless Bell node sequence.' },
-        { id: 'krh-observatory', name: 'Throne Observatory', purpose: 'Kurozane final boss.' },
+        { id: 'krh-outer-archive', name: 'Kurohana Outer Archive', purpose: 'Cross the first rows of crucified and impaled Kirishitan victims, break bell nodes, and release named spirits.' },
+        { id: 'krh-audience-hall', name: 'Living Audience Hall', purpose: 'Cut down two living prisoners beneath the execution display, then confront Ujiro.' },
+        { id: 'krh-blood-conservatory', name: 'Blood Conservatory', purpose: 'Refuse six tailored offers beneath galleries of court-made martyrs.' },
+        { id: 'krh-bell-spine', name: 'Bell Spine', purpose: 'Climb through the densest stake gallery into the Yearless Bell node sequence.' },
+        { id: 'krh-observatory', name: 'Throne Observatory', purpose: 'Fight Kurozane inside the final ring of execution beams.' },
       ],
       encounters: [
         { id: 'c9-archive-nodes', name: 'Bell Node Release', kind: 'dungeon-objective', lesson: 'Use keys and protect released spirits' },
@@ -1579,7 +1579,8 @@ export const CAMPAIGN = deepFreeze({
           text: [
             { speaker: 'AYA', line: 'The shelves are breathing.' },
             { speaker: 'REN', line: 'Paper should not have veins.' },
-            { speaker: 'AYA', line: 'Neither should an archive. Break the nodes and keep the names from falling into it.' },
+            { speaker: 'KIKU', line: 'The people on those beams are not carvings. Two still breathe; the rest deserve names before this place falls.' },
+            { speaker: 'AYA', line: 'The court made persecuted Christians into architecture, then filed them as ornament. Break the nodes and keep every name from falling into it.' },
           ],
           choices: [
             {
@@ -1600,6 +1601,7 @@ export const CAMPAIGN = deepFreeze({
             { speaker: 'UJIRO', line: 'Give me the archive and I can still save a thousand useful names.' },
             { speaker: 'REN', line: 'You mean names you can own.' },
             { speaker: 'AYA', line: 'The copies are already outside. You cannot make this room the only record again.' },
+            { speaker: 'KIKU', line: 'We cut two living people from your decoration. They will testify if and when they choose.' },
             { speaker: 'HARMED WITNESS', line: 'You will answer where we can hear you.' },
           ],
           choices: [
@@ -1671,7 +1673,7 @@ export const CAMPAIGN = deepFreeze({
           text: [
             { speaker: 'KUROZANE', line: 'A country is quiet when every fear has a ledger.' },
             { speaker: 'REN', line: 'Quiet is not peace.' },
-            { speaker: 'AYA', line: 'Protect the archive core. Break the nodes when the bell exposes them.' },
+            { speaker: 'AYA', line: 'Nor are rows of murdered Christians order. Protect the archive core. Break the nodes when the bell exposes them.' },
           ],
           choices: [
             {

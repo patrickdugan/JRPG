@@ -879,7 +879,7 @@ export function createDurationAudit({
     limitations: [
       'Quantity estimates are not observed playtime and cannot prove campaign duration.',
       'Finite side-quest route movement is not measured by the canonical runner; objective handling is represented only by the explicit per-objective assumption.',
-      'Mandatory scene-operation traversal is included in the canonical runner as one combined exact route with authored exits: 183 nodes across 60 beats, without adding the standalone 920-step placement audit on top.',
+      'Mandatory scene-operation traversal is included in the canonical runner as one combined exact route with authored exits: 183 nodes across 60 beats, without adding the standalone 919-step placement audit on top.',
       'Witness-chronicle field movement uses the deterministic minimum spawn-to-final-node paths across all 67 fresh stage contexts; detours and authored activity-minute declarations remain excluded until observed.',
       'Camp-conversation words include the title, theme, prompt, both visible option labels, the chosen first response, and its visible consequence; the unseen alternative response is excluded.',
       'Party-council words include each title, theme, prompt, both visible option labels, every multi-character main line, the chosen first response, and its visible consequence; unseen alternative responses are excluded.',

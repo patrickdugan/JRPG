@@ -129,7 +129,7 @@ test('schema, lookup, metrics, and every nested record are immutable', () => {
   }, {
     operationCount: 60,
     nodeCount: 183,
-    shortestPathStepCount: 920,
+    shortestPathStepCount: 919,
     encounterBindingCount: 23,
     reservedFallbackCount: 0,
   });

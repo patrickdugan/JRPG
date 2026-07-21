@@ -87,7 +87,7 @@ At least one warm practical light must identify a human-scale destination in a n
 | Takamine Bell Temple | mountain steps, experimental local bell registry, hidden chapel rooms, wet bronze | stairs, corridor, prison lattice, bell, paper screen, cedar gate | seams of ash in bell cavities; red wax on official records |
 | Nagi Sea Road | fog islands, carrack wreck, salt-worn shrines, net sheds | docks, sea rocks, boats, sail cloth, tide pools, storm walls | moonlit Umbral reflection; impossible still water around a bell shard |
 | Kagura Pass / Ash Fields | volcanic slope, relay stations, furnace sheds, wind-blown grass | black rock, rope bridge, kiln, cart, warning posts | soot that rises against wind; Ashen Oni mask patterns in slag |
-| Kurohana Castle | black lacquer administration becoming living fortress | palace corridor, archive, chapel, gate, organ-like bell machinery | architecture subtly develops veins, bell mouths, and blood-dark glass |
+| Kurohana Castle | black lacquer administration becoming living fortress and mass execution display | palace corridor, archive, chapel, gate, organ-like bell machinery, rough execution beams, impalement stakes | architecture subtly develops veins, bell mouths, and blood-dark glass while scores of fictional Kirishitan victims become an accusatory processional through the final dungeon |
 
 ### Cultural and historical guardrails
 
@@ -122,6 +122,15 @@ Combat portraits use 32 x 32 or 40 x 40 frames with a flat value field behind th
 - **Ashen Oni:** furnace-ash body, invented geometric face mask, broken bell-metal joints, ember core visible only in active frames. No cultural shorthand for evil.
 - **Undead officers:** court clothing remains recognizable but the silhouette has one impossible feature (too-long shadow, empty sleeve, bell halo, or unblinking mask). Avoid gore.
 - **Bosses:** one visually dominant mechanic and one breakable read. A bell boss has a visible resonant throat; a forge boss exposes a slag vent; Kurozane's court form reveals the black-bell network and individually separable office seals rather than becoming a pile of unrelated spikes. His final read must support a living, ward-broken surrender tableau before the Storyworld branch; execution is never staged as a collectible kill flourish.
+
+### Kurohana execution processional
+
+- From the Black Gate onward, every major castle composition includes multiple fictional Kirishitan victims on rough crucifixion beams or impalement stakes. The density escalates from edge silhouettes to wall-to-wall galleries and reaches a final ring around the observatory.
+- Battle boards bake at least one environmental victim fixture into every blocked perimeter or central-mass cell in the three authored castle boards, for forty-two readable fixtures. The Chapter 9 panorama adds eighteen distant silhouettes. Reuse is acceptable at tactical scale, but alternate beam/stake pose, garment value, head angle, and wound placement so the display reads as many people rather than one stamped prop.
+- Use restrained oxblood pixels at hands, torso, or stake contact points. The horror comes from scale, state violence, and duration, not detachable anatomy or comic spray.
+- Two lower audience-hall fixtures show breath and small hand motion and correspond to the chained required rescue interactions. Once rescued, their structures remain empty; do not leave their bodies visible as though the action changed nothing.
+- No victim is loot, cover, a damage target, or a decorative sacred object. Execution beams are instruments of killing rather than devotional crosses. Clothing and archive context identify a persecuted Kirishitan community without assigning one standardized costume to all Christians.
+- Include a content warning and preserve an eventual reduced-horror presentation option that substitutes empty blood-marked beams for bodies while retaining navigation and narrative information. Default authored presentation remains the full processional.
 
 ### Final political-branch presentation
 

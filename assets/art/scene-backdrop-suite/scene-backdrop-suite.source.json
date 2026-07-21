@@ -16,6 +16,7 @@
     "presentationOnly": true,
     "collisionAuthority": "none",
     "bakeActors": false,
+    "bakeVictimFixtures": true,
     "bakeText": false,
     "bakeUi": false,
     "bakeSacredObjects": false,
@@ -150,12 +151,12 @@
     },
     {
       "id": "black-gate-causeway", "paletteFamily": "court-vermilion", "motif": "black-gate", "weather": "ash-rain",
-      "focalMotif": "black-lacquer-gate-and-two-lantern-relays", "supportMotifs": ["causeway-stone", "ash-lanes", "broken-ledger-tabs"],
+      "focalMotif": "black-lacquer-gate-and-two-lantern-relays", "supportMotifs": ["causeway-stone", "ash-lanes", "broken-ledger-tabs", "fictional-kirishitan-execution-processional"], "victimFixtureCount": 10,
       "beatIds": ["c8-03-black-gate-bargain", "c8-04-lantern-breach", "c8-05-gate-opened"]
     },
     {
       "id": "kurohana-living-archive", "paletteFamily": "court-vermilion", "motif": "living-archive", "weather": "impossible-stillness",
-      "focalMotif": "invented-lacquer-archive-and-bell-spine-machinery", "supportMotifs": ["audience-hall", "conservatory-glass", "yearless-mechanism", "dawn-window"],
+      "focalMotif": "invented-lacquer-archive-and-bell-spine-machinery", "supportMotifs": ["audience-hall", "conservatory-glass", "yearless-mechanism", "dawn-window", "fictional-kirishitan-execution-galleries"], "victimFixtureCount": 18,
       "beatIds": ["c9-01-archive-breathes", "c9-02-ujiros-last-ledger", "c9-03-conservatory-offers", "c9-04-yearless-bell", "c9-05-dawn-at-observatory", "c9-06-leave-evidence-alive"]
     },
     {
@@ -165,9 +166,9 @@
     }
   ],
   "restrictions": [
-    "Runtime frames contain no actors, lettering, interface, readable documents, logos, or watermarks.",
-    "No sacred or devotional object, authentic heraldry, real ceremonial mask, real clan mark, or radial floral emblem is drawn.",
-    "No historical victim, persecution method, ethnicity, or religious identity is converted into horror scenery.",
+    "Runtime frames contain no live combat or NPC actors, lettering, interface, readable documents, logos, or watermarks; only the two explicitly scoped Kurohana victim-fixture panoramas contain human silhouettes.",
+    "No sacred or devotional object, authentic heraldry, real ceremonial mask, real clan mark, or radial floral emblem is drawn; crucifixion beams are execution structures, not devotional crosses.",
+    "Every crucified or impaled figure is a fictional Kirishitan victim of Kurozane's invented regime, remains attached to named-evidence and rescue context, and never represents an identifiable historical martyr.",
     "No celebrity, film character, copyrighted game character, recognizable franchise castle, or borrowed visual composition is an input.",
     "No pixels are sampled, traced, transformed, or imported from assets/concepts, assets/production, or any external image.",
     "Kurozane's authority uses only asymmetrical broken ledger-tab geometry and invented administrative machinery.",

@@ -14,11 +14,12 @@
     "presentationOnly": true,
     "bakeTelegraphs": false,
     "bakeActors": false,
+    "bakeVictimFixtures": true,
     "bakeObjectives": false,
     "bakeInteractableIcons": false,
     "authenticReligiousSymbols": false,
     "authenticHeraldicSymbols": false,
-    "note": "Only quiet floor materials, collision-matched blocked architecture, and static terrain footing are rendered. Special cells are audit snapshots, never drawing commands."
+    "note": "Quiet floor materials, collision-matched blocked architecture, static terrain footing, and explicitly scoped Kurohana victim fixtures are rendered. Victim fixtures are environmental evidence, never live actors, targets, loot, collision, or objective authority. Special cells are audit snapshots, never drawing commands."
   },
   "generator": {
     "path": "build_regional_battle_stages.py",
@@ -28,11 +29,11 @@
   "sources": [
     {
       "path": "regional-battle-stages.source.json",
-      "sha256": "29b648f44fe530afc931a9b866ecb8e00b581962a2d5c99e519e70f62f524c4f"
+      "sha256": "cadbb68409e1d9329d6f245945c41d1ffe8645ded6c02c760cd65bc850d052f9"
     },
     {
       "path": "build_regional_battle_stages.py",
-      "sha256": "1dd316158bcf52b800ab5bae9ceab73725d1a9328593ab624499e289ff9f6e56"
+      "sha256": "426d4aef6ea2f79cc159d82b3c7825b11a80e76f33a87fb997cabd96f2e545ff"
     }
   ],
   "kits": [
@@ -351,7 +352,7 @@
       "boardId": "c8-black-gate",
       "path": "c8-black-gate-board-v01.png",
       "format": "png",
-      "sha256": "aae4f7e99b6642938511dbfa46a07e3afcca25a676afd122a7238f34d2cb82ab",
+      "sha256": "ff8cd700faf3eb59d866573560f5175c5179534e4d8ce28bf8ec79cc7fea3c3b",
       "ihdr": {
         "width": 384,
         "height": 224,
@@ -368,7 +369,7 @@
       "boardId": "krh-outer-archive",
       "path": "krh-outer-archive-board-v01.png",
       "format": "png",
-      "sha256": "f6388fef513a4563904c8893e9879d6c5d91c58682535a939449337f0e1e0f42",
+      "sha256": "fa5716c03bc2f91953899b4eab937eef82468005f9f226a24ad30ceaa5b3306e",
       "ihdr": {
         "width": 384,
         "height": 224,
@@ -385,7 +386,7 @@
       "boardId": "krh-observatory",
       "path": "krh-observatory-board-v01.png",
       "format": "png",
-      "sha256": "5a78ecfb699fb34fb4c072624ba4db2e86cc1e092ed4e3a2e810f00e75050990",
+      "sha256": "7d0daf944df1736c69fdf792c60e0be1d30f91dbd5ca949117d439e1ed553b2b",
       "ihdr": {
         "width": 384,
         "height": 224,
@@ -417,7 +418,7 @@
       "id": "labeled-contact-sheet",
       "path": "regional-battle-stages-contact-sheet.png",
       "format": "png",
-      "sha256": "d93a73340b588138714dc1ea8c26826b33184850e85d9419a75497e1bd5da244",
+      "sha256": "c8dbdad7bbaa6b8edcae379db6f0a77bb8001251533ab7d332d01cf162932639",
       "ihdr": {
         "width": 768,
         "height": 640,
@@ -438,6 +439,7 @@
       "kitId": "rain-v01",
       "style": "census-stone",
       "export": "hsh-census-square-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "d7532c4098345a00953a0df2dcf0f062aa41ac55ba3a59c3685b25cf5b564d71",
       "snapshot": {
         "id": "hsh-census-square",
@@ -518,6 +520,7 @@
       "kitId": "rain-v01",
       "style": "flooded-cedar",
       "export": "c1-flooded-cedars-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "bc94584560653b5583d9f5778bb256e67f25830cc99abda7d0184d8c3130bbee",
       "snapshot": {
         "id": "c1-flooded-cedars",
@@ -591,6 +594,7 @@
       "kitId": "rain-v01",
       "style": "cedar-service",
       "export": "fp1-wet-cedar-stage-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "c29282ccdae28e483e85d4885dcf57f4bf367b1c6c54fa7afa6f444d5a0d0d94",
       "snapshot": {
         "id": "fp1-wet-cedar-stage",
@@ -659,6 +663,7 @@
       "kitId": "archive-v01",
       "style": "tax-storehouse",
       "export": "c1-tax-storehouse-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "3c79450e2f487a86f1ae1d4d423c5e9b77eff19d301c5d249b6b1542cbf37635",
       "snapshot": {
         "id": "c1-tax-storehouse",
@@ -749,6 +754,7 @@
       "kitId": "archive-v01",
       "style": "flooded-archive",
       "export": "fp1-flooded-archive-stage-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "2c469d4bc49e3e8ae81660945c12d0165d4707990910eba902e59eca43e0fee9",
       "snapshot": {
         "id": "fp1-flooded-archive-stage",
@@ -845,6 +851,7 @@
       "kitId": "archive-v01",
       "style": "prison-ferry",
       "export": "hsh-prison-ferry-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "883a8e35510a8087db2af4f3e8629ca0df30c2f7653003ee84de0547599f74de",
       "snapshot": {
         "id": "hsh-prison-ferry",
@@ -939,6 +946,7 @@
       "kitId": "archive-v01",
       "style": "bell-aqueduct",
       "export": "hsh-bell-aqueduct-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "007d294a55ab1681bab84f9a91bc858bc3535b33a9c34911dc07baa68a3a9b71",
       "snapshot": {
         "id": "hsh-bell-aqueduct",
@@ -1037,6 +1045,7 @@
       "kitId": "coast-v01",
       "style": "rain-docks",
       "export": "sdg-rain-docks-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "7b202eba030e67b96ee749bf05a740d1dbb2c961c96f632270139056b65d6d09",
       "snapshot": {
         "id": "sdg-rain-docks",
@@ -1119,6 +1128,7 @@
       "kitId": "coast-v01",
       "style": "salt-warehouse",
       "export": "sdg-salt-warehouse-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "2ef18ef5f2f03a3531604e84c6d7bbcf00e23e5870cfb513094974c6d1bc8ee4",
       "snapshot": {
         "id": "sdg-salt-warehouse",
@@ -1218,6 +1228,7 @@
       "kitId": "coast-v01",
       "style": "tide-caves",
       "export": "ngi-tide-caves-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "1f88f0dc45dc03a0417df291f1498a6077917058d871b38688b8d68ae658dc61",
       "snapshot": {
         "id": "ngi-tide-caves",
@@ -1322,6 +1333,7 @@
       "kitId": "coast-v01",
       "style": "storm-reef",
       "export": "ngi-storm-reef-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "43ef7f3f7b1d47126cfb0e97ffe19b60cb0b0ab9d3409b9c1289125974124bdb",
       "snapshot": {
         "id": "ngi-storm-reef",
@@ -1422,6 +1434,7 @@
       "kitId": "ash-v01",
       "style": "ash-fields",
       "export": "kgr-ash-fields-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "31b9e311063d36e4c7a98b31cb62d1d8e1ec53ba491f04e242f2e9d0345da4f7",
       "snapshot": {
         "id": "kgr-ash-fields",
@@ -1519,6 +1532,7 @@
       "kitId": "ash-v01",
       "style": "archive-furnace",
       "export": "kgr-archive-furnace-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "2ee28844d9073c3f21072eb746e85138ccb07c4e9aa9b1e1f38bb623153fe023",
       "snapshot": {
         "id": "kgr-archive-furnace",
@@ -1634,6 +1648,7 @@
       "kitId": "court-v01",
       "style": "archive-roof",
       "export": "kzu-archive-roof-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "6211fcaee1084ea9664d31e3e38ca37313f4a6c7f3d9214e8cbc5ca0265add29",
       "snapshot": {
         "id": "kzu-archive-roof",
@@ -1732,6 +1747,7 @@
       "kitId": "court-v01",
       "style": "public-tribunal",
       "export": "kzu-public-tribunal-board-v01.png",
+      "victimFixtureCount": 0,
       "occupancySha256": "dc0006561de340cab630b1c7e17c62f66d674ce65fe6ec37d5a1fb57708a441d",
       "snapshot": {
         "id": "kzu-public-tribunal",
@@ -1826,6 +1842,7 @@
       "kitId": "court-v01",
       "style": "black-gate",
       "export": "c8-black-gate-board-v01.png",
+      "victimFixtureCount": 14,
       "occupancySha256": "81cff94de03551b06b8e1ebbcafe2605f3891e9a241e1077ce4be0eba389275e",
       "snapshot": {
         "id": "c8-black-gate",
@@ -1930,6 +1947,7 @@
       "kitId": "court-v01",
       "style": "outer-archive",
       "export": "krh-outer-archive-board-v01.png",
+      "victimFixtureCount": 14,
       "occupancySha256": "7e3d3b822c6062f542c6bd48f3faf370e4f3e960d68faa931b3d4816a14a5bae",
       "snapshot": {
         "id": "krh-outer-archive",
@@ -2022,6 +2040,7 @@
       "kitId": "court-v01",
       "style": "throne-observatory",
       "export": "krh-observatory-board-v01.png",
+      "victimFixtureCount": 14,
       "occupancySha256": "436fdfcec19949c115c3f11ca0bb82471774707d9856d6f191c8aa396960972d",
       "snapshot": {
         "id": "krh-observatory",
@@ -2126,6 +2145,7 @@
     "allBoardsRgba": true,
     "allBoardsOpaque": true,
     "allBoardIhdrExact": true,
+    "kurohanaVictimFixtureCount": 42,
     "moduleSheetDimensions": [
       640,
       128

@@ -511,9 +511,9 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
   {
     beatId: "c9-01-archive-breathes",
     before: [
-      line("NARRATOR", "Kurohana's outer archive receives the party with polished floors, aligned shelves, and the soft rhythm of clerks turning pages."),
-      line("REN", "Where are the clerks?"),
-      line("AYA", "There are none. The shelves are making the sound."),
+      line("NARRATOR", "Kurohana's outer archive receives the party between rows of crucified and impaled Christians built into polished walls as ornament."),
+      line("REN", "Are any victims living?"),
+      line("AYA", "Two still breathe. Kiku has already marked their beams."),
       line("NARRATOR", "A lacquered cabinet expands by a finger's width, then settles as though completing a careful breath."),
       line("KIKU", "Do not touch the paper with bare hands. Red threads are moving between the fibers."),
       line("NIKOLA", "Threads run from every shelf toward the copper knot above the east door."),
@@ -562,7 +562,7 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
   {
     beatId: "c9-02-ujiros-last-ledger",
     before: [
-      line("NARRATOR", "The living audience hall retracts its red-veined walls from four copied ledgers laid open on a plain custody table."),
+      line("NARRATOR", "The living audience hall retracts its red-veined walls as Kiku lowers two breathing prisoners from the nearest execution fixtures."),
       line("UJIRO", "Shoes on the petition floor. Wet coats before the dais. You make disorder look almost ceremonial."),
       line("REN", "Come down from the dais."),
       line("UJIRO", "You still mistake proximity for equality. A hall has levels because judgment needs perspective."),
@@ -578,9 +578,9 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
       line("MATEUS", "Yes. I translated the column called retained essence and knew it meant people drained past death."),
       line("UJIRO", "You see? Their star witness confesses to sorcery and expects confession to become virtue."),
       line("MATEUS", "I expect it to become evidence. Virtue is not on offer."),
-      line("NIKOLA", "The Severed Dragon notes show my house turning a holy check into hereditary purge authority."),
+      line("NIKOLA", "Notes show noblewomen carrying our covenant while titled men turned it into hereditary purge authority."),
       line("UJIRO", "At last, a self-crowned nobleman discovers that useful precedent becomes impolite when another court uses it."),
-      line("NIKOLA", "It was violent in my family's hand and yours. I preserved both copies so your mockery cannot sever the chain."),
+      line("NIKOLA", "My English mother was bartered there. I preserved her contract so your mockery cannot restore its invented male chain unchallenged."),
       line("KIKU", "The clinic requisitions show medicine diverted to the barracks while fever shelters were listed as noncompliant."),
       line("UJIRO", "Resource triage. Governance requires choices sentimental healers can avoid."),
       line("KIKU", "I make triage choices every day. I record who lacked medicine and why. You recorded them as useful losses."),
@@ -611,7 +611,7 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
   {
     beatId: "c9-03-conservatory-offers",
     before: [
-      line("NARRATOR", "Black glass flowers open across the conservatory, each petal reflecting a future polished beyond the reach of ordinary correction."),
+      line("NARRATOR", "Black glass flowers open beneath impaled bodies, each petal reflecting a private future polished beyond the reach of correction."),
       line("KUROZANE", "Enter, six dissenting notes. My house has kept a chamber tuned to every hunger you were too modest to confess."),
       line("REN", "Your house has listened through census slips and prison walls. Do not call surveillance understanding."),
       line("KUROZANE", "Understanding is merely surveillance that survives long enough to become tender."),
@@ -662,7 +662,7 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
   {
     beatId: "c9-04-yearless-bell",
     before: [
-      line("NARRATOR", "The Bell spine rises through the chamber like a black rib cage, enclosing an archive core lit by trapped names."),
+      line("NARRATOR", "The Bell spine rises through the chamber between stacked execution galleries, enclosing an archive core lit by trapped names below."),
       line("KUROZANE", "You refused six mercies and brought your contradictions here as if plurality were armor."),
       line("AYA", "The archive core is below the third strut. Loose names spiral clockwise toward it."),
       line("REN", "Three stage nodes. Each carries the scar of one key."),
@@ -711,7 +711,7 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
   {
     beatId: "c9-05-dawn-at-observatory",
     before: [
-      line("NARRATOR", "Broken node-light climbs the spine into the observatory, where first dawn presses a thin line beneath Kurozane's final ward."),
+      line("NARRATOR", "Broken node-light climbs the spine into an observatory ringed by execution beams, where first dawn reaches every remaining name."),
       line("KUROZANE", "You have cracked my Bell and mistaken damage for mortality. Dawn is an old clerk; it has declared me dead before."),
       line("NARRATOR", "Black lacquer splits across his court robes as vast wings unfold, their membranes written with erased census lines."),
       line("REN", "His real body casts three shadows."),
@@ -760,7 +760,7 @@ export const SCRIPT_CHAPTER7_EPILOGUE = deepFreeze([
   {
     beatId: "c9-06-leave-evidence-alive",
     before: [
-      line("NARRATOR", "Dawn crosses the broken circle. Kurozane no longer commands the Bell; witnesses hold the chosen outcome."),
+      line("NARRATOR", "Dawn crosses the broken execution ring. Kurozane commands neither Bell nor the witnesses holding his outcome."),
       line("NETWORK REPRESENTATIVE", "No clean victory. Record each choice, objection, and risk."),
       line("REN", "Witnessed transfer requires custody; execution risks civil war. Neither is freedom without consequence."),
       line("GENTA", "Send the garrison both watch and unrest signals before rumor supplies certainty."),

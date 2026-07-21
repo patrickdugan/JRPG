@@ -64,7 +64,9 @@ def load_source() -> dict:
         raise ValueError("Scene-backdrop source must assign 60 unique beats")
     policy = source.get("renderPolicy", {})
     required_false = ("bakeActors", "bakeText", "bakeUi", "bakeSacredObjects", "bakeAuthenticHeraldry", "generatedConceptPixels", "externalPixels", "partialAlpha")
-    if not policy.get("presentationOnly") or policy.get("collisionAuthority") != "none" or any(policy.get(key) is not False for key in required_false):
+    if (not policy.get("presentationOnly") or policy.get("collisionAuthority") != "none"
+            or policy.get("bakeVictimFixtures") is not True
+            or any(policy.get(key) is not False for key in required_false)):
         raise ValueError("Scene-backdrop presentation boundaries drifted")
     restrictions = " ".join(source.get("restrictions", [])).lower()
     for phrase in ("no sacred", "no celebrity", "no pixels are sampled", "external japanese"):
@@ -101,6 +103,31 @@ def draw_roof(draw: ImageDraw.ImageDraw, x: int, y: int, w: int, h: int, palette
     draw.rectangle((x + 5, y + 17, x + w - 5, y + h - 5), fill=rgba(palette["cedar1"]))
     if lit:
         draw.rectangle((x + w // 2 - 5, y + 18, x + w // 2 + 5, y + 29), fill=rgba(palette["light"]))
+
+
+def draw_victim_fixture(draw: ImageDraw.ImageDraw, x: int, y: int, palette: dict, variant: int) -> None:
+    """Draw a tiny fictional Kurohana execution fixture, never a live rule-layer actor."""
+    timber = rgba(palette["cedar0"])
+    outline = rgba(palette["edge"])
+    garment = rgba(palette["far"] if variant % 3 else palette["paper"])
+    wound = rgba(palette["alarm"])
+    if variant % 2 == 0:
+        draw.line((x, y, x, y + 25), fill=timber, width=2)
+        draw.line((x - 6, y + 7, x + 6, y + 7), fill=timber, width=2)
+        draw.rectangle((x - 1, y + 3, x + 1, y + 5), fill=outline)
+        draw.line((x - 1, y + 7, x - 5, y + 10), fill=garment)
+        draw.line((x + 1, y + 7, x + 5, y + 10), fill=garment)
+        draw.rectangle((x - 2, y + 8, x + 2, y + 17), fill=garment)
+        draw.line((x - 1, y + 17, x - 3, y + 22), fill=garment)
+        draw.line((x + 1, y + 17, x + 3, y + 22), fill=garment)
+        draw.point((x + (1 if variant % 4 else -1), y + 12), fill=wound)
+    else:
+        draw.line((x, y + 3, x, y + 27), fill=timber, width=2)
+        draw.rectangle((x - 2, y + 4, x, y + 7), fill=outline)
+        draw.line((x - 1, y + 8, x + 3, y + 16), fill=garment, width=2)
+        draw.line((x + 2, y + 10, x + 5, y + 14), fill=garment)
+        draw.line((x + 2, y + 16, x + 4, y + 22), fill=garment)
+        draw.point((x, y + 15), fill=wound)
 
 
 def draw_frame(record: dict, palette: dict, index: int) -> Image.Image:
@@ -176,11 +203,15 @@ def draw_frame(record: dict, palette: dict, index: int) -> Image.Image:
         draw.polygon(((0, 131), (100, 86), (220, 86), (319, 131)), fill=rgba(palette["ground0"])); draw.rectangle((78, 38, 242, 112), fill=rgba(palette["shadow"])); draw.rectangle((108, 56, 212, 112), fill=rgba(palette["sky0"])); draw.rectangle((70, 34, 250, 45), fill=rgba(palette["cedar0"]));
         for x in (72, 240): draw.rectangle((x, 82, x + 6, 126), fill=rgba(palette["accent"])); draw.rectangle((x - 4, 88, x + 10, 104), fill=rgba(palette["light"]))
         draw.polygon(((150, 52), (159, 47), (168, 52), (164, 58), (153, 57)), fill=rgba(palette["alarm"]))
+        for fixture_index, x in enumerate((20, 38, 56, 88, 104, 216, 232, 264, 282, 300)):
+            draw_victim_fixture(draw, x, 91 + fixture_index % 3, palette, fixture_index)
     elif motif == "living-archive":
         draw.rectangle((8, 28, 312, 129), fill=rgba(palette["shadow"]));
         for x in (22, 74, 238, 290): draw.rectangle((x, 38, x + 12, 124), fill=rgba(palette["cedar0"]));
         for y in (58, 82, 106): draw.line((25, y, 92, y), fill=rgba(palette["edge"])); draw.line((228, y, 300, y), fill=rgba(palette["edge"]))
         draw.polygon(((118, 43), (202, 43), (188, 116), (132, 116)), fill=rgba(palette["sky1"])); draw.line((160, 45, 160, 114), fill=rgba(palette["alarm"]), width=3); draw.rectangle((151, 79, 169, 101), outline=rgba(palette["accent"]), width=3); draw.rectangle((174, 49, 186, 112), fill=rgba(palette["light"]))
+        for fixture_index, x in enumerate((18, 34, 50, 66, 82, 98, 112, 126, 140, 180, 194, 208, 222, 238, 254, 270, 286, 302)):
+            draw_victim_fixture(draw, x, 91 + fixture_index % 4, palette, fixture_index)
     elif motif == "daybreak-repair":
         draw.rectangle((0, 30, 103, 128), fill=rgba(palette["cedar0"])); draw.rectangle((108, 42, 211, 128), fill=rgba(palette["cedar1"])); draw.rectangle((216, 24, 319, 128), fill=rgba(palette["far"]));
         for y in (54, 78, 102): draw.line((12, y, 91, y), fill=rgba(palette["paper"]), width=4)
@@ -200,11 +231,11 @@ def draw_frame(record: dict, palette: dict, index: int) -> Image.Image:
 def readme_bytes() -> bytes:
     return ("""# Campaign scene-backdrop suite
 
-This package contains 20 original, deterministic 320 x 180 pixel panoramas mapped explicitly to all 60 Campaign beats. The atlas is decorative presentation beneath the existing portrait, atmosphere, dialogue, choices, and accessibility text. It never defines a field map, collision, route, encounter, objective, timing, or save state.
+This package contains 20 original, deterministic 320 x 180 pixel panoramas mapped explicitly to all 60 Campaign beats. The atlas is decorative presentation beneath the existing portrait, atmosphere, dialogue, choices, and accessibility text. It never defines a field map, collision, route, encounter, objective, timing, or save state. The Black Gate and Chapter 9 panoramas contain 10 and 18 code-native fictional Kirishitan victim fixtures respectively, supporting Kurohana's authored mass-execution processional without becoming rule-layer actors.
 
 `scene-backdrop-suite.source.json` owns the motif, beat, palette, safe-area, and cultural boundaries. `build_scene_backdrop_suite.py` uses only integer-coordinate Pillow primitives and creates the runtime atlas, a half-scale labeled review sheet, this manifest, and the byte-identical browser copy. Run it with `--check` for a non-writing deterministic receipt.
 
-No frame contains actors, lettering, readable records, sacred objects, devotional symbols, authentic heraldry, real-person likenesses, imported concept pixels, or copied franchise compositions. External Japanese historical, Christianity, and religious-practice review remains pending; this package is not art-locked.
+No frame contains live combat or NPC actors, lettering, readable records, sacred objects, devotional symbols, authentic heraldry, real-person likenesses, imported concept pixels, or copied franchise compositions. Execution beams are killing structures, not devotional crosses; the victim silhouettes are fictional, evidence-bound, and subject to external Japanese Christianity and historical-persecution review. This package is not art-locked.
 """).encode("utf-8")
 
 
@@ -225,6 +256,7 @@ def build_outputs(source: dict) -> dict[Path, bytes]:
         frames.append({
             "id": record["id"], "index": index, "rect": [x, y, FRAME_W, FRAME_H],
             "paletteFamily": record["paletteFamily"], "beatIds": record["beatIds"],
+            "victimFixtureCount": record.get("victimFixtureCount", 0),
             "rgbaSha256": raw_hash, "opaqueBounds": [0, 0, FRAME_W, FRAME_H],
             "colorCount": len(set(frame.getdata())),
         })

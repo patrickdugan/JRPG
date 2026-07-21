@@ -844,14 +844,14 @@ const CONTENT = {
     }),
     scene({
       title: 'The Journal and the Uniform',
-      theme: 'The Dražanić journal makes Nikola and Genta examine how families and institutions edit betrayal into honorable inheritance.',
+      theme: 'The Dražanić journal makes Nikola and Genta examine how families and institutions edit marriage barter and betrayal into honorable male inheritance.',
       prompt: 'How should they compare family and military records?',
       first: { label: 'Trace who benefited from honor', direction: 'Each record should identify who gained status when betrayal was renamed duty' },
       second: { label: 'Place dissent beside ceremony', direction: 'Accounts from people who refused should sit beside oaths, citations, and formal praise' },
       topics: [
         topic('the raid renamed a hunt', 'the Dražanić journal converted a sold port list into a heroic hunt narrative', 'my inheritance preserved the weapon and discarded the people betrayed to justify it', 'uniform histories preserve maneuvers while treating requisitioned towns as background', 'we will compare what each proud account omits before accepting its stated purpose'),
         topic('the citation for a closed road', 'Genta received praise for securing a route later used to transport prisoners', 'honor attached to efficiency can make the purpose feel already judged', 'I displayed the citation because it discouraged questions from younger soldiers', 'I will place the citation beside transport testimony and state why I no longer accept it'),
-        topic('the family correction resisted', 'Nikola’s first impulse was to hide the journal until he could rewrite the oath himself', 'control over correction can repeat the ownership that produced the false inheritance', 'I understand the impulse because institutions call private revision responsibility', 'we will publish the source with context and let affected readers challenge our framing'),
+        topic('the women edited into bridges', 'the pedigree calls itself a father-to-son line although covenant, name, and land repeatedly arrived through noblewomen', 'my English mother’s contract records money, refuge, and protection as a marriage bargain rather than romance', 'military histories perform the same trick by making negotiated communities into roads between commanders', 'we will name each woman as an actor and publish what every exchange bought without pretending that disclosure cancels coercion'),
         topic('the uniform set aside', 'Genta no longer wears his command badge but keeps the armor that protects others', 'objects can change use without pretending their history vanished', 'discarding the armor would be easier than answering what I did while wearing it', 'I will keep its old marks visible and accept when their sight makes someone refuse me'),
       ],
     }),

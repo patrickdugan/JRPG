@@ -25,7 +25,9 @@
   },
   "nikolaLineage": {
     "birthAndStation": "Croatian-born frontier minor aristocrat",
-    "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+    "claimedDescent": "Nikola claims a Wallachian covenant line transmitted through noblewomen",
+    "englishAncestry": "Nikola is English through his fictional mother Margaret Wychmere",
+    "inheritanceChain": "the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection",
     "affiliation": "Covenant of the Severed Dragon",
     "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
   },
@@ -33,7 +35,7 @@
     {
       "path": "party-roster-suite.source.json",
       "role": "editable-composition-contract",
-      "sha256": "559be8bac7a909904dc536c6f196712439cebc6d0edfa755bf350d55f00a0d7c"
+      "sha256": "f8d6b1a2e59b49c42f5b50ca8813f31df3704c0584b39af1b0786c92590c750c"
     },
     {
       "path": "../party-combat-suite/party-combat-actions.png",
@@ -43,12 +45,12 @@
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-name-contract",
-      "sha256": "17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3"
+      "sha256": "31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a"
     },
     {
       "path": "build_party_roster_suite.py",
       "role": "deterministic-builder",
-      "sha256": "f591c3bb6ab288a03d731d361c205abb8c015b5ce3cd4c0cd2c55e1107505309"
+      "sha256": "9939248e295f07cb25fa576a3c27cf156553d91d439889187b26553f194781b7"
     }
   ],
   "exports": [

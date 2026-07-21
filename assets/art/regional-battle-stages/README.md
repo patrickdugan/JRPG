@@ -10,7 +10,7 @@ This package contains the first editable whole-campaign environment wave for the
 - `regional-battle-stages-contact-sheet.png` is the labeled `768 x 640` half-scale review sheet.
 - `manifest.json` records source and export hashes, PNG IHDR values, per-board occupancy signatures, kit mappings, render policy, and validation results.
 
-All 18 board exports are copied byte-identically into the browser runtime and registered beside the independently authored Takamine board, so every canonical combat encounter now resolves to an authored floor. `game/content/levels.mjs` remains collision and rules authority. The renderer continues to draw live grid, terrain overlays, objectives, telegraphs, units, and VFX above these static floors, with its procedural floor retained for image failure.
+All 18 board exports are copied byte-identically into the browser runtime and registered beside the independently authored Takamine board, so every canonical combat encounter now resolves to an authored floor. `game/content/levels.mjs` remains collision and rules authority. The Black Gate, Outer Archive, and Throne Observatory floors each bake fourteen fictional Kirishitan victim fixtures—alternating crucified and impaled silhouettes—into blocked architecture, for forty-two visible fixtures across Kurohana's approach and final dungeon. They are environmental evidence, never actors, targets, loot, or collision authority. The renderer continues to draw live grid, terrain overlays, objectives, telegraphs, units, and VFX above these static floors, with its procedural floor retained for image failure.
 
 ## Deterministic build
 

@@ -10,6 +10,8 @@ This list is the art-production authority. Quantity is a planned final count, no
 
 The live scene-panorama package accepts `MAP-CIN-001-020`: 20 distinct opaque 320×180 frames in one manifested 1600×720 atlas, mapped explicitly across 60/60 canonical beats. Exact canonical-level compatibility, natural-dimension validation, a static code-native fallback, a deterministic builder, raw-RGBA frame hashes, production/runtime byte identity, and a labeled review sheet are automated. This is decorative dialogue/cutscene coverage only. It does not replace the 19 combat boards, accept any of the other 49 planned map/backdrop deliverables, establish the still-unproduced whole-field map/prop/foreground packages, or accept the 24 core/reuse tileset kits. Human backdrop/portrait/text readability, Narrator/NVDA, external cultural review, and Accepted/art lock remain pending.
 
+**2026-07-21 Kurohana/Nikola addition:** the Black Gate, Kurohana Outer Archive, and Throne Observatory boards contain forty-two code-native fictional Kirishitan victim fixtures, while the gate and Chapter 9 panoramas add twenty-eight distant execution silhouettes. Nikola’s source/manifest metadata now records Croatian birth, English ancestry through fictional Margaret Wychmere, and a claimed Wallachian line repeatedly transmitted through noblewomen. Living-prisoner cut-down animation and reduced-horror empty fixtures remain planned rather than shipped.
+
 ## 1. Asset states, priorities, and naming
 
 | Code | Meaning |
@@ -60,7 +62,7 @@ Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small
 | MAP-TAK-001-008 | Takamine Bell Temple, registry, prison, undercroft | 8 | 4 | 16 | P0/P1 | First playable uses the rain gate; include first board backdrop and bell/prison story objects. |
 | MAP-NAG-001-007 | Nagi Sea Road, fishing villages, fog islands, wreck | 7 | 4 | 14 | P1 | Waterline collision, wet rock readability, ship interior/exterior reuse. |
 | MAP-KAG-001-008 | Kagura Pass, relay station, ash fields, oni forge | 8 | 4 | 16 | P1 | Ash/weather legibility; moving carts and falling floor hazards need explicit states. |
-| MAP-KUR-001-012 | Kurohana Castle exterior, archive, court, chapel, bell engine, throne | 12 | 6 | 24 | P1/P2 | Final dungeon uses modular black-lacquer kit plus increasing organic/bell intrusion. |
+| MAP-KUR-001-012 | Kurohana Castle exterior, archive, court, chapel, bell engine, throne | 12 | 6 | 24 | P1/P2 | Final dungeon uses modular black-lacquer kit plus increasing organic/bell intrusion and a sustained mass-execution processional. Three authored boards contain forty-two code-native crucified/impaled victim fixtures; field maps and scene compositions extend the rows without collision authority. |
 | MAP-OPT-001-008 | optional revisits, side rooms, Lantern Network refuges | 8 | 3 reuse extensions | 10 | P2 | No main-route movement power gate; create shortcuts and lore/supply rewards only. |
 | MAP-CIN-001-020 | chapter scene backdrops / panorama composites | 20 | derived | 20 | P1/P2 | Dialogue/cutscene compositions: one key background per chapter plus major reversal/boss scenes. |
 
@@ -81,6 +83,7 @@ Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small
 | NPC-NAG-001-012 | Sea Road NPCs | 12 | P1 | fishers, smugglers, sailors, wreck survivors, local officials. |
 | NPC-KAG-001-012 | Pass / ash field NPCs | 12 | P1 | relay workers, defectors, forge prisoners, traveling households. |
 | NPC-KUR-001-016 | Court / castle NPCs | 16 | P1/P2 | magistrates, clerks, retainers, servants, prisoners; court clothing is fictionalized. |
+| NPC-KUR-MARTYR-001-024 | Kurohana fictional Kirishitan victim fixtures | 24 modular bodies × beam/stake and dead/living variants | P1/P2 | Scores of repeated castle victims; varied garments and silhouettes, restrained blood, two living rescue states, named-evidence treatment, and empty-structure reduced-horror substitutes. Never loot, target, collision authority, or devotional prop. |
 | NPC-GEN-001-012 | generic reuse NPC sheet | 12 bodies x 4 palettes | P1 | body/garment combinations, 4-direction idle/walk; localization-safe speech pose. |
 
 **Character art total:** 6 party field sheets, 6 party battle sheets, 48 party portrait expressions, 84 regional/named NPC packages, and 48 generic NPC combinations.
@@ -163,7 +166,7 @@ This cut is the first staffing and outsourcing package. It is intentionally comp
 | C1-ART-002 | Takamine Bell-Chamber battle stage | 1 | first playable | Produced and integrated as an editable 384 x 224, 12 x 7 board at exact 2x; automated geometry/layer/fallback checks pass; subjective telegraph and external cultural review remain before Accepted/art lock. |
 | C1-ART-003 | Takamine path, gate, registry, chapel, undercroft map kits | 5 | Chapter 1 | collision thumbnails, day/rain variants, story objects, foreground mask |
 | C1-ART-004 | Ren field/combat/portrait package | 1 | first playable | all required movement, command, Guard, hit, defeat tags |
-| C1-ART-005 | Nikola Dražanić scene/field/portrait package | 1 | first playable narrative | original male Croatian minor-aristocrat hunter silhouette, c.1622 rain-travel layers, claimed Wallachian house origin, and invented Severed Dragon counter-ward read; no real-person or real-heraldry reference; internal compatibility key remains `lise` |
+| C1-ART-005 | Nikola Dražanić scene/field/portrait package | 1 | first playable narrative | original male Croatian-English minor-aristocrat hunter silhouette, c.1622 rain-travel layers, English ancestry through fictional Margaret Wychmere, claimed Wallachian house origin carried through noblewomen, and invented Severed Dragon counter-ward read; no real-person or real-heraldry reference; internal compatibility key remains `lise` |
 | C1-ART-006 | Father Mateus Avelar scene/portrait package | 1 | first playable narrative | original court interpreter silhouette, no likeness reference, and consistent with the permanent party-art package |
 | C1-ART-007 | Ashen Oni Tithe Enforcer package | 1 | first playable | two attacks, intent, hit/defeat, Ledger portrait, original mask language |
 | C1-ART-008 | Cinder Hound, Ash Wisp, Bell Moth packages | 3 | Chapter 1 | core enemies test Ember/Radiance weakness and Umbral resistance feedback |

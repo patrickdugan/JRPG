@@ -63,12 +63,12 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   }, {
     chapters: 11,
     beats: 60,
-    lines: 2_746,
-    words: 37_776,
+    lines: 2_748,
+    words: 37_826,
     authoredChoices: 68,
     canonicalChoices: 59,
-    moves: 1_419,
-    interactions: 236,
+    moves: 1_429,
+    interactions: 239,
     exits: 41,
     finiteQuests: 13,
     finiteQuestObjectives: 59,
@@ -151,8 +151,8 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   assert.deepEqual(audit.campConversation.playableMetrics, CAMP_CONVERSATION_PLAYABLE_METRICS);
   assert.equal(CAMP_CONVERSATION_METRICS.mainLineCount, 3_644);
   assert.equal(CAMP_CONVERSATION_METRICS.responseLineCount, 540);
-  assert.equal(CAMP_CONVERSATION_METRICS.wordCount, 83_435);
-  assert.equal(CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount, 76_547);
+  assert.equal(CAMP_CONVERSATION_METRICS.wordCount, 83_460);
+  assert.equal(CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount, 76_572);
   assert.deepEqual(audit.campConversation.metrics, {
     dialogueWords: CAMP_CONVERSATION_PLAYABLE_METRICS.visibleWordCount,
     dialogueLines: CAMP_CONVERSATION_PLAYABLE_METRICS.dialogueLineCount,
@@ -258,11 +258,11 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   );
 
   assert.deepEqual(audit.estimates.reference.canonicalOnly.quantities, {
-    dialogueWords: 37_776,
-    dialogueLines: 2_746,
+    dialogueWords: 37_826,
+    dialogueLines: 2_748,
     choices: 59,
-    fieldMoves: 1_419,
-    interactions: 236,
+    fieldMoves: 1_429,
+    interactions: 239,
     exits: 41,
     playerCommands: 231,
     enemyActivations: 97,
@@ -291,8 +291,8 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
       - audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedSeconds
       - audit.estimates.reference.postStoryPreCredits.estimatedSeconds,
   ) < 1e-9);
-  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 309.249);
-  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 393.697);
+  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 309.862);
+  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 394.31);
   assert.ok(audit.estimates.low.allFiniteBeforeStoryCompletion.estimatedMinutes
     < audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes);
   assert.ok(audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes
@@ -302,23 +302,23 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
       name,
       estimate.allFiniteBeforeStoryCompletion.estimatedMinutes,
     ])),
-    { low: 769.649, reference: 1_221.359, high: 1_902.603 },
+    { low: 770.514, reference: 1_222.739, high: 1_904.816 },
   );
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates).map(([name, estimate]) => [
       name,
       estimate.allFiniteContent.estimatedMinutes,
     ])),
-    { low: 776.975, reference: 1_232.299, high: 1_918.346 },
+    { low: 777.84, reference: 1_233.679, high: 1_920.559 },
   );
   assert.equal(audit.estimates.reference.allFiniteContent.requiredRepeatPresentationMs, 36_800);
   assert.equal(audit.estimates.reference.allFiniteContent.breakdownMinutes.requiredRepeatPresentation, 0.613);
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates.reference.allFiniteContent.repeatSpeedVariants)
       .map(([speed, variant]) => [speed, variant.estimatedMinutes])),
-    { 1: 1_232.299, 2: 1_231.993, 4: 1_231.839 },
+    { 1: 1_233.679, 2: 1_233.372, 4: 1_233.219 },
   );
-  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 32.299);
+  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 33.679);
   assert.equal(audit.estimates.low.allFiniteContent.reaches20HoursUnderModel, false);
   assert.equal(audit.estimates.reference.allFiniteContent.reaches20HoursUnderModel, true);
   assert.equal(audit.estimates.high.allFiniteContent.reaches20HoursUnderModel, true);

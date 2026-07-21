@@ -64,7 +64,7 @@ test('shared contract accepts the pack and reports its exact authored volume', (
   assert.deepEqual(validation.metrics, {
     recordCount: 20,
     paragraphCount: 176,
-    wordCount: 10_512,
+    wordCount: 10_593,
     chapterCount: 5,
     byGroup: { early: 0, middle: 0, late: 20 },
   });

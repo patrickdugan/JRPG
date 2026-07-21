@@ -21,7 +21,9 @@ const LEGACY_FRAME_DIGEST = '794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a
 const SUPERSEDED_PRE_NIKOLA_DIGEST = '72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2';
 const NIKOLA_LINEAGE = {
   birthAndStation: 'Croatian-born frontier minor aristocrat',
-  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  claimedDescent: 'Nikola claims a Wallachian covenant line transmitted through noblewomen',
+  englishAncestry: 'Nikola is English through his fictional mother Margaret Wychmere',
+  inheritanceChain: 'the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection',
   affiliation: 'Covenant of the Severed Dragon',
   historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
 };
@@ -104,7 +106,7 @@ test('Nikola migration preserves the stable six-by-fourteen field contract', asy
   ]);
   const source = JSON.parse(sourceText);
   const extension = JSON.parse(extensionText);
-  assert.equal(sha256(Buffer.from(sourceText)), '17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3');
+  assert.equal(sha256(Buffer.from(sourceText)), '31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a');
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.deepEqual(source.frame, {
     width: 32,

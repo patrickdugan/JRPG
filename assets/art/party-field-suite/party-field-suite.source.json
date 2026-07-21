@@ -59,10 +59,12 @@
       "id": "lise",
       "name": "Nikola Dražanić",
       "legacyCompatibilityId": "lise",
-      "origin": "Croatian-born frontier minor aristocrat travelling through the Adriatic, Goa, and Macao in 1622",
+      "origin": "Croatian-born frontier minor aristocrat with English maternal ancestry, travelling through the Adriatic, Goa, and Macao in 1622",
       "lineage": {
         "birthAndStation": "Croatian-born frontier minor aristocrat",
-        "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+        "claimedDescent": "Nikola claims a Wallachian covenant line transmitted through noblewomen",
+        "englishAncestry": "Nikola is English through his fictional mother Margaret Wychmere",
+        "inheritanceChain": "the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection",
         "affiliation": "Covenant of the Severed Dragon",
         "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
       },

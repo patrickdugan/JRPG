@@ -78,6 +78,9 @@ test('save-stable party slot resolves to Nikola Dražanić and masculine charact
   assert.equal(runtimeMember.id, 'lise');
   assert.equal(runtimeMember.name, 'Nikola Dražanić');
   assert.match(cast.role, /self-styled Count of a Croatian house with claimed Wallachian roots/u);
+  assert.match(cast.role, /English maternal blood/u);
+  assert.match(cast.background, /Margaret Wychmere/u);
+  assert.match(cast.background, /passing through noblewomen/u);
   assert.match(`${cast.arc} ${cast.background}`, /\bhis\b/u);
 });
 

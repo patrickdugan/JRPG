@@ -89,10 +89,12 @@
     "lise": {
       "name": "Nikola Dražanić",
       "legacyCompatibilityId": "lise",
-      "origin": "Croatian-born frontier minor aristocrat travelling through the Adriatic, Goa, and Macao in 1622",
+      "origin": "Croatian-born frontier minor aristocrat with English maternal ancestry, travelling through the Adriatic, Goa, and Macao in 1622",
       "lineage": {
         "birthAndStation": "Croatian-born frontier minor aristocrat",
-        "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+        "claimedDescent": "Nikola claims a Wallachian covenant line transmitted through noblewomen",
+        "englishAncestry": "Nikola is English through his fictional mother Margaret Wychmere",
+        "inheritanceChain": "the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection",
         "affiliation": "Covenant of the Severed Dragon",
         "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
       }
@@ -2465,7 +2467,7 @@
     {
       "path": "party-field-suite.source.json",
       "format": "json",
-      "sha256": "17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3"
+      "sha256": "31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a"
     },
     {
       "path": "party-field-walk-inbetweens.source.json",
@@ -2475,7 +2477,7 @@
     {
       "path": "build_party_field_suite.py",
       "format": "python",
-      "sha256": "8a5d016c8e89d6db4a77cfd87f04c125b03b7671da3b60114da84927ac067fd8"
+      "sha256": "9b6346767bcce97f77b45f1d21400348dc7ffe8601d8583ca44eaa29771f73a2"
     }
   ],
   "exports": [

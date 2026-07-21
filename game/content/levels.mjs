@@ -1325,9 +1325,9 @@ export const LEVELS = [
     terrain: [{ at: '4,4', tag: 'archive-floor' }, { at: '5,4', tag: 'archive-floor' }, { at: '7,4', tag: 'archive-floor' }, { at: '10,4', tag: 'archive-floor' }, { at: '11,4', tag: 'archive-floor' }],
     spawn: { x: 2, y: 9, facing: 'north-east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
     exits: [{ id: 'conservatory', at: '18,3', destinationLevelId: 'krh-blood-conservatory', condition: 'ujiro-custody-scene-complete' }],
-    objective: 'Confront Ujiro’s last ledger and place him in public custody without destroying the evidence.',
-    interactables: [{ id: 'ujiro-ledger', at: '8,3', action: 'confront-with-copies', result: 'ujiro-custody-scene-complete' }, { id: 'witness-circle', at: '5,4', action: 'talk', text: 'People harmed by the system take part in the custody decision.' }],
-    lesson: 'The confrontation resolves through records and witnesses, not a stylish execution.',
+    objective: 'Cut down the two living prisoners, confront Ujiro’s last ledger, and place him in public custody without destroying the evidence.',
+    interactables: [{ id: 'ujiro-ledger', at: '8,3', action: 'confront-with-copies', requires: 'kurohana-martyr-east-rescued', result: 'ujiro-custody-scene-complete' }, { id: 'witness-circle', at: '5,4', action: 'talk', text: 'People harmed by the system take part in the custody decision.' }, { id: 'living-martyr-west', at: '3,5', action: 'cut-down-prisoner', result: 'kurohana-martyr-west-rescued' }, { id: 'living-martyr-east', at: '6,5', action: 'cut-down-prisoner', requires: 'kurohana-martyr-west-rescued', result: 'kurohana-martyr-east-rescued' }],
+    lesson: 'The castle’s execution display contains people who can still be saved; the confrontation then resolves through records and witnesses, not a stylish execution.',
   }),
   sceneHub({
     id: 'krh-blood-conservatory', chapterId: 'chapter-9', name: 'Kurohana Blood Conservatory', palette: courtPalette,

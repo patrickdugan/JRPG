@@ -501,25 +501,25 @@ export const SCENE_DIRECTIONS = deepFreeze([
   }),
 
   scene('chapter-9', 'c9-01-archive-breathes', {
-    atmosphere: 'Shelves flex with bell tissue while loose names pull toward red nodes embedded in the outer archive.',
+    atmosphere: 'Shelves flex with bell tissue while loose names pull toward red nodes; scores of crucified and impaled Kirishitan victims form a forced processional along the walls.',
     musicCue: 'The evidence theme is stretched through a living low drone, interrupted by clean tones when names are released.',
-    cameraCue: 'Show the names’ direction of pull, node locations, and safe archive core before granting movement control.',
+    cameraCue: 'Sweep the execution rows long enough to establish their scale, stop on two visible breaths, then show the names’ direction of pull, node locations, and safe archive core before granting movement control.',
     entranceCue: 'Aya enters with protective folios raised; Ren follows the first loose page to its node rather than striking the shelves.',
     gestureCue: ['AYA', 'Pin a falling name beneath a clear ward sheet and point Ren toward the node feeding on it.'],
     blockingCue: 'Keep party routes between nodes and the archive core, leaving authored forward openings instead of maze-like returns.',
     transitionCue: 'The first broken node exhales paper into the living audience hall’s tall doors.',
   }),
   scene('chapter-9', 'c9-02-ujiros-last-ledger', {
-    atmosphere: 'The audience hall’s living walls recede from copied testimony carried by people Ujiro classified as inventory.',
+    atmosphere: 'The audience hall’s living walls recede from copied testimony; execution beams continue between lacquer pillars, with two living prisoners low enough to reach.',
     musicCue: 'Ujiro’s court rhythm loses instruments one by one while the witness motif remains steady and close.',
     cameraCue: 'Frame Ujiro at floor level with the harmed witness visible before his offer, denying him a solitary final tableau.',
-    entranceCue: 'Ujiro emerges from the breathing dais; witnesses enter through the opened archive route under their own escort.',
+    entranceCue: 'Kiku and Ren cut down the two living prisoners before Ujiro emerges from the breathing dais; witnesses enter through the opened archive route under their own escort.',
     gestureCue: ['REN', 'Close Ujiro’s ledger and slide it toward the witness custody table without drawing his weapon.'],
     blockingCue: 'Witnesses control the exit and evidence table; the party leaves an open path between them and Ujiro.',
     transitionCue: 'Custody doors close without impact; a conservatory petal drifts through the next opening.',
   }),
   scene('chapter-9', 'c9-03-conservatory-offers', {
-    atmosphere: 'Black glass flowers reflect six impossible private futures while the real evacuation route remains dimly visible behind them.',
+    atmosphere: 'Black glass flowers reflect six impossible private futures while impalement stakes and execution beams climb the upper galleries; the real evacuation route remains dimly visible behind them.',
     musicCue: 'Six familiar character motifs appear as polished, incomplete imitations over Kurozane’s held bell tone.',
     cameraCue: 'Move past each reflection to the corresponding person in the shared chamber, always returning to the open group frame.',
     entranceCue: 'Kurozane speaks through reflections before appearing at the far end; the party enters together and does not separate.',
@@ -528,7 +528,7 @@ export const SCENE_DIRECTIONS = deepFreeze([
     transitionCue: 'Each refusal darkens one glass flower; the remaining bell light drains toward the spine chamber.',
   }),
   scene('chapter-9', 'c9-04-yearless-bell', {
-    atmosphere: 'A vast bell spine pulses above an archive core whose protective wards expose nodes in readable cycles.',
+    atmosphere: 'A vast bell spine pulses above an archive core; the castle has bound its densest rows of dead Kirishitan victims to the machinery as a final declaration of ownership.',
     musicCue: 'Kurozane’s ledger rhythm swells against the full evidence theme, with clear rests marking exposed-node windows.',
     cameraCue: 'Establish core, nodes, and party lanes before revealing Kurozane above them; return immediately to tactical height.',
     entranceCue: 'Kurozane descends with the bell stroke while Ren and Aya take positions on opposite sides of the archive core.',
@@ -537,7 +537,7 @@ export const SCENE_DIRECTIONS = deepFreeze([
     transitionCue: 'A broken node sends dawn-colored light up the spine toward the observatory.',
   }),
   scene('chapter-9', 'c9-05-dawn-at-observatory', {
-    atmosphere: 'First daylight reaches the observatory through cracked wards while the final bell shadow still covers the floor.',
+    atmosphere: 'First daylight reaches the observatory through cracked wards and the final ring of execution beams while the bell shadow still covers the floor.',
     musicCue: 'Mateus’s cipher motif sheds its destructive bass and joins Nikola’s revised theme on a spare protective chord.',
     cameraCue: 'Hold the blood rite as a boundary opening, not a bodily spectacle; track its light to the route it creates for others.',
     entranceCue: 'Mateus approaches the ward from the party line; Nikola holds the rear path open and Ren waits at the exposed threshold.',

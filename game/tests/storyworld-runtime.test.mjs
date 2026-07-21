@@ -185,8 +185,33 @@ test('the exact pre-Severed-Dragon identity migrates only an early prefix before
   assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
 });
 
+test('the pre-English-heiress identity migrates a complete choice-compatible history', () => {
+  const storage = new MemoryStorage();
+  const adapter = createStoryworldStorageAdapter(storage);
+  let current = createStoryworldState({ runId: 'storyworld-english-heiress-migration-0001' });
+  for (const cluster of STORYWORLD_CLUSTERS) current = resolveCluster(current, cluster, 0);
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[2];
+  const legacy = {
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  };
+  storage.setItem(adapter.key, JSON.stringify(legacy));
+
+  const loaded = adapter.load();
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'english-heiress-lineage-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+  assert.equal(loaded.state.revision, current.revision);
+  assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
+});
+
 test('historical Corrections Desk outcomes fail closed instead of becoming surrender or execution', () => {
-  for (const [identityIndex, legacyIdentity] of LEGACY_STORYWORLD_CATALOG_IDENTITIES.entries()) {
+  for (const [identityIndex, legacyIdentity] of LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .map((identity, index) => [index, identity])
+    .filter(([, identity]) => identity.maximumCompatibleRecordCount === 8)) {
     for (const outcome of [
       {
         suffix: 'accord',

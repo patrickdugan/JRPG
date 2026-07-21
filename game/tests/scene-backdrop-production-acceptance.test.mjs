@@ -99,12 +99,15 @@ test('scene-backdrop source and manifest preserve exact cultural and presentatio
   });
   assert.equal(source.renderPolicy.presentationOnly, true);
   assert.equal(source.renderPolicy.collisionAuthority, 'none');
+  assert.equal(source.renderPolicy.bakeVictimFixtures, true);
   for (const key of ['bakeActors', 'bakeText', 'bakeUi', 'bakeSacredObjects', 'bakeAuthenticHeraldry', 'generatedConceptPixels', 'externalPixels', 'partialAlpha']) {
     assert.equal(source.renderPolicy[key], false, `${key} must remain forbidden`);
   }
   assert.deepEqual(source.backdrops.map((entry) => entry.id), SCENE_BACKDROP_IDS);
   assert.equal(source.backdrops.flatMap((entry) => entry.beatIds).length, 60);
   assert.equal(new Set(source.backdrops.flatMap((entry) => entry.beatIds)).size, 60);
+  assert.equal(source.backdrops.find(({ id }) => id === 'black-gate-causeway').victimFixtureCount, 10);
+  assert.equal(source.backdrops.find(({ id }) => id === 'kurohana-living-archive').victimFixtureCount, 18);
   assert.equal(manifest.sourceSha256, sha256(sourceBytes));
   assert.equal(manifest.builderSha256, sha256(builderBytes));
   assert.deepEqual(manifest.coverage, {
@@ -119,6 +122,7 @@ test('scene-backdrop source and manifest preserve exact cultural and presentatio
   for (const phrase of ['no sacred', 'no celebrity', 'no pixels are sampled', 'external japanese']) {
     assert.match(restrictions, new RegExp(phrase));
   }
+  assert.match(restrictions, /fictional kirishitan victim/u);
 });
 
 test('scene-backdrop builder check is non-writing and current', () => {

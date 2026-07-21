@@ -282,6 +282,8 @@ Enma creates Ember/Umbral hazards. Each hero has a useful response, producing th
 
 ## Chapter 9 — The Black Chrysanthemum
 
+The castle breach crosses a sustained execution display rather than a single shock tableau. At least forty-two readable environmental fixtures appear across the authored Black Gate, Outer Archive, and Throne Observatory battle boards, with additional distant rows in field-scene compositions: fictional Kirishitan prisoners crucified on rough execution beams or impaled on stakes and incorporated into Kurozane’s architecture. The presentation is severe and unmistakable, with restrained pixel-scale blood marks, varied clothing and body shapes, and no collectible interaction. Two living prisoners in the audience hall are required chained rescue interactions; Kiku stabilizes them and the evacuation route carries them out before Ujiro’s confrontation continues. Dead victims remain evidence with names or explicit unidentified status.
+
 ### C9-01 — The archive that breathes
 
 Kurohana’s early rooms look like a model administrative archive; close-up movement reveals veins under paper and lacquer. The player breaks three bell nodes using the keys and releases spirits.

@@ -844,7 +844,7 @@ AYA|Do not pull the first cord. It crosses five others beneath the surface.
 REN|The dry alcove holds a brazier and a warning plate covered in mineral scale.
 NIKOLA|The nearest slip bears my house's severed-dragon cut beneath the court annotation.
 AYA|Can you separate the marks without touching the name?
-NIKOLA|We are Croatian-born; our house claims Wallachian origins, which proves nothing.
+NIKOLA|Croatian-born, English-blooded; our records claim Wallachian fathers surviving only through noblewomen.
 REN|Why would it appear on a bell beneath a Japanese temple?
 NIKOLA|The Severed Dragon covenant traveled east, perhaps sold by my line.
 AYA|Those are different histories. Which does the metal support?

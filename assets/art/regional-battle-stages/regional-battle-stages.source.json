@@ -7,11 +7,12 @@
     "presentationOnly": true,
     "bakeTelegraphs": false,
     "bakeActors": false,
+    "bakeVictimFixtures": true,
     "bakeObjectives": false,
     "bakeInteractableIcons": false,
     "authenticReligiousSymbols": false,
     "authenticHeraldicSymbols": false,
-    "note": "Only quiet floor materials, collision-matched blocked architecture, and static terrain footing are rendered. Special cells are audit snapshots, never drawing commands."
+    "note": "Quiet floor materials, collision-matched blocked architecture, static terrain footing, and explicitly scoped Kurohana victim fixtures are rendered. Victim fixtures are environmental evidence, never live actors, targets, loot, collision, or objective authority. Special cells are audit snapshots, never drawing commands."
   },
   "kits": [
     {
@@ -127,19 +128,19 @@
       "specialCells":{"exits":[{"id":"canal-lock","at":"11,3"}],"interactables":[{"id":"print-block-a","at":"1,3"},{"id":"print-block-b","at":"2,4"},{"id":"print-block-c","at":"2,2"}],"hazards":[{"id":"seizure-order","tiles":[]}],"spawn":{"x":2,"y":3}}
     },
     {
-      "id":"c8-black-gate","chapterId":"chapter-8","name":"Black Gate Causeway","kitId":"court-v01","style":"black-gate","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "id":"c8-black-gate","chapterId":"chapter-8","name":"Black Gate Causeway","kitId":"court-v01","style":"black-gate","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion","environmentalVictimFixtures":{"count":14,"context":"fictional Kirishitan execution processional","variants":["crucified","impaled"]},
       "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
       "terrain":[{"at":"2,1","tag":"ember-ash"},{"at":"3,1","tag":"ember-ash"},{"at":"8,1","tag":"umbral-ash"},{"at":"9,1","tag":"umbral-ash"},{"at":"2,5","tag":"umbral-ash"},{"at":"3,5","tag":"umbral-ash"},{"at":"8,5","tag":"ember-ash"},{"at":"9,5","tag":"ember-ash"},{"at":"4,3","tag":"dry-lantern"},{"at":"7,3","tag":"dry-lantern"}],
       "specialCells":{"exits":[{"id":"kurohana-gate","at":"11,3"}],"interactables":[{"id":"lantern-relay-west","at":"4,3"},{"id":"lantern-relay-east","at":"7,3"}],"hazards":[{"id":"ash-lane-pair","tiles":[]}],"spawn":{"x":2,"y":3}}
     },
     {
-      "id":"krh-outer-archive","chapterId":"chapter-9","name":"Kurohana Outer Archive","kitId":"court-v01","style":"outer-archive","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "id":"krh-outer-archive","chapterId":"chapter-9","name":"Kurohana Outer Archive","kitId":"court-v01","style":"outer-archive","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion","environmentalVictimFixtures":{"count":14,"context":"fictional Kirishitan execution processional","variants":["crucified","impaled"]},
       "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
       "terrain":[{"at":"2,1","tag":"bell-node"},{"at":"9,1","tag":"bell-node"},{"at":"2,5","tag":"bell-node"},{"at":"9,5","tag":"bell-node"},{"at":"4,3","tag":"archive-floor"},{"at":"7,3","tag":"archive-floor"}],
       "specialCells":{"exits":[{"id":"observatory-stair","at":"11,3"}],"interactables":[{"id":"archive-node-a","at":"2,1"},{"id":"archive-node-b","at":"9,1"},{"id":"archive-node-c","at":"9,5"}],"hazards":[{"id":"catalogue-line","tiles":[]}],"spawn":{"x":2,"y":3}}
     },
     {
-      "id":"krh-observatory","chapterId":"chapter-9","name":"Kurohana Throne Observatory","kitId":"court-v01","style":"throne-observatory","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion",
+      "id":"krh-observatory","chapterId":"chapter-9","name":"Kurohana Throne Observatory","kitId":"court-v01","style":"throne-observatory","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion","environmentalVictimFixtures":{"count":14,"context":"fictional Kirishitan execution processional","variants":["crucified","impaled"]},
       "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
       "terrain":[{"at":"2,1","tag":"bell-node"},{"at":"9,1","tag":"bell-node"},{"at":"2,5","tag":"bell-node"},{"at":"9,5","tag":"bell-node"},{"at":"4,3","tag":"archive-floor"},{"at":"7,3","tag":"archive-floor"}],
       "specialCells":{"exits":[{"id":"archive-evacuation","at":"11,3"}],"interactables":[{"id":"north-node","at":"2,1"},{"id":"east-node","at":"9,1"},{"id":"south-node","at":"9,5"},{"id":"west-node","at":"2,5"}],"hazards":[{"id":"yearless-ring","tiles":[]},{"id":"dawn-window","tiles":["1,3","2,3","3,3"]}],"spawn":{"x":2,"y":3}}

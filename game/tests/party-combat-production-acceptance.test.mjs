@@ -14,7 +14,9 @@ const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
 const COLUMNS = ['idle', 'move', 'guard', 'hit', 'basic-strike-windup', 'basic-strike-active', 'signature-a', 'signature-b', 'recovery', 'defeat'];
 const NIKOLA_LINEAGE = {
   birthAndStation: 'Croatian-born frontier minor aristocrat',
-  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  claimedDescent: 'Nikola claims a Wallachian covenant line transmitted through noblewomen',
+  englishAncestry: 'Nikola is English through his fictional mother Margaret Wychmere',
+  inheritanceChain: 'the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection',
   affiliation: 'Covenant of the Severed Dragon',
   historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
 };
@@ -110,7 +112,7 @@ test('combat source fixes the canonical six-by-ten 48x64 action contract', async
   assert.equal(nikola.name, 'Nikola Dražanić');
   assert.equal(nikola.legacyCompatibilityId, 'lise');
   assert.deepEqual(nikola.lineage, NIKOLA_LINEAGE);
-  assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
+  assert.match(nikola.likenessPolicy, /original fictional Croatian-English male face and proportions; no real-person or actor reference/u);
   assert.match(source.characters.find(({ id }) => id === 'mateus').likenessPolicy, /original fictional face and proportions; no real-person reference/u);
 });
 

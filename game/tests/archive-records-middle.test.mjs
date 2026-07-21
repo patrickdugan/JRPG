@@ -64,7 +64,7 @@ test('contract validator accepts the middle pack and reports complete authored v
   assert.deepEqual(validation.metrics, {
     recordCount: 20,
     paragraphCount: 162,
-    wordCount: 10_549,
+    wordCount: 10_581,
     chapterCount: 4,
     byGroup: { early: 0, middle: 20, late: 0 },
   });

@@ -11,7 +11,7 @@ This is the production map for the ten implemented Storyworld clusters. The auth
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 1,887 words and at most 19 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 15.768 reference minutes. Combined with the current 309.249-minute canonical reference, the 80-scene route is 325.017 minutes (about 5.42 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 1,963 words and at most 19 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 16.148 reference minutes. Combined with the current 309.862-minute canonical reference, the 80-scene route is 326.010 minutes (about 5.43 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
 
 ## Carry-forward contract
 
@@ -88,7 +88,7 @@ For a related battle, the presentation card carries the selected decision text, 
 - Sacred and devotional objects are not loot, combat consumables, puzzle tokens, or neutral gothic decoration. The clusters use fictional records, custody procedures, routes, and administrative evidence as their interactive material.
 - Named Japanese organizers, witnesses, crews, and custodians retain authority over routes, access, custody, refusal, revision, and stop conditions. A refusal is a valid consequence, not a player obstacle to override.
 - Mateus receives accountability, supervision, corroboration, and revocable limits—not absolution, command authority, private access, restored office, or narrative ownership. His useful knowledge never makes European authority the resistance's default leader.
-- Nikola's Croatian birth and his house's claimed Wallachian origin remain distinct. The 1462 vampire emergency, Dracul blood precedent, and Covenant of the Severed Dragon are explicit alternate history; the Covenant is not a real chivalric order, Christian rite, or historical institution.
+- Nikola's Croatian birth, English ancestry through fictional Margaret Wychmere, and his house's claimed Wallachian origin remain distinct. The house advertises a male line but its own contracts show repeated transmission through noblewomen and negotiated marriages. The 1462 vampire emergency, Dracul blood precedent, and Covenant of the Severed Dragon are explicit alternate history; the Covenant is not a real chivalric order, Christian rite, or historical institution.
 - **The Last Command** does not reduce politics to mercy versus punishment. Witnessed transfer leaves Kurozane alive, defeated, bound, and without honor; execution or failed transfer exposes the civil war built into an immortal regime with no safe succession mechanism. Neither branch grants Nikola, Mateus, or the party the surrendered office.
 - Father Mateus Avelar and the full cast remain original fictional characters; no celebrity or actor likeness is permitted.
 - The fiction must not turn a real faith, ethnicity, historical victim, or identifiable sacred tradition into a monster class, reward system, or boss prop. External historical and cultural review remains a production gate.

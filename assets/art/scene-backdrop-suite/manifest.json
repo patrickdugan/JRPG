@@ -3,8 +3,8 @@
   "assetId": "scene-backdrop-suite-v01",
   "status": "production-foundation-review",
   "authorship": "original-code-native-pixel-primitives",
-  "sourceSha256": "6fee0d8f7f712b2d82b3592f776e5d64e8d938e0f7e0f1761a5b35ef4e1325d4",
-  "builderSha256": "bf2181395f0670176292ed70caa600d494d5537a974b7617be7d2def794fe035",
+  "sourceSha256": "ec8344a677adcf70c52787bf5c21258b52c0c617065b164cf16d621b5f77d72b",
+  "builderSha256": "112f8a27ee5506399cdd166be96d7ab26b99bc3a86b1f6f5dea80d724f28adc2",
   "geometry": {
     "frameWidth": 320,
     "frameHeight": 180,
@@ -50,6 +50,7 @@
         "p03-bailiff-returns",
         "p04-river-escape"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "73db308d4a82ebb8644d9860677f66fb5247e9543b4b1d874912b1b7c073e2b3",
       "opaqueBounds": [
         0,
@@ -73,6 +74,7 @@
         "p05-archive-promise",
         "c1-01-registers-omissions"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "d4a08c1f738cf00e66b0f2e7fff248ec9b89b1593fa89a2bcbdd209dbabc79a6",
       "opaqueBounds": [
         0,
@@ -97,6 +99,7 @@
         "c1-03-ferry-gossip",
         "c1-04-flooded-cedars"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "799c0394c190a18ed7a96490e61f94b885f0a99dde5545e4187feff0685121a4",
       "opaqueBounds": [
         0,
@@ -120,6 +123,7 @@
         "c1-05-storehouse-clerk",
         "c1-06-copy-before-fire"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "25b67f96e918ca90747925657aad353bb0210d952e88d4abd0c8bfcd8f628bb8",
       "opaqueBounds": [
         0,
@@ -145,6 +149,7 @@
         "c2-03-lises-interruption",
         "c2-04-bell-stair"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "d6d5be421e00cd3a300e48cf3035ad54ddbe54767ec79761939b68b2bbdc1dd2",
       "opaqueBounds": [
         0,
@@ -168,6 +173,7 @@
         "c2-05-undercrypt-truth",
         "c2-06-name-from-europe"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "21a29bdb2333f667a12bcb48cd149ca5735e43ba40cf0d7bf2f191ad1ae926fe",
       "opaqueBounds": [
         0,
@@ -192,6 +198,7 @@
         "c3-02-the-checkpoint",
         "c3-03-ledger-customs-house"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "ae58ef5688c4a0e39bf77a35d0fa7f9f040a4bdb78e9a4f370c3d012b16d7410",
       "opaqueBounds": [
         0,
@@ -216,6 +223,7 @@
         "c3-05-gentas-order",
         "c3-06-first-key"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "259cf54d0d94280b6d7a0a11fc33bf8e727a1802f31fab887304807f7e2b5d23",
       "opaqueBounds": [
         0,
@@ -240,6 +248,7 @@
         "c4-05-names-returned",
         "c4-06-kikus-terms"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "808403cb3ff7bc1355b70424506a96e368965952672c407bb7b1646f6c5293dc",
       "opaqueBounds": [
         0,
@@ -264,6 +273,7 @@
         "c4-03-varga-journal",
         "c4-04-survivors-hold"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "adbf98c4253dcc14e9219e230d41166b3ca3e34e2716268bda05e055db51f40f",
       "opaqueBounds": [
         0,
@@ -287,6 +297,7 @@
         "c5-01-requisition-town",
         "c5-02-ash-fields"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "4a02e6ef3d31c1e37769c43f45163dc5e050f96aec5f15c66b2e80edba381268",
       "opaqueBounds": [
         0,
@@ -312,6 +323,7 @@
         "c5-05-sigil-burned",
         "c5-06-midpoint-evidence"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "56b517d3eef7b1f947a6691a9efa6cc9b89c3041b2763640f351e7048d9591cd",
       "opaqueBounds": [
         0,
@@ -335,6 +347,7 @@
         "c6-01-city-competing-needs",
         "c6-02-three-copies"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "a9754e0a2923496773e76cc08c0c3caba23e7b030f67b1a59cfcd3630d628094",
       "opaqueBounds": [
         0,
@@ -359,6 +372,7 @@
         "c6-04-printmaker-flight",
         "c6-05-all-copies-leave"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "247e3912615377e0f1a4bb880d5cf6fa41ff14bc97db5594c246a3e9d72074cb",
       "opaqueBounds": [
         0,
@@ -382,6 +396,7 @@
         "c7-01-decision-map-table",
         "c7-02-former-retainer"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "04be8adcd76bfaa7d20daeece56cabbf86f784798ec89e4148af7f87dc705c54",
       "opaqueBounds": [
         0,
@@ -406,6 +421,7 @@
         "c7-04-lises-revised-oath",
         "c7-05-rescue-before-ring"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "0b4fc6ce2eba5390cf1664eabb1389f999bab1818692fb7a4159a11bbf9a03e4",
       "opaqueBounds": [
         0,
@@ -429,6 +445,7 @@
         "c8-01-three-homecomings",
         "c8-02-consent-not-conscription"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "86096c7368d6876b7a9cf77465454291a06f1e0a2a75c0f757a6d8160f7149d5",
       "opaqueBounds": [
         0,
@@ -453,14 +470,15 @@
         "c8-04-lantern-breach",
         "c8-05-gate-opened"
       ],
-      "rgbaSha256": "95b7631beb5c0a0935813814542df0bf3a29f5953157110c3db684b555c837d3",
+      "victimFixtureCount": 10,
+      "rgbaSha256": "ad2d8df2a9dacbff7b40a2b5a08a66cf0b9102a2be4654f9761bb1aeee0f0e55",
       "opaqueBounds": [
         0,
         0,
         320,
         180
       ],
-      "colorCount": 11
+      "colorCount": 12
     },
     {
       "id": "kurohana-living-archive",
@@ -480,14 +498,15 @@
         "c9-05-dawn-at-observatory",
         "c9-06-leave-evidence-alive"
       ],
-      "rgbaSha256": "ffc20f97ad0427fbcc4eb6b05f928a63804263ba5ef97ee6db877f644e669c88",
+      "victimFixtureCount": 18,
+      "rgbaSha256": "201b225febfbd82226caf12d4f1a20b7700ebdd28b84d7493552fc0d466452d2",
       "opaqueBounds": [
         0,
         0,
         320,
         180
       ],
-      "colorCount": 11
+      "colorCount": 12
     },
     {
       "id": "daybreak-repair-montage",
@@ -504,6 +523,7 @@
         "e01-repair-work",
         "e02-repaired-tower"
       ],
+      "victimFixtureCount": 0,
       "rgbaSha256": "1bc368969a40039606bd4f383eec979075fc584207f9384952b1b96ae902b386",
       "opaqueBounds": [
         0,
@@ -521,7 +541,7 @@
       "width": 1600,
       "height": 720,
       "mode": "RGBA",
-      "sha256": "ba7bcf31ac8c62055a1e2e325412e3865f72021fbca8d1fe25c156cf5604881e"
+      "sha256": "16c860a3a888b0284ebdb2101c4b5b5b07726d264862b9838e180e84ea9a6a1b"
     },
     {
       "file": "scene-backdrop-contact-sheet.png",
@@ -529,7 +549,7 @@
       "width": 800,
       "height": 440,
       "mode": "RGBA",
-      "sha256": "92c9706f31d1e23c557935f9eada0e95de67856a9e8b7715294ea263f04f64de"
+      "sha256": "39e58526bfa838a939482d9edc095cdbc0b5221a28b293161a324fe78cbb3f92"
     }
   ],
   "twoIndependentRendersByteIdentical": true,
@@ -540,6 +560,7 @@
     "presentationOnly": true,
     "collisionAuthority": "none",
     "bakeActors": false,
+    "bakeVictimFixtures": true,
     "bakeText": false,
     "bakeUi": false,
     "bakeSacredObjects": false,
@@ -549,9 +570,9 @@
     "partialAlpha": false
   },
   "restrictions": [
-    "Runtime frames contain no actors, lettering, interface, readable documents, logos, or watermarks.",
-    "No sacred or devotional object, authentic heraldry, real ceremonial mask, real clan mark, or radial floral emblem is drawn.",
-    "No historical victim, persecution method, ethnicity, or religious identity is converted into horror scenery.",
+    "Runtime frames contain no live combat or NPC actors, lettering, interface, readable documents, logos, or watermarks; only the two explicitly scoped Kurohana victim-fixture panoramas contain human silhouettes.",
+    "No sacred or devotional object, authentic heraldry, real ceremonial mask, real clan mark, or radial floral emblem is drawn; crucifixion beams are execution structures, not devotional crosses.",
+    "Every crucified or impaled figure is a fictional Kirishitan victim of Kurozane's invented regime, remains attached to named-evidence and rescue context, and never represents an identifiable historical martyr.",
     "No celebrity, film character, copyrighted game character, recognizable franchise castle, or borrowed visual composition is an input.",
     "No pixels are sampled, traced, transformed, or imported from assets/concepts, assets/production, or any external image.",
     "Kurozane's authority uses only asymmetrical broken ledger-tab geometry and invented administrative machinery.",

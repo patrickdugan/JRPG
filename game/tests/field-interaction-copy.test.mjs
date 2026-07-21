@@ -28,7 +28,7 @@ function visibleStrings(entry) {
   ];
 }
 
-test('field interaction copy exactly covers all 113 authored interactables in level order', () => {
+test('field interaction copy exactly covers all 115 authored interactables in level order', () => {
   const expected = LEVELS.flatMap((level) => (
     (level.interactables ?? []).map((interactable) => ({
       levelId: level.id,
@@ -41,7 +41,7 @@ test('field interaction copy exactly covers all 113 authored interactables in le
   assert.equal(FIELD_INTERACTION_COPY_SCHEMA_VERSION, 1);
   assert.equal(FIELD_INTERACTION_COPY.schemaVersion, 1);
   assert.equal(FIELD_INTERACTION_COPY.locale, 'en');
-  assert.equal(expected.length, 113);
+  assert.equal(expected.length, 115);
   assert.equal(actual.length, expected.length);
   assert.deepEqual(
     actual.map(({ levelId, interactableId }) => ({ levelId, interactableId })),
@@ -49,8 +49,8 @@ test('field interaction copy exactly covers all 113 authored interactables in le
   );
 
   const keys = actual.map(({ levelId, interactableId }) => `${levelId}\u0000${interactableId}`);
-  assert.equal(new Set(keys).size, 113, 'compound level/interactable keys must be unique');
-  assert.equal(new Set(actual.map(({ copyKey }) => copyKey)).size, 113, 'copy keys must be unique');
+  assert.equal(new Set(keys).size, 115, 'compound level/interactable keys must be unique');
+  assert.equal(new Set(actual.map(({ copyKey }) => copyKey)).size, 115, 'copy keys must be unique');
 
   for (const [index, entry] of actual.entries()) {
     const expectedEntry = expected[index];

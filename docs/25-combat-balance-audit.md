@@ -63,4 +63,4 @@ node --test tests/combat-balance-audit.test.mjs tests/battle-solvability.test.mj
 npm run check
 ```
 
-The canonical receipt changes are intentional: 97 enemy activations and signature `fnv1a32:ff4e1361`. Updated low/reference/high projections are 186.868/309.249/499.306 canonical-only minutes, 223.577/393.697/692.896 canonical-plus-quest/chronicle minutes, and 776.975/1,232.299/1,918.346 all-finite minutes. The narrative-plus-Storyworld reference is 325.017 minutes. None is observed duration evidence.
+The canonical receipt changes are intentional: 97 enemy activations and signature `fnv1a32:2a3c2402`. Updated low/reference/high projections are 187.202/309.862/500.458 canonical-only minutes, 223.911/394.310/694.047 canonical-plus-quest/chronicle minutes, and 777.840/1,233.679/1,920.559 all-finite minutes. The narrative-plus-Storyworld reference is 326.010 minutes. None is observed duration evidence.

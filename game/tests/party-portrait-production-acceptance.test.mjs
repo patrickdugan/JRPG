@@ -14,7 +14,9 @@ const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
 const COLUMNS = ['neutral', 'resolve', 'strain', 'soften', 'concern', 'anger', 'surprise', 'quiet'];
 const NIKOLA_LINEAGE = {
   birthAndStation: 'Croatian-born frontier minor aristocrat',
-  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  claimedDescent: 'Nikola claims a Wallachian covenant line transmitted through noblewomen',
+  englishAncestry: 'Nikola is English through his fictional mother Margaret Wychmere',
+  inheritanceChain: 'the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection',
   affiliation: 'Covenant of the Severed Dragon',
   historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
 };
@@ -98,7 +100,7 @@ test('portrait source defines the exact six-by-eight expression and originality 
   assert.deepEqual(nikola.lineage, NIKOLA_LINEAGE);
   assert.equal(nikola.faceShape, 'square-angular-male');
   assert.equal(nikola.facialHair, 'narrow-moustache-and-trim-pointed-beard');
-  assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
+  assert.match(nikola.likenessPolicy, /original fictional Croatian-English male face and proportions; no real-person or actor reference/u);
   const mateus = source.characters.find(({ id }) => id === 'mateus');
   assert.match(mateus.likenessPolicy, /original fictional face, age lines, proportions, and hair; no real-person or actor reference/u);
   assert.doesNotMatch(JSON.stringify(source), /Adam Driver|celebrity likeness/iu);

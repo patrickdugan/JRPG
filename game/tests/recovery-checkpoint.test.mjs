@@ -352,6 +352,29 @@ test('signed early pre-Severed-Dragon checkpoints restore before the revised Cha
   assert.notEqual(loaded.state.catalogSignature, LEGACY_STORYWORLD_CATALOG_IDENTITIES[1].catalogSignature);
 });
 
+test('signed pre-English-heiress checkpoints restore complete compatible Storyworld history', () => {
+  const current = createRecoveryCheckpoint(
+    new MemoryStorage(completeEntries()),
+    { createdAtEpochMs: 1_700_000_000_005 },
+  ).checkpoint;
+  const legacy = legacyStoryworldCheckpoint(current, 2);
+  const validated = validateRecoveryCheckpoint(legacy);
+  assert.equal(validated.ok, true, validated.errors?.join(' '));
+  assert.equal(validated.requiresMigration, true);
+  assert.equal(validated.migrationId, 'english-heiress-lineage-v1');
+
+  const destination = new MemoryStorage();
+  const restored = restoreRecoveryCheckpoint(destination, legacy);
+  assert.equal(restored.ok, true, restored.errors?.join(' '));
+  assert.equal(restored.writesApplied, 14);
+  assert.equal(restored.migrationId, 'english-heiress-lineage-v1');
+  const storyworldRecord = RECOVERY_CHECKPOINT_AUTHORITIES.at(-1);
+  const loaded = loadStoryworldState(destination.getItem(storyworldRecord.key));
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(Object.hasOwn(loaded, 'migrated'), false);
+  assert.notEqual(loaded.state.catalogSignature, LEGACY_STORYWORLD_CATALOG_IDENTITIES[2].catalogSignature);
+});
+
 test('signed historical Corrections Desk checkpoints fail closed for both old outcomes before any write', () => {
   const current = createRecoveryCheckpoint(
     new MemoryStorage(completeEntries()),

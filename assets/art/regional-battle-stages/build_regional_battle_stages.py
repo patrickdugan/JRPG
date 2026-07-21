@@ -99,6 +99,8 @@ def load_source() -> dict:
     for key in ["bakeTelegraphs", "bakeActors", "bakeObjectives", "bakeInteractableIcons", "authenticReligiousSymbols", "authenticHeraldicSymbols"]:
         if policy.get(key) is not False:
             raise ValueError(f"renderPolicy.{key} must remain false")
+    if policy.get("bakeVictimFixtures") is not True:
+        raise ValueError("renderPolicy.bakeVictimFixtures must remain true")
 
     kits = source.get("kits", [])
     if [kit.get("id") for kit in kits] != list(EXPECTED_KITS):
@@ -130,6 +132,16 @@ def load_source() -> dict:
             raise ValueError(f"{board['id']} references an unknown kit")
         if len(board["blocked"]) != len(set(board["blocked"])):
             raise ValueError(f"{board['id']} has duplicate blocked cells")
+        fixtures = board.get("environmentalVictimFixtures")
+        if board["style"] in {"black-gate", "outer-archive", "throne-observatory"}:
+            if fixtures != {
+                "count": len(board["blocked"]),
+                "context": "fictional Kirishitan execution processional",
+                "variants": ["crucified", "impaled"],
+            }:
+                raise ValueError(f"{board['id']} must bind one victim fixture to every blocked cell")
+        elif fixtures is not None:
+            raise ValueError(f"{board['id']} cannot add victim fixtures outside Kurohana")
         terrain_keys = [entry["at"] for entry in board["terrain"]]
         if len(terrain_keys) != len(set(terrain_keys)):
             raise ValueError(f"{board['id']} has duplicate terrain cells")
@@ -226,6 +238,31 @@ def paint_blocked_cell(draw: ImageDraw.ImageDraw, x: int, y: int, palette: dict,
         draw.line((x + 8, y + 11, x + 23, y + 11), fill=palette["accent"])
         draw.line((x + 8, y + 19, x + 23, y + 19), fill=palette["accent"])
     draw.line((x + 3, y + 29, x + 28, y + 29), fill=palette["edge"])
+    if style in {"black-gate", "outer-archive", "throne-observatory"}:
+        paint_victim_fixture(draw, x, y, palette, column + row)
+
+
+def paint_victim_fixture(draw: ImageDraw.ImageDraw, x: int, y: int, palette: dict, variant: int) -> None:
+    """Paint a static fictional Kurohana victim fixture, separate from live actor authority."""
+    stake_x = x + 16
+    garment = palette["paper"] if variant % 3 == 0 else palette["edge"]
+    if variant % 2 == 0:
+        draw.line((stake_x, y + 3, stake_x, y + 29), fill=palette["accent"], width=2)
+        draw.line((x + 7, y + 9, x + 25, y + 9), fill=palette["accent"], width=2)
+        draw.ellipse((x + 14, y + 5, x + 18, y + 9), fill=palette["edge"])
+        draw.line((x + 15, y + 10, x + 9, y + 13), fill=garment, width=2)
+        draw.line((x + 17, y + 10, x + 23, y + 13), fill=garment, width=2)
+        draw.polygon(((x + 13, y + 10), (x + 19, y + 10), (x + 20, y + 21), (x + 12, y + 21)), fill=garment)
+        draw.line((x + 14, y + 21, x + 12, y + 26), fill=garment, width=2)
+        draw.line((x + 18, y + 21, x + 20, y + 26), fill=garment, width=2)
+        draw.rectangle((x + 17, y + 15, x + 18, y + 16), fill=palette["blocked"])
+    else:
+        draw.line((stake_x, y + 3, stake_x, y + 30), fill=palette["accent"], width=2)
+        draw.ellipse((x + 12, y + 5, x + 17, y + 10), fill=palette["edge"])
+        draw.line((x + 14, y + 10, x + 20, y + 20), fill=garment, width=3)
+        draw.line((x + 18, y + 14, x + 23, y + 18), fill=garment, width=2)
+        draw.line((x + 19, y + 20, x + 21, y + 26), fill=garment, width=2)
+        draw.rectangle((x + 15, y + 18, x + 17, y + 19), fill=palette["blocked"])
 
 
 def paint_terrain_cell(draw: ImageDraw.ImageDraw, x: int, y: int, palette: dict, tag: str, column: int, row: int) -> None:
@@ -382,6 +419,7 @@ def validate_outputs(source: dict, board_images: dict[str, Image.Image], board_b
     return {
         "boardCount": 18, "distinctBoardHashes": 18, "allBoardsRgba": True,
         "allBoardsOpaque": True, "allBoardIhdrExact": True,
+        "kurohanaVictimFixtureCount": sum(board.get("environmentalVictimFixtures", {}).get("count", 0) for board in source["boards"]),
         "moduleSheetDimensions": [640, 128], "contactSheetDimensions": [768, 640],
         "twoIndependentRendersByteIdentical": True,
     }
@@ -429,6 +467,7 @@ def create_manifest(source: dict, board_bytes: dict[str, bytes], module_bytes: b
         board_records.append({
             "id": board_id, "name": board["name"], "chapterId": board["chapterId"],
             "kitId": board["kitId"], "style": board["style"], "export": filename,
+            "victimFixtureCount": board.get("environmentalVictimFixtures", {}).get("count", 0),
             "occupancySha256": canonical_sha(snapshot), "snapshot": snapshot,
         })
     return {

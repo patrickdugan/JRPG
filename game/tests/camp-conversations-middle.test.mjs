@@ -139,7 +139,7 @@ test('contract validator accepts the complete middle pack and its deterministic 
     responseLineCount: 180,
     choiceCount: 30,
     choiceOptionCount: 60,
-    wordCount: 34_388,
+    wordCount: 34_413,
   });
 });
 

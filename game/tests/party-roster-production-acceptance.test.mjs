@@ -11,7 +11,9 @@ const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-roster-suite');
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const NIKOLA_LINEAGE = {
   birthAndStation: 'Croatian-born frontier minor aristocrat',
-  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  claimedDescent: 'Nikola claims a Wallachian covenant line transmitted through noblewomen',
+  englishAncestry: 'Nikola is English through his fictional mother Margaret Wychmere',
+  inheritanceChain: 'the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection',
   affiliation: 'Covenant of the Severed Dragon',
   historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
 };

@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 186.868/309.249/499.306 minutes low/reference/high (about 3.11/5.15/8.32 hours)<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 776.975/1,232.299/1,918.346 minutes (about 12.95/20.54/31.97 hours), not measured playtime<br>
+**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 187.202/309.862/500.458 minutes low/reference/high (about 3.12/5.16/8.34 hours)<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 777.840/1,233.679/1,920.559 minutes (about 12.96/20.56/32.01 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 
@@ -78,7 +78,7 @@
 
 **Places:** Takamine rain gate; cedar stair; abandoned chapel; bell tower; flooded undercroft.
 
-**Characters:** Lord Nikola Dražanić arrives while tracking a ledger and relic from a wrecked ship. He is a displaced Croatian frontier noble who calls himself Count abroad, though the title is inflated; his house claims descent from a fictional Wallachian branch charged with checking the vampire sovereignty attributed to Vlad III in the game’s invented 1462 history. Father Mateus Avelar is introduced as the court’s polished foreign interpreter and an enemy. When Mateus sees the Dražanić seal, he recognizes the Severed Dragon ward, a minor house entangled in the Adriatic sale network, and a fellow European stubborn enough to follow both to Japan.
+**Characters:** Lord Nikola Dražanić arrives while tracking a ledger and relic from a wrecked ship. He is a displaced Croatian frontier noble with English blood through his fictional mother Margaret Wychmere. He calls himself Count abroad, though the title is inflated; his house claims descent from a fictional Wallachian branch charged with checking the vampire sovereignty attributed to Vlad III in the game’s invented 1462 history. The boast of an unbroken male line conceals repeated inheritance through noblewomen and marriages that exchanged refuge, money, ships, land, and protection. Father Mateus Avelar is introduced as the court’s polished foreign interpreter and an enemy. When Mateus sees the Dražanić seal, he recognizes the Severed Dragon ward, a minor house entangled in the Adriatic sale network, and a fellow European stubborn enough to follow both to Japan.
 
 **Major beats**
 
@@ -231,6 +231,8 @@
 5. Each party member rejects the offer in a short playable interaction that changes the final boss’s opening resistance but not its required outcome.
 6. Kurozane rings the Yearless Bell. The party breaks it on the battle stage while protecting the archive of names.
 7. In the final phase, Kurozane becomes a winged, black-lacquer vampire monarch. Mateus uses his own blood to enter the boss’s Umbral authority while Nikola applies the Severed Dragon’s Radiant check; Black Sun Concord becomes the tactical proof that blood power can be bounded by another will instead of owned by one ruler.
+
+Kurohana’s entire ascent is lined with scores of fictional Kirishitan victims displayed on execution beams and impalement stakes: first as distant silhouettes at the Black Gate, then as dense processional rows through the archive, audience hall, conservatory, bell spine, and observatory. Two prisoners remain alive in the audience hall; the player must cut down both through chained field interactions before Ujiro’s ledger can be confronted. The court calls the dead ornament; narration, camera, archive, and quest language never do. Their chosen names, where known, travel with the evacuation record, and the unidentified remain explicit missing-person cases rather than anonymous gothic texture.
 8. Kurozane is defeated alive as dawn reaches the observatory. The party then faces the political decision damage could not make: secure a witnessed return of the military, registry, and bell seals, or kill him and rupture every blood-bound office at once.
 
 **Boss:** Shogun Kurozane. Three phases: court commands and clones; bell-node positioning puzzle; exposed vampire form. All five delivery/essence concepts, Tempo inspection, Recovery timing, terrain, swaps, and party combinations are used, but the UI repeats the rules taught earlier.

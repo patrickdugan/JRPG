@@ -45,7 +45,7 @@ test('production map locks authored-versus-played arithmetic and core guardrails
   assert.match(DOC, /\*\*90 scenes\*\*/);
   assert.match(DOC, /\*\*80 played scenes\*\*/);
   assert.equal(STORYWORLD_PACING_REPORT.withinFiveToSixHourTarget, true);
-  assert.match(DOC, /325\.017 minutes \(about 5\.42 hours\)/);
+  assert.match(DOC, /326\.010 minutes \(about 5\.43 hours\)/);
   assert.match(DOC, /\*\*The Last Command\*\*/u);
   assert.match(DOC, /\*\*The Seals Returned\*\* \/ \*\*The Empty Throne Mobilizes\*\*/u);
   assert.match(DOC, /Sacred and devotional objects are not loot/);

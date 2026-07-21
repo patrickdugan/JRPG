@@ -166,6 +166,13 @@ test('production policy and drawing path exclude live rule-layer and authentic-s
     assert.equal(source.renderPolicy[key], false, `${key} must remain false`);
     assert.equal(manifest.renderPolicy[key], false, `${key} manifest value must remain false`);
   }
+  assert.equal(source.renderPolicy.bakeVictimFixtures, true);
+  assert.equal(manifest.renderPolicy.bakeVictimFixtures, true);
+  assert.equal(manifest.validation.kurohanaVictimFixtureCount, 42);
+  assert.deepEqual(
+    manifest.boards.filter(({ victimFixtureCount }) => victimFixtureCount > 0).map(({ id, victimFixtureCount }) => [id, victimFixtureCount]),
+    [['c8-black-gate', 14], ['krh-outer-archive', 14], ['krh-observatory', 14]],
+  );
   const renderStart = builder.indexOf('def render_board(');
   const renderEnd = builder.indexOf('\ndef render_module_sheet(', renderStart);
   assert.ok(renderStart >= 0 && renderEnd > renderStart);

@@ -8,12 +8,12 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:1c9a56037dbc2bf3f4a6f38f5bcc95e6fcbbfe152a9e7f24a919cf037ea5808d";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:a3408c9b8e65c8ee87646e2148f781dc9f3cb2a4c58b5ceb33a33b1b9a5916cb";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
   "sourceVersion": 1,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:dda93670de31a2df06e84f328edce857ffa606ea5f128df1fd481e0358c0f894",
+  "sourceHash": "sha256:1b73ec6c717a0ca4899922d0bbdd5293ac564ed274af6e96c8a9032806b3f0e0",
   "bindingHash": "sha256:65f25f78bc59e8217738c5363cfff376fe9b0d2328bd38a3389aa1db31dfd71e",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
@@ -1123,7 +1123,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entry": {
         "id": "page_sw04_decision",
         "title": "A Margin in the Severed Dragon Testament",
-        "text": "The wreck has preserved a Dražanić testament page. It claims that an ancestor survived Vlad III's fictional vampire war and helped create a ward that severed immortal rulers from office. Later Dražanić hands converted that public check into hereditary purge authority, confiscated books, and fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward.",
+        "text": "The wreck has preserved a Dražanić testament page and the marriage contracts hidden behind its boast of an unbroken male line. Wallachian wardcraft, the Croatian house name, land, and an English Wychmere dowry repeatedly passed through noblewomen whose marriages exchanged refuge, ships, money, or armed protection. Later titled Dražanić men converted the public check on immortal rule into hereditary purge authority. Nikola can read the household abbreviations, but his mixed ancestry and claimed rank implicate rather than vindicate him. The wreck survivors retain the original while Aya asks what may travel onward.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -1135,7 +1135,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
             "reactions": [
               {
                 "id": "page_sw04_decision_opt_publish-passage_r_accord",
-                "text": "Nikola supplies context without asking the record to rescue his house. The passage travels with a note distinguishing inherited liability from his present choices.",
+                "text": "Nikola supplies context without asking the record to rescue his house. The passage travels with a note naming each woman as an actor and distinguishing inherited liability from his present choices.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
                   "propertyId": "lise_oath_revision",
@@ -1160,7 +1160,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw04_decision_opt_publish-passage_r_revision",
-                "text": "Nikola invokes the authority of a count he never legally was. Aya makes him retract the claim in the record, preserving both the passage and the attempted use of rank.",
+                "text": "Nikola invokes the authority of a count he never legally was and calls the women links in his line. Aya makes him retract both claims, preserving the passage and his attempted use of rank.",
                 "consequenceId": "page_sw04_revision",
                 "score": {
                   "propertyId": "lise_oath_revision",
@@ -1307,7 +1307,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_sw04_accord",
           "title": "A Covenant Entered as Evidence",
-          "text": "Nikola reads the family marks without claiming that blood, covenant technique, or an inflated title grants custody. Aya places the Severed Dragon passage beside survivor terms and a visible chain of copies. The page becomes evidence that a check on emergency power can itself become hereditary power, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached.",
+          "text": "Nikola reads the family marks and his English mother's contract without claiming that blood, covenant technique, or an inflated title grants custody. Aya places the Severed Dragon passage beside survivor terms and a visible chain of copies. The page becomes evidence that women carried a house men falsely advertised as patrilineal, and that a check on emergency power can itself become hereditary power. It is not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached.",
           "prompt": "Choose the sentence that limits Nikola's inherited authority.",
           "terminal": false,
           "options": [
@@ -3133,7 +3133,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entry": {
         "id": "page_sw10_decision",
         "title": "The Last Command",
-        "text": "Kurozane lies alive inside the broken command circle. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still carry instructions tied to his blood. Killing him may rupture those bindings and invite rival governors to seize the empty machinery. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but it cannot make surrender sincere. Ren asks what terms can transfer power without making the hunter, the vampire priest, or the victorious party his successor.",
+        "text": "Kurozane lies alive inside the broken command circle, surrounded by the castle's final ring of crucified and impaled Kirishitan victims. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not scenery to be erased with the throne. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still carry instructions tied to his blood. Killing him may rupture those bindings and invite rival governors to seize the empty machinery. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but it cannot make surrender sincere. Ren asks what terms can transfer power without making the hunter, the vampire priest, or the victorious party his successor.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -3317,7 +3317,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_end_corrections_visible",
           "title": "The Seals Returned",
-          "text": "Kurozane hears the independent route confirmations and sees that the country can act without his blood. He asks Ren what will hold it together when no immortal body commands the center. Ren answers: routes that can hold one another provisionally, refuse one another publicly, and survive the death of any one keeper. Kurozane returns the military, registry, granary, and bell seals one by one while the Severed Dragon boundary separates each office from his body. He is taken alive under rotating guard. The transfer is not absolution, restoration, or proof that his self-justifying history was true; it is the first public act in which his survival no longer requires everyone else's obedience.",
+          "text": "Kurozane hears the independent route confirmations and sees that the country can act without his blood. He asks Ren what will hold it together when no immortal body commands the center. Ren answers: routes that can hold one another provisionally, refuse one another publicly, and survive the death of any one keeper. Kurozane returns the military, registry, granary, and bell seals one by one while the Severed Dragon boundary separates each office from his body. He is taken alive under rotating guard. The living prisoners leave first; witnesses catalogue the execution rows before any beam is dismantled. The transfer is not absolution, restoration, or proof that his self-justifying history was true; it is the first public act in which his survival no longer requires everyone else's obedience.",
           "prompt": "Record what the former shogun does not retain.",
           "terminal": true,
           "options": []

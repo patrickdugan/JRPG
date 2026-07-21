@@ -199,6 +199,10 @@ The final combat resolves to a living, ward-broken Kurozane before **The Last Co
 - **Witnessed return:** military, registry, granary, and bell seals detach one at a time toward separately framed witnesses. Kurozane stays bound and diminished; no halo, softened palette, or restored upright pose implies absolution.
 - **Execution/failed transfer:** the death itself is brief and non-gory. The important animation is outward consequence—competing seal pulses, messengers leaving on divergent vectors, guarded roads, and mobilizing checkpoints—not a kill flourish or exploding evidence archive.
 - The Severed Dragon mark is a wholly invented broken command circuit. Never animate the historical Order of the Dragon's device, authentic Wallachian heraldry, a cross, sacramental gesture, or coronation transfer.
+
+### 7.4 Kurohana victim-fixture states
+
+The execution processional uses environmental fixtures, not enemy actors. Dead crucified and impaled victims have no idle loop; wind may move clothing or rope by one pixel, but bodies never become ambient animation. Two living audience-hall prisoners use a sparse eight-frame breath and hand-response loop before rescue, followed by a supported cut-down transition, Kiku’s stabilization hold, and an empty blood-marked beam or stake. Do not animate struggling as reusable spectacle, hit reactions, score feedback, ragdolls, or dismemberment. Reduced-horror mode swaps every body fixture for its empty-structure state without changing collision, interactions, objectives, timing, or evidence text.
 - These clips present the resolved Storyworld branch. They do not select an outcome, alter an effect value, or become save, settlement, or political-state authority.
 
 ### 7.4 Boss and hazard rules

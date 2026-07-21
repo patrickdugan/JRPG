@@ -23,7 +23,7 @@ Each reviewer should mark every question `accept`, `revise`, `outside scope`, or
 5. Does any prop, item, puzzle, VFX, environment, or enemy design turn a sacred or devotional object into loot, neutral gothic decoration, or spectacle?
 6. Does the contested `Ashen Oni` label remain visibly fictional and avoid copying a sacred figure, ceremonial mask, identifiable local tradition, or ethnicity-coded monster class?
 7. Are titles, personal names, place-name sounds, clothing layers, work tools, domestic spaces, port activity, and travel routes plausible enough for the stated alternate setting?
-8. Does persecution remain consequential without recreating named historical victims, exact execution methods, or suffering as atmosphere?
+8. Does Kurohana’s explicitly fictional mass processional of crucified and impaled Kirishitan victims remain attached to Kurozane’s state violence, two living rescues, chosen names, and evidence custody without recreating identifiable historical martyrs or presenting Japanese Christianity itself as macabre? Are the content warning and planned reduced-horror empty-structure variants sufficient?
 9. Is the Black Chrysanthemum clearly Kurozane's theft and defacement rather than an authentic shogunal or imperial emblem?
 10. Do visual silhouettes for the twelve community roles read as distinct people with practical local authority rather than interchangeable exotic background figures?
 
