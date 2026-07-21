@@ -53,8 +53,8 @@ test('ten exact anchors cover post-level, pre-boss, and post-boss sequencing wit
     }
   }
   assert.deepEqual(Object.fromEntries(roleCounts), {
-    'after-level-consequence': 3,
-    'after-boss-consequence': 2,
+    'after-level-consequence': 2,
+    'after-boss-consequence': 3,
     'before-boss-decision': 5,
   });
   assert.equal(canonical.size, 60);

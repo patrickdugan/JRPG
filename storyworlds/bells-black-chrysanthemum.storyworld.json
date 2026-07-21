@@ -150,7 +150,7 @@
     {
       "id": "lise_oath_revision",
       "property_name": "lise_oath_revision",
-      "property_label": "Nikola earned discipline",
+      "property_label": "Nikola severed-command discipline",
       "property_type": "bounded number",
       "default_value": 0.35,
       "depth": 0,
@@ -1889,7 +1889,7 @@
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Mateus has named the European cipher and admitted the hand that taught it to Kurozane's clerks. Lord Nikola Dražanić recognizes Adriatic merchant marks that his own frontier house once taxed, protected, and quietly profited from. Shared Latin and a European route make the two men useful to one another, not kin, and remorse does not make Mateus safe. Freed prisoners wait beyond the stair while the party defines whether he may speak, move, or advise."
+        "value": "Mateus has named the European cipher and admitted that he translated the Dracul precedent for Kurozane's clerks. Lord Nikola Dražanić recognizes both Adriatic merchant marks and the Severed Dragon counter-ward his house says its Wallachian forebears carried west. Shared Latin and a European route make the two men useful to one another, not kin, and remorse does not make Mateus safe. Freed prisoners wait beyond the stair while the party defines whether he may speak, move, or advise."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -4901,11 +4901,11 @@
     },
     {
       "id": "page_sw04_decision",
-      "title": "A Margin in the Dražanić Ledger",
+      "title": "A Margin in the Severed Dragon Testament",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The wreck has preserved a Dražanić ledger page. It shows that Nikola's minor frontier house converted wartime escorts, confiscated books, and anti-vampire knowledge into fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward and how delay, context, and custody will be made visible."
+        "value": "The wreck has preserved a Dražanić testament page. It claims that an ancestor survived Vlad III's fictional vampire war and helped create a ward that severed immortal rulers from office. Later Dražanić hands converted that public check into hereditary purge authority, confiscated books, and fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -5775,11 +5775,11 @@
     },
     {
       "id": "page_sw04_accord",
-      "title": "A House Entered as Evidence",
+      "title": "A Covenant Entered as Evidence",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Nikola reads the family marks without claiming that blood or an inflated title grants custody. Aya places the Dražanić passage beside survivor terms and a visible chain of copies. The page becomes evidence of choices made by named houses and brokers, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached."
+        "value": "Nikola reads the family marks without claiming that blood, covenant technique, or an inflated title grants custody. Aya places the Severed Dragon passage beside survivor terms and a visible chain of copies. The page becomes evidence that a check on emergency power can itself become hereditary power, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
@@ -5822,7 +5822,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Nikola writes that technical knowledge and noble birth grant no right to command their use. The survivors approve the sentence and retain the original page."
+                "value": "Nikola writes that wardcraft and noble birth grant no right to command their use; the pattern may divide blood from office, never appoint the hunter as successor. The survivors approve the sentence and retain the original."
               },
               "consequence_id": "page_sw05_decision",
               "desirability_script": {
@@ -13949,11 +13949,11 @@
     },
     {
       "id": "page_sw10_decision",
-      "title": "The Corrections Desk",
+      "title": "The Last Command",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The open archive receives disputed names, harmful wording, incomplete testimony, and requests to remove records that still expose living people. Aya cannot repair every entry at once. The final Storyworld decision determines how corrections remain visible, who controls testimony beside a disputed line, and how capacity limits are published without becoming another closed door."
+        "value": "Kurozane lies alive inside the broken command circle. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still carry instructions tied to his blood. Killing him may rupture those bindings and invite rival governors to seize the empty machinery. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but it cannot make surrender sincere. Ren asks what terms can transfer power without making the hunter, the vampire priest, or the victorious party his successor."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -13961,7 +13961,7 @@
         "script_element_type": "Pointer",
         "character": "char_lantern_network",
         "keyring": [
-          "aya_archive_openness"
+          "network_consent"
         ],
         "coefficient": 1
       },
@@ -13977,21 +13977,21 @@
       ],
       "options": [
         {
-          "id": "page_sw10_decision_opt_annotate-errors",
+          "id": "page_sw10_decision_opt_witnessed-return",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Annotate errors without silently erasing the original entry."
+            "value": "Offer a witnessed return of the military, registry, and bell seals under binding."
           },
           "visibility_script": true,
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw10_decision_opt_annotate-errors_r_accord",
+              "id": "page_sw10_decision_opt_witnessed-return_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Readers can see both the harmful record and its correction under controlled access. Survivors retain authority over when the original wording may be viewed."
+                "value": "Route delegates enter the observatory separately and name the powers being returned. Nikola holds only the severing boundary; Mateus confirms each blood command has stopped without receiving a new office."
               },
               "consequence_id": "page_end_corrections_visible",
               "desirability_script": {
@@ -14008,147 +14008,9 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "aya_archive_openness"
+                      "network_consent"
                     ],
                     "coefficient": 1
-                  }
-                ]
-              },
-              "after_effects": [
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "aya_archive_openness"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "aya_archive_openness"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "proof_integrity"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "proof_integrity"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "public_reach"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "public_reach"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.05
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "id": "page_sw10_decision_opt_annotate-errors_r_revision",
-              "text_script": {
-                "pointer_type": "String Constant",
-                "script_element_type": "Pointer",
-                "value": "A survivor objects that preservation still repeats harm. The desk restricts the original and publishes only the correction plus a reason for the limit."
-              },
-              "consequence_id": "page_end_limits_posted",
-              "desirability_script": {
-                "operator_type": "Addition",
-                "script_element_type": "Operator",
-                "operands": [
-                  {
-                    "pointer_type": "Bounded Number Constant",
-                    "script_element_type": "Pointer",
-                    "value": 0.01
-                  },
-                  {
-                    "operator_type": "Subtraction",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "aya_archive_openness"
-                        ],
-                        "coefficient": 1
-                      }
-                    ]
                   }
                 ]
               },
@@ -14192,7 +14054,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "witness_safety"
+                      "lise_oath_revision"
                     ],
                     "coefficient": 1
                   },
@@ -14205,7 +14067,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "witness_safety"
+                          "lise_oath_revision"
                         ],
                         "coefficient": 1
                       },
@@ -14224,7 +14086,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "aya_archive_openness"
+                      "mateus_accountability"
                     ],
                     "coefficient": 1
                   },
@@ -14237,7 +14099,145 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "aya_archive_openness"
+                          "mateus_accountability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw10_decision_opt_witnessed-return_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Kurozane returns one ceremonial seal while retaining the granary commands. Aya reads the omission aloud. When he reaches through the hidden command to starve the routes, Ren gives the fatal stop before the binding tears; rival riders are already moving."
+              },
+              "consequence_id": "page_end_limits_posted",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
                         ],
                         "coefficient": 1
                       },
@@ -14258,21 +14258,21 @@
           ]
         },
         {
-          "id": "page_sw10_decision_opt_testimony-beside",
+          "id": "page_sw10_decision_opt_provisional-binding",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Place authorized testimony beside the disputed entry."
+            "value": "Bind Kurozane provisionally while route councils define the transfer."
           },
           "visibility_script": true,
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw10_decision_opt_testimony-beside_r_accord",
+              "id": "page_sw10_decision_opt_provisional-binding_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The contradiction remains visible because witnesses authorized publication. Their words are not treated as decoration around the old official record."
+                "value": "The binding receives a public expiration and no hunter custody. Local delegates inventory every office before accepting it, preventing victory from becoming an unexamined succession."
               },
               "consequence_id": "page_end_corrections_visible",
               "desirability_script": {
@@ -14289,215 +14289,13 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "network_consent"
+                      "proof_integrity"
                     ],
                     "coefficient": 1
                   }
                 ]
               },
               "after_effects": [
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "truth_completeness"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "truth_completeness"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "public_reach"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "public_reach"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "network_consent"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "network_consent"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "id": "page_sw10_decision_opt_testimony-beside_r_revision",
-              "text_script": {
-                "pointer_type": "String Constant",
-                "script_element_type": "Pointer",
-                "value": "Authorization is absent. The desk records that testimony exists without exposing it, preserving the gap and the witness boundary together."
-              },
-              "consequence_id": "page_end_limits_posted",
-              "desirability_script": {
-                "operator_type": "Addition",
-                "script_element_type": "Operator",
-                "operands": [
-                  {
-                    "pointer_type": "Bounded Number Constant",
-                    "script_element_type": "Pointer",
-                    "value": 0.01
-                  },
-                  {
-                    "operator_type": "Subtraction",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "network_consent"
-                        ],
-                        "coefficient": 1
-                      }
-                    ]
-                  }
-                ]
-              },
-              "after_effects": [
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "witness_safety"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "witness_safety"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "aya_archive_openness"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "aya_archive_openness"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
                 {
                   "effect_type": "Bounded Number Effect",
                   "Set": {
@@ -14525,85 +14323,6 @@
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 0.05
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ],
-          "benchmark_tags": [
-            "slot:sw10-corrections-desk",
-            "option:2"
-          ]
-        },
-        {
-          "id": "page_sw10_decision_opt_contested-queue",
-          "text_script": {
-            "pointer_type": "String Constant",
-            "script_element_type": "Pointer",
-            "value": "Open a public queue for contested records and review dates."
-          },
-          "visibility_script": true,
-          "performability_script": true,
-          "reactions": [
-            {
-              "id": "page_sw10_decision_opt_contested-queue_r_accord",
-              "text_script": {
-                "pointer_type": "String Constant",
-                "script_element_type": "Pointer",
-                "value": "Unresolved claims receive visible dates, named custodians, and published capacity limits. Delay becomes accountable work instead of another quiet disappearance."
-              },
-              "consequence_id": "page_end_corrections_visible",
-              "desirability_script": {
-                "operator_type": "Addition",
-                "script_element_type": "Operator",
-                "operands": [
-                  {
-                    "pointer_type": "Bounded Number Constant",
-                    "script_element_type": "Pointer",
-                    "value": 0.01
-                  },
-                  {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "care_capacity"
-                    ],
-                    "coefficient": 1
-                  }
-                ]
-              },
-              "after_effects": [
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "public_reach"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "public_reach"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
                         "value": 0.1
                       }
                     ]
@@ -14616,7 +14335,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "aya_archive_openness"
+                      "ren_noncoercion"
                     ],
                     "coefficient": 1
                   },
@@ -14629,7 +14348,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "aya_archive_openness"
+                          "ren_noncoercion"
                         ],
                         "coefficient": 1
                       },
@@ -14676,11 +14395,11 @@
               ]
             },
             {
-              "id": "page_sw10_decision_opt_contested-queue_r_revision",
+              "id": "page_sw10_decision_opt_provisional-binding_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The queue exceeds capacity on its first day. Aya posts the limit, pays local reviewers, and names the next date without promising impossible speed."
+                "value": "The first draft leaves Nikola as sole keeper of the binding. He tears out his own authority clause. During the delay Kurozane ruptures the provisional bond to reclaim an outer bell; route witnesses authorize the fatal stop rather than grant Nikola permanent custody."
               },
               "consequence_id": "page_end_limits_posted",
               "desirability_script": {
@@ -14706,7 +14425,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "care_capacity"
+                          "proof_integrity"
                         ],
                         "coefficient": 1
                       }
@@ -14715,6 +14434,181 @@
                 ]
               },
               "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "party_cohesion"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "party_cohesion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw10-corrections-desk",
+            "option:2"
+          ]
+        },
+        {
+          "id": "page_sw10_decision_opt_execution-demand",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Demand immediate execution before the blood court can regroup."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw10_decision_opt_execution-demand_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "The naked blade makes Kurozane understand that immortality no longer protects his office. He chooses witnessed surrender, not remorse, and the party refuses to call fear a change of heart."
+              },
+              "consequence_id": "page_end_corrections_visible",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.1
+                      }
+                    ]
+                  }
+                },
                 {
                   "effect_type": "Bounded Number Effect",
                   "Set": {
@@ -14754,7 +14648,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "care_capacity"
+                      "network_consent"
                     ],
                     "coefficient": 1
                   },
@@ -14767,7 +14661,81 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "care_capacity"
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw10_decision_opt_execution-demand_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "The blade falls before every command can be inventoried. Kurozane dies, distant bells answer competing hands, and messengers report governors claiming emergency authority over roads and rice."
+              },
+              "consequence_id": "page_end_limits_posted",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -14786,7 +14754,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "public_reach"
+                      "route_safety"
                     ],
                     "coefficient": 1
                   },
@@ -14799,14 +14767,46 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "public_reach"
+                          "route_safety"
                         ],
                         "coefficient": 1
                       },
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 0.05
+                        "value": -0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -14823,16 +14823,16 @@
     },
     {
       "id": "page_end_corrections_visible",
-      "title": "Corrections Remain Visible",
+      "title": "The Seals Returned",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The desk opens with visible review dates, controlled access, and testimony published only under its custodians' terms. Aya does not promise a pure archive. She promises that correction, refusal, delay, and uncertainty will leave accountable traces. The party's victory becomes an institution people can revise rather than another perfect record imposed from above."
+        "value": "Kurozane hears the independent route confirmations and sees that the country can act without his blood. He asks Ren what will hold it together when no immortal body commands the center. Ren answers: routes that can hold one another provisionally, refuse one another publicly, and survive the death of any one keeper. Kurozane returns the military, registry, granary, and bell seals one by one while the Severed Dragon boundary separates each office from his body. He is taken alive under rotating guard. The transfer is not absolution, restoration, or proof that his self-justifying history was true; it is the first public act in which his survival no longer requires everyone else's obedience."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The narrative route closes on an archive that can be corrected without erasing who set each boundary."
+        "value": "Record what the former shogun does not retain."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -14840,7 +14840,7 @@
         "script_element_type": "Pointer",
         "character": "char_lantern_network",
         "keyring": [
-          "truth_completeness"
+          "network_consent"
         ],
         "coefficient": 1
       },
@@ -14858,16 +14858,16 @@
     },
     {
       "id": "page_end_limits_posted",
-      "title": "The Limit Is Posted",
+      "title": "The Empty Throne Mobilizes",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The corrections desk cannot review every claim or expose every source safely. Aya publishes the capacity limit, the missing authorizations, and the next review date. The archive remains imperfect without pretending imperfection is neutral. Repair begins as visible, revisable labor shared with the people whose names the old ledger tried to own."
+        "value": "Kurozane dies after immediate execution or a failed transfer forces the fatal stop, before the blood offices can be separated from him. The central Bell stops, but outer governors seize stores, patrol seals, and surviving Oni commands in the name of temporary order. No explosion erases the evidence and no narrator declares execution uniquely wicked; the consequence is a civil war created by a regime designed to make one immortal body its only transfer mechanism. The party can preserve routes and records, not retroactively make the vacuum safe."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The narrative route closes with limits named plainly instead of hidden behind institutional language."
+        "value": "Carry the execution record into the emergency route plan."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -14875,7 +14875,7 @@
         "script_element_type": "Pointer",
         "character": "char_lantern_network",
         "keyring": [
-          "aya_archive_openness"
+          "court_pressure"
         ],
         "coefficient": 1
       },

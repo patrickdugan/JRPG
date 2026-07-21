@@ -59,7 +59,13 @@
       "id": "lise",
       "name": "Nikola Dražanić",
       "legacyCompatibilityId": "lise",
-      "origin": "Croatian minor aristocrat travelling through the Adriatic, Goa, and Macao in 1622",
+      "origin": "Croatian-born frontier minor aristocrat travelling through the Adriatic, Goa, and Macao in 1622",
+      "lineage": {
+        "birthAndStation": "Croatian-born frontier minor aristocrat",
+        "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+        "affiliation": "Covenant of the Severed Dragon",
+        "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
+      },
       "paletteId": "party-nikola-oxblood-dusk-v2",
       "silhouette": "square-shouldered rain cloak over a fitted doublet and falling band, compact crossbow, long rapier, proud upright posture",
       "colors": {"primary": "#304967", "secondary": "#5b2d38", "light": "#6b7e99", "accent": "#b09155", "hair": "#281c1b"},

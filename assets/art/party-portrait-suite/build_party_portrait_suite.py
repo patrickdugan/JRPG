@@ -336,7 +336,8 @@ def build_files() -> dict[str,bytes]:
     manifest={
         "assetId":source["assetId"],"status":"editable-production-portrait-expression-suite","runtimeIntegration":"current-browser-camp-and-scene-focus","authorship":source["authorship"],
         "geometry":{"columns":len(COLUMNS),"rows":len(ROWS),"cellWidth":CELL,"cellHeight":CELL,"contentWidth":CELL*len(COLUMNS),"contentHeight":CELL*len(ROWS),"sheetWidth":atlas.width,"sheetHeight":atlas.height,"transparentRightPadding":atlas.width-CELL*len(COLUMNS),"minimumTransparentGutter":GUTTER},
-        "rowOrder":list(ROWS),"columnOrder":list(COLUMNS),"expressionSemantics":source["expressions"],"paletteCostumeReuse":palette_reuse,"frames":frames,
+        "rowOrder":list(ROWS),"columnOrder":list(COLUMNS),"expressionSemantics":source["expressions"],"paletteCostumeReuse":palette_reuse,
+        "characterIdentity":{entry["id"]:{key:entry[key] for key in ("name","legacyCompatibilityId","lineage") if key in entry} for entry in source["characters"]},"frames":frames,
         "sources":[
             {"path":SOURCE_PATH.name,"role":"editable-portrait-contract","sha256":sha256(SOURCE_PATH.read_bytes())},
             {"path":source["canonicalFieldSource"],"role":"canonical-palette-costume-contract","sha256":sha256(FIELD_SOURCE_PATH.read_bytes())},
@@ -348,6 +349,10 @@ def build_files() -> dict[str,bytes]:
         "review":{"visualInspection":"pending","humanExpressionReadability":"pending","externalCulturalReview":"pending","mateusOriginalityConstraint":"applied"}}
     manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode("utf-8")
     readme=f"""# Party portrait expression suite\n\nOriginal, code-authored portrait-scale redraws for Ren, Aya, Nikola, Mateus, Genta, and Kiku. The stable third-row key remains `lise` for runtime compatibility, but its pixels and NIKOLA review label present Nikola Dražanić with an original broad male face, high forehead, narrow moustache, clipped beard, oxblood doublet, and plain falling band. The deterministic builder reuses palette IDs, colors, and costume/silhouette motifs from `../party-field-suite/party-field-suite.source.json`; no generated concept or raster atlas is an input and no face uses a real-person likeness.\n\n- `{SOURCE_PATH.name}`: editable face-shape, costume, expression, and anchor contract.\n- `{ATLAS_NAME}`: transparent {atlas.width} × {atlas.height} runtime candidate; {len(ROWS)} rows × {len(COLUMNS)} columns × {CELL} × {CELL}, with no transparent reserve columns.\n- `{CONTACT_NAME}`: labeled {contact.width} × {contact.height} checkerboard review sheet; not for runtime use.\n- `{MANIFEST_NAME}`: exact frame rectangles, eye lines, mouth/focus anchors, expression semantics, source/export hashes, and review state.\n\nColumns are neutral, resolve, strain, soften, concern, anger, surprise, and quiet. These are the complete eight production expression keys; speaking in-betweens, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_portrait_suite.py` to rebuild or `python build_party_portrait_suite.py --check` to byte-compare all generated outputs.\n"""
+    readme=readme.replace(
+        "oxblood doublet, and plain falling band.",
+        "oxblood doublet, and plain falling band. He is a Croatian-born frontier minor aristocrat who claims Wallachian hunter descent and membership in the invented Covenant of the Severed Dragon; this is alternate-history fiction, not a real-world claim that vampires, vampire hunters, or the Covenant existed.",
+    )
     return {ATLAS_NAME:atlas_data,CONTACT_NAME:contact_data,MANIFEST_NAME:manifest_data,README_NAME:readme.encode("utf-8")}
 
 

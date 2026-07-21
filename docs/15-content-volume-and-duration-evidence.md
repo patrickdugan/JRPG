@@ -76,7 +76,7 @@ The camp-conversation runner begins from the same canonical zero-time result and
 | Replay refusals | 90 / 90 |
 | Recorded playtime | 0 ms |
 
-The visible-word count includes titles, themes, prompts, both option labels, every main line, the selected first response, and its consequence summary. It excludes the unseen alternate response. Prose-bound catalogue signature: `fnv1a32:27c27bb7`; completion signature: `fnv1a32:316369e1`.
+The visible-word count includes titles, themes, prompts, both option labels, every main line, the selected first response, and its consequence summary. It excludes the unseen alternate response. Prose-bound catalogue signature: `fnv1a32:3fdaa62f`; completion signature: `fnv1a32:e5fb2c5e`.
 
 ## Finite party-council completion
 
@@ -111,7 +111,7 @@ The public reading table opens one record after every canonical beat. Its runner
 | Trace events | 619 |
 | Recorded playtime | 0 ms |
 
-Each visible record word belongs to its title, form, custodian, access note, or paragraph. Prose-bound catalogue signature: `fnv1a32:b98f9711`; completion signature: `fnv1a32:d5cae18f`.
+Each visible record word belongs to its title, form, custodian, access note, or paragraph. Prose-bound catalogue signature: `fnv1a32:46c6b812`; completion signature: `fnv1a32:4c582420`.
 
 ## Intended-route contract
 

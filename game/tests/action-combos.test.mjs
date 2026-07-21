@@ -35,6 +35,8 @@ test('Black Sun Concord is a frozen Hunter-Priest contract over the canonical si
   assert.equal(contract.name, 'Black Sun Concord');
   assert.match(contract.description, /dawnfire/u);
   assert.match(contract.description, /penitent night/u);
+  assert.match(contract.description, /Severed Dragon/u);
+  assert.match(contract.description, /neither man can inherit/u);
   assert.deepEqual(contract.participantActorIds, ['lise', 'mateus']);
   assert.deepEqual(contract.initiatorActorIds, ['lise', 'mateus']);
   assert.equal(contract.maxAllySeparationPx, 180);

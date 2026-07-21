@@ -78,14 +78,14 @@
 
 **Places:** Takamine rain gate; cedar stair; abandoned chapel; bell tower; flooded undercroft.
 
-**Characters:** Lord Nikola Dražanić arrives while tracking a ledger and relic from a wrecked ship. He is a displaced Croatian frontier noble who calls himself Count abroad, though the title is inflated. Father Mateus Avelar is introduced as the court’s polished foreign interpreter and an enemy. When Mateus sees the Dražanić seal, he recognizes a minor house entangled in the Adriatic sale network—and a fellow European stubborn enough to follow it to Japan.
+**Characters:** Lord Nikola Dražanić arrives while tracking a ledger and relic from a wrecked ship. He is a displaced Croatian frontier noble who calls himself Count abroad, though the title is inflated; his house claims descent from a fictional Wallachian branch charged with checking the vampire sovereignty attributed to Vlad III in the game’s invented 1462 history. Father Mateus Avelar is introduced as the court’s polished foreign interpreter and an enemy. When Mateus sees the Dražanić seal, he recognizes the Severed Dragon ward, a minor house entangled in the Adriatic sale network, and a fellow European stubborn enough to follow both to Japan.
 
 **Major beats**
 
 1. Ren and Aya enter the temple disguised as supply carriers, only to find prisoners being made to stamp blank confessions.
 2. Nikola steals a key at the same moment, mistakes Ren for a court scout, and tries to order him aside in rough Portuguese and Italian. Ren understands none of it; Aya deflates the attempted command by identifying their shared target.
 3. The group uses the chapel’s service route to bypass the public stair. Field hazards test careful walking but never require a reflex jump.
-4. Nikola recognizes a Dražanić escort mark cut beside the black bell alloy; the same brokers named in his missing house ledger helped move it, and the temple’s bell is one node of a larger network.
+4. Nikola recognizes a corrupted Severed Dragon mark cut beside the black bell alloy; the same brokers named in his missing house ledger helped move it, and the temple’s bell is one node of a larger network.
 5. Mateus intercepts them in the bell chamber. He is ordered to retrieve Nikola and erase the witnesses.
 6. During the boss fight, Mateus casts a blood rite that harms him more than the party. His private hesitation becomes a phase change, not an instant redemption.
 7. After the fight, Nikola names the Ragusan broker and Latin cipher attached to Mateus’s earlier passage. Mateus answers by exposing the Dražanić house’s profits, admits he helped make the registry work, and reveals Kurozane’s name for the first time.
@@ -130,7 +130,7 @@
 
 1. Nagi’s fishers refuse to help strangers until the party clears bell-tainted fog from their nets; Kiku demands practical aid rather than a speech.
 2. The tide caves introduce elemental ground: cold pools inflict Chill, while dry lantern spaces can be created with Ember tools.
-3. In the wreck, Nikola finds evidence that his house sold information to a European vampire court while publicly condemning the merchants who carried it. His rank is evidence of inherited complicity, not a pure credential.
+3. In the wreck, Nikola finds evidence that his house turned a ward meant to sever immortal rulers from office into a hereditary license to purge, then sold information to a European vampire court while publicly condemning the merchants who carried it. His rank is evidence of inherited complicity, not a pure credential.
 4. Mateus admits he knew the ship’s purpose and chose not to warn anyone because the court rewarded silence.
 5. Kiku stabilizes survivors and joins, insisting the group’s plans must account for those who cannot fight.
 6. The party defeats the Widow-of-Fog, a bell-made ghost collecting sailors’ unrecorded names, and recovers the key.
@@ -230,16 +230,16 @@
 4. Kurozane offers each hero a precise version of their desire: Ren safety through obedience, Aya a perfect archive, Nikola a recognized title and a war that makes his class necessary again, Mateus freedom from guilt, Genta restored rank, and Kiku a village untouched by pain.
 5. Each party member rejects the offer in a short playable interaction that changes the final boss’s opening resistance but not its required outcome.
 6. Kurozane rings the Yearless Bell. The party breaks it on the battle stage while protecting the archive of names.
-7. In the final phase, Kurozane becomes a winged, black-lacquer vampire monarch. Mateus uses his own blood to expose the boss’s Umbral ward and permanently loses access to his most destructive rite.
-8. Kurozane is defeated as dawn reaches the observatory. The castle does not explode; it stops feeding and begins to collapse only where it is unsafe.
+7. In the final phase, Kurozane becomes a winged, black-lacquer vampire monarch. Mateus uses his own blood to enter the boss’s Umbral authority while Nikola applies the Severed Dragon’s Radiant check; Black Sun Concord becomes the tactical proof that blood power can be bounded by another will instead of owned by one ruler.
+8. Kurozane is defeated alive as dawn reaches the observatory. The party then faces the political decision damage could not make: secure a witnessed return of the military, registry, and bell seals, or kill him and rupture every blood-bound office at once.
 
 **Boss:** Shogun Kurozane. Three phases: court commands and clones; bell-node positioning puzzle; exposed vampire form. All five delivery/essence concepts, Tempo inspection, Recovery timing, terrain, swaps, and party combinations are used, but the UI repeats the rules taught earlier.
 
-**Exit state:** The Yearless Bell is broken. The public ledger remains, now as evidence rather than a weapon.
+**Exit state:** The Yearless Bell is broken. A high-consent route can force Kurozane to return governing authority under the Severed Dragon binding; execution or a failed transfer produces an empty throne, rival mobilization, and civil war. The public ledger remains as evidence in either outcome.
 
 ## Epilogue — Names at Daybreak
 
-Three months later, Hoshigawa holds a rain-clearing ceremony that is deliberately plural: people bring their own forms of mourning and remembrance. Aya oversees a public archive with testimony, corrections, and blank spaces marked honestly as unknown. Genta gives testimony before helping rebuild a road. Kiku returns medical stores to the villages. Nikola enters the Dražanić ledger as evidence, leaves locally controlled self-defense notes, and stays long enough to teach without taking command. Mateus publicly records his crimes and works under supervision to identify the court’s remaining caches; redemption is a process, not a reward scene. The two Europeans still quarrel, but now over who must carry the boxes rather than who is entitled to give the order.
+Three months later, Hoshigawa holds a rain-clearing ceremony that is deliberately plural: people bring their own forms of mourning and remembrance. On the transfer route, Kurozane lives under guard after returning the seals, and every surviving office must learn to operate without his blood. On the execution route, the same archive works behind guarded roads while rival governors fight over the empty command structure. Aya oversees testimony, corrections, and blank spaces marked honestly as unknown. Genta gives testimony before helping rebuild a road. Kiku returns medical stores to the villages. Nikola enters the Dražanić and Severed Dragon records as evidence, leaves locally controlled self-defense notes, and stays long enough to teach without taking command. Mateus publicly records his crimes and works under supervision to identify the court’s remaining caches; redemption is a process, not a reward scene. The two Europeans still quarrel, but now over who must carry the boxes rather than who is entitled to give the order.
 
 Ren delivers a new packet between Hoshigawa and Sodegaura. It contains not a command but a list of people asking after one another. The final image is a small lantern lit at a repaired bell tower, with no bell ringing.
 

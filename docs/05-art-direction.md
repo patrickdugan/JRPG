@@ -97,6 +97,7 @@ At least one warm practical light must identify a human-scale destination in a n
 - The Ashen Oni are a deliberate fictional synthesis under a contested in-world label. Their masks, anatomy, and behavior must not claim a canonical oni design or reproduce a specific sacred figure, ceremonial mask, or identifiable local tradition.
 - Kurozane’s black chrysanthemum is deliberately stolen and defaced imperial imagery. Frame it as illegitimate usurpation, never as an authentic shogunal crest or a neutral government emblem.
 - Court uniforms are invented: dark lacquer, chrysanthemum geometry, iron ledger tabs, and blood-black seals. They do not need to copy a real shogunal insignia.
+- The Covenant of the Severed Dragon, its 1462 vampire emergency, and its counter-ward are invented. Use a broken, asymmetrical dragon-line abstraction that reads as an interrupted command circuit; do not reproduce the historical Order of the Dragon's insignia, authentic Wallachian heraldry, a Christian sacrament, or a real devotional seal.
 
 ## 5. Character and enemy language
 
@@ -108,7 +109,7 @@ At 32 x 48, each party member must be identifiable in monochrome, from either fi
 | --- | --- | --- | --- |
 | Ren Ishikawa | courier satchel, short spear, forward-leaning coat | cedar brown + rain blue | quick measured step; spear line makes Pierce range clear |
 | Aya Shinohara | squared archive case, folded record-seal fan, layered sleeves | parchment + muted teal | deliberate seal placement; paper arc stays readable; no devotional talismans |
-| Nikola Dražanić | square-shouldered rain cloak over a fitted oxblood doublet and plain falling band; compact crossbow, long rapier, brass signet clasp | dusk blue + dark oxblood + brass | proud upright idle, exact rapier lunge, controlled recoil; high forehead, narrow moustache, and clipped beard establish an original Croatian male face distinct from Mateus |
+| Nikola Dražanić | square-shouldered rain cloak over a fitted oxblood doublet and plain falling band; compact crossbow, long rapier, brass signet clasp bearing an invented severed-line device | dusk blue + dark oxblood + brass | proud upright idle, exact rapier lunge, controlled recoil; Severed Dragon Radiance interrupts command seals without crowning its bearer; high forehead, narrow moustache, and clipped beard establish an original Croatian male face distinct from Mateus |
 | Father Mateus Avelar | narrow cassock-derived coat, high collar, ring of keys, controlled posture | charcoal + dried-wine accent | a held stillness that breaks into costly blood-rite motion; original face and proportions |
 | Genta Mononobe | broad shoulder mantle, tetsubo or shield mass | earth gray + oxidized gold | braced stance and lane-blocking impact |
 | Kiku Nawa | medicine box, short cloak, bottle/packet read | herb green + candle ivory | toss, mix, and terrain placement instead of attack flourishes |
@@ -120,7 +121,11 @@ Combat portraits use 32 x 32 or 40 x 40 frames with a flat value field behind th
 - **Human court personnel:** crisp verticals, paper seals, lacquer trim, readable weapons; corruption shows in behavior and accessories rather than race or deformity.
 - **Ashen Oni:** furnace-ash body, invented geometric face mask, broken bell-metal joints, ember core visible only in active frames. No cultural shorthand for evil.
 - **Undead officers:** court clothing remains recognizable but the silhouette has one impossible feature (too-long shadow, empty sleeve, bell halo, or unblinking mask). Avoid gore.
-- **Bosses:** one visually dominant mechanic and one breakable read. A bell boss has a visible resonant throat; a forge boss exposes a slag vent; Kurozane's court form reveals the black-bell network rather than becoming a pile of unrelated spikes.
+- **Bosses:** one visually dominant mechanic and one breakable read. A bell boss has a visible resonant throat; a forge boss exposes a slag vent; Kurozane's court form reveals the black-bell network and individually separable office seals rather than becoming a pile of unrelated spikes. His final read must support a living, ward-broken surrender tableau before the Storyworld branch; execution is never staged as a collectible kill flourish.
+
+### Final political-branch presentation
+
+The witnessed-transfer branch frames route delegates and named witnesses above Kurozane: each military, registry, granary, and bell seal leaves his body separately, while the Severed Dragon boundary stays visibly temporary and does not pass into Nikola. The execution/failed-transfer branch preserves the same evidence but shows command lines rupturing outward into competing seals, mounted messengers, guarded rice roads, and civil-war checkpoints. Do not substitute a clean castle explosion, triumphant coronation, radiant absolution, or heroic execution pose for either political consequence.
 
 ## 6. Battle-stage, UI, and VFX language
 

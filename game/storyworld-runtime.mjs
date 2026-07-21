@@ -14,16 +14,25 @@ import { getDefaultBrowserStorage } from './browser-storage.mjs';
 export const STORYWORLD_SCHEMA_VERSION = 1;
 export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWORLD_SCHEMA_VERSION}`;
 
-// Prose-only catalog migrations retain every cluster, option, reaction, and
-// property key.  Exact former identities are accepted once, validated against
-// the current structural catalog, and immediately re-frozen with current
-// hashes.  This keeps authored-character revisions from discarding a run.
+// Exact former identities may migrate only while their record prefix predates
+// the structurally revised Chapter 9 sequence. Later saves are rejected rather
+// than reinterpreting the old Corrections Desk as a surrender or execution the
+// player never chose. Accepted early saves are validated against the current
+// structural catalog and immediately re-frozen with current hashes.
 export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
     sourceHash: 'sha256:0066e58a7aaf8d749c2937c356015210277a86b730f467c032c6ceec9f1156c5',
     catalogSignature: 'sha256:fc3584c223773b6df0da2986a26a9393aba46a6d749d2d2b8186b22898c0a3ec',
     migrationId: 'lise-to-nikola-canon-v1',
+    maximumCompatibleRecordCount: 8,
+  }),
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:3ea35ca34387a6844506552dc52f8edef4844859c568d5a1c236aa6ae93510f5',
+    catalogSignature: 'sha256:7f439953b6dac6d20d1283f0c3b564005aa99770584cbe9838cd55deee962fee',
+    migrationId: 'severed-dragon-ending-v1',
+    maximumCompatibleRecordCount: 8,
   }),
 ]);
 
@@ -441,6 +450,16 @@ export function loadStoryworldState(serializedOrPayload) {
       && payload?.catalogSignature === identity.catalogSignature
   ));
   if (!legacyIdentity) return current;
+  if (!Array.isArray(payload?.records)
+    || payload.records.length > legacyIdentity.maximumCompatibleRecordCount) {
+    return Object.freeze({
+      ok: false,
+      errors: Object.freeze([
+        ...current.errors,
+        'Legacy Storyworld progress reached the structurally revised Chapter 9 ending and cannot be migrated without inventing a political choice.',
+      ]),
+    });
+  }
   const migrated = validateStoryworldPayload({
     ...payload,
     sourceIFID: STORYWORLD_CATALOG.sourceIFID,

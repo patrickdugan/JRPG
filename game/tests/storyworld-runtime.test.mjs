@@ -161,3 +161,70 @@ test('the exact pre-Nikola Storyworld identity migrates once without changing br
   assert.equal(secondLoad.ok, true);
   assert.equal(Object.hasOwn(secondLoad, 'migrated'), false, 'migration is not repeated after rewrite');
 });
+
+test('the exact pre-Severed-Dragon identity migrates only an early prefix before the revised ending', () => {
+  const storage = new MemoryStorage();
+  const adapter = createStoryworldStorageAdapter(storage);
+  let current = createStoryworldState({ runId: 'storyworld-severed-dragon-migration-0001' });
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 8)) current = resolveCluster(current, cluster, 0);
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[1];
+  const legacy = {
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  };
+  storage.setItem(adapter.key, JSON.stringify(legacy));
+
+  const loaded = adapter.load();
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'severed-dragon-ending-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+  assert.equal(loaded.state.revision, current.revision);
+  assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
+});
+
+test('historical Corrections Desk outcomes fail closed instead of becoming surrender or execution', () => {
+  for (const [identityIndex, legacyIdentity] of LEGACY_STORYWORLD_CATALOG_IDENTITIES.entries()) {
+    for (const outcome of [
+      {
+        suffix: 'accord',
+        outcomeEncounterId: 'page_end_corrections_visible',
+      },
+      {
+        suffix: 'revision',
+        outcomeEncounterId: 'page_end_limits_posted',
+      },
+    ]) {
+      let prefix = createStoryworldState({ runId: `storyworld-old-corrections-${identityIndex}-${outcome.suffix}` });
+      for (const cluster of STORYWORLD_CLUSTERS.slice(0, 9)) prefix = resolveCluster(prefix, cluster, 0);
+      const historicalRecord = {
+        clusterId: 'sw10-corrections-desk',
+        phase: 'complete',
+        entryOptionId: 'page_sw10_decision_opt_annotate-errors',
+        entryReactionId: `page_sw10_decision_opt_annotate-errors_r_${outcome.suffix}`,
+        outcomeEncounterId: outcome.outcomeEncounterId,
+        outcomeOptionId: null,
+        outcomeReactionId: null,
+      };
+      const legacy = {
+        ...prefix,
+        sourceIFID: legacyIdentity.sourceIFID,
+        sourceHash: legacyIdentity.sourceHash,
+        catalogSignature: legacyIdentity.catalogSignature,
+        records: [...prefix.records, historicalRecord],
+        revision: prefix.revision + 4,
+      };
+      const serialized = JSON.stringify(legacy);
+      const storage = new MemoryStorage();
+      const adapter = createStoryworldStorageAdapter(storage);
+      storage.setItem(adapter.key, serialized);
+
+      const loaded = adapter.load();
+      assert.equal(loaded.ok, false);
+      assert.match(loaded.errors.join(' '), /cannot be migrated without inventing a political choice/u);
+      assert.equal(storage.getItem(adapter.key), serialized, 'rejected history must not be rewritten');
+    }
+  }
+});

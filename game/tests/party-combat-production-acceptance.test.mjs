@@ -12,6 +12,12 @@ const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-combat-suite');
 const FIELD_SOURCE_PATH = resolve(REPO_ROOT, 'assets', 'art', 'party-field-suite', 'party-field-suite.source.json');
 const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
 const COLUMNS = ['idle', 'move', 'guard', 'hit', 'basic-strike-windup', 'basic-strike-active', 'signature-a', 'signature-b', 'recovery', 'defeat'];
+const NIKOLA_LINEAGE = {
+  birthAndStation: 'Croatian-born frontier minor aristocrat',
+  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  affiliation: 'Covenant of the Severed Dragon',
+  historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
+};
 
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
@@ -103,16 +109,19 @@ test('combat source fixes the canonical six-by-ten 48x64 action contract', async
   const nikola = source.characters.find(({ id }) => id === 'lise');
   assert.equal(nikola.name, 'Nikola Dražanić');
   assert.equal(nikola.legacyCompatibilityId, 'lise');
+  assert.deepEqual(nikola.lineage, NIKOLA_LINEAGE);
   assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
   assert.match(source.characters.find(({ id }) => id === 'mateus').likenessPolicy, /original fictional face and proportions; no real-person reference/u);
 });
 
-test('manifest reuses every canonical field palette and silhouette exactly', async () => {
-  const [manifestText, fieldText] = await Promise.all([
+test('manifest reuses every canonical field palette, silhouette, and Nikola lineage exactly', async () => {
+  const [manifestText, sourceText, fieldText] = await Promise.all([
     readFile(resolve(SUITE_ROOT, 'manifest.json'), 'utf8'),
+    readFile(resolve(SUITE_ROOT, 'party-combat-suite.source.json'), 'utf8'),
     readFile(FIELD_SOURCE_PATH, 'utf8'),
   ]);
   const manifest = JSON.parse(manifestText);
+  const source = JSON.parse(sourceText);
   const field = JSON.parse(fieldText);
   assert.deepEqual(manifest.rowOrder, ROWS);
   assert.deepEqual(manifest.columnOrder, COLUMNS);
@@ -136,6 +145,8 @@ test('manifest reuses every canonical field palette and silhouette exactly', asy
   }
   const fieldRecord = manifest.sources.find(({ role }) => role === 'canonical-palette-and-silhouette-contract');
   assert.equal(fieldRecord.sha256, hash(Buffer.from(fieldText)));
+  assert.deepEqual(manifest.characterIdentity.lise.lineage,
+    source.characters.find(({ id }) => id === 'lise').lineage);
 });
 
 test('all 60 manifested frames have stable pivots, exact hit anchors, events, and distinct pixels', async () => {

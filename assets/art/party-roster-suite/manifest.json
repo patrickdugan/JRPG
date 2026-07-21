@@ -23,11 +23,17 @@
     "genta": "Genta Mononobe",
     "kiku": "Kiku Nawa"
   },
+  "nikolaLineage": {
+    "birthAndStation": "Croatian-born frontier minor aristocrat",
+    "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+    "affiliation": "Covenant of the Severed Dragon",
+    "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
+  },
   "sources": [
     {
       "path": "party-roster-suite.source.json",
       "role": "editable-composition-contract",
-      "sha256": "1d6476ef415e8325c0d0370c592138914114b93bf628af00ddde06cf913f68e8"
+      "sha256": "559be8bac7a909904dc536c6f196712439cebc6d0edfa755bf350d55f00a0d7c"
     },
     {
       "path": "../party-combat-suite/party-combat-actions.png",
@@ -37,12 +43,12 @@
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-name-contract",
-      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
+      "sha256": "17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3"
     },
     {
       "path": "build_party_roster_suite.py",
       "role": "deterministic-builder",
-      "sha256": "ba486fb2597ec2e1a06d9ca7d0d80b7feac1ab676d263f2a5d79cf11c0762aa3"
+      "sha256": "f591c3bb6ab288a03d731d361c205abb8c015b5ce3cd4c0cd2c55e1107505309"
     }
   ],
   "exports": [

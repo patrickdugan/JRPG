@@ -11,11 +11,13 @@ This is the production map for the ten implemented Storyworld clusters. The auth
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 1,757 words and at most 19 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 15.118 reference minutes. Combined with the current 309.249-minute canonical reference, the 80-scene route is 324.367 minutes (about 5.41 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 1,887 words and at most 19 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 15.768 reference minutes. Combined with the current 309.249-minute canonical reference, the 80-scene route is 325.017 minutes (about 5.42 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
 
 ## Carry-forward contract
 
 Every cluster is required for narrative credits. A `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions.
+
+The `sw10-corrections-desk` string remains an opaque internal compatibility ID, not a claim that the new scene has the old meaning. Exact legacy identities migrate only through the first eight Storyworld records. A prior save that reached the old Chapter 9 translation/corrections sequence fails closed: the runtime will not reinterpret **Corrections Remain Visible** as surrender or **The Limit Is Posted** as execution. Both historical outcomes have explicit storage and signed-recovery rejection fixtures.
 
 For a related battle, the presentation card carries the selected decision text, the consequence-scene title, and the resolved consequence reaction (falling back to consequence text). Pre-boss cards read **Decision carried into encounter**. After-boss records read **Recorded aftermath** when that encounter is subsequently presented. Clusters without a related encounter ID still carry their state and narrative context into later Storyworld selection, but do not create a battle card.
 
@@ -39,10 +41,10 @@ For a related battle, the presentation card carries the selected decision text, 
    - Consequences: **Two Routes, Two Custodians** / **Capacity Chooses the Order**.
    - Carry-forward: **Decision carried into encounter** context for `c3-dock-patrol`, including Sayo's selected route conditions and their resolved consequence.
 
-4. **A Margin in the Dražanić Ledger** (`sw4-margin-varga-journal`, save-stable legacy ID)
+4. **A Margin in the Severed Dragon Testament** (`sw4-margin-varga-journal`, save-stable legacy ID)
    - Anchor: `c4-03-varga-journal`; placement: **after level** (`after-beat`, `after-level-consequence`).
    - Related encounter IDs: none.
-   - Consequences: **A House Entered as Evidence** / **The Deadline Beside the Gap**.
+   - Consequences: **A Covenant Entered as Evidence** / **The Deadline Beside the Gap**.
    - Carry-forward: durable inheritance, custody, and archive-limit context for later Storyworld reactions; no battle card.
 
 5. **The Cipher Handoff** (`sw5-cipher-handoff`)
@@ -75,16 +77,18 @@ For a related battle, the presentation card carries the selected decision text, 
    - Consequences: **Knowledge Under Revocable Terms** / **The Translation Stops**.
    - Carry-forward: **Decision carried into encounter** context for `c9-yearless-bell`, including the selected limit on Mateus and its resolved consequence.
 
-10. **The Corrections Desk** (`sw10-corrections-desk`)
-    - Anchor: `e00-open-archive`; placement: **after level** (`after-beat`, `after-level-consequence`).
-    - Related encounter IDs: none.
-    - Consequences: **Corrections Remain Visible** / **The Limit Is Posted**.
-    - Carry-forward: final archive-policy context and route-ending Storyworld state; no battle card.
+10. **The Last Command** (`sw10-corrections-desk`, opaque legacy internal ID)
+    - Anchor: `c9-05-dawn-at-observatory`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
+    - Related encounter ID: `c9-kurozane`.
+    - Consequences: **The Seals Returned** / **The Empty Throne Mobilizes**.
+    - Carry-forward: final witnessed-transfer or execution/civil-war state, retrospective **Recorded aftermath** context for `c9-kurozane`, and the route-ending political record.
 
 ## Cultural and narrative guardrails
 
 - Sacred and devotional objects are not loot, combat consumables, puzzle tokens, or neutral gothic decoration. The clusters use fictional records, custody procedures, routes, and administrative evidence as their interactive material.
 - Named Japanese organizers, witnesses, crews, and custodians retain authority over routes, access, custody, refusal, revision, and stop conditions. A refusal is a valid consequence, not a player obstacle to override.
 - Mateus receives accountability, supervision, corroboration, and revocable limits—not absolution, command authority, private access, restored office, or narrative ownership. His useful knowledge never makes European authority the resistance's default leader.
+- Nikola's Croatian birth and his house's claimed Wallachian origin remain distinct. The 1462 vampire emergency, Dracul blood precedent, and Covenant of the Severed Dragon are explicit alternate history; the Covenant is not a real chivalric order, Christian rite, or historical institution.
+- **The Last Command** does not reduce politics to mercy versus punishment. Witnessed transfer leaves Kurozane alive, defeated, bound, and without honor; execution or failed transfer exposes the civil war built into an immortal regime with no safe succession mechanism. Neither branch grants Nikola, Mateus, or the party the surrendered office.
 - Father Mateus Avelar and the full cast remain original fictional characters; no celebrity or actor likeness is permitted.
 - The fiction must not turn a real faith, ethnicity, historical victim, or identifiable sacred tradition into a monster class, reward system, or boss prop. External historical and cultural review remains a production gate.

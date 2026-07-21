@@ -842,11 +842,11 @@ AYA|One deliberate light can turn this dangerous stair into a route people may t
 NARRATOR|Name slips tremble above shin-deep water as cords descend from them into a buried bell mechanism.
 AYA|Do not pull the first cord. It crosses five others beneath the surface.
 REN|The dry alcove holds a brazier and a warning plate covered in mineral scale.
-NIKOLA|The nearest slip bears a Dražanić cut beneath the court annotation.
+NIKOLA|The nearest slip bears my house's severed-dragon cut beneath the court annotation.
 AYA|Can you separate the marks without touching the name?
-NIKOLA|Yes. My family's mark is three shallow angles made before the alloy cooled.
+NIKOLA|We are Croatian-born; our house claims Wallachian origins, which proves nothing.
 REN|Why would it appear on a bell beneath a Japanese temple?
-NIKOLA|Because someone brought captured knowledge east, or someone from my line helped build what hunted us.
+NIKOLA|The Severed Dragon covenant traveled east, perhaps sold by my line.
 AYA|Those are different histories. Which does the metal support?
 NIKOLA|Neither alone. I can recognize the tool, not the hand that held it.
 REN|A useful limit stated without argument. We are all growing.
@@ -917,12 +917,12 @@ AYA|What did you adapt the cipher to do?
 MATEUS|Translate denunciations into categories the court could route without carrying witnesses alongside them.
 NIKOLA|You made accusation portable.
 MATEUS|And made distance resemble verification. A copied mark could condemn someone no listener had ever met.
-AYA|Who commissioned the network?
-MATEUS|Shogun Kurozane. Magistrate Ujiro standardized the local records. I joined their work willingly for access and protection.
-REN|Protection from what?
-MATEUS|Consequences I considered unbearable when they belonged to me, and manageable when assigned to strangers.
-NIKOLA|Do not call cowardice a spell.
-MATEUS|I do not. Whatever else has changed in me, I signed before any compulsion was needed.
+AYA|Which precedent did Kurozane commission?
+MATEUS|Disputed history says Vlad III used vampirism in the 1462 Ottoman campaign; witnesses answered with the Severed Dragon covenant.
+REN|That invention asserts no real vampire rite.
+MATEUS|I translated its legal check: witnesses severed an immortal ruler from office and army.
+NIKOLA|My house corrupted that check into hereditary purge authority.
+MATEUS|Kurozane rewarded my willing translation because it made permanent rule appear lawful.
 NARRATOR|Nikola notices the Dražanić mark inside the fallen bell key while approaching only far enough to read it.
     `),
     after: dialogue(`

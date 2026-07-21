@@ -300,18 +300,18 @@ Kurozane rings the bell. The first boss phase protects an archive core while bre
 
 ### C9-05 — Boss: Shogun Kurozane
 
-Phase one uses court commands and clones; phase two uses bell-node positioning; phase three exposes Kurozane’s vampire form. Mateus gives up his strongest Umbral rite to crack the final ward. The party defeats Kurozane as daylight reaches the observatory.
+Phase one uses court commands and clones; phase two uses bell-node positioning; phase three exposes Kurozane’s vampire form. Mateus’s blood opens the sovereign ward from within while Nikola’s Severed Dragon Radiance prevents either vampire from controlling the opening. The party reduces Kurozane to a living, ward-broken state as daylight reaches the observatory.
 
-### C9-06 — Leave evidence alive
+### C9-06 — The last command
 
-The party escapes with the archive. The castle only collapses where bell tissue fails; the story’s proof is not conveniently destroyed.<br>
+Kurozane argues that killing him will tear apart the garrisons, granaries, Oni commands, and registry offices bound to his blood. The evidence proves this is partly true and partly the final threat of an indispensable ruler. The accumulated Storyworld state resolves the response. With sufficient consent, proof, and disciplined restraint, Nikola’s inherited ward holds Kurozane mortal and commandless while Ren requires him to return the military, registry, and bell seals before witnesses; he yields power but receives neither pardon nor restored honor. If the party executes him or the transfer cannot be secured, the blood offices rupture and rival governors mobilize into civil war. The archive leaves by separate routes in either case; the castle only collapses where bell tissue fails, so the story’s proof is not conveniently destroyed.<br>
 **Exit:** Epilogue at three months.
 
 ## Epilogue — Names at Daybreak
 
 ### E00 — Open archive
 
-Aya establishes a public archive with corrections, testimony, and acknowledged gaps. Kiku opens a medical storehouse. Genta offers testimony before rebuilding a road. Nikola leaves the broken false-count seal, a bounded field manual, and local self-defense notes under Japanese custody. Mateus records his crimes under supervision and begins locating remaining caches. Ren delivers a packet of people asking after one another.
+Aya establishes a public archive with corrections, testimony, and acknowledged gaps. The transfer ending shows offices operating without Kurozane while he remains bound under guard; the execution ending shows the same work continuing behind civil-war checkpoints. Kiku opens a medical storehouse. Genta offers testimony before rebuilding a road. Nikola leaves the broken false-count seal, the Severed Dragon testament, a bounded field manual, and local self-defense notes under Japanese custody. Mateus records his crimes under supervision and begins locating remaining caches. Ren delivers a packet of people asking after one another.
 
 ### E01 — Repaired tower
 

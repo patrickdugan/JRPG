@@ -162,7 +162,7 @@ The event manifest must mark `windupStart`, `activeStart`, `activeEnd`, `recover
 | --- | --- | --- | --- |
 | Ren | Short spear establishes Pierce lines and redirection | Low target notice, rearward load, line-extension hit, one-foot braced recovery | Spear point drops one quadrant and satchel pulls him off balance. |
 | Aya | Record-seal placement and careful Radiance arcs | Case-open load, squared archive-seal fan, eight-ray disc active, sleeves settle | Seal hand remains extended, head turns to check allies; no devotional talismans. |
-| Nikola (`lise` compatibility row) | Precise aristocratic rapier lunge / controlled recoil | Square shoulder load, low rear heel, clean pierce line, clipped withdrawal; moustache, beard, falling band, and oxblood doublet remain readable | Rain cloak trails behind a controlled recoil; no pose-glamour, swashbuckling spin, or similarity to Mateus's narrow clerical silhouette. |
+| Nikola (`lise` compatibility row) | Precise aristocratic rapier lunge / controlled recoil; Severed Dragon Radiance cuts access between blood and command rather than conferring office | Square shoulder load, low rear heel, clean pierce line, clipped withdrawal; moustache, beard, falling band, oxblood doublet, and an invented broken command-line device remain readable | Rain cloak trails behind a controlled recoil; no pose-glamour, swashbuckling spin, real heraldic sign, or similarity to Mateus's narrow clerical silhouette. |
 | Mateus | Stillness breaks into costly blood rite; no gore | Locked hands, controlled raised palm, thorned crescent line, low kneel-like recovery | Dried-wine accent dims; shoulders drop and keys go still. |
 | Genta | Weight, bracing, and lane control | Shield/tetsubo mass planted, wide shoulder load, square impact, planted recovery | Feet remain separated; center of mass stays low. |
 | Kiku | Toss, mix, and terrain placement | Medicine case open, packet/bottle arc, local terrain bloom, reaching recovery | Case remains in one hand; packet source is clear. |
@@ -192,7 +192,16 @@ Mateus is a named human/vampire opponent in FP-1. His defeat must be a nonlethal
 | Crimson Litany | 44f; 0-11f bell-note rise, 12-23f 4-space danger line holds, 24-27f active, 28-43f collapse | The full 4-space Umbral line is visible for **at least 12f** before frame 24 | Low, exposed stance; **3p**, conveyed by 3 lock pips plus hold pose. |
 | Phase-3 surrender | 36f; spell breaks, nonlethal self-damage, kneel, guards dismissed | No active hit and no blood spray | Remain in `defeated_human` / dialogue pose. |
 
-### 7.3 Boss and hazard rules
+### 7.3 Final Kurozane hold and political handoff
+
+The final combat resolves to a living, ward-broken Kurozane before **The Last Command** chooses its political consequence. Black Sun Concord joins Nikola's Severed Dragon Radiance to Mateus's blood access: Radiance draws a clear severing boundary while Umbral light exposes the command paths, and neither effect visually crowns its caster. Kurozane's defeated hold must remain readable without breathless idle motion, attack readiness, or a triumphant execution loop.
+
+- **Witnessed return:** military, registry, granary, and bell seals detach one at a time toward separately framed witnesses. Kurozane stays bound and diminished; no halo, softened palette, or restored upright pose implies absolution.
+- **Execution/failed transfer:** the death itself is brief and non-gory. The important animation is outward consequence—competing seal pulses, messengers leaving on divergent vectors, guarded roads, and mobilizing checkpoints—not a kill flourish or exploding evidence archive.
+- The Severed Dragon mark is a wholly invented broken command circuit. Never animate the historical Order of the Dragon's device, authentic Wallachian heraldry, a cross, sacramental gesture, or coronation transfer.
+- These clips present the resolved Storyworld branch. They do not select an outcome, alter an effect value, or become save, settlement, or political-state authority.
+
+### 7.4 Boss and hazard rules
 
 - Every boss has one dominant visual mechanic and one breakable read. Create a clean contact sheet for both before in-betweens.
 - Build hazards as four named states: `idle`, `armed`, `active`, `cool`. Do not treat a particle loop as a hazard state.

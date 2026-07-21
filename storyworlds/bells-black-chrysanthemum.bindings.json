@@ -146,11 +146,13 @@
     },
     {
       "id": "sw10-corrections-desk",
-      "chapterId": "epilogue",
-      "anchorBeatId": "e00-open-archive",
+      "chapterId": "chapter-9",
+      "anchorBeatId": "c9-05-dawn-at-observatory",
       "placement": "after-beat",
-      "sequenceRole": "after-level-consequence",
-      "relatedEncounterIds": [],
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c9-kurozane"
+      ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw10_decision",
       "outcomeEncounterIds": [

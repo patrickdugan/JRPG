@@ -614,15 +614,15 @@ const CONTENT = {
     }),
     scene({
       title: 'Two Inheritances Named',
-      theme: 'Forge evidence forces Nikola and Mateus to compare inherited hunter certainty with a cipher author who chose institutional reward.',
+      theme: 'Forge evidence makes Nikola and Mateus compare a corrupted Severed Dragon inheritance with the translator who weaponized it for Kurozane.',
       prompt: 'How should the Dražanić journal and Mateus cipher admission be filed together?',
       first: { label: 'File them as parallel warnings', direction: 'The journal and cipher should show how inherited missions and rewarded expertise both evade responsibility' },
       second: { label: 'File distinct chains of choice', direction: 'The archive should connect the records while preserving their different actors, victims, and decisions' },
       topics: [
-        topic('the Dražanić port list', 'Nikola learned that his ancestor sold a port list and later described the resulting raid as a hunt', 'my family turned betrayal into lineage by changing the noun after people died', 'I cannot use your ancestor to make my own court service look ordinary or shared', 'I will annotate only the places where my cipher touched that list and leave the Dražanić account to you'),
-        topic('the forge directive code', 'the archive furnace preserved orders that Mateus could decode because he designed their grammar', 'expertise is evidence here, but expertise does not appoint its author judge', 'I will explain the grammar and surrender every conclusion to readers with other records', 'I will create a key that exposes ambiguity instead of silently resolving it in my favor'),
+        topic('the Dražanić port list', 'the Croatian-born Dražanić house claimed Wallachian origin before selling a port list under the Severed Dragon mark', 'my family turned an unverified genealogy and a holy restraint into hereditary prestige', 'I cannot use your ancestor to make my own court service look ordinary or shared', 'I will annotate only the places where my translation touched that list and leave the family claim open to challenge'),
+        topic('the forge directive code', 'the furnace preserved Mateus\'s Severed Dragon translation for Kurozane', 'the covenant separated immortal ruler from office and army, while your version bound all three', 'I will name the corrupted choices and leave conclusions to readers with other records', 'I will create a key that exposes each inversion instead of silently resolving it in my favor'),
         topic('the room the court offered', 'the Furnace Abbot offered Mateus a place in the court while prisoners crossed the open route', 'refusing a room today does not erase the people delivered to its earlier rooms', 'I know, and I will not stage refusal as if it were the difficult part of accountability', 'I will name the deliveries I remember and accept supervision where memory affects a search'),
-        topic('the inherited right to purge', 'Nikola has begun striking the word purge from the oath his family preserved', 'a bloodline cannot be a target category, even when one member has become dangerous', 'do not rewrite the oath around me as a demonstration that you can spare one vampire', 'I will write it around named protection and consent, with no specimen required to prove restraint'),
+        topic('the inherited right to purge', 'Nikola separates the covenant original from the purge authority his family later added', 'a bloodline cannot be a target category, even when one member has become dangerous', 'do not rewrite the oath around me as a demonstration that you can spare one vampire', 'I will restore separation from office and army while writing protection around named people and consent'),
       ],
     }),
     scene({

@@ -8,10 +8,10 @@ import {
 
 test('maximum visible Storyworld path keeps the 80-scene reference route within five to six hours', () => {
   assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 10);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 1757);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 1887);
   assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 19);
-  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 15.118333333333332);
-  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceMinutes, 324.36733333333336);
+  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 15.768333333333334);
+  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceMinutes, 325.01733333333334);
   assert.equal(STORYWORLD_PACING_REPORT.withinFiveToSixHourTarget, true);
 });
 

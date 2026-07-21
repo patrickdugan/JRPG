@@ -604,6 +604,14 @@ def build_files() -> dict[str, bytes]:
         "runtimeIntegration": "current-browser-battle-key-poses", "authorship": source["authorship"],
         "geometry": {"columns":len(COLUMNS),"rows":len(ROWS),"cellWidth":W,"cellHeight":H,"sheetWidth":atlas.width,"sheetHeight":atlas.height,"pivot":list(PIVOT),"footPoint":list(PIVOT),"minimumTransparentGutter":GUTTER},
         "rowOrder": list(ROWS), "columnOrder": list(COLUMNS), "paletteAndSilhouetteReuse": palette_records,
+        "characterIdentity": {
+            entry["id"]: {
+                key: entry[key]
+                for key in ("name", "legacyCompatibilityId", "lineage")
+                if key in entry
+            }
+            for entry in source["characters"]
+        },
         "actionSemantics": source["actions"], "frames": frames,
         "sources": [
             {"path":SOURCE_PATH.name,"role":"editable-combat-contract","sha256":digest(SOURCE_PATH.read_bytes())},
@@ -619,6 +627,10 @@ def build_files() -> dict[str, bytes]:
     }
     manifest_data=(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n").encode("utf-8")
     readme=f"""# Party combat action suite\n\nOriginal, code-authored combat key poses for Ren, Aya, Nikola, Mateus, Genta, and Kiku. The stable third-row key remains `lise` for runtime compatibility, but its pixels and NIKOLA review label present Nikola Dražanić: an original male Croatian minor aristocrat with a square doublet, falling band, moustache, clipped beard, rapier, and no real-person likeness. The builder reads canonical palette IDs, colors, and silhouettes from `../party-field-suite/party-field-suite.source.json`; it does not use generated concepts or raster atlases as input.\n\n- `{SOURCE_PATH.name}` is the editable action and event contract.\n- `{ATLAS_NAME}` is the transparent {atlas.width} × {atlas.height} runtime candidate: {len(ROWS)} rows, {len(COLUMNS)} columns, {W} × {H} per cell.\n- `{CONTACT_NAME}` is a labeled {contact.width} × {contact.height} checkerboard review sheet and is not for runtime use.\n- `{MANIFEST_NAME}` records exact frames, pivots `(24, 58)`, foot points, hit anchors, action semantics, palette reuse, hashes, and review state.\n\nColumns are idle, move, guard, hit, basic-strike wind-up, basic-strike active, signature A, signature B, a braced post-action recovery hold, and a non-gory collapsed defeat hold. These are silhouette-defining production keys, not complete animation clips. In-betweens, full recovery and defeat transitions, alternate facings, portraits, human readability testing, and external cultural review remain pending.\n\nRun `python build_party_combat_suite.py` to rebuild or `python build_party_combat_suite.py --check` to byte-compare every generated file.\n"""
+    readme=readme.replace(
+        "an original male Croatian minor aristocrat with a square doublet, falling band, moustache, clipped beard, rapier, and no real-person likeness",
+        "a Croatian-born frontier minor aristocrat with a square doublet, falling band, moustache, clipped beard, and rapier. Nikola claims Wallachian hunter descent and membership in the invented Covenant of the Severed Dragon; this is entirely alternate-history fiction, not a real-world claim that vampires, vampire hunters, or the Covenant existed",
+    )
     return {ATLAS_NAME:atlas_data,CONTACT_NAME:contact_data,MANIFEST_NAME:manifest_data,README_NAME:readme.encode("utf-8")}
 
 

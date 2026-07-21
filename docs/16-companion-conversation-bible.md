@@ -78,7 +78,7 @@ The quantity audit counts only text a canonical first-choice playthrough can act
 
 The canonical visible path contains 3,914 acknowledged dialogue lines and 76,547 visible words. These quantities are derived from the exact shipped records; no authored activity-minute declaration is added.
 
-The bounded completion witness starts from the zero-time canonical campaign result, completes all 90 talks through public runtime transitions, records the first response for each, refuses all 90 replay attempts, and keeps recorded playtime at zero. All 90 talks are also placed at exact unlock frontiers in the optional 215-activity completionist route. Its prose-bound catalogue signature is `fnv1a32:27c27bb7`; the completion signature is `fnv1a32:316369e1`. This proves deterministic reachability and line coverage. It does not prove how long a person reads, reflects, or chooses.
+The bounded completion witness starts from the zero-time canonical campaign result, completes all 90 talks through public runtime transitions, records the first response for each, refuses all 90 replay attempts, and keeps recorded playtime at zero. All 90 talks are also placed at exact unlock frontiers in the optional 215-activity completionist route. Its prose-bound catalogue signature is `fnv1a32:3fdaa62f`; the completion signature is `fnv1a32:e5fb2c5e`. This proves deterministic reachability and line coverage. It does not prove how long a person reads, reflects, or chooses.
 
 ## Writing review checklist
 

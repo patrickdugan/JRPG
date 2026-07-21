@@ -213,8 +213,8 @@ export class CombatEngine {
     this.log = [];
     this.lastResolution = null;
     this.turnNumber = 0;
-    this._appendLog('Ren reaches Takamine with Nikola Dražanić, a Croatian hunter who calls himself Count.', 'scene');
-    this._appendLog('Father Mateus Avelar’s seal marks the court’s orders; Nikola knows the cipher.', 'scene');
+    this._appendLog('Ren reaches Takamine with Nikola Dražanić, a Croatian hunter whose house claims Wallachian origin.', 'scene');
+    this._appendLog('Father Mateus Avelar’s seal carries the Dracul precedent; Nikola knows the Severed Dragon counter-ward.', 'scene');
     this._appendLog('An Ashen Oni Tithe Enforcer bars the black chrysanthemum gate.', 'scene');
     this.phase = PHASES.SELECT_NEXT;
     this._selectNext();
@@ -563,7 +563,7 @@ export class CombatEngine {
     if (this.enemy.hp <= 0) {
       this.result = 'victory';
       this.phase = PHASES.VICTORY;
-      this.message = 'The banner falls. Nikola sees Mateus’s seal beneath the lacquer.';
+      this.message = 'The banner falls. Nikola finds Mateus’s Dracul translation beneath the lacquer.';
       this._appendLog(this.message, 'victory');
       return true;
     }

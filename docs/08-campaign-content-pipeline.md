@@ -58,7 +58,9 @@ Field interactables use a separate exact presentation layer in `game/content/fie
 2. Render `summary`, `objective`, `party`, `boss`, `reward`, `maps`, and `encounters` in journals, map screens, encounter setup, and planning UI as appropriate.
 3. Drive story scenes from the ordered `beats` array. Every beat has a required resolving `mapId`; beats that gate combat list canonical `encounterIds`. `trigger` is a symbolic event name for the field/scene system and is deliberately not an executable callback.
 4. For each selected choice, write its `flag` with a choice-specific value or record the selected choice ID beside it. The `result` is the immediate player-facing consequence.
-5. Do not gate the critical path on optional-record flags. Choices may affect copy, a route setup, an opening resistance, a later cameo, or an optional reward, but preserve the canonical campaign outcome.
+5. Do not gate the critical path on optional-record flags. Ordinary campaign choices may affect copy, a route setup, an opening resistance, a later cameo, or an optional reward. The final political variance belongs to the required Storyworld sequence: `sw10-corrections-desk` retains its save-stable ID but now resolves after `c9-kurozane` as **The Last Command**, selecting witnessed transfer or execution/failed transfer and civil war from accumulated bounded reactions. Both consequences remain complete narrative routes.
+
+The ten required Storyworld clusters are placed as five before-boss decisions, two after-level consequences, and three after-boss consequences. The final cluster remains `placement: 'after-beat'` and `sequenceRole: 'after-boss-consequence'`; consumers must not infer placement from its legacy ID or old epilogue meaning.
 6. Use `CAMPAIGN.firstPlayable.sequence` for FP-1. Every sequence item specifies map, intended duration, objective, ordered events, and exit condition. Its durations total 32 minutes, within the 28-34 minute target.
 
 Suggested save shape:
@@ -108,6 +110,7 @@ The 32-minute expected clear remains a first-playable target, not permission to 
 - The historical backdrop needs Japanese cultural-historian and sensitivity review before production dialogue, garments, practices, or regional details are locked.
 - Japanese characters retain local authority and decision-making. Nikola and Mateus cannot become default interpreters of Japanese stakes because they are European.
 - Mateus is original. Do not use a celebrity likeness, a real actor reference, copied scene behavior, or a film adaptation shorthand.
+- Nikola is Croatian-born and his fictional house only claims Wallachian origin. The Dracul vampire emergency, Covenant of the Severed Dragon, and hereditary ward are alternate-history inventions; content must not represent the historical Order of the Dragon, real Christian rites, or real Wallachian belief as supernatural systems.
 - The Ashen Oni use a contested in-world label and a deliberate fictional synthesis; they must not claim one canonical Japanese oni design or copy a sacred figure, ceremonial mask, or identifiable local tradition.
 - Redemption is evidence-based and ongoing: Mateus protects people, confesses, loses power, and remains under supervision. The content must never turn a single helpful act into forgiveness owed by victims.
 

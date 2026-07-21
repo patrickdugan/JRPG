@@ -8,13 +8,13 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:7f439953b6dac6d20d1283f0c3b564005aa99770584cbe9838cd55deee962fee";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:1c9a56037dbc2bf3f4a6f38f5bcc95e6fcbbfe152a9e7f24a919cf037ea5808d";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
   "sourceVersion": 1,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:3ea35ca34387a6844506552dc52f8edef4844859c568d5a1c236aa6ae93510f5",
-  "bindingHash": "sha256:2941f64bb1518de310c77474a487f523a53f91c2622adc7e3a9dee30a3118233",
+  "sourceHash": "sha256:dda93670de31a2df06e84f328edce857ffa606ea5f128df1fd481e0358c0f894",
+  "bindingHash": "sha256:65f25f78bc59e8217738c5363cfff376fe9b0d2328bd38a3389aa1db31dfd71e",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
     {
@@ -54,7 +54,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
     },
     {
       "id": "lise_oath_revision",
-      "label": "Nikola earned discipline",
+      "label": "Nikola severed-command discipline",
       "defaultValue": 0.35
     },
     {
@@ -455,7 +455,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entry": {
         "id": "page_sw02_decision",
         "title": "Witness, Not Family",
-        "text": "Mateus has named the European cipher and admitted the hand that taught it to Kurozane's clerks. Lord Nikola Dražanić recognizes Adriatic merchant marks that his own frontier house once taxed, protected, and quietly profited from. Shared Latin and a European route make the two men useful to one another, not kin, and remorse does not make Mateus safe. Freed prisoners wait beyond the stair while the party defines whether he may speak, move, or advise.",
+        "text": "Mateus has named the European cipher and admitted that he translated the Dracul precedent for Kurozane's clerks. Lord Nikola Dražanić recognizes both Adriatic merchant marks and the Severed Dragon counter-ward his house says its Wallachian forebears carried west. Shared Latin and a European route make the two men useful to one another, not kin, and remorse does not make Mateus safe. Freed prisoners wait beyond the stair while the party defines whether he may speak, move, or advise.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -1122,8 +1122,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "entry": {
         "id": "page_sw04_decision",
-        "title": "A Margin in the Dražanić Ledger",
-        "text": "The wreck has preserved a Dražanić ledger page. It shows that Nikola's minor frontier house converted wartime escorts, confiscated books, and anti-vampire knowledge into fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward and how delay, context, and custody will be made visible.",
+        "title": "A Margin in the Severed Dragon Testament",
+        "text": "The wreck has preserved a Dražanić testament page. It claims that an ancestor survived Vlad III's fictional vampire war and helped create a ward that severed immortal rulers from office. Later Dražanić hands converted that public check into hereditary purge authority, confiscated books, and fees paid by the same Adriatic sale network now serving Kurozane's officers. Nikola can read the household abbreviations, but his claimed rank implicates rather than vindicates him. The wreck survivors retain the original while Aya asks what may travel onward.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -1306,8 +1306,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "outcomes": [
         {
           "id": "page_sw04_accord",
-          "title": "A House Entered as Evidence",
-          "text": "Nikola reads the family marks without claiming that blood or an inflated title grants custody. Aya places the Dražanić passage beside survivor terms and a visible chain of copies. The page becomes evidence of choices made by named houses and brokers, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached.",
+          "title": "A Covenant Entered as Evidence",
+          "text": "Nikola reads the family marks without claiming that blood, covenant technique, or an inflated title grants custody. Aya places the Severed Dragon passage beside survivor terms and a visible chain of copies. The page becomes evidence that a check on emergency power can itself become hereditary power, not proof that a foreign hunter was destined either to save Japan or corrupt it. That distinction remains attached.",
           "prompt": "Choose the sentence that limits Nikola's inherited authority.",
           "terminal": false,
           "options": [
@@ -1319,7 +1319,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               "reactions": [
                 {
                   "id": "page_sw04_accord_opt_carry_r_accord",
-                  "text": "Nikola writes that technical knowledge and noble birth grant no right to command their use. The survivors approve the sentence and retain the original page.",
+                  "text": "Nikola writes that wardcraft and noble birth grant no right to command their use; the pattern may divide blood from office, never appoint the hunter as successor. The survivors approve the sentence and retain the original.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
                     "propertyId": "lise_oath_revision",
@@ -3117,11 +3117,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
     },
     {
       "id": "sw10-corrections-desk",
-      "chapterId": "epilogue",
-      "anchorBeatId": "e00-open-archive",
+      "chapterId": "chapter-9",
+      "anchorBeatId": "c9-05-dawn-at-observatory",
       "placement": "after-beat",
-      "sequenceRole": "after-level-consequence",
-      "relatedEncounterIds": [],
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c9-kurozane"
+      ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw10_decision",
       "outcomeEncounterIds": [
@@ -3130,78 +3132,20 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "entry": {
         "id": "page_sw10_decision",
-        "title": "The Corrections Desk",
-        "text": "The open archive receives disputed names, harmful wording, incomplete testimony, and requests to remove records that still expose living people. Aya cannot repair every entry at once. The final Storyworld decision determines how corrections remain visible, who controls testimony beside a disputed line, and how capacity limits are published without becoming another closed door.",
+        "title": "The Last Command",
+        "text": "Kurozane lies alive inside the broken command circle. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still carry instructions tied to his blood. Killing him may rupture those bindings and invite rival governors to seize the empty machinery. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but it cannot make surrender sincere. Ren asks what terms can transfer power without making the hunter, the vampire priest, or the victorious party his successor.",
         "prompt": "",
         "terminal": false,
         "options": [
           {
-            "id": "page_sw10_decision_opt_annotate-errors",
-            "text": "Annotate errors without silently erasing the original entry.",
+            "id": "page_sw10_decision_opt_witnessed-return",
+            "text": "Offer a witnessed return of the military, registry, and bell seals under binding.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw10_decision_opt_annotate-errors_r_accord",
-                "text": "Readers can see both the harmful record and its correction under controlled access. Survivors retain authority over when the original wording may be viewed.",
-                "consequenceId": "page_end_corrections_visible",
-                "score": {
-                  "propertyId": "aya_archive_openness",
-                  "invert": false,
-                  "offset": 0.01
-                },
-                "effects": [
-                  {
-                    "propertyId": "aya_archive_openness",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "proof_integrity",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "public_reach",
-                    "delta": 0.05
-                  }
-                ],
-                "authoredIndex": 0
-              },
-              {
-                "id": "page_sw10_decision_opt_annotate-errors_r_revision",
-                "text": "A survivor objects that preservation still repeats harm. The desk restricts the original and publishes only the correction plus a reason for the limit.",
-                "consequenceId": "page_end_limits_posted",
-                "score": {
-                  "propertyId": "aya_archive_openness",
-                  "invert": true,
-                  "offset": 0.01
-                },
-                "effects": [
-                  {
-                    "propertyId": "network_consent",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "witness_safety",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "aya_archive_openness",
-                    "delta": 0.05
-                  }
-                ],
-                "authoredIndex": 1
-              }
-            ]
-          },
-          {
-            "id": "page_sw10_decision_opt_testimony-beside",
-            "text": "Place authorized testimony beside the disputed entry.",
-            "visible": true,
-            "performable": true,
-            "reactions": [
-              {
-                "id": "page_sw10_decision_opt_testimony-beside_r_accord",
-                "text": "The contradiction remains visible because witnesses authorized publication. Their words are not treated as decoration around the old official record.",
+                "id": "page_sw10_decision_opt_witnessed-return_r_accord",
+                "text": "Route delegates enter the observatory separately and name the powers being returned. Nikola holds only the severing boundary; Mateus confirms each blood command has stopped without receiving a new office.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
                   "propertyId": "network_consent",
@@ -3210,23 +3154,23 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 "effects": [
                   {
-                    "propertyId": "truth_completeness",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "public_reach",
-                    "delta": 0.1
-                  },
-                  {
                     "propertyId": "network_consent",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "lise_oath_revision",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "mateus_accountability",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw10_decision_opt_testimony-beside_r_revision",
-                "text": "Authorization is absent. The desk records that testimony exists without exposing it, preserving the gap and the witness boundary together.",
+                "id": "page_sw10_decision_opt_witnessed-return_r_revision",
+                "text": "Kurozane returns one ceremonial seal while retaining the granary commands. Aya reads the omission aloud. When he reaches through the hidden command to starve the routes, Ren gives the fatal stop before the binding tears; rival riders are already moving.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
                   "propertyId": "network_consent",
@@ -3235,15 +3179,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 "effects": [
                   {
-                    "propertyId": "witness_safety",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "aya_archive_openness",
-                    "delta": 0.1
-                  },
-                  {
                     "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
                     "delta": 0.05
                   }
                 ],
@@ -3252,27 +3196,27 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw10_decision_opt_contested-queue",
-            "text": "Open a public queue for contested records and review dates.",
+            "id": "page_sw10_decision_opt_provisional-binding",
+            "text": "Bind Kurozane provisionally while route councils define the transfer.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw10_decision_opt_contested-queue_r_accord",
-                "text": "Unresolved claims receive visible dates, named custodians, and published capacity limits. Delay becomes accountable work instead of another quiet disappearance.",
+                "id": "page_sw10_decision_opt_provisional-binding_r_accord",
+                "text": "The binding receives a public expiration and no hunter custody. Local delegates inventory every office before accepting it, preventing victory from becoming an unexamined succession.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
-                  "propertyId": "care_capacity",
+                  "propertyId": "proof_integrity",
                   "invert": false,
                   "offset": 0.01
                 },
                 "effects": [
                   {
-                    "propertyId": "public_reach",
+                    "propertyId": "proof_integrity",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "aya_archive_openness",
+                    "propertyId": "ren_noncoercion",
                     "delta": 0.1
                   },
                   {
@@ -3283,26 +3227,84 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw10_decision_opt_contested-queue_r_revision",
-                "text": "The queue exceeds capacity on its first day. Aya posts the limit, pays local reviewers, and names the next date without promising impossible speed.",
+                "id": "page_sw10_decision_opt_provisional-binding_r_revision",
+                "text": "The first draft leaves Nikola as sole keeper of the binding. He tears out his own authority clause. During the delay Kurozane ruptures the provisional bond to reclaim an outer bell; route witnesses authorize the fatal stop rather than grant Nikola permanent custody.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
-                  "propertyId": "care_capacity",
+                  "propertyId": "proof_integrity",
                   "invert": true,
                   "offset": 0.01
                 },
                 "effects": [
                   {
+                    "propertyId": "lise_oath_revision",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "party_cohesion",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              }
+            ]
+          },
+          {
+            "id": "page_sw10_decision_opt_execution-demand",
+            "text": "Demand immediate execution before the blood court can regroup.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw10_decision_opt_execution-demand_r_accord",
+                "text": "The naked blade makes Kurozane understand that immortality no longer protects his office. He chooses witnessed surrender, not remorse, and the party refuses to call fear a change of heart.",
+                "consequenceId": "page_end_corrections_visible",
+                "score": {
+                  "propertyId": "court_pressure",
+                  "invert": false,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": -0.1
+                  },
+                  {
                     "propertyId": "truth_completeness",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "care_capacity",
+                    "propertyId": "network_consent",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw10_decision_opt_execution-demand_r_revision",
+                "text": "The blade falls before every command can be inventoried. Kurozane dies, distant bells answer competing hands, and messengers report governors claiming emergency authority over roads and rice.",
+                "consequenceId": "page_end_limits_posted",
+                "score": {
+                  "propertyId": "court_pressure",
+                  "invert": true,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "court_pressure",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "public_reach",
-                    "delta": 0.05
+                    "propertyId": "route_safety",
+                    "delta": -0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": -0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -3314,17 +3316,17 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "outcomes": [
         {
           "id": "page_end_corrections_visible",
-          "title": "Corrections Remain Visible",
-          "text": "The desk opens with visible review dates, controlled access, and testimony published only under its custodians' terms. Aya does not promise a pure archive. She promises that correction, refusal, delay, and uncertainty will leave accountable traces. The party's victory becomes an institution people can revise rather than another perfect record imposed from above.",
-          "prompt": "The narrative route closes on an archive that can be corrected without erasing who set each boundary.",
+          "title": "The Seals Returned",
+          "text": "Kurozane hears the independent route confirmations and sees that the country can act without his blood. He asks Ren what will hold it together when no immortal body commands the center. Ren answers: routes that can hold one another provisionally, refuse one another publicly, and survive the death of any one keeper. Kurozane returns the military, registry, granary, and bell seals one by one while the Severed Dragon boundary separates each office from his body. He is taken alive under rotating guard. The transfer is not absolution, restoration, or proof that his self-justifying history was true; it is the first public act in which his survival no longer requires everyone else's obedience.",
+          "prompt": "Record what the former shogun does not retain.",
           "terminal": true,
           "options": []
         },
         {
           "id": "page_end_limits_posted",
-          "title": "The Limit Is Posted",
-          "text": "The corrections desk cannot review every claim or expose every source safely. Aya publishes the capacity limit, the missing authorizations, and the next review date. The archive remains imperfect without pretending imperfection is neutral. Repair begins as visible, revisable labor shared with the people whose names the old ledger tried to own.",
-          "prompt": "The narrative route closes with limits named plainly instead of hidden behind institutional language.",
+          "title": "The Empty Throne Mobilizes",
+          "text": "Kurozane dies after immediate execution or a failed transfer forces the fatal stop, before the blood offices can be separated from him. The central Bell stops, but outer governors seize stores, patrol seals, and surviving Oni commands in the name of temporary order. No explosion erases the evidence and no narrator declares execution uniquely wicked; the consequence is a civil war created by a regime designed to make one immortal body its only transfer mechanism. The party can preserve routes and records, not retroactively make the vacuum safe.",
+          "prompt": "Carry the execution record into the emergency route plan.",
           "terminal": true,
           "options": []
         }

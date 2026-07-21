@@ -108,6 +108,23 @@
       }
     }
   },
+  "characterIdentity": {
+    "ren": {},
+    "aya": {},
+    "lise": {
+      "name": "Nikola Dražanić",
+      "legacyCompatibilityId": "lise",
+      "lineage": {
+        "birthAndStation": "Croatian-born frontier minor aristocrat",
+        "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+        "affiliation": "Covenant of the Severed Dragon",
+        "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
+      }
+    },
+    "mateus": {},
+    "genta": {},
+    "kiku": {}
+  },
   "actionSemantics": {
     "idle": {
       "phase": "neutral",
@@ -2326,17 +2343,17 @@
     {
       "path": "party-combat-suite.source.json",
       "role": "editable-combat-contract",
-      "sha256": "2300053eea80bc05bc8c35c97c5a0e3bd3efe9f606b24b0be63d02126f76e25e"
+      "sha256": "4b976199c3e239844e64edfde54623cfff73060ab8822669331eeb5c1d507bea"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-silhouette-contract",
-      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
+      "sha256": "17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3"
     },
     {
       "path": "build_party_combat_suite.py",
       "role": "deterministic-builder",
-      "sha256": "177c3706fdbba0d2a5c351b3958ea5f459dfe91ba9fb15616909496a4c5f16a9"
+      "sha256": "cc1799a44a72ec9d5f47ba560a04bf8fbf153a81006428f84a4e17bd76d34d6f"
     }
   ],
   "exports": [

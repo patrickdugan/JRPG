@@ -72,7 +72,7 @@ Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small
 
 | ID range | Asset family | Qty | Priority | Minimum production package |
 | --- | --- | ---: | --- | --- |
-| CHR-PARTY-001-006 | Ren, Aya, Nikola, Mateus, Genta, Kiku field sprites | 6 | P0/P1 | 4 directional idle, 4 directional walk, interact, hurt, celebration/scene pose; 32 x 48 nominal. Nikola retains the internal compatibility row key `lise`. |
+| CHR-PARTY-001-006 | Ren, Aya, Nikola, Mateus, Genta, Kiku field sprites | 6 | P0/P1 | 4 directional idle, 4 directional walk, interact, hurt, celebration/scene pose; 32 x 48 nominal. Nikola retains the internal compatibility row key `lise`; his invented Severed Dragon device is a broken command-line motif, not real Wallachian or chivalric heraldry. |
 | CHR-PARTY-007-012 | party combat sprites | 6 | P0/P1 | idle, move, guard, hit, basic strike, 2 signature skills, defeat/retreat; 48 x 64 nominal. Live Dodge deliberately reuses `move` plus code-native chevrons rather than requiring a bespoke bitmap. |
 | CHR-PARTY-013-018 | party portraits + emotion set | 6 x 8 expressions | P1 | neutral, determined, concern, anger, pain, relief, surprise, quiet; original faces only. |
 | CHR-PARTY-019-024 | party gear accent overlays | 6 sets | P2 | weapon/off-hand and major Vow visual changes; do not require separate full sprite bodies per equipment item. |
@@ -113,7 +113,7 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 | BOS-004 | Forge of Names | 1 | P1 | mechanical forge boss; exposes vent/slag logic. |
 | BOS-005 | Magistrate Ujiro Arata | 1 | P2 | named human antagonist; authority/cowardice expressed in tools and staging. |
 | BOS-006 | Father Mateus Avelar - court form | 1 | P1 | original vampire priest form; redemption context affects staging; no celebrity reference. |
-| BOS-007 | Shogun Kurozane, Black Chrysanthemum | 2 phases | P2 | original final form plus bell-network phase; no borrowed castle/vampire design. |
+| BOS-007 | Shogun Kurozane, Black Chrysanthemum | 2 phases | P2 | original court and sovereign-vampire/bell-network phases plus a living ward-broken hold from the same package; office seals separate visibly for the transfer branch, while the execution branch is non-gory and hands consequence staging to the civil-war aftermath. No borrowed castle/vampire design. |
 
 **Enemy total:** 14 base families / 38 planned variants, 7 named boss encounters, 8 boss-form deliverables including phase distinction.
 
@@ -151,7 +151,7 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 | ITM-001-030 | consumables / key items | 30 | P1 | icon plus one field pickup where needed; bottles, remedies, maps, seals, keys, bell fragments. |
 | EQP-001-036 | weapons / focus / armor icons | 36 | P1/P2 | weapon changes basic Strike identity; use overlays only for major visible equipment. |
 | VOW-001-036 | Vow-node icons | 36 | P1 | six characters x 6 final planned nodes; compact, role-specific, accessible shape language. |
-| ILL-001-012 | journal/ledger spot illustrations | 12 | P2 | maps, faction marks, monster notes, historical-material thumbnails; never claim a real historical document. |
+| ILL-001-012 | journal/ledger spot illustrations | 12 | P2 | maps, faction marks, monster notes, the fictional Severed Dragon testament, and returned-seals/execution records; never claim a real historical document, covenant, or heraldic authority. |
 
 ## 10. Chapter 1 / first-playable delivery cut
 
@@ -163,7 +163,7 @@ This cut is the first staffing and outsourcing package. It is intentionally comp
 | C1-ART-002 | Takamine Bell-Chamber battle stage | 1 | first playable | Produced and integrated as an editable 384 x 224, 12 x 7 board at exact 2x; automated geometry/layer/fallback checks pass; subjective telegraph and external cultural review remain before Accepted/art lock. |
 | C1-ART-003 | Takamine path, gate, registry, chapel, undercroft map kits | 5 | Chapter 1 | collision thumbnails, day/rain variants, story objects, foreground mask |
 | C1-ART-004 | Ren field/combat/portrait package | 1 | first playable | all required movement, command, Guard, hit, defeat tags |
-| C1-ART-005 | Nikola Dražanić scene/field/portrait package | 1 | first playable narrative | original male Croatian minor-aristocrat hunter silhouette, c.1622 rain-travel layers, no real-person reference; internal compatibility key remains `lise` |
+| C1-ART-005 | Nikola Dražanić scene/field/portrait package | 1 | first playable narrative | original male Croatian minor-aristocrat hunter silhouette, c.1622 rain-travel layers, claimed Wallachian house origin, and invented Severed Dragon counter-ward read; no real-person or real-heraldry reference; internal compatibility key remains `lise` |
 | C1-ART-006 | Father Mateus Avelar scene/portrait package | 1 | first playable narrative | original court interpreter silhouette, no likeness reference, and consistent with the permanent party-art package |
 | C1-ART-007 | Ashen Oni Tithe Enforcer package | 1 | first playable | two attacks, intent, hit/defeat, Ledger portrait, original mask language |
 | C1-ART-008 | Cinder Hound, Ash Wisp, Bell Moth packages | 3 | Chapter 1 | core enemies test Ember/Radiance weakness and Umbral resistance feedback |

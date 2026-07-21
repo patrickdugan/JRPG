@@ -10,6 +10,8 @@ test('starts at a paused Ren Activation with two Pace', () => {
   assert.equal(engine.movementPoints, 2);
   assert.equal(engine.player.pos.x, 1);
   assert.equal(engine.player.pos.y, 3);
+  assert.ok(engine.log.some(({ text }) => text === 'Ren reaches Takamine with Nikola Dražanić, a Croatian hunter whose house claims Wallachian origin.'));
+  assert.ok(engine.log.some(({ text }) => text === 'Father Mateus Avelar’s seal carries the Dracul precedent; Nikola knows the Severed Dragon counter-ward.'));
 });
 
 test('movement changes exactly one legal 8-way space and consumes one Pace', () => {
@@ -135,6 +137,7 @@ test('a reachable final Cinder Route enters the victory state', () => {
   assert.equal(result.ok, true);
   assert.equal(engine.phase, PHASES.VICTORY);
   assert.equal(engine.result, 'victory');
+  assert.equal(engine.message, 'The banner falls. Nikola finds Mateus’s Dracul translation beneath the lacquer.');
 });
 
 test('an enemy finishing blow enters the defeat state', () => {

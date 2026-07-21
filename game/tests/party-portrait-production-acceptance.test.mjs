@@ -12,6 +12,12 @@ const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-portrait-suite');
 const FIELD_SOURCE_PATH = resolve(REPO_ROOT, 'assets', 'art', 'party-field-suite', 'party-field-suite.source.json');
 const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
 const COLUMNS = ['neutral', 'resolve', 'strain', 'soften', 'concern', 'anger', 'surprise', 'quiet'];
+const NIKOLA_LINEAGE = {
+  birthAndStation: 'Croatian-born frontier minor aristocrat',
+  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  affiliation: 'Covenant of the Severed Dragon',
+  historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
+};
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 function paeth(left, above, upperLeft) {
@@ -89,6 +95,7 @@ test('portrait source defines the exact six-by-eight expression and originality 
   const nikola = source.characters.find(({ id }) => id === 'lise');
   assert.equal(nikola.name, 'Nikola Dražanić');
   assert.equal(nikola.legacyCompatibilityId, 'lise');
+  assert.deepEqual(nikola.lineage, NIKOLA_LINEAGE);
   assert.equal(nikola.faceShape, 'square-angular-male');
   assert.equal(nikola.facialHair, 'narrow-moustache-and-trim-pointed-beard');
   assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
@@ -128,6 +135,7 @@ test('manifest preserves canonical palette/costume motifs and exact expression a
     });
   }
   const byId = Object.fromEntries(source.characters.map((entry) => [entry.id, entry]));
+  assert.deepEqual(manifest.characterIdentity.lise.lineage, byId.lise.lineage);
   manifest.frames.forEach((frame, index) => {
     const row = Math.floor(index / 8);
     const column = index % 8;

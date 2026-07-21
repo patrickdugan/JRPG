@@ -9,6 +9,12 @@ const GAME_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_ROOT = resolve(GAME_ROOT, '..');
 const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-roster-suite');
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+const NIKOLA_LINEAGE = {
+  birthAndStation: 'Croatian-born frontier minor aristocrat',
+  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  affiliation: 'Covenant of the Severed Dragon',
+  historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
+};
 
 test('deterministic roster retains the legacy row key but presents Nikola Dražanić', async () => {
   const [sourceText, manifestText] = await Promise.all([
@@ -23,7 +29,9 @@ test('deterministic roster retains the legacy row key but presents Nikola Draža
   assert.deepEqual(source.rowOrder, ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']);
   assert.equal(source.presentationNames.lise, 'Nikola Dražanić');
   assert.match(source.legacyCompatibility.lise, /stable internal actor and atlas row key/u);
+  assert.deepEqual(source.nikolaLineage, NIKOLA_LINEAGE);
   assert.equal(manifest.presentationNames.lise, 'Nikola Dražanić');
+  assert.deepEqual(manifest.nikolaLineage, NIKOLA_LINEAGE);
   assert.equal(manifest.sources.find(({ role }) => role === 'editable-composition-contract').sha256,
     sha256(Buffer.from(sourceText)));
 });

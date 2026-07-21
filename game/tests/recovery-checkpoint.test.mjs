@@ -27,8 +27,14 @@ import {
   serializeRunReceipt,
 } from '../run-receipt.mjs';
 import { serializeSceneOperationState } from '../scene-operation-runtime.mjs';
+import { STORYWORLD_CLUSTERS } from '../content/storyworld-encounters.generated.mjs';
 import {
+  advanceStoryworldEncounter,
+  beginStoryworldEncounter,
+  chooseStoryworldOption,
   createStoryworldState,
+  getStoryworldProgress,
+  getVisibleStoryworldOptions,
   LEGACY_STORYWORLD_CATALOG_IDENTITIES,
   loadStoryworldState,
   serializeStoryworldState,
@@ -146,8 +152,8 @@ function legacyV1Checkpoint(currentCheckpoint) {
   return { ...body, signature: `fnv1a32:${fnv1a32(JSON.stringify(body))}` };
 }
 
-function preNikolaStoryworldCheckpoint(currentCheckpoint) {
-  const identity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[0];
+function legacyStoryworldCheckpoint(currentCheckpoint, identityIndex = 0) {
+  const identity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[identityIndex];
   const records = currentCheckpoint.records.map((record) => {
     if (record.id !== 'storyworld') return record;
     const state = JSON.parse(record.serialized);
@@ -165,6 +171,66 @@ function preNikolaStoryworldCheckpoint(currentCheckpoint) {
     ...Object.fromEntries(Object.entries(currentCheckpoint).filter(([key]) => key !== 'signature')),
     summary: {
       ...currentCheckpoint.summary,
+      storyworldCatalogSignature: identity.catalogSignature,
+    },
+    records,
+  };
+  return { ...body, signature: `fnv1a32:${fnv1a32(JSON.stringify(body))}` };
+}
+
+function resolveStoryworldCluster(state, cluster) {
+  state = beginStoryworldEncounter(state, cluster.id).state;
+  state = chooseStoryworldOption(
+    state,
+    cluster.id,
+    getVisibleStoryworldOptions(state, cluster.id)[0].id,
+  ).state;
+  state = advanceStoryworldEncounter(state, cluster.id).state;
+  const progress = getStoryworldProgress(state, cluster.id);
+  if (!progress.outcome.terminal) {
+    state = chooseStoryworldOption(
+      state,
+      cluster.id,
+      getVisibleStoryworldOptions(state, cluster.id)[0].id,
+    ).state;
+  }
+  return advanceStoryworldEncounter(state, cluster.id).state;
+}
+
+function incompatibleCorrectionsDeskCheckpoint(currentCheckpoint, suffix, outcomeEncounterId) {
+  const identity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[1];
+  let state = createStoryworldState({ runId: RUN_ID });
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 9)) state = resolveStoryworldCluster(state, cluster);
+  state = {
+    ...state,
+    sourceIFID: identity.sourceIFID,
+    sourceHash: identity.sourceHash,
+    catalogSignature: identity.catalogSignature,
+    records: [
+      ...state.records,
+      {
+        clusterId: 'sw10-corrections-desk',
+        phase: 'complete',
+        entryOptionId: 'page_sw10_decision_opt_annotate-errors',
+        entryReactionId: `page_sw10_decision_opt_annotate-errors_r_${suffix}`,
+        outcomeEncounterId,
+        outcomeOptionId: null,
+        outcomeReactionId: null,
+      },
+    ],
+    revision: state.revision + 4,
+  };
+  const records = currentCheckpoint.records.map((record) => (
+    record.id === 'storyworld' ? { ...record, serialized: JSON.stringify(state) } : record
+  ));
+  const body = {
+    ...Object.fromEntries(Object.entries(currentCheckpoint).filter(([key]) => key !== 'signature')),
+    summary: {
+      ...currentCheckpoint.summary,
+      storyworldCompletedClusterCount: 10,
+      storyworldRequiredClusterCount: 10,
+      storyworldNarrativeComplete: true,
+      storyworldProofEligible: true,
       storyworldCatalogSignature: identity.catalogSignature,
     },
     records,
@@ -241,7 +307,7 @@ test('signed pre-Nikola checkpoints restore all fourteen authorities with migrat
     new MemoryStorage(completeEntries()),
     { createdAtEpochMs: 1_700_000_000_002 },
   ).checkpoint;
-  const legacy = preNikolaStoryworldCheckpoint(current);
+  const legacy = legacyStoryworldCheckpoint(current);
   const validated = validateRecoveryCheckpoint(legacy);
   assert.equal(validated.ok, true, validated.errors?.join(' '));
   assert.equal(validated.requiresMigration, true);
@@ -261,6 +327,51 @@ test('signed pre-Nikola checkpoints restore all fourteen authorities with migrat
   assert.equal(loaded.ok, true, loaded.errors?.join(' '));
   assert.equal(Object.hasOwn(loaded, 'migrated'), false, 'restored authority already uses current hashes');
   assert.notEqual(loaded.state.catalogSignature, LEGACY_STORYWORLD_CATALOG_IDENTITIES[0].catalogSignature);
+});
+
+test('signed early pre-Severed-Dragon checkpoints restore before the revised Chapter 9 sequence', () => {
+  const current = createRecoveryCheckpoint(
+    new MemoryStorage(completeEntries()),
+    { createdAtEpochMs: 1_700_000_000_003 },
+  ).checkpoint;
+  const legacy = legacyStoryworldCheckpoint(current, 1);
+  const validated = validateRecoveryCheckpoint(legacy);
+  assert.equal(validated.ok, true, validated.errors?.join(' '));
+  assert.equal(validated.requiresMigration, true);
+  assert.equal(validated.migrationId, 'severed-dragon-ending-v1');
+
+  const destination = new MemoryStorage();
+  const restored = restoreRecoveryCheckpoint(destination, legacy);
+  assert.equal(restored.ok, true, restored.errors?.join(' '));
+  assert.equal(restored.writesApplied, 14);
+  assert.equal(restored.migrationId, 'severed-dragon-ending-v1');
+  const storyworldRecord = RECOVERY_CHECKPOINT_AUTHORITIES.at(-1);
+  const loaded = loadStoryworldState(destination.getItem(storyworldRecord.key));
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(Object.hasOwn(loaded, 'migrated'), false, 'restored authority already uses current hashes');
+  assert.notEqual(loaded.state.catalogSignature, LEGACY_STORYWORLD_CATALOG_IDENTITIES[1].catalogSignature);
+});
+
+test('signed historical Corrections Desk checkpoints fail closed for both old outcomes before any write', () => {
+  const current = createRecoveryCheckpoint(
+    new MemoryStorage(completeEntries()),
+    { createdAtEpochMs: 1_700_000_000_004 },
+  ).checkpoint;
+  for (const [suffix, outcomeEncounterId] of [
+    ['accord', 'page_end_corrections_visible'],
+    ['revision', 'page_end_limits_posted'],
+  ]) {
+    const legacy = incompatibleCorrectionsDeskCheckpoint(current, suffix, outcomeEncounterId);
+    const validated = validateRecoveryCheckpoint(legacy);
+    assert.equal(validated.ok, false);
+    assert.match(validated.errors.join(' '), /cannot be migrated without inventing a political choice/u);
+
+    const prior = RECOVERY_CHECKPOINT_AUTHORITIES.map(({ id, key }) => [key, `prior-${id}-${suffix}`]);
+    const destination = new MemoryStorage(prior);
+    const restored = restoreRecoveryCheckpoint(destination, legacy);
+    assert.equal(restored.ok, false);
+    assert.deepEqual(snapshot(destination), prior);
+  }
 });
 
 test('checkpoint creation and validation reject omissions, corruption, mixed runs, and signature drift before writes', () => {

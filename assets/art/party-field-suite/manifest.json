@@ -79,6 +79,34 @@
     "genta": "party-genta-earth-metal-v1",
     "kiku": "party-kiku-herb-candle-v1"
   },
+  "characterIdentity": {
+    "ren": {
+      "name": "Ren Ishikawa"
+    },
+    "aya": {
+      "name": "Aya Shinohara"
+    },
+    "lise": {
+      "name": "Nikola Dražanić",
+      "legacyCompatibilityId": "lise",
+      "origin": "Croatian-born frontier minor aristocrat travelling through the Adriatic, Goa, and Macao in 1622",
+      "lineage": {
+        "birthAndStation": "Croatian-born frontier minor aristocrat",
+        "claimedDescent": "Nikola claims descent from a Wallachian hunter line",
+        "affiliation": "Covenant of the Severed Dragon",
+        "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
+      }
+    },
+    "mateus": {
+      "name": "Father Mateus Avelar"
+    },
+    "genta": {
+      "name": "Genta Mononobe"
+    },
+    "kiku": {
+      "name": "Kiku Nawa"
+    }
+  },
   "frames": [
     {
       "id": "ren-north-idle",
@@ -2437,7 +2465,7 @@
     {
       "path": "party-field-suite.source.json",
       "format": "json",
-      "sha256": "867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f"
+      "sha256": "17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3"
     },
     {
       "path": "party-field-walk-inbetweens.source.json",
@@ -2447,7 +2475,7 @@
     {
       "path": "build_party_field_suite.py",
       "format": "python",
-      "sha256": "f6cd4457d7935df3463c07383e991ef2b0b8af6ea008bb067de6990c7794eb0f"
+      "sha256": "8a5d016c8e89d6db4a77cfd87f04c125b03b7671da3b60114da84927ac067fd8"
     }
   ],
   "exports": [

@@ -34,7 +34,7 @@ export const HUNTER_PRIEST_COMBO_CONTRACT = deepFreeze({
   schemaVersion: ACTION_COMBO_SCHEMA_VERSION,
   id: 'hunter-priest:black-sun-concord',
   name: 'Black Sun Concord',
-  description: 'Nikola pins the quarry in dawnfire while Mateus drives a penitent night through the same wound—a radiant and umbral verdict struck in perfect accord.',
+  description: 'Nikola draws the Severed Dragon boundary in dawnfire while Mateus drives a penitent night through the exposed blood command—a radiant and umbral verdict neither man can inherit.',
   participantActorIds: ['lise', 'mateus'],
   initiatorActorIds: ['lise', 'mateus'],
   maxAllySeparationPx: 180,

@@ -19,6 +19,12 @@ const COLUMNS = [
 const LEGACY_COLUMNS = COLUMNS.slice(0, 10);
 const LEGACY_FRAME_DIGEST = '794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25';
 const SUPERSEDED_PRE_NIKOLA_DIGEST = '72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2';
+const NIKOLA_LINEAGE = {
+  birthAndStation: 'Croatian-born frontier minor aristocrat',
+  claimedDescent: 'Nikola claims descent from a Wallachian hunter line',
+  affiliation: 'Covenant of the Severed Dragon',
+  historicity: 'entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed',
+};
 
 function sha256(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -98,7 +104,7 @@ test('Nikola migration preserves the stable six-by-fourteen field contract', asy
   ]);
   const source = JSON.parse(sourceText);
   const extension = JSON.parse(extensionText);
-  assert.equal(sha256(Buffer.from(sourceText)), '867bc8c383109e7550e782535a6f3b86e662fed89d51ea074373526864071a3f');
+  assert.equal(sha256(Buffer.from(sourceText)), '17b9e7c3fb7fd78eff4420bbb68b793fcc9fa3c1358d1a3ce6154594f4e2edd3');
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.deepEqual(source.frame, {
     width: 32,
@@ -122,7 +128,8 @@ test('Nikola migration preserves the stable six-by-fourteen field contract', asy
   const nikola = source.characters.find(({ id }) => id === 'lise');
   assert.equal(nikola.name, 'Nikola Dražanić');
   assert.equal(nikola.legacyCompatibilityId, 'lise');
-  assert.match(nikola.origin, /Croatian minor aristocrat.*1622/u);
+  assert.match(nikola.origin, /Croatian-born frontier minor aristocrat.*1622/u);
+  assert.deepEqual(nikola.lineage, NIKOLA_LINEAGE);
   assert.match(nikola.silhouette, /square-shouldered.*doublet.*rapier.*upright/u);
   assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
   assert.match(source.characters.find(({ id }) => id === 'mateus').likenessPolicy, /original fictional face and proportions/u);
@@ -156,6 +163,7 @@ test('manifest maps all 84 frames to stable pivots and preserves the migrated le
     assert.deepEqual(frame.footPoint, [16, 44]);
   });
   assert.deepEqual(Object.keys(manifest.paletteIds), ROWS);
+  assert.deepEqual(manifest.characterIdentity.lise.lineage, NIKOLA_LINEAGE);
   assert.equal(manifest.validation.legacyFrameCount, 60);
   assert.equal(manifest.validation.legacyFrameRgbaSha256Digest, LEGACY_FRAME_DIGEST);
   assert.equal(manifest.review.runtimeIntegration, 'current-browser-selectable-field-leader-two-phase-directional-walk-interact-hurt');
