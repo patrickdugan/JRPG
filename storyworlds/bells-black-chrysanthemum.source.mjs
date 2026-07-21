@@ -3,11 +3,12 @@
  *
  * The generated SweepWeave JSON and browser registry are derived from this
  * file by game/tools/build-storyworld.mjs.  The 60 canonical Campaign beats
- * remain save-stable; these ten clusters add thirty authored interstitial
- * scene nodes, twenty of which are experienced in a complete narrative run.
+ * remain save-stable; these eleven clusters add thirty-four authored
+ * interstitial scene nodes, twenty-two of which are experienced in a complete
+ * narrative run.
  */
 
-export const STORYWORLD_SOURCE_VERSION = 1;
+export const STORYWORLD_SOURCE_VERSION = 2;
 export const STORYWORLD_IFID = '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4';
 export const STORYWORLD_CHARACTER_ID = 'char_lantern_network';
 
@@ -33,15 +34,23 @@ export const STORYWORLD_PROPERTIES = Object.freeze([
   property('court_pressure', 'Court pressure', 0.55),
   property('p_party_respects_limits', 'Belief: party respects limits', 0.45),
   property('p_mateus_truthfulness', 'Belief: Mateus tells the truth', 0.25),
+  property('enma_custody', 'Lady Enma held in rotating custody', 0),
+  property('enma_killed', 'Lady Enma killed at the Black Gate', 0),
+  property('enma_compact', 'Lady Enma bound by a witnessed defection compact', 0),
+  property('enma_testimony', 'Lady Enma testimony reliability', 0.30),
 ]);
 
-const reaction = (text, effects) => Object.freeze({ text, effects: Object.freeze({ ...effects }) });
+const reaction = (text, effects, outcomeKey = undefined) => Object.freeze({
+  text,
+  effects: Object.freeze({ ...effects }),
+  ...(outcomeKey ? { outcomeKey } : {}),
+});
 const option = (id, text, gateProperty, accord, revision) => Object.freeze({
   id,
   text,
   gateProperty,
-  accord: reaction(accord.text, accord.effects),
-  revision: reaction(revision.text, revision.effects),
+  accord: reaction(accord.text, accord.effects, accord.outcomeKey),
+  revision: reaction(revision.text, revision.effects, revision.outcomeKey),
 });
 const outcome = (title, text, prompt, gateProperty, accord, revision) => Object.freeze({
   title,
@@ -57,6 +66,7 @@ const cluster = (definition) => Object.freeze({
   relatedEncounterIds: Object.freeze(definition.relatedEncounterIds ?? []),
   accordOutcome: outcome(...definition.accordOutcome),
   revisionOutcome: outcome(...definition.revisionOutcome),
+  ...(definition.thirdOutcome ? { thirdOutcome: outcome(...definition.thirdOutcome) } : {}),
 });
 
 export const STORYWORLD_CLUSTERS = Object.freeze([
@@ -357,6 +367,52 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'ren_noncoercion',
       { text: 'Ren strikes the cargo language from the route cards and names evacuation as the boats\' complete mission. No later commander may silently restore it.', effects: { ren_noncoercion: 0.05, witness_safety: 0.05, network_consent: 0.05 } },
       { text: 'A reserve note survives on one copied map. Aya recalls it, publishes the correction, and assigns the archive bundle to an independent land route.', effects: { aya_archive_openness: 0.05, proof_integrity: 0.05, route_safety: -0.05 } },
+    ],
+  }),
+  cluster({
+    id: 'sw-enma-three-terms',
+    chapterId: 'chapter-8',
+    anchorBeatId: 'c8-05-gate-opened',
+    placement: 'after-beat',
+    sequenceRole: 'after-boss-consequence',
+    relatedEncounterIds: ['c8-lady-enma'],
+    spoolId: 'spool_enma',
+    title: 'Three Terms for the Cinder Fan',
+    text: "Lady Enma's third mask lies split on the Black Gate stones. The former court entertainer who became Kurozane's Cinder Fan remains conscious, dangerous, and responsible for the rain-dock pursuit, the archive-roof seizure, and years of audiences that turned selective mercy into terror. She offers route ciphers and court testimony but asks to leave under her own name. Nikola can set the Severed Dragon restraint; Mateus can identify a false blood command because he once wrote them; neither man is allowed to own the decision. Released soldiers, route delegates, and harmed witnesses require one exact term: death, rotating custody, or a revocable defection compact with no pardon.",
+    options: [
+      option('bounded-defection', 'Offer a witnessed defection compact: release every thrall, surrender every route cipher, testify, and accept revocable movement limits.', 'network_consent',
+        { text: 'Enma names three hidden audiences and opens her cinder seals while separate route delegates retain the right to halt, narrow, or end the compact. Her assistance becomes monitored defection, not pardon or membership in the party.', outcomeKey: 'negotiated', effects: { enma_compact: 0.10, enma_testimony: 0.10, network_consent: 0.10 } },
+        { text: 'Enma withholds the servant ledger and calls the omission privacy. Aya identifies two missing routes; the compact fails before it starts, and the released soldiers establish rotating custody under a Severed Dragon boundary.', outcomeKey: 'accord', effects: { enma_custody: 0.10, proof_integrity: 0.10, witness_safety: 0.10 } }),
+      option('rotating-custody', 'Set the Severed Dragon restraint and transfer her to rotating civilian custody for testimony without a promise of release.', 'lise_oath_revision',
+        { text: 'Nikola sets only the anti-vampire boundary, then gives its keys to three unrelated custodians. Enma survives to testify, while no hunter, priest, party member, or single village can turn custody into inherited authority.', outcomeKey: 'accord', effects: { enma_custody: 0.10, lise_oath_revision: 0.10, enma_testimony: 0.05 } },
+        { text: 'Enma drives a hidden blood filament through the incomplete boundary toward the patient lane. Nikola severs it, Ren gives the witnessed fatal stop, and her death enters the record beside the failed restraint.', outcomeKey: 'revision', effects: { enma_killed: 0.10, witness_safety: 0.10, court_pressure: -0.05 } }),
+      option('final-blood-duel', 'Accept her demand for a final blood duel only inside the witnessed ward, with the patient and evidence lanes protected.', 'court_pressure',
+        { text: 'Enma uses the duel to reach the road behind Ren. Nikola and Mateus close the two exits without claiming the finishing stroke; the witnessed counterblow kills her before the Cinder Fan can reopen.', outcomeKey: 'revision', effects: { enma_killed: 0.10, court_pressure: -0.10, party_cohesion: 0.05 } },
+        { text: 'The protected lanes deny Enma the theatrical death she expected. She drops the fan, gives Aya the first verifiable cipher, and accepts a compact whose witnesses may revoke every privilege she negotiates.', outcomeKey: 'negotiated', effects: { enma_compact: 0.10, enma_testimony: 0.10, truth_completeness: 0.05 } }),
+    ],
+    accordOutcome: [
+      'Custody Without a Trophy',
+      "The Severed Dragon restraint closes around Enma's blood commands without placing her inside Nikola's household power. Three custodians hold separate keys, harmed witnesses may set distance, and each interrogation requires an independent recorder. Mateus identifies ciphers but cannot question her alone. Enma is neither displayed as a conquered monster nor quietly absorbed into the resistance. She remains a living defendant and a dangerous source whose useful testimony does not erase the people she delivered to Kurozane's audiences.",
+      'Write the first limit on her custody record.',
+      'witness_safety',
+      { text: 'The record forbids solitary custody, private questioning, blood access, and transport without a published destination. Enma signs beneath the restrictions while the three key holders sign beside, not above, one another.', effects: { enma_custody: 0.05, witness_safety: 0.05, proof_integrity: 0.05 } },
+      { text: 'Nikola initially writes his house as guarantor. He strikes the title and replaces it with an expiring technical duty, leaving civilian custodians authority to end his access.', effects: { lise_oath_revision: 0.05, network_consent: 0.05, enma_testimony: 0.05 } },
+    ],
+    revisionOutcome: [
+      'The Cinder Fan Ends',
+      "Enma dies inside the witnessed ward after choosing a final attack or rupturing the restraint. Aya records who authorized the stop, what danger was immediate, and which questions now have no living answer. The party gains no trophy and no clean absolution. Her hidden ciphers must be reconstructed from seized fans, servants' accounts, and the routes she damaged. Kurozane loses his most capable audience keeper, but frightened officials scatter before they can be identified or offered bounded surrender.",
+      'Separate the fatal record from the victory account.',
+      'truth_completeness',
+      { text: 'Aya preserves the immediate threat, the failed alternatives, and the testimony lost with Enma. The death is neither hidden nor made into proof that every captive enemy must die.', effects: { enma_killed: 0.05, truth_completeness: 0.05, aya_archive_openness: 0.05 } },
+      { text: 'A route copy calls the killing purification. Nikola removes the inherited hunter language and replaces it with the exact witnessed necessity and its unresolved cost.', effects: { lise_oath_revision: 0.05, proof_integrity: 0.05, ren_noncoercion: 0.05 } },
+    ],
+    thirdOutcome: [
+      'A Defection Under Witness',
+      "Enma releases the attendants bound to her cinder seals, surrenders the rain-dock and archive-route ciphers, and gives Aya one claim that can be checked before the party enters Kurohana. The compact grants no pardon, office, or promise of safety after Kurozane falls. Each route may withdraw cooperation; every movement is reported; harmed witnesses need not meet her. Enma remains proud, implicated, and free only inside terms other people can revise. Her change is an action under pressure, not a declaration that the court years no longer count.",
+      'State the first service that does not purchase forgiveness.',
+      'enma_testimony',
+      { text: 'Enma identifies a false inner-gate order, then waits while Aya confirms it from an independent record. The useful answer earns only the next bounded question, not trust or restored status.', effects: { enma_compact: 0.05, enma_testimony: 0.05, proof_integrity: 0.05 } },
+      { text: 'Her first route claim omits two endangered attendants. Kiku suspends movement privileges until they are found, demonstrating that the compact can contract as well as reward cooperation.', effects: { witness_safety: 0.05, enma_testimony: -0.05, network_consent: 0.05 } },
     ],
   }),
   cluster({

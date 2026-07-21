@@ -39,9 +39,9 @@ The speed preference remains restricted to `1x`, `2x`, or `4x`. It affects only 
 
 | Required repeat speed | Intended-route reference estimate | Hours |
 | --- | ---: | ---: |
-| 1× | 1,233.679 min | 20.56 |
-| 2× | 1,233.372 min | 20.56 |
-| 4× | 1,233.219 min | 20.55 |
+| 1× | 1,236.311 min | 20.61 |
+| 2× | 1,235.998 min | 20.60 |
+| 4× | 1,235.841 min | 20.60 |
 
 Only 0.614 reference minute at 1× belongs to the four required repeat presentation schedules, so speed-up changes the estimate by seconds rather than removing hours of authored play.
 
@@ -53,7 +53,7 @@ The advancement inventory remains the gross, display-name reward ledger used by 
 
 Chapter level targets rise from level 2 after the Prologue to level 40 for Chapter 9 and the Epilogue. Canonical first clears attain those targets; repeat grinding provides optional over-leveling, currency, recovery from skipped party participation, or a lower-difficulty route through later encounters.
 
-The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 187.202/309.862/500.458 minutes and the complete intended route at 777.840/1,233.679/1,920.559 minutes low/reference/high. The 1× reference route is 33.679 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
+The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 188.936/312.481/504.237 minutes and the complete intended route at 779.587/1,236.311/1,924.351 minutes low/reference/high. The 1× reference route is 36.311 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
 
 ## Save contract
 

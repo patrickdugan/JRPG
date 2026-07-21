@@ -11,6 +11,7 @@ import {
   createStoryworldStorageAdapter,
   deriveStoryworldProjection,
   getCompletedStoryworldClusterIds,
+  getLadyEnmaResolution,
   getStoryworldGateForBeat,
   getStoryworldProgress,
   getVisibleStoryworldOptions,
@@ -84,17 +85,17 @@ test('reaction ties deterministically favor the later-authored reaction', () => 
   assert.equal(selected.score, 0.51);
 });
 
-test('all ten required clusters produce one eighty-scene narrative route and exact replay-derived state', () => {
+test('all eleven required clusters produce one eighty-two-scene narrative route and exact replay-derived state', () => {
   let state = createStoryworldState({ runId: 'storyworld-runtime-complete' });
   STORYWORLD_CLUSTERS.forEach((cluster, index) => {
     state = resolveCluster(state, cluster, index % 3);
   });
   assert.equal(isStoryworldNarrativeComplete(state), true);
-  assert.equal(getCompletedStoryworldClusterIds(state).length, 10);
-  assert.equal(state.records.length, 10);
-  assert.equal(state.revision, 49);
+  assert.equal(getCompletedStoryworldClusterIds(state).length, 11);
+  assert.equal(state.records.length, 11);
+  assert.equal(state.revision, 54);
   const projection = deriveStoryworldProjection(state);
-  assert.equal(Object.keys(projection).length, 17);
+  assert.equal(Object.keys(projection).length, 21);
   assert.equal(Object.values(projection).every((value) => value >= 0 && value <= 1), true);
   const serialized = serializeStoryworldState(state);
   const loaded = loadStoryworldState(serialized);
@@ -185,11 +186,11 @@ test('the exact pre-Severed-Dragon identity migrates only an early prefix before
   assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
 });
 
-test('the pre-English-heiress identity migrates a complete choice-compatible history', () => {
+test('the pre-English-heiress identity migrates only the prefix before Enma\'s inserted hearing', () => {
   const storage = new MemoryStorage();
   const adapter = createStoryworldStorageAdapter(storage);
   let current = createStoryworldState({ runId: 'storyworld-english-heiress-migration-0001' });
-  for (const cluster of STORYWORLD_CLUSTERS) current = resolveCluster(current, cluster, 0);
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 8)) current = resolveCluster(current, cluster, 0);
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[2];
   const legacy = {
     ...current,
@@ -206,6 +207,36 @@ test('the pre-English-heiress identity migrates a complete choice-compatible his
   assert.deepEqual(loaded.state.records, current.records);
   assert.equal(loaded.state.revision, current.revision);
   assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
+});
+
+test('the exact pre-Enma identity migrates only eight compatible records', () => {
+  const storage = new MemoryStorage();
+  const adapter = createStoryworldStorageAdapter(storage);
+  let current = createStoryworldState({ runId: 'storyworld-enma-migration-0001' });
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 8)) current = resolveCluster(current, cluster, 0);
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[3];
+  const legacy = {
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  };
+  storage.setItem(adapter.key, JSON.stringify(legacy));
+
+  const loaded = adapter.load();
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'enma-three-terms-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+});
+
+test('Lady Enma resolution is categorical and remains unavailable until her spool completes', () => {
+  const cluster = STORYWORLD_CLUSTERS.find(({ id }) => id === 'sw-enma-three-terms');
+  let state = createStoryworldState({ runId: 'storyworld-enma-resolution-0001' });
+  assert.equal(getLadyEnmaResolution(state), null);
+  state = resolveCluster(state, cluster, 0);
+  assert.equal(getLadyEnmaResolution(state), 'captured');
+  assert.equal(deriveStoryworldProjection(state).enma_custody > 0, true);
 });
 
 test('historical Corrections Desk outcomes fail closed instead of becoming surrender or execution', () => {

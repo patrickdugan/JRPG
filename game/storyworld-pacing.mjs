@@ -1,9 +1,9 @@
-/** Transparent reference pacing for the 20 Storyworld scenes played in one route. */
+/** Transparent reference pacing for the 22 Storyworld scenes played in one route. */
 
 import { STORYWORLD_CLUSTERS } from './content/storyworld-encounters.generated.mjs';
 
 export const STORYWORLD_PACING_ASSUMPTIONS = Object.freeze({
-  canonicalReferenceMinutes: 309.862,
+  canonicalReferenceMinutes: 312.481,
   readingWordsPerMinute: 200,
   decisionDwellSeconds: 20,
   narrativeTargetMinimumMinutes: 300,

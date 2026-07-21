@@ -97,13 +97,13 @@ test('every authored combat status resolves to engine mechanics and presentation
   assert.equal(COMBAT_STATUS_DEFINITIONS['final-ward-open'].kind, 'tactical-marker');
 });
 
-test('all 47 enemy skills own an exact authored Dodge contract', () => {
+test('all 53 enemy skills own an exact authored Dodge contract', () => {
   const skills = ENCOUNTERS.flatMap((encounter) => encounter.enemies.flatMap((enemy) => (
     (enemy.skills ?? []).map((skill) => ({ encounterId: encounter.id, enemyId: enemy.id, skill }))
   )));
-  assert.equal(skills.length, 47);
-  assert.equal(skills.filter(({ skill }) => skill.dodgeable === true).length, 20);
-  assert.equal(skills.filter(({ skill }) => skill.dodgeable === false).length, 27);
+  assert.equal(skills.length, 53);
+  assert.equal(skills.filter(({ skill }) => skill.dodgeable === true).length, 25);
+  assert.equal(skills.filter(({ skill }) => skill.dodgeable === false).length, 28);
   for (const { encounterId, enemyId, skill } of skills) {
     assert.equal(typeof skill.dodgeable, 'boolean', `${encounterId}/${enemyId}/${skill.id}`);
   }

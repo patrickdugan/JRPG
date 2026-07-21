@@ -53,6 +53,7 @@ export const NARRATIVE_STORYWORLD_DECISION_IDS = Object.freeze([
   'sw6-tribunal-afterword',
   'sw7-soldier-will-not-follow',
   'sw8-boats-with-conditions',
+  'sw-enma-three-terms',
   'sw9-mateus-living-archive',
   'sw10-corrections-desk',
 ]);

@@ -6,12 +6,13 @@ import {
   STORYWORLD_PACING_REPORT,
 } from '../storyworld-pacing.mjs';
 
-test('maximum visible Storyworld path keeps the 80-scene reference route within five to six hours', () => {
-  assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 10);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 1963);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 19);
-  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 16.148333333333333);
-  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceMinutes, 326.01033333333334);
+test('maximum visible Storyworld path keeps the 82-scene reference route within five to six hours', () => {
+  assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 11);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2249);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 21);
+  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 18.244999999999997);
+  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceMinutes, 330.726);
+  assert.equal(STORYWORLD_PACING_REPORT.completeNarrativeReferenceHours, 5.5121);
   assert.equal(STORYWORLD_PACING_REPORT.withinFiveToSixHourTarget, true);
 });
 

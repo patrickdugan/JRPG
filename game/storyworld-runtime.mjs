@@ -18,9 +18,10 @@ export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWO
 // remains compatible. The two pre-Severed-Dragon identities stop before the
 // structurally revised Chapter 9 sequence so the old Corrections Desk can never
 // become a surrender or execution the player did not choose. The later English-
-// heiress revision changes prose without changing any option, effect, or ending,
-// so its complete ten-record history is safe. Accepted saves are validated
-// against the current structural catalog and immediately re-frozen with hashes.
+// heiress revision was choice-compatible at the time, but the later Lady Enma
+// resolution inserts a new three-outcome decision after the eighth record. No
+// legacy identity may cross that point without making the player choose it.
+// Accepted prefixes are validated and immediately re-frozen with current hashes.
 export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
@@ -41,7 +42,14 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     sourceHash: 'sha256:dda93670de31a2df06e84f328edce857ffa606ea5f128df1fd481e0358c0f894',
     catalogSignature: 'sha256:1c9a56037dbc2bf3f4a6f38f5bcc95e6fcbbfe152a9e7f24a919cf037ea5808d',
     migrationId: 'english-heiress-lineage-v1',
-    maximumCompatibleRecordCount: 10,
+    maximumCompatibleRecordCount: 8,
+  }),
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:1b73ec6c717a0ca4899922d0bbdd5293ac564ed274af6e96c8a9032806b3f0e0',
+    catalogSignature: 'sha256:a3408c9b8e65c8ee87646e2148f781dc9f3cb2a4c58b5ceb33a33b1b9a5916cb',
+    migrationId: 'enma-three-terms-v1',
+    maximumCompatibleRecordCount: 8,
   }),
 ]);
 
@@ -325,6 +333,14 @@ export function getStoryworldProgress(state, clusterId) {
   return Object.freeze({ cluster, record, outcome, phase: record?.phase ?? 'unseen', complete: record?.phase === 'complete' });
 }
 
+export function getLadyEnmaResolution(state) {
+  const progress = getStoryworldProgress(state, 'sw-enma-three-terms');
+  if (!progress.complete) return null;
+  return Object.freeze({ accord: 'captured', revision: 'killed', negotiated: 'negotiated' })[
+    progress.outcome?.resolutionKey
+  ] ?? null;
+}
+
 export function getStoryworldGateForBeat(state, beatId, placement = 'after-beat') {
   const snapshot = assertState(state);
   const cluster = getStoryworldClusterForBeat(beatId);
@@ -465,7 +481,7 @@ export function loadStoryworldState(serializedOrPayload) {
       ok: false,
       errors: Object.freeze([
         ...current.errors,
-        'Legacy Storyworld progress reached the structurally revised Chapter 9 ending and cannot be migrated without inventing a political choice.',
+        'Legacy Storyworld progress crossed a structurally inserted decision and cannot be migrated without inventing a political choice.',
       ]),
     });
   }

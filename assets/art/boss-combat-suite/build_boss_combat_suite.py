@@ -395,33 +395,65 @@ def draw_enma(s: Surface, pose: str):
     dx, dy = POSE_OFFSET[pose]
     cx = 56 + dx
     if pose == "defeat":
-        s.shadow(19, 90, 118)
-        s.poly([(25, 82), (48, 70), (71, 79), (86, 103), (74, 115), (38, 113), (20, 100)], "body")
-        s.rect((46, 87, 63, 103), "ink")
-        s.rect((50, 91, 59, 98), "accent")
-        s.line([(27, 90), (16, 108)], "metal", 4)
-        s.line([(76, 88), (94, 105)], "spark", 4)
+        # Subdued, upright, and non-gory: the fan and parasol are separated
+        # from her kneeling silhouette so the later three-way judgment reads.
+        s.shadow(18, 92, 118)
+        s.poly([(34, 77), (51, 68), (68, 75), (81, 103), (72, 115), (36, 114), (25, 101)], "body")
+        s.poly([(43, 70), (56, 65), (68, 73), (63, 87), (45, 87)], "deep")
+        s.rect((49, 76, 62, 89), "light")
+        s.rect((50, 85, 61, 88), "ink")
+        s.line([(25, 91), (12, 109)], "metal", 3)
+        s.poly([(75, 91), (98, 105), (83, 110)], "accent")
+        for px in (82, 87, 92):
+            s.line([(75, 91), (px, 105)], "metal", 1)
         return
-    s.shadow(20 + dx, 91 + dx)
-    s.poly([(29 + dx, 50 + dy), (42 + dx, 27 + dy), (57 + dx, 19 + dy), (73 + dx, 29 + dy),
-            (84 + dx, 55 + dy), (79 + dx, 96 + dy), (64 + dx, 108 + dy),
-            (53 + dx, 91 + dy), (38 + dx, 108 + dy), (23 + dx, 92 + dy)], "body")
-    s.poly([(42 + dx, 37 + dy), (56 + dx, 27 + dy), (70 + dx, 38 + dy),
-            (67 + dx, 57 + dy), (45 + dx, 58 + dy)], "deep")
-    s.rect((48 + dx, 45 + dy, 64 + dx, 49 + dy), "ink")
-    s.rect((52 + dx, 46 + dy, 60 + dx, 47 + dy), "spark")
-    s.rect((46 + dx, 66 + dy, 68 + dx, 88 + dy), "ink")
-    s.rect((51 + dx, 71 + dy, 63 + dx, 83 + dy), "accent")
-    s.rect((54 + dx, 74 + dy, 60 + dx, 80 + dy), "spark")
-    spread = 32 if pose in {"active", "transition"} else 18 if pose == "recovery" else 24
-    s.poly([(36 + dx, 61 + dy), (max(9, 18 + dx - spread // 3), 48 + dy),
-            (max(7, 11 + dx), 61 + dy), (29 + dx, 74 + dy)], "metal")
-    s.poly([(75 + dx, 60 + dy), (min(101, 94 + dx + spread // 4), 46 + dy),
-            (min(104, 102 + dx), 61 + dy), (82 + dx, 75 + dy)], "light")
-    s.line([(18 + dx, 53 + dy), (34 + dx, 66 + dy)], "accent", 3)
-    s.line([(94 + dx, 52 + dy), (78 + dx, 66 + dy)], "spark", 3)
+
+    s.shadow(19 + dx, 94 + dx)
+    # Layered kosode and open uchikake create a court-entertainer silhouette
+    # without copying a named character or relying on a real family emblem.
+    s.poly([(38 + dx, 51 + dy), (24 + dx, 66 + dy), (18 + dx, 98 + dy),
+            (39 + dx, 110 + dy), (55 + dx, 92 + dy), (73 + dx, 110 + dy),
+            (94 + dx, 96 + dy), (86 + dx, 64 + dy), (72 + dx, 51 + dy)], "body")
+    s.poly([(43 + dx, 51 + dy), (55 + dx, 59 + dy), (69 + dx, 51 + dy),
+            (67 + dx, 91 + dy), (56 + dx, 102 + dy), (44 + dx, 90 + dy)], "deep")
+    s.line([(42 + dx, 63 + dy), (55 + dx, 73 + dy), (69 + dx, 62 + dy)], "metal", 2)
+    s.rect((49 + dx, 70 + dy, 63 + dx, 87 + dy), "ink")
+    s.rect((53 + dx, 74 + dy, 59 + dx, 82 + dy), "accent")
+    s.rect((55 + dx, 76 + dy, 58 + dx, 80 + dy), "spark")
+
+    # White-powdered stage face, swept hair mass, and intentionally uneven
+    # hairpins distinguish Enma from the geometric court officers.
+    s.poly([(45 + dx, 31 + dy), (53 + dx, 23 + dy), (65 + dx, 26 + dy),
+            (70 + dx, 39 + dy), (65 + dx, 53 + dy), (48 + dx, 52 + dy),
+            (42 + dx, 40 + dy)], "deep")
+    s.rect((48 + dx, 34 + dy, 65 + dx, 49 + dy), "light")
+    s.rect((49 + dx, 39 + dy, 53 + dx, 41 + dy), "ink")
+    s.rect((60 + dx, 39 + dy, 64 + dx, 41 + dy), "ink")
+    s.rect((55 + dx, 46 + dy, 58 + dx, 48 + dy), "accent")
+    s.rect((53 + dx, 49 + dy, 55 + dx, 51 + dy), "spark")
+    s.rect((59 + dx, 49 + dy, 61 + dx, 51 + dy), "spark")
+    s.poly([(47 + dx, 31 + dy), (52 + dx, 19 + dy), (65 + dx, 18 + dy),
+            (72 + dx, 29 + dy), (64 + dx, 33 + dy)], "ink")
+    s.line([(43 + dx, 26 + dy), (25 + dx, 18 + dy)], "metal", 2)
+    s.line([(66 + dx, 24 + dy), (89 + dx, 14 + dy)], "metal", 2)
+    s.rect((23 + dx, 16 + dy, 29 + dx, 21 + dy), "accent")
+    s.rect((86 + dx, 12 + dy, 92 + dx, 17 + dy), "spark")
+
+    # Left-hand folding fan: readable ribs telegraph attack, closure reads as
+    # recovery. The right side becomes a broken paper-parasol wing in phase 2.
+    fan_tip = (12 + dx, 52 + dy) if pose in {"telegraph", "active", "transition"} else (27 + dx, 64 + dy)
+    fan_hand = (41 + dx, 66 + dy)
+    s.poly([fan_hand, fan_tip, (18 + dx, 72 + dy), (35 + dx, 75 + dy)], "accent")
+    for px, py in ((20, 52), (21, 59), (22, 66), (23, 72)):
+        s.line([fan_hand, (px + dx, py + dy)], "metal", 1)
+    wing_open = pose in {"active", "transition"}
+    wing_tip = (96 + dx, 43 + dy) if wing_open else (88 + dx, 62 + dy)
+    wing_hand = (72 + dx, 66 + dy)
+    s.poly([wing_hand, wing_tip, (96 + dx, 74 + dy), (82 + dx, 78 + dy)], "deep")
+    s.line([wing_hand, wing_tip], "metal", 2)
+    s.line([wing_hand, (95 + dx, 73 + dy)], "light", 2)
     if pose == "transition":
-        s.line([(13, 43), (56, 75), (101, 42)], "spark", 3)
+        s.line([(13, 43), (56, 76), (101, 42)], "spark", 3)
         phase_brackets(s, pose, cx, 7)
 
 

@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 187.202/309.862/500.458 minutes low/reference/high (about 3.12/5.16/8.34 hours)<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 777.840/1,233.679/1,920.559 minutes (about 12.96/20.56/32.01 hours), not measured playtime<br>
+**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 188.936/312.481/504.237 minutes low/reference/high (about 3.15/5.21/8.40 hours)<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 779.587/1,236.311/1,924.351 minutes (about 12.99/20.61/32.07 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 
@@ -171,7 +171,7 @@
 2. Aya works with a printmaker to duplicate proof. The player chooses the order of three short support tasks, affecting which allies appear in the escape but not the ending.
 3. Ujiro stages a trial in which he calls the party foreign agents and uses Mateus’s past crimes as evidence. The accusation is partly true; the scene refuses an easy defense.
 4. Mateus publicly states what he did and names the court’s mechanism without asking for applause. This breaks Ujiro’s attempt to use secrecy.
-5. Ujiro sends masked clerks to seize the print blocks. Ren and Aya protect the copies, not a single heroic document.
+5. Ujiro sends masked clerks and Lady Enma in her second archive mask to seize the print blocks. Ren and Aya protect the living courier and copies while breaking the reflected writ; Enma retreats to Kurohana at 30% HP.
 6. The party escapes along the canal with the third key but learns that Kurozane has begun collecting prisoners for the Yearless Bell at Hushroad.
 
 **Boss:** Magistrate Ujiro Arata. A human boss with clerk summons and legal-seal hazards. The fight is about threat triage, protection, and stopping his command actions; he survives to flee to Kurohana.
@@ -212,7 +212,7 @@
 5. Lady Enma reveals that Kurozane’s castle feeds on fear of abandonment. The group uses lantern signals to show the people inside that the outer routes are not gone.
 6. The party defeats Enma, releasing the final Ashen garrison and opening the castle.
 
-**Boss:** Lady Enma of Ash. She creates Ember and Umbral hazard zones that become safe only through character combinations: Aya wards, Kiku changes terrain, Genta anchors, Ren redirects, Nikola exposes, and Mateus protects.
+**Recurring boss:** Lady Enma of Ash, Kurozane's vampire Cinder Fan and former court entertainer. The Black Gate is her third fight after the Rain Docks first mask and Archive Roof second mask. She creates Ember and Umbral hazard zones that become safe only through character combinations: Aya wards, Kiku changes terrain, Genta anchors, Ren redirects, Nikola exposes, and Mateus protects. Her last defeat subdues her alive; a dedicated Storyworld spool then records death, rotating custody, or a revocable negotiated defection.
 
 **Exit state:** The network holds the gate while the six heroes enter Kurohana Castle. No ally is sent on a suicide mission off-screen.
 

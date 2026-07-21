@@ -113,8 +113,8 @@
       "label": "LADY ENMA OF ASH",
       "encounterId": "c8-lady-enma",
       "encounterFormat": "boss",
-      "resolution": "non-gory-defeat",
-      "phaseRead": "Paired vane colors divide around the reservoir before converging."
+      "resolution": "subdued-for-death-custody-or-compact",
+      "phaseRead": "The closed fan marks the first form, mirrored fan ribs mark the second, and the broken parasol wing opens around the last mask before witnessed restraint."
     },
     {
       "id": "yearless-bell",
@@ -146,12 +146,12 @@
     {
       "path": "boss-combat-suite.source.json",
       "format": "json",
-      "sha256": "bf86135c017c360978e4795182a72cc53cbbf4dc67a009fc9535e51e80205d52"
+      "sha256": "79fc338a739e3eb843a5e09a23cca971aedb73e83593c771191f65328edfe16f"
     },
     {
       "path": "build_boss_combat_suite.py",
       "format": "python",
-      "sha256": "4e049679da4cf83216afb33810a132294f2a3fcebf6c35b1b538d29e248519be"
+      "sha256": "6ba3b5364cfceeaab9546c8956ed69ead954d760bb6780523d4927e17f37fe25"
     }
   ],
   "exports": [
@@ -159,7 +159,7 @@
       "path": "boss-combat-atlas.png",
       "role": "transparent-runtime-candidate",
       "runtimeCandidate": true,
-      "sha256": "b0c2796d7abe3efec5d0e9ac9254568e87ac960502691be2b159f98e1e3419ca",
+      "sha256": "fae229aa37cfbff853c26c6a670eade06db0b8bb829e5a163c97557348b188a5",
       "ihdr": {
         "width": 784,
         "height": 1280,
@@ -174,7 +174,7 @@
       "path": "boss-combat-contact-sheet.png",
       "role": "labeled-review-contact-sheet",
       "runtimeCandidate": false,
-      "sha256": "624d03caf714277ce23f1944c0c7c6de2ec13d2d1f94f8a18f843971ed7541cd",
+      "sha256": "392f663acd1deb021de275b4a806d221e6da44a903b36dd3aae7a60883b2460b",
       "ihdr": {
         "width": 838,
         "height": 1528,
@@ -2423,19 +2423,19 @@
         25
       ],
       "alphaBounds": {
-        "x": 10,
-        "y": 19,
-        "width": 93,
-        "height": 101
+        "x": 18,
+        "y": 12,
+        "width": 79,
+        "height": 108
       },
       "transparentGutter": {
-        "left": 10,
-        "top": 19,
-        "right": 9,
+        "left": 18,
+        "top": 12,
+        "right": 15,
         "bottom": 8
       },
-      "opaquePixelCount": 4820,
-      "rgbaSha256": "bd768b8698bbfc5a5d85aaa884007fcb9b6c9d7b19edcbe743c5d354bf4a8b13"
+      "opaquePixelCount": 4683,
+      "rgbaSha256": "28fa12a115a7abd2d8b6942fa17e89d7625ffd599a316ae10464923acb8d49d7"
     },
     {
       "id": "lady-enma:telegraph",
@@ -2468,19 +2468,19 @@
         22
       ],
       "alphaBounds": {
-        "x": 8,
-        "y": 19,
-        "width": 92,
-        "height": 101
+        "x": 9,
+        "y": 12,
+        "width": 85,
+        "height": 108
       },
       "transparentGutter": {
-        "left": 8,
-        "top": 19,
-        "right": 12,
+        "left": 9,
+        "top": 12,
+        "right": 18,
         "bottom": 8
       },
-      "opaquePixelCount": 4818,
-      "rgbaSha256": "a2f44279d59dedfd092e0afff6c0363ab9e8d03f3be9de511601a905c33ae6e6"
+      "opaquePixelCount": 4831,
+      "rgbaSha256": "8588c1c3c5712fc20c5f9efe65dc6b90d7146ded1aebb5aa603b8d20ba456705"
     },
     {
       "id": "lady-enma:active",
@@ -2513,19 +2513,19 @@
         19
       ],
       "alphaBounds": {
-        "x": 16,
-        "y": 20,
-        "width": 89,
-        "height": 100
+        "x": 20,
+        "y": 13,
+        "width": 85,
+        "height": 107
       },
       "transparentGutter": {
-        "left": 16,
-        "top": 20,
+        "left": 20,
+        "top": 13,
         "right": 7,
         "bottom": 8
       },
-      "opaquePixelCount": 4723,
-      "rgbaSha256": "f86ce12848f9eb9ba403148efeffb282951c80a2de25435fa8adb7fce133ea33"
+      "opaquePixelCount": 5082,
+      "rgbaSha256": "ead3e763a5741f85d2f2ebfda55cc747e01bfb925a658b85315e1c1582deb939"
     },
     {
       "id": "lady-enma:break",
@@ -2558,19 +2558,19 @@
         36
       ],
       "alphaBounds": {
-        "x": 7,
-        "y": 26,
-        "width": 88,
-        "height": 94
+        "x": 10,
+        "y": 19,
+        "width": 79,
+        "height": 101
       },
       "transparentGutter": {
-        "left": 7,
-        "top": 26,
-        "right": 17,
+        "left": 10,
+        "top": 19,
+        "right": 23,
         "bottom": 8
       },
-      "opaquePixelCount": 4760,
-      "rgbaSha256": "186bfd3c48f832f9ae39661bd7b522bb5cec92c0fefab1c31b68c31fd44a0c6b"
+      "opaquePixelCount": 4674,
+      "rgbaSha256": "83d332eb11a1b89b2789e363d76695c577db86304f7d07959de840b3336b0c83"
     },
     {
       "id": "lady-enma:transition",
@@ -2603,19 +2603,19 @@
         14
       ],
       "alphaBounds": {
-        "x": 9,
+        "x": 12,
         "y": 7,
-        "width": 94,
+        "width": 91,
         "height": 113
       },
       "transparentGutter": {
-        "left": 9,
+        "left": 12,
         "top": 7,
         "right": 9,
         "bottom": 8
       },
-      "opaquePixelCount": 5030,
-      "rgbaSha256": "e6c1d3adf38917f8e300b0e8919d1d8daaac06e583e638f095882c9bd9a05b8e"
+      "opaquePixelCount": 5335,
+      "rgbaSha256": "2fc34ea32ce4a688012ab285f448a9fa2fd26d780b54f340c1be473956fc3a28"
     },
     {
       "id": "lady-enma:defeat",
@@ -2648,19 +2648,19 @@
         61
       ],
       "alphaBounds": {
-        "x": 15,
-        "y": 70,
-        "width": 81,
-        "height": 52
+        "x": 11,
+        "y": 65,
+        "width": 88,
+        "height": 57
       },
       "transparentGutter": {
-        "left": 15,
-        "top": 70,
-        "right": 16,
+        "left": 11,
+        "top": 65,
+        "right": 13,
         "bottom": 6
       },
-      "opaquePixelCount": 2470,
-      "rgbaSha256": "9dab017a65c71104ab65556db201adb93dd06e1e6eb61f4ed0b1cb42aeb89889"
+      "opaquePixelCount": 2516,
+      "rgbaSha256": "e6b37f26eed26e24f222d33a460007689f2b9d05e4f2aafa2313601620fcde1c"
     },
     {
       "id": "lady-enma:recovery",
@@ -2693,19 +2693,19 @@
         31
       ],
       "alphaBounds": {
-        "x": 9,
-        "y": 23,
-        "width": 92,
-        "height": 97
+        "x": 16,
+        "y": 16,
+        "width": 79,
+        "height": 104
       },
       "transparentGutter": {
-        "left": 9,
-        "top": 23,
-        "right": 11,
+        "left": 16,
+        "top": 16,
+        "right": 17,
         "bottom": 8
       },
-      "opaquePixelCount": 4815,
-      "rgbaSha256": "4db697c39880a4e7190d103190994426baee651b226009759c04a68f80acd03f"
+      "opaquePixelCount": 4683,
+      "rgbaSha256": "3c1f3640a5825366f19684613d688ef9a1c9094463995e1084c019ce51fae959"
     },
     {
       "id": "yearless-bell:neutral",

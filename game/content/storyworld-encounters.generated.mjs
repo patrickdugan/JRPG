@@ -8,13 +8,13 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:a3408c9b8e65c8ee87646e2148f781dc9f3cb2a4c58b5ceb33a33b1b9a5916cb";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:cda027a434bd5f95301d65dc27c059d49cdbe2d6751b3d3e93e4bb1eb77f86a2";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 1,
+  "sourceVersion": 2,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:1b73ec6c717a0ca4899922d0bbdd5293ac564ed274af6e96c8a9032806b3f0e0",
-  "bindingHash": "sha256:65f25f78bc59e8217738c5363cfff376fe9b0d2328bd38a3389aa1db31dfd71e",
+  "sourceHash": "sha256:c487a443ccbef01c0354a7ea0d2c003bac724d0f5bb230f1b4ad673170b2c2a9",
+  "bindingHash": "sha256:00820724b6dbb3a52720a9ce0f84660a7a0fe96f7420d2119cbf18dc6cb4ff32",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
     {
@@ -101,6 +101,26 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "id": "p_mateus_truthfulness",
       "label": "Belief: Mateus tells the truth",
       "defaultValue": 0.25
+    },
+    {
+      "id": "enma_custody",
+      "label": "Lady Enma held in rotating custody",
+      "defaultValue": 0
+    },
+    {
+      "id": "enma_killed",
+      "label": "Lady Enma killed at the Black Gate",
+      "defaultValue": 0
+    },
+    {
+      "id": "enma_compact",
+      "label": "Lady Enma bound by a witnessed defection compact",
+      "defaultValue": 0
+    },
+    {
+      "id": "enma_testimony",
+      "label": "Lady Enma testimony reliability",
+      "defaultValue": 0.3
     }
   ],
   "clusters": [
@@ -113,6 +133,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_0000",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw01_accord",
         "page_sw01_revision"
@@ -366,7 +390,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw01_revision",
@@ -433,7 +458,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -448,6 +474,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw02_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw02_accord",
         "page_sw02_revision"
@@ -701,7 +731,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw02_revision",
@@ -768,7 +799,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -783,6 +815,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw03_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw03_accord",
         "page_sw03_revision"
@@ -1036,7 +1072,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw03_revision",
@@ -1103,7 +1140,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -1116,6 +1154,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw04_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw04_accord",
         "page_sw04_revision"
@@ -1369,7 +1411,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw04_revision",
@@ -1436,7 +1479,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -1451,6 +1495,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw05_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw05_accord",
         "page_sw05_revision"
@@ -1704,7 +1752,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw05_revision",
@@ -1771,7 +1820,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -1786,6 +1836,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw06_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw06_accord",
         "page_sw06_revision"
@@ -2039,7 +2093,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw06_revision",
@@ -2106,7 +2161,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -2121,6 +2177,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw07_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw07_accord",
         "page_sw07_revision"
@@ -2374,7 +2434,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw07_revision",
@@ -2441,7 +2502,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -2456,6 +2518,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw08_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw08_accord",
         "page_sw08_revision"
@@ -2709,7 +2775,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_sw08_revision",
@@ -2776,7 +2843,419 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
+        }
+      ]
+    },
+    {
+      "id": "sw-enma-three-terms",
+      "chapterId": "chapter-8",
+      "anchorBeatId": "c8-05-gate-opened",
+      "placement": "after-beat",
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c8-lady-enma"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw09_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision",
+        "negotiated"
+      ],
+      "outcomeEncounterIds": [
+        "page_sw09_accord",
+        "page_sw09_revision",
+        "page_sw09_negotiated"
+      ],
+      "entry": {
+        "id": "page_sw09_decision",
+        "title": "Three Terms for the Cinder Fan",
+        "text": "Lady Enma's third mask lies split on the Black Gate stones. The former court entertainer who became Kurozane's Cinder Fan remains conscious, dangerous, and responsible for the rain-dock pursuit, the archive-roof seizure, and years of audiences that turned selective mercy into terror. She offers route ciphers and court testimony but asks to leave under her own name. Nikola can set the Severed Dragon restraint; Mateus can identify a false blood command because he once wrote them; neither man is allowed to own the decision. Released soldiers, route delegates, and harmed witnesses require one exact term: death, rotating custody, or a revocable defection compact with no pardon.",
+        "prompt": "",
+        "terminal": false,
+        "options": [
+          {
+            "id": "page_sw09_decision_opt_bounded-defection",
+            "text": "Offer a witnessed defection compact: release every thrall, surrender every route cipher, testify, and accept revocable movement limits.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw09_decision_opt_bounded-defection_r_accord",
+                "text": "Enma names three hidden audiences and opens her cinder seals while separate route delegates retain the right to halt, narrow, or end the compact. Her assistance becomes monitored defection, not pardon or membership in the party.",
+                "consequenceId": "page_sw09_negotiated",
+                "score": {
+                  "propertyId": "network_consent",
+                  "invert": false,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_compact",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "enma_testimony",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.1
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw09_decision_opt_bounded-defection_r_revision",
+                "text": "Enma withholds the servant ledger and calls the omission privacy. Aya identifies two missing routes; the compact fails before it starts, and the released soldiers establish rotating custody under a Severed Dragon boundary.",
+                "consequenceId": "page_sw09_accord",
+                "score": {
+                  "propertyId": "network_consent",
+                  "invert": true,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_custody",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  }
+                ],
+                "authoredIndex": 1
+              }
+            ]
+          },
+          {
+            "id": "page_sw09_decision_opt_rotating-custody",
+            "text": "Set the Severed Dragon restraint and transfer her to rotating civilian custody for testimony without a promise of release.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw09_decision_opt_rotating-custody_r_accord",
+                "text": "Nikola sets only the anti-vampire boundary, then gives its keys to three unrelated custodians. Enma survives to testify, while no hunter, priest, party member, or single village can turn custody into inherited authority.",
+                "consequenceId": "page_sw09_accord",
+                "score": {
+                  "propertyId": "lise_oath_revision",
+                  "invert": false,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_custody",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "lise_oath_revision",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "enma_testimony",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw09_decision_opt_rotating-custody_r_revision",
+                "text": "Enma drives a hidden blood filament through the incomplete boundary toward the patient lane. Nikola severs it, Ren gives the witnessed fatal stop, and her death enters the record beside the failed restraint.",
+                "consequenceId": "page_sw09_revision",
+                "score": {
+                  "propertyId": "lise_oath_revision",
+                  "invert": true,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_killed",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": -0.05
+                  }
+                ],
+                "authoredIndex": 1
+              }
+            ]
+          },
+          {
+            "id": "page_sw09_decision_opt_final-blood-duel",
+            "text": "Accept her demand for a final blood duel only inside the witnessed ward, with the patient and evidence lanes protected.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw09_decision_opt_final-blood-duel_r_accord",
+                "text": "Enma uses the duel to reach the road behind Ren. Nikola and Mateus close the two exits without claiming the finishing stroke; the witnessed counterblow kills her before the Cinder Fan can reopen.",
+                "consequenceId": "page_sw09_revision",
+                "score": {
+                  "propertyId": "court_pressure",
+                  "invert": false,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_killed",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": -0.1
+                  },
+                  {
+                    "propertyId": "party_cohesion",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw09_decision_opt_final-blood-duel_r_revision",
+                "text": "The protected lanes deny Enma the theatrical death she expected. She drops the fan, gives Aya the first verifiable cipher, and accepts a compact whose witnesses may revoke every privilege she negotiates.",
+                "consequenceId": "page_sw09_negotiated",
+                "score": {
+                  "propertyId": "court_pressure",
+                  "invert": true,
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_compact",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "enma_testimony",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              }
+            ]
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "page_sw09_accord",
+          "title": "Custody Without a Trophy",
+          "text": "The Severed Dragon restraint closes around Enma's blood commands without placing her inside Nikola's household power. Three custodians hold separate keys, harmed witnesses may set distance, and each interrogation requires an independent recorder. Mateus identifies ciphers but cannot question her alone. Enma is neither displayed as a conquered monster nor quietly absorbed into the resistance. She remains a living defendant and a dangerous source whose useful testimony does not erase the people she delivered to Kurozane's audiences.",
+          "prompt": "Write the first limit on her custody record.",
+          "terminal": false,
+          "options": [
+            {
+              "id": "page_sw09_accord_opt_carry",
+              "text": "Write the first limit on her custody record.",
+              "visible": true,
+              "performable": true,
+              "reactions": [
+                {
+                  "id": "page_sw09_accord_opt_carry_r_accord",
+                  "text": "The record forbids solitary custody, private questioning, blood access, and transport without a published destination. Enma signs beneath the restrictions while the three key holders sign beside, not above, one another.",
+                  "consequenceId": "page_sw10_decision",
+                  "score": {
+                    "propertyId": "witness_safety",
+                    "invert": false,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "enma_custody",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 0
+                },
+                {
+                  "id": "page_sw09_accord_opt_carry_r_revision",
+                  "text": "Nikola initially writes his house as guarantor. He strikes the title and replaces it with an expiring technical duty, leaving civilian custodians authority to end his access.",
+                  "consequenceId": "page_sw10_decision",
+                  "score": {
+                    "propertyId": "witness_safety",
+                    "invert": true,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 1
+                }
+              ]
+            }
+          ],
+          "resolutionKey": "accord"
+        },
+        {
+          "id": "page_sw09_revision",
+          "title": "The Cinder Fan Ends",
+          "text": "Enma dies inside the witnessed ward after choosing a final attack or rupturing the restraint. Aya records who authorized the stop, what danger was immediate, and which questions now have no living answer. The party gains no trophy and no clean absolution. Her hidden ciphers must be reconstructed from seized fans, servants' accounts, and the routes she damaged. Kurozane loses his most capable audience keeper, but frightened officials scatter before they can be identified or offered bounded surrender.",
+          "prompt": "Separate the fatal record from the victory account.",
+          "terminal": false,
+          "options": [
+            {
+              "id": "page_sw09_revision_opt_carry",
+              "text": "Separate the fatal record from the victory account.",
+              "visible": true,
+              "performable": true,
+              "reactions": [
+                {
+                  "id": "page_sw09_revision_opt_carry_r_accord",
+                  "text": "Aya preserves the immediate threat, the failed alternatives, and the testimony lost with Enma. The death is neither hidden nor made into proof that every captive enemy must die.",
+                  "consequenceId": "page_sw10_decision",
+                  "score": {
+                    "propertyId": "truth_completeness",
+                    "invert": false,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "enma_killed",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 0
+                },
+                {
+                  "id": "page_sw09_revision_opt_carry_r_revision",
+                  "text": "A route copy calls the killing purification. Nikola removes the inherited hunter language and replaces it with the exact witnessed necessity and its unresolved cost.",
+                  "consequenceId": "page_sw10_decision",
+                  "score": {
+                    "propertyId": "truth_completeness",
+                    "invert": true,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 1
+                }
+              ]
+            }
+          ],
+          "resolutionKey": "revision"
+        },
+        {
+          "id": "page_sw09_negotiated",
+          "title": "A Defection Under Witness",
+          "text": "Enma releases the attendants bound to her cinder seals, surrenders the rain-dock and archive-route ciphers, and gives Aya one claim that can be checked before the party enters Kurohana. The compact grants no pardon, office, or promise of safety after Kurozane falls. Each route may withdraw cooperation; every movement is reported; harmed witnesses need not meet her. Enma remains proud, implicated, and free only inside terms other people can revise. Her change is an action under pressure, not a declaration that the court years no longer count.",
+          "prompt": "State the first service that does not purchase forgiveness.",
+          "terminal": false,
+          "options": [
+            {
+              "id": "page_sw09_negotiated_opt_carry",
+              "text": "State the first service that does not purchase forgiveness.",
+              "visible": true,
+              "performable": true,
+              "reactions": [
+                {
+                  "id": "page_sw09_negotiated_opt_carry_r_accord",
+                  "text": "Enma identifies a false inner-gate order, then waits while Aya confirms it from an independent record. The useful answer earns only the next bounded question, not trust or restored status.",
+                  "consequenceId": "page_sw10_decision",
+                  "score": {
+                    "propertyId": "enma_testimony",
+                    "invert": false,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "enma_compact",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 0
+                },
+                {
+                  "id": "page_sw09_negotiated_opt_carry_r_revision",
+                  "text": "Her first route claim omits two endangered attendants. Kiku suspends movement privileges until they are found, demonstrating that the compact can contract as well as reward cooperation.",
+                  "consequenceId": "page_sw10_decision",
+                  "score": {
+                    "propertyId": "enma_testimony",
+                    "invert": true,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "witness_safety",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "delta": -0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 1
+                }
+              ]
+            }
+          ],
+          "resolutionKey": "negotiated"
         }
       ]
     },
@@ -2790,28 +3269,32 @@ export const STORYWORLD_CATALOG = deepFreeze({
         "c9-yearless-bell"
       ],
       "requiredForNarrativeCredits": true,
-      "entryEncounterId": "page_sw09_decision",
+      "entryEncounterId": "page_sw10_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
-        "page_sw09_accord",
-        "page_sw09_revision"
+        "page_sw10_accord",
+        "page_sw10_revision"
       ],
       "entry": {
-        "id": "page_sw09_decision",
+        "id": "page_sw10_decision",
         "title": "Mateus at the Living Archive",
         "text": "Kurozane's living archive contains cipher layers Mateus can read and witness boundaries he has no right to cross. The party may use his knowledge without restoring priestly, foreign, or scholarly authority. Aya asks whether he should translate aloud, write only a key, or remain silent until a local custodian requests an answer.",
         "prompt": "",
         "terminal": false,
         "options": [
           {
-            "id": "page_sw09_decision_opt_translate-aloud",
+            "id": "page_sw10_decision_opt_translate-aloud",
             "text": "Have Mateus translate aloud while Aya records.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw09_decision_opt_translate-aloud_r_accord",
+                "id": "page_sw10_decision_opt_translate-aloud_r_accord",
                 "text": "Mateus distinguishes his original work from later alterations and stops whenever Aya asks. The translation remains a witnessed act, not his private edition.",
-                "consequenceId": "page_sw09_accord",
+                "consequenceId": "page_sw10_accord",
                 "score": {
                   "propertyId": "mateus_accountability",
                   "invert": false,
@@ -2834,9 +3317,9 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw09_decision_opt_translate-aloud_r_revision",
+                "id": "page_sw10_decision_opt_translate-aloud_r_revision",
                 "text": "He starts controlling interpretation through pace and omission. Aya stops the session, records the attempt, and keeps only independently checked lines.",
-                "consequenceId": "page_sw09_revision",
+                "consequenceId": "page_sw10_revision",
                 "score": {
                   "propertyId": "mateus_accountability",
                   "invert": true,
@@ -2861,15 +3344,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw09_decision_opt_cipher-key-only",
+            "id": "page_sw10_decision_opt_cipher-key-only",
             "text": "Ask him to write only a bounded cipher key.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw09_decision_opt_cipher-key-only_r_accord",
+                "id": "page_sw10_decision_opt_cipher-key-only_r_accord",
                 "text": "The key permits independent reading later without bringing Mateus near witnesses. He labels where context is missing and claims no final interpretation.",
-                "consequenceId": "page_sw09_accord",
+                "consequenceId": "page_sw10_accord",
                 "score": {
                   "propertyId": "witness_safety",
                   "invert": false,
@@ -2892,9 +3375,9 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw09_decision_opt_cipher-key-only_r_revision",
+                "id": "page_sw10_decision_opt_cipher-key-only_r_revision",
                 "text": "The key is incomplete without context. Mateus labels that limit instead of expanding his access, and Aya preserves the unfinished tool.",
-                "consequenceId": "page_sw09_revision",
+                "consequenceId": "page_sw10_revision",
                 "score": {
                   "propertyId": "witness_safety",
                   "invert": true,
@@ -2919,15 +3402,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw09_decision_opt_wait-for-custodian",
+            "id": "page_sw10_decision_opt_wait-for-custodian",
             "text": "Keep him silent unless a local custodian asks.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw09_decision_opt_wait-for-custodian_r_accord",
+                "id": "page_sw10_decision_opt_wait-for-custodian_r_accord",
                 "text": "Mateus accepts silence and follows guard instructions. A custodian later asks one narrow question, which he answers carefully in writing.",
-                "consequenceId": "page_sw09_accord",
+                "consequenceId": "page_sw10_accord",
                 "score": {
                   "propertyId": "network_consent",
                   "invert": false,
@@ -2950,9 +3433,9 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw09_decision_opt_wait-for-custodian_r_revision",
+                "id": "page_sw10_decision_opt_wait-for-custodian_r_revision",
                 "text": "He volunteers a warning before being asked. The guard stops him; he submits it in writing and accepts that urgency does not erase the rule.",
-                "consequenceId": "page_sw09_revision",
+                "consequenceId": "page_sw10_revision",
                 "score": {
                   "propertyId": "network_consent",
                   "invert": true,
@@ -2980,22 +3463,22 @@ export const STORYWORLD_CATALOG = deepFreeze({
       },
       "outcomes": [
         {
-          "id": "page_sw09_accord",
+          "id": "page_sw10_accord",
           "title": "Knowledge Under Revocable Terms",
           "text": "Mateus contributes a bounded key whose use can be stopped, checked, and reassigned. Aya and local custodians retain interpretation authority. His change of heart appears as costly restraint and useful testimony, not absolution, restored office, or a claim that European knowledge must lead the resistance or define its future direction.",
           "prompt": "State what Mateus does not receive in return.",
           "terminal": false,
           "options": [
             {
-              "id": "page_sw09_accord_opt_carry",
+              "id": "page_sw10_accord_opt_carry",
               "text": "State what Mateus does not receive in return.",
               "visible": true,
               "performable": true,
               "reactions": [
                 {
-                  "id": "page_sw09_accord_opt_carry_r_accord",
+                  "id": "page_sw10_accord_opt_carry_r_accord",
                   "text": "The record grants no command, pardon, private access, or restored title. Mateus signs the limits before the key enters local custody.",
-                  "consequenceId": "page_sw10_decision",
+                  "consequenceId": "page_sw11_decision",
                   "score": {
                     "propertyId": "mateus_accountability",
                     "invert": false,
@@ -3018,9 +3501,9 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "authoredIndex": 0
                 },
                 {
-                  "id": "page_sw09_accord_opt_carry_r_revision",
+                  "id": "page_sw10_accord_opt_carry_r_revision",
                   "text": "One draft thanks Mateus in language that implies restoration. Nikola removes it without substituting the language of noble honor, and the final receipt records only the bounded work completed.",
-                  "consequenceId": "page_sw10_decision",
+                  "consequenceId": "page_sw11_decision",
                   "score": {
                     "propertyId": "mateus_accountability",
                     "invert": true,
@@ -3044,25 +3527,26 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "accord"
         },
         {
-          "id": "page_sw09_revision",
+          "id": "page_sw10_revision",
           "title": "The Translation Stops",
           "text": "Aya ends the session when Mateus begins to control interpretation. The archive keeps the checked lines, the attempted omission, and the unfinished cipher key. He remains available under guard, but usefulness does not entitle him to continue. The party enters Kurozane's final chamber with a narrower and more trustworthy record.",
           "prompt": "Preserve the stopped boundary in the archive.",
           "terminal": false,
           "options": [
             {
-              "id": "page_sw09_revision_opt_carry",
+              "id": "page_sw10_revision_opt_carry",
               "text": "Preserve the stopped boundary in the archive.",
               "visible": true,
               "performable": true,
               "reactions": [
                 {
-                  "id": "page_sw09_revision_opt_carry_r_accord",
+                  "id": "page_sw10_revision_opt_carry_r_accord",
                   "text": "Aya timestamps the halt and separates verified lines from abandoned interpretation. Later readers can see why the account ends where it does.",
-                  "consequenceId": "page_sw10_decision",
+                  "consequenceId": "page_sw11_decision",
                   "score": {
                     "propertyId": "aya_archive_openness",
                     "invert": false,
@@ -3085,9 +3569,9 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "authoredIndex": 0
                 },
                 {
-                  "id": "page_sw09_revision_opt_carry_r_revision",
+                  "id": "page_sw10_revision_opt_carry_r_revision",
                   "text": "The first copy omits the attempted control. Nikola restores the note, refusing to make Mateus easier to forgive or either man easier to honor by making the record smoother.",
-                  "consequenceId": "page_sw10_decision",
+                  "consequenceId": "page_sw11_decision",
                   "score": {
                     "propertyId": "aya_archive_openness",
                     "invert": true,
@@ -3111,7 +3595,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 }
               ]
             }
-          ]
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -3125,26 +3610,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
         "c9-kurozane"
       ],
       "requiredForNarrativeCredits": true,
-      "entryEncounterId": "page_sw10_decision",
+      "entryEncounterId": "page_sw11_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_end_corrections_visible",
         "page_end_limits_posted"
       ],
       "entry": {
-        "id": "page_sw10_decision",
+        "id": "page_sw11_decision",
         "title": "The Last Command",
         "text": "Kurozane lies alive inside the broken command circle, surrounded by the castle's final ring of crucified and impaled Kirishitan victims. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not scenery to be erased with the throne. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still carry instructions tied to his blood. Killing him may rupture those bindings and invite rival governors to seize the empty machinery. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but it cannot make surrender sincere. Ren asks what terms can transfer power without making the hunter, the vampire priest, or the victorious party his successor.",
         "prompt": "",
         "terminal": false,
         "options": [
           {
-            "id": "page_sw10_decision_opt_witnessed-return",
+            "id": "page_sw11_decision_opt_witnessed-return",
             "text": "Offer a witnessed return of the military, registry, and bell seals under binding.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw10_decision_opt_witnessed-return_r_accord",
+                "id": "page_sw11_decision_opt_witnessed-return_r_accord",
                 "text": "Route delegates enter the observatory separately and name the powers being returned. Nikola holds only the severing boundary; Mateus confirms each blood command has stopped without receiving a new office.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
@@ -3169,7 +3658,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw10_decision_opt_witnessed-return_r_revision",
+                "id": "page_sw11_decision_opt_witnessed-return_r_revision",
                 "text": "Kurozane returns one ceremonial seal while retaining the granary commands. Aya reads the omission aloud. When he reaches through the hidden command to starve the routes, Ren gives the fatal stop before the binding tears; rival riders are already moving.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
@@ -3196,13 +3685,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw10_decision_opt_provisional-binding",
+            "id": "page_sw11_decision_opt_provisional-binding",
             "text": "Bind Kurozane provisionally while route councils define the transfer.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw10_decision_opt_provisional-binding_r_accord",
+                "id": "page_sw11_decision_opt_provisional-binding_r_accord",
                 "text": "The binding receives a public expiration and no hunter custody. Local delegates inventory every office before accepting it, preventing victory from becoming an unexamined succession.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
@@ -3227,7 +3716,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw10_decision_opt_provisional-binding_r_revision",
+                "id": "page_sw11_decision_opt_provisional-binding_r_revision",
                 "text": "The first draft leaves Nikola as sole keeper of the binding. He tears out his own authority clause. During the delay Kurozane ruptures the provisional bond to reclaim an outer bell; route witnesses authorize the fatal stop rather than grant Nikola permanent custody.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
@@ -3254,13 +3743,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw10_decision_opt_execution-demand",
+            "id": "page_sw11_decision_opt_execution-demand",
             "text": "Demand immediate execution before the blood court can regroup.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw10_decision_opt_execution-demand_r_accord",
+                "id": "page_sw11_decision_opt_execution-demand_r_accord",
                 "text": "The naked blade makes Kurozane understand that immortality no longer protects his office. He chooses witnessed surrender, not remorse, and the party refuses to call fear a change of heart.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
@@ -3285,7 +3774,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw10_decision_opt_execution-demand_r_revision",
+                "id": "page_sw11_decision_opt_execution-demand_r_revision",
                 "text": "The blade falls before every command can be inventoried. Kurozane dies, distant bells answer competing hands, and messengers report governors claiming emergency authority over roads and rice.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
@@ -3320,7 +3809,8 @@ export const STORYWORLD_CATALOG = deepFreeze({
           "text": "Kurozane hears the independent route confirmations and sees that the country can act without his blood. He asks Ren what will hold it together when no immortal body commands the center. Ren answers: routes that can hold one another provisionally, refuse one another publicly, and survive the death of any one keeper. Kurozane returns the military, registry, granary, and bell seals one by one while the Severed Dragon boundary separates each office from his body. He is taken alive under rotating guard. The living prisoners leave first; witnesses catalogue the execution rows before any beam is dismantled. The transfer is not absolution, restoration, or proof that his self-justifying history was true; it is the first public act in which his survival no longer requires everyone else's obedience.",
           "prompt": "Record what the former shogun does not retain.",
           "terminal": true,
-          "options": []
+          "options": [],
+          "resolutionKey": "accord"
         },
         {
           "id": "page_end_limits_posted",
@@ -3328,19 +3818,20 @@ export const STORYWORLD_CATALOG = deepFreeze({
           "text": "Kurozane dies after immediate execution or a failed transfer forces the fatal stop, before the blood offices can be separated from him. The central Bell stops, but outer governors seize stores, patrol seals, and surviving Oni commands in the name of temporary order. No explosion erases the evidence and no narrator declares execution uniquely wicked; the consequence is a civil war created by a regime designed to make one immortal body its only transfer mechanism. The party can preserve routes and records, not retroactively make the vacuum safe.",
           "prompt": "Carry the execution record into the emergency route plan.",
           "terminal": true,
-          "options": []
+          "options": [],
+          "resolutionKey": "revision"
         }
       ]
     }
   ],
   "metrics": {
     "canonicalSceneCount": 60,
-    "storyworldAuthoredSceneCount": 30,
-    "authoredSceneCount": 90,
-    "completeRunStoryworldSceneCount": 20,
-    "completeRunSceneCount": 80,
-    "clusterCount": 10,
-    "entryOptionCount": 30
+    "storyworldAuthoredSceneCount": 34,
+    "authoredSceneCount": 94,
+    "completeRunStoryworldSceneCount": 22,
+    "completeRunSceneCount": 82,
+    "clusterCount": 11,
+    "entryOptionCount": 33
   }
 });
 export const STORYWORLD_PROPERTIES = STORYWORLD_CATALOG.properties;

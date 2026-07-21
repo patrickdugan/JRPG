@@ -120,7 +120,7 @@ test('a run receipt can start only beside pristine campaign and advancement stat
   }).ok, false);
 });
 
-test('narrative profile is explicit and records the ten Storyworld decisions in exact order', () => {
+test('narrative profile is explicit and records the eleven Storyworld decisions in exact order', () => {
   let state = startNarrative('run-narrative-order');
   assert.equal(state.profileId, RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H);
   assert.equal(RUN_RECEIPT_PROFILE_CONTRACTS[state.profileId].minimumActiveMinutes, 300);
@@ -150,7 +150,7 @@ test('narrative profile is explicit and records the ten Storyworld decisions in 
   assert.equal(notTracked.code, 'profile-does-not-track-storyworld');
 });
 
-test('narrative credits require 60 canonical scenes, 10 Storyworld decisions, and 300 active minutes', () => {
+test('narrative credits require 60 canonical scenes, 11 Storyworld decisions, and 300 active minutes', () => {
   let state = startNarrative('run-narrative-proof');
   for (const beatId of BEAT_IDS) state = recordRunBeatCompletion(state, state.runId, beatId).state;
   for (const decisionId of NARRATIVE_STORYWORLD_DECISION_IDS.slice(0, -1)) {
@@ -169,12 +169,12 @@ test('narrative credits require 60 canonical scenes, 10 Storyworld decisions, an
   assert.equal(proof.profileLabel, 'Narrative 5-6 hour route');
   assert.equal(proof.canonicalStoryComplete, true);
   assert.equal(proof.storyworldDecisionsComplete, true);
-  assert.equal(proof.completedStoryworldDecisionCount, 10);
-  assert.equal(proof.requiredStoryworldDecisionCount, 10);
-  assert.equal(proof.completedStoryworldPlayedSceneCount, 20);
-  assert.equal(proof.requiredStoryworldPlayedSceneCount, 20);
-  assert.equal(proof.playedSceneCount, 80);
-  assert.equal(proof.requiredPlayedSceneCount, 80);
+  assert.equal(proof.completedStoryworldDecisionCount, 11);
+  assert.equal(proof.requiredStoryworldDecisionCount, 11);
+  assert.equal(proof.completedStoryworldPlayedSceneCount, 22);
+  assert.equal(proof.requiredStoryworldPlayedSceneCount, 22);
+  assert.equal(proof.playedSceneCount, 82);
+  assert.equal(proof.requiredPlayedSceneCount, 82);
   assert.equal(proof.firstClearCount, 0);
   assert.equal(proof.requiredFirstClearCount, 0);
   assert.equal(proof.firstClearsComplete, true);

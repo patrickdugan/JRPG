@@ -127,7 +127,7 @@ test('narrative mode leaves the 215-entry ledger optional while explicit complet
   assert.doesNotMatch(finishScene, /self\.finish_dialogue_and_choices\(\)\s+self\.drain_due_route_work\(initial\)/);
   assert.match(routeSource, /parser\.add_argument\(\s+"--completionist"/);
   assert.match(routeSource, /PlayerDriver\(page, budget, completionist=args\.completionist\)/);
-  assert.match(routeSource, /"routeMode": "completionist-215" if args\.completionist else "narrative-80-scenes"/);
+  assert.match(routeSource, /"routeMode": "completionist-215" if args\.completionist else "narrative-82-scenes"/);
 });
 
 test('multi-map route work cannot be abandoned merely because its activity ID stays stable', () => {

@@ -252,7 +252,7 @@ test('recovery checkpoint round-trips all fourteen exact authorities with a reco
   assert.equal(created.checkpoint.summary.routeRequiredActivityCount, 215);
   assert.equal(created.checkpoint.summary.routeCreditsReady, true);
   assert.equal(created.checkpoint.summary.storyworldCompletedClusterCount, 0);
-  assert.equal(created.checkpoint.summary.storyworldRequiredClusterCount, 10);
+  assert.equal(created.checkpoint.summary.storyworldRequiredClusterCount, 11);
   assert.equal(created.checkpoint.summary.storyworldNarrativeComplete, false);
   assert.equal(created.checkpoint.summary.storyworldProofEligible, true);
   assert.match(created.checkpoint.summary.storyworldCatalogSignature, /^sha256:[0-9a-f]{64}$/u);

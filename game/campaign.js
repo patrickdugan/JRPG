@@ -2445,7 +2445,7 @@ function renderRunProofStatus() {
     }
     if (report.storyComplete && !report.creditsComplete) {
       runProofStatus.dataset.proof = 'active';
-      runProofStatus.textContent = `80-scene story complete · ${elapsed} active · ${formatPlaytime(report.remainingMs)} to five-hour seal floor`;
+      runProofStatus.textContent = `82-scene story complete · ${elapsed} active · ${formatPlaytime(report.remainingMs)} to five-hour seal floor`;
       return;
     }
     runProofStatus.dataset.proof = 'active';

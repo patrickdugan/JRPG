@@ -61,14 +61,14 @@ function completeAuthorities(activeMinutes = 300) {
   return { receipt, storyworld };
 }
 
-test('narrative gate reconciles 60 canonical and 20 Storyworld scenes at five active hours', () => {
+test('narrative gate reconciles 60 canonical and 22 Storyworld scenes at five active hours', () => {
   const { receipt, storyworld } = completeAuthorities();
   const gate = deriveNarrativeCreditsGate(receipt, storyworld);
   assert.deepEqual(gate.reasons, []);
   assert.equal(gate.ready, true);
   assert.equal(gate.completedCanonicalSceneCount, 60);
-  assert.equal(gate.completedStoryworldSceneCount, 20);
-  assert.equal(gate.completedStoryworldClusterIds.length, 10);
+  assert.equal(gate.completedStoryworldSceneCount, 22);
+  assert.equal(gate.completedStoryworldClusterIds.length, 11);
   assert.equal(gate.totalMs, 18_000_000);
 });
 

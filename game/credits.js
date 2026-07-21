@@ -195,7 +195,7 @@ function render() {
   if (report.creditsComplete) {
     creditsStatus.dataset.state = 'sealed';
     creditsStatus.textContent = narrativeRun
-      ? `Credits complete · 80-scene narrative receipt sealed at ${elapsed}`
+      ? `Credits complete · 82-scene narrative receipt sealed at ${elapsed}`
       : report.durationProven
         ? `Credits complete · receipt sealed · 20-hour run proven at ${elapsed}`
         : `Credits complete · receipt sealed at ${elapsed} · duration target not yet proven`;
@@ -208,7 +208,7 @@ function render() {
     creditsStatus.dataset.state = 'error';
     creditsStatus.textContent = 'Credits preview · story evidence is incomplete';
     creditsActionHint.textContent = narrativeRun
-      ? 'Complete all 60 canonical scenes and all ten Storyworld decision/consequence pairs before sealing the run.'
+      ? 'Complete all 60 canonical scenes and all eleven Storyworld decision/consequence pairs before sealing the run.'
       : 'Complete every canonical story scene before sealing the run.';
     sealCredits.disabled = true;
     return;
@@ -232,7 +232,7 @@ function render() {
   creditsStatus.dataset.state = 'active';
   creditsStatus.textContent = `${narrativeRun ? 'Narrative proof ready' : 'Story complete'} · receipt still active at ${elapsed}`;
   creditsActionHint.textContent = narrativeRun
-    ? 'The 80-scene narrative and five-hour active-play floor are complete. This explicit action freezes the clean-run receipt.'
+    ? 'The 82-scene narrative and five-hour active-play floor are complete. This explicit action freezes the clean-run receipt.'
     : 'The 215-activity completionist route is complete. This explicit action freezes the clean-run receipt.';
   sealCredits.disabled = false;
 }

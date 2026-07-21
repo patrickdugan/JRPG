@@ -18,21 +18,21 @@ const GAME = path.resolve(HERE, '..');
 const ROOT = path.resolve(GAME, '..');
 const wordCount = (value) => value.trim().split(/\s+/u).length;
 
-test('generated Storyworld catalog supplies exactly ninety authored and eighty complete-run scenes', () => {
+test('generated Storyworld catalog supplies exactly ninety-four authored and eighty-two complete-run scenes', () => {
   assert.deepEqual(STORYWORLD_METRICS, {
     canonicalSceneCount: 60,
-    storyworldAuthoredSceneCount: 30,
-    authoredSceneCount: 90,
-    completeRunStoryworldSceneCount: 20,
-    completeRunSceneCount: 80,
-    clusterCount: 10,
-    entryOptionCount: 30,
+    storyworldAuthoredSceneCount: 34,
+    authoredSceneCount: 94,
+    completeRunStoryworldSceneCount: 22,
+    completeRunSceneCount: 82,
+    clusterCount: 11,
+    entryOptionCount: 33,
   });
-  assert.equal(STORYWORLD_CLUSTERS.length, 10);
+  assert.equal(STORYWORLD_CLUSTERS.length, 11);
   assert.equal(Object.isFrozen(STORYWORLD_CATALOG), true);
   assert.equal(Object.isFrozen(STORYWORLD_CLUSTERS[0].entry.options[0].reactions[0].effects), true);
 });
-test('ten exact anchors cover post-level, pre-boss, and post-boss sequencing without changing canonical beats', () => {
+test('eleven exact anchors cover post-level, pre-boss, and post-boss sequencing without changing canonical beats', () => {
   const canonical = new Map(CAMPAIGN.chapters.flatMap((chapter) => (
     chapter.beats.map((beat) => [beat.id, { chapterId: chapter.id, encounterIds: beat.encounterIds ?? [] }])
   )));
@@ -54,7 +54,7 @@ test('ten exact anchors cover post-level, pre-boss, and post-boss sequencing wit
   }
   assert.deepEqual(Object.fromEntries(roleCounts), {
     'after-level-consequence': 2,
-    'after-boss-consequence': 3,
+    'after-boss-consequence': 4,
     'before-boss-decision': 5,
   });
   assert.equal(canonical.size, 60);
@@ -69,7 +69,7 @@ test('every decision and reaction meets the authored density, bounded-effect, an
   for (const cluster of STORYWORLD_CLUSTERS) {
     const encounters = [cluster.entry, ...cluster.outcomes];
     assert.equal(cluster.entry.options.length, 3, cluster.id);
-    assert.equal(cluster.outcomes.length, 2, cluster.id);
+    assert.equal(cluster.outcomes.length, cluster.id === 'sw-enma-three-terms' ? 3 : 2, cluster.id);
     for (const encounter of encounters) {
       assert.equal(encounterIds.has(encounter.id), false, encounter.id);
       encounterIds.add(encounter.id);
@@ -104,9 +104,9 @@ test('every decision and reaction meets the authored density, bounded-effect, an
       }
     }
   }
-  assert.equal(encounterIds.size, 30);
-  assert.equal(optionIds.size, 48);
-  assert.equal(reactionIds.size, 96);
+  assert.equal(encounterIds.size, 34);
+  assert.equal(optionIds.size, 54);
+  assert.equal(reactionIds.size, 108);
   assert.equal(terminalCount, 2);
 });
 
@@ -119,9 +119,13 @@ test('authored JSON, binding sidecar, and browser registry remain deterministic 
   assert.match(run.stdout, /generated artifacts are current/u);
   const world = JSON.parse(fs.readFileSync(path.join(ROOT, 'storyworlds', 'bells-black-chrysanthemum.storyworld.json'), 'utf8'));
   const bindings = JSON.parse(fs.readFileSync(path.join(ROOT, 'storyworlds', 'bells-black-chrysanthemum.bindings.json'), 'utf8'));
-  assert.equal(world.encounters.length, 30);
-  assert.equal(world.meta.complete_run_total_scene_count, 80);
-  assert.equal(bindings.authoredSceneCount, 30);
-  assert.equal(bindings.clusters.length, 10);
+  assert.equal(world.encounters.length, 34);
+  assert.equal(world.meta.complete_run_total_scene_count, 82);
+  assert.equal(world.spools.length, 5);
+  assert.equal(world.spools.filter(({ starts_active: startsActive }) => startsActive).length, 1);
+  assert.equal(world.spools.some(({ id }) => id === 'spool_enma'), true);
+  assert.equal(world.spools.some((spool) => Object.hasOwn(spool, 'spool_type')), false);
+  assert.equal(bindings.authoredSceneCount, 34);
+  assert.equal(bindings.clusters.length, 11);
   assert.equal(bindings.clusters.every(({ requiredForNarrativeCredits }) => requiredForNarrativeCredits), true);
 });

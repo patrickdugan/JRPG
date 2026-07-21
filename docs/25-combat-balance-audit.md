@@ -8,10 +8,10 @@ This is a bounded simulation audit, not a human timing run. It uses the shipped 
 
 ## Result
 
-- First clears: 23/23 victories, 231 player commands, 97 enemy activations, zero party knockouts.
+- First clears: 23/23 victories, 231 player commands, 98 enemy activations, zero party knockouts.
 - Lowest surviving actor: 15.4545% HP in `fp1-cedar-path`; the checked lower bound is 10%.
 - Highest command load: 55 in `c9-kurozane`; its 37 Guard commands are a 67.2727% Spirit-recovery share under the deliberately aggressive policy, below the 75% audit ceiling.
-- Replays: all 23 victories, 605 policy steps total, 352,520 ms of schedule-only 1× presentation, and exact decision/reward identity at 1×/2×/4×.
+- Replays: all 23 victories, 608 policy steps total, 353,880 ms of schedule-only 1× presentation, and exact decision/reward identity at 1×/2×/4×.
 - Longest replay schedule: `c9-kurozane`, 111 steps and 53,800/26,900/13,450 ms at 1×/2×/4×, below the 125-step and 60,000 ms bounds.
 - Kurozane now exercises all four authored skills (`Court Command`, `Yearless Thrust`, `Blood Eclipse`, and `Black Chrysanthemum`) and all authored 1/2/3-pulse Recovery bands during the canonical trace.
 - Audit violations after tuning: zero.
@@ -63,4 +63,4 @@ node --test tests/combat-balance-audit.test.mjs tests/battle-solvability.test.mj
 npm run check
 ```
 
-The canonical receipt changes are intentional: 97 enemy activations and signature `fnv1a32:2a3c2402`. Updated low/reference/high projections are 187.202/309.862/500.458 canonical-only minutes, 223.911/394.310/694.047 canonical-plus-quest/chronicle minutes, and 777.840/1,233.679/1,920.559 all-finite minutes. The narrative-plus-Storyworld reference is 326.010 minutes. None is observed duration evidence.
+The canonical receipt changes are intentional: 98 enemy activations and signature `fnv1a32:462b7ff8`. Updated low/reference/high projections are 188.936/312.481/504.237 canonical-only minutes, 225.645/396.929/697.827 canonical-plus-quest/chronicle minutes, and 779.587/1,236.311/1,924.351 all-finite minutes. The narrative-plus-Storyworld reference is 330.726 minutes after the Lady Enma spool. None is observed duration evidence.

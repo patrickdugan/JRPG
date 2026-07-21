@@ -60,7 +60,7 @@ Field interactables use a separate exact presentation layer in `game/content/fie
 4. For each selected choice, write its `flag` with a choice-specific value or record the selected choice ID beside it. The `result` is the immediate player-facing consequence.
 5. Do not gate the critical path on optional-record flags. Ordinary campaign choices may affect copy, a route setup, an opening resistance, a later cameo, or an optional reward. The final political variance belongs to the required Storyworld sequence: `sw10-corrections-desk` retains its save-stable ID but now resolves after `c9-kurozane` as **The Last Command**, selecting witnessed transfer or execution/failed transfer and civil war from accumulated bounded reactions. Both consequences remain complete narrative routes.
 
-The ten required Storyworld clusters are placed as five before-boss decisions, two after-level consequences, and three after-boss consequences. The final cluster remains `placement: 'after-beat'` and `sequenceRole: 'after-boss-consequence'`; consumers must not infer placement from its legacy ID or old epilogue meaning.
+The eleven required Storyworld clusters are placed as five before-boss decisions, two after-level consequences, and four after-boss consequences. Lady Enma's Three Terms cluster is inserted after the Black Gate fight; the final Corrections Desk cluster remains `placement: 'after-beat'` and `sequenceRole: 'after-boss-consequence'`; consumers must not infer placement from its legacy ID or old epilogue meaning.
 6. Use `CAMPAIGN.firstPlayable.sequence` for FP-1. Every sequence item specifies map, intended duration, objective, ordered events, and exit condition. Its durations total 32 minutes, within the 28-34 minute target.
 
 Suggested save shape:

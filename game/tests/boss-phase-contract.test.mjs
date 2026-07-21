@@ -8,8 +8,11 @@ import { ENCOUNTERS, getEncounter, validateEncounter } from '../content/encounte
 const PHASED_ENCOUNTERS = Object.freeze({
   'c1-tithe-hound': ['hunger', 'frantic'],
   'fp1-mateus': ['phase-1', 'phase-2', 'phase-3'],
+  'c3-dock-patrol': ['closed-fan', 'first-mask-broken'],
   'c4-widow-of-fog': ['high-tide', 'low-tide'],
   'c5-furnace-abbot': ['forge', 'sigil-break'],
+  'c6-masked-clerks': ['mirrored-seizure', 'second-mask-broken'],
+  'c8-lady-enma': ['paired-last-mask', 'cinder-wing', 'subdued-for-terms'],
   'c9-kurozane': ['court', 'bell', 'dawn'],
 });
 
@@ -56,7 +59,7 @@ function forceWidowActivation(engine) {
   return engine.snapshot();
 }
 
-test('all five typed phase contracts validate with one explicit phase-zero initial state', () => {
+test('all eight typed phase contracts validate with one explicit phase-zero initial state', () => {
   assert.deepEqual(ENCOUNTERS.flatMap((encounter) => (
     encounter.bossMechanic?.phases ? [encounter.id] : []
   )), Object.keys(PHASED_ENCOUNTERS));

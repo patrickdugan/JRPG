@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "campaignId": "bells-black-chrysanthemum",
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "authoredSceneCount": 30,
+  "authoredSceneCount": 34,
   "clusters": [
     {
       "id": "sw1-clerks-second-copy",
@@ -13,6 +13,10 @@
       "relatedEncounterIds": [],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_0000",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw01_accord",
         "page_sw01_revision"
@@ -29,6 +33,10 @@
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw02_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw02_accord",
         "page_sw02_revision"
@@ -45,6 +53,10 @@
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw03_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw03_accord",
         "page_sw03_revision"
@@ -59,6 +71,10 @@
       "relatedEncounterIds": [],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw04_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw04_accord",
         "page_sw04_revision"
@@ -75,6 +91,10 @@
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw05_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw05_accord",
         "page_sw05_revision"
@@ -91,6 +111,10 @@
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw06_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw06_accord",
         "page_sw06_revision"
@@ -107,6 +131,10 @@
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw07_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw07_accord",
         "page_sw07_revision"
@@ -123,9 +151,35 @@
       ],
       "requiredForNarrativeCredits": true,
       "entryEncounterId": "page_sw08_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_sw08_accord",
         "page_sw08_revision"
+      ]
+    },
+    {
+      "id": "sw-enma-three-terms",
+      "chapterId": "chapter-8",
+      "anchorBeatId": "c8-05-gate-opened",
+      "placement": "after-beat",
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c8-lady-enma"
+      ],
+      "requiredForNarrativeCredits": true,
+      "entryEncounterId": "page_sw09_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision",
+        "negotiated"
+      ],
+      "outcomeEncounterIds": [
+        "page_sw09_accord",
+        "page_sw09_revision",
+        "page_sw09_negotiated"
       ]
     },
     {
@@ -138,10 +192,14 @@
         "c9-yearless-bell"
       ],
       "requiredForNarrativeCredits": true,
-      "entryEncounterId": "page_sw09_decision",
+      "entryEncounterId": "page_sw10_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
-        "page_sw09_accord",
-        "page_sw09_revision"
+        "page_sw10_accord",
+        "page_sw10_revision"
       ]
     },
     {
@@ -154,7 +212,11 @@
         "c9-kurozane"
       ],
       "requiredForNarrativeCredits": true,
-      "entryEncounterId": "page_sw10_decision",
+      "entryEncounterId": "page_sw11_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
       "outcomeEncounterIds": [
         "page_end_corrections_visible",
         "page_end_limits_posted"

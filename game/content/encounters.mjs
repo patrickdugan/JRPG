@@ -388,12 +388,23 @@ export const ENCOUNTERS = [
     id: 'c3-dock-patrol',
     chapterId: 'chapter-3',
     levelId: 'sdg-rain-docks',
-    name: 'Sodegaura Lantern Route Patrol',
+    name: 'The Cinder Fan at Rain Docks — First Mask',
     format: 'escort-route',
-    objective: { type: 'escortTokens', text: 'Move two witness tokens to the boat exit; a visible bad route begins this battle instead of a stealth game-over.', tokenCount: 2, failure: 'both-witnesses-incapacitated' },
-    lesson: { primary: 'Facing controls hook lines; Guard protects an escort lane before a forced move.', playerRead: 'Patrol cones and the hook path are visible before engagement.', successSignal: 'At least one witness reaches the lantern boat.' },
+    objective: { type: 'escortTokens', text: 'Move both witnesses to the lantern boat and break Lady Enma\'s rain mask without letting her ash fan sever the route.', tokenCount: 2, bossId: 'lady-enma', bossResolution: 'force-retreat', failure: 'both-witnesses-incapacitated' },
+    lesson: { primary: 'Facing controls hook lines while Enma\'s fan turns an open lane into a delayed Ember threat.', playerRead: 'The hook path is yellow; Enma\'s cinder-fan lane is orange and remains visible through free movement.', successSignal: 'A witness reaches the boat while Enma is recovering from Cinder Fan Draw.' },
     party: { roster: ['ren', 'aya', 'lise', 'mateus'], deployment: partyDeployment([['ren', '2,4'], ['aya', '2,3'], ['lise', '3,4'], ['mateus', '3,3']]), objectiveTokens: [{ id: 'witness-a', at: '1,2' }, { id: 'witness-b', at: '1,5' }] },
     enemies: [
+      {
+        id: 'lady-enma', name: 'Lady Enma of Ash — Rain Mask', count: 1, positions: ['9,3'], role: 'recurring vampire route-hunter',
+        stats: { hp: 360, power: 17, guard: 13, speed: 106 },
+        resistances: { delivery: { cut: 1, pierce: 1, crush: 0.75, arcane: 0.75 }, essence: { ember: 0.75, frost: 1.25, storm: 1, radiance: 1.25, umbral: 0.75 } },
+        ledger: 'Kurozane\'s Cinder Fan: a former court entertainer made vampire and audience keeper. Frost and Radiance expose the lacquered rain mask; she retreats rather than dying here.',
+        skills: [
+          { id: 'cinder-fan-draw', name: 'Cinder Fan Draw', delivery: 'arcane', essence: 'ember', power: 15, range: 5, shape: { type: 'line', length: 5, origin: 'enma-facing' }, telegraph: 'Enma opens a black-red folding fan; an orange five-space lane persists for one activation.', recoveryPulses: 3, dodgeable: true },
+          { id: 'rain-mirror-step', name: 'Rain Mirror Step', delivery: 'arcane', essence: 'umbral', power: 12, range: 4, shape: { type: 'cross', radius: 1, origin: 'destination' }, telegraph: 'Her reflection remains on the departure tile while the destination tile ripples violet.', recoveryPulses: 2, dodgeable: true, effect: { reposition: { spaces: 3 } } },
+        ],
+        ai: ['Use Cinder Fan Draw across the boat approach.', 'Use Rain Mirror Step away from adjacency.', 'Retreat when the rain mask reaches 55% HP after at least one witness boards.'],
+      },
       {
         id: 'dock-retainer', name: 'Dock Retainer', count: 2, positions: ['8,2', '8,5'], role: 'hook-line guard',
         stats: { hp: 132, power: 15, guard: 12, speed: 91 }, resistances: neutralResistances,
@@ -404,8 +415,15 @@ export const ENCOUNTERS = [
         ], ai: ['Hook a witness if possible.', 'Otherwise hook the nearest unguarded hero.', 'Baton at adjacency.'],
       },
     ],
-    bossMechanic: { type: 'visible-route-punishment', telegraphs: ['dock-hook'], rule: 'Choosing a bad lantern route starts this fair encounter; it never resets the player to a prior dialogue.' },
-    reward: { flags: ['c3-lantern-route'], story: 'Witnesses reach the lantern boat and Genta sees the transport mark.' },
+    bossMechanic: {
+      type: 'recurring-boss-escort', telegraphs: ['cinder-fan-draw', 'rain-mirror-step', 'dock-hook'],
+      phases: [
+        { id: 'closed-fan', initial: true, when: 'boss-hp-above-55-percent', rule: 'Enma alternates a persistent fan lane with mirror repositioning while retainers threaten witness pulls.' },
+        { id: 'first-mask-broken', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.55 }, when: 'at-least-one-witness-at-boat', rule: 'Enma names Mateus, marks Nikola\'s Severed Dragon ward, and escapes across the rain mirrors. She cannot be killed in this encounter.' },
+      ],
+      counterplay: 'Keep moving outside animation lock, Guard the hook target, and punish Enma\'s Recovery 3 with Frost or Radiance before advancing a witness.',
+    },
+    reward: { flags: ['c3-lantern-route', 'enma-first-mask-broken'], story: 'Both witnesses reach the lantern boat; Enma retreats after recognizing the hunter and the vampire priest.' },
   },
 
   {
@@ -548,14 +566,26 @@ export const ENCOUNTERS = [
     id: 'c6-masked-clerks',
     chapterId: 'chapter-6',
     levelId: 'kzu-archive-roof',
-    name: 'Printmaker Flight — Masked Clerks',
+    name: 'Cinder Fan Above the Archive — Second Mask',
     format: 'protect-objective',
-    objective: { type: 'protectObjects', text: 'Escort the civilian courier and preserve three print blocks through four enemy activations.', protectedObjects: ['courier', 'print-block-a', 'print-block-b', 'print-block-c'], turns: 4, failure: 'courier-defeated-or-two-print-blocks-destroyed' },
-    lesson: { primary: 'Threat triage makes “who acts next” more important than simply focusing the highest HP target.', playerRead: 'Each clerk’s target is marked directly on a courier or print block.', successSignal: 'The party can interrupt one order while protecting another target.' },
+    objective: { type: 'protectObjects', text: 'Escort the civilian courier, preserve three print blocks, and break Lady Enma\'s archive mask before her reflected writs seize two copies.', protectedObjects: ['courier', 'print-block-a', 'print-block-b', 'print-block-c'], turns: 4, bossId: 'lady-enma', bossResolution: 'force-retreat', failure: 'courier-defeated-or-two-print-blocks-destroyed' },
+    lesson: { primary: 'Threat triage now includes a mobile boss whose reflection can repeat one declared clerk target.', playerRead: 'Clerk writs are black; Enma\'s copied target receives a separate violet mirror marker.', successSignal: 'The party breaks the mirror holding the next reflected writ while the courier keeps moving.' },
     party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '3,4'], ['aya', '2,3'], ['lise', '3,3'], ['mateus', '4,3'], ['genta', '2,4'], ['kiku', '3,5']]) },
     enemies: [
       {
-        id: 'masked-clerk', name: 'Masked Clerk', count: 3, positions: ['8,1', '9,3', '8,5'], role: 'objective saboteur',
+        id: 'lady-enma', name: 'Lady Enma of Ash — Archive Mask', count: 1, positions: ['9,3'], role: 'recurring vampire evidence-seizer',
+        stats: { hp: 620, power: 21, guard: 17, speed: 110 },
+        resistances: { delivery: { cut: 1, pierce: 1, crush: 0.75, arcane: 0.75 }, essence: { ember: 0.75, frost: 1.25, storm: 1, radiance: 1.25, umbral: 0.75 } },
+        ledger: 'Enma has replaced the rain mask with an archive mirror lacquered in stolen testimony. Break the visible reflection; she escapes at 30% HP rather than resolving her fate here.',
+        skills: [
+          { id: 'mirror-writ', name: 'Mirror Writ', delivery: 'arcane', essence: 'umbral', power: 16, range: 6, shape: { type: 'singleObjective', selection: 'most-recent-clerk-target' }, telegraph: 'A violet duplicate of the latest black writ appears on a second objective.', recoveryPulses: 3, dodgeable: false, effect: { objectiveDamage: 1, createsWeakPoint: 'archive-reflection' } },
+          { id: 'parasol-shear', name: 'Parasol Shear', delivery: 'cut', essence: 'ember', power: 19, range: 3, shape: { type: 'arc', radius: 2, origin: 'enma' }, telegraph: 'The cinder parasol locks into a red three-tile arc.', recoveryPulses: 2, dodgeable: true },
+          { id: 'blood-ink-step', name: 'Blood-Ink Step', delivery: 'arcane', essence: 'umbral', power: 0, range: 5, telegraph: 'Two square ink pools declare her origin and destination.', recoveryPulses: 1, dodgeable: true, effect: { reposition: { spaces: 4 } } },
+        ],
+        ai: ['Use Mirror Writ after a clerk declares Seize Copy.', 'Use Parasol Shear against defenders clustered around one objective.', 'At 30% HP, burn the archive mask and retreat toward Kurohana.'],
+      },
+      {
+        id: 'masked-clerk', name: 'Masked Clerk', count: 2, positions: ['8,1', '8,5'], role: 'objective saboteur',
         stats: { hp: 142, power: 14, guard: 10, speed: 100 }, resistances: neutralResistances,
         ledger: 'A court clerk choosing to seize evidence. The mask conceals responsibility; it does not remove it.',
         skills: [
@@ -564,8 +594,15 @@ export const ENCOUNTERS = [
         ], ai: ['Target the least-protected print block.', 'Target the courier if two blocks are guarded.', 'Seal Snap only when blocked.'],
       },
     ],
-    bossMechanic: { type: 'multi-objective-countdown', telegraphs: ['seize-copy'], rule: 'The encounter ends when copies leave; killing every clerk is optional once the timed objective resolves.' },
-    reward: { flags: ['three-evidence-bundles-dispatched'], story: 'The public proof travels by three routes.' },
+    bossMechanic: {
+      type: 'recurring-boss-multi-objective', telegraphs: ['seize-copy', 'mirror-writ', 'parasol-shear', 'blood-ink-step'],
+      phases: [
+        { id: 'mirrored-seizure', initial: true, when: 'boss-hp-above-30-percent', rule: 'Enma can reflect only the latest visible clerk writ; breaking the archive reflection cancels the duplicate and opens Recovery 3.' },
+        { id: 'second-mask-broken', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.30 }, rule: 'Enma burns the archive mask, abandons the clerks, and escapes to the Black Gate. She cannot be killed on the roof.' },
+      ],
+      counterplay: 'Read the marked objectives, move freely between telegraphs, break the reflection with Radiance, then spend Enma\'s Recovery 3 on Frost pressure or courier protection.',
+    },
+    reward: { flags: ['three-evidence-bundles-dispatched', 'enma-second-mask-broken'], story: 'All three public-proof routes leave Kozui while Enma retreats to the Black Gate without the seized copies.' },
   },
 
   {
@@ -671,25 +708,34 @@ export const ENCOUNTERS = [
     chapterId: 'chapter-8',
     primary: true,
     levelId: 'c8-black-gate',
-    name: 'Lady Enma of Ash',
+    name: 'Lady Enma of Ash — Last Mask',
     format: 'boss',
-    objective: { type: 'defeatBossAndRelease', text: 'Defeat Lady Enma while turning Ember and Umbral ash lanes into safe routes for the garrison release.', failure: 'all-active-party-defeated' },
+    objective: { type: 'defeatBossAndRelease', text: 'Break Lady Enma\'s last mask while turning Ember and Umbral ash lanes into safe routes; her death, custody, or defection is decided afterward.', bossResolution: 'subdue-for-storyworld', failure: 'all-active-party-defeated' },
     lesson: { primary: 'Late-game hazards remain readable because the tag, essence, and counter-role never change.', playerRead: 'Orange means Ember and violet means Umbral on every telegraph and tile.', successSignal: 'The party creates or holds a safe lane before Enma’s paired zone resolves.' },
     party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
     enemies: [
       {
-        id: 'lady-enma', name: 'Lady Enma of Ash', count: 1, positions: ['8,3'], role: 'paired-hazard commander',
+        id: 'lady-enma', name: 'Lady Enma of Ash — Last Mask', count: 1, positions: ['8,3'], role: 'recurring vampire paired-hazard commander',
         stats: { hp: 910, power: 25, guard: 20, speed: 105 },
         resistances: { delivery: { cut: 1, pierce: 1, crush: 0.75, arcane: 0.75 }, essence: { ember: 0.75, frost: 1.25, storm: 1, radiance: 1.25, umbral: 0.75 } },
-        ledger: 'A court officer carrying ashes of the disappeared; the garrison can be released, not merely destroyed.',
+        ledger: 'Kurozane\'s Cinder Fan and former court entertainer, carrying ashes of the disappeared in her war fan. This third defeat subdues her alive so a witnessed decision can kill, capture, or negotiate with her.',
         skills: [
           { id: 'paired-ashes', name: 'Paired Ashes', delivery: 'arcane', power: 21, range: 6, shape: { type: 'pairedZones', tags: ['ember-ash', 'umbral-ash'] }, telegraph: 'Enma paints one orange and one violet lane before they ignite.', recoveryPulses: 2, dodgeable: false, effect: { essenceByTag: { 'ember-ash': 'ember', 'umbral-ash': 'umbral' } } },
           { id: 'abandonment-cry', name: 'Abandonment Cry', delivery: 'arcane', essence: 'umbral', power: 17, range: 4, shape: { type: 'cone', length: 3 }, telegraph: 'A violet cone points at the nearest isolated ally.', recoveryPulses: 1, dodgeable: false, effect: { status: 'dread', duration: 'one-activation' } },
+          { id: 'cinder-parasol-wing', name: 'Cinder Parasol Wing', delivery: 'cut', essence: 'ember', power: 23, range: 4, shape: { type: 'arc', radius: 3, origin: 'enma' }, telegraph: 'Her broken parasol opens like one red-black wing and marks a three-tile arc for a full activation.', recoveryPulses: 3, dodgeable: true },
         ], ai: ['Use Paired Ashes every other activation.', 'Use Abandonment Cry against an isolated ally.', 'Prioritize an unlit relay.'],
       },
     ],
-    bossMechanic: { type: 'paired-elemental-hazards', telegraphs: ['paired-ashes', 'abandonment-cry'], counterplay: 'Ward, terrain change, anchor, redirect, expose, and protection all answer a declared lane; Frost is Enma’s strongest elemental weakness.' },
-    reward: { story: 'The Ashen garrison is released and the Black Gate opens by collective choice.' },
+    bossMechanic: {
+      type: 'recurring-boss-final-restraint', telegraphs: ['paired-ashes', 'abandonment-cry', 'cinder-parasol-wing'],
+      phases: [
+        { id: 'paired-last-mask', initial: true, when: 'hp-above-50-percent', rule: 'Enma layers one orange and one violet lane around the same civilian release problem used by the outer court.' },
+        { id: 'cinder-wing', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.50 }, when: 'hp-at-or-below-50-percent', rule: 'The last mask breaks; Cinder Parasol Wing joins the cadence but declares a full activation and Recovery 3.' },
+        { id: 'subdued-for-terms', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.01 }, rule: 'At the near-zero restraint threshold, the Severed Dragon ward and released-garrison witnesses hold Enma alive. The Storyworld spool resolves death, rotating custody, or bounded defection.' },
+      ],
+      counterplay: 'Ward, terrain change, anchor, redirect, expose, and protection answer declared lanes; Frost and Radiance punish her Recovery 3 without restricting free movement.',
+    },
+    reward: { flags: ['enma-last-mask-broken', 'enma-resolution-pending'], story: 'The Ashen garrison is released, the Black Gate opens, and Enma remains alive until the Three Terms spool records her fate.' },
   },
 
   {

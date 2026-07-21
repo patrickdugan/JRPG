@@ -37,15 +37,15 @@ test('canonical DOM-free run legally completes every authority without fabricati
   assert.equal(run.fieldCoverage.complete, true);
   assert.equal(run.summary.requiredRouteCount, 34);
   assert.equal(run.summary.routeCount, run.summary.requiredRouteCount);
-  assert.equal(run.summary.fieldSteps, 1_429);
+  assert.equal(run.summary.fieldSteps, 1_428);
   assert.equal(run.summary.interactionCount, 239);
   assert.equal(run.summary.sceneOperationCount, 60);
   assert.equal(run.summary.sceneOperationNodeCount, 183);
   assert.equal(run.summary.exitCount, 41);
   assert.equal(run.summary.restCount, 17);
-  assert.equal(run.summary.dialogueLineCount, 2_748);
+  assert.equal(run.summary.dialogueLineCount, 2_768);
   assert.equal(run.summary.playerCommands, 231);
-  assert.equal(run.summary.enemyActivations, 97);
+  assert.equal(run.summary.enemyActivations, 98);
   assert.deepEqual(run.fieldCoverage.routeGaps, []);
   assert.deepEqual(run.fieldCoverage.finalObjectiveGaps, []);
   assert.equal(run.fieldCoverage.sceneOperations.campaignComplete, true);
@@ -57,8 +57,8 @@ test('canonical DOM-free run legally completes every authority without fabricati
   const party = getParty(run.states.advancement, { unlockedOnly: true });
   assert.equal(party.length, 6);
   assert.ok(party.every(({ level }) => level === 40));
-  assert.equal(run.states.advancement.inventory.currency, 3396);
-  assert.equal(run.states.loadout.currency, 2881);
+  assert.equal(run.states.advancement.inventory.currency, 3402);
+  assert.equal(run.states.loadout.currency, 2887);
   assert.ok(Object.values(run.states.loadout.vitals).every((vitals) =>
     vitals.hp === vitals.maxHp && vitals.statuses.length === 0));
   for (const beat of BEATS) {
@@ -72,7 +72,7 @@ test('canonical trace and signature replay identically under the same hard bound
   const replay = runCanonicalCompletion();
 
   assert.match(first.signature, /^fnv1a32:[0-9a-f]{8}$/);
-  assert.equal(first.signature, 'fnv1a32:2a3c2402');
+  assert.equal(first.signature, 'fnv1a32:462b7ff8');
   assert.equal(replay.signature, first.signature);
   assert.deepEqual(replay.summary, first.summary);
   assert.deepEqual(replay.trace, first.trace);

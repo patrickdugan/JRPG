@@ -11,7 +11,7 @@
   "font_size": 16,
   "language": "en",
   "rating": "Teen",
-  "about_text": "Thirty reaction-driven interstitial scene nodes anchored to the sixty-scene JRPG campaign. Every complete narrative run experiences ten decisions and one of two authored consequence scenes per decision.",
+  "about_text": "Thirty-four reaction-driven interstitial scene nodes anchored to the sixty-scene JRPG campaign. Every complete narrative run experiences eleven decisions and one authored consequence scene per decision; Lady Enma has distinct death, custody, and negotiated-defection outcomes.",
   "characters": [
     {
       "id": "char_lantern_network",
@@ -34,7 +34,11 @@
         "truth_completeness": 0.4,
         "court_pressure": 0.55,
         "p_party_respects_limits": 0.45,
-        "p_mateus_truthfulness": 0.25
+        "p_mateus_truthfulness": 0.25,
+        "enma_custody": 0,
+        "enma_killed": 0,
+        "enma_compact": 0,
+        "enma_testimony": 0.3
       },
       "creation_index": 0,
       "creation_time": 1784577000,
@@ -296,13 +300,72 @@
       "creation_index": 16,
       "creation_time": 1784577000,
       "modified_time": 1784577000
+    },
+    {
+      "id": "enma_custody",
+      "property_name": "enma_custody",
+      "property_label": "Lady Enma held in rotating custody",
+      "property_type": "bounded number",
+      "default_value": 0,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 17,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "enma_killed",
+      "property_name": "enma_killed",
+      "property_label": "Lady Enma killed at the Black Gate",
+      "property_type": "bounded number",
+      "default_value": 0,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 18,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "enma_compact",
+      "property_name": "enma_compact",
+      "property_label": "Lady Enma bound by a witnessed defection compact",
+      "property_type": "bounded number",
+      "default_value": 0,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 19,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "enma_testimony",
+      "property_name": "enma_testimony",
+      "property_label": "Lady Enma testimony reliability",
+      "property_type": "bounded number",
+      "default_value": 0.3,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 20,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
     }
   ],
   "spools": [
     {
       "id": "spool_act1",
       "spool_name": "Act I — Custody and Terms",
-      "spool_type": "General",
       "starts_active": true,
       "creation_index": 0,
       "creation_time": 1784577000,
@@ -322,7 +385,6 @@
     {
       "id": "spool_act2",
       "spool_name": "Act II — Account and Corroboration",
-      "spool_type": "General",
       "starts_active": false,
       "creation_index": 1,
       "creation_time": 1784577000,
@@ -342,7 +404,6 @@
     {
       "id": "spool_act3",
       "spool_name": "Act III — Authority and Repair",
-      "spool_type": "General",
       "starts_active": false,
       "creation_index": 2,
       "creation_time": 1784577000,
@@ -354,21 +415,34 @@
         "page_sw08_decision",
         "page_sw08_accord",
         "page_sw08_revision",
-        "page_sw09_decision",
-        "page_sw09_accord",
-        "page_sw09_revision"
+        "page_sw10_decision",
+        "page_sw10_accord",
+        "page_sw10_revision"
       ]
     },
     {
-      "id": "spool_endings",
-      "spool_name": "Epilogue — A Revisable Archive",
-      "spool_type": "General",
+      "id": "spool_enma",
+      "spool_name": "The Cinder Fan — Death, Custody, or Compact",
       "starts_active": false,
       "creation_index": 3,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "encounters": [
-        "page_sw10_decision",
+        "page_sw09_decision",
+        "page_sw09_accord",
+        "page_sw09_revision",
+        "page_sw09_negotiated"
+      ]
+    },
+    {
+      "id": "spool_endings",
+      "spool_name": "Epilogue — A Revisable Archive",
+      "starts_active": false,
+      "creation_index": 4,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "encounters": [
+        "page_sw11_decision",
         "page_end_corrections_visible",
         "page_end_limits_posted"
       ]
@@ -1278,7 +1352,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 220,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act1"
       ],
@@ -1595,7 +1669,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 220,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act1"
       ],
@@ -2786,7 +2860,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 660,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act1"
       ],
@@ -3103,7 +3177,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 660,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act1"
       ],
@@ -4294,7 +4368,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1100,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act1"
       ],
@@ -4611,7 +4685,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1100,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act1"
       ],
@@ -5802,7 +5876,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1540,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act2"
       ],
@@ -6119,7 +6193,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1540,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act2"
       ],
@@ -7310,7 +7384,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1980,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act2"
       ],
@@ -7627,7 +7701,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1980,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act2"
       ],
@@ -8818,7 +8892,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2420,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act2"
       ],
@@ -9135,7 +9209,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2420,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act2"
       ],
@@ -10326,7 +10400,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2860,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act3"
       ],
@@ -10643,7 +10717,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2860,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act3"
       ],
@@ -11834,7 +11908,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3300,
-      "graph_position_y": -180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act3"
       ],
@@ -12151,7 +12225,7 @@
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3300,
-      "graph_position_y": 180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act3"
       ],
@@ -12441,6 +12515,1831 @@
     },
     {
       "id": "page_sw09_decision",
+      "title": "Three Terms for the Cinder Fan",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Lady Enma's third mask lies split on the Black Gate stones. The former court entertainer who became Kurozane's Cinder Fan remains conscious, dangerous, and responsible for the rain-dock pursuit, the archive-roof seizure, and years of audiences that turned selective mercy into terror. She offers route ciphers and court testimony but asks to leave under her own name. Nikola can set the Severed Dragon restraint; Mateus can identify a false blood command because he once wrote them; neither man is allowed to own the decision. Released soldiers, route delegates, and harmed witnesses require one exact term: death, rotating custody, or a revocable defection compact with no pardon."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "network_consent"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 16,
+      "latest_turn": 16,
+      "creation_index": 24,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 3520,
+      "graph_position_y": 0,
+      "connected_spools": [
+        "spool_enma"
+      ],
+      "options": [
+        {
+          "id": "page_sw09_decision_opt_bounded-defection",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Offer a witnessed defection compact: release every thrall, surrender every route cipher, testify, and accept revocable movement limits."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw09_decision_opt_bounded-defection_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Enma names three hidden audiences and opens her cinder seals while separate route delegates retain the right to halt, narrow, or end the compact. Her assistance becomes monitored defection, not pardon or membership in the party."
+              },
+              "consequence_id": "page_sw09_negotiated",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_compact"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_compact"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw09_decision_opt_bounded-defection_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Enma withholds the servant ledger and calls the omission privacy. Aya identifies two missing routes; the compact fails before it starts, and the released soldiers establish rotating custody under a Severed Dragon boundary."
+              },
+              "consequence_id": "page_sw09_accord",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_custody"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_custody"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw-enma-three-terms",
+            "option:1"
+          ]
+        },
+        {
+          "id": "page_sw09_decision_opt_rotating-custody",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Set the Severed Dragon restraint and transfer her to rotating civilian custody for testimony without a promise of release."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw09_decision_opt_rotating-custody_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Nikola sets only the anti-vampire boundary, then gives its keys to three unrelated custodians. Enma survives to testify, while no hunter, priest, party member, or single village can turn custody into inherited authority."
+              },
+              "consequence_id": "page_sw09_accord",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_custody"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_custody"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw09_decision_opt_rotating-custody_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Enma drives a hidden blood filament through the incomplete boundary toward the patient lane. Nikola severs it, Ren gives the witnessed fatal stop, and her death enters the record beside the failed restraint."
+              },
+              "consequence_id": "page_sw09_revision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_killed"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw-enma-three-terms",
+            "option:2"
+          ]
+        },
+        {
+          "id": "page_sw09_decision_opt_final-blood-duel",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Accept her demand for a final blood duel only inside the witnessed ward, with the patient and evidence lanes protected."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw09_decision_opt_final-blood-duel_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Enma uses the duel to reach the road behind Ren. Nikola and Mateus close the two exits without claiming the finishing stroke; the witnessed counterblow kills her before the Cinder Fan can reopen."
+              },
+              "consequence_id": "page_sw09_revision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_killed"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "party_cohesion"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "party_cohesion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw09_decision_opt_final-blood-duel_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "The protected lanes deny Enma the theatrical death she expected. She drops the fan, gives Aya the first verifiable cipher, and accepts a compact whose witnesses may revoke every privilege she negotiates."
+              },
+              "consequence_id": "page_sw09_negotiated",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_compact"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_compact"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw-enma-three-terms",
+            "option:3"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sw09_accord",
+      "title": "Custody Without a Trophy",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "The Severed Dragon restraint closes around Enma's blood commands without placing her inside Nikola's household power. Three custodians hold separate keys, harmed witnesses may set distance, and each interrogation requires an independent recorder. Mateus identifies ciphers but cannot question her alone. Enma is neither displayed as a conquered monster nor quietly absorbed into the resistance. She remains a living defendant and a dangerous source whose useful testimony does not erase the people she delivered to Kurozane's audiences."
+      },
+      "prompt_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Write the first limit on her custody record."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "witness_safety"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 17,
+      "latest_turn": 17,
+      "creation_index": 25,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 3740,
+      "graph_position_y": -220,
+      "connected_spools": [
+        "spool_enma"
+      ],
+      "options": [
+        {
+          "id": "page_sw09_accord_opt_carry",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Write the first limit on her custody record."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw09_accord_opt_carry_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "The record forbids solitary custody, private questioning, blood access, and transport without a published destination. Enma signs beneath the restrictions while the three key holders sign beside, not above, one another."
+              },
+              "consequence_id": "page_sw10_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_custody"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_custody"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw09_accord_opt_carry_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Nikola initially writes his house as guarantor. He strikes the title and replaces it with an expiring technical duty, leaving civilian custodians authority to end his access."
+              },
+              "consequence_id": "page_sw10_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw-enma-three-terms",
+            "outcome:accord"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sw09_revision",
+      "title": "The Cinder Fan Ends",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Enma dies inside the witnessed ward after choosing a final attack or rupturing the restraint. Aya records who authorized the stop, what danger was immediate, and which questions now have no living answer. The party gains no trophy and no clean absolution. Her hidden ciphers must be reconstructed from seized fans, servants' accounts, and the routes she damaged. Kurozane loses his most capable audience keeper, but frightened officials scatter before they can be identified or offered bounded surrender."
+      },
+      "prompt_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Separate the fatal record from the victory account."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "truth_completeness"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 17,
+      "latest_turn": 17,
+      "creation_index": 26,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 3740,
+      "graph_position_y": 220,
+      "connected_spools": [
+        "spool_enma"
+      ],
+      "options": [
+        {
+          "id": "page_sw09_revision_opt_carry",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Separate the fatal record from the victory account."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw09_revision_opt_carry_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Aya preserves the immediate threat, the failed alternatives, and the testimony lost with Enma. The death is neither hidden nor made into proof that every captive enemy must die."
+              },
+              "consequence_id": "page_sw10_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_killed"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "aya_archive_openness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "aya_archive_openness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw09_revision_opt_carry_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "A route copy calls the killing purification. Nikola removes the inherited hunter language and replaces it with the exact witnessed necessity and its unresolved cost."
+              },
+              "consequence_id": "page_sw10_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ren_noncoercion"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ren_noncoercion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw-enma-three-terms",
+            "outcome:revision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sw09_negotiated",
+      "title": "A Defection Under Witness",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Enma releases the attendants bound to her cinder seals, surrenders the rain-dock and archive-route ciphers, and gives Aya one claim that can be checked before the party enters Kurohana. The compact grants no pardon, office, or promise of safety after Kurozane falls. Each route may withdraw cooperation; every movement is reported; harmed witnesses need not meet her. Enma remains proud, implicated, and free only inside terms other people can revise. Her change is an action under pressure, not a declaration that the court years no longer count."
+      },
+      "prompt_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "State the first service that does not purchase forgiveness."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "enma_testimony"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 17,
+      "latest_turn": 17,
+      "creation_index": 27,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 3740,
+      "graph_position_y": 0,
+      "connected_spools": [
+        "spool_enma"
+      ],
+      "options": [
+        {
+          "id": "page_sw09_negotiated_opt_carry",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "State the first service that does not purchase forgiveness."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw09_negotiated_opt_carry_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Enma identifies a false inner-gate order, then waits while Aya confirms it from an independent record. The useful answer earns only the next bounded question, not trust or restored status."
+              },
+              "consequence_id": "page_sw10_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_compact"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_compact"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw09_negotiated_opt_carry_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Her first route claim omits two endangered attendants. Kiku suspends movement privileges until they are found, demonstrating that the compact can contract as well as reward cooperation."
+              },
+              "consequence_id": "page_sw10_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "enma_testimony"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw-enma-three-terms",
+            "outcome:negotiated"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sw10_decision",
       "title": "Mateus at the Living Archive",
       "text_script": {
         "pointer_type": "String Constant",
@@ -12457,19 +14356,19 @@
         ],
         "coefficient": 1
       },
-      "earliest_turn": 16,
-      "latest_turn": 16,
-      "creation_index": 24,
+      "earliest_turn": 18,
+      "latest_turn": 18,
+      "creation_index": 28,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
-      "graph_position_x": 3520,
+      "graph_position_x": 3960,
       "graph_position_y": 0,
       "connected_spools": [
         "spool_act3"
       ],
       "options": [
         {
-          "id": "page_sw09_decision_opt_translate-aloud",
+          "id": "page_sw10_decision_opt_translate-aloud",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -12479,13 +14378,13 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw09_decision_opt_translate-aloud_r_accord",
+              "id": "page_sw10_decision_opt_translate-aloud_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "Mateus distinguishes his original work from later alterations and stops whenever Aya asks. The translation remains a witnessed act, not his private edition."
               },
-              "consequence_id": "page_sw09_accord",
+              "consequence_id": "page_sw10_accord",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -12606,13 +14505,13 @@
               ]
             },
             {
-              "id": "page_sw09_decision_opt_translate-aloud_r_revision",
+              "id": "page_sw10_decision_opt_translate-aloud_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "He starts controlling interpretation through pace and omission. Aya stops the session, records the attempt, and keeps only independently checked lines."
               },
-              "consequence_id": "page_sw09_revision",
+              "consequence_id": "page_sw10_revision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -12750,7 +14649,7 @@
           ]
         },
         {
-          "id": "page_sw09_decision_opt_cipher-key-only",
+          "id": "page_sw10_decision_opt_cipher-key-only",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -12760,13 +14659,13 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw09_decision_opt_cipher-key-only_r_accord",
+              "id": "page_sw10_decision_opt_cipher-key-only_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "The key permits independent reading later without bringing Mateus near witnesses. He labels where context is missing and claims no final interpretation."
               },
-              "consequence_id": "page_sw09_accord",
+              "consequence_id": "page_sw10_accord",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -12887,13 +14786,13 @@
               ]
             },
             {
-              "id": "page_sw09_decision_opt_cipher-key-only_r_revision",
+              "id": "page_sw10_decision_opt_cipher-key-only_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "The key is incomplete without context. Mateus labels that limit instead of expanding his access, and Aya preserves the unfinished tool."
               },
-              "consequence_id": "page_sw09_revision",
+              "consequence_id": "page_sw10_revision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13031,7 +14930,7 @@
           ]
         },
         {
-          "id": "page_sw09_decision_opt_wait-for-custodian",
+          "id": "page_sw10_decision_opt_wait-for-custodian",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -13041,13 +14940,13 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw09_decision_opt_wait-for-custodian_r_accord",
+              "id": "page_sw10_decision_opt_wait-for-custodian_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "Mateus accepts silence and follows guard instructions. A custodian later asks one narrow question, which he answers carefully in writing."
               },
-              "consequence_id": "page_sw09_accord",
+              "consequence_id": "page_sw10_accord",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13168,13 +15067,13 @@
               ]
             },
             {
-              "id": "page_sw09_decision_opt_wait-for-custodian_r_revision",
+              "id": "page_sw10_decision_opt_wait-for-custodian_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "He volunteers a warning before being asked. The guard stops him; he submits it in writing and accepts that urgency does not erase the rule."
               },
-              "consequence_id": "page_sw09_revision",
+              "consequence_id": "page_sw10_revision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13314,7 +15213,7 @@
       ]
     },
     {
-      "id": "page_sw09_accord",
+      "id": "page_sw10_accord",
       "title": "Knowledge Under Revocable Terms",
       "text_script": {
         "pointer_type": "String Constant",
@@ -13336,19 +15235,19 @@
         ],
         "coefficient": 1
       },
-      "earliest_turn": 17,
-      "latest_turn": 17,
-      "creation_index": 25,
+      "earliest_turn": 19,
+      "latest_turn": 19,
+      "creation_index": 29,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
-      "graph_position_x": 3740,
-      "graph_position_y": -180,
+      "graph_position_x": 4180,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_act3"
       ],
       "options": [
         {
-          "id": "page_sw09_accord_opt_carry",
+          "id": "page_sw10_accord_opt_carry",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -13358,13 +15257,13 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw09_accord_opt_carry_r_accord",
+              "id": "page_sw10_accord_opt_carry_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "The record grants no command, pardon, private access, or restored title. Mateus signs the limits before the key enters local custody."
               },
-              "consequence_id": "page_sw10_decision",
+              "consequence_id": "page_sw11_decision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13485,13 +15384,13 @@
               ]
             },
             {
-              "id": "page_sw09_accord_opt_carry_r_revision",
+              "id": "page_sw10_accord_opt_carry_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "One draft thanks Mateus in language that implies restoration. Nikola removes it without substituting the language of noble honor, and the final receipt records only the bounded work completed."
               },
-              "consequence_id": "page_sw10_decision",
+              "consequence_id": "page_sw11_decision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13631,7 +15530,7 @@
       ]
     },
     {
-      "id": "page_sw09_revision",
+      "id": "page_sw10_revision",
       "title": "The Translation Stops",
       "text_script": {
         "pointer_type": "String Constant",
@@ -13653,19 +15552,19 @@
         ],
         "coefficient": 1
       },
-      "earliest_turn": 17,
-      "latest_turn": 17,
-      "creation_index": 26,
+      "earliest_turn": 19,
+      "latest_turn": 19,
+      "creation_index": 30,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
-      "graph_position_x": 3740,
-      "graph_position_y": 180,
+      "graph_position_x": 4180,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_act3"
       ],
       "options": [
         {
-          "id": "page_sw09_revision_opt_carry",
+          "id": "page_sw10_revision_opt_carry",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -13675,13 +15574,13 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw09_revision_opt_carry_r_accord",
+              "id": "page_sw10_revision_opt_carry_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "Aya timestamps the halt and separates verified lines from abandoned interpretation. Later readers can see why the account ends where it does."
               },
-              "consequence_id": "page_sw10_decision",
+              "consequence_id": "page_sw11_decision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13802,13 +15701,13 @@
               ]
             },
             {
-              "id": "page_sw09_revision_opt_carry_r_revision",
+              "id": "page_sw10_revision_opt_carry_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
                 "value": "The first copy omits the attempted control. Nikola restores the note, refusing to make Mateus easier to forgive or either man easier to honor by making the record smoother."
               },
-              "consequence_id": "page_sw10_decision",
+              "consequence_id": "page_sw11_decision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -13948,7 +15847,7 @@
       ]
     },
     {
-      "id": "page_sw10_decision",
+      "id": "page_sw11_decision",
       "title": "The Last Command",
       "text_script": {
         "pointer_type": "String Constant",
@@ -13965,19 +15864,19 @@
         ],
         "coefficient": 1
       },
-      "earliest_turn": 18,
-      "latest_turn": 18,
-      "creation_index": 27,
+      "earliest_turn": 20,
+      "latest_turn": 20,
+      "creation_index": 31,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
-      "graph_position_x": 3960,
+      "graph_position_x": 4400,
       "graph_position_y": 0,
       "connected_spools": [
         "spool_endings"
       ],
       "options": [
         {
-          "id": "page_sw10_decision_opt_witnessed-return",
+          "id": "page_sw11_decision_opt_witnessed-return",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -13987,7 +15886,7 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw10_decision_opt_witnessed-return_r_accord",
+              "id": "page_sw11_decision_opt_witnessed-return_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
@@ -14114,7 +16013,7 @@
               ]
             },
             {
-              "id": "page_sw10_decision_opt_witnessed-return_r_revision",
+              "id": "page_sw11_decision_opt_witnessed-return_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
@@ -14258,7 +16157,7 @@
           ]
         },
         {
-          "id": "page_sw10_decision_opt_provisional-binding",
+          "id": "page_sw11_decision_opt_provisional-binding",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -14268,7 +16167,7 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw10_decision_opt_provisional-binding_r_accord",
+              "id": "page_sw11_decision_opt_provisional-binding_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
@@ -14395,7 +16294,7 @@
               ]
             },
             {
-              "id": "page_sw10_decision_opt_provisional-binding_r_revision",
+              "id": "page_sw11_decision_opt_provisional-binding_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
@@ -14539,7 +16438,7 @@
           ]
         },
         {
-          "id": "page_sw10_decision_opt_execution-demand",
+          "id": "page_sw11_decision_opt_execution-demand",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
@@ -14549,7 +16448,7 @@
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw10_decision_opt_execution-demand_r_accord",
+              "id": "page_sw11_decision_opt_execution-demand_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
@@ -14676,7 +16575,7 @@
               ]
             },
             {
-              "id": "page_sw10_decision_opt_execution-demand_r_revision",
+              "id": "page_sw11_decision_opt_execution-demand_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
@@ -14844,13 +16743,13 @@
         ],
         "coefficient": 1
       },
-      "earliest_turn": 19,
-      "latest_turn": 19,
-      "creation_index": 28,
+      "earliest_turn": 21,
+      "latest_turn": 21,
+      "creation_index": 32,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
-      "graph_position_x": 4180,
-      "graph_position_y": -180,
+      "graph_position_x": 4620,
+      "graph_position_y": -220,
       "connected_spools": [
         "spool_endings"
       ],
@@ -14879,13 +16778,13 @@
         ],
         "coefficient": 1
       },
-      "earliest_turn": 19,
-      "latest_turn": 19,
-      "creation_index": 29,
+      "earliest_turn": 21,
+      "latest_turn": 21,
+      "creation_index": 33,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
-      "graph_position_x": 4180,
-      "graph_position_y": 180,
+      "graph_position_x": 4620,
+      "graph_position_y": 220,
       "connected_spools": [
         "spool_endings"
       ],
@@ -14893,11 +16792,11 @@
     }
   ],
   "meta": {
-    "source_version": 1,
+    "source_version": 2,
     "canonical_scene_count": 60,
-    "storyworld_authored_scene_count": 30,
-    "complete_run_storyworld_scene_count": 20,
-    "complete_run_total_scene_count": 80,
+    "storyworld_authored_scene_count": 34,
+    "complete_run_storyworld_scene_count": 22,
+    "complete_run_total_scene_count": 82,
     "reaction_tie_break": "later-authored-wins"
   }
 }

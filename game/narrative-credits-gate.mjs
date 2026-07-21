@@ -1,4 +1,4 @@
-/** Cross-authority gate for the ordinary 80-scene narrative credits route. */
+/** Cross-authority gate for the ordinary 82-scene narrative credits route. */
 
 import {
   RUN_RECEIPT_PROFILE_IDS,
@@ -54,7 +54,7 @@ export function deriveNarrativeCreditsGate(receiptCandidate, storyworldCandidate
     completedCanonicalSceneCount: report?.completedBeatCount ?? 0,
     requiredCanonicalSceneCount: report?.requiredBeatCount ?? 60,
     completedStoryworldSceneCount: report?.completedStoryworldPlayedSceneCount ?? 0,
-    requiredStoryworldSceneCount: report?.requiredStoryworldPlayedSceneCount ?? 20,
+    requiredStoryworldSceneCount: report?.requiredStoryworldPlayedSceneCount ?? 22,
     completedStoryworldClusterIds: completedClusterIds,
     totalMs: report?.totalMs ?? 0,
     targetMs: report?.targetMs ?? 18_000_000,

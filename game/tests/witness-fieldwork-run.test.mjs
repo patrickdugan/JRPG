@@ -15,7 +15,7 @@ function recursivelyFrozen(value, seen = new Set()) {
 
 test('fieldwork runner reaches every ordered task through exact runtime steps', () => {
   assert.equal(RUN.ok, true);
-  assert.equal(RUN.signature, 'fnv1a32:18eed422');
+  assert.equal(RUN.signature, 'fnv1a32:03290d06');
   assert.deepEqual(RUN.summary, {
     stageCount: 67,
     completedStageCount: 67,

@@ -138,7 +138,9 @@ Every boss mechanic is designed around a small visible question.
 | Furnace Abbot | Eight glowing grates | Frost footing, leave grate zones, Pierce after overheat | Forge Sermon Recovery 3 |
 | Ujiro | Vermilion writ above exact print targets | Interrupt order or protect target | Order Recovery 2; no kill spectacle |
 | Bell Warden Chiyo | Chain endpoint and numbered bell count | Break chain, Swap into rescue space | Count is visible; extraction is mandatory |
-| Lady Enma | One orange and one violet lane | Assign party roles to stabilize both | Paired Ashes Recovery 2 |
+| Lady Enma — Rain Mask | Orange five-space fan lane across the witness route | Guard hooks, keep the escort moving, punish Frost/Radiance | Cinder Fan Draw Recovery 3; forced retreat at 55% HP |
+| Lady Enma — Archive Mask | Black clerk writ followed by one violet reflected target | Break the visible mirror while protecting courier and blocks | Mirror Writ Recovery 3; forced retreat at 30% HP |
+| Lady Enma — Last Mask | One orange and one violet lane plus a red-black parasol arc | Assign party roles to stabilize both, then punish the full-activation arc | Cinder Parasol Wing Recovery 3; subdued alive for the three-outcome spool |
 | Kurozane | Clone seals, ring, spear line, five-petal bloom | Apply learned answers; avoid Umbral; use dawn lane | Black Chrysanthemum Recovery 3 after ward break |
 
 ## Production and playtest invariants

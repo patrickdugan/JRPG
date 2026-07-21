@@ -618,7 +618,7 @@ export const CAMPAIGN = deepFreeze({
         { id: 'sdg-salt-warehouse', name: 'Salt Warehouse', purpose: 'Cargo platform boss and first key.' },
       ],
       encounters: [
-        { id: 'c3-dock-patrol', name: 'Dock Patrol', kind: 'route-battle', lesson: 'Visible patrol route choice, no stealth fail loop' },
+        { id: 'c3-dock-patrol', name: 'Lady Enma — First Mask', kind: 'boss-escort', lesson: 'Protect witnesses, read persistent fan lanes, and force a recurring boss to retreat' },
         { id: 'c3-captain-kaji', name: 'Captain Kaji', kind: 'boss', lesson: 'Facing, Guard, and forced movement' },
       ],
       flags: { sets: ['c3_lantern_route'], reads: ['c2_cells_opened', 'c1_clerk_testimony_ready'] },
@@ -693,13 +693,16 @@ export const CAMPAIGN = deepFreeze({
           text: [
             { speaker: 'AYA', line: 'Three routes. Their risks are written plainly. Choose with the witnesses, not for them.' },
             { speaker: 'WITNESS', line: 'The warehouse lane has cover. The crowded lane has people. The quiet lane has water.' },
+            { speaker: 'LADY ENMA', line: 'Quiet water still reflects. Kurozane asked me which frightened face would lead me to Avelar.' },
+            { speaker: 'MATEUS', line: 'Lady Enma. Court entertainer, audience keeper, and the last smile many prisoners saw before the Bell.' },
+            { speaker: 'NIKOLA', line: 'Her rain mask is lacquered over a blood ward. Break the mask; she is not dying for us tonight.' },
           ],
           choices: [
             {
               id: 'c3-lantern-route-quiet',
               label: 'Take the quiet canal route.',
               flag: 'c3_lantern_route',
-              result: 'The group faces a small patrol battle near the lantern boat.',
+              result: 'Lady Enma leads the patrol herself; the party escorts both witnesses and breaks her first mask before she retreats.',
             },
             {
               id: 'c3-lantern-route-crowded',
@@ -1108,7 +1111,7 @@ export const CAMPAIGN = deepFreeze({
         { id: 'kzu-canal-lock', name: 'Canal Lock', purpose: 'Boss exit and bundle distribution.' },
       ],
       encounters: [
-        { id: 'c6-masked-clerks', name: 'Masked Clerks', kind: 'protect-objective', lesson: 'Defend a print block and courier' },
+        { id: 'c6-masked-clerks', name: 'Lady Enma — Second Mask', kind: 'boss-protect-objective', lesson: 'Defend the courier and print blocks while breaking Enma\'s reflected writs' },
         { id: 'c6-ujiro', name: 'Magistrate Ujiro Arata', kind: 'boss', lesson: 'Threat triage and command interruption' },
       ],
       flags: { sets: ['c6_first_copy'], reads: ['c1_records_copied', 'c3_mateus_port_admission', 'c5_mateus_full_admission'] },
@@ -1197,13 +1200,15 @@ export const CAMPAIGN = deepFreeze({
             { speaker: 'NIKOLA', line: 'The courier is slower than the crate.' },
             { speaker: 'AYA', line: 'Then protect the courier. A person can carry another copy tomorrow.' },
             { speaker: 'NIKOLA', line: 'Understood.' },
+            { speaker: 'LADY ENMA', line: 'You broke a rain mask and mistook retreat for absence. The archive has better mirrors.' },
+            { speaker: 'MATEUS', line: 'She can repeat the clerks\' latest writ, not invent a target. Watch what they mark first.' },
           ],
           choices: [
             {
               id: 'c6-escort-civilian-courier',
               label: 'Escort the civilian courier across the roof route.',
               flag: 'c6_courier_protected',
-              result: 'Nikola protects a person rather than a supposedly more valuable object; the final bundle travels safely.',
+              result: 'Nikola protects the person while the party breaks Enma\'s archive reflection; she burns her second mask and retreats to Kurohana.',
             },
           ],
         },
@@ -1391,10 +1396,12 @@ export const CAMPAIGN = deepFreeze({
       boss: {
         id: 'lady-enma-of-ash',
         name: 'Lady Enma of Ash',
+        role: 'Kurozane\'s recurring vampire Cinder Fan; a former court entertainer and audience keeper who remains culpable for the people she delivered to the Bell.',
+        recurringEncounterIds: ['c3-dock-patrol', 'c6-masked-clerks', 'c8-lady-enma'],
         arena: 'Black Gate Outer Court',
         objective: 'Release the Ashen garrison while using party combinations to convert Ember/Umbral hazard lanes.',
         battleLesson: 'Every permanent hero contributes to a readable combination; allies handle evacuation and records, not anonymous damage buffs.',
-        resolution: 'The garrison is released and allies hold the gate voluntarily while the six heroes enter Kurohana.',
+        resolution: 'The garrison is released, Enma is subdued alive, and the Three Terms Storyworld spool records death, rotating custody, or a revocable negotiated defection before the six heroes enter Kurohana.',
       },
       reward: {
         keyItems: ['Black Gate route map'],
@@ -1409,7 +1416,7 @@ export const CAMPAIGN = deepFreeze({
       ],
       encounters: [
         { id: 'c8-outer-court', name: 'Outer Court Breach', kind: 'party-combination', lesson: 'Signals and combinations across hazard lanes' },
-        { id: 'c8-lady-enma', name: 'Lady Enma of Ash', kind: 'boss', lesson: 'All-six combination roles' },
+        { id: 'c8-lady-enma', name: 'Lady Enma — Last Mask', kind: 'recurring-boss-finale', lesson: 'All-six combination roles followed by a three-outcome witnessed resolution' },
       ],
       flags: { sets: ['c8_hub_assets'], reads: ['c7_network_warned', 'c1_clerk_testimony_ready'] },
       beats: [
@@ -1515,14 +1522,14 @@ export const CAMPAIGN = deepFreeze({
           text: [
             { speaker: 'LADY ENMA', line: 'He fed on fear of abandonment. You brought witnesses instead.' },
             { speaker: 'KIKU', line: 'Move the released soldiers to the tents. They are not a second enemy.' },
-            { speaker: 'AYA', line: 'The gate is open. The six of us go in; everyone else keeps the road alive.' },
+            { speaker: 'AYA', line: 'The gate is open. Before we enter, the witnesses decide whether Enma dies, enters rotating custody, or defects under terms they can revoke.' },
           ],
           choices: [
             {
               id: 'c8-enter-kurohana',
-              label: 'Enter Kurohana with the six-person roster available.',
+              label: 'Hold the threshold until the Three Terms hearing records Enma\'s fate.',
               flag: 'c8_kurohana_open',
-              result: 'Allies hold the gate voluntarily; no ally is sent on an off-screen suicide mission.',
+              result: 'The Three Terms spool resolves Enma first; then allies hold the gate voluntarily and no one is sent on an off-screen suicide mission.',
             },
           ],
         },

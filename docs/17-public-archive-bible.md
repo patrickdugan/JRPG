@@ -54,7 +54,7 @@ New Game clears the reading save independently from companion conversations and 
 
 The bounded completion witness begins from the canonical zero-time campaign result, opens all 60 records, acknowledges every paragraph, refuses every replay attempt, and records zero elapsed time. It proves finite reachability and paragraph coverage only.
 
-The exact witness executes 558 successful transitions and records 619 trace events. Its prose-bound catalogue signature is `fnv1a32:92ea7832`; the completion signature is `fnv1a32:be3b7c4b`.
+The exact witness executes 558 successful transitions and records 619 trace events. Its prose-bound catalogue signature is `fnv1a32:92ea7832`; the completion signature is `fnv1a32:c61b184f`.
 
 ## Duration boundary
 

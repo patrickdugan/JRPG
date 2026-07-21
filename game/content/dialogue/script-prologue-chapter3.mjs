@@ -1146,6 +1146,12 @@ BOAT OPERATOR|One tide turn remains. Any route chosen together will reach my lan
 AYA|The board holds all known risks, including our uncertainty. We step back now.
 WITNESS|Good. We will speak among ourselves, then point to the color we choose.
 NARRATOR|The three lantern colors remain equal in the rain while witnesses stand closest to the choice markers.
+NARRATOR|A paper parasol opens on the far piling. Its reflection arrives one heartbeat before the woman holding it.
+LADY ENMA|Choose carefully. Kurozane sent his Cinder Fan to learn which frightened route still carries Avelar.
+MATEUS|Lady Enma of Ash. She kept the court audiences entertaining enough that prisoners forgot when the verdict had already been written.
+LADY ENMA|And you wrote the verdicts in three languages, Father. Shall we compare workmanship in front of your new witnesses?
+NIKOLA|Her rain mask carries the blood ward. Break the lacquer and punish the fan's recovery; she has already prepared her exit.
+REN|The witnesses still choose the route. Enma changes the danger we record, not who owns the decision.
 AYA|Choose with the people who must walk it; the party's task begins after their answer.
     `),
   },

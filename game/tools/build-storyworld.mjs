@@ -68,19 +68,26 @@ function afterEffects(effects) {
   return Object.entries(effects).map(([propertyId, delta]) => effect(propertyId, delta));
 }
 
-function clusterNodeIds(index) {
+function outcomeBranches(cluster) {
+  return Object.freeze(['accord', 'revision', ...(cluster.thirdOutcome ? ['negotiated'] : [])]);
+}
+
+function clusterNodeIds(index, cluster = STORYWORLD_CLUSTERS[index]) {
   const prefix = `page_sw${String(index + 1).padStart(2, '0')}`;
-  return Object.freeze({
+  const ids = {
     entry: index === 0 ? 'page_0000' : `${prefix}_decision`,
     accord: index === STORYWORLD_CLUSTERS.length - 1 ? 'page_end_corrections_visible' : `${prefix}_accord`,
     revision: index === STORYWORLD_CLUSTERS.length - 1 ? 'page_end_limits_posted' : `${prefix}_revision`,
-  });
+  };
+  if (cluster.thirdOutcome) ids.negotiated = `${prefix}_negotiated`;
+  return Object.freeze(ids);
 }
 
-function spoolIdForCluster(index) {
+function spoolIdForCluster(cluster, index) {
+  if (cluster.spoolId) return cluster.spoolId;
   if (index < 3) return 'spool_act1';
   if (index < 6) return 'spool_act2';
-  if (index < 9) return 'spool_act3';
+  if (cluster.id !== 'sw10-corrections-desk' && index < 10) return 'spool_act3';
   return 'spool_endings';
 }
 
@@ -94,7 +101,7 @@ function buildReaction({ id, text, propertyId, invert, consequenceId, effects })
   };
 }
 
-function buildEntryEncounter(cluster, index, ids) {
+function buildEntryEncounter(cluster, index, ids, creationIndex) {
   return {
     id: ids.entry,
     title: cluster.title,
@@ -103,12 +110,12 @@ function buildEntryEncounter(cluster, index, ids) {
     desirability_script: propertyPointer(cluster.options[0].gateProperty),
     earliest_turn: index * 2,
     latest_turn: index * 2,
-    creation_index: index * 3,
+    creation_index: creationIndex,
     creation_time: CREATED_AT,
     modified_time: CREATED_AT,
     graph_position_x: index * 440,
     graph_position_y: 0,
-    connected_spools: [spoolIdForCluster(index)],
+    connected_spools: [spoolIdForCluster(cluster, index)],
     options: cluster.options.map((sourceOption, optionIndex) => {
       const optionId = `${ids.entry}_opt_${sourceOption.id}`;
       return {
@@ -122,7 +129,7 @@ function buildEntryEncounter(cluster, index, ids) {
             text: sourceOption.accord.text,
             propertyId: sourceOption.gateProperty,
             invert: false,
-            consequenceId: ids.accord,
+            consequenceId: ids[sourceOption.accord.outcomeKey ?? 'accord'],
             effects: sourceOption.accord.effects,
           }),
           buildReaction({
@@ -130,7 +137,7 @@ function buildEntryEncounter(cluster, index, ids) {
             text: sourceOption.revision.text,
             propertyId: sourceOption.gateProperty,
             invert: true,
-            consequenceId: ids.revision,
+            consequenceId: ids[sourceOption.revision.outcomeKey ?? 'revision'],
             effects: sourceOption.revision.effects,
           }),
         ],
@@ -140,8 +147,12 @@ function buildEntryEncounter(cluster, index, ids) {
   };
 }
 
-function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId) {
-  const source = branch === 'accord' ? cluster.accordOutcome : cluster.revisionOutcome;
+function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId, creationIndex, branchIndex) {
+  const source = branch === 'accord'
+    ? cluster.accordOutcome
+    : branch === 'revision'
+      ? cluster.revisionOutcome
+      : cluster.thirdOutcome;
   const encounterId = ids[branch];
   const terminal = index === STORYWORLD_CLUSTERS.length - 1;
   const optionId = `${encounterId}_opt_carry`;
@@ -154,12 +165,12 @@ function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId) {
     desirability_script: propertyPointer(source.gateProperty),
     earliest_turn: index * 2 + 1,
     latest_turn: index * 2 + 1,
-    creation_index: index * 3 + (branch === 'accord' ? 1 : 2),
+    creation_index: creationIndex,
     creation_time: CREATED_AT,
     modified_time: CREATED_AT,
     graph_position_x: index * 440 + 220,
-    graph_position_y: branch === 'accord' ? -180 : 180,
-    connected_spools: [spoolIdForCluster(index)],
+    graph_position_y: [-220, 220, 0][branchIndex] ?? branchIndex * 180,
+    connected_spools: [spoolIdForCluster(cluster, index)],
     options: terminal ? [] : [{
       id: optionId,
       text_script: stringConstant(source.prompt),
@@ -189,33 +200,45 @@ function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId) {
 }
 
 function buildStoryworld() {
-  const nodeIds = STORYWORLD_CLUSTERS.map((_, index) => clusterNodeIds(index));
+  const nodeIds = STORYWORLD_CLUSTERS.map((cluster, index) => clusterNodeIds(index, cluster));
   const encounters = [];
+  let creationIndex = 0;
   for (const [index, cluster] of STORYWORLD_CLUSTERS.entries()) {
     const ids = nodeIds[index];
     const nextEntryId = nodeIds[index + 1]?.entry ?? '';
-    encounters.push(
-      buildEntryEncounter(cluster, index, ids),
-      buildOutcomeEncounter(cluster, index, ids, 'accord', nextEntryId),
-      buildOutcomeEncounter(cluster, index, ids, 'revision', nextEntryId),
-    );
+    encounters.push(buildEntryEncounter(cluster, index, ids, creationIndex));
+    creationIndex += 1;
+    for (const [branchIndex, branch] of outcomeBranches(cluster).entries()) {
+      encounters.push(buildOutcomeEncounter(
+        cluster,
+        index,
+        ids,
+        branch,
+        nextEntryId,
+        creationIndex,
+        branchIndex,
+      ));
+      creationIndex += 1;
+    }
   }
 
   const propertyDefaults = Object.fromEntries(STORYWORLD_PROPERTIES.map(({ id, defaultValue }) => [id, defaultValue]));
   const spools = [
-    ['spool_act1', 'Act I — Custody and Terms', true, encounters.slice(0, 9)],
-    ['spool_act2', 'Act II — Account and Corroboration', false, encounters.slice(9, 18)],
-    ['spool_act3', 'Act III — Authority and Repair', false, encounters.slice(18, 27)],
-    ['spool_endings', 'Epilogue — A Revisable Archive', false, encounters.slice(27, 30)],
-  ].map(([id, spoolName, startsActive, spoolEncounters], creationIndex) => ({
+    ['spool_act1', 'Act I — Custody and Terms', true],
+    ['spool_act2', 'Act II — Account and Corroboration', false],
+    ['spool_act3', 'Act III — Authority and Repair', false],
+    ['spool_enma', 'The Cinder Fan — Death, Custody, or Compact', false],
+    ['spool_endings', 'Epilogue — A Revisable Archive', false],
+  ].map(([id, spoolName, startsActive], creationIndex) => ({
     id,
     spool_name: spoolName,
-    spool_type: 'General',
     starts_active: startsActive,
     creation_index: creationIndex,
     creation_time: CREATED_AT,
     modified_time: CREATED_AT,
-    encounters: spoolEncounters.map(({ id: encounterId }) => encounterId),
+    encounters: encounters
+      .filter(({ connected_spools: connectedSpools }) => connectedSpools.includes(id))
+      .map(({ id: encounterId }) => encounterId),
   }));
 
   return {
@@ -231,7 +254,7 @@ function buildStoryworld() {
     font_size: 16,
     language: 'en',
     rating: 'Teen',
-    about_text: 'Thirty reaction-driven interstitial scene nodes anchored to the sixty-scene JRPG campaign. Every complete narrative run experiences ten decisions and one of two authored consequence scenes per decision.',
+    about_text: 'Thirty-four reaction-driven interstitial scene nodes anchored to the sixty-scene JRPG campaign. Every complete narrative run experiences eleven decisions and one authored consequence scene per decision; Lady Enma has distinct death, custody, and negotiated-defection outcomes.',
     characters: [{
       id: STORYWORLD_CHARACTER_ID,
       name: 'The Lantern Network',
@@ -327,8 +350,9 @@ function buildBindings(storyworld) {
       sequenceRole: cluster.sequenceRole,
       relatedEncounterIds: cluster.relatedEncounterIds,
       requiredForNarrativeCredits: true,
-      entryEncounterId: clusterNodeIds(index).entry,
-      outcomeEncounterIds: [clusterNodeIds(index).accord, clusterNodeIds(index).revision],
+      entryEncounterId: clusterNodeIds(index, cluster).entry,
+      outcomeKeys: outcomeBranches(cluster),
+      outcomeEncounterIds: outcomeBranches(cluster).map((branch) => clusterNodeIds(index, cluster)[branch]),
     })),
   };
 }
@@ -354,7 +378,10 @@ function buildRuntime(storyworld, bindings, sourceHash, bindingHash) {
     clusters: bindings.clusters.map((binding) => ({
       ...binding,
       entry: compileEncounter(encounterById.get(binding.entryEncounterId)),
-      outcomes: binding.outcomeEncounterIds.map((encounterId) => compileEncounter(encounterById.get(encounterId))),
+      outcomes: binding.outcomeEncounterIds.map((encounterId, index) => ({
+        ...compileEncounter(encounterById.get(encounterId)),
+        resolutionKey: binding.outcomeKeys[index],
+      })),
     })),
     metrics: {
       canonicalSceneCount: 60,

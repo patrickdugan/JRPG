@@ -8,7 +8,7 @@ This packet is the bounded handoff for a Japanese cultural historian, a scholar 
 
 - Git commit: record the reviewed commit at handoff; never reuse findings after relevant script or art changes without a delta review.
 - Historical frame: alternate Genna 8 / 1622 after the 1614 ban.
-- Narrative volume: 60 canonical scenes plus ten Storyworld decisions and ten played consequences per route.
+- Narrative volume: 60 canonical scenes plus eleven Storyworld decisions and eleven played consequences per route.
 - Visual scope: 20 scene panoramas, 16-role/32-frame NPC field suite, party/enemy/boss atlases, field overlays, battle boards, VFX, and generated production-reference sheets.
 - Required play surfaces: Campaign, Camp conversations/councils/archive, Battle context cards, and Credits.
 

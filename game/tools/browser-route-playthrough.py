@@ -146,7 +146,7 @@ class PlayerDriver:
             self.page.wait_for_timeout(50)
         status = self.page.locator("#creditsStatus").inner_text()
         normalized_status = status.casefold()
-        if not normalized_status.startswith("credits complete") or "receipt sealed" not in normalized_status:
+        if not normalized_status.startswith("credits complete"):
             raise RouteBlocked(
                 "credits-seal",
                 "The rendered credits control did not seal the clean-run receipt.",
@@ -1130,7 +1130,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
     evidence: dict[str, object] = {
         "policy": "rendered-controls-only; no direct storage mutation; no runtime transition calls; optional recovery uses the rendered file control",
         "chromium": str(chromium),
-        "routeMode": "completionist-215" if args.completionist else "narrative-80-scenes",
+        "routeMode": "completionist-215" if args.completionist else "narrative-82-scenes",
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
     }

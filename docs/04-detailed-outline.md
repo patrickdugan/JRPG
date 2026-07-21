@@ -275,10 +275,10 @@ Lady Enma offers selected villages safety for Mateus and Nikola. Mateus refuses 
 
 The outer-court battle alternates party combat with lantern signals visible in the background. Allies hold evacuation and record routes; they are not anonymous attack buffs.
 
-### C8-05 — Boss: Lady Enma of Ash
+### C8-05 — Recurring boss finale: Lady Enma of Ash
 
-Enma creates Ember/Umbral hazards. Each hero has a useful response, producing the late-game party-combination tutorial.<br>
-**Exit:** The Ashen garrison is released. Allies hold the gate by choice while the six heroes enter Kurohana.
+Enma's third fight combines the rain-mask fan lane, archive-mask reflection read, and new paired Ember/Umbral hazards. Each hero has a useful response, producing the late-game party-combination tutorial. At zero HP the Severed Dragon boundary subdues her alive rather than silently fixing her fate.<br>
+**Exit:** The Ashen garrison is released. Before the six heroes enter Kurohana, the `spool_enma` hearing records one of three material outcomes: killed with testimony lost, held under rotating civilian custody, or defected under revocable terms with no pardon.
 
 ## Chapter 9 — The Black Chrysanthemum
 

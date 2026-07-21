@@ -161,7 +161,7 @@ const TASKS_BY_BEAT = {
   'c3-04-lantern-boat-escort': [
     task('council', 'Compare', 'Compare the quiet, crowded, and warehouse routes with the witnesses who will travel them.'),
     task('care-rescue', 'Board', 'Board the witnesses only after they confirm the risk they accept.'),
-    task('combat-evidence', 'Escort', 'Resolve the registered dock patrol while keeping the chosen witness route open.'),
+    task('combat-evidence', 'Break', 'Escort both witnesses while breaking Lady Enma\'s first mask during her declared Cinder Fan recovery.'),
   ],
   'c3-05-gentas-order': [
     task('interview', 'Hear', 'Hear Kaji\'s transport order in front of the dock workers who would carry it out.'),
@@ -252,7 +252,7 @@ const TASKS_BY_BEAT = {
   'c6-04-printmaker-flight': [
     task('inspect', 'Scout', 'Scout the roof route for a path wide enough for the civilian courier.'),
     task('care-rescue', 'Shield', 'Shield the courier rather than the heavier print crate.'),
-    task('combat-evidence', 'Escort', 'Resolve the registered masked-clerk encounter and escort the living copy carrier across.'),
+    task('combat-evidence', 'Reflect', 'Escort the living copy carrier, break Lady Enma\'s reflected writ, and force her second-mask retreat.'),
   ],
   'c6-05-all-copies-leave': [
     task('carry-deliver', 'Send', 'Send the woodblock bundle by road.'),

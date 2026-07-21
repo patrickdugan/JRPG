@@ -9,7 +9,7 @@ const routeRun = runRequiredRouteCompletion({ runId: 'required-route-test-0001' 
 test('required route executes every finite activity at its chronological frontier', () => {
   const run = routeRun;
   assert.equal(run.ok, true);
-  assert.equal(run.signature, 'fnv1a32:deee52ef');
+  assert.equal(run.signature, 'fnv1a32:6a58eed2');
   assert.deepEqual(run.summary, {
     canonicalBeatCount: 60,
     canonicalFirstClearCount: 23,
@@ -114,9 +114,9 @@ test('required grind has measured scheduler outputs at exact ratios and no durat
   const run = routeRun;
   assert.equal(run.repeatScheduleAudit.schedules.length, 4);
   assert.deepEqual(run.repeatScheduleAudit.aggregateScheduledMsBySpeed, {
-    1: 36800,
-    2: 18400,
-    4: 9200,
+    1: 37600,
+    2: 18800,
+    4: 9400,
   });
   assert.deepEqual(run.repeatScheduleAudit.exactRatios, { 1: 1, 2: 2, 4: 4 });
   assert.equal(run.repeatScheduleAudit.scheduleOnly, true);
@@ -138,7 +138,7 @@ test('required grind has measured scheduler outputs at exact ratios and no durat
   assert.equal(run.canonical.proof.totalMs, 0);
   assert.equal(run.canonical.proof.durationProven, false);
   assert.equal(run.fieldworkAudit.traversalExecuted, true);
-  assert.equal(run.fieldworkAudit.traversalSignature, 'fnv1a32:18eed422');
+  assert.equal(run.fieldworkAudit.traversalSignature, 'fnv1a32:03290d06');
   assert.equal(run.fieldworkAudit.exactMovementSteps, 729);
   assert.equal(run.fieldworkAudit.coordinateJumpCount, 0);
   assert.equal(run.fieldworkAudit.recordedPlaytimeMs, 0);

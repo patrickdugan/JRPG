@@ -128,8 +128,8 @@ test('partial playtest exports publish separate, explicit profile verdicts', () 
   assert.equal(report.playtime.unattributedMs, 0);
   assert.equal(report.pacing.diagnosticOnly, true);
   assert.equal(report.pacing.observedPlaytimeProof, false);
-  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:b600dd42');
-  assert.equal(report.pacing.aggregateReferenceTargetMs, 74_020_733);
+  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:c0e61174');
+  assert.equal(report.pacing.aggregateReferenceTargetMs, 74_178_683);
   assert.equal(report.pacing.chapters.length, 11);
   assert.equal(report.narrativeRoute.applicable, false);
   assert.equal(report.narrativeRoute.releaseTargetProven, false);
@@ -140,7 +140,7 @@ test('partial playtest exports publish separate, explicit profile verdicts', () 
   assert.deepEqual(JSON.parse(serializePlaytestEvidenceReport(report)), report);
 });
 
-test('narrative evidence proves reconciled 60 plus 20 scenes and five attributed hours without 215 completion', () => {
+test('narrative evidence proves reconciled 60 plus 22 scenes and five attributed hours without 215 completion', () => {
   const { receipt, storyworld } = completeNarrativeRun();
   const report = createPlaytestEvidenceReport(
     receipt,
@@ -149,15 +149,15 @@ test('narrative evidence proves reconciled 60 plus 20 scenes and five attributed
   );
   assert.equal(report.profileId, RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H);
   assert.equal(report.story.completedBeatCount, 60);
-  assert.equal(report.story.completedStoryworldPlayedSceneCount, 20);
-  assert.equal(report.story.playedSceneCount, 80);
+  assert.equal(report.story.completedStoryworldPlayedSceneCount, 22);
+  assert.equal(report.story.playedSceneCount, 82);
   assert.equal(report.requiredRoute.complete, false);
   assert.equal(report.narrativeRoute.applicable, true);
   assert.equal(report.narrativeRoute.strictCreditsGateReady, true);
   assert.deepEqual(report.narrativeRoute.strictCreditsGateReasons, []);
   assert.equal(report.narrativeRoute.completedCanonicalSceneCount, 60);
-  assert.equal(report.narrativeRoute.completedStoryworldSceneCount, 20);
-  assert.equal(report.narrativeRoute.completedStoryworldClusterIds.length, 10);
+  assert.equal(report.narrativeRoute.completedStoryworldSceneCount, 22);
+  assert.equal(report.narrativeRoute.completedStoryworldClusterIds.length, 11);
   assert.equal(report.narrativeRoute.minimumPlaytimeMet, true);
   assert.equal(report.narrativeRoute.chapterTimingComplete, true);
   assert.equal(report.narrativeRoute.releaseTargetProven, true);
