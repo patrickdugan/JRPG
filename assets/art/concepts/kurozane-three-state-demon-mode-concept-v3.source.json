@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-three-state-demon-mode-concept-v3",
+  "title": "Shogun Kurozane — Ruler, Oni Armor, and Blood-Fueled Demon Mode",
+  "classification": "AI-generated stylized concept",
+  "productionStatus": "approved review source; not a pixel-authored runtime asset",
+  "generatedOn": "2026-07-23",
+  "generator": {
+    "surface": "Codex built-in image generation",
+    "mode": "generate with character and historical portrait references"
+  },
+  "revision": {
+    "continuityReference": "assets/art/concepts/kurozane-dual-state-concept-v2.png",
+    "replacesForFutureDerivation": "The v2 concept remains historical evidence, but v3 is the preferred facial and transformation reference.",
+    "goals": [
+      "Replace the residual Western-esque face with an original face grounded in Momoyama and early-Edo Japanese portrait conventions.",
+      "Make a broad, strongly projecting fleshy nose, hooded eyes, full cheek plane, pronounced ears, and period hairline stable identity anchors.",
+      "Add a blood-fueled Demon Mode that visibly transforms the same man inside the same Oni armor."
+    ]
+  },
+  "states": [
+    {
+      "id": "unarmored-ruler",
+      "read": "Sad elderly Japanese vampire statesman in repaired early-Edo formal layers, resting one hand on the closed state-seal case."
+    },
+    {
+      "id": "oni-armored-shogun",
+      "read": "Human-scale Kurozane in black-lacquer early-17th-century gusoku, horned kawari-kabuto, and Oni menpo."
+    },
+    {
+      "id": "blood-fueled-demon-mode",
+      "read": "The same armored body distended from within: fused menpo, opened lacquer seams, blood-lit lacing, streaming gray hair, claws, and black-bell resonance."
+    }
+  ],
+  "identityContract": {
+    "face": "Original elderly Japanese man with a broad projecting fleshy nose, low root, wide bridge, rounded tip and alae, heavy-lidded almond eyes, epicanthic folds, full cheeks, large ears, age jowls, thin moustache, and wispy chin beard.",
+    "hair": "Period shaved forecrown and gray chonmage in human states; old gray hair streams from the shikoro in Demon Mode.",
+    "continuityAnchors": [
+      "Broad-nosed Japanese facial profile",
+      "Swept kabuto horns",
+      "Black-lacquer cuirass centerline",
+      "Faded-aubergine lacing",
+      "Old-bronze black-bell clasp"
+    ]
+  },
+  "visualReferences": [
+    {
+      "path": "assets/art/concepts/kurozane-dual-state-concept-v2.png",
+      "role": "character, armor, palette, and mood continuity"
+    },
+    {
+      "institution": "Kyoto National Museum via e-Museum",
+      "title": "Portrait of Kano Tan'yu",
+      "date": "17th century",
+      "url": "https://emuseum.nich.go.jp/detail?content_base_id=100954&content_part_id=1&content_pict_id=0&langId=en",
+      "role": "Japanese period portrait conventions and facial anatomy only; sitter identity not copied"
+    },
+    {
+      "institution": "The Metropolitan Museum of Art",
+      "objectId": "2004.309",
+      "title": "Portrait of a Warrior",
+      "date": "late 16th century",
+      "url": "https://www.metmuseum.org/art/collection/search/72570",
+      "role": "Momoyama warrior portrait conventions, hairline, eyes, beard, and formal presence only; sitter identity not copied"
+    }
+  ],
+  "constraints": [
+    "No resemblance to Peter Cushing, Grand Moff Tarkin, or another real actor",
+    "No Western or Eurasian facial structure",
+    "No Western plate armor",
+    "No authentic clan mon or imperial chrysanthemum",
+    "No copied historical crest, sitter, painting composition, or mask",
+    "No wings, extra arms, graphic gore, text, logo, or watermark"
+  ],
+  "output": {
+    "path": "assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "alphaPolicy": "opaque",
+    "sha256": "12e3573e1295f87ac2bb2a626267546a68f475ffaf7c321dd1a3b59c111df355"
+  },
+  "nextProductionStep": "Derive the v3 face into a boss portrait expression row, then author human-to-demon transition keys and separate combat silhouettes under a fixed sprite geometry contract."
+}
