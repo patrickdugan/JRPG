@@ -1,0 +1,2234 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-oni-attack-suite-v1",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated stylized animation concepts",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "canonicalConcept": "../concepts/kurozane-three-state-demon-mode-concept-v3.png",
+    "companionKit": "../kurozane-final-battle-v1"
+  },
+  "build": {
+    "builder": {
+      "path": "build_kurozane_oni_attack_suite.py",
+      "sha256": "75c14df22a0a126172d9db20404357c829105b3029e453900cabcf21bbb3c15a"
+    },
+    "sourceContract": {
+      "path": "kurozane-oni-attack-suite.source.json",
+      "sha256": "59391f3d23fd2731d9f161d4055fdb5061e64e0a8df31c0291414fa136314938"
+    },
+    "pillowVersion": "11.3.0",
+    "resampling": "BOX",
+    "dither": "none",
+    "alphaPolicy": "binary threshold at 128 after source chroma-key removal"
+  },
+  "sources": [
+    {
+      "path": "sources/kurozane-oni-four-attacks-chroma-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "sha256": "5f9145c9719bfe3518623e9e50cb7c3dc282f8327b9edb897d47ab15bb6c8b13",
+      "bytes": 2080445
+    },
+    {
+      "path": "sources/kurozane-oni-four-attacks-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "2a20dc16b774dbf809d55c26559a43a3c8c4252b80023b3feddba0aa68e56929",
+      "bytes": 1104326
+    },
+    {
+      "path": "sources/kurozane-oni-chest-spiral-chroma-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "sha256": "66e2660bb8aecf1efb8308d4d74370db36cda13f4a9109942647fa2d74f61bec",
+      "bytes": 2415712
+    },
+    {
+      "path": "sources/kurozane-oni-chest-spiral-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "e05d692b5ee7b53580f7767405f8c7ed731f46e991730e79b96ca004938f61a1",
+      "bytes": 1625546
+    }
+  ],
+  "combat": {
+    "geometry": {
+      "columns": 6,
+      "rows": 6,
+      "frameWidth": 160,
+      "frameHeight": 160,
+      "atlasWidth": 960,
+      "atlasHeight": 960,
+      "minimumTransparentGutter": 2,
+      "facing": "screen-left",
+      "rootMotionOwnership": "runtime-simulation",
+      "weaponAndVfxOverflowPolicy": "contained inside the authored frame"
+    },
+    "visibleColors": 64,
+    "alphaValues": [
+      0,
+      255
+    ],
+    "clips": [
+      {
+        "id": "oni-gauntlet-swipes",
+        "atlasStartRow": 0,
+        "state": "oni-armor",
+        "sourceSegments": [
+          {
+            "board": "four-attacks",
+            "row": 0
+          }
+        ],
+        "frameDurationsMs": [
+          160,
+          140,
+          90,
+          90,
+          150,
+          240
+        ],
+        "phases": [
+          "ready",
+          "anticipation",
+          "active-one",
+          "active-two",
+          "follow-through",
+          "recovery"
+        ],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [
+              33,
+              76
+            ],
+            "hitId": "swipe-one"
+          },
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [
+              42,
+              82
+            ],
+            "hitId": "swipe-two"
+          }
+        ]
+      },
+      {
+        "id": "oni-predator-jump",
+        "atlasStartRow": 1,
+        "state": "oni-armor",
+        "sourceSegments": [
+          {
+            "board": "four-attacks",
+            "row": 1
+          }
+        ],
+        "frameDurationsMs": [
+          180,
+          90,
+          140,
+          160,
+          110,
+          240
+        ],
+        "phases": [
+          "compression",
+          "launch",
+          "ascent",
+          "apex",
+          "landing-active",
+          "recovery"
+        ],
+        "anchorProfileByFrame": [
+          "oni-crouched",
+          "oni-airborne",
+          "oni-airborne",
+          "oni-airborne",
+          "oni-crouched",
+          "oni-crouched"
+        ],
+        "events": [
+          {
+            "name": "takeoff",
+            "frameIndex": 1,
+            "anchor": [
+              80,
+              146
+            ]
+          },
+          {
+            "name": "damage",
+            "frameIndex": 4,
+            "anchor": [
+              70,
+              137
+            ],
+            "hitId": "landing"
+          },
+          {
+            "name": "landShockwave",
+            "frameIndex": 4,
+            "anchor": [
+              70,
+              148
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-spear-wheel",
+        "atlasStartRow": 2,
+        "state": "oni-armor",
+        "sourceSegments": [
+          {
+            "board": "four-attacks",
+            "row": 2
+          }
+        ],
+        "frameDurationsMs": [
+          180,
+          140,
+          100,
+          100,
+          110,
+          260
+        ],
+        "phases": [
+          "ready",
+          "grip-change",
+          "active-low",
+          "active-high",
+          "active-finish",
+          "recovery"
+        ],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [
+              29,
+              87
+            ],
+            "hitId": "wheel-low"
+          },
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [
+              80,
+              35
+            ],
+            "hitId": "wheel-high"
+          },
+          {
+            "name": "damage",
+            "frameIndex": 4,
+            "anchor": [
+              31,
+              103
+            ],
+            "hitId": "wheel-finish"
+          }
+        ]
+      },
+      {
+        "id": "oni-mouth-cannon",
+        "atlasStartRow": 3,
+        "state": "oni-armor",
+        "sourceSegments": [
+          {
+            "board": "four-attacks",
+            "row": 3
+          }
+        ],
+        "frameDurationsMs": [
+          220,
+          220,
+          160,
+          90,
+          300,
+          260
+        ],
+        "phases": [
+          "ready",
+          "brace",
+          "charge",
+          "beam-start",
+          "beam-sustain",
+          "burnout"
+        ],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {
+            "name": "beamCharge",
+            "frameIndex": 2,
+            "anchor": [
+              60,
+              67
+            ]
+          },
+          {
+            "name": "beamDamageStart",
+            "frameIndex": 3,
+            "anchor": [
+              29,
+              68
+            ]
+          },
+          {
+            "name": "beamDamageSustain",
+            "frameIndex": 4,
+            "anchor": [
+              18,
+              68
+            ]
+          },
+          {
+            "name": "beamDamageEnd",
+            "frameIndex": 5,
+            "anchor": [
+              60,
+              67
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage",
+        "atlasStartRow": 4,
+        "state": "oni-armor",
+        "sourceSegments": [
+          {
+            "board": "chest-spiral",
+            "row": 0
+          },
+          {
+            "board": "chest-spiral",
+            "row": 1
+          }
+        ],
+        "frameDurationsMs": [
+          260,
+          200,
+          180,
+          200,
+          220,
+          180,
+          110,
+          110,
+          110,
+          180,
+          240,
+          360
+        ],
+        "phases": [
+          "ready",
+          "grip-plates",
+          "strain",
+          "plate-open",
+          "core-reveal",
+          "spiral-charge",
+          "volley-one",
+          "volley-two",
+          "volley-three",
+          "radial-burst",
+          "recoil",
+          "plate-relock"
+        ],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {
+            "name": "plateOpen",
+            "frameIndex": 3,
+            "anchor": [
+              80,
+              73
+            ]
+          },
+          {
+            "name": "coreExposed",
+            "frameIndex": 4,
+            "anchor": [
+              80,
+              72
+            ]
+          },
+          {
+            "name": "spiralFireballLaunch",
+            "frameIndex": 6,
+            "anchor": [
+              27,
+              75
+            ],
+            "projectileId": "spiral-one"
+          },
+          {
+            "name": "spiralFireballLaunch",
+            "frameIndex": 7,
+            "anchor": [
+              25,
+              75
+            ],
+            "projectileId": "spiral-two"
+          },
+          {
+            "name": "spiralFireballLaunch",
+            "frameIndex": 8,
+            "anchor": [
+              23,
+              75
+            ],
+            "projectileId": "spiral-three"
+          },
+          {
+            "name": "radialBurst",
+            "frameIndex": 9,
+            "anchor": [
+              80,
+              78
+            ]
+          },
+          {
+            "name": "plateRelock",
+            "frameIndex": 11,
+            "anchor": [
+              80,
+              73
+            ]
+          }
+        ]
+      }
+    ],
+    "frames": [
+      {
+        "id": "oni-gauntlet-swipes:0",
+        "atlasRect": [
+          0,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "99b64afe57a3361a6237f491ba227176cae5d170a17c9098fd819af8b736d756",
+        "alphaBounds": [
+          50,
+          36,
+          127,
+          146
+        ],
+        "transparentGutter": {
+          "left": 50,
+          "top": 36,
+          "right": 33,
+          "bottom": 14
+        },
+        "clipId": "oni-gauntlet-swipes",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 160,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-gauntlet-swipes:1",
+        "atlasRect": [
+          160,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "e58d2ee6439387c30320928c2aa804dc0c3227b29dbbc0a37ae7abd4f6a5d9e4",
+        "alphaBounds": [
+          31,
+          38,
+          114,
+          146
+        ],
+        "transparentGutter": {
+          "left": 31,
+          "top": 38,
+          "right": 46,
+          "bottom": 14
+        },
+        "clipId": "oni-gauntlet-swipes",
+        "frameIndex": 1,
+        "phase": "anticipation",
+        "durationMs": 140,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-gauntlet-swipes:2",
+        "atlasRect": [
+          320,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "a384d00bacf48c57f8e6447857c1637a3ab3a3e9d6dcf8baa8981e2d70ba58fa",
+        "alphaBounds": [
+          2,
+          35,
+          116,
+          146
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 35,
+          "right": 44,
+          "bottom": 14
+        },
+        "clipId": "oni-gauntlet-swipes",
+        "frameIndex": 2,
+        "phase": "active-one",
+        "durationMs": 90,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [
+              33,
+              76
+            ],
+            "hitId": "swipe-one"
+          }
+        ]
+      },
+      {
+        "id": "oni-gauntlet-swipes:3",
+        "atlasRect": [
+          480,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "6236f22d9186c24f6e0ef455d1e8f08edda4310646b717888c46dac049036cdc",
+        "alphaBounds": [
+          16,
+          39,
+          140,
+          146
+        ],
+        "transparentGutter": {
+          "left": 16,
+          "top": 39,
+          "right": 20,
+          "bottom": 14
+        },
+        "clipId": "oni-gauntlet-swipes",
+        "frameIndex": 3,
+        "phase": "active-two",
+        "durationMs": 90,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [
+              42,
+              82
+            ],
+            "hitId": "swipe-two"
+          }
+        ]
+      },
+      {
+        "id": "oni-gauntlet-swipes:4",
+        "atlasRect": [
+          640,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "80f85ce185b8a5623c52efc2ab39b63a012c2b92c5b59df6cb6cc2f77a31ee5a",
+        "alphaBounds": [
+          28,
+          41,
+          140,
+          146
+        ],
+        "transparentGutter": {
+          "left": 28,
+          "top": 41,
+          "right": 20,
+          "bottom": 14
+        },
+        "clipId": "oni-gauntlet-swipes",
+        "frameIndex": 4,
+        "phase": "follow-through",
+        "durationMs": 150,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-gauntlet-swipes:5",
+        "atlasRect": [
+          800,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "c7e3acbcb6c33e63d1193b8f2273afa6ead622e605e93a438d3b5a671ebd3a5a",
+        "alphaBounds": [
+          36,
+          29,
+          115,
+          146
+        ],
+        "transparentGutter": {
+          "left": 36,
+          "top": 29,
+          "right": 45,
+          "bottom": 14
+        },
+        "clipId": "oni-gauntlet-swipes",
+        "frameIndex": 5,
+        "phase": "recovery",
+        "durationMs": 240,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-predator-jump:0",
+        "atlasRect": [
+          0,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "7a5c898fe81d04b4c28b3b6b582dd7f4c4201d05b3f5378507a32fc465bf8f00",
+        "alphaBounds": [
+          18,
+          59,
+          131,
+          136
+        ],
+        "transparentGutter": {
+          "left": 18,
+          "top": 59,
+          "right": 29,
+          "bottom": 24
+        },
+        "clipId": "oni-predator-jump",
+        "frameIndex": 0,
+        "phase": "compression",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "oni-crouched",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          25,
+          62,
+          113,
+          91
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-predator-jump:1",
+        "atlasRect": [
+          160,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "8f046b0eb3854529a5bb784cc0eed48b40ac3138934e6bed962e0404d568927d",
+        "alphaBounds": [
+          2,
+          27,
+          139,
+          115
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 27,
+          "right": 21,
+          "bottom": 45
+        },
+        "clipId": "oni-predator-jump",
+        "frameIndex": 1,
+        "phase": "launch",
+        "durationMs": 90,
+        "state": "oni-armor",
+        "anchorProfile": "oni-airborne",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          30,
+          28,
+          105,
+          116
+        ],
+        "events": [
+          {
+            "name": "takeoff",
+            "frameIndex": 1,
+            "anchor": [
+              80,
+              146
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-predator-jump:2",
+        "atlasRect": [
+          320,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "da0d7f5a3456177d1c5a17c460e5c2b1fc0d723771ba9513321f81267df12e28",
+        "alphaBounds": [
+          45,
+          30,
+          109,
+          114
+        ],
+        "transparentGutter": {
+          "left": 45,
+          "top": 30,
+          "right": 51,
+          "bottom": 46
+        },
+        "clipId": "oni-predator-jump",
+        "frameIndex": 2,
+        "phase": "ascent",
+        "durationMs": 140,
+        "state": "oni-armor",
+        "anchorProfile": "oni-airborne",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          30,
+          28,
+          105,
+          116
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-predator-jump:3",
+        "atlasRect": [
+          480,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "b63976df57098d45e6029c2fbaa3c7553dc5b0d170210f59ca2c5161cffc8a59",
+        "alphaBounds": [
+          54,
+          19,
+          126,
+          136
+        ],
+        "transparentGutter": {
+          "left": 54,
+          "top": 19,
+          "right": 34,
+          "bottom": 24
+        },
+        "clipId": "oni-predator-jump",
+        "frameIndex": 3,
+        "phase": "apex",
+        "durationMs": 160,
+        "state": "oni-armor",
+        "anchorProfile": "oni-airborne",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          30,
+          28,
+          105,
+          116
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-predator-jump:4",
+        "atlasRect": [
+          640,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "ce9f6b6a25fdf6eb7e93fe5992f6d913ff1b58a015292c20b5db921748f9134d",
+        "alphaBounds": [
+          36,
+          58,
+          133,
+          137
+        ],
+        "transparentGutter": {
+          "left": 36,
+          "top": 58,
+          "right": 27,
+          "bottom": 23
+        },
+        "clipId": "oni-predator-jump",
+        "frameIndex": 4,
+        "phase": "landing-active",
+        "durationMs": 110,
+        "state": "oni-armor",
+        "anchorProfile": "oni-crouched",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          25,
+          62,
+          113,
+          91
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 4,
+            "anchor": [
+              70,
+              137
+            ],
+            "hitId": "landing"
+          },
+          {
+            "name": "landShockwave",
+            "frameIndex": 4,
+            "anchor": [
+              70,
+              148
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-predator-jump:5",
+        "atlasRect": [
+          800,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "aa2f897b2620bb5abc4a002a1b0da170291d1b5824cab48bef0ce1b7635b241c",
+        "alphaBounds": [
+          4,
+          61,
+          133,
+          137
+        ],
+        "transparentGutter": {
+          "left": 4,
+          "top": 61,
+          "right": 27,
+          "bottom": 23
+        },
+        "clipId": "oni-predator-jump",
+        "frameIndex": 5,
+        "phase": "recovery",
+        "durationMs": 240,
+        "state": "oni-armor",
+        "anchorProfile": "oni-crouched",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          25,
+          62,
+          113,
+          91
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-spear-wheel:0",
+        "atlasRect": [
+          0,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "00eff638a3a75fbb143a7798f43e89041c66b7f26cb63aa07bde8eebed29e770",
+        "alphaBounds": [
+          48,
+          19,
+          126,
+          126
+        ],
+        "transparentGutter": {
+          "left": 48,
+          "top": 19,
+          "right": 34,
+          "bottom": 34
+        },
+        "clipId": "oni-spear-wheel",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-spear-wheel:1",
+        "atlasRect": [
+          160,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "c502ca17643c1faee99351762f71ae0401930075a35c1f5f00f928b871d80434",
+        "alphaBounds": [
+          42,
+          16,
+          124,
+          127
+        ],
+        "transparentGutter": {
+          "left": 42,
+          "top": 16,
+          "right": 36,
+          "bottom": 33
+        },
+        "clipId": "oni-spear-wheel",
+        "frameIndex": 1,
+        "phase": "grip-change",
+        "durationMs": 140,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-spear-wheel:2",
+        "atlasRect": [
+          320,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "13a27387b736a507b2a540d1f8a6f948a1245b5d11dc40a8376bbb8e1e7f985e",
+        "alphaBounds": [
+          14,
+          33,
+          132,
+          127
+        ],
+        "transparentGutter": {
+          "left": 14,
+          "top": 33,
+          "right": 28,
+          "bottom": 33
+        },
+        "clipId": "oni-spear-wheel",
+        "frameIndex": 2,
+        "phase": "active-low",
+        "durationMs": 100,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [
+              29,
+              87
+            ],
+            "hitId": "wheel-low"
+          }
+        ]
+      },
+      {
+        "id": "oni-spear-wheel:3",
+        "atlasRect": [
+          480,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "b0cb696e8f5987d76fddff226d22939763b1702b2df35bf11197e818ff91fdb2",
+        "alphaBounds": [
+          14,
+          15,
+          141,
+          128
+        ],
+        "transparentGutter": {
+          "left": 14,
+          "top": 15,
+          "right": 19,
+          "bottom": 32
+        },
+        "clipId": "oni-spear-wheel",
+        "frameIndex": 3,
+        "phase": "active-high",
+        "durationMs": 100,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [
+              80,
+              35
+            ],
+            "hitId": "wheel-high"
+          }
+        ]
+      },
+      {
+        "id": "oni-spear-wheel:4",
+        "atlasRect": [
+          640,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "b0c19645b97bcb36892820af6dd9cb6a7d71d48a39019f0e00c140d6f1b92900",
+        "alphaBounds": [
+          2,
+          36,
+          154,
+          130
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 36,
+          "right": 6,
+          "bottom": 30
+        },
+        "clipId": "oni-spear-wheel",
+        "frameIndex": 4,
+        "phase": "active-finish",
+        "durationMs": 110,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 4,
+            "anchor": [
+              31,
+              103
+            ],
+            "hitId": "wheel-finish"
+          }
+        ]
+      },
+      {
+        "id": "oni-spear-wheel:5",
+        "atlasRect": [
+          800,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "d77aebbfbf0638b3eb85137f8ff7dba20e5523c2d37b0d486d8e18d161722daf",
+        "alphaBounds": [
+          45,
+          13,
+          121,
+          130
+        ],
+        "transparentGutter": {
+          "left": 45,
+          "top": 13,
+          "right": 39,
+          "bottom": 30
+        },
+        "clipId": "oni-spear-wheel",
+        "frameIndex": 5,
+        "phase": "recovery",
+        "durationMs": 260,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-mouth-cannon:0",
+        "atlasRect": [
+          0,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "cff1047629aa0816c4ded4c2f70d3a2b17c83c89163a7c4ca8d0348046fcb0d4",
+        "alphaBounds": [
+          50,
+          13,
+          127,
+          122
+        ],
+        "transparentGutter": {
+          "left": 50,
+          "top": 13,
+          "right": 33,
+          "bottom": 38
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 220,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-mouth-cannon:1",
+        "atlasRect": [
+          160,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "7a265544bf3e121306463b35f8aef8fe419fbafc9aee82963d16fd7297fb2f65",
+        "alphaBounds": [
+          36,
+          10,
+          115,
+          122
+        ],
+        "transparentGutter": {
+          "left": 36,
+          "top": 10,
+          "right": 45,
+          "bottom": 38
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 1,
+        "phase": "brace",
+        "durationMs": 220,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-mouth-cannon:2",
+        "atlasRect": [
+          320,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "09fa023d08482aeb3c267970c4aa450bc6032ff1732c449f5ea18af1823d64a6",
+        "alphaBounds": [
+          20,
+          19,
+          96,
+          124
+        ],
+        "transparentGutter": {
+          "left": 20,
+          "top": 19,
+          "right": 64,
+          "bottom": 36
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 2,
+        "phase": "charge",
+        "durationMs": 160,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "beamCharge",
+            "frameIndex": 2,
+            "anchor": [
+              60,
+              67
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-mouth-cannon:3",
+        "atlasRect": [
+          480,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "c1b25befaa15b5a1359e74851e1eeb3e57fef2b11ca6f960b767a0bf0c03e746",
+        "alphaBounds": [
+          2,
+          24,
+          158,
+          125
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 24,
+          "right": 2,
+          "bottom": 35
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 3,
+        "phase": "beam-start",
+        "durationMs": 90,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "beamDamageStart",
+            "frameIndex": 3,
+            "anchor": [
+              29,
+              68
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-mouth-cannon:4",
+        "atlasRect": [
+          640,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "03f4b631eb8561ee27857b30f7d89b174bbdae0b3f4f44e50c7c02ed2921ea9f",
+        "alphaBounds": [
+          2,
+          20,
+          136,
+          126
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 20,
+          "right": 24,
+          "bottom": 34
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 4,
+        "phase": "beam-sustain",
+        "durationMs": 300,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "beamDamageSustain",
+            "frameIndex": 4,
+            "anchor": [
+              18,
+              68
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-mouth-cannon:5",
+        "atlasRect": [
+          800,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "33adc75b9f45fe0563ea101eaed787858bfa77a24a0747d0b46486c6f9daf4d0",
+        "alphaBounds": [
+          47,
+          24,
+          124,
+          126
+        ],
+        "transparentGutter": {
+          "left": 47,
+          "top": 24,
+          "right": 36,
+          "bottom": 34
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 5,
+        "phase": "burnout",
+        "durationMs": 260,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "beamDamageEnd",
+            "frameIndex": 5,
+            "anchor": [
+              60,
+              67
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:0",
+        "atlasRect": [
+          0,
+          640,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "e69978c9f6a6085b175d6e06b7bd53b32ef86fed038f3fbed95f210b8a9b650c",
+        "alphaBounds": [
+          44,
+          26,
+          116,
+          158
+        ],
+        "transparentGutter": {
+          "left": 44,
+          "top": 26,
+          "right": 44,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 260,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-chest-spiral-barrage:1",
+        "atlasRect": [
+          160,
+          640,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "cff044b9c1adbb65c31651860509c3b9cfda1f406fbfaaaf0e7942c8511737b7",
+        "alphaBounds": [
+          43,
+          24,
+          116,
+          158
+        ],
+        "transparentGutter": {
+          "left": 43,
+          "top": 24,
+          "right": 44,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 1,
+        "phase": "grip-plates",
+        "durationMs": 200,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-chest-spiral-barrage:2",
+        "atlasRect": [
+          320,
+          640,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "5c5ff08a5e26f97ee6e1fc979ad65d83ed83e85b793696f5fa69667c3e160532",
+        "alphaBounds": [
+          43,
+          25,
+          114,
+          158
+        ],
+        "transparentGutter": {
+          "left": 43,
+          "top": 25,
+          "right": 46,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 2,
+        "phase": "strain",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-chest-spiral-barrage:3",
+        "atlasRect": [
+          480,
+          640,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "0cfce212e53b4e530f1ba21b9395d1af1f9538b9c2238cdefb1cb331f1499224",
+        "alphaBounds": [
+          44,
+          28,
+          113,
+          158
+        ],
+        "transparentGutter": {
+          "left": 44,
+          "top": 28,
+          "right": 47,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 3,
+        "phase": "plate-open",
+        "durationMs": 200,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "plateOpen",
+            "frameIndex": 3,
+            "anchor": [
+              80,
+              73
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:4",
+        "atlasRect": [
+          640,
+          640,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "6b9ff6011d5e3c19a1b28ad814f65006b27865e62fbe27bdb8e3e508a0605fe0",
+        "alphaBounds": [
+          41,
+          26,
+          118,
+          158
+        ],
+        "transparentGutter": {
+          "left": 41,
+          "top": 26,
+          "right": 42,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 4,
+        "phase": "core-reveal",
+        "durationMs": 220,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "coreExposed",
+            "frameIndex": 4,
+            "anchor": [
+              80,
+              72
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:5",
+        "atlasRect": [
+          800,
+          640,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "3afecbaf1d6753f591ee774922a05241f851fe942c7237c63a2cdb7a86e2b309",
+        "alphaBounds": [
+          39,
+          25,
+          120,
+          158
+        ],
+        "transparentGutter": {
+          "left": 39,
+          "top": 25,
+          "right": 40,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 5,
+        "phase": "spiral-charge",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-chest-spiral-barrage:6",
+        "atlasRect": [
+          0,
+          800,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "1e799d926f6796809b93e4ad4dffe4cfd31c14b1672c4d5534d43306814862fa",
+        "alphaBounds": [
+          32,
+          24,
+          129,
+          158
+        ],
+        "transparentGutter": {
+          "left": 32,
+          "top": 24,
+          "right": 31,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 6,
+        "phase": "volley-one",
+        "durationMs": 110,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "spiralFireballLaunch",
+            "frameIndex": 6,
+            "anchor": [
+              27,
+              75
+            ],
+            "projectileId": "spiral-one"
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:7",
+        "atlasRect": [
+          160,
+          800,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "febd41491270675746d573e3d20d99e234cde9bfd8102e3aebd59950bb51ddfd",
+        "alphaBounds": [
+          40,
+          24,
+          129,
+          158
+        ],
+        "transparentGutter": {
+          "left": 40,
+          "top": 24,
+          "right": 31,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 7,
+        "phase": "volley-two",
+        "durationMs": 110,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "spiralFireballLaunch",
+            "frameIndex": 7,
+            "anchor": [
+              25,
+              75
+            ],
+            "projectileId": "spiral-two"
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:8",
+        "atlasRect": [
+          320,
+          800,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "53fafb7eb182d1f09278e7a0ffa3aa6525673738856031042373d4bf2e2367bf",
+        "alphaBounds": [
+          30,
+          24,
+          129,
+          154
+        ],
+        "transparentGutter": {
+          "left": 30,
+          "top": 24,
+          "right": 31,
+          "bottom": 6
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 8,
+        "phase": "volley-three",
+        "durationMs": 110,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "spiralFireballLaunch",
+            "frameIndex": 8,
+            "anchor": [
+              23,
+              75
+            ],
+            "projectileId": "spiral-three"
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:9",
+        "atlasRect": [
+          480,
+          800,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "cd86bd8ad6ae558efdffa2f93ded3a5e13b73458eb74f3ac1ad7ce6872884b2e",
+        "alphaBounds": [
+          53,
+          43,
+          124,
+          158
+        ],
+        "transparentGutter": {
+          "left": 53,
+          "top": 43,
+          "right": 36,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 9,
+        "phase": "radial-burst",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "radialBurst",
+            "frameIndex": 9,
+            "anchor": [
+              80,
+              78
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage:10",
+        "atlasRect": [
+          640,
+          800,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "b865a0804543a442e318eafd4e153832d9faf2831b8f1b545c835821933b3661",
+        "alphaBounds": [
+          47,
+          28,
+          125,
+          158
+        ],
+        "transparentGutter": {
+          "left": 47,
+          "top": 28,
+          "right": 35,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 10,
+        "phase": "recoil",
+        "durationMs": 240,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": []
+      },
+      {
+        "id": "oni-chest-spiral-barrage:11",
+        "atlasRect": [
+          800,
+          800,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "db189b345a7b6ed2a96f41940c8d73c96272db6e425d01abd16850cb1e295efc",
+        "alphaBounds": [
+          43,
+          26,
+          115,
+          158
+        ],
+        "transparentGutter": {
+          "left": 43,
+          "top": 26,
+          "right": 45,
+          "bottom": 2
+        },
+        "clipId": "oni-chest-spiral-barrage",
+        "frameIndex": 11,
+        "phase": "plate-relock",
+        "durationMs": 360,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "plateRelock",
+            "frameIndex": 11,
+            "anchor": [
+              80,
+              73
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "safety": {
+    "graphicGore": false,
+    "chestOpeningIsMechanical": true,
+    "realEmblems": false,
+    "actorLikeness": false
+  },
+  "artifacts": {
+    "kurozane-oni-all-attacks-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 36,
+      "sha256": "cd6eb55158faf8e625ea3bc7850c32574afc2dc49c69be05aa626afb6a505bd9",
+      "bytes": 722678
+    },
+    "kurozane-oni-attack-atlas-v1.png": {
+      "width": 960,
+      "height": 960,
+      "mode": "RGBA",
+      "format": "PNG",
+      "frameCount": 1,
+      "sha256": "f83c6478148d464da6a8b754803a66d93e7ffadabf7fdb10e0a9330d500defce",
+      "bytes": 469425
+    },
+    "kurozane-oni-attack-contact-sheet-v1.png": {
+      "width": 1920,
+      "height": 2154,
+      "mode": "RGB",
+      "format": "PNG",
+      "frameCount": 1,
+      "sha256": "bb9528d50d3c263aab837226c0cbdf6d9f1697d39c39737fb3ec8116743d04b7",
+      "bytes": 578113
+    },
+    "kurozane-oni-chest-spiral-barrage-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 12,
+      "sha256": "105c86d0a4006ec5b2b9700a1e772769e6f2549d3509238183cee7023b90ef2f",
+      "bytes": 274012
+    },
+    "kurozane-oni-gauntlet-swipes-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "13cb2679794e8c6d963b64577bdde2b744e354f5d277be59fc15afe192f9707f",
+      "bytes": 120725
+    },
+    "kurozane-oni-mouth-cannon-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "1eb6116201873b1eff054f50c711d28f7c2e0a40ddc1a4bdca9746717570a06d",
+      "bytes": 119333
+    },
+    "kurozane-oni-predator-jump-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "da09321dc0b6b2bf1cc45bd14bef0fe50a13ee7c7a7714b68fb3fc4d778195db",
+      "bytes": 97728
+    },
+    "kurozane-oni-spear-wheel-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "47bc5e93ad8d932e482dd199b396ab0bae052dd1605fa7df7be1e7137c4096d9",
+      "bytes": 111012
+    }
+  },
+  "review": {
+    "humanVisualReviewRequired": true,
+    "gifPolicy": "Review artifacts only; runtime timing, events, pivots, and bounds remain authoritative in this manifest.",
+    "remainingBeforeRuntimeIntegration": [
+      "Bind the five Oni attack IDs to the canonical Kurozane phase controller.",
+      "Author gameplay hitboxes and projectile trajectories from the declared event frames.",
+      "Verify jump root motion, spear reach, beam lanes, and spiral-fireball readability in the live renderer."
+    ]
+  }
+}

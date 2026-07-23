@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-oni-attack-suite-v1",
+  "title": "Shogun Kurozane Oni Attack Suite",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated stylized animation concepts",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "canonicalConcept": "../concepts/kurozane-three-state-demon-mode-concept-v3.png",
+    "companionKit": "../kurozane-final-battle-v1"
+  },
+  "palette": {
+    "visibleColorCeiling": 64,
+    "dither": "none",
+    "resampling": "BOX",
+    "alphaPolicy": "binary threshold at 128 after source chroma-key removal",
+    "minimumComponentPixels": 40,
+    "sliverAspectRatio": 3.0,
+    "minimumSliverHeight": 20
+  },
+  "sources": {
+    "boards": {
+      "four-attacks": {
+        "chroma": "sources/kurozane-oni-four-attacks-chroma-source-v1.png",
+        "alpha": "sources/kurozane-oni-four-attacks-source-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "columns": 6,
+        "rows": 4,
+        "cellWidth": 256,
+        "cellHeight": 256,
+        "fitMode": "fixed-cell"
+      },
+      "chest-spiral": {
+        "chroma": "sources/kurozane-oni-chest-spiral-chroma-source-v1.png",
+        "alpha": "sources/kurozane-oni-chest-spiral-source-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "columns": 6,
+        "rows": 2,
+        "cellWidth": 256,
+        "cellHeight": 512,
+        "fitMode": "trim-fit",
+        "maximumExtent": 136
+      }
+    },
+    "chromaIntent": "#FF00FF flat removable background"
+  },
+  "combat": {
+    "runtimeAtlas": {
+      "columns": 6,
+      "rows": 6,
+      "frameWidth": 160,
+      "frameHeight": 160,
+      "atlasWidth": 960,
+      "atlasHeight": 960,
+      "minimumTransparentGutter": 2,
+      "facing": "screen-left",
+      "rootMotionOwnership": "runtime-simulation",
+      "weaponAndVfxOverflowPolicy": "contained inside the authored frame"
+    },
+    "anchorProfiles": {
+      "oni-grounded": {
+        "pivot": [80, 146],
+        "foot": [80, 151],
+        "hurtBounds": [39, 14, 82, 142]
+      },
+      "oni-crouched": {
+        "pivot": [80, 146],
+        "foot": [80, 151],
+        "hurtBounds": [25, 62, 113, 91]
+      },
+      "oni-airborne": {
+        "pivot": [80, 146],
+        "foot": [80, 151],
+        "hurtBounds": [30, 28, 105, 116]
+      }
+    },
+    "clips": [
+      {
+        "id": "oni-gauntlet-swipes",
+        "atlasStartRow": 0,
+        "state": "oni-armor",
+        "sourceSegments": [{"board": "four-attacks", "row": 0}],
+        "frameDurationsMs": [160, 140, 90, 90, 150, 240],
+        "phases": ["ready", "anticipation", "active-one", "active-two", "follow-through", "recovery"],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {"name": "damage", "frameIndex": 2, "anchor": [33, 76], "hitId": "swipe-one"},
+          {"name": "damage", "frameIndex": 3, "anchor": [42, 82], "hitId": "swipe-two"}
+        ]
+      },
+      {
+        "id": "oni-predator-jump",
+        "atlasStartRow": 1,
+        "state": "oni-armor",
+        "sourceSegments": [{"board": "four-attacks", "row": 1}],
+        "frameDurationsMs": [180, 90, 140, 160, 110, 240],
+        "phases": ["compression", "launch", "ascent", "apex", "landing-active", "recovery"],
+        "anchorProfileByFrame": ["oni-crouched", "oni-airborne", "oni-airborne", "oni-airborne", "oni-crouched", "oni-crouched"],
+        "events": [
+          {"name": "takeoff", "frameIndex": 1, "anchor": [80, 146]},
+          {"name": "damage", "frameIndex": 4, "anchor": [70, 137], "hitId": "landing"},
+          {"name": "landShockwave", "frameIndex": 4, "anchor": [70, 148]}
+        ]
+      },
+      {
+        "id": "oni-spear-wheel",
+        "atlasStartRow": 2,
+        "state": "oni-armor",
+        "sourceSegments": [{"board": "four-attacks", "row": 2}],
+        "frameDurationsMs": [180, 140, 100, 100, 110, 260],
+        "phases": ["ready", "grip-change", "active-low", "active-high", "active-finish", "recovery"],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {"name": "damage", "frameIndex": 2, "anchor": [29, 87], "hitId": "wheel-low"},
+          {"name": "damage", "frameIndex": 3, "anchor": [80, 35], "hitId": "wheel-high"},
+          {"name": "damage", "frameIndex": 4, "anchor": [31, 103], "hitId": "wheel-finish"}
+        ]
+      },
+      {
+        "id": "oni-mouth-cannon",
+        "atlasStartRow": 3,
+        "state": "oni-armor",
+        "sourceSegments": [{"board": "four-attacks", "row": 3}],
+        "frameDurationsMs": [220, 220, 160, 90, 300, 260],
+        "phases": ["ready", "brace", "charge", "beam-start", "beam-sustain", "burnout"],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {"name": "beamCharge", "frameIndex": 2, "anchor": [60, 67]},
+          {"name": "beamDamageStart", "frameIndex": 3, "anchor": [29, 68]},
+          {"name": "beamDamageSustain", "frameIndex": 4, "anchor": [18, 68]},
+          {"name": "beamDamageEnd", "frameIndex": 5, "anchor": [60, 67]}
+        ]
+      },
+      {
+        "id": "oni-chest-spiral-barrage",
+        "atlasStartRow": 4,
+        "state": "oni-armor",
+        "sourceSegments": [
+          {"board": "chest-spiral", "row": 0},
+          {"board": "chest-spiral", "row": 1}
+        ],
+        "frameDurationsMs": [260, 200, 180, 200, 220, 180, 110, 110, 110, 180, 240, 360],
+        "phases": ["ready", "grip-plates", "strain", "plate-open", "core-reveal", "spiral-charge", "volley-one", "volley-two", "volley-three", "radial-burst", "recoil", "plate-relock"],
+        "anchorProfile": "oni-grounded",
+        "events": [
+          {"name": "plateOpen", "frameIndex": 3, "anchor": [80, 73]},
+          {"name": "coreExposed", "frameIndex": 4, "anchor": [80, 72]},
+          {"name": "spiralFireballLaunch", "frameIndex": 6, "anchor": [27, 75], "projectileId": "spiral-one"},
+          {"name": "spiralFireballLaunch", "frameIndex": 7, "anchor": [25, 75], "projectileId": "spiral-two"},
+          {"name": "spiralFireballLaunch", "frameIndex": 8, "anchor": [23, 75], "projectileId": "spiral-three"},
+          {"name": "radialBurst", "frameIndex": 9, "anchor": [80, 78]},
+          {"name": "plateRelock", "frameIndex": 11, "anchor": [80, 73]}
+        ]
+      }
+    ]
+  },
+  "outputs": {
+    "atlas": "kurozane-oni-attack-atlas-v1.png",
+    "contactSheet": "kurozane-oni-attack-contact-sheet-v1.png",
+    "allClipsGif": "kurozane-oni-all-attacks-v1.gif",
+    "clipGifPattern": "kurozane-{clipId}-v1.gif",
+    "manifest": "manifest.json"
+  },
+  "safety": {
+    "graphicGore": false,
+    "chestOpeningIsMechanical": true,
+    "realEmblems": false,
+    "actorLikeness": false
+  }
+}
