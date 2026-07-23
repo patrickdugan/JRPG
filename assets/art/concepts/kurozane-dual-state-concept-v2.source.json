@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-dual-state-concept-v2",
+  "title": "Shogun Kurozane — Japanese Face and Early-Edo Oni Armor",
+  "classification": "AI-generated stylized concept",
+  "productionStatus": "approved review source; not a pixel-authored runtime asset",
+  "generatedOn": "2026-07-23",
+  "generator": {
+    "surface": "Codex built-in image generation",
+    "mode": "precise-object-edit with visual references"
+  },
+  "revision": {
+    "editTarget": "assets/art/concepts/kurozane-dual-state-concept-v1.png",
+    "reason": "Correct the elderly ruler's face to read unmistakably Japanese and replace European-fantasy plate language with recognizable 17th-century Japanese samurai armor and an Oni helmet.",
+    "preserved": [
+      "Two-state unarmored and armored composition",
+      "Sad, exhausted, culpable vampire-statesman characterization",
+      "Black, charcoal, faded-aubergine, old-bronze, and restrained-crimson palette",
+      "Neutral concept-board backdrop and paired face studies"
+    ]
+  },
+  "creativeBrief": {
+    "identity": "Elderly Japanese vampire shogun with hooded almond eyes, broader cheek structure, lower nasal bridge, warm-ashen complexion, chonmage, thin gray moustache, and sparse chin beard.",
+    "unarmoredRead": "Worn early-Edo Japanese kosode and formal layered robes, repaired seams, seal case, slight stoop, and disciplined grief.",
+    "armoredRead": "Early-17th-century tosei gusoku / nimai-do construction with black-lacquered iron cuirass, indigo lacing, kusazuri, sode, kote, haidate, suneate, and armored footwear.",
+    "oniHelmetRead": "Ribbed iron kawari-kabuto, shikoro neck defense, swept lacquered horns, and an original red-black menpo with a fierce Oni read.",
+    "constraints": [
+      "No resemblance to Peter Cushing, Grand Moff Tarkin, or another real actor",
+      "No European facial anatomy, tailoring, cuirass, buckles, or fantasy plate",
+      "No authentic clan mon or imperial chrysanthemum",
+      "No copied historical crest, inscription, or museum decoration",
+      "No copied Noh, Bugaku, ceremonial, sacred, or historical mask",
+      "No gore, biological horns, wings, text, logo, or watermark"
+    ]
+  },
+  "visualReferences": [
+    {
+      "path": "assets/art/concepts/kurozane-dual-state-concept-v1.png",
+      "role": "edit target and composition reference"
+    },
+    {
+      "institution": "The Metropolitan Museum of Art",
+      "objectId": "2023.735.2a-n",
+      "title": "Armor (Nimai-Do Gusoku) with Box",
+      "date": "late 16th-early 17th century",
+      "url": "https://www.metmuseum.org/art/collection/search/894750",
+      "role": "period construction, material, lacing, and armor-proportion reference only"
+    },
+    {
+      "institution": "The Metropolitan Museum of Art",
+      "objectId": "14.100.160",
+      "title": "Helmet (Suji Kabuto)",
+      "date": "early 17th century",
+      "url": "https://www.metmuseum.org/art/collection/search/22513",
+      "role": "period helmet construction and craftsmanship reference only"
+    }
+  ],
+  "output": {
+    "path": "assets/art/concepts/kurozane-dual-state-concept-v2.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "alphaPolicy": "opaque",
+    "sha256": "bea8c2775afadc38b1ec70ec181543c764593c3c6aea21326dbc7ee57d11f8bb"
+  },
+  "nextProductionStep": "Derive the approved face into an eight-expression portrait row and the armored silhouette into separately authored boss sprite studies."
+}
