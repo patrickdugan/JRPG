@@ -1,0 +1,1700 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-final-battle-v1",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated stylized concept",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "canonicalConcept": "../concepts/kurozane-three-state-demon-mode-concept-v3.png"
+  },
+  "build": {
+    "builder": {
+      "path": "build_kurozane_final_battle.py",
+      "sha256": "0b97412789b4b65076e6aebd582088bcf67916a506bf30d64ad8e7488f7b90ca"
+    },
+    "sourceContract": {
+      "path": "kurozane-final-battle.source.json",
+      "sha256": "32c0578b48f0ae76df7a977b8a528d431eb3775434ed35bd332c6b57afc70c07"
+    },
+    "pillowVersion": "11.3.0",
+    "resampling": "BOX",
+    "dither": "none",
+    "alphaPolicy": "binary threshold at 128 after source chroma-key removal"
+  },
+  "sources": [
+    {
+      "path": "sources/kurozane-portrait-expressions-chroma-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "sha256": "f39488e19b2043cfa8f54aa6508777a57a572dd6784bc65727021b26372c5c14",
+      "bytes": 2760692
+    },
+    {
+      "path": "sources/kurozane-portrait-expressions-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "8dc67c40649bd2fa635ea8c4ff0b113a198126335eca1f03ae93b4081bfa12fa",
+      "bytes": 2214614
+    },
+    {
+      "path": "sources/kurozane-final-battle-keyframes-chroma-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "sha256": "e882e985f2de48e58e47537f1c3945ff7160d2d58f6e0f59efc5cc59cbac25fb",
+      "bytes": 2385680
+    },
+    {
+      "path": "sources/kurozane-final-battle-keyframes-source-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "5d55e199cf1120e0411d7ec8e906b1727af5acb9d921be66cbbd835048603c19",
+      "bytes": 1503655
+    }
+  ],
+  "portrait": {
+    "geometry": {
+      "columns": 8,
+      "rows": 1,
+      "frameWidth": 128,
+      "frameHeight": 128,
+      "contentWidth": 96,
+      "contentHeight": 128,
+      "contentOffset": [
+        16,
+        0
+      ],
+      "atlasWidth": 1024,
+      "atlasHeight": 128,
+      "minimumTransparentGutter": 2
+    },
+    "visibleColors": 64,
+    "alphaValues": [
+      0,
+      255
+    ],
+    "frames": [
+      {
+        "id": "neutral-regret",
+        "atlasRect": [
+          0,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "e285430626e1a6310638b8ca59631ccc2d40e85b53a6d79e7d74e66ddb9dd7c9",
+        "alphaBounds": [
+          30,
+          9,
+          110,
+          122
+        ],
+        "transparentGutter": {
+          "left": 30,
+          "top": 9,
+          "right": 18,
+          "bottom": 6
+        },
+        "state": "unarmored",
+        "sourceCell": [
+          0,
+          0
+        ],
+        "previewDurationMs": 520
+      },
+      {
+        "id": "the-bargain",
+        "atlasRect": [
+          128,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "e08efcaf370d144ca4e8fd2d73f426a753c57c5fa88577042a5e1fb79a4c43f5",
+        "alphaBounds": [
+          26,
+          9,
+          106,
+          122
+        ],
+        "transparentGutter": {
+          "left": 26,
+          "top": 9,
+          "right": 22,
+          "bottom": 6
+        },
+        "state": "unarmored",
+        "sourceCell": [
+          1,
+          0
+        ],
+        "previewDurationMs": 520
+      },
+      {
+        "id": "disdain",
+        "atlasRect": [
+          256,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "da84013e23e9c2c6cbd445d1d96e88173064acf7c63ee2eefd748b46b490fd9a",
+        "alphaBounds": [
+          22,
+          9,
+          103,
+          126
+        ],
+        "transparentGutter": {
+          "left": 22,
+          "top": 9,
+          "right": 25,
+          "bottom": 2
+        },
+        "state": "unarmored",
+        "sourceCell": [
+          2,
+          0
+        ],
+        "previewDurationMs": 480
+      },
+      {
+        "id": "court-command",
+        "atlasRect": [
+          384,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "5ccfed2607735ebc2b5b3039aa922362b2f4b1175811b40cd19db6208cd3cc04",
+        "alphaBounds": [
+          20,
+          9,
+          99,
+          122
+        ],
+        "transparentGutter": {
+          "left": 20,
+          "top": 9,
+          "right": 29,
+          "bottom": 6
+        },
+        "state": "unarmored",
+        "sourceCell": [
+          3,
+          0
+        ],
+        "previewDurationMs": 420
+      },
+      {
+        "id": "oni-resolve",
+        "atlasRect": [
+          512,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "17eddd9a1246311941e69938bfa076a5858c00b6f00837bc18d51cdf7a2b59f1",
+        "alphaBounds": [
+          26,
+          2,
+          110,
+          121
+        ],
+        "transparentGutter": {
+          "left": 26,
+          "top": 2,
+          "right": 18,
+          "bottom": 7
+        },
+        "state": "oni-armor",
+        "sourceCell": [
+          0,
+          1
+        ],
+        "previewDurationMs": 520
+      },
+      {
+        "id": "ward-break",
+        "atlasRect": [
+          640,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "ca23c1182a45e1aa72f4ab04de380fc4008d9ebecdc0c0bafba030ac6f4fed2a",
+        "alphaBounds": [
+          22,
+          4,
+          108,
+          121
+        ],
+        "transparentGutter": {
+          "left": 22,
+          "top": 4,
+          "right": 20,
+          "bottom": 7
+        },
+        "state": "oni-armor",
+        "sourceCell": [
+          1,
+          1
+        ],
+        "previewDurationMs": 420
+      },
+      {
+        "id": "demon-rage",
+        "atlasRect": [
+          768,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "8bffa166aef624fc4ae849a3411971c2ae433c6fc86e2b5c4f341357157a66ec",
+        "alphaBounds": [
+          18,
+          2,
+          106,
+          121
+        ],
+        "transparentGutter": {
+          "left": 18,
+          "top": 2,
+          "right": 22,
+          "bottom": 7
+        },
+        "state": "demon-mode",
+        "sourceCell": [
+          2,
+          1
+        ],
+        "previewDurationMs": 480
+      },
+      {
+        "id": "living-defeat",
+        "atlasRect": [
+          896,
+          0,
+          128,
+          128
+        ],
+        "rawRgbaSha256": "89f8d3aa1bfbc12df42275f10536e9f50d5750aaadeff17b691b77eeec093679",
+        "alphaBounds": [
+          20,
+          3,
+          105,
+          120
+        ],
+        "transparentGutter": {
+          "left": 20,
+          "top": 3,
+          "right": 23,
+          "bottom": 8
+        },
+        "state": "ward-broken",
+        "sourceCell": [
+          3,
+          1
+        ],
+        "previewDurationMs": 780
+      }
+    ]
+  },
+  "combat": {
+    "geometry": {
+      "columns": 6,
+      "rows": 4,
+      "frameWidth": 160,
+      "frameHeight": 160,
+      "atlasWidth": 960,
+      "atlasHeight": 640,
+      "minimumTransparentGutter": 2,
+      "facing": "screen-left",
+      "rootMotionOwnership": "runtime-simulation",
+      "vfxOverflowPolicy": "contained inside the authored frame"
+    },
+    "visibleColors": 64,
+    "alphaValues": [
+      0,
+      255
+    ],
+    "clips": [
+      {
+        "id": "court-command",
+        "row": 0,
+        "state": "oni-armor",
+        "frameDurationsMs": [
+          180,
+          180,
+          170,
+          110,
+          170,
+          260
+        ],
+        "phases": [
+          "ready",
+          "anticipation",
+          "wind-up",
+          "active",
+          "recoil",
+          "recovery"
+        ],
+        "events": [
+          {
+            "name": "summonCourtClones",
+            "frameIndex": 3,
+            "anchor": [
+              38,
+              76
+            ]
+          }
+        ],
+        "anchorProfile": "human"
+      },
+      {
+        "id": "yearless-thrust",
+        "row": 1,
+        "state": "oni-armor",
+        "frameDurationsMs": [
+          180,
+          220,
+          140,
+          90,
+          150,
+          270
+        ],
+        "phases": [
+          "ready",
+          "anticipation",
+          "commitment",
+          "active",
+          "follow-through",
+          "recovery"
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [
+              16,
+              87
+            ]
+          }
+        ],
+        "anchorProfile": "human"
+      },
+      {
+        "id": "blood-eclipse-transform",
+        "row": 2,
+        "state": "human-to-demon",
+        "frameDurationsMs": [
+          220,
+          200,
+          150,
+          180,
+          200,
+          360
+        ],
+        "phases": [
+          "ready",
+          "wind-up",
+          "active",
+          "commitment",
+          "extension",
+          "recovery"
+        ],
+        "events": [
+          {
+            "name": "bloodEclipseClose",
+            "frameIndex": 2,
+            "anchor": [
+              80,
+              145
+            ]
+          },
+          {
+            "name": "demonModeReady",
+            "frameIndex": 5,
+            "anchor": [
+              80,
+              78
+            ]
+          }
+        ],
+        "anchorProfileByFrame": [
+          "human",
+          "human",
+          "human",
+          "demon",
+          "demon",
+          "demon"
+        ]
+      },
+      {
+        "id": "black-chrysanthemum-defeat",
+        "row": 3,
+        "state": "demon-to-ward-broken",
+        "frameDurationsMs": [
+          220,
+          220,
+          110,
+          180,
+          260,
+          720
+        ],
+        "phases": [
+          "anticipation",
+          "wind-up",
+          "active",
+          "ward-break",
+          "living-collapse",
+          "living-defeat"
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [
+              80,
+              78
+            ]
+          },
+          {
+            "name": "finalWardOpen",
+            "frameIndex": 3,
+            "anchor": [
+              80,
+              76
+            ]
+          },
+          {
+            "name": "livingDefeatHold",
+            "frameIndex": 5,
+            "anchor": [
+              80,
+              103
+            ]
+          }
+        ],
+        "anchorProfileByFrame": [
+          "demon",
+          "demon",
+          "demon",
+          "demon",
+          "defeated",
+          "defeated"
+        ]
+      }
+    ],
+    "frames": [
+      {
+        "id": "court-command:0",
+        "atlasRect": [
+          0,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "75894c88b9efdb1c0015655b8c480c14cee9691110dac6aefe11926cec9df73b",
+        "alphaBounds": [
+          48,
+          17,
+          125,
+          158
+        ],
+        "transparentGutter": {
+          "left": 48,
+          "top": 17,
+          "right": 35,
+          "bottom": 2
+        },
+        "clipId": "court-command",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "court-command:1",
+        "atlasRect": [
+          160,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "54fc9c368457baf6b4448998a70124a06152ddf813724b3709a5a41279703fb5",
+        "alphaBounds": [
+          10,
+          26,
+          121,
+          158
+        ],
+        "transparentGutter": {
+          "left": 10,
+          "top": 26,
+          "right": 39,
+          "bottom": 2
+        },
+        "clipId": "court-command",
+        "frameIndex": 1,
+        "phase": "anticipation",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "court-command:2",
+        "atlasRect": [
+          320,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "fad90fdbb2bf7316cd2c03b905a82367aba0ec6a0e1665fb1d5d9dbfe761a316",
+        "alphaBounds": [
+          7,
+          28,
+          149,
+          158
+        ],
+        "transparentGutter": {
+          "left": 7,
+          "top": 28,
+          "right": 11,
+          "bottom": 2
+        },
+        "clipId": "court-command",
+        "frameIndex": 2,
+        "phase": "wind-up",
+        "durationMs": 170,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "court-command:3",
+        "atlasRect": [
+          480,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "b5f03b7b00efdf2acffb6a2ddd3c5d72fec778b5bebecba46e8f5a4f1904717b",
+        "alphaBounds": [
+          2,
+          25,
+          111,
+          158
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 25,
+          "right": 49,
+          "bottom": 2
+        },
+        "clipId": "court-command",
+        "frameIndex": 3,
+        "phase": "active",
+        "durationMs": 110,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": [
+          {
+            "name": "summonCourtClones",
+            "frameIndex": 3,
+            "anchor": [
+              38,
+              76
+            ]
+          }
+        ]
+      },
+      {
+        "id": "court-command:4",
+        "atlasRect": [
+          640,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "fc8e93b5d66815c25669188bf9efcb5e2d20e5d9fcc2385059829fdea56ddab4",
+        "alphaBounds": [
+          17,
+          30,
+          113,
+          158
+        ],
+        "transparentGutter": {
+          "left": 17,
+          "top": 30,
+          "right": 47,
+          "bottom": 2
+        },
+        "clipId": "court-command",
+        "frameIndex": 4,
+        "phase": "recoil",
+        "durationMs": 170,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "court-command:5",
+        "atlasRect": [
+          800,
+          0,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "7e43aa86716d0468edaff5ff00dcc6f79ca04102917b756f4251d2991a6ed656",
+        "alphaBounds": [
+          32,
+          18,
+          110,
+          158
+        ],
+        "transparentGutter": {
+          "left": 32,
+          "top": 18,
+          "right": 50,
+          "bottom": 2
+        },
+        "clipId": "court-command",
+        "frameIndex": 5,
+        "phase": "recovery",
+        "durationMs": 260,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "yearless-thrust:0",
+        "atlasRect": [
+          0,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "209b6378058f2d4b783568e38ee327399c4453c0b73e50757e01c6ac43078bb2",
+        "alphaBounds": [
+          9,
+          36,
+          143,
+          151
+        ],
+        "transparentGutter": {
+          "left": 9,
+          "top": 36,
+          "right": 17,
+          "bottom": 9
+        },
+        "clipId": "yearless-thrust",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 180,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "yearless-thrust:1",
+        "atlasRect": [
+          160,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "a3db00e006538f3d82285c534b5498737ff8c73cf77c05df7d653ea8763f9588",
+        "alphaBounds": [
+          16,
+          26,
+          143,
+          151
+        ],
+        "transparentGutter": {
+          "left": 16,
+          "top": 26,
+          "right": 17,
+          "bottom": 9
+        },
+        "clipId": "yearless-thrust",
+        "frameIndex": 1,
+        "phase": "anticipation",
+        "durationMs": 220,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "yearless-thrust:2",
+        "atlasRect": [
+          320,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "d6f56050709e24f19bc70bb24c460e11eff057d717fcc75ffe7840baccc658ef",
+        "alphaBounds": [
+          8,
+          47,
+          143,
+          151
+        ],
+        "transparentGutter": {
+          "left": 8,
+          "top": 47,
+          "right": 17,
+          "bottom": 9
+        },
+        "clipId": "yearless-thrust",
+        "frameIndex": 2,
+        "phase": "commitment",
+        "durationMs": 140,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "yearless-thrust:3",
+        "atlasRect": [
+          480,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "1455909986a019414b4c302de38692e8ce1a315bf6cb374c29f1eac41d677fbb",
+        "alphaBounds": [
+          2,
+          50,
+          158,
+          150
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 50,
+          "right": 2,
+          "bottom": 10
+        },
+        "clipId": "yearless-thrust",
+        "frameIndex": 3,
+        "phase": "active",
+        "durationMs": 90,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [
+              16,
+              87
+            ]
+          }
+        ]
+      },
+      {
+        "id": "yearless-thrust:4",
+        "atlasRect": [
+          640,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "0b090d37fbde80e2531cde30f6e627d552c09b630df0d86fb9a018160d2d04be",
+        "alphaBounds": [
+          29,
+          45,
+          158,
+          151
+        ],
+        "transparentGutter": {
+          "left": 29,
+          "top": 45,
+          "right": 2,
+          "bottom": 9
+        },
+        "clipId": "yearless-thrust",
+        "frameIndex": 4,
+        "phase": "follow-through",
+        "durationMs": 150,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "yearless-thrust:5",
+        "atlasRect": [
+          800,
+          160,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "9808fc8c249d7d652bb442350e8abfe02f7ae60dee41d4865322454837fc79e1",
+        "alphaBounds": [
+          13,
+          38,
+          144,
+          152
+        ],
+        "transparentGutter": {
+          "left": 13,
+          "top": 38,
+          "right": 16,
+          "bottom": 8
+        },
+        "clipId": "yearless-thrust",
+        "frameIndex": 5,
+        "phase": "recovery",
+        "durationMs": 270,
+        "state": "oni-armor",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "blood-eclipse-transform:0",
+        "atlasRect": [
+          0,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "7f47433e0a8d9dbde9e562d1d4f36f8db583650f9208fc278fc9c97672f5ba6c",
+        "alphaBounds": [
+          20,
+          15,
+          130,
+          147
+        ],
+        "transparentGutter": {
+          "left": 20,
+          "top": 15,
+          "right": 30,
+          "bottom": 13
+        },
+        "clipId": "blood-eclipse-transform",
+        "frameIndex": 0,
+        "phase": "ready",
+        "durationMs": 220,
+        "state": "human-to-demon",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "blood-eclipse-transform:1",
+        "atlasRect": [
+          160,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "df609949308da3461cfee111f99f8373ae370a51ed7cd752b13c4655494c773d",
+        "alphaBounds": [
+          16,
+          21,
+          140,
+          147
+        ],
+        "transparentGutter": {
+          "left": 16,
+          "top": 21,
+          "right": 20,
+          "bottom": 13
+        },
+        "clipId": "blood-eclipse-transform",
+        "frameIndex": 1,
+        "phase": "wind-up",
+        "durationMs": 200,
+        "state": "human-to-demon",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": []
+      },
+      {
+        "id": "blood-eclipse-transform:2",
+        "atlasRect": [
+          320,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "26136ac8a693c4cf872b31d99b1f247aed7a61d20f698272a036d7c92fadf48e",
+        "alphaBounds": [
+          16,
+          13,
+          139,
+          146
+        ],
+        "transparentGutter": {
+          "left": 16,
+          "top": 13,
+          "right": 21,
+          "bottom": 14
+        },
+        "clipId": "blood-eclipse-transform",
+        "frameIndex": 2,
+        "phase": "active",
+        "durationMs": 150,
+        "state": "human-to-demon",
+        "anchorProfile": "human",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          45,
+          17,
+          70,
+          132
+        ],
+        "events": [
+          {
+            "name": "bloodEclipseClose",
+            "frameIndex": 2,
+            "anchor": [
+              80,
+              145
+            ]
+          }
+        ]
+      },
+      {
+        "id": "blood-eclipse-transform:3",
+        "atlasRect": [
+          480,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "82a615839d92b6e88b89f49ad8dd040468a824d8f0e3137d63002d80f57dd277",
+        "alphaBounds": [
+          24,
+          20,
+          142,
+          146
+        ],
+        "transparentGutter": {
+          "left": 24,
+          "top": 20,
+          "right": 18,
+          "bottom": 14
+        },
+        "clipId": "blood-eclipse-transform",
+        "frameIndex": 3,
+        "phase": "commitment",
+        "durationMs": 180,
+        "state": "human-to-demon",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": []
+      },
+      {
+        "id": "blood-eclipse-transform:4",
+        "atlasRect": [
+          640,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "c4a27ca2e2b81c48f92e15e4653e3ce2ccf79b1042c06b366e07aeede31e8d94",
+        "alphaBounds": [
+          13,
+          23,
+          142,
+          149
+        ],
+        "transparentGutter": {
+          "left": 13,
+          "top": 23,
+          "right": 18,
+          "bottom": 11
+        },
+        "clipId": "blood-eclipse-transform",
+        "frameIndex": 4,
+        "phase": "extension",
+        "durationMs": 200,
+        "state": "human-to-demon",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": []
+      },
+      {
+        "id": "blood-eclipse-transform:5",
+        "atlasRect": [
+          800,
+          320,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "072ada56cca6f41704cb607ab309ca4462286b3b94fc56311a1323b1a31a7bba",
+        "alphaBounds": [
+          16,
+          7,
+          136,
+          151
+        ],
+        "transparentGutter": {
+          "left": 16,
+          "top": 7,
+          "right": 24,
+          "bottom": 9
+        },
+        "clipId": "blood-eclipse-transform",
+        "frameIndex": 5,
+        "phase": "recovery",
+        "durationMs": 360,
+        "state": "human-to-demon",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": [
+          {
+            "name": "demonModeReady",
+            "frameIndex": 5,
+            "anchor": [
+              80,
+              78
+            ]
+          }
+        ]
+      },
+      {
+        "id": "black-chrysanthemum-defeat:0",
+        "atlasRect": [
+          0,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "de6856d53965875069c71bfd5e280a41430c33d601b976c896def8ffd78bbc47",
+        "alphaBounds": [
+          25,
+          21,
+          140,
+          138
+        ],
+        "transparentGutter": {
+          "left": 25,
+          "top": 21,
+          "right": 20,
+          "bottom": 22
+        },
+        "clipId": "black-chrysanthemum-defeat",
+        "frameIndex": 0,
+        "phase": "anticipation",
+        "durationMs": 220,
+        "state": "demon-to-ward-broken",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": []
+      },
+      {
+        "id": "black-chrysanthemum-defeat:1",
+        "atlasRect": [
+          160,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "74c7cff3c777f36f4817f65e671429b4e511765e9a18d4cff7fa1f5513abf27a",
+        "alphaBounds": [
+          10,
+          7,
+          148,
+          138
+        ],
+        "transparentGutter": {
+          "left": 10,
+          "top": 7,
+          "right": 12,
+          "bottom": 22
+        },
+        "clipId": "black-chrysanthemum-defeat",
+        "frameIndex": 1,
+        "phase": "wind-up",
+        "durationMs": 220,
+        "state": "demon-to-ward-broken",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": []
+      },
+      {
+        "id": "black-chrysanthemum-defeat:2",
+        "atlasRect": [
+          320,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "07e576b6783d01b38dedfdd1ef2a8ee99d1019740551d29592904f8ff648d74f",
+        "alphaBounds": [
+          11,
+          2,
+          150,
+          138
+        ],
+        "transparentGutter": {
+          "left": 11,
+          "top": 2,
+          "right": 10,
+          "bottom": 22
+        },
+        "clipId": "black-chrysanthemum-defeat",
+        "frameIndex": 2,
+        "phase": "active",
+        "durationMs": 110,
+        "state": "demon-to-ward-broken",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [
+              80,
+              78
+            ]
+          }
+        ]
+      },
+      {
+        "id": "black-chrysanthemum-defeat:3",
+        "atlasRect": [
+          480,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "b537618aea7b5735d9a0e60faeb689fcf6bc8c84fc2a117895a20399eb99bc98",
+        "alphaBounds": [
+          34,
+          30,
+          136,
+          136
+        ],
+        "transparentGutter": {
+          "left": 34,
+          "top": 30,
+          "right": 24,
+          "bottom": 24
+        },
+        "clipId": "black-chrysanthemum-defeat",
+        "frameIndex": 3,
+        "phase": "ward-break",
+        "durationMs": 180,
+        "state": "demon-to-ward-broken",
+        "anchorProfile": "demon",
+        "pivot": [
+          80,
+          145
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          33,
+          10,
+          94,
+          139
+        ],
+        "events": [
+          {
+            "name": "finalWardOpen",
+            "frameIndex": 3,
+            "anchor": [
+              80,
+              76
+            ]
+          }
+        ]
+      },
+      {
+        "id": "black-chrysanthemum-defeat:4",
+        "atlasRect": [
+          640,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "6c47d0a902e6d18562eb9dab358aa3911471b06c2118710323a258d426e7280c",
+        "alphaBounds": [
+          35,
+          34,
+          128,
+          136
+        ],
+        "transparentGutter": {
+          "left": 35,
+          "top": 34,
+          "right": 32,
+          "bottom": 24
+        },
+        "clipId": "black-chrysanthemum-defeat",
+        "frameIndex": 4,
+        "phase": "living-collapse",
+        "durationMs": 260,
+        "state": "demon-to-ward-broken",
+        "anchorProfile": "defeated",
+        "pivot": [
+          80,
+          148
+        ],
+        "foot": [
+          80,
+          152
+        ],
+        "hurtBounds": [
+          45,
+          65,
+          72,
+          85
+        ],
+        "events": []
+      },
+      {
+        "id": "black-chrysanthemum-defeat:5",
+        "atlasRect": [
+          800,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "999abcc25ed4a495e4f288b3debcfa82103ddc027b72755b960f55b2938067fa",
+        "alphaBounds": [
+          2,
+          33,
+          118,
+          137
+        ],
+        "transparentGutter": {
+          "left": 2,
+          "top": 33,
+          "right": 42,
+          "bottom": 23
+        },
+        "clipId": "black-chrysanthemum-defeat",
+        "frameIndex": 5,
+        "phase": "living-defeat",
+        "durationMs": 720,
+        "state": "demon-to-ward-broken",
+        "anchorProfile": "defeated",
+        "pivot": [
+          80,
+          148
+        ],
+        "foot": [
+          80,
+          152
+        ],
+        "hurtBounds": [
+          45,
+          65,
+          72,
+          85
+        ],
+        "events": [
+          {
+            "name": "livingDefeatHold",
+            "frameIndex": 5,
+            "anchor": [
+              80,
+              103
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "safety": {
+    "graphicGore": false,
+    "realEmblems": false,
+    "actorLikeness": false,
+    "livingDefeatRequired": true,
+    "defeatRead": "Kurozane remains alive, ward-broken, diminished, and without attack readiness."
+  },
+  "artifacts": {
+    "kurozane-black-chrysanthemum-defeat-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "97727dd37634ba1a065a80c8c8dbed8cf98f90cfc3f417a794d040e07d4455d8",
+      "bytes": 162404
+    },
+    "kurozane-blood-eclipse-transform-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "28b1fcb6f182780ccc71bbc8ee41d060140f12da444d6ec37cfaded41b6064e8",
+      "bytes": 186171
+    },
+    "kurozane-court-command-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "11c58fd91dfcd7e55be071d2609ed9ce5463e9551c45c36259eafdc0e7a0e07c",
+      "bytes": 142935
+    },
+    "kurozane-final-battle-all-clips-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 24,
+      "sha256": "f885abacc000eb328fa088796b357f17df0f5e3a40e2a117f21f932a2d99f4fa",
+      "bytes": 619327
+    },
+    "kurozane-final-battle-atlas-v1.png": {
+      "width": 960,
+      "height": 640,
+      "mode": "RGBA",
+      "format": "PNG",
+      "frameCount": 1,
+      "sha256": "686d59fa9c2e81700c8d39713580b90c1c7ac0b6621a9ae8a62fa9465bbf2154",
+      "bytes": 395531
+    },
+    "kurozane-final-battle-contact-sheet-v1.png": {
+      "width": 1920,
+      "height": 1450,
+      "mode": "RGB",
+      "format": "PNG",
+      "frameCount": 1,
+      "sha256": "12428b2c86beeb3077b59b8adfdbe480975aaea31cc33adc147c3414ceb3610b",
+      "bytes": 487129
+    },
+    "kurozane-portrait-atlas-v1.png": {
+      "width": 1024,
+      "height": 128,
+      "mode": "RGBA",
+      "format": "PNG",
+      "frameCount": 1,
+      "sha256": "22f130511619847ecc80a444a8241a5e1c13c9a261b39c162a97e866a6c5f47e",
+      "bytes": 103787
+    },
+    "kurozane-portrait-expression-cycle-v1.gif": {
+      "width": 512,
+      "height": 512,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 8,
+      "sha256": "07d2df2b6b6e0447852179cd1797bfd3b1f52cdfd05e7b55549b9f233c4e12bc",
+      "bytes": 238210
+    },
+    "kurozane-portrait-expressions-v1-contact-sheet.png": {
+      "width": 1536,
+      "height": 878,
+      "mode": "RGB",
+      "format": "PNG",
+      "frameCount": 1,
+      "sha256": "60783a8d77b400bce4a5aea3451f8c344bb15cb973d8988e03957cc2283296b0",
+      "bytes": 144523
+    },
+    "kurozane-yearless-thrust-v1.gif": {
+      "width": 480,
+      "height": 480,
+      "mode": "P",
+      "format": "GIF",
+      "frameCount": 6,
+      "sha256": "c5a2feb46478ef6b4b50ef9176cbbf89e4e5ee3dc4c08d890b4699fea4c9dc81",
+      "bytes": 126764
+    }
+  },
+  "review": {
+    "humanVisualReviewRequired": true,
+    "gifPolicy": "Review artifacts only; runtime timing, events, pivots, and bounds remain authoritative in this manifest.",
+    "remainingBeforeRuntimeIntegration": [
+      "Bind portrait expression IDs to Chapter 9 dialogue gesture cues.",
+      "Add a Kurozane-specific atlas loader and select clips from canonical boss phase and skill events.",
+      "Verify weapon anchors, hurt bounds, and dawn-lane VFX inside the live battle renderer."
+    ]
+  }
+}

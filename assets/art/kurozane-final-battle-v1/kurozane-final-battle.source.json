@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-final-battle-v1",
+  "title": "Shogun Kurozane Portrait and Final-Battle Animation Kit",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated stylized concept",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "canonicalConcept": "../concepts/kurozane-three-state-demon-mode-concept-v3.png"
+  },
+  "palette": {
+    "portraitVisibleColorCeiling": 64,
+    "combatVisibleColorCeiling": 64,
+    "dither": "none",
+    "resampling": "BOX",
+    "alphaPolicy": "binary threshold at 128 after source chroma-key removal",
+    "portraitMinimumComponentPixels": 32,
+    "combatMinimumComponentPixels": 40,
+    "combatMaximumEdgeDebrisPixels": 256
+  },
+  "sources": {
+    "portraitChroma": "sources/kurozane-portrait-expressions-chroma-source-v1.png",
+    "portraitAlpha": "sources/kurozane-portrait-expressions-source-v1.png",
+    "combatChroma": "sources/kurozane-final-battle-keyframes-chroma-source-v1.png",
+    "combatAlpha": "sources/kurozane-final-battle-keyframes-source-v1.png",
+    "chromaIntent": "#FF00FF flat removable background",
+    "sourceDimensions": [1536, 1024]
+  },
+  "portrait": {
+    "sourceGrid": {
+      "columns": 4,
+      "rows": 2,
+      "cellWidth": 384,
+      "cellHeight": 512
+    },
+    "runtimeAtlas": {
+      "columns": 8,
+      "rows": 1,
+      "frameWidth": 128,
+      "frameHeight": 128,
+      "contentWidth": 96,
+      "contentHeight": 128,
+      "contentOffset": [16, 0],
+      "atlasWidth": 1024,
+      "atlasHeight": 128,
+      "minimumTransparentGutter": 2
+    },
+    "expressions": [
+      {
+        "id": "neutral-regret",
+        "source": [0, 0],
+        "atlasColumn": 0,
+        "state": "unarmored",
+        "previewDurationMs": 520
+      },
+      {
+        "id": "the-bargain",
+        "source": [1, 0],
+        "atlasColumn": 1,
+        "state": "unarmored",
+        "previewDurationMs": 520
+      },
+      {
+        "id": "disdain",
+        "source": [2, 0],
+        "atlasColumn": 2,
+        "state": "unarmored",
+        "previewDurationMs": 480
+      },
+      {
+        "id": "court-command",
+        "source": [3, 0],
+        "atlasColumn": 3,
+        "state": "unarmored",
+        "previewDurationMs": 420
+      },
+      {
+        "id": "oni-resolve",
+        "source": [0, 1],
+        "atlasColumn": 4,
+        "state": "oni-armor",
+        "previewDurationMs": 520
+      },
+      {
+        "id": "ward-break",
+        "source": [1, 1],
+        "atlasColumn": 5,
+        "state": "oni-armor",
+        "previewDurationMs": 420
+      },
+      {
+        "id": "demon-rage",
+        "source": [2, 1],
+        "atlasColumn": 6,
+        "state": "demon-mode",
+        "previewDurationMs": 480
+      },
+      {
+        "id": "living-defeat",
+        "source": [3, 1],
+        "atlasColumn": 7,
+        "state": "ward-broken",
+        "previewDurationMs": 780
+      }
+    ]
+  },
+  "combat": {
+    "sourceGrid": {
+      "columns": 6,
+      "rows": 4,
+      "cellWidth": 256,
+      "cellHeight": 256
+    },
+    "runtimeAtlas": {
+      "columns": 6,
+      "rows": 4,
+      "frameWidth": 160,
+      "frameHeight": 160,
+      "atlasWidth": 960,
+      "atlasHeight": 640,
+      "minimumTransparentGutter": 2,
+      "facing": "screen-left",
+      "rootMotionOwnership": "runtime-simulation",
+      "vfxOverflowPolicy": "contained inside the authored frame"
+    },
+    "anchorProfiles": {
+      "human": {
+        "pivot": [80, 146],
+        "foot": [80, 151],
+        "hurtBounds": [45, 17, 70, 132]
+      },
+      "demon": {
+        "pivot": [80, 145],
+        "foot": [80, 151],
+        "hurtBounds": [33, 10, 94, 139]
+      },
+      "defeated": {
+        "pivot": [80, 148],
+        "foot": [80, 152],
+        "hurtBounds": [45, 65, 72, 85]
+      }
+    },
+    "clips": [
+      {
+        "id": "court-command",
+        "row": 0,
+        "state": "oni-armor",
+        "frameDurationsMs": [180, 180, 170, 110, 170, 260],
+        "phases": ["ready", "anticipation", "wind-up", "active", "recoil", "recovery"],
+        "events": [
+          {
+            "name": "summonCourtClones",
+            "frameIndex": 3,
+            "anchor": [38, 76]
+          }
+        ],
+        "anchorProfile": "human"
+      },
+      {
+        "id": "yearless-thrust",
+        "row": 1,
+        "state": "oni-armor",
+        "frameDurationsMs": [180, 220, 140, 90, 150, 270],
+        "phases": ["ready", "anticipation", "commitment", "active", "follow-through", "recovery"],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 3,
+            "anchor": [16, 87]
+          }
+        ],
+        "anchorProfile": "human"
+      },
+      {
+        "id": "blood-eclipse-transform",
+        "row": 2,
+        "state": "human-to-demon",
+        "frameDurationsMs": [220, 200, 150, 180, 200, 360],
+        "phases": ["ready", "wind-up", "active", "commitment", "extension", "recovery"],
+        "events": [
+          {
+            "name": "bloodEclipseClose",
+            "frameIndex": 2,
+            "anchor": [80, 145]
+          },
+          {
+            "name": "demonModeReady",
+            "frameIndex": 5,
+            "anchor": [80, 78]
+          }
+        ],
+        "anchorProfileByFrame": ["human", "human", "human", "demon", "demon", "demon"]
+      },
+      {
+        "id": "black-chrysanthemum-defeat",
+        "row": 3,
+        "state": "demon-to-ward-broken",
+        "frameDurationsMs": [220, 220, 110, 180, 260, 720],
+        "phases": ["anticipation", "wind-up", "active", "ward-break", "living-collapse", "living-defeat"],
+        "events": [
+          {
+            "name": "damage",
+            "frameIndex": 2,
+            "anchor": [80, 78]
+          },
+          {
+            "name": "finalWardOpen",
+            "frameIndex": 3,
+            "anchor": [80, 76]
+          },
+          {
+            "name": "livingDefeatHold",
+            "frameIndex": 5,
+            "anchor": [80, 103]
+          }
+        ],
+        "anchorProfileByFrame": ["demon", "demon", "demon", "demon", "defeated", "defeated"]
+      }
+    ]
+  },
+  "outputs": {
+    "portraitAtlas": "kurozane-portrait-atlas-v1.png",
+    "portraitContactSheet": "kurozane-portrait-expressions-v1-contact-sheet.png",
+    "portraitGif": "kurozane-portrait-expression-cycle-v1.gif",
+    "combatAtlas": "kurozane-final-battle-atlas-v1.png",
+    "combatContactSheet": "kurozane-final-battle-contact-sheet-v1.png",
+    "allClipsGif": "kurozane-final-battle-all-clips-v1.gif",
+    "clipGifPattern": "kurozane-{clipId}-v1.gif",
+    "manifest": "manifest.json"
+  },
+  "safety": {
+    "graphicGore": false,
+    "realEmblems": false,
+    "actorLikeness": false,
+    "livingDefeatRequired": true,
+    "defeatRead": "Kurozane remains alive, ward-broken, diminished, and without attack readiness."
+  }
+}
