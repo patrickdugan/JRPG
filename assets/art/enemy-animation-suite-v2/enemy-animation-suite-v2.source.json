@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "assetId": "enemy-animation-suite-v2",
+  "title": "Canonical Enemy Animation Suite V2",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated stylized animation concepts",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "originalityPolicy": "Original fictional enemy designs; no celebrity likeness, real heraldry, readable sacred text, or borrowed franchise characters."
+  },
+  "sourceGrid": {
+    "columns": 6,
+    "rows": 4,
+    "cropPolicy": "Proportional row and column boundaries derived from each source image's actual dimensions."
+  },
+  "runtimeAtlas": {
+    "columns": 6,
+    "rows": 4,
+    "frameWidth": 160,
+    "frameHeight": 160,
+    "atlasWidth": 960,
+    "atlasHeight": 640,
+    "minimumTransparentGutter": 2,
+    "maximumContentWidth": 152,
+    "maximumContentHeight": 152,
+    "bottomGutter": 4,
+    "visibleColorCeiling": 64,
+    "resampling": "BOX",
+    "dither": "none",
+    "alphaPolicy": "binary threshold at 128 after chroma-key removal",
+    "minimumComponentPixelsAtSourceResolution": 12,
+    "maximumEdgeDebrisPixelsAtSourceResolution": 1600,
+    "edgeDebrisInsetAtSourceResolution": 8,
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "vfxOverflowPolicy": "contained inside the authored frame"
+  },
+  "anchorProfiles": {
+    "quadruped": {
+      "pivot": [80, 142],
+      "foot": [80, 151],
+      "hurtBounds": [22, 58, 116, 72]
+    },
+    "flyer": {
+      "pivot": [80, 100],
+      "foot": [80, 151],
+      "hurtBounds": [35, 30, 90, 100]
+    },
+    "broad-humanoid": {
+      "pivot": [80, 146],
+      "foot": [80, 151],
+      "hurtBounds": [32, 14, 96, 140]
+    },
+    "lean-humanoid": {
+      "pivot": [80, 146],
+      "foot": [80, 151],
+      "hurtBounds": [40, 14, 80, 138]
+    },
+    "crawler": {
+      "pivot": [80, 132],
+      "foot": [80, 151],
+      "hurtBounds": [20, 52, 120, 85]
+    }
+  },
+  "clips": [
+    {
+      "id": "locomotion",
+      "row": 0,
+      "frameDurationsMs": [120, 100, 90, 100, 90, 120],
+      "phases": ["contact", "compression", "passing", "extension", "second-contact", "ready"],
+      "events": []
+    },
+    {
+      "id": "basic-attack",
+      "row": 1,
+      "frameDurationsMs": [180, 150, 100, 80, 130, 240],
+      "phases": ["ready", "anticipation", "commitment", "active", "follow-through", "recovery"],
+      "events": [
+        {
+          "name": "damage",
+          "frameIndex": 3
+        }
+      ]
+    },
+    {
+      "id": "signature-attack",
+      "row": 2,
+      "frameDurationsMs": [220, 180, 140, 100, 180, 300],
+      "phases": ["ready", "anticipation", "charge", "active", "recoil", "recovery"],
+      "events": [
+        {
+          "name": "enemy-signature",
+          "frameIndex": 3
+        }
+      ]
+    },
+    {
+      "id": "hurt-defeat",
+      "row": 3,
+      "frameDurationsMs": [100, 100, 120, 160, 300, 600],
+      "phases": ["hurt-contact", "compression", "stagger", "collapse", "defeated", "defeated-hold"],
+      "events": [
+        {
+          "name": "hurt",
+          "frameIndex": 0
+        },
+        {
+          "name": "defeatedHold",
+          "frameIndex": 5
+        }
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "catalogId": "ENM-001",
+      "id": "cinder-hound",
+      "name": "Cinder Hound",
+      "role": "rushing beast / heat escalation",
+      "profile": "quadruped",
+      "signatureId": "cinder-overload",
+      "sourceChroma": "sources/cinder-hound-chroma-source-v2.png",
+      "sourceAlpha": "sources/cinder-hound-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-002",
+      "id": "ash-wisp",
+      "name": "Ash Wisp",
+      "role": "floating construct / area denial",
+      "profile": "flyer",
+      "signatureId": "ash-nova",
+      "sourceChroma": "sources/ash-wisp-chroma-source-v2.png",
+      "sourceAlpha": "sources/ash-wisp-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-003",
+      "id": "bell-moth",
+      "name": "Bell Moth",
+      "role": "flying diver / resonance zone",
+      "profile": "flyer",
+      "signatureId": "bell-resonance",
+      "sourceChroma": "sources/bell-moth-chroma-source-v2.png",
+      "sourceAlpha": "sources/bell-moth-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-004",
+      "id": "tithe-enforcer",
+      "name": "Tithe Enforcer",
+      "role": "armored bruiser / seal slam",
+      "profile": "broad-humanoid",
+      "signatureId": "tithe-seal",
+      "sourceChroma": "sources/tithe-enforcer-chroma-source-v2.png",
+      "sourceAlpha": "sources/tithe-enforcer-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-005",
+      "id": "registry-hound",
+      "name": "Registry Hound",
+      "role": "court scout / pursuit mark",
+      "profile": "lean-humanoid",
+      "signatureId": "registry-mark",
+      "sourceChroma": "sources/registry-hound-chroma-source-v2.png",
+      "sourceAlpha": "sources/registry-hound-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-006",
+      "id": "drowned-retainer",
+      "name": "Drowned Retainer",
+      "role": "waterlogged duelist / lane bind",
+      "profile": "lean-humanoid",
+      "signatureId": "undertow-bind",
+      "sourceChroma": "sources/drowned-retainer-chroma-source-v2.png",
+      "sourceAlpha": "sources/drowned-retainer-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-007",
+      "id": "lantern-leech",
+      "name": "Lantern Leech",
+      "role": "hovering siphon / tether drain",
+      "profile": "crawler",
+      "signatureId": "lantern-drain",
+      "sourceChroma": "sources/lantern-leech-chroma-source-v2.png",
+      "sourceAlpha": "sources/lantern-leech-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-008",
+      "id": "salt-warden",
+      "name": "Salt Warden",
+      "role": "sea-route elite / brittle rampart",
+      "profile": "broad-humanoid",
+      "signatureId": "salt-rampart",
+      "sourceChroma": "sources/salt-warden-chroma-source-v2.png",
+      "sourceAlpha": "sources/salt-warden-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-009",
+      "id": "ashen-spearman",
+      "name": "Ashen Spearman",
+      "role": "spacing infantry / lane charge",
+      "profile": "lean-humanoid",
+      "signatureId": "ash-lane-charge",
+      "sourceChroma": "sources/ashen-spearman-chroma-source-v2.png",
+      "sourceAlpha": "sources/ashen-spearman-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-010",
+      "id": "ashen-banner-guard",
+      "name": "Ashen Banner Guard",
+      "role": "defensive infantry / banner wall",
+      "profile": "broad-humanoid",
+      "signatureId": "banner-wall",
+      "sourceChroma": "sources/ashen-banner-guard-chroma-source-v2.png",
+      "sourceAlpha": "sources/ashen-banner-guard-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-011",
+      "id": "forge-thrall",
+      "name": "Forge Thrall",
+      "role": "furnace construct / floor vent",
+      "profile": "broad-humanoid",
+      "signatureId": "ember-vent",
+      "sourceChroma": "sources/forge-thrall-chroma-source-v2.png",
+      "sourceAlpha": "sources/forge-thrall-source-v2.png"
+    },
+    {
+      "catalogId": "ENM-012",
+      "id": "bell-scribe",
+      "name": "Bell Scribe",
+      "role": "masked support / docket mark",
+      "profile": "lean-humanoid",
+      "signatureId": "docket-mark",
+      "reviewFrameIndex": 14,
+      "sourceChroma": "sources/bell-scribe-chroma-source-v2.png",
+      "sourceAlpha": "sources/bell-scribe-source-v2.png"
+    }
+  ]
+}
