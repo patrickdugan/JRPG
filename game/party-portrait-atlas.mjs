@@ -5,6 +5,7 @@ export const PARTY_PORTRAIT_MEMBERS = Object.freeze([
   'mateus',
   'genta',
   'kiku',
+  'miyo',
 ]);
 
 export const PARTY_PORTRAIT_EXPRESSIONS = Object.freeze([
@@ -19,15 +20,15 @@ export const PARTY_PORTRAIT_EXPRESSIONS = Object.freeze([
 ]);
 
 export const PARTY_PORTRAIT_ATLAS = Object.freeze({
-  url: './assets/art/party-portrait-suite/party-portrait-expressions.png',
-  width: 512,
-  height: 384,
-  contentWidth: 512,
+  url: './assets/art/party-portrait-suite-v2/party-portrait-expressions-v2.png',
+  width: 768,
+  height: 672,
+  contentWidth: 768,
   transparentReserveWidth: 0,
   columns: 8,
-  rows: 6,
-  cellWidth: 64,
-  cellHeight: 64,
+  rows: 7,
+  cellWidth: 96,
+  cellHeight: 96,
 });
 
 export function hasPartyPortraitMember(memberId) {
@@ -59,7 +60,7 @@ function cssPixels(value) {
 /**
  * Derive a CSS background crop from the authored source frame.
  * The Camp card intentionally displays a centered 52 x 60 crop of the
- * 64 x 64 portrait cell; callers must supply those display dimensions.
+ * 96 x 96 portrait cell; callers must supply those display dimensions.
  */
 export function getPartyPortraitBackgroundPlacement(frame, { cropWidth, cropHeight } = {}) {
   if (!frame || !Number.isFinite(frame.x) || !Number.isFinite(frame.y)

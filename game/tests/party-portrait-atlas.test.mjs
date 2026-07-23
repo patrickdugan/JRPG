@@ -18,7 +18,7 @@ import { SCENE_DIRECTIONS } from '../content/scene-direction.mjs';
 
 const GAME_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-test('portrait atlas exposes 48 exact frames without an unused reserve', () => {
+test('portrait atlas exposes 56 exact frames without an unused reserve', () => {
   const rectangles = new Set();
   for (const [row, memberId] of PARTY_PORTRAIT_MEMBERS.entries()) {
     assert.equal(hasPartyPortraitMember(memberId), true);
@@ -29,17 +29,17 @@ test('portrait atlas exposes 48 exact frames without an unused reserve', () => {
         expression,
         row,
         column,
-        x: column * 64,
-        y: row * 64,
-        width: 64,
-        height: 64,
+        x: column * 96,
+        y: row * 96,
+        width: 96,
+        height: 96,
       });
       assert.equal(Object.isFrozen(frame), true);
       rectangles.add(`${frame.x},${frame.y},${frame.width},${frame.height}`);
     }
   }
-  assert.equal(rectangles.size, 48);
-  assert.equal(PARTY_PORTRAIT_ATLAS.contentWidth, PARTY_PORTRAIT_ATLAS.columns * 64);
+  assert.equal(rectangles.size, 56);
+  assert.equal(PARTY_PORTRAIT_ATLAS.contentWidth, PARTY_PORTRAIT_ATLAS.columns * 96);
   assert.equal(PARTY_PORTRAIT_ATLAS.width - PARTY_PORTRAIT_ATLAS.contentWidth, 0);
   assert.equal(hasPartyPortraitMember('unknown'), false);
   assert.throws(() => getPartyPortraitFrame('unknown'), /Unknown party portrait member/);
@@ -64,19 +64,19 @@ test('authored scene gestures exercise every speaking portrait expression', () =
   assert.deepEqual([...usedExpressions].sort(), [...PARTY_PORTRAIT_EXPRESSIONS].sort());
 });
 
-test('Camp crop placement derives all six rows and eight columns from authored frames', () => {
+test('Camp crop placement derives all seven rows and eight columns from authored frames', () => {
   for (const [row, memberId] of PARTY_PORTRAIT_MEMBERS.entries()) {
     for (const [column, expression] of PARTY_PORTRAIT_EXPRESSIONS.entries()) {
       const frame = getPartyPortraitFrame(memberId, expression);
       const placement = getPartyPortraitBackgroundPlacement(frame, { cropWidth: 52, cropHeight: 60 });
       assert.equal(placement.cropWidth, 52);
       assert.equal(placement.cropHeight, 60);
-      assert.equal(placement.scale, 0.9375);
+      assert.equal(placement.scale, 0.625);
       assert.equal(placement.backgroundWidth, 480);
-      assert.equal(placement.backgroundHeight, 360);
+      assert.equal(placement.backgroundHeight, 420);
       assert.equal(placement.x, -4 - column * 60);
       assert.equal(placement.y, -row * 60);
-      assert.equal(placement.backgroundSize, '480px 360px');
+      assert.equal(placement.backgroundSize, '480px 420px');
       assert.equal(placement.backgroundPosition, `${-4 - column * 60}px ${-row * 60}px`);
       assert.equal(Object.isFrozen(placement), true);
     }
@@ -87,14 +87,14 @@ test('portrait placement rejects invalid crop dimensions and frames outside auth
   const frame = getPartyPortraitFrame('ren', 'neutral');
   assert.throws(() => getPartyPortraitBackgroundPlacement(frame), /positive crop dimensions/);
   assert.throws(() => getPartyPortraitBackgroundPlacement(frame, { cropWidth: 61, cropHeight: 60 }), /cannot be wider/);
-  assert.throws(() => getPartyPortraitBackgroundPlacement({ ...frame, x: 512 }, { cropWidth: 52, cropHeight: 60 }), /content grid/);
+  assert.throws(() => getPartyPortraitBackgroundPlacement({ ...frame, x: 768 }, { cropWidth: 52, cropHeight: 60 }), /content grid/);
   assert.throws(() => getPartyPortraitBackgroundPlacement(null, { cropWidth: 52, cropHeight: 60 }), /valid source frame/);
 });
 
 test('portrait image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 512, naturalHeight: 384 }), true);
-  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 511, naturalHeight: 384 }), false);
-  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 512, naturalHeight: 383 }), false);
+  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 768, naturalHeight: 672 }), true);
+  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 767, naturalHeight: 672 }), false);
+  assert.equal(partyPortraitImageHasExpectedSize({ naturalWidth: 768, naturalHeight: 671 }), false);
   assert.equal(partyPortraitImageHasExpectedSize(null), false);
 });
 

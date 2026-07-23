@@ -1,0 +1,118 @@
+{
+  "assetId": "party-portrait-expression-suite-v2",
+  "formatVersion": 2,
+  "provenance": {
+    "sourceClassification": "ai-generated-pixel-styled-expression-sheets",
+    "runtimeClassification": "deterministically-pixelified-raster-derivative",
+    "generator": "OpenAI built-in image generation tool",
+    "generatedOn": "2026-07-23",
+    "claim": "The source boards are AI-generated and the runtime atlas is deterministically pixelified; neither is hand-pixeled or pixel-authored."
+  },
+  "frame": {
+    "width": 96,
+    "height": 96,
+    "minimumTransparentGutter": 2,
+    "visiblePaletteLimit": 64,
+    "alphaPolicy": "binary"
+  },
+  "atlas": {
+    "width": 768,
+    "height": 672,
+    "columns": 8,
+    "rows": 7
+  },
+  "sourceSheet": {
+    "width": 1536,
+    "height": 1024,
+    "columns": 4,
+    "rows": 2,
+    "cellWidth": 384,
+    "cellHeight": 512,
+    "squareCropWithinCell": [0, 64, 384, 448],
+    "nativeInset": 2,
+    "resampling": "BOX",
+    "dither": "none",
+    "chromaKey": "#FF00FF",
+    "backgroundRemoval": "imagegen/remove_chroma_key.py with soft matte and despill"
+  },
+  "sheet": {
+    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku", "miyo"],
+    "columns": ["neutral", "resolve", "strain", "soften", "concern", "anger", "surprise", "quiet"],
+    "sourceCoordinates": {
+      "neutral": [0, 0],
+      "resolve": [1, 0],
+      "strain": [2, 0],
+      "soften": [3, 0],
+      "concern": [0, 1],
+      "anger": [1, 1],
+      "surprise": [2, 1],
+      "quiet": [3, 1]
+    }
+  },
+  "houseStyle": {
+    "description": "Original premium gothic 32-bit-era JRPG portraiture with elegant anime realism, ink-like contour control, baroque chiaroscuro, sculpted face planes, restrained highlights, and deliberate crisp pixel clusters.",
+    "consistencyAnchor": "Ren Ishikawa's accepted eight-expression board",
+    "constraints": [
+      "one head-and-upper-torso bust per source cell",
+      "stable eye line, crop, costume, pose, lighting, and pixel density",
+      "only facial expression changes between columns",
+      "no franchise character, actor, celebrity, artist, or real-person likeness",
+      "no text, logos, watermarks, weapons, props, hands, or scenery"
+    ]
+  },
+  "expressions": {
+    "neutral": "attentive restraint",
+    "resolve": "deliberate commitment",
+    "strain": "fatigue, pain, or difficult admission without melodrama",
+    "soften": "guarded warmth",
+    "concern": "searching attention and careful worry",
+    "anger": "controlled outrage",
+    "surprise": "immediate alarm",
+    "quiet": "lowered gaze and inward composure"
+  },
+  "characters": [
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "source": "sources/ren-portrait-expressions-source-v2.png",
+      "identity": "Japanese courier; square-tapered face, short forward black hair, rain-blue collar, cedar-brown coat and satchel strap"
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "source": "sources/aya-portrait-expressions-source-v2.png",
+      "identity": "Japanese archivist; soft oval face, practical side locks, muted-teal layers and parchment-ivory archive garment"
+    },
+    {
+      "id": "lise",
+      "name": "Nikola Dražanić",
+      "legacyCompatibilityId": "lise",
+      "source": "sources/lise-portrait-expressions-source-v2.png",
+      "identity": "Croatian-English frontier hunter; high forehead, backswept brown hair, moustache and clipped beard, dusk-blue cloak, oxblood doublet, falling band and chainmail edge"
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "source": "sources/mateus-portrait-expressions-source-v2.png",
+      "identity": "Portuguese priest living in Japan; narrow gaunt face, tired eyes, wavy black hair, restrained facial hair and charcoal Japanese travel robes"
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "source": "sources/genta-portrait-expressions-source-v2.png",
+      "identity": "Japanese frontline protector; broad square face, cropped black hair, short jaw beard, earth-gray mantle and oxidized-gold clasp"
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "source": "sources/kiku-portrait-expressions-source-v2.png",
+      "identity": "Japanese field physician; round-tapered face, practical side tie, herb-green cloak and candle-ivory medicine collar"
+    },
+    {
+      "id": "miyo",
+      "name": "Miyo Senda",
+      "source": "sources/miyo-portrait-expressions-source-v2.png",
+      "identity": "Japanese weather reader; soft-angular face, center-parted looped working tie, storm-blue collar, pale underlayer and brass instrument accent"
+    }
+  ]
+}

@@ -1,0 +1,1624 @@
+{
+  "assetId": "party-portrait-expression-suite-v2",
+  "status": "review-quality-runtime-candidate",
+  "runtimeIntegration": "current-browser-camp-and-scene-focus-v2",
+  "provenance": {
+    "sourceClassification": "ai-generated-pixel-styled-expression-sheets",
+    "runtimeClassification": "deterministically-pixelified-raster-derivative",
+    "generator": "OpenAI built-in image generation tool",
+    "generatedOn": "2026-07-23",
+    "claim": "The source boards are AI-generated and the runtime atlas is deterministically pixelified; neither is hand-pixeled or pixel-authored."
+  },
+  "tool": {
+    "name": "build_party_portrait_suite_v2.py",
+    "pillowVersion": "11.3.0"
+  },
+  "geometry": {
+    "columns": 8,
+    "rows": 7,
+    "cellWidth": 96,
+    "cellHeight": 96,
+    "sheetWidth": 768,
+    "sheetHeight": 672,
+    "minimumTransparentGutter": 2
+  },
+  "rowOrder": [
+    "ren",
+    "aya",
+    "lise",
+    "mateus",
+    "genta",
+    "kiku",
+    "miyo"
+  ],
+  "columnOrder": [
+    "neutral",
+    "resolve",
+    "strain",
+    "soften",
+    "concern",
+    "anger",
+    "surprise",
+    "quiet"
+  ],
+  "palette": {
+    "method": "shared-median-cut",
+    "requestedVisibleColors": 64,
+    "actualVisibleColors": 64,
+    "colors": [
+      "#e3c28f",
+      "#d3bb91",
+      "#e6ad6e",
+      "#d6ab77",
+      "#e0a567",
+      "#db9d61",
+      "#cc9a6b",
+      "#b39b76",
+      "#c48552",
+      "#aa835d",
+      "#ad744a",
+      "#a16942",
+      "#7f7059",
+      "#7b6149",
+      "#49716f",
+      "#4e6252",
+      "#83573a",
+      "#685848",
+      "#714933",
+      "#634332",
+      "#575147",
+      "#52463e",
+      "#573d2f",
+      "#53382c",
+      "#3b5252",
+      "#33485c",
+      "#424243",
+      "#2b425f",
+      "#3e3b3f",
+      "#413934",
+      "#2f3a4a",
+      "#243a53",
+      "#4b3229",
+      "#3b3230",
+      "#3e2b26",
+      "#442124",
+      "#32333c",
+      "#303038",
+      "#313033",
+      "#312a2a",
+      "#312221",
+      "#263145",
+      "#2b2e36",
+      "#262a36",
+      "#292c30",
+      "#27282f",
+      "#23262f",
+      "#262427",
+      "#262022",
+      "#241a1e",
+      "#1b2d43",
+      "#1b2533",
+      "#1d212b",
+      "#162130",
+      "#191e29",
+      "#1a1c22",
+      "#121c29",
+      "#141724",
+      "#16161b",
+      "#0c1523",
+      "#0c131d",
+      "#0f0f19",
+      "#060f1b",
+      "#080711"
+    ],
+    "dither": "none"
+  },
+  "alpha": {
+    "policy": "binary",
+    "values": [
+      0,
+      255
+    ]
+  },
+  "frames": [
+    {
+      "id": "ren:neutral",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        16,
+        3,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "69e77c26458b12c1f0fd5a6e3913fc3eacdefd48d23f7fe7906466e71b3e540e"
+    },
+    {
+      "id": "ren:resolve",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        90,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "97e1ab491e28603c2539e87610d482738ff338ad4ce26d2209fbf9fbb0290576"
+    },
+    {
+      "id": "ren:strain",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        7,
+        4,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "fa132a14d574de59af5346263997902d83ccf21c4cf8722305a8839a84b95ea3"
+    },
+    {
+      "id": "ren:soften",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        77,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "87cdd01fc8a666894a721804517483533462b219bc15f7f0d6c6aaf71cb08239"
+    },
+    {
+      "id": "ren:concern",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        13,
+        2,
+        92,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "87921c77d70a6a77575618cfe54114ac304519e33532af27865175ac2b3879ee"
+    },
+    {
+      "id": "ren:anger",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        8,
+        2,
+        87,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "889415bf58eb942beaaed2da0dbe7dd7e1b825a0c38ad38b61f9235833a7c3a9"
+    },
+    {
+      "id": "ren:surprise",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        5,
+        2,
+        94,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "588b39860cc5195eda7e6feaea377417fa25895173b2c774d08ca2a542406cb3"
+    },
+    {
+      "id": "ren:quiet",
+      "characterId": "ren",
+      "characterName": "Ren Ishikawa",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        0,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        75,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "3bb23071d796320db46c606a199de3630e6eb48520f2866b6609946437a80db4"
+    },
+    {
+      "id": "aya:neutral",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        14,
+        4,
+        92,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "2ec9a9449dfbbec95b4847f64a9d260c6e8706c7d6c591ab95e7fecef7d08e12"
+    },
+    {
+      "id": "aya:resolve",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        9,
+        5,
+        86,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "0da2f19ea920d264b9aa8d18afe99025cf7099eac01337189a4242cabd0ae437"
+    },
+    {
+      "id": "aya:strain",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        5,
+        5,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "8be64702956678467bcd03f9b4007791e49d619e072d9ac0a00c3eb5c719dcc0"
+    },
+    {
+      "id": "aya:soften",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        4,
+        77,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "40df21b6478725854a123c2d6be95ada0b5947d6a2c4d0f2c111094823393963"
+    },
+    {
+      "id": "aya:concern",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        13,
+        2,
+        93,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "19dac60fa4aee1a2c3bee8346cef4d80a7e660bab00bfc7262ac2d1dc44ff4fe"
+    },
+    {
+      "id": "aya:anger",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        8,
+        2,
+        87,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "b41fb2878e51c06083afb054ab3e299fe8cb346ab73a7c06e4a7d1d5e41b1a55"
+    },
+    {
+      "id": "aya:surprise",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        3,
+        2,
+        94,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "ca2f7dc2675a28f12f5469ac8e3e29144293257a8082becfc75fe1e09bf75346"
+    },
+    {
+      "id": "aya:quiet",
+      "characterId": "aya",
+      "characterName": "Aya Shinohara",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        96,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        76,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "8d10cda88265241dbbff06f844d39f35ab8f39cfa419583b6bf21051af6b8947"
+    },
+    {
+      "id": "lise:neutral",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        15,
+        2,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "9d15288e09af4d3ce757055ec07474fad89b39a861ed488d2d7c60e6fb0388a6"
+    },
+    {
+      "id": "lise:resolve",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        92,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "7570c56feb9e5fbf5e290cfd5336b73c4ad7c72182a1de921132098e11e716c4"
+    },
+    {
+      "id": "lise:strain",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        7,
+        3,
+        88,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "d6a54e296e79282c479f90ad3859d1bb94d01df1fb994dc884ce89be94e5ff90"
+    },
+    {
+      "id": "lise:soften",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        81,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "07ba466019193b8b0bbd0426e07c419eeece91f03f5afce2a254032cafebca1d"
+    },
+    {
+      "id": "lise:concern",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        16,
+        2,
+        94,
+        90
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "4e9703ba1307bd20725dcd08ebdc797e55a1fed2f2a08343cdb96228a6ea7298"
+    },
+    {
+      "id": "lise:anger",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        93,
+        90
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "8d8e66a28ca94453ac8a7aab439b501756607074aa6c445255e531ab042c2216"
+    },
+    {
+      "id": "lise:surprise",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        7,
+        2,
+        89,
+        90
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "550fd84062203318dedb26fe4e543ee97b9f4f7a5ded82916c7d86a1007d9450"
+    },
+    {
+      "id": "lise:quiet",
+      "characterId": "lise",
+      "characterName": "Nikola Dražanić",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        192,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        82,
+        90
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "123b2ee751d12b7daa818b9ea8c48b04743e2b38efd24d0ed28ccce1f5b7422e"
+    },
+    {
+      "id": "mateus:neutral",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        16,
+        2,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "94891782bc292dbbee0bcdc5cae40fd2643ccfe65111042107904464b83428c1"
+    },
+    {
+      "id": "mateus:resolve",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        90,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "e3bce99dbfe0e11670593e2a11092894404abf211b90ffcee09f2ec3953fc598"
+    },
+    {
+      "id": "mateus:strain",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        6,
+        2,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "19b1de34e9d48c136034af26bbaee3671957218ebf9a46a937a229b8c3f31705"
+    },
+    {
+      "id": "mateus:soften",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        4,
+        79,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "4ab1fa3ecdbd5b892056e1d416c6c8fa271a7df81feb6d5f3d0220be759ebb0c"
+    },
+    {
+      "id": "mateus:concern",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        16,
+        2,
+        94,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "61a2c65632b0692e4272f731557ba45936dc3546de2125ccc9aa503d1d60c1a6"
+    },
+    {
+      "id": "mateus:anger",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        90,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "2f8bf321339207a3d940a7811688abaa1cd618099d8ab0dac534df1f24f797c2"
+    },
+    {
+      "id": "mateus:surprise",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        6,
+        2,
+        94,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "6703ff6ecbc5056393fbe70deca26875ce9dad81424f679b077a1b1e213dfc82"
+    },
+    {
+      "id": "mateus:quiet",
+      "characterId": "mateus",
+      "characterName": "Father Mateus Avelar",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        288,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        79,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "132f59257512cbf9018db8684106b803936449e86d3f7c832f262f9647363c4c"
+    },
+    {
+      "id": "genta:neutral",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        16,
+        4,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "c60774dfc8ad7d39d0323d2a07c845f630999326930a303c9162f94c9c5bbe3a"
+    },
+    {
+      "id": "genta:resolve",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        4,
+        93,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "0e67a3cce713f96ad8bec0ca6e0c72df9276a4f84367c22850e24361d6a915b8"
+    },
+    {
+      "id": "genta:strain",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        6,
+        4,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "fcb4dee1dc06007c01e8c46b0f070d66b006b8a9580b885decd4bd7dc67b9e28"
+    },
+    {
+      "id": "genta:soften",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        4,
+        74,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "a48717a5dac581fdccf36b3170ef19716b3a8aac0160b0213c877bdeb67a251a"
+    },
+    {
+      "id": "genta:concern",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        16,
+        2,
+        94,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "a0b3197e12b5f9014169fee17977f7dadd87b2de4f76e965f63d8d6e978aa8cb"
+    },
+    {
+      "id": "genta:anger",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        93,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "ffaa9639f77c09af62f920c736d7ae094f720d3986cd31f98b44939761efbe35"
+    },
+    {
+      "id": "genta:surprise",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        8,
+        2,
+        94,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "65f7d16dbbb42df526e7dda228655109396ed48cfcf67983a82caa4d7dfa0a22"
+    },
+    {
+      "id": "genta:quiet",
+      "characterId": "genta",
+      "characterName": "Genta Mononobe",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        384,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        77,
+        91
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "80979be0b36a41ddc3df7f300295d8a1de9b69580ee6c24202bc1a2ebd3f14b4"
+    },
+    {
+      "id": "kiku:neutral",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        15,
+        3,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "6dd2caf95bae816d83a4d28b353c8e980427e2b7890f415c20ead9fcaa3b9c54"
+    },
+    {
+      "id": "kiku:resolve",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        89,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "8edf6365add396fc6b39be3562ff9958917a95716bc456cefeb1521cf0528045"
+    },
+    {
+      "id": "kiku:strain",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        4,
+        3,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "f75ad7dcac15486c60b6b6b21fcbf9bc5c8f3de04446a4f9e880b1c49bdf8099"
+    },
+    {
+      "id": "kiku:soften",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        3,
+        76,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "da500035f3e387e3e7638ec22f37f69b4b3bf25a02e95e9b32f4984a4a1ec859"
+    },
+    {
+      "id": "kiku:concern",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        14,
+        2,
+        93,
+        86
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "f874bd1bc99137c92c85ee25abf2dc75b5b2218218deccee02a74b306348091a"
+    },
+    {
+      "id": "kiku:anger",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        9,
+        2,
+        88,
+        86
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "638dd41bf50f2c00fe1e8cd33a8cae1d3d4f693bf36dbec8d0dd086f21aeef08"
+    },
+    {
+      "id": "kiku:surprise",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        3,
+        2,
+        94,
+        86
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "00b0ae608165d9e26a9a914d38a565e572aad156d617bd7fa1b41fbb255b3e56"
+    },
+    {
+      "id": "kiku:quiet",
+      "characterId": "kiku",
+      "characterName": "Kiku Nawa",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        480,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        77,
+        86
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "0fa0b42ea544a644e3eeb4d930d6c86fd97bd60047fd601a64386b15ae410712"
+    },
+    {
+      "id": "miyo:neutral",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "neutral",
+      "expressionSemantic": "attentive restraint",
+      "rect": [
+        0,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        0
+      ],
+      "localAlphaBounds": [
+        15,
+        4,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "34f31bb8cc5c3bb4813c2e70091e6d8206b4ff3bef009c2c2a5880ae4613cc45"
+    },
+    {
+      "id": "miyo:resolve",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "resolve",
+      "expressionSemantic": "deliberate commitment",
+      "rect": [
+        96,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        5,
+        89,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "8eb97204b8faccaa2f693e1f1f620aa27c7bfa4382ec0af7d6c915723eeb4e64"
+    },
+    {
+      "id": "miyo:strain",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "strain",
+      "expressionSemantic": "fatigue, pain, or difficult admission without melodrama",
+      "rect": [
+        192,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        0
+      ],
+      "localAlphaBounds": [
+        5,
+        6,
+        94,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "299983616c611428460ac2d2f59a6baac2a2f4d327acdada00217ca6b06f4e50"
+    },
+    {
+      "id": "miyo:soften",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "soften",
+      "expressionSemantic": "guarded warmth",
+      "rect": [
+        288,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        0
+      ],
+      "localAlphaBounds": [
+        2,
+        7,
+        79,
+        94
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "5ca1fbedcba91bf8bf40d67563d5d0a5253288b8f37762479b3af0d4756360d0"
+    },
+    {
+      "id": "miyo:concern",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "concern",
+      "expressionSemantic": "searching attention and careful worry",
+      "rect": [
+        384,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        0,
+        1
+      ],
+      "localAlphaBounds": [
+        15,
+        2,
+        94,
+        86
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "68e0bc5f5664f6c2a086a442471f33d0e9389c826a3710a68ec4602b90ef1c4a"
+    },
+    {
+      "id": "miyo:anger",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "anger",
+      "expressionSemantic": "controlled outrage",
+      "rect": [
+        480,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        1,
+        1
+      ],
+      "localAlphaBounds": [
+        10,
+        2,
+        88,
+        86
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "f15f2509df6bf12be30a82cd566c1880ca52b5b5d5f06b5daa386295215293d1"
+    },
+    {
+      "id": "miyo:surprise",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "surprise",
+      "expressionSemantic": "immediate alarm",
+      "rect": [
+        576,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        2,
+        1
+      ],
+      "localAlphaBounds": [
+        4,
+        2,
+        94,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "7c4188c634e33ecc689415afb3a74db9f611b60424ed637883c740b866209914"
+    },
+    {
+      "id": "miyo:quiet",
+      "characterId": "miyo",
+      "characterName": "Miyo Senda",
+      "expression": "quiet",
+      "expressionSemantic": "lowered gaze and inward composure",
+      "rect": [
+        672,
+        576,
+        96,
+        96
+      ],
+      "sourceCell": [
+        3,
+        1
+      ],
+      "localAlphaBounds": [
+        2,
+        2,
+        75,
+        87
+      ],
+      "minimumObservedGutter": 2,
+      "rgbaSha256": "f4b5b7db18c5b23f589895bc6efbedcf05c0d7787c122900ae2851517a4fb6ad"
+    }
+  ],
+  "sources": [
+    {
+      "path": "party-portrait-suite-v2.source.json",
+      "role": "portrait-v2-geometry-identity-and-provenance-contract",
+      "sha256": "d64868856a49203a2d235bce6ca6d116771bafb9768fab1e31a37dad0f2b233f"
+    },
+    {
+      "path": "sources/ren-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "46ef99b493971855d94b850efb45b999a18cb751563b25bdfdedfd8dba8b52d3"
+    },
+    {
+      "path": "sources/aya-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "0cdcb332f704de18d60f5e3d8c304acb0e66cceae924ba25a0eedad6750f3113"
+    },
+    {
+      "path": "sources/lise-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "983f6517718c1f532f4c96f5b7d966b79a4282aa3718e82d2bcc59ebf22a5774"
+    },
+    {
+      "path": "sources/mateus-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "dc9588c97fa86bc4ffe86a5e694be1091674e7a64c06edede39e09c399bc7715"
+    },
+    {
+      "path": "sources/genta-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "383d8a75076fda318fa6f9603b45869920f19526854c9f4d0116c89523c67461"
+    },
+    {
+      "path": "sources/kiku-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "2f83ea3dc266362b97d804b0a37195da66d360b8aa170c2316c1c3f4bb2b335a"
+    },
+    {
+      "path": "sources/miyo-portrait-expressions-source-v2.png",
+      "role": "ai-generated-expression-source-with-chroma-removed",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "c35352e066896e4c3a2e02dc198022f2f4fdd1e1aff05f4ec3b9b15c4272c9a6"
+    },
+    {
+      "path": "build_party_portrait_suite_v2.py",
+      "role": "deterministic-pixelification-builder",
+      "sha256": "00542e9332f87fa6d70997527e711b5e0ff4d76cd30d00b4e78699bc912d84c0"
+    }
+  ],
+  "exports": [
+    {
+      "path": "party-portrait-expressions-v2.png",
+      "role": "transparent-runtime-candidate",
+      "width": 768,
+      "height": 672,
+      "mode": "RGBA",
+      "sha256": "0ee5d5f2ce1706834d5a7ce054ddf6d349d544342c238810a682d54cb1cee139"
+    },
+    {
+      "path": "party-portrait-expressions-v2-contact-sheet.png",
+      "role": "labeled-review-only-not-runtime",
+      "width": 1648,
+      "height": 1412,
+      "mode": "RGBA",
+      "sha256": "af6110b88622aa718b2473181ef1003963329c00c9afc81134223d8d26636858"
+    }
+  ],
+  "validation": {
+    "frameCount": 56,
+    "distinctRgbaFrameHashes": 56,
+    "binaryTransparency": true,
+    "minimumObservedGutter": 2,
+    "deterministicCommand": "python build_party_portrait_suite_v2.py --check"
+  },
+  "review": {
+    "agentVisualInspection": "passed",
+    "humanExpressionReadability": "pending",
+    "externalCulturalReview": "pending",
+    "runtimeBrowserInspection": "targeted-tests-passed-live-browser-session-unavailable"
+  }
+}

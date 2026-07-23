@@ -786,7 +786,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "**/assets/art/enemy-combat-suite/enemy-combat-atlas.png",
                 "**/assets/art/boss-combat-suite/boss-combat-atlas.png",
                 "**/assets/art/battle-vfx-suite/battle-vfx-suite-atlas.png",
-                "**/assets/art/party-portrait-suite/party-portrait-expressions.png",
+                "**/assets/art/party-portrait-suite-v2/party-portrait-expressions-v2.png",
                 "**/assets/art/scene-backdrop-suite/scene-backdrop-atlas.png",
             ):
                 wrong_size_context.route(
@@ -940,7 +940,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
 
             portrait_fallback_context = browser.new_context(viewport={"width": 1024, "height": 768})
             portrait_fallback_context.route(
-                "**/assets/art/party-portrait-suite/party-portrait-expressions.png",
+                "**/assets/art/party-portrait-suite-v2/party-portrait-expressions-v2.png",
                 lambda route: route.fulfill(status=200, content_type="image/png", body=b"invalid-png-for-portrait-fallback-qa"),
             )
             portrait_fallback_page = portrait_fallback_context.new_page()
