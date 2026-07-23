@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pixel Art Production"
+  short_description: "Build and verify production-ready pixel art"
+  default_prompt: "Use $pixel-art-production to convert this raster concept into a deterministic pixel-art production candidate."

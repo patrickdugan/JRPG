@@ -1,0 +1,49 @@
+{
+  "classification": "deterministically-pixelified-raster",
+  "tool": {
+    "name": "pixel-art-production/scripts/pixelify.py",
+    "version": "1.0.0",
+    "pillowVersion": "11.3.0",
+    "dependencyLock": "Pillow==11.3.0"
+  },
+  "source": {
+    "path": "../dravanic-lance-of-longinus-concept-v2.png",
+    "sha256": "ae7ff5f69686998549ad24a795e35a920db779dddcaf090851e4b745a9e2962b",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB"
+  },
+  "settings": {
+    "targetWidth": 384,
+    "targetHeight": 256,
+    "fit": "contain",
+    "resample": "box",
+    "paletteMethod": "median-cut",
+    "requestedColors": 32,
+    "dither": "none",
+    "alpha": "opaque",
+    "alphaThreshold": 128,
+    "matte": "#081326",
+    "previewScale": 4,
+    "palette": null
+  },
+  "outputs": {
+    "native": {
+      "path": "dravanic-longinus-pixelified-native-384x256-v1.png",
+      "width": 384,
+      "height": 256,
+      "mode": "RGBA",
+      "actualColors": 32,
+      "sha256": "7c209b333e3ff3563dfbf4511a73a53bb75d9df8198010aa6fd5fef3e2610827"
+    },
+    "preview": {
+      "path": "dravanic-longinus-pixelified-preview-4x-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "actualColors": 32,
+      "sha256": "c3b085433be10589f171b9c5296ff19351476d214695a1bebb5ef1e28cef7214"
+    }
+  },
+  "claim": "Mechanically pixelified from the recorded raster source; not hand-pixeled or pixel-authored."
+}
