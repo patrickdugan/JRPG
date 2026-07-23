@@ -1,0 +1,115 @@
+{
+  "assetId": "dravanic-vampire-priest-animation-preview-v1",
+  "status": "review-quality-generated-animation-concepts",
+  "runtimeIntegration": "not-integrated",
+  "grid": {
+    "columns": 6,
+    "rows": 4,
+    "cellWidth": 256,
+    "cellHeight": 256,
+    "rowOrder": [
+      "run",
+      "jump",
+      "basic-attack",
+      "signature-attack"
+    ]
+  },
+  "timing": [
+    {
+      "action": "run",
+      "durationsMs": [
+        90,
+        75,
+        75,
+        90,
+        75,
+        75
+      ],
+      "repeats": 2,
+      "finalHoldMs": 120
+    },
+    {
+      "action": "jump",
+      "durationsMs": [
+        140,
+        90,
+        110,
+        155,
+        110,
+        150
+      ],
+      "repeats": 1,
+      "finalHoldMs": 220
+    },
+    {
+      "action": "basic-attack",
+      "durationsMs": [
+        150,
+        140,
+        85,
+        105,
+        105,
+        175
+      ],
+      "repeats": 1,
+      "finalHoldMs": 260
+    },
+    {
+      "action": "signature-attack",
+      "durationsMs": [
+        190,
+        170,
+        90,
+        90,
+        180,
+        230
+      ],
+      "repeats": 1,
+      "finalHoldMs": 420
+    }
+  ],
+  "characters": [
+    {
+      "id": "dravanic",
+      "signature": "holy Longinus power",
+      "sheet": {
+        "path": "dravanic-longinus-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "259ba8f2a076f8f77089afb66373b645807f4c58a2ab28f22ca05ab9368aa972",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "dravanic-longinus-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "406c898cc0bd86da7fd9f611fa5bd4719215d39756ded3e7678927b2b76f9d75"
+      }
+    },
+    {
+      "id": "vampire-priest",
+      "signature": "red-eyed bloodlust",
+      "sheet": {
+        "path": "vampire-priest-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "fcf665aec826b849db69f3009ef25065f9df36f0fea4cbfee93ad4d15b296929",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "vampire-priest-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "6ca2d2a42bfc882af7140191609cff5173bb812e952f5cb8af22ec37a2b0176c"
+      }
+    }
+  ],
+  "notes": [
+    "GIFs are deterministic previews cropped from the 6x4 sheets.",
+    "These generated concepts do not replace the canonical 48x64 runtime atlas."
+  ]
+}
