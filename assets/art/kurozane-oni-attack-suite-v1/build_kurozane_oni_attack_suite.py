@@ -347,6 +347,42 @@ def source_record(relative_path: str) -> dict[str, Any]:
         }
 
 
+def build_source_segment_frames(
+    segment: dict[str, Any],
+    board_configs: dict[str, dict[str, Any]],
+    boards: dict[str, Image.Image],
+    minimum_component_pixels: int,
+    sliver_aspect_ratio: float,
+    minimum_sliver_height: int,
+) -> list[Image.Image]:
+    board_config = board_configs[segment["board"]]
+    board = boards[segment["board"]]
+    frames: list[Image.Image] = []
+    for column in range(board_config["columns"]):
+        cell = crop_grid_cell(
+            board,
+            column,
+            segment["row"],
+            board_config["cellWidth"],
+            board_config["cellHeight"],
+        )
+        if board_config["fitMode"] == "fixed-cell":
+            frame = fixed_cell_frame(cell)
+        elif board_config["fitMode"] == "trim-fit":
+            frame = trim_fit_frame(cell, board_config["maximumExtent"])
+        else:
+            raise ValueError(f"Unknown fit mode {board_config['fitMode']}")
+        frames.append(
+            remove_small_alpha_components(
+                frame,
+                minimum_component_pixels,
+                sliver_aspect_ratio,
+                minimum_sliver_height,
+            )
+        )
+    return frames
+
+
 def build_artifacts() -> dict[str, bytes]:
     config = load_config()
     board_configs = config["sources"]["boards"]
@@ -369,30 +405,16 @@ def build_artifacts() -> dict[str, bytes]:
         clip_start = len(unquantized_frames)
         clip_frame_index = 0
         for segment in clip["sourceSegments"]:
-            board_config = board_configs[segment["board"]]
-            board = boards[segment["board"]]
-            for column in range(board_config["columns"]):
-                cell = crop_grid_cell(
-                    board,
-                    column,
-                    segment["row"],
-                    board_config["cellWidth"],
-                    board_config["cellHeight"],
-                )
-                if board_config["fitMode"] == "fixed-cell":
-                    frame = fixed_cell_frame(cell)
-                elif board_config["fitMode"] == "trim-fit":
-                    frame = trim_fit_frame(cell, board_config["maximumExtent"])
-                else:
-                    raise ValueError(f"Unknown fit mode {board_config['fitMode']}")
-                unquantized_frames.append(
-                    remove_small_alpha_components(
-                        frame,
-                        minimum_component_pixels,
-                        sliver_aspect_ratio,
-                        minimum_sliver_height,
-                    )
-                )
+            segment_frames = build_source_segment_frames(
+                segment,
+                board_configs,
+                boards,
+                minimum_component_pixels,
+                sliver_aspect_ratio,
+                minimum_sliver_height,
+            )
+            for frame in segment_frames:
+                unquantized_frames.append(frame)
                 frame_metadata.append(
                     {
                         "clipId": clip["id"],
@@ -409,8 +431,20 @@ def build_artifacts() -> dict[str, bytes]:
             )
         clip_ranges[clip["id"]] = (clip_start, len(unquantized_frames))
 
+    stable_palette_frames = [
+        frame
+        for segment in config["palette"]["stableSeedSegments"]
+        for frame in build_source_segment_frames(
+            segment,
+            board_configs,
+            boards,
+            minimum_component_pixels,
+            sliver_aspect_ratio,
+            minimum_sliver_height,
+        )
+    ]
     palette = palette_seed(
-        unquantized_frames,
+        stable_palette_frames,
         config["palette"]["visibleColorCeiling"],
     )
     frames = [apply_bounded_palette(frame, palette) for frame in unquantized_frames]

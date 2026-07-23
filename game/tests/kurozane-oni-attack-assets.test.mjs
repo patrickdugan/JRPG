@@ -53,6 +53,11 @@ test('Kurozane Oni attack kit preserves geometry and honest provenance', async (
   assert.deepEqual(manifest.combat.alphaValues, [0, 255]);
   assert.equal(manifest.safety.graphicGore, false);
   assert.equal(manifest.safety.chestOpeningIsMechanical, true);
+  assert.equal(source.palette.stableSeedSegments.length, 6);
+  assert.deepEqual(
+    source.combat.clips.find(({ id }) => id === 'oni-mouth-cannon').sourceSegments,
+    [{ board: 'mouth-cannon-v2', row: 0 }],
+  );
 });
 
 
@@ -97,11 +102,20 @@ test('Kurozane Oni clips expose the requested attacks and release events', async
   assert.deepEqual(
     clips.get('oni-mouth-cannon').events.map(({ name, frameIndex }) => [name, frameIndex]),
     [
-      ['beamCharge', 2],
-      ['beamDamageStart', 3],
-      ['beamDamageSustain', 4],
-      ['beamDamageEnd', 5],
+      ['preflashFlickerOn', 1],
+      ['preflashFlickerOff', 2],
+      ['preflashBulge', 3],
+      ['beamColumnDamage', 4],
+      ['beamSnapOff', 5],
     ],
+  );
+  assert.deepEqual(
+    clips.get('oni-mouth-cannon').frameDurationsMs,
+    [160, 55, 45, 70, 60, 180],
+  );
+  assert.deepEqual(
+    clips.get('oni-mouth-cannon').phases,
+    ['brace-dark', 'flicker-on', 'flicker-off', 'preflash-bulge', 'instant-column', 'snap-off'],
   );
   const barrage = clips.get('oni-chest-spiral-barrage');
   assert.equal(barrage.frameDurationsMs.length, 12);

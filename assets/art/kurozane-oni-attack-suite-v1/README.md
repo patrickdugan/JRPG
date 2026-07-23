@@ -8,11 +8,17 @@ player-readable Oni attack clips:
 | `oni-gauntlet-swipes` | 6 | 870 ms | Two discrete swipe hits |
 | `oni-predator-jump` | 6 | 920 ms | Runtime-owned jump and landing shockwave |
 | `oni-spear-wheel` | 6 | 890 ms | Three spear-spin damage pulses |
-| `oni-mouth-cannon` | 6 | 1,250 ms | Charge, beam start, sustain, burnout |
+| `oni-mouth-cannon` | 6 | 570 ms | Flicker on/off, pre-flash bulge, instant column, snap-off |
 | `oni-chest-spiral-barrage` | 12 | 2,350 ms | Mechanical plate opening, three fireball launches, radial burst, relock |
 
 The chest opening is mechanical armor movement, not a wound. The source and
 runtime contracts explicitly prohibit graphic gore.
+
+The revised mouth cannon is deliberately not a sustained laser or fireball. Its
+tell flickers, briefly disappears, swells just outside the menpo, then becomes a
+single hard-edged horizontal column for one 60 ms active frame before snapping
+off. Palette generation remains pinned to the original v1 source segments so
+mouth-cannon revisions cannot recolor unrelated clips.
 
 ## Runtime geometry
 

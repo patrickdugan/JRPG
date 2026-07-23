@@ -13,11 +13,11 @@
   "build": {
     "builder": {
       "path": "build_kurozane_oni_attack_suite.py",
-      "sha256": "75c14df22a0a126172d9db20404357c829105b3029e453900cabcf21bbb3c15a"
+      "sha256": "9bbf04c1e3ab6541189ac7679b8fc746dcadca7d9e09c552a25b112341beb56e"
     },
     "sourceContract": {
       "path": "kurozane-oni-attack-suite.source.json",
-      "sha256": "59391f3d23fd2731d9f161d4055fdb5061e64e0a8df31c0291414fa136314938"
+      "sha256": "1f6bbbc96a0e5807a53ecfe870ba321a4de2250079acde7031fbcfe03114d435"
     },
     "pillowVersion": "11.3.0",
     "resampling": "BOX",
@@ -40,6 +40,22 @@
       "mode": "RGBA",
       "sha256": "2a20dc16b774dbf809d55c26559a43a3c8c4252b80023b3feddba0aa68e56929",
       "bytes": 1104326
+    },
+    {
+      "path": "sources/kurozane-oni-mouth-cannon-chroma-source-v2.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "sha256": "4e12364fba49e9637a0904ce2e62a4dd06fb4e499a6b2b15a92b447dc565ef77",
+      "bytes": 2072739
+    },
+    {
+      "path": "sources/kurozane-oni-mouth-cannon-source-v2.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "3c140378e6caa7276a8f9941a30a9b535fdf9025aa038ed0465cd52eca3e3be0",
+      "bytes": 1112046
     },
     {
       "path": "sources/kurozane-oni-chest-spiral-chroma-source-v1.png",
@@ -250,58 +266,66 @@
         "state": "oni-armor",
         "sourceSegments": [
           {
-            "board": "four-attacks",
-            "row": 3
+            "board": "mouth-cannon-v2",
+            "row": 0
           }
         ],
         "frameDurationsMs": [
-          220,
-          220,
           160,
-          90,
-          300,
-          260
+          55,
+          45,
+          70,
+          60,
+          180
         ],
         "phases": [
-          "ready",
-          "brace",
-          "charge",
-          "beam-start",
-          "beam-sustain",
-          "burnout"
+          "brace-dark",
+          "flicker-on",
+          "flicker-off",
+          "preflash-bulge",
+          "instant-column",
+          "snap-off"
         ],
         "anchorProfile": "oni-grounded",
         "events": [
           {
-            "name": "beamCharge",
+            "name": "preflashFlickerOn",
+            "frameIndex": 1,
+            "anchor": [
+              61,
+              65
+            ]
+          },
+          {
+            "name": "preflashFlickerOff",
             "frameIndex": 2,
             "anchor": [
-              60,
-              67
+              61,
+              65
             ]
           },
           {
-            "name": "beamDamageStart",
+            "name": "preflashBulge",
             "frameIndex": 3,
             "anchor": [
-              29,
-              68
+              51,
+              65
             ]
           },
           {
-            "name": "beamDamageSustain",
+            "name": "beamColumnDamage",
             "frameIndex": 4,
             "anchor": [
               18,
-              68
+              65
             ]
           },
           {
-            "name": "beamDamageEnd",
+            "name": "beamSnapOff",
             "frameIndex": 5,
             "anchor": [
-              60,
-              67
+              61,
+              65
             ]
           }
         ]
@@ -1272,23 +1296,23 @@
           160,
           160
         ],
-        "rawRgbaSha256": "cff1047629aa0816c4ded4c2f70d3a2b17c83c89163a7c4ca8d0348046fcb0d4",
+        "rawRgbaSha256": "feed876a90edd8b4d7b2434233131c2a8c503746868008b8617545a7b227eb44",
         "alphaBounds": [
-          50,
-          13,
-          127,
-          122
+          54,
+          45,
+          140,
+          147
         ],
         "transparentGutter": {
-          "left": 50,
-          "top": 13,
-          "right": 33,
-          "bottom": 38
+          "left": 54,
+          "top": 45,
+          "right": 20,
+          "bottom": 13
         },
         "clipId": "oni-mouth-cannon",
         "frameIndex": 0,
-        "phase": "ready",
-        "durationMs": 220,
+        "phase": "brace-dark",
+        "durationMs": 160,
         "state": "oni-armor",
         "anchorProfile": "oni-grounded",
         "pivot": [
@@ -1315,66 +1339,23 @@
           160,
           160
         ],
-        "rawRgbaSha256": "7a265544bf3e121306463b35f8aef8fe419fbafc9aee82963d16fd7297fb2f65",
+        "rawRgbaSha256": "e456c0a0ced1de29dea02d95ffa289b0cd5c08b35792ba5c6e36ca287cd4eb36",
         "alphaBounds": [
-          36,
-          10,
-          115,
-          122
+          49,
+          45,
+          134,
+          147
         ],
         "transparentGutter": {
-          "left": 36,
-          "top": 10,
-          "right": 45,
-          "bottom": 38
+          "left": 49,
+          "top": 45,
+          "right": 26,
+          "bottom": 13
         },
         "clipId": "oni-mouth-cannon",
         "frameIndex": 1,
-        "phase": "brace",
-        "durationMs": 220,
-        "state": "oni-armor",
-        "anchorProfile": "oni-grounded",
-        "pivot": [
-          80,
-          146
-        ],
-        "foot": [
-          80,
-          151
-        ],
-        "hurtBounds": [
-          39,
-          14,
-          82,
-          142
-        ],
-        "events": []
-      },
-      {
-        "id": "oni-mouth-cannon:2",
-        "atlasRect": [
-          320,
-          480,
-          160,
-          160
-        ],
-        "rawRgbaSha256": "09fa023d08482aeb3c267970c4aa450bc6032ff1732c449f5ea18af1823d64a6",
-        "alphaBounds": [
-          20,
-          19,
-          96,
-          124
-        ],
-        "transparentGutter": {
-          "left": 20,
-          "top": 19,
-          "right": 64,
-          "bottom": 36
-        },
-        "clipId": "oni-mouth-cannon",
-        "frameIndex": 2,
-        "phase": "charge",
-        "durationMs": 160,
+        "phase": "flicker-on",
+        "durationMs": 55,
         "state": "oni-armor",
         "anchorProfile": "oni-grounded",
         "pivot": [
@@ -1393,11 +1374,63 @@
         ],
         "events": [
           {
-            "name": "beamCharge",
+            "name": "preflashFlickerOn",
+            "frameIndex": 1,
+            "anchor": [
+              61,
+              65
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oni-mouth-cannon:2",
+        "atlasRect": [
+          320,
+          480,
+          160,
+          160
+        ],
+        "rawRgbaSha256": "ac77857f992743b34965ea07497dc5b66ada1dac70ccd42fa434c0d539db8006",
+        "alphaBounds": [
+          47,
+          45,
+          131,
+          147
+        ],
+        "transparentGutter": {
+          "left": 47,
+          "top": 45,
+          "right": 29,
+          "bottom": 13
+        },
+        "clipId": "oni-mouth-cannon",
+        "frameIndex": 2,
+        "phase": "flicker-off",
+        "durationMs": 45,
+        "state": "oni-armor",
+        "anchorProfile": "oni-grounded",
+        "pivot": [
+          80,
+          146
+        ],
+        "foot": [
+          80,
+          151
+        ],
+        "hurtBounds": [
+          39,
+          14,
+          82,
+          142
+        ],
+        "events": [
+          {
+            "name": "preflashFlickerOff",
             "frameIndex": 2,
             "anchor": [
-              60,
-              67
+              61,
+              65
             ]
           }
         ]
@@ -1410,23 +1443,23 @@
           160,
           160
         ],
-        "rawRgbaSha256": "c1b25befaa15b5a1359e74851e1eeb3e57fef2b11ca6f960b767a0bf0c03e746",
+        "rawRgbaSha256": "158b7e84e7a1345eefa82b49b0fc90e3d22adfce0b5b42cae1b2e410e63b9f48",
         "alphaBounds": [
-          2,
-          24,
-          158,
-          125
+          44,
+          44,
+          128,
+          147
         ],
         "transparentGutter": {
-          "left": 2,
-          "top": 24,
-          "right": 2,
-          "bottom": 35
+          "left": 44,
+          "top": 44,
+          "right": 32,
+          "bottom": 13
         },
         "clipId": "oni-mouth-cannon",
         "frameIndex": 3,
-        "phase": "beam-start",
-        "durationMs": 90,
+        "phase": "preflash-bulge",
+        "durationMs": 70,
         "state": "oni-armor",
         "anchorProfile": "oni-grounded",
         "pivot": [
@@ -1445,11 +1478,11 @@
         ],
         "events": [
           {
-            "name": "beamDamageStart",
+            "name": "preflashBulge",
             "frameIndex": 3,
             "anchor": [
-              29,
-              68
+              51,
+              65
             ]
           }
         ]
@@ -1462,23 +1495,23 @@
           160,
           160
         ],
-        "rawRgbaSha256": "03f4b631eb8561ee27857b30f7d89b174bbdae0b3f4f44e50c7c02ed2921ea9f",
+        "rawRgbaSha256": "8976ba406c9aedd2c2f6cbcacc631f7d4bc7510d8cb3ae1901bb3ad8f03b9d0c",
         "alphaBounds": [
-          2,
-          20,
-          136,
-          126
+          7,
+          44,
+          149,
+          147
         ],
         "transparentGutter": {
-          "left": 2,
-          "top": 20,
-          "right": 24,
-          "bottom": 34
+          "left": 7,
+          "top": 44,
+          "right": 11,
+          "bottom": 13
         },
         "clipId": "oni-mouth-cannon",
         "frameIndex": 4,
-        "phase": "beam-sustain",
-        "durationMs": 300,
+        "phase": "instant-column",
+        "durationMs": 60,
         "state": "oni-armor",
         "anchorProfile": "oni-grounded",
         "pivot": [
@@ -1497,11 +1530,11 @@
         ],
         "events": [
           {
-            "name": "beamDamageSustain",
+            "name": "beamColumnDamage",
             "frameIndex": 4,
             "anchor": [
               18,
-              68
+              65
             ]
           }
         ]
@@ -1514,23 +1547,23 @@
           160,
           160
         ],
-        "rawRgbaSha256": "33adc75b9f45fe0563ea101eaed787858bfa77a24a0747d0b46486c6f9daf4d0",
+        "rawRgbaSha256": "5055378bb4f172c0b5dbdf8705a5b7a2faa854d59e39a152e0c1804da555e400",
         "alphaBounds": [
-          47,
-          24,
-          124,
-          126
+          55,
+          45,
+          141,
+          147
         ],
         "transparentGutter": {
-          "left": 47,
-          "top": 24,
-          "right": 36,
-          "bottom": 34
+          "left": 55,
+          "top": 45,
+          "right": 19,
+          "bottom": 13
         },
         "clipId": "oni-mouth-cannon",
         "frameIndex": 5,
-        "phase": "burnout",
-        "durationMs": 260,
+        "phase": "snap-off",
+        "durationMs": 180,
         "state": "oni-armor",
         "anchorProfile": "oni-grounded",
         "pivot": [
@@ -1549,11 +1582,11 @@
         ],
         "events": [
           {
-            "name": "beamDamageEnd",
+            "name": "beamSnapOff",
             "frameIndex": 5,
             "anchor": [
-              60,
-              67
+              61,
+              65
             ]
           }
         ]
@@ -2155,8 +2188,8 @@
       "mode": "P",
       "format": "GIF",
       "frameCount": 36,
-      "sha256": "cd6eb55158faf8e625ea3bc7850c32574afc2dc49c69be05aa626afb6a505bd9",
-      "bytes": 722678
+      "sha256": "5c70ff779e63d316df634d4e925eda8b4208a3f26f244c388955154ddbdd7f8e",
+      "bytes": 721552
     },
     "kurozane-oni-attack-atlas-v1.png": {
       "width": 960,
@@ -2164,8 +2197,8 @@
       "mode": "RGBA",
       "format": "PNG",
       "frameCount": 1,
-      "sha256": "f83c6478148d464da6a8b754803a66d93e7ffadabf7fdb10e0a9330d500defce",
-      "bytes": 469425
+      "sha256": "b923a10b0e6d627642240223eb3d1915f91ab2a6fcd23c8d2f0ef788150d32c1",
+      "bytes": 468182
     },
     "kurozane-oni-attack-contact-sheet-v1.png": {
       "width": 1920,
@@ -2173,8 +2206,8 @@
       "mode": "RGB",
       "format": "PNG",
       "frameCount": 1,
-      "sha256": "bb9528d50d3c263aab837226c0cbdf6d9f1697d39c39737fb3ec8116743d04b7",
-      "bytes": 578113
+      "sha256": "6e7365999a648b6feecfc1dd479c1403c4cd288849f813f79a27b513042b0a45",
+      "bytes": 576882
     },
     "kurozane-oni-chest-spiral-barrage-v1.gif": {
       "width": 480,
@@ -2200,8 +2233,8 @@
       "mode": "P",
       "format": "GIF",
       "frameCount": 6,
-      "sha256": "1eb6116201873b1eff054f50c711d28f7c2e0a40ddc1a4bdca9746717570a06d",
-      "bytes": 119333
+      "sha256": "713d62c99dbe3fbe683bc473992cd50b3a44abf438744f3a7fb2e4c9276f7555",
+      "bytes": 118207
     },
     "kurozane-oni-predator-jump-v1.gif": {
       "width": 480,

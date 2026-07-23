@@ -18,7 +18,15 @@
     "alphaPolicy": "binary threshold at 128 after source chroma-key removal",
     "minimumComponentPixels": 40,
     "sliverAspectRatio": 3.0,
-    "minimumSliverHeight": 20
+    "minimumSliverHeight": 20,
+    "stableSeedSegments": [
+      {"board": "four-attacks", "row": 0},
+      {"board": "four-attacks", "row": 1},
+      {"board": "four-attacks", "row": 2},
+      {"board": "four-attacks", "row": 3},
+      {"board": "chest-spiral", "row": 0},
+      {"board": "chest-spiral", "row": 1}
+    ]
   },
   "sources": {
     "boards": {
@@ -32,6 +40,19 @@
         "cellWidth": 256,
         "cellHeight": 256,
         "fitMode": "fixed-cell"
+      },
+      "mouth-cannon-v2": {
+        "chroma": "sources/kurozane-oni-mouth-cannon-chroma-source-v2.png",
+        "alpha": "sources/kurozane-oni-mouth-cannon-source-v2.png",
+        "width": 1536,
+        "height": 1024,
+        "columns": 6,
+        "rows": 4,
+        "cellWidth": 256,
+        "cellHeight": 256,
+        "fitMode": "fixed-cell",
+        "selectedRow": 0,
+        "revisionIntent": "flickering pre-flash, forward bulge, instantaneous hard-edged column, snap-off"
       },
       "chest-spiral": {
         "chroma": "sources/kurozane-oni-chest-spiral-chroma-source-v1.png",
@@ -124,15 +145,16 @@
         "id": "oni-mouth-cannon",
         "atlasStartRow": 3,
         "state": "oni-armor",
-        "sourceSegments": [{"board": "four-attacks", "row": 3}],
-        "frameDurationsMs": [220, 220, 160, 90, 300, 260],
-        "phases": ["ready", "brace", "charge", "beam-start", "beam-sustain", "burnout"],
+        "sourceSegments": [{"board": "mouth-cannon-v2", "row": 0}],
+        "frameDurationsMs": [160, 55, 45, 70, 60, 180],
+        "phases": ["brace-dark", "flicker-on", "flicker-off", "preflash-bulge", "instant-column", "snap-off"],
         "anchorProfile": "oni-grounded",
         "events": [
-          {"name": "beamCharge", "frameIndex": 2, "anchor": [60, 67]},
-          {"name": "beamDamageStart", "frameIndex": 3, "anchor": [29, 68]},
-          {"name": "beamDamageSustain", "frameIndex": 4, "anchor": [18, 68]},
-          {"name": "beamDamageEnd", "frameIndex": 5, "anchor": [60, 67]}
+          {"name": "preflashFlickerOn", "frameIndex": 1, "anchor": [61, 65]},
+          {"name": "preflashFlickerOff", "frameIndex": 2, "anchor": [61, 65]},
+          {"name": "preflashBulge", "frameIndex": 3, "anchor": [51, 65]},
+          {"name": "beamColumnDamage", "frameIndex": 4, "anchor": [18, 65]},
+          {"name": "beamSnapOff", "frameIndex": 5, "anchor": [61, 65]}
         ]
       },
       {
