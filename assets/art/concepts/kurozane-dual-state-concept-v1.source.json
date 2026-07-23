@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kurozane-dual-state-concept-v1",
+  "title": "Shogun Kurozane — Unarmored and Oni Armor",
+  "classification": "AI-generated stylized concept",
+  "productionStatus": "review source; not a pixel-authored runtime asset",
+  "generatedOn": "2026-07-23",
+  "generator": {
+    "surface": "Codex built-in image generation",
+    "mode": "generate with visual references"
+  },
+  "creativeBrief": {
+    "subject": "The same sad, elderly Japanese vampire ruler shown without armor and inside original fictional Oni armor.",
+    "characterRead": "Intelligent, exhausted, formidable, culpable, and nearly unable to imagine himself apart from the office he made indispensable.",
+    "unarmoredRead": "Lean and slightly stooped in repaired black, charcoal, and faded-plum court robes, one hand resting on a closed administrative seal case.",
+    "armoredRead": "Upright inside asymmetrical black-lacquer government machinery: stepped mantle plates, broken registry-tablet geometry, bell bronze, and a narrow red central seam.",
+    "identityLock": "Long narrow aged face, hollow cheekbones, tired wine-red eyes, swept-back iron-gray hair, short gray moustache, and pointed chin beard remain consistent between states.",
+    "constraints": [
+      "Original alternate-history design",
+      "No real clan mon or authentic imperial chrysanthemum",
+      "No copied armor or identifiable ceremonial, sacred, theatrical, or historical mask",
+      "No absolution, glamour pose, wings, throne, gore, text, logo, or watermark"
+    ]
+  },
+  "visualReferences": [
+    {
+      "path": "assets/art/party-portrait-suite-v2/sources/ren-portrait-expressions-source-v2.png",
+      "role": "rendering language and finish only"
+    },
+    {
+      "path": "assets/art/boss-combat-suite/boss-combat-contact-sheet.png",
+      "role": "existing Kurozane bottom-row silhouette and palette language only"
+    }
+  ],
+  "output": {
+    "path": "assets/art/concepts/kurozane-dual-state-concept-v1.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGB",
+    "alphaPolicy": "opaque",
+    "sha256": "806ecc9995b7acd1b598a0d43e1cc0ef3b5a639513c0aa68b9bec305cdacef8b"
+  },
+  "nextProductionStep": "Approve the character identity and armor language, then derive separately authored portrait expressions and deterministic sprite studies."
+}
