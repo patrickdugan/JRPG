@@ -1,0 +1,3763 @@
+{
+  "schemaVersion": 1,
+  "assetId": "late-snes-roster-suite-v1",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated pixel-styled concept",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "promptSetSummary": "Ten grouped source-board prompts: exactly four columns of idle, move, signature, and hurt-defeat poses; compact expressive late-16-bit console JRPG proportions; screen-left facing; flat magenta key; existing costume, weapon, cultural, and monster-family motifs retained.",
+    "designReferences": [
+      "../party-portrait-suite/party-portrait-expressions-contact-sheet.png",
+      "../party-combat-suite/party-combat-actions-contact-sheet.png",
+      "../enemy-animation-suite-v2/enemy-animation-roster-contact-sheet-v2.png",
+      "../enemy-animation-suite-v3/enemy-animation-roster-contact-sheet-v3.png",
+      "../kurozane-final-battle-v1/sources/kurozane-portrait-expressions-chroma-source-v1.png",
+      "../kurozane-final-battle-v1/sources/kurozane-final-battle-keyframes-chroma-source-v1.png"
+    ],
+    "originalityPolicy": "Original fictional designs using broad late-16-bit console JRPG readability traits; no copied franchise sprites, logos, real-person likenesses, or traced poses."
+  },
+  "runtimeAtlas": {
+    "columns": 4,
+    "rows": 1,
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "atlasWidth": 256,
+    "atlasHeight": 64,
+    "minimumTransparentGutter": 2,
+    "maximumContentWidth": 58,
+    "maximumContentHeight": 58,
+    "bottomGutter": 3,
+    "visibleColorCeiling": 24,
+    "resampling": "BOX",
+    "dither": "none",
+    "alphaPolicy": "binary alpha after chroma-key removal",
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "pivot": [
+      32,
+      58
+    ],
+    "foot": [
+      32,
+      61
+    ]
+  },
+  "poseOrder": [
+    "idle",
+    "move",
+    "signature",
+    "hurt-defeat"
+  ],
+  "identityCount": 39,
+  "combatantCount": 36,
+  "bossStateCount": 4,
+  "sourceBoards": [
+    {
+      "boardId": "party-a",
+      "path": "sources/party-a-chroma-source-v1.png",
+      "sha256": "f1b2dbeb220e3bb291cd1512f42d414f2b9fc7906e6bbbbff61682ba1d8e443e",
+      "width": 1254,
+      "height": 1254,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        237,
+        29,
+        237
+      ],
+      "detectedColumnBounds": [
+        0,
+        279,
+        545,
+        966,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        287,
+        570,
+        874,
+        1254
+      ]
+    },
+    {
+      "boardId": "party-b",
+      "path": "sources/party-b-chroma-source-v1.png",
+      "sha256": "770dd39263e4fa541a93d3f431b0a49afc4b28772fc04b9ea25e227b81303e8f",
+      "width": 1448,
+      "height": 1086,
+      "rows": 3,
+      "columns": 4,
+      "keyColor": [
+        239,
+        26,
+        238
+      ],
+      "detectedColumnBounds": [
+        0,
+        345,
+        676,
+        1124,
+        1448
+      ],
+      "detectedRowBounds": [
+        0,
+        362,
+        706,
+        1086
+      ]
+    },
+    {
+      "boardId": "enemy-v2-a",
+      "path": "sources/enemy-v2-a-chroma-source-v1.png",
+      "sha256": "9490ecf84448067692e9a072779331e8f5580fcf5a83eabb10c800099fae15ba",
+      "width": 1254,
+      "height": 1254,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        234,
+        30,
+        233
+      ],
+      "detectedColumnBounds": [
+        0,
+        289,
+        607,
+        936,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        314,
+        627,
+        905,
+        1254
+      ]
+    },
+    {
+      "boardId": "enemy-v2-b",
+      "path": "sources/enemy-v2-b-chroma-source-v1.png",
+      "sha256": "67516b1cb1e2dea793e952822604922000e6560254ffe48289f3fb69494e16e8",
+      "width": 1254,
+      "height": 1254,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        236,
+        27,
+        233
+      ],
+      "detectedColumnBounds": [
+        0,
+        272,
+        571,
+        942,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        314,
+        627,
+        928,
+        1254
+      ]
+    },
+    {
+      "boardId": "enemy-v2-c",
+      "path": "sources/enemy-v2-c-chroma-source-v1.png",
+      "sha256": "d03f46068c7f5f2bee3bed9937424fab22a48f680e24dc38c93d30d3f22e2f14",
+      "width": 1448,
+      "height": 1086,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        237,
+        28,
+        236
+      ],
+      "detectedColumnBounds": [
+        0,
+        283,
+        659,
+        1081,
+        1448
+      ],
+      "detectedRowBounds": [
+        0,
+        272,
+        522,
+        791,
+        1086
+      ]
+    },
+    {
+      "boardId": "enemy-v3-humans",
+      "path": "sources/enemy-v3-humans-chroma-source-v1.png",
+      "sha256": "833dae98329e4745d4f6060219d151879bc82abbe04430fbcc9fae79ab5d6e62",
+      "width": 1402,
+      "height": 1122,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        228,
+        30,
+        224
+      ],
+      "detectedColumnBounds": [
+        0,
+        347,
+        640,
+        1022,
+        1402
+      ],
+      "detectedRowBounds": [
+        0,
+        280,
+        561,
+        791,
+        1122
+      ]
+    },
+    {
+      "boardId": "enemy-v3-beasts-a",
+      "path": "sources/enemy-v3-beasts-a-chroma-source-v1.png",
+      "sha256": "a0135b27ef654721301c80fa7aa2b5f9ec8a01a9d6d99e54d5e61358e68b4d26",
+      "width": 1254,
+      "height": 1254,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        231,
+        28,
+        229
+      ],
+      "detectedColumnBounds": [
+        0,
+        314,
+        620,
+        947,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        325,
+        632,
+        940,
+        1254
+      ]
+    },
+    {
+      "boardId": "enemy-v3-beasts-b",
+      "path": "sources/enemy-v3-beasts-b-chroma-source-v1.png",
+      "sha256": "e9766841bef1154295307860a76f839401e10ac7b60267ab17dc233d8d204c5a",
+      "width": 1402,
+      "height": 1122,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        220,
+        32,
+        228
+      ],
+      "detectedColumnBounds": [
+        0,
+        343,
+        686,
+        1046,
+        1402
+      ],
+      "detectedRowBounds": [
+        0,
+        280,
+        561,
+        836,
+        1122
+      ]
+    },
+    {
+      "boardId": "enemy-v3-plants",
+      "path": "sources/enemy-v3-plants-chroma-source-v1.png",
+      "sha256": "1277514d58f1f33db6a907cf1448faaf4fc998502dd67f1f03a5d21d731c934a",
+      "width": 1536,
+      "height": 1024,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        228,
+        31,
+        222
+      ],
+      "detectedColumnBounds": [
+        0,
+        384,
+        755,
+        1152,
+        1536
+      ],
+      "detectedRowBounds": [
+        0,
+        275,
+        513,
+        768,
+        1024
+      ]
+    },
+    {
+      "boardId": "kurozane-states",
+      "path": "sources/kurozane-states-chroma-source-v1.png",
+      "sha256": "e1cac6325ba0c283460f899028e25c37f5e0d6194b60dca5a23803823a1c95bc",
+      "width": 1254,
+      "height": 1254,
+      "rows": 4,
+      "columns": 4,
+      "keyColor": [
+        234,
+        28,
+        235
+      ],
+      "detectedColumnBounds": [
+        0,
+        270,
+        589,
+        940,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        304,
+        592,
+        872,
+        1254
+      ]
+    }
+  ],
+  "builder": {
+    "path": "build_late_snes_roster_suite.py",
+    "sha256": "676b3c86a73493a99ef88d285bf678a5763a9d2df334bf723c4dcf58cc82d2e3",
+    "deterministic": true
+  },
+  "contactSheet": {
+    "path": "late-snes-roster-contact-sheet-v1.png",
+    "sha256": "fdd1269cbd2f756c40a1a39cf1244a0f25f800412932c8186fb1cd027b4b144b",
+    "width": 1608,
+    "height": 2262
+  },
+  "assets": [
+    {
+      "id": "ren",
+      "name": "Ren",
+      "catalogId": "PTY-001",
+      "group": "party",
+      "signature": "ember-spear-thrust",
+      "sourceBoard": "party-a",
+      "sourceRow": 0,
+      "atlas": "sprites/ren-four-pose-v1.png",
+      "atlasSha256": "74851756d295db0abaaf99fd05f037c0a0d442354e747899e5850966d0f76a3b",
+      "preview": "previews/ren-four-pose-preview-v1.png",
+      "previewSha256": "2afa7e7e3d5248dcc2c590c62838742ee6be2f2072ffc8efc934dede72f5c1f0",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "7f43e1e13f0780ad959986a071fbf2ba3e758089c4c42f2fb884cc0f2b4cf4c1",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            13,
+            3,
+            50,
+            61
+          ],
+          "transparentGutters": {
+            "left": 13,
+            "top": 3,
+            "right": 14,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "5d50620b321073bb06c25833c4255f2117760a9f07a8ad9b920261e2c3849774",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "1c43e71d7011449ddfb97c84178eb7831ec11b43e1231c7e555833cf2040331f",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            33,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 33,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "83e3a32985b9fc81ad4d01e86aad21439adab5c09b0889e5958802ed68073d59",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            18,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 18,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "aya",
+      "name": "Aya",
+      "catalogId": "PTY-002",
+      "group": "party",
+      "signature": "radiance-ward",
+      "sourceBoard": "party-a",
+      "sourceRow": 1,
+      "atlas": "sprites/aya-four-pose-v1.png",
+      "atlasSha256": "01b5fb16e70e05a07b9f4fa4b9750cf7414d6640ac75d1b80aef5a7bb3ed733d",
+      "preview": "previews/aya-four-pose-preview-v1.png",
+      "previewSha256": "a70ce04835742f723ee4c91ffc132d6a738f5c198fbefa5a9cabc5dbd75d5b05",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "9625bc746c830850ea8aa05bb160e57cab9a9ed4fc3f4e1a0f43046efe00b059",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            14,
+            3,
+            49,
+            61
+          ],
+          "transparentGutters": {
+            "left": 14,
+            "top": 3,
+            "right": 15,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "2aa4d539c9fbd3c45838ba507cdd4bb05f84aadd20be62bcd27ba5bd892a20ae",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            3,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 3,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "a1cce8cb694d39c2755d359a829e4a9c04510ec4db79e56511a2aad03acca860",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            24,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 24,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "01c0cc27f26f3a3a550438458322fbc9f24cef72aa997815620d1886b55f9576",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "nikola-drazanic",
+      "name": "Nikola Dražanić",
+      "catalogId": "PTY-003",
+      "group": "party",
+      "signature": "dawn-lance-thrust",
+      "poseMasks": {
+        "hurt-defeat": [
+          [
+            0.0,
+            0.0,
+            0.28,
+            0.42
+          ]
+        ]
+      },
+      "nativePoseMasks": {
+        "hurt-defeat": [
+          [
+            0,
+            0,
+            20,
+            26
+          ]
+        ]
+      },
+      "sourceBoard": "party-a",
+      "sourceRow": 2,
+      "atlas": "sprites/nikola-drazanic-four-pose-v1.png",
+      "atlasSha256": "f30f7252d56463dc06c53aa69bfc333fa524090c737baa3e80d4684d87e85893",
+      "preview": "previews/nikola-drazanic-four-pose-preview-v1.png",
+      "previewSha256": "36b4cff83cb1125c15a6858a03530478d302db11f1f9e4e76e28b01a088d5710",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "ef6683c5ab04d5249c202fc06e8aa5c8229a5463f3eff06880cd48d62f443a67",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            11,
+            3,
+            52,
+            61
+          ],
+          "transparentGutters": {
+            "left": 11,
+            "top": 3,
+            "right": 12,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "040d85b23a2c5ef2456479da4d91297bad76d9e39a249283bedd255e812caad7",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            11,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 11,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "7bd19c6765fe8827c8c18070f218a2819d53be390747fa8e026cb309dea98fac",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            29,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 29,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "1cd10132758fb955099139b8c9656853855671a60f88ef59d18ed050d73ba8e1",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            14,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 14,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "mateus",
+      "name": "Mateus",
+      "catalogId": "PTY-004",
+      "group": "party",
+      "signature": "umbral-cross-slash",
+      "sourceBoard": "party-a",
+      "sourceRow": 3,
+      "atlas": "sprites/mateus-four-pose-v1.png",
+      "atlasSha256": "fd917df450cc23d43a678818236133215c018e744297e5d4a2cbaf0149363493",
+      "preview": "previews/mateus-four-pose-preview-v1.png",
+      "previewSha256": "bfe43c39d08fe3b07691d58297bf51f2cede2aa672bdd04a2b0ec20a2727cee6",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "bf096fbb24dfca27ed915187bb44db6aca62820adf2074bf12af7505a7ce3ca5",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            16,
+            3,
+            48,
+            61
+          ],
+          "transparentGutters": {
+            "left": 16,
+            "top": 3,
+            "right": 16,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "1a4ab12b9dadf6b8659cac1054fe4f2a236f650035cb075670990e686293473b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            3,
+            58,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 3,
+            "right": 6,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "69940f9bab2d8198681d4c13540707739752a1cbafe4fa0633199c515265ca14",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            22,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 22,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "ddf35f3743ea802f81760a393089b1952f14e4cc2c029d4d7cb4f9d689be076e",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            15,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 15,
+            "right": 4,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "genta",
+      "name": "Genta",
+      "catalogId": "PTY-005",
+      "group": "party",
+      "signature": "guarded-maul-crush",
+      "sourceBoard": "party-b",
+      "sourceRow": 0,
+      "atlas": "sprites/genta-four-pose-v1.png",
+      "atlasSha256": "08600cab757229a7aa4b19847f0715756b7e6abe81aab7b0d0ae299e2e39c075",
+      "preview": "previews/genta-four-pose-preview-v1.png",
+      "previewSha256": "2b19ca0667dec7f9c5d272228f8ba1b70988cb79bade9cf862fa60781c6ab4e2",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "33590a11d8de548c1fd80305ee41f827ad30c3dc8fd10a70abc4d0dc6a26aad9",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            4,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 4,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "5a4f7a36828a530990ed59da51b9c56a876ffa4312971333202ae3d6e380bb1d",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            8,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 8,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "141c279ab4f42df65ae632d8e37fe1fdb9b7eb1609f86a62a854b8bdec624bba",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            3,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 3,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "08b69ce27d36c01da360a47295b5ca39c6fd1fe0deedeb91a4fb500e5bf1cd78",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            9,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 9,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku",
+      "catalogId": "PTY-006",
+      "group": "party",
+      "signature": "frost-medicine-sweep",
+      "sourceBoard": "party-b",
+      "sourceRow": 1,
+      "atlas": "sprites/kiku-four-pose-v1.png",
+      "atlasSha256": "9493b1548de34d5a288b62a1eb92348d05dcbb77d4a95b9f61cdc71df6d4600a",
+      "preview": "previews/kiku-four-pose-preview-v1.png",
+      "previewSha256": "5d3840e9766c79ba9fe60c1e8eaf500c1f634cd9481371308b2b0e5d07666390",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "2b0d4137542a07ba8f9b94e8db4565bd79ff6b7da9d6fade69031c426bf751f8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            7,
+            3,
+            57,
+            61
+          ],
+          "transparentGutters": {
+            "left": 7,
+            "top": 3,
+            "right": 7,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "f469670f84cfc1a96713d972df911be1abf72f14af4e7a1c814d89602ff58d60",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "930a1858e00f27b388321d0d189e969800835e908673129a7783a5a2133c1a57",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            22,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 22,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "9b1cfa8776f6ddd032e824b3180e4e8c76ccf50ab9fe1cdbdf5b6eaec95d49b1",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            9,
+            3,
+            54,
+            61
+          ],
+          "transparentGutters": {
+            "left": 9,
+            "top": 3,
+            "right": 10,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "miyo-senda",
+      "name": "Miyo Senda",
+      "catalogId": "PTY-007",
+      "group": "party",
+      "signature": "fourfold-crosswind",
+      "sourceBoard": "party-b",
+      "sourceRow": 2,
+      "atlas": "sprites/miyo-senda-four-pose-v1.png",
+      "atlasSha256": "01bc95dc6924e71183dc90cec73041f54fc35c9a386eee7312030b0b477032d7",
+      "preview": "previews/miyo-senda-four-pose-preview-v1.png",
+      "previewSha256": "39827ccc1395b18b7114c4ffeba438cc56209a02e5a3e928a48bc60bcb4f0cfc",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "319213973aeef41d6abccc071c5d5f7af02a489f43387edf7c72639aeda85439",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            11,
+            3,
+            53,
+            61
+          ],
+          "transparentGutters": {
+            "left": 11,
+            "top": 3,
+            "right": 11,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "72a92ad6a9474eb6b1130bd1a0b916afea16b55cfe77bd92c09abbd0f8ff833b",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            3,
+            58,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 3,
+            "right": 6,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "5f86887b1158f72973fdd725f4da471467b4456496cd40315d0d2ec4c0151d4b",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            21,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 21,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "1140e20560b980f75c4672bd15498dfcfa0521b4e349fef6cca85124c087f01b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            7,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 7,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cinder-hound",
+      "name": "Cinder Hound",
+      "catalogId": "ENM-001",
+      "group": "enemy-v2",
+      "signature": "cinder-overload",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 0,
+      "atlas": "sprites/cinder-hound-four-pose-v1.png",
+      "atlasSha256": "7112969e91438c1266105b6708db74cbab5fe6140b7e7dd720f3b39d92fd6922",
+      "preview": "previews/cinder-hound-four-pose-preview-v1.png",
+      "previewSha256": "55f0bc66764a6b32e3d67662fb67ad7202ad844f1f3edc044cef2d18d3af6427",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "c380563720c947b5414c8809afc5693354cad0005334c2c4686599122e510067",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            23,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 23,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "d7f1881063e001e555559832c31f357ef8912ef5221c3a61c0177e2ec2edbd3b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            34,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 34,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "9bc1ab1ea8e554908c779e50839d5927c8d35137012dbd8d402e1347c3393012",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            26,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 26,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "e14481af961f4b81191789dfd61687671d2764033e33989354069f7c1a3f7ef4",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            33,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 33,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "ash-wisp",
+      "name": "Ash Wisp",
+      "catalogId": "ENM-002",
+      "group": "enemy-v2",
+      "signature": "ash-nova",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 1,
+      "atlas": "sprites/ash-wisp-four-pose-v1.png",
+      "atlasSha256": "eca661fe32d146e2007120bd80571b0b32d61cb2c384682ff075f7fe700e6163",
+      "preview": "previews/ash-wisp-four-pose-preview-v1.png",
+      "previewSha256": "1148d98ddcef9e866a6dfa7c09ca13691ba4261ad0c3b31c322c91267ca310d6",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "e78ae2bb2bdea13588ded669324ab1d952eca505894b8fc202b010d3ff9447ed",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            11,
+            4,
+            53,
+            61
+          ],
+          "transparentGutters": {
+            "left": 11,
+            "top": 4,
+            "right": 11,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "d628e47ec1d3b89f7059e8b08dfb3ca3c92b5abe3abc27c30bea070af2d18b17",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            3,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 3,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "98aba8398935236594f33acc4573723810d6cf22507f43107d5856f46509caa3",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            14,
+            59,
+            59
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 14,
+            "right": 5,
+            "bottom": 5
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "8c0d231eb7d3078f98e19c49e76a88115d3fa6100dc4ea542de431f7af0ba23c",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            9,
+            3,
+            54,
+            61
+          ],
+          "transparentGutters": {
+            "left": 9,
+            "top": 3,
+            "right": 10,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "bell-moth",
+      "name": "Bell Moth",
+      "catalogId": "ENM-003",
+      "group": "enemy-v2",
+      "signature": "bell-resonance",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 2,
+      "atlas": "sprites/bell-moth-four-pose-v1.png",
+      "atlasSha256": "03d0d3df9be1dbafd3ebb97125311725e0be2663b119da0fd49878cf911bced7",
+      "preview": "previews/bell-moth-four-pose-preview-v1.png",
+      "previewSha256": "1ef4dcb303d42b29c5eb619e6ea72a0f6982f4132756445968128cc4bc5be2df",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "fcb5f16a5a8dd185125d94e299d0181ad5d4b595242b6459bb61c67be6aae48c",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            3,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 3,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "3da919489dbcc986c07105f50119587069a90e8814d7dbdb4d8eb78885d4e224",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            9,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 9,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "80fa46057a7ed0d80e8a8b6a7dca1d666667c7f26c7e42892eaec7c85e15f068",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            21,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 21,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "f83aaa1e559f91798d88ae521d6c958f69afd925f210afda064c72d8ab2475c8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            29,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 29,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "tithe-enforcer",
+      "name": "Tithe Enforcer",
+      "catalogId": "ENM-004",
+      "group": "enemy-v2",
+      "signature": "tithe-steel",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 3,
+      "atlas": "sprites/tithe-enforcer-four-pose-v1.png",
+      "atlasSha256": "2f65d81ea3511218d194c444ffd84d7d7bba37b263151597088edf7e16e6baf3",
+      "preview": "previews/tithe-enforcer-four-pose-preview-v1.png",
+      "previewSha256": "91b2f7bf2e90a8a337c661e171a2f53178bd22d8550e0ee65ec91ad77ad1802f",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "cd72b2d4ef77f7058c68ba4041d81820ee798629f719812773a4793040a55d83",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            6,
+            3,
+            57,
+            61
+          ],
+          "transparentGutters": {
+            "left": 6,
+            "top": 3,
+            "right": 7,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "e09edfa162350946aad01c3d61387c4a1d72f2be12ee69c49e2e2a917316e946",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "900dcb1dfda91f13c4c43d9b3ac913b87480b54da6f6f6f8066c3579d5e43a98",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            3,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 3,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "fa2c1588d0445a31b118157d5e92fc7567342d81a8390bb5d401db9f1f43f6f0",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            22,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 22,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "registry-hound",
+      "name": "Registry Hound",
+      "catalogId": "ENM-005",
+      "group": "enemy-v2",
+      "signature": "registry-mark",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 0,
+      "atlas": "sprites/registry-hound-four-pose-v1.png",
+      "atlasSha256": "876a0b0d16bcf0a192175f7064926b2c5d9018413b475fdf91e91ccf41ff95d6",
+      "preview": "previews/registry-hound-four-pose-preview-v1.png",
+      "previewSha256": "3e25ba16d742b69e481f0c592ea05535624395c8cf88550d5859ecfc31c44a26",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "bd7c96a3f217e0af876c6ca3db1e70e57f50ce5e2abd5d40042d42eac89f2643",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            12,
+            3,
+            51,
+            61
+          ],
+          "transparentGutters": {
+            "left": 12,
+            "top": 3,
+            "right": 13,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "eb4daa720249807b4ed5fab279854fe9c48d6ce4ea5dc0435ba4924ebaf45c3c",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            10,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 10,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "08bb03d0d72e176eadf4b9b12607fe349e7da8d9318a3be07ad32b3f5aea2f19",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            4,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 4,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "4b79a2a89cd763fca59dcc104fe0825afa4c0c34c0bcfa557646a1b8d9102d42",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            20,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 20,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "drowned-retainer",
+      "name": "Drowned Retainer",
+      "catalogId": "ENM-006",
+      "group": "enemy-v2",
+      "signature": "undertow-bind",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 1,
+      "atlas": "sprites/drowned-retainer-four-pose-v1.png",
+      "atlasSha256": "6c1cbe0b3544fee6b9b5690d8cb8543df919c95b60164accbd032094ef2ffe1f",
+      "preview": "previews/drowned-retainer-four-pose-preview-v1.png",
+      "previewSha256": "ed8e8e9fdc8cfb7e3d6cb93b81d931047ea28241f4bf9ec04fddf000d4ae6aee",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "a2992c2ea0bafd7b64e4442bbb53aa853d4a450072217dda0f2ccdeffd2757a7",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            7,
+            3,
+            57,
+            61
+          ],
+          "transparentGutters": {
+            "left": 7,
+            "top": 3,
+            "right": 7,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "fbc01ca65235a8aa4e75535b027bc2a81652696b4cae6c21438086fa3e27be2d",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            17,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 17,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "80e2ac0abb169da7db3b3bc7372323703e26fad51920ab77ca82df66fdc21330",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            28,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 28,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "748127f05c27c700d59a7f2a273f5c9ea51326c25ea4e1d4017140fa7ce2fb37",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            19,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 19,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "lantern-leech",
+      "name": "Lantern Leech",
+      "catalogId": "ENM-007",
+      "group": "enemy-v2",
+      "signature": "lantern-drain",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 2,
+      "atlas": "sprites/lantern-leech-four-pose-v1.png",
+      "atlasSha256": "b67b9c66003b744eac8065853abb3c7d20512dfbe9407866a08e1709cba342dd",
+      "preview": "previews/lantern-leech-four-pose-preview-v1.png",
+      "previewSha256": "f4933bca6c7423d227a1975dced8e4b73ff280d80578a511625761849af8a7d9",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "40488b33841bebbeeadc8fa6391412d0c7a7002a3ad1bc9b0384d1c3c8f74879",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            4,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 4,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "f504f1033ce47dcd49f967a7d7550b2ade83a62715e7ec273c6177ec0650b751",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "4ffe5e808f30f7b2fb843990be4cc06cc0b8bae689291778a270f6fd19c0384b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            22,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 22,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "f9b71c3459aafcd0e0da8241438ed4f7b5bc7b09d6a2b9da8d0a4545e3c7d083",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            33,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 33,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "salt-warden",
+      "name": "Salt Warden",
+      "catalogId": "ENM-008",
+      "group": "enemy-v2",
+      "signature": "salt-rampart",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 3,
+      "atlas": "sprites/salt-warden-four-pose-v1.png",
+      "atlasSha256": "29403fb5346a9130a8f6b56ffd72d306b4b077874b6acd9bc42b2b8194800d09",
+      "preview": "previews/salt-warden-four-pose-preview-v1.png",
+      "previewSha256": "eb510c8495d71edbf1935a043a5bb69a9983c50c41133474dd9da3ecda1d85c7",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "76095b018c96d80c41afe0b9e06e68c2f9a74161a1252351bd6d831700c3bd77",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            15,
+            3,
+            48,
+            61
+          ],
+          "transparentGutters": {
+            "left": 15,
+            "top": 3,
+            "right": 16,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "23bde58a94938e5aef3ad751e8a5d5a9b0eb98d24d470a144380400a9bb16462",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            8,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 8,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "8310d43b8e7adeab6cedd991fab5028f880c40e40e4a7b6ab6d355d02aff285b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            15,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 15,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "d3fa27c5975357ef8b3476973575110efe785a97598ffda96333b74e42026870",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            23,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 23,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "ashen-spearman",
+      "name": "Ashen Spearman",
+      "catalogId": "ENM-009",
+      "group": "enemy-v2",
+      "signature": "ash-lane-charge",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 0,
+      "atlas": "sprites/ashen-spearman-four-pose-v1.png",
+      "atlasSha256": "6ea9ab364f67b76f397f2094af6ff2ec710c9601f1d6490975ea7be2bffd7cbc",
+      "preview": "previews/ashen-spearman-four-pose-preview-v1.png",
+      "previewSha256": "5492269d65f823d3ec0b7714538059d89af8422ebd95e16296be532a0ea47a6c",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "30c6bfa1f0edc445429d4cb02235910b5501b982c07ccecddf9c6b36359505c4",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            15,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 15,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "5722e0eec919e67c7adfc257eff6e7a5d967187f1ec71b8a12871d68b96ce3f0",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            27,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 27,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "bbb5ad07773cf5785589d1da42bee32959d9175211b60390478bca0167fc6dab",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            45,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 45,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "7ab19d5f66947743820cf2eb247c374122907bcdc717ef24b6c04eae55412ced",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            36,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 36,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "ashen-banner-guard",
+      "name": "Ashen Banner Guard",
+      "catalogId": "ENM-010",
+      "group": "enemy-v2",
+      "signature": "banner-wall",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 1,
+      "atlas": "sprites/ashen-banner-guard-four-pose-v1.png",
+      "atlasSha256": "75633c20c571f64dee0b1021f88eff0311ecc35779c07655a7e87967c5ed5ba3",
+      "preview": "previews/ashen-banner-guard-four-pose-preview-v1.png",
+      "previewSha256": "54e2b66f7852688d7d726ea2a16fddcb91d3dba06eb19a117cbe7a4f46c2ba42",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "12aff0ac1bba18cab7adae9611923079cb5e6b501bec95c9d4e9a9a1711af777",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            13,
+            3,
+            50,
+            61
+          ],
+          "transparentGutters": {
+            "left": 13,
+            "top": 3,
+            "right": 14,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "f9d13757b45d94c418e149dd9813715337c5a32130e691a49c82c59df9b12431",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            21,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 21,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "ead693753119b80655336afa176406cf9d75dde73adec5d67e79237c3b45080c",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            13,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 13,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "5dceeb4e385974ade4da538d4005659fdae92efb561fcb61216e13b83d39819a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            42,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 42,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "forge-thrall",
+      "name": "Forge Thrall",
+      "catalogId": "ENM-011",
+      "group": "enemy-v2",
+      "signature": "ember-vent",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 2,
+      "atlas": "sprites/forge-thrall-four-pose-v1.png",
+      "atlasSha256": "55ca71f1979f6ea5a9e798f3a9eaadf03731ef4e89f48a547b00027fda969e71",
+      "preview": "previews/forge-thrall-four-pose-preview-v1.png",
+      "previewSha256": "ff6b7ccd026257c060c36503b85a12f19989a418065fd99e33be095385b4f1af",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "49ccdfb975390986656d6793271d55ec9b886f88dd3222f3c3f3d128ea83ed0f",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            7,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 7,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "8990cb3ad83382e5e97428b62620309edd0a1ab1006475e199d8dc46c6ab1265",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "fb5ee661678d0d14d09ff7026897553820ca289ed5a2761250ffb06685157f38",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            9,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 9,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "6db5bd5c9650cb33e0fee08acf6a1d68ccb1e428703f57890fa8bb026f1f7680",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            13,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 13,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "bell-scribe",
+      "name": "Bell Scribe",
+      "catalogId": "ENM-012",
+      "group": "enemy-v2",
+      "signature": "docket-mark",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 3,
+      "atlas": "sprites/bell-scribe-four-pose-v1.png",
+      "atlasSha256": "7f82806af005bc2fcde078cb9a8bf001faa193ab0a22b660a0cb1757bed5af4e",
+      "preview": "previews/bell-scribe-four-pose-preview-v1.png",
+      "previewSha256": "ffcd50603c9665b4f522c1785a21d906558469dbe40f35e94a69a37a670bc19d",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "e4ffa9070817decd06bed74887299d0ddaa76ab0abea520ac0c978a52bab65bd",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            3,
+            59,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 3,
+            "right": 5,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "842182e88f410de1f4bbd9c6324a353c9bf4e9643748e7792d367ea68c28c31d",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            13,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 13,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "2354e2e51097cd79013e8f2fa6eb41f869990ee0707710deff26aafababcc06a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            25,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 25,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "5bcdcb1ff2bf955d4c4d7017153e94d505267e821fa17ab3c961d03d15d51b3c",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            29,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 29,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "mourning-ronin",
+      "name": "Mourning Ronin",
+      "catalogId": "HUM-001",
+      "group": "enemy-v3-human",
+      "signature": "last-vow-draw",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 0,
+      "atlas": "sprites/mourning-ronin-four-pose-v1.png",
+      "atlasSha256": "08d8caf53ff03a670e215461ae5c413f2a040b258ed4ecfeaea80c4eb0788561",
+      "preview": "previews/mourning-ronin-four-pose-preview-v1.png",
+      "previewSha256": "901cfd07560d5459e37ff60267abc62a743c2772a8a309e32db27a8db0a97f8c",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "84034e5697c6953c7c664b853fea6ec388b178fc944cd730816d3431fd184e4c",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            3,
+            58,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 3,
+            "right": 6,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "b0c175d9341b50fdc03df7b40bfc5a6f146a15275990273a61f4df88aad5bbc6",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            19,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 19,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "9df834fa12ef45b88d931a716d22c8f821408998ebfc6a4e27cb5a0f04be9010",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            26,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 26,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "d7e5f83b22ccb21eb834521af8688df4bf6f2531eec882d1db0a0e68cd235fb6",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "court-arquebusier",
+      "name": "Court Arquebusier",
+      "catalogId": "HUM-002",
+      "group": "enemy-v3-human",
+      "signature": "ash-match-volley",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 1,
+      "atlas": "sprites/court-arquebusier-four-pose-v1.png",
+      "atlasSha256": "a87a8ecca91f8be949a99c1bdd5118ca8eed66235616962b3c4bf598b1fa619c",
+      "preview": "previews/court-arquebusier-four-pose-preview-v1.png",
+      "previewSha256": "72cb5eb8ba154382afd4559b7dad31e4aaa64c5ea6242fff01c47e445b7ecb0c",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "eed4a369f62b378b54dc4bfa7fd38316051e3c7720297f15e07c75f29a5d469a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            8,
+            3,
+            55,
+            61
+          ],
+          "transparentGutters": {
+            "left": 8,
+            "top": 3,
+            "right": 9,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "b6eaa9067980d2bd76fbef45a45e5417095f8b5663acf2b22df15e17988991c8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "c49ed0d03cdfe32b8a0b3f402e432f0f55b2f122e53a8b7bc60eb8e0622e90e4",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            6,
+            27,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 6,
+            "top": 27,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "70bd18ef0fb6916472dab4780b34bd79c1830f81ca93a2117a511360a5501a0e",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            19,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 19,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "veil-courier",
+      "name": "Veil Courier",
+      "catalogId": "HUM-003",
+      "group": "enemy-v3-human",
+      "signature": "smoke-relay",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 2,
+      "atlas": "sprites/veil-courier-four-pose-v1.png",
+      "atlasSha256": "e48f998f2b69ba49c1365b12e74395b69c81f43120f5947fd86f4062299e30a3",
+      "preview": "previews/veil-courier-four-pose-preview-v1.png",
+      "previewSha256": "05fb9cd84e82312df311661722ba2691b567666dec36d32f84f66387f58af633",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "fd017969566bc35db4fa73945f6f0ae80c407fe8f5a4fcf04c3133b611095da9",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            3,
+            58,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 3,
+            "right": 6,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "1686225ac413ff3ccaf12735b450f37011e41dc1fe600dac59dffefc1063ee6e",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "8c86521123764b5737fc50070147d02158ebadf8672766d37fd44d0f817a1db7",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            27,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 27,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "f0a57bb1980eb5b75ec3a255386ef9e875b3e047a83be2d1d08e952b9976270b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            20,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 20,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "provincial-banner-guard",
+      "name": "Provincial Banner Guard",
+      "catalogId": "HUM-004",
+      "group": "enemy-v3-human",
+      "signature": "banner-wall",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 3,
+      "atlas": "sprites/provincial-banner-guard-four-pose-v1.png",
+      "atlasSha256": "e322cd31b8e7b2d78aba1171f921b3fe9c0cb0f1b159c7eb67bc7199c22d0347",
+      "preview": "previews/provincial-banner-guard-four-pose-preview-v1.png",
+      "previewSha256": "374916524649e11bfb7d5026bfbd916d89d893b0d230fae8e9152b81a6c62046",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "4976af2ffaf0416cfc84d2cf4a24a4eb38eee9d2429b6969ba5691835548265a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            16,
+            3,
+            48,
+            61
+          ],
+          "transparentGutters": {
+            "left": 16,
+            "top": 3,
+            "right": 16,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "a271f02d35d2147f28e2702063a28f07aa3a0ae3cea0020e49ee461489145a52",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            9,
+            3,
+            55,
+            61
+          ],
+          "transparentGutters": {
+            "left": 9,
+            "top": 3,
+            "right": 9,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "2f279058fcf4cf4ff617bcd01ed5a65453b24d1c293a56f720b3f0dab28a856d",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            3,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 3,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "7c773760b98aa22fa6c064024df11c5e9298e07b58d0858e31e4b013ab5ba8a3",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            27,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 27,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "storm-nue",
+      "name": "Storm Nue",
+      "catalogId": "BST-001",
+      "group": "enemy-v3-beast",
+      "signature": "storm-tail",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 0,
+      "atlas": "sprites/storm-nue-four-pose-v1.png",
+      "atlasSha256": "06e3e8ec8c7ba1847fa591cfc2511e28a8350e155047afdcb983053e2e1eafc3",
+      "preview": "previews/storm-nue-four-pose-preview-v1.png",
+      "previewSha256": "3a453b1216d8c31446b90d8a0a8be9e4e305d5c12835cf69b5d00eb7ee4b4a5c",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "5f9ed029dca1ece622105770cb932e4658e84bf7c3ab3c42324af8d897fb3224",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            11,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 11,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "9dc2dc6bfd9139ee9914e9355f6caa08fd86c4858364988499646f359291b67f",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            14,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 14,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "0a688b94c449073b4c0bdd17a9cc9ad9eb1c2fc36a0fbef05d29a05911aab4d4",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            3,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 3,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "4c877c1faade772104cbad17ccbba0c50502cd642acad038d1beb4290c90aa0f",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            27,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 27,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "dream-baku",
+      "name": "Dream Baku",
+      "catalogId": "BST-002",
+      "group": "enemy-v3-beast",
+      "signature": "dream-vacuum",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 1,
+      "atlas": "sprites/dream-baku-four-pose-v1.png",
+      "atlasSha256": "135272ce02ccfd25a3b64ad1d948759f6e97e436ba3dd72398252e1f988b4c11",
+      "preview": "previews/dream-baku-four-pose-preview-v1.png",
+      "previewSha256": "9f89ce5d87e9983157611edd4dd0a49054d9c83a13954f28bc6785755c950c49",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "438951c96333059c2f3530f5b1d06f690511bacee1c7636338ff72c3e3f91178",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            8,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 8,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "1eaedeb7d059ac58fc7818ce839905b8451c71140f820d27e25532dda368008e",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            14,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 14,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "49cbfb24eaf2eab3a9ffd4ecb50b5862156e4ec05c55fb340f07469711a8eef2",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            5,
+            14,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 5,
+            "top": 14,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "ea723960c26c0220ba674ea2fc40d58d1d4b041dc71e4c6e8e052ca8a7897e9f",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            30,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 30,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "twin-tail-nekomata",
+      "name": "Twin-Tail Nekomata",
+      "catalogId": "BST-003",
+      "group": "enemy-v3-beast",
+      "signature": "twin-flame-lash",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 2,
+      "atlas": "sprites/twin-tail-nekomata-four-pose-v1.png",
+      "atlasSha256": "966ab2690a89c884d14a296acde83810e3f52459c4217659ccb4b7eb22bec7d2",
+      "preview": "previews/twin-tail-nekomata-four-pose-preview-v1.png",
+      "previewSha256": "31e2b3ff350799b3eee5d60259092941d8ad22db11168ae1340699f37756e623",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "8efc68b1b66a381069b26114ad471394acfa7ade1a961ddcb358c661b554f2b1",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            3,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 3,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "854ab2bf93c260a017c4683ff84297e1dddcb3505303dc4ff51bfe775b565c46",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            23,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 23,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "b27a85b0285c1f47da31a59f3504d7f57ab552e819ee7d8ab251177471be4848",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            15,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 15,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "5413101b8038462d76c15ed1e334a20d269ae3fd5bc18f061453ed380829861e",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            20,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 20,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "silk-jorogumo",
+      "name": "Silk Jorogumo",
+      "catalogId": "BST-004",
+      "group": "enemy-v3-beast",
+      "signature": "silk-prison",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 3,
+      "atlas": "sprites/silk-jorogumo-four-pose-v1.png",
+      "atlasSha256": "c9159a00d20df58a6f764334b4b71175576d9b6e0492df1a9888e67ed894785a",
+      "preview": "previews/silk-jorogumo-four-pose-preview-v1.png",
+      "previewSha256": "132925d162220fdb60fe7fd31f93dac28df3233b204eb6e452a57dafb793d6a6",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "2a99109be4541d132792cfa0de7760fff79293436970829f4bd47befd5407df8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "3391157c5d9df951b6f4058b68bb5b470c74466f453f364042cd99c40a623074",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            21,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 21,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "bae7ba9b6a523fe94ce55e582a5950c3fe95220f504e9425cc288dd27336ea87",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            19,
+            61,
+            60
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 19,
+            "right": 3,
+            "bottom": 4
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "3fe85084d641dd6c2a3c42d17e871fcb59fc735a389faacdf91c748582f3fd1c",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            33,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 33,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "sickle-weasel",
+      "name": "Sickle Weasel",
+      "catalogId": "BST-005",
+      "group": "enemy-v3-beast",
+      "signature": "crosswind-dash",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 0,
+      "atlas": "sprites/sickle-weasel-four-pose-v1.png",
+      "atlasSha256": "25543dbd0ae495f0270e3fd3e1e7c0f01e426a1c7796d12f83d9db543d96c097",
+      "preview": "previews/sickle-weasel-four-pose-preview-v1.png",
+      "previewSha256": "3c3e99f151139ffbb3c3c20ceca0d9bdeba74ea39b61f3086e1fe8e846f12c28",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "4286dbcc9c954b53b0885c0438fc155273abfd8e1f11c17362f745898684d5c8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            26,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 26,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "878c13eb62d157d8a75b5e1576c67297f51267352a41a655cd8ba871d882d0d0",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            34,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 34,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "6850e25e193be8ee00fac40d85ff823d3e7182ffcbe4012ce96f25273f5a5496",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            28,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 28,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "5ab6dcc8c68a52dfcb9d6f50f5b6cd473c20a0c09cff5838fad9a214735bf97b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            29,
+            59,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 29,
+            "right": 5,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "drum-tanuki",
+      "name": "Drum Tanuki",
+      "catalogId": "BST-006",
+      "group": "enemy-v3-beast",
+      "signature": "belly-drum-quake",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 1,
+      "atlas": "sprites/drum-tanuki-four-pose-v1.png",
+      "atlasSha256": "cc3ac5b99af060b119cd9246cdc19aee0a0a051ba7a8025581485e61baf2688a",
+      "preview": "previews/drum-tanuki-four-pose-preview-v1.png",
+      "previewSha256": "1d54f582cc538456a0facc5dfd26375a5d525cae6f27fa639dff89d980c09c30",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "ef083f2d8ef97a202aed5c2b7b4167f28122b7c5dd5777dbd922eef163815b01",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "b9d4d35fad401bbb24ba8778ba4e6c01bc3ed19d9a41f6221cc40eba056d96d8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            20,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 20,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "97bcf17a45934e4f94aa83ebd75fc97a3208af185e0a11029bb160ec4f4b2b93",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            21,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 21,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "05ece413d72974880ae524f857ecaa304d146f1823f92fdf7ce6edd0907a4aec",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            31,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 31,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "marsh-kappa-beast",
+      "name": "Marsh Kappa-Beast",
+      "catalogId": "BST-007",
+      "group": "enemy-v3-beast",
+      "signature": "shell-surge",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 2,
+      "atlas": "sprites/marsh-kappa-beast-four-pose-v1.png",
+      "atlasSha256": "a1758d9a5f853cbec8547832d61a10f895ec8c2b07a95dd887a39c81e0d31f46",
+      "preview": "previews/marsh-kappa-beast-four-pose-preview-v1.png",
+      "previewSha256": "9c2edd113eb96bff1d133c0a28c4d6a1ec33c086e9991e020f538be4bbf18bd0",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "5f76b860c31d2b235694820ed28755e057567f4ca94cded8187c1f4721871a89",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            15,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 15,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "dcac58a3f1ba44af569d2496893f81ac0eb781864acba77a2cb0f2e09dcf7027",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            24,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 24,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "c1729f9edae4efddcb332a54e29414835707848db62b35585f6b32c9dd033481",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            26,
+            58,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 26,
+            "right": 6,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "4197f3c26c116d76a449ef654f21556437d9a39e2e73d02f35372ca57bee67f8",
+          "visibleColors": 24,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            35,
+            59,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 35,
+            "right": 5,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "ushi-oni-behemoth",
+      "name": "Ushi-Oni Behemoth",
+      "catalogId": "BST-008",
+      "group": "enemy-v3-beast",
+      "signature": "earth-gore-charge",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 3,
+      "atlas": "sprites/ushi-oni-behemoth-four-pose-v1.png",
+      "atlasSha256": "bea17852b1e5abbfc69c5ce6101741c464820d498551aa4c5a44db02bae10bf9",
+      "preview": "previews/ushi-oni-behemoth-four-pose-preview-v1.png",
+      "previewSha256": "7567aa34b86080dba31b949747497b56ce923e316b03697560f6123ad388a89b",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "61e83f64b6745e9eb184cdbd4f324f5b5ac79dbe91a5f262f053a79946e97ee4",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            23,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 23,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "d59656d6c5cea953c3518fe259dc59559eeee15e14b0ac74f0a7b59b7fee44a3",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            28,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 28,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "9901a06399b6dbef70b992f9040066d1404089d2bb5cb19b68df642282332356",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            30,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 30,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "da02d51c9110abdc252d2f7c1fd8ec1058212b7b4a8a8d1ec9cc7712eac143a0",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            33,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 33,
+            "right": 4,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "black-chrysanthemum-nest-woman",
+      "name": "Black Chrysanthemum Nest-Woman",
+      "catalogId": "PLT-001",
+      "group": "enemy-v3-plant",
+      "signature": "black-bloom-devour",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 0,
+      "atlas": "sprites/black-chrysanthemum-nest-woman-four-pose-v1.png",
+      "atlasSha256": "ac52344e22ac994b90858bb2922a0e351e801ffb72e47232d4e41b402f15498f",
+      "preview": "previews/black-chrysanthemum-nest-woman-four-pose-preview-v1.png",
+      "previewSha256": "66bd302b8cfabb538e4f01585ca6dcf21c90dd9350ee9c27570cc490c019d0b3",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "dc8a82e1e7713e9779dda0569a8d8ae2b3f1e70aeeb2a750ce0718295edf9477",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            14,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 14,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "1140c59d086eb727ca14c7b6691638af3355904f1dc4169c9d1d7aeb016ce4bc",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            23,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 23,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "a41e9561880c6b6eb9e2ed2922afd403fcdcb66e7e5828c083d9308785e677fa",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            20,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 20,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "848f55acdc9659b43798d4bbf637827f452d3b4a2b77a5f133036a4d2e815c63",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            25,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 25,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "razor-bamboo-stalker",
+      "name": "Razor Bamboo Stalker",
+      "catalogId": "PLT-002",
+      "group": "enemy-v3-plant",
+      "signature": "razor-canopy",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 1,
+      "atlas": "sprites/razor-bamboo-stalker-four-pose-v1.png",
+      "atlasSha256": "d2b1d145890f59d37cb27b08951e6cdc3184e0add9d3f56fe18a5711cee75a9e",
+      "preview": "previews/razor-bamboo-stalker-four-pose-preview-v1.png",
+      "previewSha256": "b29fe64c9d983487c26f5b55e55edf29c6929f44940e78c5b69ad953788ea076",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "c03588a7bdd8f9ee90002ef2faa4c77d63181aa28be0bdb0c4fb071aabec5dcf",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "c12dfaa0d271260e72f279935fd37affcf055bf22fed2636941a60db84dcc82a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            19,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 19,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "9bed3bc19f3374d5669af3e054156bb357d86fb5f7804a0dcf2798080c896b9d",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            29,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 29,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "9fa9c7117528dbdf8e9d3f889c870bc3744a8d2d96227251a124043a760a3db4",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            29,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 29,
+            "right": 4,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "spider-lily-ambusher",
+      "name": "Spider-Lily Ambusher",
+      "catalogId": "PLT-003",
+      "group": "enemy-v3-plant",
+      "signature": "crimson-pollen-ambush",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 2,
+      "atlas": "sprites/spider-lily-ambusher-four-pose-v1.png",
+      "atlasSha256": "3ad4a4537bec8a08fb7832050fcb38476f9ddf631329b63378be5ab9c7159f88",
+      "preview": "previews/spider-lily-ambusher-four-pose-preview-v1.png",
+      "previewSha256": "e365968654e1c1b9a52e0894fa51913df31fd8bac30c3c980ec40c25d8fd7371",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "56de4e3093f1300704c835e7ce74df799cfb22c7b9757288b814ba1d6ab2d330",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            21,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 21,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "c7a30f90075cc7c2bb81cf42602f73a1bda0e68c8b2e0cddbf68afc3efd0061b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            28,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 28,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "64469eddc3ca4d7b1acec8856e03665b3f9326718f3a5c47379c0019eb16fbc5",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            30,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 30,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "9ad0a649fbbf9a4a4c1ab2bad5fee2cdb4c2ee4daa372156de8e6e4f6b31bc30",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            37,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 37,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "lantern-vine-maw",
+      "name": "Lantern-Vine Maw",
+      "catalogId": "PLT-004",
+      "group": "enemy-v3-plant",
+      "signature": "false-lantern-lure",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 3,
+      "atlas": "sprites/lantern-vine-maw-four-pose-v1.png",
+      "atlasSha256": "93ebb5a43fd0236455a66fca174a0d75d2e8988dafcb446d566d9e6580c564a3",
+      "preview": "previews/lantern-vine-maw-four-pose-preview-v1.png",
+      "previewSha256": "bd0b4f8d093526aa2749c5c43009a0b183f4b1f36f8439c06035161fe8c9c0a0",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "bcc34ba4fe207d96b8f20ea7a7cca255cbde8b47e5865e787c697261d2f718b7",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            12,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 12,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "421b36e2340fb7f3faecc50bf59b7bfe8db4dc8afb5ea74b154910909b5d7a6a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            16,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 16,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "04992f6cb79031c34a3e2cfc97034528cce374d3240180de8321636c78172d34",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            24,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 24,
+            "right": 4,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "367e9760edeb46ec7ff3f08ca3aa0f7178e1980762889bfe85e9ac2fea9f8f18",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            37,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 37,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "kurozane-court-human",
+      "name": "Kurozane — Court Human",
+      "catalogId": "BOS-001-A",
+      "group": "boss",
+      "signature": "crimson-hand-seal",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 0,
+      "atlas": "sprites/kurozane-court-human-four-pose-v1.png",
+      "atlasSha256": "14658886e6c83898ec89b4200e3d591d39a32f78e74de9ab30af38e370ed6085",
+      "preview": "previews/kurozane-court-human-four-pose-preview-v1.png",
+      "previewSha256": "96e7ecd0779c6b7fec9341836287e9be218deff2dbd2e0203ec8674b24d26d0d",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "73c11654602212beb41e99a4ca8afbd82fb9ccc27f2edef1357e9f6f6f2cce55",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            19,
+            3,
+            45,
+            61
+          ],
+          "transparentGutters": {
+            "left": 19,
+            "top": 3,
+            "right": 19,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "e2e6755ff75ceaf2bbb4c31aaeb49f798c4c60fd6a1861dec409fc9d9a1bd8a7",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            6,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 6,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "e87c8cd9447b8da6dc561641cb6f823d6d831dcfd52fcb226a52374631541fa2",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            14,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 14,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "4577fbba3c2c1afec2f7518e747fd92a042988ffba550bf6978de8bd0b1bdf55",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            4,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 4,
+            "right": 4,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "kurozane-oni-armor",
+      "name": "Kurozane — Oni Armor",
+      "catalogId": "BOS-001-B",
+      "group": "boss",
+      "signature": "spear-spin",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 1,
+      "atlas": "sprites/kurozane-oni-armor-four-pose-v1.png",
+      "atlasSha256": "7820c0eeec84d28497c78f8ce610e16efeebd08339e7de8fabc7231ce27c7624",
+      "preview": "previews/kurozane-oni-armor-four-pose-preview-v1.png",
+      "previewSha256": "219e66348fe8e27cfd3e4199395544c94bac06f1c56cd880ccf8a1c1c6b4810a",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "44af654994e01a02bce278795b53a197f0c490b121a6443701757b38b4f04227",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            12,
+            3,
+            51,
+            61
+          ],
+          "transparentGutters": {
+            "left": 12,
+            "top": 3,
+            "right": 13,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "9c5f1ff8ce111cb95316c5e999b4383d324aeda3020c43f0b29537de3ea9e6e8",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            13,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 13,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "3c4bc468522fdc58f28b272cab30a2bcf096899f159aa7d4ca98885ab7d83c9f",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            19,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 19,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "c765dc7b8e40d88f842aa1e1da6362784d5369f339cb5469e3e8f491698e3657",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            6,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 6,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "kurozane-demon-mode",
+      "name": "Kurozane — Demon Mode",
+      "catalogId": "BOS-001-C",
+      "group": "boss",
+      "signature": "mouth-beam-column",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 2,
+      "atlas": "sprites/kurozane-demon-mode-four-pose-v1.png",
+      "atlasSha256": "bde159987f2bf407cc4b84298583a1397f1af59045b0559d68ff0948035f2c63",
+      "preview": "previews/kurozane-demon-mode-four-pose-preview-v1.png",
+      "previewSha256": "eeb699fd4559f8ace0dafa9b32c6c9b010c7f594299abd50de8ac965f87db8b5",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "5ec52bb7baa16a14c4a788f7cfe8a6cb6568165f3ec9293e8bc15cba6371eea1",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            3,
+            59,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 3,
+            "right": 5,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "e9e4b2b0fe8d9aa184508118a5ceb841432f4e2fdc85bfbfdd7a494b79f2fa7a",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            6,
+            60,
+            60
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 6,
+            "right": 4,
+            "bottom": 4
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "9c3405a776988ccd48efbadce321dba90eb8a4dcea2671a1b32127a752d98c66",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            20,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 20,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "7c19acd7abc70f5dc60fee26b6995c06235b8619661bac6a23a259ef6b1551d1",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            6,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 6,
+            "right": 3,
+            "bottom": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "kurozane-ward-broken",
+      "name": "Kurozane — Ward Broken",
+      "catalogId": "BOS-001-D",
+      "group": "boss",
+      "signature": "dying-spear-thrust",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 3,
+      "atlas": "sprites/kurozane-ward-broken-four-pose-v1.png",
+      "atlasSha256": "e9ce9c7616c547e5c5e0146f539e99b544ffe7c87fb36719f0c25b492ff7f1ff",
+      "preview": "previews/kurozane-ward-broken-four-pose-preview-v1.png",
+      "previewSha256": "66d29cf15d4974fa1c2ee99fee6ebabc702c75b80d675d98cefdbf65047cca7c",
+      "frames": [
+        {
+          "pose": "idle",
+          "sha256Rgba": "5179e237c1caf93bacbce9f0405daaf38f8bcd053c9ce69909e34029699e87a1",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            13,
+            3,
+            50,
+            61
+          ],
+          "transparentGutters": {
+            "left": 13,
+            "top": 3,
+            "right": 14,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "move",
+          "sha256Rgba": "74f00dec0dffbc734a4ee9a8a2db56e880b2f991895aa87b987814b0834c3429",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            11,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 11,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "signature",
+          "sha256Rgba": "763bb2c3e034c9f91236f2720faa95b57f2bebe2dc88dabd0b49c0ff1cb8917b",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            4,
+            13,
+            61,
+            61
+          ],
+          "transparentGutters": {
+            "left": 4,
+            "top": 13,
+            "right": 3,
+            "bottom": 3
+          }
+        },
+        {
+          "pose": "hurt-defeat",
+          "sha256Rgba": "7c9ced4ffcb4064d3849a93bbb9088823817026e7dc4fd76e1176916c5a11848",
+          "visibleColors": 23,
+          "binaryAlpha": true,
+          "visibleBounds": [
+            3,
+            14,
+            60,
+            61
+          ],
+          "transparentGutters": {
+            "left": 3,
+            "top": 14,
+            "right": 4,
+            "bottom": 3
+          }
+        }
+      ]
+    }
+  ]
+}

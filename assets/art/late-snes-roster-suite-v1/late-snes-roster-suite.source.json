@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "assetId": "late-snes-roster-suite-v1",
+  "title": "Original Late-16-Bit JRPG Combat Roster",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated pixel-styled concept",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "promptSetSummary": "Ten grouped source-board prompts: exactly four columns of idle, move, signature, and hurt-defeat poses; compact expressive late-16-bit console JRPG proportions; screen-left facing; flat magenta key; existing costume, weapon, cultural, and monster-family motifs retained.",
+    "designReferences": [
+      "../party-portrait-suite/party-portrait-expressions-contact-sheet.png",
+      "../party-combat-suite/party-combat-actions-contact-sheet.png",
+      "../enemy-animation-suite-v2/enemy-animation-roster-contact-sheet-v2.png",
+      "../enemy-animation-suite-v3/enemy-animation-roster-contact-sheet-v3.png",
+      "../kurozane-final-battle-v1/sources/kurozane-portrait-expressions-chroma-source-v1.png",
+      "../kurozane-final-battle-v1/sources/kurozane-final-battle-keyframes-chroma-source-v1.png"
+    ],
+    "originalityPolicy": "Original fictional designs using broad late-16-bit console JRPG readability traits; no copied franchise sprites, logos, real-person likenesses, or traced poses."
+  },
+  "sourceGrid": {
+    "columns": 4,
+    "poseOrder": ["idle", "move", "signature", "hurt-defeat"],
+    "cropPolicy": "Proportional row and column boundaries derived from each source board's actual dimensions."
+  },
+  "runtimeAtlas": {
+    "columns": 4,
+    "rows": 1,
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "atlasWidth": 256,
+    "atlasHeight": 64,
+    "minimumTransparentGutter": 2,
+    "maximumContentWidth": 58,
+    "maximumContentHeight": 58,
+    "bottomGutter": 3,
+    "visibleColorCeiling": 24,
+    "resampling": "BOX",
+    "dither": "none",
+    "alphaPolicy": "binary alpha after chroma-key removal",
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "pivot": [32, 58],
+    "foot": [32, 61]
+  },
+  "poseEvents": [
+    {"pose": "signature", "frameIndex": 2, "event": "signature-impact"},
+    {"pose": "hurt-defeat", "frameIndex": 3, "event": "hurt-or-defeat-hold"}
+  ],
+  "boards": [
+    {
+      "id": "party-a",
+      "source": "sources/party-a-chroma-source-v1.png",
+      "rows": [
+        {"id": "ren", "name": "Ren", "catalogId": "PTY-001", "group": "party", "signature": "ember-spear-thrust"},
+        {"id": "aya", "name": "Aya", "catalogId": "PTY-002", "group": "party", "signature": "radiance-ward"},
+        {
+          "id": "nikola-drazanic",
+          "name": "Nikola Dražanić",
+          "catalogId": "PTY-003",
+          "group": "party",
+          "signature": "dawn-lance-thrust",
+          "poseMasks": {
+            "hurt-defeat": [[0.0, 0.0, 0.28, 0.42]]
+          },
+          "nativePoseMasks": {
+            "hurt-defeat": [[0, 0, 20, 26]]
+          }
+        },
+        {"id": "mateus", "name": "Mateus", "catalogId": "PTY-004", "group": "party", "signature": "umbral-cross-slash"}
+      ]
+    },
+    {
+      "id": "party-b",
+      "source": "sources/party-b-chroma-source-v1.png",
+      "rows": [
+        {"id": "genta", "name": "Genta", "catalogId": "PTY-005", "group": "party", "signature": "guarded-maul-crush"},
+        {"id": "kiku", "name": "Kiku", "catalogId": "PTY-006", "group": "party", "signature": "frost-medicine-sweep"},
+        {"id": "miyo-senda", "name": "Miyo Senda", "catalogId": "PTY-007", "group": "party", "signature": "fourfold-crosswind"}
+      ]
+    },
+    {
+      "id": "enemy-v2-a",
+      "source": "sources/enemy-v2-a-chroma-source-v1.png",
+      "rows": [
+        {"id": "cinder-hound", "name": "Cinder Hound", "catalogId": "ENM-001", "group": "enemy-v2", "signature": "cinder-overload"},
+        {"id": "ash-wisp", "name": "Ash Wisp", "catalogId": "ENM-002", "group": "enemy-v2", "signature": "ash-nova"},
+        {"id": "bell-moth", "name": "Bell Moth", "catalogId": "ENM-003", "group": "enemy-v2", "signature": "bell-resonance"},
+        {"id": "tithe-enforcer", "name": "Tithe Enforcer", "catalogId": "ENM-004", "group": "enemy-v2", "signature": "tithe-steel"}
+      ]
+    },
+    {
+      "id": "enemy-v2-b",
+      "source": "sources/enemy-v2-b-chroma-source-v1.png",
+      "rows": [
+        {"id": "registry-hound", "name": "Registry Hound", "catalogId": "ENM-005", "group": "enemy-v2", "signature": "registry-mark"},
+        {"id": "drowned-retainer", "name": "Drowned Retainer", "catalogId": "ENM-006", "group": "enemy-v2", "signature": "undertow-bind"},
+        {"id": "lantern-leech", "name": "Lantern Leech", "catalogId": "ENM-007", "group": "enemy-v2", "signature": "lantern-drain"},
+        {"id": "salt-warden", "name": "Salt Warden", "catalogId": "ENM-008", "group": "enemy-v2", "signature": "salt-rampart"}
+      ]
+    },
+    {
+      "id": "enemy-v2-c",
+      "source": "sources/enemy-v2-c-chroma-source-v1.png",
+      "rows": [
+        {"id": "ashen-spearman", "name": "Ashen Spearman", "catalogId": "ENM-009", "group": "enemy-v2", "signature": "ash-lane-charge"},
+        {"id": "ashen-banner-guard", "name": "Ashen Banner Guard", "catalogId": "ENM-010", "group": "enemy-v2", "signature": "banner-wall"},
+        {"id": "forge-thrall", "name": "Forge Thrall", "catalogId": "ENM-011", "group": "enemy-v2", "signature": "ember-vent"},
+        {"id": "bell-scribe", "name": "Bell Scribe", "catalogId": "ENM-012", "group": "enemy-v2", "signature": "docket-mark"}
+      ]
+    },
+    {
+      "id": "enemy-v3-humans",
+      "source": "sources/enemy-v3-humans-chroma-source-v1.png",
+      "rows": [
+        {"id": "mourning-ronin", "name": "Mourning Ronin", "catalogId": "HUM-001", "group": "enemy-v3-human", "signature": "last-vow-draw"},
+        {"id": "court-arquebusier", "name": "Court Arquebusier", "catalogId": "HUM-002", "group": "enemy-v3-human", "signature": "ash-match-volley"},
+        {"id": "veil-courier", "name": "Veil Courier", "catalogId": "HUM-003", "group": "enemy-v3-human", "signature": "smoke-relay"},
+        {"id": "provincial-banner-guard", "name": "Provincial Banner Guard", "catalogId": "HUM-004", "group": "enemy-v3-human", "signature": "banner-wall"}
+      ]
+    },
+    {
+      "id": "enemy-v3-beasts-a",
+      "source": "sources/enemy-v3-beasts-a-chroma-source-v1.png",
+      "rows": [
+        {"id": "storm-nue", "name": "Storm Nue", "catalogId": "BST-001", "group": "enemy-v3-beast", "signature": "storm-tail"},
+        {"id": "dream-baku", "name": "Dream Baku", "catalogId": "BST-002", "group": "enemy-v3-beast", "signature": "dream-vacuum"},
+        {"id": "twin-tail-nekomata", "name": "Twin-Tail Nekomata", "catalogId": "BST-003", "group": "enemy-v3-beast", "signature": "twin-flame-lash"},
+        {"id": "silk-jorogumo", "name": "Silk Jorogumo", "catalogId": "BST-004", "group": "enemy-v3-beast", "signature": "silk-prison"}
+      ]
+    },
+    {
+      "id": "enemy-v3-beasts-b",
+      "source": "sources/enemy-v3-beasts-b-chroma-source-v1.png",
+      "rows": [
+        {"id": "sickle-weasel", "name": "Sickle Weasel", "catalogId": "BST-005", "group": "enemy-v3-beast", "signature": "crosswind-dash"},
+        {"id": "drum-tanuki", "name": "Drum Tanuki", "catalogId": "BST-006", "group": "enemy-v3-beast", "signature": "belly-drum-quake"},
+        {"id": "marsh-kappa-beast", "name": "Marsh Kappa-Beast", "catalogId": "BST-007", "group": "enemy-v3-beast", "signature": "shell-surge"},
+        {"id": "ushi-oni-behemoth", "name": "Ushi-Oni Behemoth", "catalogId": "BST-008", "group": "enemy-v3-beast", "signature": "earth-gore-charge"}
+      ]
+    },
+    {
+      "id": "enemy-v3-plants",
+      "source": "sources/enemy-v3-plants-chroma-source-v1.png",
+      "cellInsetYRatio": 0.05,
+      "rows": [
+        {"id": "black-chrysanthemum-nest-woman", "name": "Black Chrysanthemum Nest-Woman", "catalogId": "PLT-001", "group": "enemy-v3-plant", "signature": "black-bloom-devour"},
+        {"id": "razor-bamboo-stalker", "name": "Razor Bamboo Stalker", "catalogId": "PLT-002", "group": "enemy-v3-plant", "signature": "razor-canopy"},
+        {"id": "spider-lily-ambusher", "name": "Spider-Lily Ambusher", "catalogId": "PLT-003", "group": "enemy-v3-plant", "signature": "crimson-pollen-ambush"},
+        {"id": "lantern-vine-maw", "name": "Lantern-Vine Maw", "catalogId": "PLT-004", "group": "enemy-v3-plant", "signature": "false-lantern-lure"}
+      ]
+    },
+    {
+      "id": "kurozane-states",
+      "source": "sources/kurozane-states-chroma-source-v1.png",
+      "rows": [
+        {"id": "kurozane-court-human", "name": "Kurozane — Court Human", "catalogId": "BOS-001-A", "group": "boss", "signature": "crimson-hand-seal"},
+        {"id": "kurozane-oni-armor", "name": "Kurozane — Oni Armor", "catalogId": "BOS-001-B", "group": "boss", "signature": "spear-spin"},
+        {"id": "kurozane-demon-mode", "name": "Kurozane — Demon Mode", "catalogId": "BOS-001-C", "group": "boss", "signature": "mouth-beam-column"},
+        {"id": "kurozane-ward-broken", "name": "Kurozane — Ward Broken", "catalogId": "BOS-001-D", "group": "boss", "signature": "dying-spear-thrust"}
+      ]
+    }
+  ]
+}
