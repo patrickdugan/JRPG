@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "assetId": "enemy-animation-suite-v3",
+  "artifactVersion": "v3",
+  "sharedBuilder": "../enemy-animation-suite-v2/build_enemy_animation_suite_v2.py",
+  "contactSheetName": "enemy-animation-roster-contact-sheet-v3.png",
+  "contactSheetTitle": "ENEMY ANIMATION SUITE V3 - HUMANS, MYTHIC BEASTS, AND LETHAL PLANTS",
+  "title": "Human, Mythic Beast, and Lethal Plant Enemy Animation Suite V3",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated stylized animation concepts",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "originalityPolicy": "Original fictional enemy designs informed by Japanese history, folklore, fauna, and flora; no celebrity likeness, real heraldry, readable sacred text, or borrowed franchise characters."
+  },
+  "sourceGrid": {
+    "columns": 6,
+    "rows": 4,
+    "cropPolicy": "Proportional row and column boundaries derived from each source image's actual dimensions."
+  },
+  "runtimeAtlas": {
+    "columns": 6,
+    "rows": 4,
+    "frameWidth": 160,
+    "frameHeight": 160,
+    "atlasWidth": 960,
+    "atlasHeight": 640,
+    "minimumTransparentGutter": 2,
+    "maximumContentWidth": 152,
+    "maximumContentHeight": 152,
+    "bottomGutter": 4,
+    "visibleColorCeiling": 64,
+    "resampling": "BOX",
+    "dither": "none",
+    "alphaPolicy": "binary threshold at 128 after chroma-key removal",
+    "minimumComponentPixelsAtSourceResolution": 12,
+    "maximumEdgeDebrisPixelsAtSourceResolution": 1600,
+    "edgeDebrisInsetAtSourceResolution": 8,
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "vfxOverflowPolicy": "contained inside the authored frame"
+  },
+  "anchorProfiles": {
+    "human": {
+      "pivot": [80, 146],
+      "foot": [80, 151],
+      "hurtBounds": [40, 14, 80, 138]
+    },
+    "armored-human": {
+      "pivot": [80, 146],
+      "foot": [80, 151],
+      "hurtBounds": [34, 14, 92, 138]
+    },
+    "quadruped": {
+      "pivot": [80, 142],
+      "foot": [80, 151],
+      "hurtBounds": [22, 52, 116, 80]
+    },
+    "broad-beast": {
+      "pivot": [80, 141],
+      "foot": [80, 151],
+      "hurtBounds": [18, 42, 124, 98]
+    },
+    "arachnid": {
+      "pivot": [80, 138],
+      "foot": [80, 151],
+      "hurtBounds": [18, 55, 124, 84]
+    },
+    "serpent-plant": {
+      "pivot": [80, 145],
+      "foot": [80, 151],
+      "hurtBounds": [30, 12, 100, 140]
+    },
+    "rooted-plant": {
+      "pivot": [80, 146],
+      "foot": [80, 151],
+      "hurtBounds": [24, 28, 112, 120]
+    }
+  },
+  "clips": [
+    {
+      "id": "locomotion",
+      "row": 0,
+      "frameDurationsMs": [120, 100, 90, 100, 90, 120],
+      "phases": ["contact", "compression", "passing", "extension", "second-contact", "ready"],
+      "events": []
+    },
+    {
+      "id": "basic-attack",
+      "row": 1,
+      "frameDurationsMs": [180, 150, 100, 80, 130, 240],
+      "phases": ["ready", "anticipation", "commitment", "active", "follow-through", "recovery"],
+      "events": [
+        {
+          "name": "damage",
+          "frameIndex": 3
+        }
+      ]
+    },
+    {
+      "id": "signature-attack",
+      "row": 2,
+      "frameDurationsMs": [220, 180, 140, 100, 180, 300],
+      "phases": ["ready", "anticipation", "charge", "active", "recoil", "recovery"],
+      "events": [
+        {
+          "name": "enemy-signature",
+          "frameIndex": 3
+        }
+      ]
+    },
+    {
+      "id": "hurt-defeat",
+      "row": 3,
+      "frameDurationsMs": [100, 100, 120, 160, 300, 600],
+      "phases": ["hurt-contact", "compression", "stagger", "collapse", "defeated", "defeated-hold"],
+      "events": [
+        {
+          "name": "hurt",
+          "frameIndex": 0
+        },
+        {
+          "name": "defeatedHold",
+          "frameIndex": 5
+        }
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "catalogId": "HUM-001",
+      "group": "human",
+      "id": "mourning-ronin",
+      "name": "Mourning Ronin",
+      "role": "human duelist / committed draw",
+      "profile": "human",
+      "signatureId": "last-vow-draw",
+      "sourceChroma": "sources/mourning-ronin-chroma-source-v3.png",
+      "sourceAlpha": "sources/mourning-ronin-source-v3.png"
+    },
+    {
+      "catalogId": "HUM-002",
+      "group": "human",
+      "id": "court-arquebusier",
+      "name": "Court Arquebusier",
+      "role": "human marksman / line shot",
+      "profile": "armored-human",
+      "signatureId": "ash-match-volley",
+      "sourceChroma": "sources/court-arquebusier-chroma-source-v3.png",
+      "sourceAlpha": "sources/court-arquebusier-source-v3.png"
+    },
+    {
+      "catalogId": "HUM-003",
+      "group": "human",
+      "id": "veil-courier",
+      "name": "Veil Courier",
+      "role": "human skirmisher / smoke reposition",
+      "profile": "human",
+      "signatureId": "smoke-relay",
+      "sourceChroma": "sources/veil-courier-chroma-source-v3.png",
+      "sourceAlpha": "sources/veil-courier-source-v3.png"
+    },
+    {
+      "catalogId": "HUM-004",
+      "group": "human",
+      "id": "provincial-banner-guard",
+      "name": "Provincial Banner Guard",
+      "role": "Japanese-armored human / banner wall",
+      "profile": "armored-human",
+      "signatureId": "banner-wall",
+      "sourceChroma": "sources/provincial-banner-guard-chroma-source-v3.png",
+      "sourceAlpha": "sources/provincial-banner-guard-source-v3.png"
+    },
+    {
+      "catalogId": "BST-001",
+      "group": "mythic-beast",
+      "id": "storm-nue",
+      "name": "Storm Nue",
+      "role": "chimera quadruped / lightning tail",
+      "profile": "quadruped",
+      "signatureId": "storm-tail",
+      "sourceChroma": "sources/storm-nue-chroma-source-v3.png",
+      "sourceAlpha": "sources/storm-nue-source-v3.png"
+    },
+    {
+      "catalogId": "BST-002",
+      "group": "mythic-beast",
+      "id": "dream-baku",
+      "name": "Dream Baku",
+      "role": "heavy quadruped / inward siphon",
+      "profile": "broad-beast",
+      "signatureId": "dream-vacuum",
+      "reviewFrameIndex": 14,
+      "sourceChroma": "sources/dream-baku-chroma-source-v3.png",
+      "sourceAlpha": "sources/dream-baku-source-v3.png"
+    },
+    {
+      "catalogId": "BST-003",
+      "group": "mythic-beast",
+      "id": "twin-tail-nekomata",
+      "name": "Twin-Tail Nekomata",
+      "role": "feline pouncer / twin flame",
+      "profile": "quadruped",
+      "signatureId": "twin-flame-lash",
+      "sourceChroma": "sources/twin-tail-nekomata-chroma-source-v3.png",
+      "sourceAlpha": "sources/twin-tail-nekomata-source-v3.png"
+    },
+    {
+      "catalogId": "BST-004",
+      "group": "mythic-beast",
+      "id": "silk-jorogumo",
+      "name": "Silk Jorogumo",
+      "role": "giant spider / web prison",
+      "profile": "arachnid",
+      "signatureId": "silk-prison",
+      "reviewFrameIndex": 14,
+      "sourceChroma": "sources/silk-jorogumo-chroma-source-v3.png",
+      "sourceAlpha": "sources/silk-jorogumo-source-v3.png"
+    },
+    {
+      "catalogId": "BST-005",
+      "group": "mythic-beast",
+      "id": "sickle-weasel",
+      "name": "Sickle Weasel",
+      "role": "fast predator / crosswind dash",
+      "profile": "quadruped",
+      "signatureId": "crosswind-dash",
+      "reviewFrameIndex": 13,
+      "sourceChroma": "sources/sickle-weasel-chroma-source-v3.png",
+      "sourceAlpha": "sources/sickle-weasel-source-v3.png"
+    },
+    {
+      "catalogId": "BST-006",
+      "group": "mythic-beast",
+      "id": "drum-tanuki",
+      "name": "Drum Tanuki",
+      "role": "rolling bruiser / ground resonance",
+      "profile": "broad-beast",
+      "signatureId": "belly-drum-quake",
+      "sourceChroma": "sources/drum-tanuki-chroma-source-v3.png",
+      "sourceAlpha": "sources/drum-tanuki-source-v3.png"
+    },
+    {
+      "catalogId": "BST-007",
+      "group": "mythic-beast",
+      "id": "marsh-kappa-beast",
+      "name": "Marsh Kappa-Beast",
+      "role": "armored amphibian / shell rush",
+      "profile": "broad-beast",
+      "signatureId": "shell-surge",
+      "sourceChroma": "sources/marsh-kappa-beast-chroma-source-v3.png",
+      "sourceAlpha": "sources/marsh-kappa-beast-source-v3.png"
+    },
+    {
+      "catalogId": "BST-008",
+      "group": "mythic-beast",
+      "id": "ushi-oni-behemoth",
+      "name": "Ushi-Oni Behemoth",
+      "role": "bull-arthropod / earth charge",
+      "profile": "broad-beast",
+      "signatureId": "earth-gore-charge",
+      "reviewFrameIndex": 16,
+      "sourceChroma": "sources/ushi-oni-behemoth-chroma-source-v3.png",
+      "sourceAlpha": "sources/ushi-oni-behemoth-source-v3.png"
+    },
+    {
+      "catalogId": "PLT-001",
+      "group": "lethal-plant",
+      "id": "black-chrysanthemum-nest-woman",
+      "name": "Black Chrysanthemum Nest-Woman",
+      "role": "serpentine floral elite / devouring bloom",
+      "profile": "serpent-plant",
+      "signatureId": "black-bloom-devour",
+      "sourceChroma": "sources/black-chrysanthemum-nest-woman-chroma-source-v3.png",
+      "sourceAlpha": "sources/black-chrysanthemum-nest-woman-source-v3.png"
+    },
+    {
+      "catalogId": "PLT-002",
+      "group": "lethal-plant",
+      "id": "razor-bamboo-stalker",
+      "name": "Razor Bamboo Stalker",
+      "role": "walking grove / leaf canopy",
+      "profile": "rooted-plant",
+      "signatureId": "razor-canopy",
+      "sourceChroma": "sources/razor-bamboo-stalker-chroma-source-v3.png",
+      "sourceAlpha": "sources/razor-bamboo-stalker-source-v3.png"
+    },
+    {
+      "catalogId": "PLT-003",
+      "group": "lethal-plant",
+      "id": "spider-lily-ambusher",
+      "name": "Spider-Lily Ambusher",
+      "role": "root crawler / pollen cone",
+      "profile": "rooted-plant",
+      "signatureId": "crimson-pollen-ambush",
+      "sourceChroma": "sources/spider-lily-ambusher-chroma-source-v3.png",
+      "sourceAlpha": "sources/spider-lily-ambusher-source-v3.png"
+    },
+    {
+      "catalogId": "PLT-004",
+      "group": "lethal-plant",
+      "id": "lantern-vine-maw",
+      "name": "Lantern-Vine Maw",
+      "role": "carnivorous lure / bloom snap",
+      "profile": "rooted-plant",
+      "signatureId": "false-lantern-lure",
+      "sourceChroma": "sources/lantern-vine-maw-chroma-source-v3.png",
+      "sourceAlpha": "sources/lantern-vine-maw-source-v3.png"
+    }
+  ]
+}

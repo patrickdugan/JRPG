@@ -301,9 +301,10 @@ def load_review_font(size: int) -> ImageFont.ImageFont:
 
 def make_roster_contact_sheet(
     enemy_frames: list[tuple[dict[str, Any], list[Image.Image]]],
+    title: str,
 ) -> Image.Image:
     columns = 4
-    rows = 3
+    rows = (len(enemy_frames) + columns - 1) // columns
     art_size = 320
     label_height = 52
     header_height = 54
@@ -315,7 +316,7 @@ def make_roster_contact_sheet(
     label_font = load_review_font(14)
     draw.text(
         (16, 16),
-        "CANONICAL ENEMY ANIMATION SUITE V2 - SIGNATURE READABILITY FRAMES",
+        title,
         fill=REVIEW_TEXT,
         font=title_font,
     )
@@ -388,6 +389,15 @@ def build_artifacts() -> dict[str, bytes]:
     columns = grid["columns"]
     rows = grid["rows"]
     frame_size = (runtime["frameWidth"], runtime["frameHeight"])
+    artifact_version = config.get("artifactVersion", "v2")
+    contact_sheet_name = config.get(
+        "contactSheetName",
+        f"enemy-animation-roster-contact-sheet-{artifact_version}.png",
+    )
+    contact_sheet_title = config.get(
+        "contactSheetTitle",
+        "CANONICAL ENEMY ANIMATION SUITE V2 - SIGNATURE READABILITY FRAMES",
+    )
     maximum_content = (
         runtime["maximumContentWidth"],
         runtime["maximumContentHeight"],
@@ -493,7 +503,7 @@ def build_artifacts() -> dict[str, bytes]:
             enemy_frame_records.append(record)
 
         atlas = build_atlas(frames, columns, rows, frame_size)
-        atlas_name = f"{enemy['id']}-atlas-v2.png"
+        atlas_name = f"{enemy['id']}-atlas-{artifact_version}.png"
         atlas_data = png_bytes(atlas)
         artifacts[atlas_name] = atlas_data
         exports.append(
@@ -513,7 +523,7 @@ def build_artifacts() -> dict[str, bytes]:
             clips_by_row[index // columns]["frameDurationsMs"][index % columns]
             for index in range(columns * rows)
         ]
-        gif_name = f"{enemy['id']}-all-actions-v2.gif"
+        gif_name = f"{enemy['id']}-all-actions-{artifact_version}.gif"
         gif_data = gif_bytes(review_frames, durations)
         artifacts[gif_name] = gif_data
         exports.append(
@@ -529,6 +539,11 @@ def build_artifacts() -> dict[str, bytes]:
         )
         enemy_records.append(
             {
+                **(
+                    {"group": enemy["group"]}
+                    if "group" in enemy
+                    else {}
+                ),
                 **{
                     key: enemy[key]
                     for key in (
@@ -553,8 +568,8 @@ def build_artifacts() -> dict[str, bytes]:
         )
         contact_inputs.append((enemy, frames))
 
-    contact_sheet = make_roster_contact_sheet(contact_inputs)
-    contact_name = "enemy-animation-roster-contact-sheet-v2.png"
+    contact_sheet = make_roster_contact_sheet(contact_inputs, contact_sheet_title)
+    contact_name = contact_sheet_name
     contact_data = png_bytes(contact_sheet)
     artifacts[contact_name] = contact_data
     exports.append(
@@ -568,6 +583,11 @@ def build_artifacts() -> dict[str, bytes]:
         )
     )
 
+    shared_builder_path = (
+        (ROOT / config["sharedBuilder"]).resolve()
+        if "sharedBuilder" in config
+        else None
+    )
     manifest = {
         "schemaVersion": 1,
         "assetId": config["assetId"],
@@ -577,12 +597,20 @@ def build_artifacts() -> dict[str, bytes]:
         "build": {
             "builder": BUILDER_PATH.name,
             "builderSha256": sha256(BUILDER_PATH.read_bytes()),
+            **(
+                {
+                    "sharedBuilder": {
+                        "path": config["sharedBuilder"],
+                        "sha256": sha256(shared_builder_path.read_bytes()),
+                    }
+                }
+                if shared_builder_path is not None
+                else {}
+            ),
             "sourceContract": SOURCE_PATH.name,
             "sourceContractSha256": sha256(SOURCE_PATH.read_bytes()),
             "pillowVersion": PILLOW_VERSION,
-            "deterministicCheck": (
-                "python build_enemy_animation_suite_v2.py --check"
-            ),
+            "deterministicCheck": f"python {BUILDER_PATH.name} --check",
         },
         "geometry": {
             "columns": columns,

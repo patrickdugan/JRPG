@@ -12,7 +12,7 @@
   },
   "build": {
     "builder": "build_enemy_animation_suite_v2.py",
-    "builderSha256": "574b6bd075dc54f42895f67f91ae071882a0687433738c7fa9baedfc4c0e0f72",
+    "builderSha256": "4883a02c8c98ff97d878e8be729d6226808b2421f70d3d945361c38773b41ae4",
     "sourceContract": "enemy-animation-suite-v2.source.json",
     "sourceContractSha256": "8eb878349f8731df60681514f0c536a300001b2987d80a22c971eef9f1225613",
     "pillowVersion": "11.3.0",
