@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "campaignId": "bells-black-chrysanthemum",
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "authoredSceneCount": 35,
+  "authoredSceneCount": 37,
   "clusters": [
     {
       "id": "sw1-clerks-second-copy",
@@ -324,11 +324,15 @@
       "entryEncounterId": "page_sw11_decision",
       "outcomeKeys": [
         "accord",
-        "revision"
+        "revision",
+        "dawn",
+        "prepared-execution"
       ],
       "outcomeEncounterIds": [
         "page_end_corrections_visible",
-        "page_end_limits_posted"
+        "page_end_limits_posted",
+        "page_end_last_seal_at_dawn",
+        "page_end_necessary_blade"
       ]
     }
   ]

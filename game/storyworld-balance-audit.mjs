@@ -108,7 +108,7 @@ function staticThreadCoverage() {
   ]));
 }
 
-function summarizeRoute(route, runs, endingCounts, enmaCounts, finalOptionReactions, gateCounts, sums) {
+function summarizeRoute(route, runs, endingCounts, enmaCounts, finalOptionOutcomes, gateCounts, sums) {
   const fractionRecord = (record) => Object.fromEntries(Object.entries(record)
     .map(([key, count]) => [key, Number((count / runs).toFixed(4))]));
   return Object.freeze({
@@ -116,8 +116,8 @@ function summarizeRoute(route, runs, endingCounts, enmaCounts, finalOptionReacti
     runs,
     endings: Object.freeze(fractionRecord(endingCounts)),
     enmaOutcomes: Object.freeze(fractionRecord(enmaCounts)),
-    finalOptionReactions: Object.freeze(Object.fromEntries(
-      Object.entries(finalOptionReactions).map(([optionId, counts]) => [
+    finalOptionOutcomes: Object.freeze(Object.fromEntries(
+      Object.entries(finalOptionOutcomes).map(([optionId, counts]) => [
         optionId,
         Object.freeze(fractionRecord(counts)),
       ]),
@@ -148,7 +148,7 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
     const random = seededRandom(seed + routeIndex * 10_007);
     const endingCounts = {};
     const enmaCounts = {};
-    const finalOptionReactions = {};
+    const finalOptionOutcomes = {};
     const gateCounts = {};
     const sums = {
       civilWarRisk: 0,
@@ -202,9 +202,9 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
         if (clusterId === FINAL_CLUSTER_ID) {
           increment(endingCounts, resolution.outcomeKey);
           increment(globalEndings, resolution.outcomeKey);
-          const optionCounts = finalOptionReactions[option.id] ?? {};
-          increment(optionCounts, resolution.entryReactionId.endsWith('_r_accord') ? 'accord' : 'revision');
-          finalOptionReactions[option.id] = optionCounts;
+          const optionCounts = finalOptionOutcomes[option.id] ?? {};
+          increment(optionCounts, resolution.outcomeKey);
+          finalOptionOutcomes[option.id] = optionCounts;
         }
       }
     }
@@ -213,7 +213,7 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
       runsPerRoute,
       endingCounts,
       enmaCounts,
-      finalOptionReactions,
+      finalOptionOutcomes,
       gateCounts,
       sums,
     ));

@@ -3,18 +3,21 @@ import test from 'node:test';
 
 import { runStoryworldBalanceAudit } from '../storyworld-balance-audit.mjs';
 
-test('seeded whole-route rehearsal keeps both endings live and late gates earned', () => {
+test('seeded whole-route rehearsal keeps four endings live and late gates earned', () => {
   const audit = runStoryworldBalanceAudit({ runsPerRoute: 250, seed: 42 });
   assert.equal(audit.totalRuns, 750);
-  assert.ok(audit.globalEndings.accord > 0.25 && audit.globalEndings.accord < 0.75);
-  assert.ok(audit.globalEndings.revision > 0.25 && audit.globalEndings.revision < 0.75);
-
-  for (const route of audit.routes) {
-    assert.ok(route.endings.accord > 0.15, `${route.route} accord collapsed`);
-    assert.ok(route.endings.revision > 0.15, `${route.route} revision collapsed`);
+  for (const ending of ['accord', 'revision', 'dawn', 'prepared-execution']) {
+    assert.ok(audit.globalEndings[ending] > 0.02, `${ending} is effectively unreachable`);
+    assert.ok(audit.globalEndings[ending] < 0.60, `${ending} dominates the whole campaign`);
   }
 
   const paper = audit.routes.find(({ route }) => route === 'paper');
+  const salt = audit.routes.find(({ route }) => route === 'salt');
+  const ash = audit.routes.find(({ route }) => route === 'ash');
+  assert.ok(paper.endings.dawn > 0.10);
+  assert.ok(paper.endings['prepared-execution'] > 0.10);
+  assert.ok(salt.endings.revision > 0.30);
+  assert.ok(ash.endings.revision > 0.30);
   for (const gate of [
     'cleanSuccessionPrepared',
     'executionAvoidsImmediateCivilWar',

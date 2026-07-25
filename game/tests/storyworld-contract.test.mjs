@@ -18,11 +18,11 @@ const GAME = path.resolve(HERE, '..');
 const ROOT = path.resolve(GAME, '..');
 const wordCount = (value) => value.trim().split(/\s+/u).length;
 
-test('generated Storyworld catalog supplies ninety-five authored scenes and exact nonlinear route totals', () => {
+test('generated Storyworld catalog supplies ninety-seven authored scenes and exact nonlinear route totals', () => {
   assert.deepEqual(STORYWORLD_METRICS, {
     canonicalSceneCount: 60,
-    storyworldAuthoredSceneCount: 35,
-    authoredSceneCount: 95,
+    storyworldAuthoredSceneCount: 37,
+    authoredSceneCount: 97,
     narrativeRoutes: {
       salt: { canonicalSceneCount: 55, storyworldSceneCount: 20, playedSceneCount: 75 },
       ash: { canonicalSceneCount: 54, storyworldSceneCount: 20, playedSceneCount: 74 },
@@ -31,7 +31,7 @@ test('generated Storyworld catalog supplies ninety-five authored scenes and exac
     completeRunStoryworldSceneCountRange: { minimum: 20, maximum: 22 },
     completeRunSceneCountRange: { minimum: 74, maximum: 77 },
     clusterCount: 11,
-    entryOptionCount: 33,
+    entryOptionCount: 34,
   });
   assert.equal(STORYWORLD_CLUSTERS.length, 11);
   assert.equal(Object.isFrozen(STORYWORLD_CATALOG), true);
@@ -74,10 +74,12 @@ test('every decision and reaction meets the authored density, bounded-effect, an
   let terminalCount = 0;
   for (const cluster of STORYWORLD_CLUSTERS) {
     const encounters = [cluster.entry, ...cluster.outcomes];
-    assert.equal(cluster.entry.options.length, 3, cluster.id);
+    assert.equal(cluster.entry.options.length, cluster.id === 'sw10-corrections-desk' ? 4 : 3, cluster.id);
     assert.equal(
       cluster.outcomes.length,
-      ['sw3-sayos-warehouse-conditions', 'sw-enma-three-terms'].includes(cluster.id) ? 3 : 2,
+      cluster.id === 'sw10-corrections-desk'
+        ? 4
+        : ['sw3-sayos-warehouse-conditions', 'sw-enma-three-terms'].includes(cluster.id) ? 3 : 2,
       cluster.id,
     );
     for (const encounter of encounters) {
@@ -97,7 +99,11 @@ test('every decision and reaction meets the authored density, bounded-effect, an
         optionIds.add(option.id);
         assert.equal(option.visible, true);
         assert.equal(option.performable, true);
-        assert.equal(option.reactions.length, 2, option.id);
+        const maximumReactionCount = option.id.endsWith('_opt_execution-demand') ? 4 : 3;
+        assert.ok(
+          option.reactions.length >= 2 && option.reactions.length <= maximumReactionCount,
+          option.id,
+        );
         for (const reaction of option.reactions) {
           assert.equal(reactionIds.has(reaction.id), false, reaction.id);
           reactionIds.add(reaction.id);
@@ -123,10 +129,10 @@ test('every decision and reaction meets the authored density, bounded-effect, an
       }
     }
   }
-  assert.equal(encounterIds.size, 35);
-  assert.equal(optionIds.size, 55);
-  assert.equal(reactionIds.size, 110);
-  assert.equal(terminalCount, 2);
+  assert.equal(encounterIds.size, 37);
+  assert.equal(optionIds.size, 56);
+  assert.equal(reactionIds.size, 114);
+  assert.equal(terminalCount, 4);
 });
 
 test('authored JSON, binding sidecar, and browser registry remain deterministic generated artifacts', () => {
@@ -138,13 +144,13 @@ test('authored JSON, binding sidecar, and browser registry remain deterministic 
   assert.match(run.stdout, /generated artifacts are current/u);
   const world = JSON.parse(fs.readFileSync(path.join(ROOT, 'storyworlds', 'bells-black-chrysanthemum.storyworld.json'), 'utf8'));
   const bindings = JSON.parse(fs.readFileSync(path.join(ROOT, 'storyworlds', 'bells-black-chrysanthemum.bindings.json'), 'utf8'));
-  assert.equal(world.encounters.length, 35);
+  assert.equal(world.encounters.length, 37);
   assert.equal(world.meta.complete_run_total_scene_count, 82);
   assert.equal(world.spools.length, 6);
   assert.equal(world.spools.filter(({ starts_active: startsActive }) => startsActive).length, 1);
   assert.equal(world.spools.some(({ id }) => id === 'spool_enma'), true);
   assert.equal(world.spools.some((spool) => Object.hasOwn(spool, 'spool_type')), false);
-  assert.equal(bindings.authoredSceneCount, 35);
+  assert.equal(bindings.authoredSceneCount, 37);
   assert.equal(bindings.clusters.length, 11);
   const routeRequirements = Object.fromEntries(
     bindings.clusters.map(({ id, requiredOnRoutes }) => [id, requiredOnRoutes]),
@@ -161,4 +167,20 @@ test('authored JSON, binding sidecar, and browser registry remain deterministic 
   assert.equal(bindings.clusters.find(({ id }) => id === 'sw3-sayos-warehouse-conditions').actIntegration.majorSequenceId, 'act3-sequence-01');
   assert.equal(bindings.clusters.find(({ id }) => id === 'sw9-mateus-living-archive').actIntegration.majorSequenceId, 'act5-sequence-03');
   assert.equal(bindings.clusters.find(({ id }) => id === 'sw10-corrections-desk').actIntegration.majorSequenceId, 'act5-sequence-04');
+  const endingIds = world.encounters
+    .filter(({ id }) => id.startsWith('page_end_'))
+    .map(({ id }) => id)
+    .sort();
+  assert.deepEqual(endingIds, [
+    'page_end_corrections_visible',
+    'page_end_last_seal_at_dawn',
+    'page_end_limits_posted',
+    'page_end_necessary_blade',
+  ]);
+  assert.equal(
+    world.encounters
+      .filter(({ id }) => endingIds.includes(id))
+      .every(({ acceptability_script: acceptability }) => acceptability === true),
+    true,
+  );
 });

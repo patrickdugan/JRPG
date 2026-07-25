@@ -3,12 +3,12 @@
  *
  * The generated SweepWeave JSON and browser registry are derived from this
  * file by game/tools/build-storyworld.mjs.  The 60 canonical Campaign beats
- * remain save-stable; these eleven clusters add thirty-five authored
+ * remain save-stable; these eleven clusters add thirty-seven authored
  * interstitial scene nodes, twenty-two of which are experienced in a complete
  * narrative run.
  */
 
-export const STORYWORLD_SOURCE_VERSION = 4;
+export const STORYWORLD_SOURCE_VERSION = 5;
 export const STORYWORLD_IFID = '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4';
 export const STORYWORLD_CHARACTER_ID = 'char_lantern_network';
 
@@ -65,12 +65,17 @@ const reaction = (text, effects, outcomeKey = undefined, desirability = undefine
   ...(outcomeKey ? { outcomeKey } : {}),
   ...(desirability ? { desirability } : {}),
 });
+const additionalReaction = (id, outcomeKey, text, effects, desirability) => Object.freeze({
+  id,
+  ...reaction(text, effects, outcomeKey, desirability),
+});
 const option = (id, text, gateProperty, accord, revision, desirability = {}) => Object.freeze({
   id,
   text,
   gateProperty,
   accord: reaction(accord.text, accord.effects, accord.outcomeKey, desirability.accord),
   revision: reaction(revision.text, revision.effects, revision.outcomeKey, desirability.revision),
+  additionalReactions: Object.freeze(desirability.additionalReactions ?? []),
 });
 const outcome = (title, text, prompt, gateProperty, accord, revision) => Object.freeze({
   title,
@@ -79,6 +84,11 @@ const outcome = (title, text, prompt, gateProperty, accord, revision) => Object.
   gateProperty,
   accord: reaction(accord.text, accord.effects),
   revision: reaction(revision.text, revision.effects),
+});
+const additionalOutcome = (key, encounterId, ...definition) => Object.freeze({
+  key,
+  encounterId,
+  ...outcome(...definition),
 });
 const cluster = (definition) => Object.freeze({
   ...definition,
@@ -89,6 +99,7 @@ const cluster = (definition) => Object.freeze({
   accordOutcome: outcome(...definition.accordOutcome),
   revisionOutcome: outcome(...definition.revisionOutcome),
   ...(definition.thirdOutcome ? { thirdOutcome: outcome(...definition.thirdOutcome) } : {}),
+  additionalOutcomes: Object.freeze(definition.additionalOutcomes ?? []),
 });
 
 const actIntegration = (actId, majorSequenceId, role, routeTheater = null) => Object.freeze({
@@ -647,6 +658,69 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
             ['network_consent', 0.10, true],
             ['enma_killed', 0.20],
           ]),
+          additionalReactions: [
+            additionalReaction(
+              'prepared',
+              'prepared-execution',
+              "Kurozane refuses every surrender term. Ash cells confirm the Oni ration seals are broken while Genta's defectors close the barracks under separate civilian orders. Nikola gives the witnessed fatal stroke only after the outer companies stand down. The blade ends a defeated ruler, not the country's last functioning chain of command.",
+              {
+                garrison_defection: 0.10,
+                oni_supply_disruption: 0.10,
+                truth_completeness: 0.05,
+              },
+              score([
+                ['succession_readiness', 1.00],
+                ['garrison_defection', 0.80],
+                ['bell_intelligence', 0.20],
+                ['paper_commitment', 0.50],
+                ['oni_supply_disruption', 0.80],
+                ['ash_commitment', 0.70],
+                ['proof_integrity', 0.15],
+                ['network_consent', 0.10],
+                ['genta_accountability', 0.10],
+              ], -0.44),
+            ),
+            additionalReaction(
+              'prepared-paper',
+              'prepared-execution',
+              "Kurozane refuses every surrender term. Paper delegates confirm the successor's civil writ, the registry copy, and three independent bell transfers before Nikola gives the witnessed fatal stroke. The execution removes the defeated sire only after a mortal government can issue orders without inheriting his blood authority.",
+              {
+                succession_readiness: 0.10,
+                bell_intelligence: 0.05,
+                proof_integrity: 0.05,
+              },
+              score([
+                ['succession_readiness', 1.00],
+                ['garrison_defection', 0.80],
+                ['bell_intelligence', 0.70],
+                ['paper_commitment', 1.20],
+                ['proof_integrity', 0.15],
+                ['network_consent', 0.10],
+                ['genta_accountability', 0.10],
+              ], -0.32),
+            ),
+          ],
+        }),
+      option('dawn-seppuku-demand', 'Demand a public abdication and witnessed seppuku at dawn after every seal passes to the prepared civil successor.', 'succession_readiness',
+        { text: "Nikola offers Kurozane no conversion story and no private bargain: return every office, name the civil transfer before hostile witnesses, and meet the death his own court demanded from mortal retainers. Hearing three outer bells repeat the successor's writ, Kurozane accepts a final act he cannot command anyone else to perform.", outcomeKey: 'dawn', effects: { succession_readiness: 0.10, bell_intelligence: 0.05, truth_completeness: 0.05 } },
+        { text: "The succession writ reaches only one stair. Kurozane uses the ceremony's delay to call the unverified barracks seal back into his blood. Nikola stops him, but the execution arrives before the provinces share a lawful command, and rival bells answer the death.", effects: { court_pressure: 0.10, route_safety: -0.10, witness_safety: -0.05 } },
+        {
+          accord: score([
+            ['succession_readiness', 0.90],
+            ['bell_intelligence', 0.70],
+            ['paper_commitment', 0.50],
+            ['proof_integrity', 0.20],
+            ['network_consent', 0.15],
+            ['lise_oath_revision', 0.15],
+          ]),
+          revision: score([
+            ['court_pressure', 0.40],
+            ['succession_readiness', 0.25, true],
+            ['bell_intelligence', 0.20, true],
+            ['proof_integrity', 0.15, true],
+            ['network_consent', 0.15, true],
+            ['enma_killed', 0.20],
+          ], 0.10),
         }),
     ],
     accordOutcome: [
@@ -664,6 +738,28 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'court_pressure',
       { text: "Aya records the time of death, the unsupported commands that failed with it, and the first rival claims. Ren marks evacuation roads without labeling every mobilized district an enemy. The record leaves no blank space where a clean victory might later be invented.", effects: { truth_completeness: 0.05, route_safety: 0.05, aya_archive_openness: 0.05 } },
       { text: "Nikola begins the Dražanić phrase 'necessary cleansing,' stops, and drives his pen through it. He writes that the Covenant failed when it offered only a blade after surrender became difficult. Mateus, holding Kiku's blood-soaked bandage, signs as witness rather than editor.", effects: { lise_oath_revision: 0.05, ren_noncoercion: 0.05, party_cohesion: 0.05 } },
+    ],
+    additionalOutcomes: [
+      additionalOutcome(
+        'dawn',
+        'page_end_last_seal_at_dawn',
+        'The Last Seal at Dawn',
+        "The route witnesses refuse Kurozane a private death. Beneath the paling observatory roof, he returns the military, registry, granary, and black bell seals while each receiving council reads its limits aloud. The prepared successor accepts civil custody of the offices but no blood command and no claim to perpetual rule. Kurozane repeats the transfer before the prisoners leaving Kiku's line, before the retainers who have already disobeyed him, and before the execution rows his government made. Only when the outer bells answer the successor rather than their sire does Nikola lift the Severed Dragon line from Kurozane's throat. Kurozane performs witnessed seppuku at dawn with a court blade stripped of office and sorcery. Nikola serves neither as second nor priest; a Japanese retainer chosen by the civil witnesses completes the sentence. Mateus offers no absolution and calls the act neither conversion nor redemption. Aya records that the abdication was compelled after military defeat, that the suicide did not pay the dead, and that orderly succession was purchased by years of coalition work outside the castle. The country wakes under a mortal government that can be revised, refused, and eventually surrendered.",
+        'Record the difference between abdication and absolution.',
+        'succession_readiness',
+        { text: 'Aya records every transferred office, the successor’s temporary limits, and the witnesses who can revoke them. Kurozane’s death closes his person, not the public account of his reign.', effects: { succession_readiness: 0.05, truth_completeness: 0.05, network_consent: 0.05 } },
+        { text: 'A court scribe calls the dawn an honorable restoration. Ren replaces the phrase with compelled abdication after defeat, while Nikola refuses the ceremonial place that would turn a civil transfer into hunter succession.', effects: { ren_noncoercion: 0.05, lise_oath_revision: 0.05, proof_integrity: 0.05 } },
+      ),
+      additionalOutcome(
+        'prepared-execution',
+        'page_end_necessary_blade',
+        'The Necessary Blade',
+        "Kurozane refuses surrender after the last transferable command has already left him. Paper delegates confirm the civil writ; Genta's former soldiers hold the outer barracks without a purge; Salt crews keep the evacuation road open; Ash saboteurs break the remaining Oni ration seals. Nikola asks each route witness whether any office still depends upon the body beneath his lance. Only when the answers return separately does he drive the Longinus point home. The black bell gives one enormous note and dies. This time the distant bells do not answer rival claimants. They repeat the provisional council's finite orders, because the coalition built a succession mechanism before demanding the execution. There is violence, reprisal, and argument after dawn, but no immediate civil war. Mateus does not call the killing holy. Ren does not call it clean. Aya records that a prepared state survived the blade, not that the blade created the state. Nikola washes the weapon in ordinary water, seals it as evidence, and refuses every invitation to become guardian of the offices he helped free. The victory is stable, severe, and permanently answerable to the question of whether Kurozane could have been made to surrender one hour later.",
+        'Record what made the execution survivable.',
+        'garrison_defection',
+        { text: 'The record credits the civil writ, separate bell confirmations, garrison stand-down, evacuation routes, and bounded testimony before it names the fatal stroke. No single victor receives ownership of the result.', effects: { garrison_defection: 0.05, succession_readiness: 0.05, truth_completeness: 0.05 } },
+        { text: 'Nikola first writes that the lance ended the war. Aya places the sentence after the coalition ledger and changes ended to survived, preserving both the necessity claimed and the uncertainty that remains.', effects: { lise_oath_revision: 0.05, aya_archive_openness: 0.05, party_cohesion: 0.05 } },
+      ),
     ],
   }),
 ]);

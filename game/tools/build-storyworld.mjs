@@ -91,7 +91,19 @@ function mergeEffects(...sources) {
 }
 
 function outcomeBranches(cluster) {
-  return Object.freeze(['accord', 'revision', ...(cluster.thirdOutcome ? ['negotiated'] : [])]);
+  return Object.freeze([
+    'accord',
+    'revision',
+    ...(cluster.thirdOutcome ? ['negotiated'] : []),
+    ...cluster.additionalOutcomes.map(({ key }) => key),
+  ]);
+}
+
+function outcomeSource(cluster, branch) {
+  if (branch === 'accord') return cluster.accordOutcome;
+  if (branch === 'revision') return cluster.revisionOutcome;
+  if (branch === 'negotiated') return cluster.thirdOutcome;
+  return cluster.additionalOutcomes.find(({ key }) => key === branch) ?? null;
 }
 
 function clusterNodeIds(index, cluster = STORYWORLD_CLUSTERS[index]) {
@@ -102,6 +114,9 @@ function clusterNodeIds(index, cluster = STORYWORLD_CLUSTERS[index]) {
     revision: index === STORYWORLD_CLUSTERS.length - 1 ? 'page_end_limits_posted' : `${prefix}_revision`,
   };
   if (cluster.thirdOutcome) ids.negotiated = `${prefix}_negotiated`;
+  for (const source of cluster.additionalOutcomes) {
+    ids[source.key] = source.encounterId ?? `${prefix}_${source.key.replaceAll('-', '_')}`;
+  }
   return Object.freeze(ids);
 }
 
@@ -156,25 +171,30 @@ function buildEntryEncounter(cluster, index, ids, creationIndex) {
         visibility_script: true,
         performability_script: true,
         reactions: [
-          buildReaction({
-            id: `${optionId}_r_accord`,
-            text: sourceOption.accord.text,
-            propertyId: sourceOption.gateProperty,
+          {
+            key: 'accord',
+            source: sourceOption.accord,
             invert: false,
-            consequenceId: ids[sourceOption.accord.outcomeKey ?? 'accord'],
-            effects: mergeEffects(sourceOption.accord.effects, cluster.entryRouteEffects),
-            desirability: sourceOption.accord.desirability,
-          }),
-          buildReaction({
-            id: `${optionId}_r_revision`,
-            text: sourceOption.revision.text,
-            propertyId: sourceOption.gateProperty,
+          },
+          {
+            key: 'revision',
+            source: sourceOption.revision,
             invert: true,
-            consequenceId: ids[sourceOption.revision.outcomeKey ?? 'revision'],
-            effects: mergeEffects(sourceOption.revision.effects, cluster.entryRouteEffects),
-            desirability: sourceOption.revision.desirability,
-          }),
-        ],
+          },
+          ...sourceOption.additionalReactions.map((source) => ({
+            key: source.id,
+            source,
+            invert: false,
+          })),
+        ].map(({ key, source, invert }) => buildReaction({
+          id: `${optionId}_r_${key}`,
+          text: source.text,
+          propertyId: sourceOption.gateProperty,
+          invert,
+          consequenceId: ids[source.outcomeKey ?? key],
+          effects: mergeEffects(source.effects, cluster.entryRouteEffects),
+          desirability: source.desirability,
+        })),
         benchmark_tags: [`slot:${cluster.id}`, `option:${optionIndex + 1}`],
       };
     }),
@@ -182,11 +202,7 @@ function buildEntryEncounter(cluster, index, ids, creationIndex) {
 }
 
 function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId, creationIndex, branchIndex) {
-  const source = branch === 'accord'
-    ? cluster.accordOutcome
-    : branch === 'revision'
-      ? cluster.revisionOutcome
-      : cluster.thirdOutcome;
+  const source = outcomeSource(cluster, branch);
   const encounterId = ids[branch];
   const terminal = index === STORYWORLD_CLUSTERS.length - 1;
   const optionId = `${encounterId}_opt_carry`;
@@ -263,7 +279,7 @@ function buildStoryworld() {
     ['spool_act4', 'Act IV — The Black Gate', false],
     ['spool_enma', 'The Cinder Fan — Death, Custody, or Compact', false],
     ['spool_act5', 'Act V — The Living Castle', false],
-    ['spool_endings', 'The Last Command — Transfer or Civil War', false],
+    ['spool_endings', 'The Last Command — Abdication, Execution, or Civil War', false],
   ].map(([id, spoolName, startsActive], creationIndex) => ({
     id,
     spool_name: spoolName,
@@ -289,7 +305,7 @@ function buildStoryworld() {
     font_size: 16,
     language: 'en',
     rating: 'Teen',
-    about_text: 'Thirty-five reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three distinct outcomes.',
+    about_text: 'Thirty-seven reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three outcomes; the Last Command has four distinct political endings.',
     characters: [{
       id: STORYWORLD_CHARACTER_ID,
       name: 'The Lantern Network',

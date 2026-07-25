@@ -5,12 +5,12 @@ This is the production map for the eleven implemented Storyworld clusters. The a
 ## Scene arithmetic
 
 - Canonical campaign: 60 scenes.
-- Storyworld: 11 decision scenes plus 24 mutually exclusive consequence scenes = 35 authored scenes. The Act III war table and Lady Enma's dedicated spool each have three outcomes; the other nine decisions have two each.
-- Total authored catalog: 60 + 35 = **95 scenes**.
+- Storyworld: 11 decision scenes plus 26 mutually exclusive consequence scenes = 37 authored scenes. The Act III war table and Lady Enma's dedicated spool each have three outcomes, the Last Command has four, and the other eight decisions have two each.
+- Total authored catalog: 60 + 37 = **97 scenes**.
 - Salt route: 55 campaign scenes + 10 decisions + 10 consequences = **75 played scenes**.
 - Ash route: 54 campaign scenes + 10 decisions + 10 consequences = **74 played scenes**.
 - Paper route: 55 campaign scenes + 11 decisions + 11 consequences = **77 played scenes**.
-- The route scheduler omits one regional operation and its owned Storyworld cluster. The authored 95-scene catalog remains available across routes; it is not a single-playthrough count.
+- The route scheduler omits one regional operation and its owned Storyworld cluster. The authored 97-scene catalog remains available across routes; it is not a single-playthrough count.
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
@@ -20,7 +20,7 @@ The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-p
 
 Every cluster scheduled on the selected route is required for narrative credits. Salt omits `sw6-tribunal-afterword`, Ash omits `sw4-margin-varga-journal`, and Paper retains all eleven clusters while omitting the Sodegaura operation, which owns no separate cluster. The `act-route-decision` resolves before Act III's first campaign beat; a `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions, the Act IV approach, and Act V political parameters.
 
-Late reactions are not single-stat morality checks. The Enma hearing, Kiku's tribunal capacity, and all three Last Command options use weighted combinations of already-authored properties. The final options read six to eight prior threads apiece, including proof, consent, witness safety, Mateus's accountability, Nikola's severed-command discipline, succession preparation, garrison defection, bell intelligence, and Enma's categorical fate.
+Late reactions are not single-stat morality checks. The Enma hearing, Kiku's tribunal capacity, and all four Last Command options use weighted combinations of already-authored properties. The final options read six to nine prior threads apiece, including proof, consent, witness safety, Mateus's accountability, Nikola's severed-command discipline, succession preparation, garrison defection, bell intelligence, Oni-supply disruption, and Enma's categorical fate.
 
 The `sw3-sayos-warehouse-conditions` and `sw10-corrections-desk` strings remain opaque internal compatibility IDs, not claims that their new scenes have their old meanings. Exact legacy identities migrate only through the first two Storyworld records. A prior save that reached the old third record fails closed: the runtime will not reinterpret a warehouse-custody choice as a Salt, Ash, or Paper strategic priority. The same rule also prevents historical Enma and Corrections Desk outcomes from becoming political choices the player did not make.
 
@@ -91,8 +91,8 @@ For a related battle, the presentation card carries the selected decision text, 
 11. **The Last Command** (`sw10-corrections-desk`, opaque legacy internal ID)
     - Anchor: `c9-05-dawn-at-observatory`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
     - Related encounter ID: `c9-kurozane`.
-    - Consequences: **The Seals Returned** / **The Empty Throne Mobilizes**.
-    - Carry-forward: final witnessed-transfer or execution/civil-war state, retrospective **Recorded aftermath** context for `c9-kurozane`, and the route-ending political record. Witnessed return, provisional binding, and execution demand each resolve from a distinct multi-thread score, so the selected tactic and the accumulated campaign history both matter.
+    - Consequences: **The Seals Returned** / **The Last Seal at Dawn** / **The Necessary Blade** / **The Empty Throne Mobilizes**.
+    - Carry-forward: final living abdication, witnessed dawn seppuku, prepared execution, or unprepared execution/failed-parley civil-war state; retrospective **Recorded aftermath** context for `c9-kurozane`; and the route-ending political record. Witnessed return, provisional binding, dawn demand, and execution demand each resolve from distinct multi-thread scores. The prepared-execution consequence has separate Ash military and Paper civil-succession reactions so the record preserves which groundwork made the same terminal act survivable.
 
 ## Whole-route balance rehearsal
 
@@ -102,7 +102,7 @@ For a related battle, the presentation card carries the selected decision text, 
 node game/storyworld-balance-audit.mjs --runs 5000 --seed 42
 ```
 
-The 15,000-run result is 55.16% **The Seals Returned** and 44.84% **The Empty Throne Mobilizes** overall. Salt resolves 47.14% / 52.86%, Ash 44.40% / 55.60%, and Paper 73.94% / 26.06%. Paper's better political position is earned but not automatic: clean succession appears in 40.22%, witnessed dawn seppuku in 42.66%, and civil-war-safe execution in 37.22% of Paper rehearsals. All three Enma outcomes and both endings remain reachable. The full findings and thread ledger are recorded in [`storyworlds/bells-black-chrysanthemum_long_range_authoring.md`](../storyworlds/bells-black-chrysanthemum_long_range_authoring.md).
+The locked 15,000-run result is 39.33% **The Seals Returned**, 3.79% **The Last Seal at Dawn**, 11.14% **The Necessary Blade**, and 45.74% **The Empty Throne Mobilizes** overall. Salt resolves 35.74% living abdication / 64.26% civil war. Ash resolves 33.24% living abdication / 10.88% prepared execution / 55.88% civil war. Paper expresses all four endings: 49.00% living abdication / 11.38% dawn seppuku / 22.54% prepared execution / 17.08% civil war. Paper's better political position is earned but not automatic: clean succession appears in 40.22%, witnessed dawn seppuku in 42.66%, and civil-war-safe execution in 37.22% of rehearsals. Ash can separately earn civil-war-safe execution through Oni-supply disruption and garrison stand-down. All three Enma outcomes and all four endings remain reachable. The full findings and thread ledger are recorded in [`storyworlds/bells-black-chrysanthemum_long_range_authoring.md`](../storyworlds/bells-black-chrysanthemum_long_range_authoring.md).
 
 ## Act III and IV major-sequence integration
 
@@ -147,6 +147,6 @@ Every Act III–V canonical beat now receives the same `actId`, `majorSequenceId
 - Lady Enma is an original culpable vampire and former court entertainer, not a claim that women, Japanese tradition, or a profession are monstrous. Her negotiated outcome is a revocable defection under witness, not romance, pardon, or instant redemption; her custody is distributed, and her death destroys living testimony.
 - Mateus receives accountability, supervision, corroboration, and revocable limits—not absolution, command authority, private access, restored office, or narrative ownership. His useful knowledge never makes European authority the resistance's default leader.
 - Nikola's Croatian birth, English ancestry through fictional Margaret Wychmere, and his house's claimed Wallachian origin remain distinct. The house advertises a male line but its own contracts show repeated transmission through noblewomen and negotiated marriages. The 1462 vampire emergency, Dracul blood precedent, and Covenant of the Severed Dragon are explicit alternate history; the Covenant is not a real chivalric order, Christian rite, or historical institution.
-- **The Last Command** does not reduce politics to mercy versus punishment. Witnessed transfer leaves Kurozane alive, defeated, bound, and without honor; execution or failed transfer exposes the civil war built into an immortal regime with no safe succession mechanism. Neither branch grants Nikola, Mateus, or the party the surrendered office.
+- **The Last Command** does not reduce politics to mercy versus punishment. Living abdication leaves Kurozane defeated, bound, and without office; dawn seppuku transfers every seal publicly before his death; prepared execution is survivable only when prior coalition work can issue mortal orders; and unprepared execution or failed parley exposes the civil war built into an immortal regime with no safe succession mechanism. No ending grants Nikola, Mateus, or the party the surrendered office.
 - Father Mateus Avelar and the full cast remain original fictional characters; no celebrity or actor likeness is permitted.
 - The fiction must not turn a real faith, ethnicity, historical victim, or identifiable sacred tradition into a monster class, reward system, or boss prop. External historical and cultural review remains a production gate.

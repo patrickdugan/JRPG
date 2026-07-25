@@ -78,3 +78,24 @@ test('Enma living under terms carries useful but non-absolving testimony into Ac
   assert.ok(compact.act5Parameters.surrenderLeverage > killed.act5Parameters.surrenderLeverage);
   assert.ok(compact.act5Parameters.civilWarRisk < killed.act5Parameters.civilWarRisk);
 });
+
+test('Ash can prepare stable execution through disruption and stand-down without Paper succession', () => {
+  const profile = deriveActRouteProfile({
+    act3_ash_priority: 0.10,
+    ash_commitment: 0.40,
+    succession_readiness: 0.15,
+    paper_commitment: 0.25,
+    garrison_defection: 0.15,
+    genta_accountability: 0.55,
+    bell_intelligence: 0.10,
+    network_consent: 0.75,
+    proof_integrity: 0.65,
+    public_reach: 0.50,
+    oni_supply_disruption: 0.25,
+    enma_compact: 0.10,
+    enma_testimony: 0.40,
+  });
+  assert.equal(profile.act5Parameters.cleanSuccessionPrepared, false);
+  assert.equal(profile.act5Parameters.ashExecutionContinuity, true);
+  assert.equal(profile.act5Parameters.executionAvoidsImmediateCivilWar, true);
+});

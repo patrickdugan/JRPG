@@ -11,7 +11,7 @@
   "font_size": 16,
   "language": "en",
   "rating": "Teen",
-  "about_text": "Thirty-five reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three distinct outcomes.",
+  "about_text": "Thirty-seven reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three outcomes; the Last Command has four distinct political endings.",
   "characters": [
     {
       "id": "char_lantern_network",
@@ -623,7 +623,7 @@
     },
     {
       "id": "spool_endings",
-      "spool_name": "The Last Command — Transfer or Civil War",
+      "spool_name": "The Last Command — Abdication, Execution, or Civil War",
       "starts_active": false,
       "creation_index": 5,
       "creation_time": 1784577000,
@@ -631,7 +631,9 @@
       "encounters": [
         "page_sw11_decision",
         "page_end_corrections_visible",
-        "page_end_limits_posted"
+        "page_end_limits_posted",
+        "page_end_last_seal_at_dawn",
+        "page_end_necessary_blade"
       ]
     }
   ],
@@ -19564,11 +19566,795 @@
                   }
                 }
               ]
+            },
+            {
+              "id": "page_sw11_decision_opt_execution-demand_r_prepared",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Kurozane refuses every surrender term. Ash cells confirm the Oni ration seals are broken while Genta's defectors close the barracks under separate civilian orders. Nikola gives the witnessed fatal stroke only after the outer companies stand down. The blade ends a defeated ruler, not the country's last functioning chain of command."
+              },
+              "consequence_id": "page_end_necessary_blade",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": -0.44
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 0.8
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 0.5
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "oni_supply_disruption"
+                    ],
+                    "coefficient": 0.8
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 0.7
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "genta_accountability"
+                    ],
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "oni_supply_disruption"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "oni_supply_disruption"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw11_decision_opt_execution-demand_r_prepared-paper",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Kurozane refuses every surrender term. Paper delegates confirm the successor's civil writ, the registry copy, and three independent bell transfers before Nikola gives the witnessed fatal stroke. The execution removes the defeated sire only after a mortal government can issue orders without inheriting his blood authority."
+              },
+              "consequence_id": "page_end_necessary_blade",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": -0.32
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 0.8
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 0.7
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "genta_accountability"
+                    ],
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           ],
           "benchmark_tags": [
             "slot:sw10-corrections-desk",
             "option:3"
+          ]
+        },
+        {
+          "id": "page_sw11_decision_opt_dawn-seppuku-demand",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Demand a public abdication and witnessed seppuku at dawn after every seal passes to the prepared civil successor."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw11_decision_opt_dawn-seppuku-demand_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Nikola offers Kurozane no conversion story and no private bargain: return every office, name the civil transfer before hostile witnesses, and meet the death his own court demanded from mortal retainers. Hearing three outer bells repeat the successor's writ, Kurozane accepts a final act he cannot command anyone else to perform."
+              },
+              "consequence_id": "page_end_last_seal_at_dawn",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 0.9
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 0.7
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 0.5
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 0.15
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw11_decision_opt_dawn-seppuku-demand_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "The succession writ reaches only one stair. Kurozane uses the ceremony's delay to call the unverified barracks seal back into his blood. Nikola stops him, but the execution arrives before the provinces share a lawful command, and rival bells answer the death."
+              },
+              "consequence_id": "page_end_limits_posted",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.4
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.25
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": -0.25
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 0.2
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "route_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "route_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw10-corrections-desk",
+            "option:4"
           ]
         }
       ]
@@ -19642,12 +20428,82 @@
         "spool_endings"
       ],
       "options": []
+    },
+    {
+      "id": "page_end_last_seal_at_dawn",
+      "title": "The Last Seal at Dawn",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "The route witnesses refuse Kurozane a private death. Beneath the paling observatory roof, he returns the military, registry, granary, and black bell seals while each receiving council reads its limits aloud. The prepared successor accepts civil custody of the offices but no blood command and no claim to perpetual rule. Kurozane repeats the transfer before the prisoners leaving Kiku's line, before the retainers who have already disobeyed him, and before the execution rows his government made. Only when the outer bells answer the successor rather than their sire does Nikola lift the Severed Dragon line from Kurozane's throat. Kurozane performs witnessed seppuku at dawn with a court blade stripped of office and sorcery. Nikola serves neither as second nor priest; a Japanese retainer chosen by the civil witnesses completes the sentence. Mateus offers no absolution and calls the act neither conversion nor redemption. Aya records that the abdication was compelled after military defeat, that the suicide did not pay the dead, and that orderly succession was purchased by years of coalition work outside the castle. The country wakes under a mortal government that can be revised, refused, and eventually surrendered."
+      },
+      "prompt_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Record the difference between abdication and absolution."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "succession_readiness"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 21,
+      "latest_turn": 21,
+      "creation_index": 35,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 4620,
+      "graph_position_y": 0,
+      "connected_spools": [
+        "spool_endings"
+      ],
+      "options": []
+    },
+    {
+      "id": "page_end_necessary_blade",
+      "title": "The Necessary Blade",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Kurozane refuses surrender after the last transferable command has already left him. Paper delegates confirm the civil writ; Genta's former soldiers hold the outer barracks without a purge; Salt crews keep the evacuation road open; Ash saboteurs break the remaining Oni ration seals. Nikola asks each route witness whether any office still depends upon the body beneath his lance. Only when the answers return separately does he drive the Longinus point home. The black bell gives one enormous note and dies. This time the distant bells do not answer rival claimants. They repeat the provisional council's finite orders, because the coalition built a succession mechanism before demanding the execution. There is violence, reprisal, and argument after dawn, but no immediate civil war. Mateus does not call the killing holy. Ren does not call it clean. Aya records that a prepared state survived the blade, not that the blade created the state. Nikola washes the weapon in ordinary water, seals it as evidence, and refuses every invitation to become guardian of the offices he helped free. The victory is stable, severe, and permanently answerable to the question of whether Kurozane could have been made to surrender one hour later."
+      },
+      "prompt_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Record what made the execution survivable."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "garrison_defection"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 21,
+      "latest_turn": 21,
+      "creation_index": 36,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 4620,
+      "graph_position_y": 540,
+      "connected_spools": [
+        "spool_endings"
+      ],
+      "options": []
     }
   ],
   "meta": {
-    "source_version": 4,
+    "source_version": 5,
     "canonical_scene_count": 60,
-    "storyworld_authored_scene_count": 35,
+    "storyworld_authored_scene_count": 37,
     "complete_run_storyworld_scene_count": 22,
     "complete_run_total_scene_count": 82,
     "reaction_tie_break": "later-authored-wins"

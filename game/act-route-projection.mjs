@@ -78,6 +78,10 @@ export function deriveActRouteProfile(projection = {}) {
   const cleanSuccessionPrepared = effectiveSuccessionReadiness >= 0.25
     && proofIntegrity >= 0.60;
   const outerGarrisonCanStandDown = garrisonStandDownReadiness >= 0.30;
+  const ashExecutionContinuity = commitments.ash >= 0.30
+    && effectiveOniSupplyDisruption >= 0.25
+    && garrisonStandDownReadiness >= 0.32
+    && proofIntegrity >= 0.55;
 
   return Object.freeze({
     priorityTheater,
@@ -102,11 +106,14 @@ export function deriveActRouteProfile(projection = {}) {
       civilWarRisk,
       surrenderLeverage,
       cleanSuccessionPrepared,
+      ashExecutionContinuity,
       massOniReinforcement: effectiveOniSupplyDisruption < 0.20,
       outerGarrisonCanStandDown,
-      executionAvoidsImmediateCivilWar: cleanSuccessionPrepared
-        && outerGarrisonCanStandDown
-        && bellIntelligence >= 0.15,
+      executionAvoidsImmediateCivilWar: outerGarrisonCanStandDown
+        && (
+          (cleanSuccessionPrepared && bellIntelligence >= 0.15)
+          || ashExecutionContinuity
+        ),
       witnessedSeppukuAtDawnAvailable: effectiveSuccessionReadiness >= 0.25
         && bellIntelligence >= 0.15
         && proofIntegrity >= 0.55,

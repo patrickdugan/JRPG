@@ -42,15 +42,18 @@ test('production map covers every authored sequence binding and consequence titl
 });
 
 test('production map locks authored-versus-played arithmetic and core guardrails', () => {
-  assert.equal(STORYWORLD_METRICS.authoredSceneCount, 95);
+  assert.equal(STORYWORLD_METRICS.authoredSceneCount, 97);
   assert.deepEqual(STORYWORLD_METRICS.completeRunSceneCountRange, { minimum: 74, maximum: 77 });
-  assert.match(DOC, /\*\*95 scenes\*\*/);
+  assert.match(DOC, /\*\*97 scenes\*\*/);
   assert.match(DOC, /\*\*74 played scenes\*\*/);
   assert.match(DOC, /\*\*75 played scenes\*\*/);
   assert.match(DOC, /\*\*77 played scenes\*\*/);
   assert.equal(STORYWORLD_PACING_REPORT.diagnosticOnly, true);
   assert.match(DOC, /\*\*The Last Command\*\*/u);
-  assert.match(DOC, /\*\*The Seals Returned\*\* \/ \*\*The Empty Throne Mobilizes\*\*/u);
+  assert.match(
+    DOC,
+    /\*\*The Seals Returned\*\* \/ \*\*The Last Seal at Dawn\*\* \/ \*\*The Necessary Blade\*\* \/ \*\*The Empty Throne Mobilizes\*\*/u,
+  );
   assert.match(DOC, /\*\*Custody Without a Trophy\*\* \/ \*\*The Cinder Fan Ends\*\* \/ \*\*A Defection Under Witness\*\*/u);
   assert.match(DOC, /Sacred and devotional objects are not loot/);
   assert.match(DOC, /Japanese organizers, witnesses, crews, and custodians retain authority/);

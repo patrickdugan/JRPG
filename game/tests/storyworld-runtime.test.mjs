@@ -351,3 +351,23 @@ test('the long-range balance model preserves already selected opaque outcomes', 
   assert.equal(loaded.migrationId, 'long-range-reaction-balance-v1');
   assert.deepEqual(loaded.state.records, current.records);
 });
+
+test('the four-ending expansion preserves previously completed two-ending histories', () => {
+  let current = createStoryworldState({ runId: 'storyworld-talk-ending-migration-0001' });
+  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
+    current = resolveCluster(current, cluster, index % 3);
+  });
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .find(({ migrationId }) => migrationId === 'talk-no-jutsu-endings-v1');
+  assert.ok(legacyIdentity);
+  const loaded = loadStoryworldState({
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  });
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'talk-no-jutsu-endings-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+});

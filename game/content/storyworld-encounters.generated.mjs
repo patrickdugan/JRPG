@@ -8,13 +8,13 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:f6cacae2c8bbee321c6e56bf0129f6b1acb7821d185d889102f8cc681aff2af5";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:508298b149d1b96acce198871a1466dde4af98b6f66e37c64044dc6dd8e12905";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 4,
+  "sourceVersion": 5,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:6e05cf56e673b023093084c559972b360b92f2cd9efe05169854a150625fd3a1",
-  "bindingHash": "sha256:e12d3192d213b626dee2d3a53b1252575907a985b84064a80c93d9bbcb6cd991",
+  "sourceHash": "sha256:78e45445845dbaeb2d265694a34e1d02dd9018247ce5168500cd257d9ff33108",
+  "bindingHash": "sha256:32d66611627db532d7d459e0b3652db8fa067edf8544305a6082a33bc7c77320",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
     {
@@ -4215,11 +4215,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entryEncounterId": "page_sw11_decision",
       "outcomeKeys": [
         "accord",
-        "revision"
+        "revision",
+        "dawn",
+        "prepared-execution"
       ],
       "outcomeEncounterIds": [
         "page_end_corrections_visible",
-        "page_end_limits_posted"
+        "page_end_limits_posted",
+        "page_end_last_seal_at_dawn",
+        "page_end_necessary_blade"
       ],
       "entry": {
         "id": "page_sw11_decision",
@@ -4599,6 +4603,254 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   }
                 ],
                 "authoredIndex": 1
+              },
+              {
+                "id": "page_sw11_decision_opt_execution-demand_r_prepared",
+                "text": "Kurozane refuses every surrender term. Ash cells confirm the Oni ration seals are broken while Genta's defectors close the barracks under separate civilian orders. Nikola gives the witnessed fatal stroke only after the outer companies stand down. The blade ends a defeated ruler, not the country's last functioning chain of command.",
+                "consequenceId": "page_end_necessary_blade",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "coefficient": 0.8,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "paper_commitment",
+                      "coefficient": 0.5,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
+                      "coefficient": 0.8,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ash_commitment",
+                      "coefficient": 0.7,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.44
+                },
+                "effects": [
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              },
+              {
+                "id": "page_sw11_decision_opt_execution-demand_r_prepared-paper",
+                "text": "Kurozane refuses every surrender term. Paper delegates confirm the successor's civil writ, the registry copy, and three independent bell transfers before Nikola gives the witnessed fatal stroke. The execution removes the defeated sire only after a mortal government can issue orders without inheriting his blood authority.",
+                "consequenceId": "page_end_necessary_blade",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "coefficient": 0.8,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.7,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "paper_commitment",
+                      "coefficient": 1.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.32
+                },
+                "effects": [
+                  {
+                    "propertyId": "succession_readiness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 3
+              }
+            ]
+          },
+          {
+            "id": "page_sw11_decision_opt_dawn-seppuku-demand",
+            "text": "Demand a public abdication and witnessed seppuku at dawn after every seal passes to the prepared civil successor.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw11_decision_opt_dawn-seppuku-demand_r_accord",
+                "text": "Nikola offers Kurozane no conversion story and no private bargain: return every office, name the civil transfer before hostile witnesses, and meet the death his own court demanded from mortal retainers. Hearing three outer bells repeat the successor's writ, Kurozane accepts a final act he cannot command anyone else to perform.",
+                "consequenceId": "page_end_last_seal_at_dawn",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.9,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.7,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "paper_commitment",
+                      "coefficient": 0.5,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "succession_readiness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw11_decision_opt_dawn-seppuku-demand_r_revision",
+                "text": "The succession writ reaches only one stair. Kurozane uses the ceremony's delay to call the unverified barracks seal back into his blood. Nikola stops him, but the execution arrives before the provinces share a lawful command, and rival bells answer the death.",
+                "consequenceId": "page_end_limits_posted",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_killed",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.1
+                },
+                "effects": [
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": -0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": -0.05
+                  }
+                ],
+                "authoredIndex": 1
               }
             ]
           }
@@ -4622,14 +4874,32 @@ export const STORYWORLD_CATALOG = deepFreeze({
           "terminal": true,
           "options": [],
           "resolutionKey": "revision"
+        },
+        {
+          "id": "page_end_last_seal_at_dawn",
+          "title": "The Last Seal at Dawn",
+          "text": "The route witnesses refuse Kurozane a private death. Beneath the paling observatory roof, he returns the military, registry, granary, and black bell seals while each receiving council reads its limits aloud. The prepared successor accepts civil custody of the offices but no blood command and no claim to perpetual rule. Kurozane repeats the transfer before the prisoners leaving Kiku's line, before the retainers who have already disobeyed him, and before the execution rows his government made. Only when the outer bells answer the successor rather than their sire does Nikola lift the Severed Dragon line from Kurozane's throat. Kurozane performs witnessed seppuku at dawn with a court blade stripped of office and sorcery. Nikola serves neither as second nor priest; a Japanese retainer chosen by the civil witnesses completes the sentence. Mateus offers no absolution and calls the act neither conversion nor redemption. Aya records that the abdication was compelled after military defeat, that the suicide did not pay the dead, and that orderly succession was purchased by years of coalition work outside the castle. The country wakes under a mortal government that can be revised, refused, and eventually surrendered.",
+          "prompt": "Record the difference between abdication and absolution.",
+          "terminal": true,
+          "options": [],
+          "resolutionKey": "dawn"
+        },
+        {
+          "id": "page_end_necessary_blade",
+          "title": "The Necessary Blade",
+          "text": "Kurozane refuses surrender after the last transferable command has already left him. Paper delegates confirm the civil writ; Genta's former soldiers hold the outer barracks without a purge; Salt crews keep the evacuation road open; Ash saboteurs break the remaining Oni ration seals. Nikola asks each route witness whether any office still depends upon the body beneath his lance. Only when the answers return separately does he drive the Longinus point home. The black bell gives one enormous note and dies. This time the distant bells do not answer rival claimants. They repeat the provisional council's finite orders, because the coalition built a succession mechanism before demanding the execution. There is violence, reprisal, and argument after dawn, but no immediate civil war. Mateus does not call the killing holy. Ren does not call it clean. Aya records that a prepared state survived the blade, not that the blade created the state. Nikola washes the weapon in ordinary water, seals it as evidence, and refuses every invitation to become guardian of the offices he helped free. The victory is stable, severe, and permanently answerable to the question of whether Kurozane could have been made to surrender one hour later.",
+          "prompt": "Record what made the execution survivable.",
+          "terminal": true,
+          "options": [],
+          "resolutionKey": "prepared-execution"
         }
       ]
     }
   ],
   "metrics": {
     "canonicalSceneCount": 60,
-    "storyworldAuthoredSceneCount": 35,
-    "authoredSceneCount": 95,
+    "storyworldAuthoredSceneCount": 37,
+    "authoredSceneCount": 97,
     "narrativeRoutes": {
       "salt": {
         "canonicalSceneCount": 55,
@@ -4656,7 +4926,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "maximum": 77
     },
     "clusterCount": 11,
-    "entryOptionCount": 33
+    "entryOptionCount": 34
   }
 });
 export const STORYWORLD_PROPERTIES = STORYWORLD_CATALOG.properties;

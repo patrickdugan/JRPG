@@ -85,6 +85,17 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     migrationId: 'long-range-reaction-balance-v1',
     maximumCompatibleRecordCount: 11,
   }),
+  // Two terminal outcomes and all existing reactions retain their opaque
+  // identities. New playthroughs can reach dawn abdication or prepared
+  // execution through newly authored reactions; completed old outcomes do
+  // not get reinterpreted.
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:6e05cf56e673b023093084c559972b360b92f2cd9efe05169854a150625fd3a1',
+    catalogSignature: 'sha256:f6cacae2c8bbee321c6e56bf0129f6b1acb7821d185d889102f8cc681aff2af5',
+    migrationId: 'talk-no-jutsu-endings-v1',
+    maximumCompatibleRecordCount: 11,
+  }),
 ]);
 
 const CAMPAIGN_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
