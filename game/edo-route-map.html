@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081018">
+  <title>Road to Edo</title>
+  <link rel="stylesheet" href="./edo-route-map.css">
+</head>
+<body>
+  <a class="skip-link" href="#routeChoices">Skip to route choices</a>
+  <main class="route-shell">
+    <header class="route-header">
+      <p class="eyebrow">Three roads · one city</p>
+      <h1>Road to Edo</h1>
+      <p>Choose what the party risks on the eastern approach. Distance is only one kind of cost.</p>
+    </header>
+
+    <section class="map-panel" aria-labelledby="mapHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Approach map</p>
+          <h2 id="mapHeading">Hoshigawa to Edo</h2>
+        </div>
+        <p id="mapRouteLabel" class="map-route-label">Witness Road selected</p>
+      </div>
+      <canvas id="routeMap" width="320" height="180" aria-describedby="mapDescription">
+        The Road to Edo map has three branches from Hoshigawa: Cedar Ridge,
+        Witness Road, and Lantern Coast. All three converge at Edo.
+      </canvas>
+      <p id="mapDescription" class="sr-only">
+        Cedar Ridge climbs northeast through Takamine and Kagura. Witness Road
+        travels east through Kozui and Hushroad. Lantern Coast bends southeast
+        through Sodegaura and Nagi before turning north into Edo.
+      </p>
+    </section>
+
+    <section class="choice-panel" aria-labelledby="choiceHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Council decision</p>
+          <h2 id="choiceHeading">Choose the approach</h2>
+        </div>
+        <p class="key-hint">↑ ↓ choose · Z confirm · X reconsider</p>
+      </div>
+
+      <div id="routeChoices" class="route-choices" role="radiogroup" aria-label="Routes to Edo">
+        <button class="route-choice" type="button" role="radio" aria-checked="false" data-route-id="cedar-ridge">
+          <span class="route-swatch route-swatch-ridge" aria-hidden="true"></span>
+          <span><strong>Cedar Ridge</strong><small>Fast / dangerous</small></span>
+        </button>
+        <button class="route-choice" type="button" role="radio" aria-checked="true" data-route-id="witness-road">
+          <span class="route-swatch route-swatch-witness" aria-hidden="true"></span>
+          <span><strong>Witness Road</strong><small>Balanced / political</small></span>
+        </button>
+        <button class="route-choice" type="button" role="radio" aria-checked="false" data-route-id="lantern-coast">
+          <span class="route-swatch route-swatch-coast" aria-hidden="true"></span>
+          <span><strong>Lantern Coast</strong><small>Slow / supplied</small></span>
+        </button>
+      </div>
+
+      <article class="route-brief" aria-labelledby="routeName">
+        <div>
+          <p class="eyebrow">Selected road</p>
+          <h3 id="routeName">Witness Road</h3>
+          <p id="routeSummary">A measured road through printers and post towns, carrying testimony east.</p>
+        </div>
+        <dl class="route-effects">
+          <div><dt>Travel</dt><dd id="routeTravel">2</dd></div>
+          <div><dt>Threat</dt><dd id="routeThreat">2</dd></div>
+          <div><dt>Supplies</dt><dd id="routeSupplies">±0</dd></div>
+          <div><dt>Witnesses</dt><dd id="routeWitnesses">+2</dd></div>
+        </dl>
+        <ol id="routeNodes" class="route-nodes" aria-label="Selected route stops"></ol>
+      </article>
+
+      <div class="route-actions">
+        <button id="confirmRoute" class="primary-action" type="button">Take this road</button>
+        <button id="reconsiderRoute" class="secondary-action" type="button" disabled>Reconsider</button>
+      </div>
+      <output id="routeStatus" class="route-status" aria-live="polite">Witness Road is ready for review.</output>
+    </section>
+  </main>
+  <script type="module" src="./edo-route-map.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "assetId": "edo-route-map-v1",
+  "status": "runtime-candidate",
+  "title": "Road to Edo",
+  "classification": "pixel-authored-production-asset",
+  "originalityPolicy": "Original alternate-history geography, iconography, labels, route geometry, and interface assets. Uses a general late-8-bit branching stage-map grammar without copying another game's map, sprites, UI, or topology.",
+  "geometry": {
+    "nativeWidth": 320,
+    "nativeHeight": 180,
+    "previewScale": 4,
+    "iconWidth": 16,
+    "iconHeight": 16,
+    "iconCount": 8,
+    "alphaPolicy": {
+      "maps": "opaque",
+      "icons": "binary"
+    },
+    "rootCoordinates": "integer native pixels"
+  },
+  "palette": {
+    "ink": "#081018",
+    "ocean": "#10293A",
+    "waterLight": "#1E5360",
+    "land": "#344B3A",
+    "landLight": "#52664A",
+    "mountain": "#69605A",
+    "road": "#6C5A43",
+    "routeMuted": "#786956",
+    "parchment": "#E2C98A",
+    "gold": "#D8A84E",
+    "ridge": "#B64B3F",
+    "witness": "#D1A958",
+    "coast": "#5FA5AA",
+    "leaf": "#76914B",
+    "white": "#F3E6B5",
+    "violet": "#513A5F"
+  },
+  "iconOrder": [
+    "council",
+    "village",
+    "mountain",
+    "post-town",
+    "watch",
+    "ferry",
+    "gate",
+    "edo-castle"
+  ],
+  "sharedNodes": {
+    "hoshigawa-council": {
+      "name": "Hoshigawa Council",
+      "shortLabel": "HOSHIGAWA",
+      "position": [24, 91],
+      "icon": "council"
+    },
+    "edo": {
+      "name": "Edo",
+      "shortLabel": "EDO",
+      "position": [294, 82],
+      "icon": "edo-castle"
+    }
+  },
+  "routes": [
+    {
+      "id": "cedar-ridge",
+      "name": "Cedar Ridge",
+      "shortLabel": "RIDGE",
+      "color": "ridge",
+      "summary": "The shortest ascent: hard patrols, thin supplies, and forge salvage.",
+      "strategy": "Fast / dangerous",
+      "campaignFlag": "edo_route_cedar_ridge",
+      "openingLevelId": "tkm-rain-gate",
+      "supportBias": ["ren", "genta"],
+      "effects": {
+        "travelTime": 1,
+        "threat": 3,
+        "supplies": -1,
+        "witnessSupport": 0,
+        "forgeSalvage": 2
+      },
+      "nodes": [
+        {"id": "hoshigawa-council", "shared": true},
+        {"id": "takamine-watch", "name": "Takamine Watch", "shortLabel": "TAKAMINE", "position": [72, 53], "icon": "watch", "levelId": "tkm-rain-gate"},
+        {"id": "kagura-pass", "name": "Kagura Pass", "shortLabel": "KAGURA", "position": [126, 31], "icon": "mountain", "levelId": "kgr-ash-fields"},
+        {"id": "koshu-watch", "name": "Koshu Watch", "shortLabel": "KOSHU", "position": [181, 37], "icon": "watch"},
+        {"id": "edo-west-gate", "name": "Edo West Gate", "shortLabel": "WEST GATE", "position": [243, 54], "icon": "gate"},
+        {"id": "edo", "shared": true}
+      ]
+    },
+    {
+      "id": "witness-road",
+      "name": "Witness Road",
+      "shortLabel": "WITNESS",
+      "color": "witness",
+      "summary": "A measured road through printers and post towns, carrying testimony east.",
+      "strategy": "Balanced / political",
+      "campaignFlag": "edo_route_witness_road",
+      "openingLevelId": "kzu-printmaker-lane",
+      "supportBias": ["aya", "mateus"],
+      "effects": {
+        "travelTime": 2,
+        "threat": 2,
+        "supplies": 0,
+        "witnessSupport": 2,
+        "forgeSalvage": 0
+      },
+      "nodes": [
+        {"id": "hoshigawa-council", "shared": true},
+        {"id": "kozui-print-road", "name": "Kozui Print Road", "shortLabel": "KOZUI", "position": [75, 91], "icon": "village", "levelId": "kzu-printmaker-lane"},
+        {"id": "hushroad-post", "name": "Hushroad Post", "shortLabel": "HUSHROAD", "position": [130, 85], "icon": "post-town", "levelId": "hsh-post-town"},
+        {"id": "musashi-post", "name": "Musashi Post", "shortLabel": "MUSASHI", "position": [184, 91], "icon": "post-town"},
+        {"id": "edo-north-gate", "name": "Edo North Gate", "shortLabel": "NORTH GATE", "position": [244, 79], "icon": "gate"},
+        {"id": "edo", "shared": true}
+      ]
+    },
+    {
+      "id": "lantern-coast",
+      "name": "Lantern Coast",
+      "shortLabel": "COAST",
+      "color": "coast",
+      "summary": "A long coastal approach: ferries, storm water, and reliable resupply.",
+      "strategy": "Slow / supplied",
+      "campaignFlag": "edo_route_lantern_coast",
+      "openingLevelId": "sdg-rain-docks",
+      "supportBias": ["kiku", "lise"],
+      "effects": {
+        "travelTime": 3,
+        "threat": 2,
+        "supplies": 2,
+        "witnessSupport": 1,
+        "forgeSalvage": 0
+      },
+      "nodes": [
+        {"id": "hoshigawa-council", "shared": true},
+        {"id": "sodegaura-docks", "name": "Sodegaura Docks", "shortLabel": "SODEGAURA", "position": [72, 132], "icon": "village", "levelId": "sdg-rain-docks"},
+        {"id": "nagi-ferry", "name": "Nagi Ferry", "shortLabel": "NAGI", "position": [128, 148], "icon": "ferry", "levelId": "ngi-fishing-village"},
+        {"id": "shinagawa", "name": "Shinagawa", "shortLabel": "SHINAGAWA", "position": [186, 139], "icon": "post-town"},
+        {"id": "edo-bay-gate", "name": "Edo Bay Gate", "shortLabel": "BAY GATE", "position": [246, 119], "icon": "gate"},
+        {"id": "edo", "shared": true}
+      ]
+    }
+  ],
+  "routeChoicePolicy": {
+    "visibleRoutes": 3,
+    "defaultRouteId": "witness-road",
+    "selectionAuthority": "player",
+    "canonicalMutation": "none until an explicit campaign adapter consumes a route receipt",
+    "convergence": "all routes reach Edo",
+    "exclusiveIntermediateNodesPerRoute": 4
+  }
+}

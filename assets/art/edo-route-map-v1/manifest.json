@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "assetId": "edo-route-map-v1",
+  "status": "runtime-candidate",
+  "provenance": {
+    "classification": "pixel-authored-production-asset",
+    "sourceMethod": "original code-native pixel primitives at 320x180 and 16x16",
+    "generatorUsed": false,
+    "originalityPolicy": "Original alternate-history geography, iconography, labels, route geometry, and interface assets. Uses a general late-8-bit branching stage-map grammar without copying another game's map, sprites, UI, or topology."
+  },
+  "source": {
+    "path": "edo-route-map.source.json",
+    "sha256": "1ad949a877ea4fafaf5d2158f221272980ddeded95b6cdbd8d1f6715628cb0a7"
+  },
+  "geometry": {
+    "nativeWidth": 320,
+    "nativeHeight": 180,
+    "previewScale": 4,
+    "iconWidth": 16,
+    "iconHeight": 16,
+    "iconCount": 8,
+    "alphaPolicy": {
+      "maps": "opaque",
+      "icons": "binary"
+    },
+    "rootCoordinates": "integer native pixels"
+  },
+  "palette": {
+    "ceiling": 16,
+    "colors": {
+      "ink": "#081018",
+      "ocean": "#10293A",
+      "waterLight": "#1E5360",
+      "land": "#344B3A",
+      "landLight": "#52664A",
+      "mountain": "#69605A",
+      "road": "#6C5A43",
+      "routeMuted": "#786956",
+      "parchment": "#E2C98A",
+      "gold": "#D8A84E",
+      "ridge": "#B64B3F",
+      "witness": "#D1A958",
+      "coast": "#5FA5AA",
+      "leaf": "#76914B",
+      "white": "#F3E6B5",
+      "violet": "#513A5F"
+    }
+  },
+  "iconOrder": [
+    "council",
+    "village",
+    "mountain",
+    "post-town",
+    "watch",
+    "ferry",
+    "gate",
+    "edo-castle"
+  ],
+  "routes": [
+    {
+      "id": "cedar-ridge",
+      "campaignFlag": "edo_route_cedar_ridge",
+      "nodeIds": [
+        "hoshigawa-council",
+        "takamine-watch",
+        "kagura-pass",
+        "koshu-watch",
+        "edo-west-gate",
+        "edo"
+      ],
+      "pathSignature": "hoshigawa-council>takamine-watch>kagura-pass>koshu-watch>edo-west-gate>edo",
+      "exclusiveIntermediateNodes": 4,
+      "reachesEdo": true,
+      "effects": {
+        "travelTime": 1,
+        "threat": 3,
+        "supplies": -1,
+        "witnessSupport": 0,
+        "forgeSalvage": 2
+      }
+    },
+    {
+      "id": "witness-road",
+      "campaignFlag": "edo_route_witness_road",
+      "nodeIds": [
+        "hoshigawa-council",
+        "kozui-print-road",
+        "hushroad-post",
+        "musashi-post",
+        "edo-north-gate",
+        "edo"
+      ],
+      "pathSignature": "hoshigawa-council>kozui-print-road>hushroad-post>musashi-post>edo-north-gate>edo",
+      "exclusiveIntermediateNodes": 4,
+      "reachesEdo": true,
+      "effects": {
+        "travelTime": 2,
+        "threat": 2,
+        "supplies": 0,
+        "witnessSupport": 2,
+        "forgeSalvage": 0
+      }
+    },
+    {
+      "id": "lantern-coast",
+      "campaignFlag": "edo_route_lantern_coast",
+      "nodeIds": [
+        "hoshigawa-council",
+        "sodegaura-docks",
+        "nagi-ferry",
+        "shinagawa",
+        "edo-bay-gate",
+        "edo"
+      ],
+      "pathSignature": "hoshigawa-council>sodegaura-docks>nagi-ferry>shinagawa>edo-bay-gate>edo",
+      "exclusiveIntermediateNodes": 4,
+      "reachesEdo": true,
+      "effects": {
+        "travelTime": 3,
+        "threat": 2,
+        "supplies": 2,
+        "witnessSupport": 1,
+        "forgeSalvage": 0
+      }
+    }
+  ],
+  "choicePolicy": {
+    "visibleRoutes": 3,
+    "defaultRouteId": "witness-road",
+    "selectionAuthority": "player",
+    "canonicalMutation": "none until an explicit campaign adapter consumes a route receipt",
+    "convergence": "all routes reach Edo",
+    "exclusiveIntermediateNodesPerRoute": 4
+  },
+  "outputs": [
+    {
+      "path": "edo-route-map-base-v1.png",
+      "sha256": "d21b87da5692cd8e90c99dbcb7bdb2dda5650332e6f374a548717b7306869d7f",
+      "dimensions": [
+        320,
+        180
+      ],
+      "actualColors": 15,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "opaque-native-runtime-background"
+    },
+    {
+      "path": "edo-route-map-all-routes-v1.png",
+      "sha256": "086274c1ffb526893ac06dba03c37c66cbcfaf24165b525e3d1dd6f385afc299",
+      "dimensions": [
+        320,
+        180
+      ],
+      "actualColors": 15,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "opaque-native-all-route-review"
+    },
+    {
+      "path": "edo-route-map-preview-v1.png",
+      "sha256": "301279cd4050d957e059d72aeb4f1484f1a3c425a7663cc9cfb8f3e313852b3f",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "actualColors": 15,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "nearest-neighbor-review"
+    },
+    {
+      "path": "edo-route-icon-atlas-v1.png",
+      "sha256": "24113aec1b45d706d964910fffdfc7794a15424bac14ef2a5cdb0604263037fe",
+      "dimensions": [
+        128,
+        16
+      ],
+      "actualColors": 8,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "purpose": "binary-alpha-runtime-icon-atlas"
+    }
+  ],
+  "inventory": {
+    "path": "top-down-tile-inventory-v1.json",
+    "sha256": "ae0cdc39337a8a2ebb67b9cfae654198efdd337b9cc6f0a46d05f4fcef280536"
+  },
+  "builder": {
+    "path": "build_edo_route_map.py",
+    "sha256": "0b7db9b5553d33e56726e43dd74421abe000c4604e307154c2cf1344ea413363",
+    "pillowVersion": "11.3.0",
+    "deterministic": true,
+    "integerAligned": true,
+    "nativeResampling": "none",
+    "previewResampling": "nearest-neighbor"
+  }
+}
