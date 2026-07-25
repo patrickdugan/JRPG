@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121118">
+  <title>Roster Animation Review</title>
+  <link rel="stylesheet" href="./roster-animation-review.css">
+</head>
+<body>
+  <main class="review-shell">
+    <header>
+      <p class="eyebrow">Runtime animation review</p>
+      <h1>Party & Encounter Triggers</h1>
+      <p>Seven party combat rows and thirty-two enemy encounter-trigger rows, sampled from their production atlases.</p>
+    </header>
+
+    <section class="review-grid">
+      <article class="review-panel" aria-labelledby="partyHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Party · 7/7</p>
+            <h2 id="partyHeading">Combat animation</h2>
+          </div>
+          <label>Character
+            <select id="partyCharacter"></select>
+          </label>
+        </div>
+        <canvas id="partyCanvas" width="240" height="200">
+          Selected party combat animation.
+        </canvas>
+        <div id="partyClips" class="clip-buttons" aria-label="Party animation clips"></div>
+        <output id="partyStatus" aria-live="polite"></output>
+      </article>
+
+      <article class="review-panel" aria-labelledby="enemyHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Enemies & bosses · 32/32</p>
+            <h2 id="enemyHeading">Encounter trigger</h2>
+          </div>
+          <label>Enemy
+            <select id="enemyCharacter"></select>
+          </label>
+        </div>
+        <canvas id="enemyCanvas" width="240" height="200">
+          Selected enemy encounter-trigger animation.
+        </canvas>
+        <div id="enemyClips" class="clip-buttons" aria-label="Enemy trigger clips"></div>
+        <button id="runTrigger" class="primary-action" type="button">Run full encounter trigger</button>
+        <output id="enemyStatus" aria-live="polite"></output>
+      </article>
+    </section>
+
+    <p class="key-help"><kbd>Z</kbd> replay party clip · <kbd>X</kbd> reset enemy trigger</p>
+  </main>
+  <script type="module" src="./roster-animation-review.js"></script>
+</body>
+</html>

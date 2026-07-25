@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "party": {
+    "expected": 7,
+    "animated": 7,
+    "clipsPerCharacter": 8,
+    "framesPerCharacter": 40,
+    "missing": []
+  },
+  "enemyEncounterTriggers": {
+    "expected": 32,
+    "animated": 32,
+    "clipsPerEnemy": 6,
+    "framesPerEnemy": 12,
+    "missing": []
+  },
+  "totalRosterEntries": 39,
+  "coverageComplete": true
+}

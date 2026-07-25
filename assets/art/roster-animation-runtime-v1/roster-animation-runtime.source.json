@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "assetId": "roster-animation-runtime-v1",
+  "status": "runtime-candidate",
+  "scope": {
+    "partyCharacters": 7,
+    "enemyAndBossStates": 32,
+    "totalRosterEntries": 39
+  },
+  "provenance": {
+    "partyLane": {
+      "classification": "pixel-authored-production-extension",
+      "sourceMethod": "A frozen snapshot of the original code-native party combat keys is extended at native resolution with explicitly authored phase selection, integer upper-body mechanics, weapon/VFX arcs, timing, pivots, and event frames.",
+      "source": "sources/party-combat-key-poses-v1.png",
+      "originalSourcePackage": "../party-combat-suite"
+    },
+    "enemyTriggerLane": {
+      "classification": "deterministically-pixelified-derivative",
+      "sourceMethod": "A frozen snapshot of the existing deterministically pixelified four-direction enemy field atlas is extended with integer-native trigger poses and code-native encounter indicators. The underlying enemy pixels remain derivative of AI-generated concept boards.",
+      "source": "sources/enemy-field-animation-atlas-v1.png",
+      "originalSourcePackage": "../combat-character-field-animation-v1"
+    }
+  },
+  "party": {
+    "sourceGeometry": {
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "columns": 10,
+      "rows": 7,
+      "pivot": [24, 58],
+      "footPoint": [24, 58],
+      "alphaPolicy": "binary"
+    },
+    "runtimeGeometry": {
+      "frameWidth": 48,
+      "frameHeight": 64,
+      "columns": 40,
+      "rows": 7,
+      "pivot": [24, 58],
+      "footPoint": [24, 58],
+      "alphaPolicy": "binary",
+      "facing": "right",
+      "rootMotionOwnership": "runtime-simulation",
+      "minimumTransparentGutter": 1
+    },
+    "sourceColumns": [
+      "idle",
+      "move",
+      "guard",
+      "hit",
+      "basic-strike-windup",
+      "basic-strike-active",
+      "signature-a",
+      "signature-b",
+      "recovery",
+      "defeat"
+    ],
+    "clips": [
+      {"id": "idle", "start": 0, "frames": 4, "durationsMs": [180, 180, 180, 180], "loop": true, "event": null},
+      {"id": "move", "start": 4, "frames": 6, "durationsMs": [80, 75, 80, 75, 80, 90], "loop": true, "event": null},
+      {"id": "guard", "start": 10, "frames": 4, "durationsMs": [90, 120, 160, 120], "loop": false, "event": {"name": "guard", "frame": 1}},
+      {"id": "hurt", "start": 14, "frames": 4, "durationsMs": [60, 100, 120, 160], "loop": false, "event": null},
+      {"id": "basic-strike", "start": 18, "frames": 6, "durationsMs": [100, 110, 70, 80, 110, 150], "loop": false, "event": {"name": "damage", "frame": 3}},
+      {"id": "signature-a", "start": 24, "frames": 6, "durationsMs": [100, 140, 120, 100, 130, 180], "loop": false, "event": {"name": "skill-a", "frame": 3}},
+      {"id": "signature-b", "start": 30, "frames": 6, "durationsMs": [100, 150, 130, 110, 140, 190], "loop": false, "event": {"name": "skill-b", "frame": 3}},
+      {"id": "defeat", "start": 36, "frames": 4, "durationsMs": [80, 120, 180, 500], "loop": false, "event": null}
+    ],
+    "characters": [
+      {"id": "ren", "name": "Ren Ishikawa", "row": 0, "accent": "#C49A45", "vfx": "crescent"},
+      {"id": "aya", "name": "Aya Shinohara", "row": 1, "accent": "#63B4A6", "vfx": "paper-fan"},
+      {"id": "lise", "name": "Nikola Dražanić", "row": 2, "accent": "#C94E4E", "vfx": "lance-radiance"},
+      {"id": "mateus", "name": "Father Mateus Avelar", "row": 3, "accent": "#8E5AA8", "vfx": "hidden-cross-light"},
+      {"id": "genta", "name": "Genta Mononobe", "row": 4, "accent": "#D9823B", "vfx": "hammer-spark"},
+      {"id": "kiku", "name": "Kiku Nawa", "row": 5, "accent": "#7FB35A", "vfx": "herb-lantern"},
+      {"id": "miyo", "name": "Miyo Senda", "row": 6, "accent": "#668CCB", "vfx": "weather-ruler"}
+    ]
+  },
+  "enemyTriggers": {
+    "sourceGeometry": {
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 20,
+      "rows": 32,
+      "southColumns": [10, 11, 12, 13, 14],
+      "pivot": [24, 46],
+      "footPoint": [24, 46],
+      "alphaPolicy": "binary"
+    },
+    "runtimeGeometry": {
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 12,
+      "rows": 32,
+      "pivot": [24, 46],
+      "footPoint": [24, 46],
+      "alphaPolicy": "binary",
+      "facing": "south trigger keys; runtime movement retains four-direction source atlas",
+      "rootMotionOwnership": "runtime-simulation",
+      "minimumTransparentGutter": 0
+    },
+    "phaseOrder": [
+      "dormant",
+      "idle-breathe",
+      "stir",
+      "suspicious",
+      "turn",
+      "alert-windup",
+      "alert-active",
+      "pursue-contact",
+      "pursue-passing",
+      "engage-windup",
+      "engage-contact",
+      "recover"
+    ],
+    "clips": [
+      {"id": "dormant", "frames": [0, 1], "durationsMs": [280, 320], "loop": true, "event": null},
+      {"id": "sense", "frames": [2, 3, 4], "durationsMs": [110, 160, 120], "loop": false, "event": null},
+      {"id": "alert", "frames": [5, 6], "durationsMs": [170, 230], "loop": false, "event": {"name": "encounter-alert", "frame": 1}},
+      {"id": "pursue", "frames": [7, 8], "durationsMs": [90, 105], "loop": true, "event": null},
+      {"id": "engage", "frames": [9, 10, 11], "durationsMs": [120, 80, 180], "loop": false, "event": {"name": "encounter-contact", "frame": 1}},
+      {"id": "cooldown", "frames": [11, 2, 0], "durationsMs": [180, 160, 260], "loop": false, "event": null}
+    ],
+    "indicatorPalette": {
+      "sense": "#68A5B5",
+      "alert": "#E1B34B",
+      "danger": "#C4473A",
+      "white": "#F4E7B2",
+      "shadow": "#17141A"
+    },
+    "entries": [
+      {"id": "cinder-hound", "name": "Cinder Hound", "row": 0, "profile": "rush"},
+      {"id": "ash-wisp", "name": "Ash Wisp", "row": 1, "profile": "hover"},
+      {"id": "bell-moth", "name": "Bell Moth", "row": 2, "profile": "hover"},
+      {"id": "tithe-enforcer", "name": "Tithe Enforcer", "row": 3, "profile": "humanoid"},
+      {"id": "registry-hound", "name": "Registry Hound", "row": 4, "profile": "rush"},
+      {"id": "drowned-retainer", "name": "Drowned Retainer", "row": 5, "profile": "humanoid"},
+      {"id": "lantern-leech", "name": "Lantern Leech", "row": 6, "profile": "hover"},
+      {"id": "salt-warden", "name": "Salt Warden", "row": 7, "profile": "humanoid"},
+      {"id": "ashen-spearman", "name": "Ashen Spearman", "row": 8, "profile": "humanoid"},
+      {"id": "ashen-banner-guard", "name": "Ashen Banner Guard", "row": 9, "profile": "humanoid"},
+      {"id": "forge-thrall", "name": "Forge Thrall", "row": 10, "profile": "beast"},
+      {"id": "bell-scribe", "name": "Bell Scribe", "row": 11, "profile": "humanoid"},
+      {"id": "mourning-ronin", "name": "Mourning Ronin", "row": 12, "profile": "humanoid"},
+      {"id": "court-arquebusier", "name": "Court Arquebusier", "row": 13, "profile": "humanoid"},
+      {"id": "veil-courier", "name": "Veil Courier", "row": 14, "profile": "humanoid"},
+      {"id": "provincial-banner-guard", "name": "Provincial Banner Guard", "row": 15, "profile": "humanoid"},
+      {"id": "storm-nue", "name": "Storm Nue", "row": 16, "profile": "hover"},
+      {"id": "dream-baku", "name": "Dream Baku", "row": 17, "profile": "beast"},
+      {"id": "twin-tail-nekomata", "name": "Twin-Tail Nekomata", "row": 18, "profile": "beast"},
+      {"id": "silk-jorogumo", "name": "Silk Jorogumo", "row": 19, "profile": "beast"},
+      {"id": "sickle-weasel", "name": "Sickle Weasel", "row": 20, "profile": "rush"},
+      {"id": "drum-tanuki", "name": "Drum Tanuki", "row": 21, "profile": "beast"},
+      {"id": "marsh-kappa-beast", "name": "Marsh Kappa-Beast", "row": 22, "profile": "beast"},
+      {"id": "ushi-oni-behemoth", "name": "Ushi-Oni Behemoth", "row": 23, "profile": "beast"},
+      {"id": "black-chrysanthemum-nest-woman", "name": "Black Chrysanthemum Nest-Woman", "row": 24, "profile": "ambush"},
+      {"id": "razor-bamboo-stalker", "name": "Razor Bamboo Stalker", "row": 25, "profile": "ambush"},
+      {"id": "spider-lily-ambusher", "name": "Spider-Lily Ambusher", "row": 26, "profile": "ambush"},
+      {"id": "lantern-vine-maw", "name": "Lantern-Vine Maw", "row": 27, "profile": "ambush"},
+      {"id": "kurozane-court-human", "name": "Kurozane — Court Human", "row": 28, "profile": "humanoid"},
+      {"id": "kurozane-oni-armor", "name": "Kurozane — Oni Armor", "row": 29, "profile": "humanoid"},
+      {"id": "kurozane-demon-mode", "name": "Kurozane — Demon Mode", "row": 30, "profile": "beast"},
+      {"id": "kurozane-ward-broken", "name": "Kurozane — Ward Broken", "row": 31, "profile": "humanoid"}
+    ],
+    "triggerContract": {
+      "dormant": "no encounter authority",
+      "sense": "player has entered awareness radius; no settlement or contact",
+      "alert": "encounter-alert event fires on active frame and starts readable grace window",
+      "pursue": "simulation owns pursuit movement and facing",
+      "engage": "encounter-contact fires exactly once on contact frame",
+      "cooldown": "failed contact or escaped player returns trigger to dormant without campaign mutation"
+    }
+  },
+  "preview": {
+    "partyGifScale": 3,
+    "enemyGridScale": 2,
+    "nearestNeighborOnly": true
+  }
+}
