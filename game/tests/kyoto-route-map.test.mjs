@@ -120,7 +120,7 @@ test('standalone route screen exposes keyboard, radiogroup, live status, and art
   assert.equal((html.match(/role="radio"/gu) ?? []).length, 3);
   assert.match(html, /aria-live="polite"/u);
   assert.match(html, /<canvas[^>]+width="480"[^>]+height="270"/u);
-  assert.match(html, /↑ ↓ choose · Z confirm · X reconsider/u);
+  assert.match(html, /Stairs choose · Z confirm · X reconsider/u);
   assert.match(source, /arrowup/u);
   assert.match(source, /key === 'z'/u);
   assert.match(source, /key === 'x'/u);

@@ -5,11 +5,18 @@ import {
   getKyotoRoute,
   reconsiderKyotoRoute,
   selectKyotoRoute,
-  stepKyotoRouteSelection,
 } from './kyoto-route-map.mjs';
+import {
+  KYOTO_JUNCTION_PREVIEW_PROGRESS,
+  getKyotoJunctionPartyPose,
+  getKyotoJunctionRoute,
+  getKyotoJunctionRouteForInput,
+} from './kyoto-route-junction.mjs';
 
 const elements = {
   canvas: document.querySelector('#routeMap'),
+  junctionCanvas: document.querySelector('#routeJunction'),
+  junctionRouteLabel: document.querySelector('#junctionRouteLabel'),
   mapRouteLabel: document.querySelector('#mapRouteLabel'),
   choices: [...document.querySelectorAll('[data-route-id]')],
   routeName: document.querySelector('#routeName'),
@@ -26,11 +33,24 @@ const elements = {
 
 const context = elements.canvas.getContext('2d', { alpha: false });
 context.imageSmoothingEnabled = false;
-const background = new Image();
-let backgroundReady = false;
+const junctionContext = elements.junctionCanvas.getContext('2d', { alpha: false });
+junctionContext.imageSmoothingEnabled = false;
+const mapBackground = new Image();
+const junctionBackground = new Image();
+const junctionPartyAtlas = new Image();
+let mapBackgroundReady = false;
+let junctionBackgroundReady = false;
+let junctionPartyReady = false;
 let state = createKyotoRouteState();
 let animationHandle = null;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let junctionMotion = {
+  routeId: state.selectedRouteId,
+  from: 0,
+  to: KYOTO_JUNCTION_PREVIEW_PROGRESS,
+  startedAt: performance.now(),
+  duration: reducedMotion ? 0 : 520,
+};
 
 function signed(value) {
   if (value > 0) return `+${value}`;
@@ -38,7 +58,7 @@ function signed(value) {
   return '±0';
 }
 
-function drawFallback() {
+function drawMapFallback() {
   context.fillStyle = '#948868';
   context.fillRect(0, 0, elements.canvas.width, elements.canvas.height);
   context.fillStyle = '#24180f';
@@ -67,8 +87,8 @@ function traceRoute(route, color, width) {
 
 function drawMap(timestamp = 0) {
   context.imageSmoothingEnabled = false;
-  if (backgroundReady) context.drawImage(background, 0, 0);
-  else drawFallback();
+  if (mapBackgroundReady) context.drawImage(mapBackground, 0, 0);
+  else drawMapFallback();
 
   const selected = getKyotoRoute(state.selectedRouteId);
   traceRoute(selected, '#17151b', 8);
@@ -80,11 +100,111 @@ function drawMap(timestamp = 0) {
   context.lineWidth = 1;
   context.strokeRect(x - 11, y - 11, 22, 22);
   context.strokeRect(x - 9, y - 9, 18, 18);
-  animationHandle = requestAnimationFrame(drawMap);
+}
+
+function junctionProgress(timestamp) {
+  if (junctionMotion.duration === 0) return junctionMotion.to;
+  const elapsed = Math.max(0, timestamp - junctionMotion.startedAt);
+  const ratio = Math.min(1, elapsed / junctionMotion.duration);
+  const eased = ratio * ratio * (3 - 2 * ratio);
+  return junctionMotion.from + (junctionMotion.to - junctionMotion.from) * eased;
+}
+
+function beginJunctionMotion(routeId, to, { from = 0, duration = 520 } = {}) {
+  junctionMotion = {
+    routeId,
+    from,
+    to,
+    startedAt: performance.now(),
+    duration: reducedMotion ? 0 : duration,
+  };
+}
+
+function drawJunctionFallback() {
+  junctionContext.fillStyle = '#17172c';
+  junctionContext.fillRect(0, 0, elements.junctionCanvas.width, elements.junctionCanvas.height);
+  junctionContext.fillStyle = '#f6e7b0';
+  junctionContext.font = '8px monospace';
+  junctionContext.fillText('THE THREE WAYS', 8, 14);
+}
+
+function traceJunctionPath(route) {
+  junctionContext.lineJoin = 'miter';
+  junctionContext.lineCap = 'square';
+  junctionContext.strokeStyle = '#0e0d13';
+  junctionContext.lineWidth = 6;
+  junctionContext.beginPath();
+  route.path.forEach(([x, y], index) => {
+    if (index === 0) junctionContext.moveTo(x, y);
+    else junctionContext.lineTo(x, y);
+  });
+  junctionContext.stroke();
+  junctionContext.strokeStyle = route.color;
+  junctionContext.lineWidth = 2;
+  junctionContext.stroke();
+}
+
+function drawJunctionSprite(frame, footX, footY, mirrored) {
+  if (!junctionPartyReady) {
+    junctionContext.fillStyle = frame < 4 ? '#b08b58' : '#7a3d45';
+    junctionContext.fillRect(footX - 4, footY - 16, 8, 16);
+    return;
+  }
+  const sourceX = frame * 16;
+  if (mirrored) {
+    junctionContext.save();
+    junctionContext.translate(footX, 0);
+    junctionContext.scale(-1, 1);
+    junctionContext.drawImage(junctionPartyAtlas, sourceX, 0, 16, 24, -8, footY - 24, 16, 24);
+    junctionContext.restore();
+  } else {
+    junctionContext.drawImage(junctionPartyAtlas, sourceX, 0, 16, 24, footX - 8, footY - 24, 16, 24);
+  }
+}
+
+function drawJunction(timestamp = 0) {
+  junctionContext.imageSmoothingEnabled = false;
+  if (junctionBackgroundReady) junctionContext.drawImage(junctionBackground, 0, 0);
+  else drawJunctionFallback();
+
+  const route = getKyotoJunctionRoute(state.selectedRouteId);
+  const progress = junctionProgress(timestamp);
+  const party = getKyotoJunctionPartyPose(route.routeId, progress);
+  traceJunctionPath(route);
+
+  const pulse = reducedMotion ? 0 : Math.floor(timestamp / 220) % 2;
+  const [exitX, exitY] = route.path.at(-1);
+  junctionContext.strokeStyle = pulse ? '#f6e7b0' : route.color;
+  junctionContext.lineWidth = 1;
+  junctionContext.strokeRect(exitX - 6, exitY - 6, 12, 12);
+
+  junctionContext.fillStyle = '#0e0d13';
+  junctionContext.fillRect(party.support.x - 5, party.support.y - 2, 10, 2);
+  junctionContext.fillRect(party.leader.x - 5, party.leader.y - 2, 10, 2);
+  drawJunctionSprite(
+    party.support.frame,
+    party.support.x,
+    party.support.y,
+    party.support.mirrored,
+  );
+  drawJunctionSprite(
+    party.leader.frame,
+    party.leader.x,
+    party.leader.y,
+    party.leader.mirrored,
+  );
+}
+
+function drawFrame(timestamp) {
+  drawMap(timestamp);
+  drawJunction(timestamp);
+  animationHandle = requestAnimationFrame(drawFrame);
 }
 
 function render() {
   const selected = getKyotoRoute(state.selectedRouteId);
+  const junctionRoute = getKyotoJunctionRoute(selected.id);
+  elements.junctionRouteLabel.textContent = `${junctionRoute.label} selected`;
   elements.mapRouteLabel.textContent = `${selected.name} selected`;
   elements.routeName.textContent = selected.name;
   elements.routeSummary.textContent = selected.summary;
@@ -111,6 +231,7 @@ function render() {
 function choose(routeId, { focus = false } = {}) {
   state = selectKyotoRoute(state, routeId);
   const selected = getKyotoRoute(routeId);
+  beginJunctionMotion(routeId, KYOTO_JUNCTION_PREVIEW_PROGRESS, { from: 0, duration: 480 });
   elements.status.textContent = `${selected.name} is ready for review.`;
   render();
   if (focus) {
@@ -119,16 +240,21 @@ function choose(routeId, { focus = false } = {}) {
 }
 
 function confirmSelection() {
+  if (state.confirmedRouteId === state.selectedRouteId) return;
+  const from = junctionProgress(performance.now());
   const result = confirmKyotoRoute(state);
   state = result.state;
   const selected = getKyotoRoute(state.selectedRouteId);
+  beginJunctionMotion(selected.id, 1, { from, duration: 680 });
   elements.status.textContent = `${selected.name} chosen. The party will reach Kyoto by way of ${selected.nodes.at(-2).name}.`;
   document.dispatchEvent(new CustomEvent('kyoto-route-confirmed', { detail: result.receipt }));
   render();
 }
 
 function reconsiderSelection() {
+  const from = junctionProgress(performance.now());
   state = reconsiderKyotoRoute(state);
+  beginJunctionMotion(state.selectedRouteId, KYOTO_JUNCTION_PREVIEW_PROGRESS, { from, duration: 360 });
   elements.status.textContent = `${getKyotoRoute(state.selectedRouteId).name} is ready for review.`;
   render();
 }
@@ -145,9 +271,8 @@ document.addEventListener('keydown', (event) => {
   const nativeButtonKey = (key === 'enter' || key === ' ') && event.target.closest?.('button');
   if (['arrowup', 'arrowleft', 'arrowdown', 'arrowright'].includes(key)) {
     event.preventDefault();
-    const direction = ['arrowup', 'arrowleft'].includes(key) ? -1 : 1;
-    state = stepKyotoRouteSelection(state, direction);
-    choose(state.selectedRouteId, { focus: true });
+    const junctionRoute = getKyotoJunctionRouteForInput(key);
+    choose(junctionRoute.routeId, { focus: true });
   } else if (key === 'z' || ((key === 'enter' || key === ' ') && !nativeButtonKey)) {
     event.preventDefault();
     confirmSelection();
@@ -160,15 +285,36 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-background.addEventListener('load', () => {
-  backgroundReady = background.naturalWidth === 480 && background.naturalHeight === 270;
+mapBackground.addEventListener('load', () => {
+  mapBackgroundReady = mapBackground.naturalWidth === 480 && mapBackground.naturalHeight === 270;
 });
-background.addEventListener('error', () => {
-  backgroundReady = false;
+mapBackground.addEventListener('error', () => {
+  mapBackgroundReady = false;
   elements.status.textContent = 'Map art unavailable. Route choices remain usable.';
 });
-background.src = './assets/art/southern-japan-route-map-v2/southern-japan-route-map-base-v2.png';
+mapBackground.src = './assets/art/southern-japan-route-map-v2/southern-japan-route-map-base-v2.png';
+
+junctionBackground.addEventListener('load', () => {
+  junctionBackgroundReady = (
+    junctionBackground.naturalWidth === 320 && junctionBackground.naturalHeight === 180
+  );
+});
+junctionBackground.addEventListener('error', () => {
+  junctionBackgroundReady = false;
+  elements.status.textContent = 'Junction art unavailable. Route choices remain usable.';
+});
+junctionBackground.src = './assets/art/kyoto-route-junction-v1/kyoto-route-junction-base-v1.png';
+
+junctionPartyAtlas.addEventListener('load', () => {
+  junctionPartyReady = (
+    junctionPartyAtlas.naturalWidth === 128 && junctionPartyAtlas.naturalHeight === 24
+  );
+});
+junctionPartyAtlas.addEventListener('error', () => {
+  junctionPartyReady = false;
+});
+junctionPartyAtlas.src = './assets/art/kyoto-route-junction-v1/kyoto-route-junction-party-atlas-v1.png';
 
 render();
-animationHandle = requestAnimationFrame(drawMap);
+animationHandle = requestAnimationFrame(drawFrame);
 window.addEventListener('pagehide', () => cancelAnimationFrame(animationHandle), { once: true });

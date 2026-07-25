@@ -13,8 +13,34 @@
     <header class="route-header">
       <p class="eyebrow">Nagasaki to Kyoto · three passages</p>
       <h1>Three Passages to Miyako</h1>
-      <p>Choose what the party risks crossing western Japan. The shortest line is not always the safest road.</p>
+      <p>Walk the party onto a stair to choose what they risk crossing western Japan. The shortest line is not always the safest road.</p>
     </header>
+
+    <section class="junction-panel" aria-labelledby="junctionHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Playable junction</p>
+          <h2 id="junctionHeading">The Three Ways</h2>
+        </div>
+        <p id="junctionRouteLabel" class="map-route-label">Northern stair selected</p>
+      </div>
+      <canvas id="routeJunction" width="320" height="180" aria-describedby="junctionDescription">
+        A moonlit wayside landing offers three stair exits: down-left to the
+        harbor, up to the northern post road, and down-right toward Shikoku.
+      </canvas>
+      <p class="junction-inputs" aria-hidden="true">
+        <span><kbd>←</kbd>/<kbd>↓</kbd> Sea</span>
+        <span><kbd>↑</kbd> North</span>
+        <span><kbd>→</kbd> South</span>
+        <span><kbd>Z</kbd> Depart</span>
+      </p>
+      <p id="junctionDescription" class="sr-only">
+        Direct Sea Passage descends left to the wet harbor stair. Northern Road
+        ascends the central shrine stair. Southern Passage descends right
+        through a vermilion gate. The controlled character leads and the AI
+        support character follows.
+      </p>
+    </section>
 
     <section class="map-panel" aria-labelledby="mapHeading">
       <div class="panel-heading">
@@ -43,7 +69,7 @@
           <p class="eyebrow">Council decision</p>
           <h2 id="choiceHeading">Choose the passage</h2>
         </div>
-        <p class="key-hint">↑ ↓ choose · Z confirm · X reconsider · 1–3 jump</p>
+        <p class="key-hint">Stairs choose · Z confirm · X reconsider · 1–3 jump</p>
       </div>
 
       <div id="routeChoices" class="route-choices" role="radiogroup" aria-label="Routes from Nagasaki to Kyoto">

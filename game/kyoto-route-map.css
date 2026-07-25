@@ -92,6 +92,7 @@ h1 {
   line-height: 1.55;
 }
 
+.junction-panel,
 .map-panel,
 .choice-panel {
   border: 2px solid var(--line);
@@ -99,8 +100,15 @@ h1 {
   box-shadow: 8px 8px 0 #09070b;
 }
 
+.junction-panel,
 .map-panel {
   padding: 14px;
+}
+
+.junction-panel {
+  margin-bottom: 18px;
+  border-color: #5c526a;
+  background: #17172c;
 }
 
 .panel-heading {
@@ -124,14 +132,49 @@ h1 {
   font-size: 0.78rem;
 }
 
+#routeJunction,
 #routeMap {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 2px solid #09070b;
-  background: #948868;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+}
+
+#routeJunction {
+  background: #17172c;
+}
+
+#routeMap {
+  background: #948868;
+}
+
+.junction-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.junction-inputs span {
+  padding: 7px 5px;
+  border: 1px solid #45466e;
+  background: #10101f;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 4px;
+  border: 1px solid #8d8172;
+  color: #f6e7b0;
+  background: #25274b;
+  box-shadow: 0 2px 0 #0e0d13;
+  font: inherit;
 }
 
 .choice-panel {
@@ -359,6 +402,10 @@ h1 {
 
   .route-effects {
     margin-top: 14px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .junction-inputs {
     grid-template-columns: repeat(2, 1fr);
   }
 

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kyoto-route-junction-v1",
+  "status": "runtime-candidate",
+  "title": "The Three Ways",
+  "classification": "pixel-authored-production-asset",
+  "originalityPolicy": "Original Japanese wayside-junction scene, geometry, architecture, duo sprites, labels, palette, and route presentation. It adapts the general action-platformer idea of committing to a branch by walking onto a staircase; no Castlevania III artwork, stage layout, sprites, tiles, UI, or proprietary motifs are copied.",
+  "geometry": {
+    "nativeWidth": 320,
+    "nativeHeight": 180,
+    "previewScale": 4,
+    "spriteWidth": 16,
+    "spriteHeight": 24,
+    "spriteFrames": 8,
+    "alphaPolicy": {
+      "scene": "opaque",
+      "sprites": "binary"
+    },
+    "rootCoordinates": "integer native pixels",
+    "spritePivot": "bottom-center"
+  },
+  "palette": {
+    "ink": "#0E0D13",
+    "shadow": "#1E1619",
+    "skyDeep": "#17172C",
+    "sky": "#25274B",
+    "skyLight": "#45466E",
+    "moon": "#E6D38E",
+    "cloud": "#55506A",
+    "mountainFar": "#2A2B3E",
+    "mountain": "#38323D",
+    "stoneDark": "#35333C",
+    "stone": "#58515A",
+    "stoneLight": "#8D8172",
+    "mossDark": "#344238",
+    "moss": "#56604A",
+    "woodDark": "#3A2424",
+    "wood": "#6B3A2E",
+    "red": "#A54438",
+    "redLight": "#D1654D",
+    "sea": "#224755",
+    "seaLight": "#3E7880",
+    "routeSea": "#5EB3BC",
+    "routeNorth": "#E0B850",
+    "routeSouth": "#D45B48",
+    "paper": "#D8C17B",
+    "white": "#F6E7B0",
+    "skin": "#C99B76",
+    "cloth": "#5C667C",
+    "armor": "#B08B58",
+    "support": "#7A3D45",
+    "holy": "#F2D86B"
+  },
+  "spriteFrameOrder": [
+    "leader-idle",
+    "leader-step-a",
+    "leader-step-b",
+    "leader-commit",
+    "support-idle",
+    "support-step-a",
+    "support-step-b",
+    "support-commit"
+  ],
+  "junction": {
+    "origin": [160, 129],
+    "previewProgress": 0.56,
+    "routes": [
+      {
+        "routeId": "direct-sea",
+        "exitId": "sea-stair",
+        "label": "SEA GATE",
+        "direction": "down-left",
+        "color": "routeSea",
+        "inputs": ["ArrowLeft", "ArrowDown"],
+        "path": [[160, 129], [143, 136], [124, 144], [101, 151], [74, 158]]
+      },
+      {
+        "routeId": "northern-road",
+        "exitId": "north-stair",
+        "label": "NORTH ROAD",
+        "direction": "up",
+        "color": "routeNorth",
+        "inputs": ["ArrowUp"],
+        "path": [[160, 129], [160, 113], [161, 96], [160, 79], [158, 61]]
+      },
+      {
+        "routeId": "southern-passage",
+        "exitId": "south-stair",
+        "label": "SOUTH ROAD",
+        "direction": "down-right",
+        "color": "routeSouth",
+        "inputs": ["ArrowRight"],
+        "path": [[160, 129], [181, 136], [205, 144], [231, 152], [260, 158]]
+      }
+    ]
+  },
+  "choicePolicy": {
+    "visibleRoutes": 3,
+    "defaultRouteId": "northern-road",
+    "selectionAuthority": "player",
+    "confirmationInput": ["KeyZ", "Enter", "Space"],
+    "reconsiderInput": ["KeyX", "Escape"],
+    "canonicalMutation": "none until an explicit campaign adapter consumes the route receipt",
+    "allRoutesReach": "Kyoto (Miyako)"
+  }
+}

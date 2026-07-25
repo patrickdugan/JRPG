@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "assetId": "kyoto-route-junction-v1",
+  "status": "runtime-candidate",
+  "provenance": {
+    "classification": "pixel-authored-production-asset",
+    "sourceMethod": "original code-native pixel primitives at 320x180; eight 16x24 duo frames; integer-aligned scene geometry and route overlays",
+    "generatorUsed": false,
+    "originalityPolicy": "Original Japanese wayside-junction scene, geometry, architecture, duo sprites, labels, palette, and route presentation. It adapts the general action-platformer idea of committing to a branch by walking onto a staircase; no Castlevania III artwork, stage layout, sprites, tiles, UI, or proprietary motifs are copied."
+  },
+  "source": {
+    "path": "kyoto-route-junction.source.json",
+    "sha256": "da577db41295d0661bb78a962d6f9918c88087bb2c13720cc8e1a9bff26fee8f"
+  },
+  "geometry": {
+    "nativeWidth": 320,
+    "nativeHeight": 180,
+    "previewScale": 4,
+    "spriteWidth": 16,
+    "spriteHeight": 24,
+    "spriteFrames": 8,
+    "alphaPolicy": {
+      "scene": "opaque",
+      "sprites": "binary"
+    },
+    "rootCoordinates": "integer native pixels",
+    "spritePivot": "bottom-center"
+  },
+  "palette": {
+    "ceiling": 30,
+    "colors": {
+      "ink": "#0E0D13",
+      "shadow": "#1E1619",
+      "skyDeep": "#17172C",
+      "sky": "#25274B",
+      "skyLight": "#45466E",
+      "moon": "#E6D38E",
+      "cloud": "#55506A",
+      "mountainFar": "#2A2B3E",
+      "mountain": "#38323D",
+      "stoneDark": "#35333C",
+      "stone": "#58515A",
+      "stoneLight": "#8D8172",
+      "mossDark": "#344238",
+      "moss": "#56604A",
+      "woodDark": "#3A2424",
+      "wood": "#6B3A2E",
+      "red": "#A54438",
+      "redLight": "#D1654D",
+      "sea": "#224755",
+      "seaLight": "#3E7880",
+      "routeSea": "#5EB3BC",
+      "routeNorth": "#E0B850",
+      "routeSouth": "#D45B48",
+      "paper": "#D8C17B",
+      "white": "#F6E7B0",
+      "skin": "#C99B76",
+      "cloth": "#5C667C",
+      "armor": "#B08B58",
+      "support": "#7A3D45",
+      "holy": "#F2D86B"
+    }
+  },
+  "spriteFrameOrder": [
+    "leader-idle",
+    "leader-step-a",
+    "leader-step-b",
+    "leader-commit",
+    "support-idle",
+    "support-step-a",
+    "support-step-b",
+    "support-commit"
+  ],
+  "junction": {
+    "origin": [
+      160,
+      129
+    ],
+    "previewProgress": 0.56,
+    "routes": [
+      {
+        "routeId": "direct-sea",
+        "exitId": "sea-stair",
+        "label": "SEA GATE",
+        "direction": "down-left",
+        "color": "routeSea",
+        "inputs": [
+          "ArrowLeft",
+          "ArrowDown"
+        ],
+        "path": [
+          [
+            160,
+            129
+          ],
+          [
+            143,
+            136
+          ],
+          [
+            124,
+            144
+          ],
+          [
+            101,
+            151
+          ],
+          [
+            74,
+            158
+          ]
+        ]
+      },
+      {
+        "routeId": "northern-road",
+        "exitId": "north-stair",
+        "label": "NORTH ROAD",
+        "direction": "up",
+        "color": "routeNorth",
+        "inputs": [
+          "ArrowUp"
+        ],
+        "path": [
+          [
+            160,
+            129
+          ],
+          [
+            160,
+            113
+          ],
+          [
+            161,
+            96
+          ],
+          [
+            160,
+            79
+          ],
+          [
+            158,
+            61
+          ]
+        ]
+      },
+      {
+        "routeId": "southern-passage",
+        "exitId": "south-stair",
+        "label": "SOUTH ROAD",
+        "direction": "down-right",
+        "color": "routeSouth",
+        "inputs": [
+          "ArrowRight"
+        ],
+        "path": [
+          [
+            160,
+            129
+          ],
+          [
+            181,
+            136
+          ],
+          [
+            205,
+            144
+          ],
+          [
+            231,
+            152
+          ],
+          [
+            260,
+            158
+          ]
+        ]
+      }
+    ]
+  },
+  "choicePolicy": {
+    "visibleRoutes": 3,
+    "defaultRouteId": "northern-road",
+    "selectionAuthority": "player",
+    "confirmationInput": [
+      "KeyZ",
+      "Enter",
+      "Space"
+    ],
+    "reconsiderInput": [
+      "KeyX",
+      "Escape"
+    ],
+    "canonicalMutation": "none until an explicit campaign adapter consumes the route receipt",
+    "allRoutesReach": "Kyoto (Miyako)"
+  },
+  "outputs": [
+    {
+      "path": "kyoto-route-junction-base-v1.png",
+      "sha256": "d18235a6f9beb2b5e3c295928566167c2df307b775e1c7486a668dabfcb2e5e6",
+      "dimensions": [
+        320,
+        180
+      ],
+      "actualColors": 25,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "opaque-native-runtime-background"
+    },
+    {
+      "path": "kyoto-route-junction-all-exits-v1.png",
+      "sha256": "b9ffd5f6ef0b69b632a464f4b9ced57279469879ed6f76fdf03563b754df84b0",
+      "dimensions": [
+        320,
+        180
+      ],
+      "actualColors": 25,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "opaque-native-three-exit-review"
+    },
+    {
+      "path": "kyoto-route-junction-preview-v1.png",
+      "sha256": "761f2f9cc8aae92df302299991deb835bcadb228dbf618fa682b193c72a2ba66",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "actualColors": 28,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "nearest-neighbor-review-with-duo"
+    },
+    {
+      "path": "kyoto-route-junction-party-atlas-v1.png",
+      "sha256": "648d5067eef5b4c9a1b23095c285a4ee12424e7ea2be2bbdae2175058059385d",
+      "dimensions": [
+        128,
+        24
+      ],
+      "actualColors": 8,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "purpose": "binary-alpha-duo-runtime-atlas"
+    }
+  ],
+  "builder": {
+    "path": "build_kyoto_route_junction.py",
+    "sha256": "f758b95fb0703b9f7ccdeca984560b9937f9f65e38e2b97272aca5f6f08e62a8",
+    "pillowVersion": "11.3.0",
+    "deterministic": true,
+    "integerAligned": true,
+    "nativeResampling": "none",
+    "previewResampling": "nearest-neighbor"
+  }
+}
