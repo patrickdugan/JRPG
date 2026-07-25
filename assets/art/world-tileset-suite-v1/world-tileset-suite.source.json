@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "assetId": "world-tileset-suite-v1",
+  "title": "Top-Down and Side-View Regional Tileset Foundation",
+  "status": "pixel-authored-production-foundation",
+  "provenance": {
+    "classification": "pixel-authored production asset",
+    "sourceMethod": "original code-native pixel primitives authored at native resolution",
+    "generatorUsed": false,
+    "originalityPolicy": "Original secular material vocabulary using cedar, stone, water, ash, paper, lacquer, iron, and invented bell machinery; no copied game tiles, real heraldry, readable sacred text, or franchise motifs."
+  },
+  "topDown": {
+    "tileWidth": 16,
+    "tileHeight": 16,
+    "columns": 16,
+    "rows": 8,
+    "atlasWidth": 256,
+    "atlasHeight": 128,
+    "alphaPolicy": "opaque",
+    "roleOrder": [
+      "floor-a",
+      "floor-b",
+      "floor-detail",
+      "path",
+      "wall",
+      "wall-cap",
+      "edge-north",
+      "edge-south",
+      "edge-west",
+      "edge-east",
+      "outer-corner",
+      "inner-corner",
+      "hazard-or-liquid",
+      "prop-base",
+      "threshold",
+      "foreground-occluder"
+    ]
+  },
+  "sideView": {
+    "tileWidth": 32,
+    "tileHeight": 32,
+    "columns": 16,
+    "rows": 8,
+    "atlasWidth": 512,
+    "atlasHeight": 256,
+    "alphaPolicy": "opaque",
+    "roleOrder": [
+      "backfill",
+      "ground-left",
+      "ground-middle",
+      "ground-right",
+      "platform-left",
+      "platform-middle",
+      "platform-right",
+      "wall",
+      "ceiling",
+      "slope-up",
+      "stairs-up",
+      "pillar",
+      "hazard",
+      "prop",
+      "door",
+      "foreground"
+    ]
+  },
+  "themes": [
+    {
+      "id": "takamine-rain-village",
+      "name": "Takamine Rain Village",
+      "motif": "cedar",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#16233A",
+        "shadow": "#24344B",
+        "mid": "#455666",
+        "light": "#6B7F8C",
+        "material": "#5A3A2C",
+        "accent": "#A08B58",
+        "hazard": "#4F7392"
+      }
+    },
+    {
+      "id": "hoshigawa-river-ward",
+      "name": "Hoshigawa River Ward",
+      "motif": "river",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#173047",
+        "shadow": "#25475B",
+        "mid": "#3F6470",
+        "light": "#6F91A6",
+        "material": "#547675",
+        "accent": "#D7C99A",
+        "hazard": "#2E6B86"
+      }
+    },
+    {
+      "id": "sodegaura-relay-road",
+      "name": "Sodegaura Relay Road",
+      "motif": "road",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#2B2526",
+        "shadow": "#473638",
+        "mid": "#665044",
+        "light": "#8B6A54",
+        "material": "#5A3A2C",
+        "accent": "#B09155",
+        "hazard": "#762B32"
+      }
+    },
+    {
+      "id": "kagura-ash-pass",
+      "name": "Kagura Ash Pass",
+      "motif": "ash",
+      "palette": {
+        "outline": "#090D16",
+        "deep": "#1B1B22",
+        "shadow": "#303039",
+        "mid": "#4B4B52",
+        "light": "#77736E",
+        "material": "#3A2B2B",
+        "accent": "#B35A3E",
+        "hazard": "#E06B32"
+      }
+    },
+    {
+      "id": "kurohana-black-castle",
+      "name": "Kurohana Black Castle",
+      "motif": "lacquer",
+      "palette": {
+        "outline": "#080A10",
+        "deep": "#111522",
+        "shadow": "#252434",
+        "mid": "#3C3340",
+        "light": "#65515B",
+        "material": "#401D2B",
+        "accent": "#9E3742",
+        "hazard": "#781E39"
+      }
+    },
+    {
+      "id": "hidden-archive-chapel",
+      "name": "Hidden Archive Chapel",
+      "motif": "archive",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#242331",
+        "shadow": "#403947",
+        "mid": "#665A57",
+        "light": "#9A8B73",
+        "material": "#5A3A2C",
+        "accent": "#D7C99A",
+        "hazard": "#F0C978"
+      }
+    },
+    {
+      "id": "oni-forge",
+      "name": "Oni Forge",
+      "motif": "forge",
+      "palette": {
+        "outline": "#080A0F",
+        "deep": "#171A20",
+        "shadow": "#292D31",
+        "mid": "#44464A",
+        "light": "#72716D",
+        "material": "#4A3029",
+        "accent": "#A05A32",
+        "hazard": "#F08032"
+      }
+    },
+    {
+      "id": "black-bell-engine",
+      "name": "Black Bell Engine",
+      "motif": "bell-engine",
+      "palette": {
+        "outline": "#080A10",
+        "deep": "#141A24",
+        "shadow": "#28343C",
+        "mid": "#46545A",
+        "light": "#718077",
+        "material": "#4A3A2A",
+        "accent": "#A08B58",
+        "hazard": "#7A233B"
+      }
+    }
+  ]
+}

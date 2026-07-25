@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "assetId": "combat-character-coverage-v1",
+  "title": "Combat Character Portrait, Top-Down, and Side-View Coverage",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated pixel-styled concept",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "promptSetSummary": "Eight grouped boards with one portrait and four elevated field views per row, preserving identities from the original late-16-bit side-sprite suite.",
+    "originalityPolicy": "Original fictional designs only; no copied franchise sprites, celebrity likenesses, logos, or traced poses."
+  },
+  "portrait": {
+    "width": 96,
+    "height": 96,
+    "maximumContentWidth": 90,
+    "maximumContentHeight": 90,
+    "visibleColorCeiling": 32,
+    "alphaPolicy": "binary",
+    "minimumTransparentGutter": 2
+  },
+  "field": {
+    "frameWidth": 48,
+    "frameHeight": 48,
+    "columns": 4,
+    "rows": 1,
+    "atlasWidth": 192,
+    "atlasHeight": 48,
+    "maximumContentWidth": 44,
+    "maximumContentHeight": 44,
+    "bottomGutter": 2,
+    "visibleColorCeiling": 16,
+    "alphaPolicy": "binary",
+    "minimumTransparentGutter": 2,
+    "pivot": [24, 44],
+    "foot": [24, 46],
+    "facingOrder": ["south-idle", "west-contact", "north-idle", "south-extension"],
+    "eastPolicy": "mirror west at runtime",
+    "rootMotionOwnership": "runtime-simulation"
+  },
+  "boards": [
+    {
+      "id": "enemy-v2-a",
+      "chromaSource": "sources/enemy-v2-a-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v2-a-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "cinder-hound", "name": "Cinder Hound", "catalogId": "ENM-001", "group": "enemy-v2"},
+        {"id": "ash-wisp", "name": "Ash Wisp", "catalogId": "ENM-002", "group": "enemy-v2"},
+        {"id": "bell-moth", "name": "Bell Moth", "catalogId": "ENM-003", "group": "enemy-v2"},
+        {"id": "tithe-enforcer", "name": "Tithe Enforcer", "catalogId": "ENM-004", "group": "enemy-v2"}
+      ]
+    },
+    {
+      "id": "enemy-v2-b",
+      "chromaSource": "sources/enemy-v2-b-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v2-b-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "registry-hound", "name": "Registry Hound", "catalogId": "ENM-005", "group": "enemy-v2"},
+        {"id": "drowned-retainer", "name": "Drowned Retainer", "catalogId": "ENM-006", "group": "enemy-v2"},
+        {"id": "lantern-leech", "name": "Lantern Leech", "catalogId": "ENM-007", "group": "enemy-v2"},
+        {"id": "salt-warden", "name": "Salt Warden", "catalogId": "ENM-008", "group": "enemy-v2"}
+      ]
+    },
+    {
+      "id": "enemy-v2-c",
+      "chromaSource": "sources/enemy-v2-c-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v2-c-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "ashen-spearman", "name": "Ashen Spearman", "catalogId": "ENM-009", "group": "enemy-v2"},
+        {"id": "ashen-banner-guard", "name": "Ashen Banner Guard", "catalogId": "ENM-010", "group": "enemy-v2"},
+        {"id": "forge-thrall", "name": "Forge Thrall", "catalogId": "ENM-011", "group": "enemy-v2"},
+        {"id": "bell-scribe", "name": "Bell Scribe", "catalogId": "ENM-012", "group": "enemy-v2"}
+      ]
+    },
+    {
+      "id": "enemy-v3-humans",
+      "chromaSource": "sources/enemy-v3-humans-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v3-humans-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "mourning-ronin", "name": "Mourning Ronin", "catalogId": "HUM-001", "group": "enemy-v3-human"},
+        {"id": "court-arquebusier", "name": "Court Arquebusier", "catalogId": "HUM-002", "group": "enemy-v3-human"},
+        {"id": "veil-courier", "name": "Veil Courier", "catalogId": "HUM-003", "group": "enemy-v3-human"},
+        {"id": "provincial-banner-guard", "name": "Provincial Banner Guard", "catalogId": "HUM-004", "group": "enemy-v3-human"}
+      ]
+    },
+    {
+      "id": "enemy-v3-beasts-a",
+      "chromaSource": "sources/enemy-v3-beasts-a-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v3-beasts-a-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "storm-nue", "name": "Storm Nue", "catalogId": "BST-001", "group": "enemy-v3-beast"},
+        {"id": "dream-baku", "name": "Dream Baku", "catalogId": "BST-002", "group": "enemy-v3-beast"},
+        {"id": "twin-tail-nekomata", "name": "Twin-Tail Nekomata", "catalogId": "BST-003", "group": "enemy-v3-beast"},
+        {"id": "silk-jorogumo", "name": "Silk Jorogumo", "catalogId": "BST-004", "group": "enemy-v3-beast"}
+      ]
+    },
+    {
+      "id": "enemy-v3-beasts-b",
+      "chromaSource": "sources/enemy-v3-beasts-b-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v3-beasts-b-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "sickle-weasel", "name": "Sickle Weasel", "catalogId": "BST-005", "group": "enemy-v3-beast"},
+        {"id": "drum-tanuki", "name": "Drum Tanuki", "catalogId": "BST-006", "group": "enemy-v3-beast"},
+        {"id": "marsh-kappa-beast", "name": "Marsh Kappa-Beast", "catalogId": "BST-007", "group": "enemy-v3-beast"},
+        {"id": "ushi-oni-behemoth", "name": "Ushi-Oni Behemoth", "catalogId": "BST-008", "group": "enemy-v3-beast"}
+      ]
+    },
+    {
+      "id": "enemy-v3-plants",
+      "chromaSource": "sources/enemy-v3-plants-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/enemy-v3-plants-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "black-chrysanthemum-nest-woman", "name": "Black Chrysanthemum Nest-Woman", "catalogId": "PLT-001", "group": "enemy-v3-plant"},
+        {"id": "razor-bamboo-stalker", "name": "Razor Bamboo Stalker", "catalogId": "PLT-002", "group": "enemy-v3-plant"},
+        {"id": "spider-lily-ambusher", "name": "Spider-Lily Ambusher", "catalogId": "PLT-003", "group": "enemy-v3-plant"},
+        {"id": "lantern-vine-maw", "name": "Lantern-Vine Maw", "catalogId": "PLT-004", "group": "enemy-v3-plant"}
+      ]
+    },
+    {
+      "id": "kurozane-states",
+      "chromaSource": "sources/kurozane-coverage-chroma-source-v1.png",
+      "alphaSource": "sources/kurozane-coverage-alpha-source-v1.png",
+      "rows": [
+        {"id": "kurozane-court-human", "name": "Kurozane — Court Human", "catalogId": "BOS-001-A", "group": "boss"},
+        {"id": "kurozane-oni-armor", "name": "Kurozane — Oni Armor", "catalogId": "BOS-001-B", "group": "boss"},
+        {"id": "kurozane-demon-mode", "name": "Kurozane — Demon Mode", "catalogId": "BOS-001-C", "group": "boss"},
+        {"id": "kurozane-ward-broken", "name": "Kurozane — Ward Broken", "catalogId": "BOS-001-D", "group": "boss"}
+      ]
+    }
+  ]
+}

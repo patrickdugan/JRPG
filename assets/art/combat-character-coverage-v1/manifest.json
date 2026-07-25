@@ -1,0 +1,3773 @@
+{
+  "schemaVersion": 1,
+  "assetId": "combat-character-coverage-v1",
+  "status": "deterministically-pixelified-runtime-candidate",
+  "provenance": {
+    "sourceClassification": "AI-generated pixel-styled concept",
+    "derivativeClassification": "deterministically pixelified",
+    "notPixelAuthored": true,
+    "generatorSurface": "Codex built-in image generation",
+    "promptSetSummary": "Eight grouped boards with one portrait and four elevated field views per row, preserving identities from the original late-16-bit side-sprite suite.",
+    "originalityPolicy": "Original fictional designs only; no copied franchise sprites, celebrity likenesses, logos, or traced poses."
+  },
+  "portraitContract": {
+    "width": 96,
+    "height": 96,
+    "maximumContentWidth": 90,
+    "maximumContentHeight": 90,
+    "visibleColorCeiling": 32,
+    "alphaPolicy": "binary",
+    "minimumTransparentGutter": 2
+  },
+  "fieldContract": {
+    "frameWidth": 48,
+    "frameHeight": 48,
+    "columns": 4,
+    "rows": 1,
+    "atlasWidth": 192,
+    "atlasHeight": 48,
+    "maximumContentWidth": 44,
+    "maximumContentHeight": 44,
+    "bottomGutter": 2,
+    "visibleColorCeiling": 16,
+    "alphaPolicy": "binary",
+    "minimumTransparentGutter": 2,
+    "pivot": [
+      24,
+      44
+    ],
+    "foot": [
+      24,
+      46
+    ],
+    "facingOrder": [
+      "south-idle",
+      "west-contact",
+      "north-idle",
+      "south-extension"
+    ],
+    "eastPolicy": "mirror west at runtime",
+    "rootMotionOwnership": "runtime-simulation"
+  },
+  "generatedStatePackages": 32,
+  "inventoryStatePackages": 39,
+  "sourceBoards": [
+    {
+      "boardId": "enemy-v2-a",
+      "chromaPath": "sources/enemy-v2-a-coverage-chroma-source-v1.png",
+      "chromaSha256": "07a29955756eb2c438bb50da3e1879a411af0d2179abc7794a9e495a6cbe7f90",
+      "alphaPath": "sources/enemy-v2-a-coverage-alpha-source-v1.png",
+      "alphaSha256": "c58c9758d2dcf25ee1410cc3cfd0785f0f9d2eaf1893bd8dd2ae2e588cb56107",
+      "dimensions": [
+        1402,
+        1122
+      ],
+      "detectedColumnBounds": [
+        0,
+        310,
+        561,
+        841,
+        1079,
+        1402
+      ],
+      "detectedRowBounds": [
+        0,
+        321,
+        605,
+        842,
+        1122
+      ]
+    },
+    {
+      "boardId": "enemy-v2-b",
+      "chromaPath": "sources/enemy-v2-b-coverage-chroma-source-v1.png",
+      "chromaSha256": "cac65366978483007c1f173f26966c95520c8d16325217f26297ea855f246ad1",
+      "alphaPath": "sources/enemy-v2-b-coverage-alpha-source-v1.png",
+      "alphaSha256": "aeb346b4eaf1a80e61602d3899bcb691c22c1825b6d44ace04285d369abf598b",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "detectedColumnBounds": [
+        0,
+        317,
+        528,
+        768,
+        989,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        314,
+        627,
+        894,
+        1254
+      ]
+    },
+    {
+      "boardId": "enemy-v2-c",
+      "chromaPath": "sources/enemy-v2-c-coverage-chroma-source-v1.png",
+      "chromaSha256": "e53d350d21ed89d06cf48b354cb705d12e06f563bf321a0a036ca6e624820ec2",
+      "alphaPath": "sources/enemy-v2-c-coverage-alpha-source-v1.png",
+      "alphaSha256": "5a1460b90af6e8d113306ace2c10a984ff20ed3c9117de0795de8b537db729a7",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "detectedColumnBounds": [
+        0,
+        343,
+        614,
+        922,
+        1229,
+        1536
+      ],
+      "detectedRowBounds": [
+        0,
+        258,
+        512,
+        732,
+        1024
+      ]
+    },
+    {
+      "boardId": "enemy-v3-humans",
+      "chromaPath": "sources/enemy-v3-humans-coverage-chroma-source-v1.png",
+      "chromaSha256": "454ac2a065c0e2c3c7065b35c385ce467b6ecfeb196abbe7debbaa59d595ca1f",
+      "alphaPath": "sources/enemy-v3-humans-coverage-alpha-source-v1.png",
+      "alphaSha256": "cffe6fc84c4506e29e1c2304b968ab6d837231333d344bcdd48ce3d7a2373ce7",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "detectedColumnBounds": [
+        0,
+        318,
+        614,
+        922,
+        1224,
+        1536
+      ],
+      "detectedRowBounds": [
+        0,
+        265,
+        514,
+        747,
+        1024
+      ]
+    },
+    {
+      "boardId": "enemy-v3-beasts-a",
+      "chromaPath": "sources/enemy-v3-beasts-a-coverage-chroma-source-v1.png",
+      "chromaSha256": "be1887c7c073546be11cd66c368efcb7fa4c13262e10e3753dec328cbdf2200c",
+      "alphaPath": "sources/enemy-v3-beasts-a-coverage-alpha-source-v1.png",
+      "alphaSha256": "d19b4d54ce9444f9793fe43471986154906377b88b1fa6bed658b976c32c81b8",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "detectedColumnBounds": [
+        0,
+        297,
+        509,
+        785,
+        1003,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        349,
+        629,
+        940,
+        1254
+      ]
+    },
+    {
+      "boardId": "enemy-v3-beasts-b",
+      "chromaPath": "sources/enemy-v3-beasts-b-coverage-chroma-source-v1.png",
+      "chromaSha256": "f3bde9fa02a6eb3bff2ee3c1a0b4ebd555d2081e7217ecf8c815ba11dd491fb7",
+      "alphaPath": "sources/enemy-v3-beasts-b-coverage-alpha-source-v1.png",
+      "alphaSha256": "6b4b6eb6575d4efbc563d62c5f136e404f9e8999dde63ca1e229bb24bd746e45",
+      "dimensions": [
+        1402,
+        1122
+      ],
+      "detectedColumnBounds": [
+        0,
+        318,
+        570,
+        864,
+        1097,
+        1402
+      ],
+      "detectedRowBounds": [
+        0,
+        305,
+        561,
+        830,
+        1122
+      ]
+    },
+    {
+      "boardId": "enemy-v3-plants",
+      "chromaPath": "sources/enemy-v3-plants-coverage-chroma-source-v1.png",
+      "chromaSha256": "fdff104bca790c3b7cc24d1a42e12216ddf02e5835033bd5dbc930bcb7a3970e",
+      "alphaPath": "sources/enemy-v3-plants-coverage-alpha-source-v1.png",
+      "alphaSha256": "299cea0ce2f0f2409b95b39d4946e94f7fe8ca3e04cc68eee6a64e68067ba78c",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "detectedColumnBounds": [
+        0,
+        327,
+        614,
+        928,
+        1224,
+        1536
+      ],
+      "detectedRowBounds": [
+        0,
+        308,
+        544,
+        762,
+        1024
+      ]
+    },
+    {
+      "boardId": "kurozane-states",
+      "chromaPath": "sources/kurozane-coverage-chroma-source-v1.png",
+      "chromaSha256": "7a489f5a31abac48a9204d9621663766670128170d2a32f444c3a1e32dd9752f",
+      "alphaPath": "sources/kurozane-coverage-alpha-source-v1.png",
+      "alphaSha256": "75f49d1fec2d6c1271a234fdc7b81bc338dca29375d9cbe92332840a2b4ad98c",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "detectedColumnBounds": [
+        0,
+        318,
+        535,
+        770,
+        983,
+        1254
+      ],
+      "detectedRowBounds": [
+        0,
+        341,
+        645,
+        926,
+        1254
+      ]
+    }
+  ],
+  "builder": {
+    "path": "build_combat_character_coverage.py",
+    "sha256": "edafb6f44e4aff22c666fb3b15dafb531dbbe58866947e888edfd583a18e2df3",
+    "sharedBuilder": "../late-snes-roster-suite-v1/build_late_snes_roster_suite.py",
+    "sharedBuilderSha256": "676b3c86a73493a99ef88d285bf678a5763a9d2df334bf723c4dcf58cc82d2e3",
+    "deterministic": true
+  },
+  "contactSheet": {
+    "path": "combat-character-coverage-contact-sheet-v1.png",
+    "sha256": "54ab7c631bbcb696f599cca5f82a3a11a1d2c094dcccb2b6947fce3afdfb783e",
+    "dimensions": [
+      2000,
+      1104
+    ]
+  },
+  "inventory": {
+    "path": "character-art-inventory-v1.json",
+    "sha256": "8e74ffb8e30543a38738745d839d46bd356bfc46aabc50522333b26021052cc6"
+  },
+  "assets": [
+    {
+      "id": "cinder-hound",
+      "name": "Cinder Hound",
+      "catalogId": "ENM-001",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/cinder-hound-portrait-v1.png",
+        "sha256": "aee5841cd03052cccf985f55dbc7c26928c8decdde4d34c52f55cf9522da2abd",
+        "sha256Rgba": "7158c5e81ff9f2f46a7942d12261a5dbd92f65ee0fd8bc743a889775afeb54ac",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          6,
+          3,
+          90,
+          93
+        ],
+        "transparentGutters": {
+          "left": 6,
+          "top": 3,
+          "right": 6,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/cinder-hound-field-four-view-v1.png",
+        "sha256": "c45d734fce8ca4b4cbc18e14724e6a9cdc3907fb9b201ef1ba8e70e0a04052d4",
+        "frames": [
+          {
+            "sha256Rgba": "86dacb4b834efadc3f30b158ad3a5632ce0d6899d0dd1c59949421b812d32b76",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              3,
+              45,
+              45
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 3,
+              "right": 3,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "761323049a0f48e17ca64f38f9bc428fea33fdd1143e647d9801f21ef7e71ee3",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              10,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 10,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "efa4fa6a8fabc5d72cbd3f139950734ad20d086327b178ae715eb899bfabe424",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 10,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "779764658f30a5cd588b892be3581418194202dfdf855e51a0ef2c55408a1da7",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              8,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 8,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/cinder-hound-four-pose-v1.png",
+        "sha256": "7112969e91438c1266105b6708db74cbab5fe6140b7e7dd720f3b39d92fd6922"
+      },
+      "preview": {
+        "path": "previews/cinder-hound-coverage-preview-v1.png",
+        "sha256": "ebe005e68da0ba545a211553aefcc60970b9e159f1b42f1bf91052c7a054d96f"
+      }
+    },
+    {
+      "id": "ash-wisp",
+      "name": "Ash Wisp",
+      "catalogId": "ENM-002",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/ash-wisp-portrait-v1.png",
+        "sha256": "9499d2a1667e9d9a75276efbfad7248500b41d9ad80fa5111821923ff8bf5492",
+        "sha256Rgba": "fc2280772fbf80a70caa6cfeb3466822c5ece4e86cba82f174778c2475f6499d",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          9,
+          3,
+          87,
+          93
+        ],
+        "transparentGutters": {
+          "left": 9,
+          "top": 3,
+          "right": 9,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/ash-wisp-field-four-view-v1.png",
+        "sha256": "c80cabf1e56e0292458e27f57ea76c1d3030c54fdafd227f7f4271caa26030ac",
+        "frames": [
+          {
+            "sha256Rgba": "3735fa9b340a74eee21893c61980be9c6602f697914648f0e91fab7b7b9d90be",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              3,
+              39,
+              45
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 3,
+              "right": 9,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "aa23c6d72d0e2932312b4916151040d52fb121b3c4229f46bed321cedca2664d",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "60458f5c3fff9a72ebc884b9cacde9d2b6d5b2682a1dc275012567ab9d5d9a11",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              3,
+              38,
+              45
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 3,
+              "right": 10,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "466e1080475d6f544bf83f79569adf924f30c1c8c035f815a2a977675aaff55c",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              4,
+              44,
+              45
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 4,
+              "right": 4,
+              "bottom": 3
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ash-wisp-four-pose-v1.png",
+        "sha256": "eca661fe32d146e2007120bd80571b0b32d61cb2c384682ff075f7fe700e6163"
+      },
+      "preview": {
+        "path": "previews/ash-wisp-coverage-preview-v1.png",
+        "sha256": "9b73ffd3c38f85de0b9786005135c1e4f269541ffe7cbce2016d44cd1b8dc15a"
+      }
+    },
+    {
+      "id": "bell-moth",
+      "name": "Bell Moth",
+      "catalogId": "ENM-003",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/bell-moth-portrait-v1.png",
+        "sha256": "f149575b979d2df2435771e8ec1f9690cf9c692292734e7d4a85333b4e3384be",
+        "sha256Rgba": "dfd243bc25d9ea601e8daf52f421ef38b03e35ca25c177b5d976b5552608aea2",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          5,
+          93,
+          90
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 5,
+          "right": 3,
+          "bottom": 6
+        }
+      },
+      "topDown": {
+        "path": "field/bell-moth-field-four-view-v1.png",
+        "sha256": "e2c28913501d629c5813cc19daae28bcd9b77d5834e15592cb4052c151935bcc",
+        "frames": [
+          {
+            "sha256Rgba": "f530bbb31f4d3f3e058d13e5294f404cca7b954a1eaa6a367a7349a24546da2b",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "555051f2b18a3ffce718b75356805525c81b5742eff842d35de42351f22e4228",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              5,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 5,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "eeeb4fadff38bf0967fee6965b70ff9cd586498469e1ff174c42b578b61ee195",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "2bcde5cbe1acdf2fe8fe95bd481dbe1ce07e67de69039611467951e490483f24",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              4,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 4,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/bell-moth-four-pose-v1.png",
+        "sha256": "03d0d3df9be1dbafd3ebb97125311725e0be2663b119da0fd49878cf911bced7"
+      },
+      "preview": {
+        "path": "previews/bell-moth-coverage-preview-v1.png",
+        "sha256": "a769404ddfce9eda6f6cd5dec04724ade830c3e9a1c6f4b23d10f081e039e6b4"
+      }
+    },
+    {
+      "id": "tithe-enforcer",
+      "name": "Tithe Enforcer",
+      "catalogId": "ENM-004",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-a",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/tithe-enforcer-portrait-v1.png",
+        "sha256": "1f8796df82cd8d03e36f193a77a8cfd8ee4cc5b4e64c0675ebed3284dd04226e",
+        "sha256Rgba": "314ca900c9c7ac990a12d031044e878e39848152b37e4af70edb1495cfae69ab",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          8,
+          93,
+          88
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 8,
+          "right": 3,
+          "bottom": 8
+        }
+      },
+      "topDown": {
+        "path": "field/tithe-enforcer-field-four-view-v1.png",
+        "sha256": "a958d17e85362d67c33f0a0991f4c698c87332e4cfe0af4ae54d5e7f74b89a18",
+        "frames": [
+          {
+            "sha256Rgba": "005a474405186e5942a99af5703b454daf4a9f909a484d5f5eb88d4677dc22ad",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              3,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 3,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "8049a5f2c7bddcca32466140eb12f5b35025524db476da0f9807e7f2f2477fd8",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              10,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 10,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "3cb02a44819b2cf24797bccae109f47d63ad61fe2117f35431741b42021e67d3",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "0d62963e251c3a1ad8a6044d1fddbf523c42173dde314f3f927092a438dbfaf0",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              13,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 13,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/tithe-enforcer-four-pose-v1.png",
+        "sha256": "2f65d81ea3511218d194c444ffd84d7d7bba37b263151597088edf7e16e6baf3"
+      },
+      "preview": {
+        "path": "previews/tithe-enforcer-coverage-preview-v1.png",
+        "sha256": "e2b23c841fa21f43afd862f3711d81548a1e5cf4e4ad5d06799bd35f8975298a"
+      }
+    },
+    {
+      "id": "registry-hound",
+      "name": "Registry Hound",
+      "catalogId": "ENM-005",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/registry-hound-portrait-v1.png",
+        "sha256": "455d58fffc6a077db98a0096f3f7583cce4fb49a92cfed89559c5183dad8e972",
+        "sha256Rgba": "df2696172eb76edb6e050b9ffe7178ebdf30076302e321bf02203069f1307160",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          7,
+          93,
+          89
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 7,
+          "right": 3,
+          "bottom": 7
+        }
+      },
+      "topDown": {
+        "path": "field/registry-hound-field-four-view-v1.png",
+        "sha256": "98c93ba6dc1f3397decf672d97cbc33f8e79f2332621d03ba2cc4509bc3f466a",
+        "frames": [
+          {
+            "sha256Rgba": "b75ed0fa7603ecfba9ac96926f3aa429bd041a182280505cee770160306c5a8d",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "6f7ad4c772dbe682c56fb98742114bd8166954b173801b4e91e22bd315cee6a5",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "72140cc366cc6bf3ff127ed08a20afa9c858d17b6773af847d6b01010f4e3803",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 10,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "26723211f533837a6e0214fecd4bfd8d070c544c4f40a0181c1f61a564674878",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 3,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/registry-hound-four-pose-v1.png",
+        "sha256": "876a0b0d16bcf0a192175f7064926b2c5d9018413b475fdf91e91ccf41ff95d6"
+      },
+      "preview": {
+        "path": "previews/registry-hound-coverage-preview-v1.png",
+        "sha256": "27ba1e88ca93fbbca5e8e84f06d2834b8f9153b8c7779744283016af7f7b9d87"
+      }
+    },
+    {
+      "id": "drowned-retainer",
+      "name": "Drowned Retainer",
+      "catalogId": "ENM-006",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/drowned-retainer-portrait-v1.png",
+        "sha256": "87176c6232ee42852ad63719ed6b4f85ebd0100b68fd64311fa5c411d3d1d267",
+        "sha256Rgba": "fcb3edaef47efe80099b94ba3ff9ee00dc7302d8b76967944105fb8f67e9f83d",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          4,
+          3,
+          91,
+          93
+        ],
+        "transparentGutters": {
+          "left": 4,
+          "top": 3,
+          "right": 5,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/drowned-retainer-field-four-view-v1.png",
+        "sha256": "be64826ded2025c0d6549b73e80e8150d78daec1803e3584ee2de627ab69d1bd",
+        "frames": [
+          {
+            "sha256Rgba": "22eebf6316c3934ed4c3d33d372f869a4831aa3fcc400501316cb6e9cef2cdc3",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "c818ae593b9f8f374955eeebaadeb6a3bb52b738f161cf68902bad11a94ad9a5",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              4,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 4,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "a33161b08b992cfaca7c7f79714f6b9649b9228ea81eba85b809cd07de1c5d6c",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "cc47c628aad0eb3fee62ac205d4ae5845a96b1876870df525427a61abd5c0012",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              5,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 5,
+              "right": 3,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/drowned-retainer-four-pose-v1.png",
+        "sha256": "6c1cbe0b3544fee6b9b5690d8cb8543df919c95b60164accbd032094ef2ffe1f"
+      },
+      "preview": {
+        "path": "previews/drowned-retainer-coverage-preview-v1.png",
+        "sha256": "251fbfbb7edac674b3bf971573989b1cea27d26f9f68518e22e8566e571d0e93"
+      }
+    },
+    {
+      "id": "lantern-leech",
+      "name": "Lantern Leech",
+      "catalogId": "ENM-007",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/lantern-leech-portrait-v1.png",
+        "sha256": "92e8d0c74e8d56237461ebc9f729910b4f258bfb0ae8816ba5ca757b9cedbe6d",
+        "sha256Rgba": "d6fe8e83bc28969ca9efff31f5ff3cc5d620db83121d87265bb8aa09a38c48a4",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          4,
+          93,
+          91
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 4,
+          "right": 3,
+          "bottom": 5
+        }
+      },
+      "topDown": {
+        "path": "field/lantern-leech-field-four-view-v1.png",
+        "sha256": "7f7b492a25e83af51aa88ff01851bfd11d85fab64e105ffd759a1732f8403736",
+        "frames": [
+          {
+            "sha256Rgba": "e1cec3ca5c698b72b1a7bb20cebd9f0a98e26e554f28e2f8954d9fb1d84042f3",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              2,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 2,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "2333052e8f76413771edf082ccc3fb18ee267586711ec324f7a2c86b78664787",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "224bc95f9fa13c3d345ca71c18643dff930bf764a716b3ae1ba15a7186390511",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              2,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 2,
+              "right": 14,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "b398c2588920ad823bd092a0aea35db75b871947bf0debfc309e8d542a12ce72",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              7,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 7,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/lantern-leech-four-pose-v1.png",
+        "sha256": "b67b9c66003b744eac8065853abb3c7d20512dfbe9407866a08e1709cba342dd"
+      },
+      "preview": {
+        "path": "previews/lantern-leech-coverage-preview-v1.png",
+        "sha256": "b101b4fe36a279069252d95555c8f56d145ddc91df8af3fdca125745d85b5d96"
+      }
+    },
+    {
+      "id": "salt-warden",
+      "name": "Salt Warden",
+      "catalogId": "ENM-008",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-b",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/salt-warden-portrait-v1.png",
+        "sha256": "6ec89d162fe9af629f3c4abd7da033c2f33d8ab56995b0bb3d9a73d3c01a29b7",
+        "sha256Rgba": "6edcc917128792a858f396c50a741bd469c5b67f8ab0fb1a49e3b897df697ebb",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          6,
+          3,
+          89,
+          93
+        ],
+        "transparentGutters": {
+          "left": 6,
+          "top": 3,
+          "right": 7,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/salt-warden-field-four-view-v1.png",
+        "sha256": "1b4903c398646cdf0b08dcc4a106cfb50b187814f47ba5b9600cba4da26133d9",
+        "frames": [
+          {
+            "sha256Rgba": "7cd4d0ad58a8084c3d35425fd0364031d5ccc83e52062c5b4707888ff7f9e361",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              39,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 9,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "191cb6fe2e3ccab7202b3f7f397661fced4978edee11785ec435b093ae00a838",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "fcbdbc50edfddfd63c065734ec8acda44728b0e4141c3bb5d5b49b25ea2ac40f",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              36,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 12,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "c863ec0980d50768317df58d8974664fc403f73723c8204894606f6018427682",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              8,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 8,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/salt-warden-four-pose-v1.png",
+        "sha256": "29403fb5346a9130a8f6b56ffd72d306b4b077874b6acd9bc42b2b8194800d09"
+      },
+      "preview": {
+        "path": "previews/salt-warden-coverage-preview-v1.png",
+        "sha256": "ad97f31f248c29bace1f2baa1c84c83a1aff029af8cb71be2c796b002ab8eb8c"
+      }
+    },
+    {
+      "id": "ashen-spearman",
+      "name": "Ashen Spearman",
+      "catalogId": "ENM-009",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/ashen-spearman-portrait-v1.png",
+        "sha256": "32c3d11eea5721089d418f4cac341e2db2d77eb89135f6b1cdbf35bec3f3146d",
+        "sha256Rgba": "0665a34af9c1a015f4f9ddeca6ca51ae8df1ce693e4a6ab7fb847a069e228a91",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          12,
+          93,
+          84
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 12,
+          "right": 3,
+          "bottom": 12
+        }
+      },
+      "topDown": {
+        "path": "field/ashen-spearman-field-four-view-v1.png",
+        "sha256": "8c2182f6a50c8e78bffec76a9f52a348587ada112b20c44605c04d5635a383de",
+        "frames": [
+          {
+            "sha256Rgba": "7da1dc48fc0e90f8bd322029045ec7692b41b5ab9eba21a9c59f6b9eae3feaa0",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "8fad6e80b0025667084150b79a34cabc11809e43bb8e53e19b4ce07077af0d05",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              19,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 19,
+              "right": 3,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "c470f95fd7c3fffc6fe450c9d96ca0f3793d81263149fefb5e12e894a0e3b0fa",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "00a715a469d866c2491cc1813051b0bb99f2a4f32921329a2a183db578008207",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 10,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ashen-spearman-four-pose-v1.png",
+        "sha256": "6ea9ab364f67b76f397f2094af6ff2ec710c9601f1d6490975ea7be2bffd7cbc"
+      },
+      "preview": {
+        "path": "previews/ashen-spearman-coverage-preview-v1.png",
+        "sha256": "88778bd0270725d8c07b9d4b02670371ca070e2ee1fd80f7d756cee380ac8bae"
+      }
+    },
+    {
+      "id": "ashen-banner-guard",
+      "name": "Ashen Banner Guard",
+      "catalogId": "ENM-010",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/ashen-banner-guard-portrait-v1.png",
+        "sha256": "ac24a719e0b0be7414e8c81e5a94f7f639eb1f2dacd8c7a3e54f55e35bdfa026",
+        "sha256Rgba": "e3922d492ba236cba349e30506cf3209095ee1d3329394ae6d31a3030faa6b1f",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          8,
+          93,
+          88
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 8,
+          "right": 3,
+          "bottom": 8
+        }
+      },
+      "topDown": {
+        "path": "field/ashen-banner-guard-field-four-view-v1.png",
+        "sha256": "bf5f2ce6df5fffc8a6cd9261ddcf7783aecdd858e54efafe2e07f7d9caee23af",
+        "frames": [
+          {
+            "sha256Rgba": "e4cb36241b348b15fc4235a2871d4da4b95861b9a01b6ce4c2d926e68ef96a41",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              12,
+              2,
+              36,
+              46
+            ],
+            "transparentGutters": {
+              "left": 12,
+              "top": 2,
+              "right": 12,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "4156682b0521db712dc9fa6d34ff48ab4159679d647242537bbfc8e748a78efc",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              10,
+              3,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 10,
+              "top": 3,
+              "right": 10,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "f7021aca5200d847fd27d4937bc3a5f2085e20c54e352dda88d60dfbd1706ed6",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              3,
+              35,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 3,
+              "right": 13,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "60f93fb10b5c540513ffb0be767c897eec4fbdcf3e32124b497168afbc5d9817",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              14,
+              2,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 14,
+              "top": 2,
+              "right": 14,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ashen-banner-guard-four-pose-v1.png",
+        "sha256": "75633c20c571f64dee0b1021f88eff0311ecc35779c07655a7e87967c5ed5ba3"
+      },
+      "preview": {
+        "path": "previews/ashen-banner-guard-coverage-preview-v1.png",
+        "sha256": "e71ea9efabc003de073570c4e68800ea53f039744abfbde93f4a8f9e153d5dc8"
+      }
+    },
+    {
+      "id": "forge-thrall",
+      "name": "Forge Thrall",
+      "catalogId": "ENM-011",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/forge-thrall-portrait-v1.png",
+        "sha256": "f871310bd06970426a579f75d4425bed0bc967dad0a4c9aa93b26a99ddfeb4ab",
+        "sha256Rgba": "343b16d80d4425026b44e8200d872dee17b0bf228092c6cf0a3c3d7c1587cb6f",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          14,
+          93,
+          81
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 14,
+          "right": 3,
+          "bottom": 15
+        }
+      },
+      "topDown": {
+        "path": "field/forge-thrall-field-four-view-v1.png",
+        "sha256": "e355744bb3324fbb4d0e396a7c2788fccc461c4a38c394411aae59b381e1d7ae",
+        "frames": [
+          {
+            "sha256Rgba": "1a008938659298e308cecba25128879eaf503308ee04e8c1b2664593738215b1",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              3,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 3,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "2fe392da4f19f3700bd53a1384f25421a039b86f56fb481d66a7645ec4736a13",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              5,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 5,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "01991b44b993da95bd3e906a69f6a4441b509646d70ab0197eb66fd54c4f802f",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "4a53e47495334cf2d271b194e2467d273d66eb38f60375088a73dc9521a148da",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/forge-thrall-four-pose-v1.png",
+        "sha256": "55ca71f1979f6ea5a9e798f3a9eaadf03731ef4e89f48a547b00027fda969e71"
+      },
+      "preview": {
+        "path": "previews/forge-thrall-coverage-preview-v1.png",
+        "sha256": "551375b672167444c6da6f9472569c50df4ccc2a22e98295943cf8f7ee29a69d"
+      }
+    },
+    {
+      "id": "bell-scribe",
+      "name": "Bell Scribe",
+      "catalogId": "ENM-012",
+      "group": "enemy-v2",
+      "sourceBoard": "enemy-v2-c",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/bell-scribe-portrait-v1.png",
+        "sha256": "9b283dd9a7639595e24d52213b0761616e4687499a4eba05ef723d1e850e1760",
+        "sha256Rgba": "d4af98cb039658c27a8a016b8f71a953e286358c91a5a433dc20df13550b7b95",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          13,
+          93,
+          83
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 13,
+          "right": 3,
+          "bottom": 13
+        }
+      },
+      "topDown": {
+        "path": "field/bell-scribe-field-four-view-v1.png",
+        "sha256": "c379296a84b84ffa09cc0f97acee1db0bfc3dbcd6a40f55e4b769262c0debd16",
+        "frames": [
+          {
+            "sha256Rgba": "a0d031d2652631dea6a4917d883aafd5cfe8e94606d3d5792d9ae9d38d5447f8",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "f150314ba80ad25f3cf4757c89f9c152c7742a8a878a11cf83d8068af3643ed2",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              2,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 2,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "8b703da030d42d43db43ec5780a22c191d6f3dd76e324e024abe8c86eb845b0a",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "5097395f0390347b9bc15180b4a8cd3eaced6c5ad41a88d807e10cfa4dd53a22",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              5,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 5,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/bell-scribe-four-pose-v1.png",
+        "sha256": "7f82806af005bc2fcde078cb9a8bf001faa193ab0a22b660a0cb1757bed5af4e"
+      },
+      "preview": {
+        "path": "previews/bell-scribe-coverage-preview-v1.png",
+        "sha256": "a6e6743e67a66bf27c02ef9962c6165de227fd7b2ccc65380ad1210751b68642"
+      }
+    },
+    {
+      "id": "mourning-ronin",
+      "name": "Mourning Ronin",
+      "catalogId": "HUM-001",
+      "group": "enemy-v3-human",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/mourning-ronin-portrait-v1.png",
+        "sha256": "18ef32191d236d5cfb90fb2f446f2603651cac7da782b4845acf7328cacf38d1",
+        "sha256Rgba": "518a77d51a3d8b3086733fdd61f45e71dfc5982b453550f6cd8e6121f33a53eb",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          7,
+          93,
+          88
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 7,
+          "right": 3,
+          "bottom": 8
+        }
+      },
+      "topDown": {
+        "path": "field/mourning-ronin-field-four-view-v1.png",
+        "sha256": "69ba3cbdb4b6f66e29aa02edbbf25419ef94a991229fc64dc44a808b04f7fb77",
+        "frames": [
+          {
+            "sha256Rgba": "3b4229f290b1177f96f227e3d798dd02fc025507c1ed7e52512cd240ac19a66b",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              3,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 3,
+              "right": 8,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "68fecffb1c8bee825c01f15f7aff4d52c9283b879efb2ec8e86d8c8120690daa",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              10,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 10,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "595665c19d9867bf42b138ed8ef12b1d38d98eab357cbaf1bc4e7fddde6f6f9c",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              39,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 9,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "a33a44ed24647e997bbd3dd5b16516a8c868b255cdc84bc3393fbedfdbb33273",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              5,
+              3,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 5,
+              "top": 3,
+              "right": 5,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/mourning-ronin-four-pose-v1.png",
+        "sha256": "08d8caf53ff03a670e215461ae5c413f2a040b258ed4ecfeaea80c4eb0788561"
+      },
+      "preview": {
+        "path": "previews/mourning-ronin-coverage-preview-v1.png",
+        "sha256": "80ca762fd79b43f02edf7679c94e995ed34fe3c1a91b14f2a0f4dd3f6a413b6d"
+      }
+    },
+    {
+      "id": "court-arquebusier",
+      "name": "Court Arquebusier",
+      "catalogId": "HUM-002",
+      "group": "enemy-v3-human",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/court-arquebusier-portrait-v1.png",
+        "sha256": "45cf7ff63ccf0fa88477cca437ea34e274c7b9313a60ac23f0737ae8e38b5bab",
+        "sha256Rgba": "f6665c720025491a8b5ba8efc25510d3cd223eb21acff775d1dec7c9de6769bb",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          6,
+          93,
+          89
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 6,
+          "right": 3,
+          "bottom": 7
+        }
+      },
+      "topDown": {
+        "path": "field/court-arquebusier-field-four-view-v1.png",
+        "sha256": "c7daab57459661138d7abd1b87ba25cdcca2f4dcd505dc2da0039b970557229f",
+        "frames": [
+          {
+            "sha256Rgba": "c1f270c17c9d786956d25fc74ef3a46ba98100ba90568f30b664883bb3109fef",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "c4b540fd8ad9f8913f96848ef2414e9713f806f8868a10e0cfdca2f90c34d7c6",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              3,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 3,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "44636cd626134c20924311473c9f077f7c41680e6b040d5621da91054a72160d",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              10,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 10,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "aa778672b49a168c8a06b763596ec42d7e449115c0a275ffbeed1ef955b4ddc2",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              6,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 6,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/court-arquebusier-four-pose-v1.png",
+        "sha256": "a87a8ecca91f8be949a99c1bdd5118ca8eed66235616962b3c4bf598b1fa619c"
+      },
+      "preview": {
+        "path": "previews/court-arquebusier-coverage-preview-v1.png",
+        "sha256": "60b83ab971a7c92d60bbeeced837b4b6e6f19c5c718f639afaede912d5127c4e"
+      }
+    },
+    {
+      "id": "veil-courier",
+      "name": "Veil Courier",
+      "catalogId": "HUM-003",
+      "group": "enemy-v3-human",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/veil-courier-portrait-v1.png",
+        "sha256": "18aa62bd5dcd862e9844a31dd0852f7789d488a4fab418476aef9bd24af107df",
+        "sha256Rgba": "033642645b345ea975836e82a5e313882e3a913629fea336730347a86c654430",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          10,
+          93,
+          86
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 10,
+          "right": 3,
+          "bottom": 10
+        }
+      },
+      "topDown": {
+        "path": "field/veil-courier-field-four-view-v1.png",
+        "sha256": "07ed3a87e317673e5942403097bfe9c83330acadf29ad3bf99f3db90dca50b19",
+        "frames": [
+          {
+            "sha256Rgba": "e02795f3b87c790dd83a1bbba5c8f39a0411ca79ca5f3663568d2ae8cef870f2",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 10,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "2eb1ff39cc98653fa3935afce997fe918e22ca535e46c7ea1f8254a0c722f2d4",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              10,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 10,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "6423d4709d199020190d2db970d3bf071fe9cdd91dba5218c0057ca8d9e314cd",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 10,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "297da5c54abee4f19d1d6c409a15d9b3322dbf8a08306de94590071e22713ae8",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 3,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/veil-courier-four-pose-v1.png",
+        "sha256": "e48f998f2b69ba49c1365b12e74395b69c81f43120f5947fd86f4062299e30a3"
+      },
+      "preview": {
+        "path": "previews/veil-courier-coverage-preview-v1.png",
+        "sha256": "3ece31bf7320ed65b1762a364e55e73988fd05c0e5e468bf339c74f4361d7c3e"
+      }
+    },
+    {
+      "id": "provincial-banner-guard",
+      "name": "Provincial Banner Guard",
+      "catalogId": "HUM-004",
+      "group": "enemy-v3-human",
+      "sourceBoard": "enemy-v3-humans",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/provincial-banner-guard-portrait-v1.png",
+        "sha256": "443e4010c12a44bf8dca88c159ffe5fc08a0532feadeda03a00610e2a479f627",
+        "sha256Rgba": "dbe2f214bb2d6e70a1e8b524810cb66a2bbbcc864958a3bddea9b98b7bcfb4f0",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          8,
+          93,
+          87
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 8,
+          "right": 3,
+          "bottom": 9
+        }
+      },
+      "topDown": {
+        "path": "field/provincial-banner-guard-field-four-view-v1.png",
+        "sha256": "92623bca464d4541b3e4f8a7b6bac49a3289e529dbeab9c3e7229204996a0b61",
+        "frames": [
+          {
+            "sha256Rgba": "b376de847456d406051e5947e66bb855a52b8f7daffc8cf81917817248e7eb4b",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "900ffdf4f35446af98d72bf5e9408bd97d03222eff1b4ba555d5cbe54aa7024c",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "3614e87a737b1c80b00a75e1b8e258666091f6d0da32f9a0267469feb9661990",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              2,
+              35,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 2,
+              "right": 13,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "04d0ff36f5502ed0f96c7f807dc4e94afecaad202844d96a5220896a7d86b7e6",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              36,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 12,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/provincial-banner-guard-four-pose-v1.png",
+        "sha256": "e322cd31b8e7b2d78aba1171f921b3fe9c0cb0f1b159c7eb67bc7199c22d0347"
+      },
+      "preview": {
+        "path": "previews/provincial-banner-guard-coverage-preview-v1.png",
+        "sha256": "dd8db0be1d8851d047247b205fceb36629f88f0a3311059d816d861e8aece61b"
+      }
+    },
+    {
+      "id": "storm-nue",
+      "name": "Storm Nue",
+      "catalogId": "BST-001",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/storm-nue-portrait-v1.png",
+        "sha256": "328d0394a8c931e880a92993927f7711d6ec08225420fc81842c5c4ee3211bf0",
+        "sha256Rgba": "0f5c8cdad176b82ea400aaf49970825da37a609b957ab8a25e94596aff38ada3",
+        "visibleColors": 32,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          9,
+          3,
+          87,
+          93
+        ],
+        "transparentGutters": {
+          "left": 9,
+          "top": 3,
+          "right": 9,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/storm-nue-field-four-view-v1.png",
+        "sha256": "61b7cac467882a31ecd000825bf1819a20c4e1450548e331541c170e229d0fdd",
+        "frames": [
+          {
+            "sha256Rgba": "730259ffb1671f9cbe23846aa26b4cc98577bd80b2112f4d217b9aa3ef2862ff",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              2,
+              35,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 2,
+              "right": 13,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "9335aa6ea191e79fbd3c31ca3fc63c0d8d5906739616de3b7ced9001196224e6",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 3,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "9fc57a227beeb11c2bdd8c7a5056f6966d2e553e325ce77049fe9553dbc0629e",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              14,
+              2,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 14,
+              "top": 2,
+              "right": 14,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "9abf0748bd3fdb12bd3a63cb42899db4febc625d38f63e862e614be30cad3eff",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              14,
+              3,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 14,
+              "top": 3,
+              "right": 14,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/storm-nue-four-pose-v1.png",
+        "sha256": "06e3e8ec8c7ba1847fa591cfc2511e28a8350e155047afdcb983053e2e1eafc3"
+      },
+      "preview": {
+        "path": "previews/storm-nue-coverage-preview-v1.png",
+        "sha256": "e19f2fab245f7014e1cef467c9c42ddc3d9c0cda8db35d716a079843b44674de"
+      }
+    },
+    {
+      "id": "dream-baku",
+      "name": "Dream Baku",
+      "catalogId": "BST-002",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/dream-baku-portrait-v1.png",
+        "sha256": "30936c49ecb3892d0dc45bbd3d50dd7ae34064880edffc8d83a7319e61ef505e",
+        "sha256Rgba": "c1f6a5437b332e1514fc3281f8c8691298b655e2244906ab7ed9bc44a80673cb",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          5,
+          93,
+          91
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 5,
+          "right": 3,
+          "bottom": 5
+        }
+      },
+      "topDown": {
+        "path": "field/dream-baku-field-four-view-v1.png",
+        "sha256": "774c04e66600efb676be6010631c94ea941aaae6e870cce766f44c7df51360eb",
+        "frames": [
+          {
+            "sha256Rgba": "aaf1a0e558dad5bdea7c998a7ba38a26794669a1f5031b1bff884330150220ad",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              2,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 2,
+              "right": 14,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "1cbd07e2210caf57e42ba55956df38ce55bef42263bfef95c302730c20eb1b91",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              12,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 12,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "862ce7bb3e7ea90a642d3145788152e94e93fff8456b46c57dd5bc2748e70fd6",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              2,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 2,
+              "right": 14,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "fc713913e154fae9917f0c05ba118d7d8d9bc0306cae361ef3e415b6fd3cd05a",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              12,
+              2,
+              35,
+              46
+            ],
+            "transparentGutters": {
+              "left": 12,
+              "top": 2,
+              "right": 13,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/dream-baku-four-pose-v1.png",
+        "sha256": "135272ce02ccfd25a3b64ad1d948759f6e97e436ba3dd72398252e1f988b4c11"
+      },
+      "preview": {
+        "path": "previews/dream-baku-coverage-preview-v1.png",
+        "sha256": "f1eff54d6159860da11d30f1193ccb72eca087da7f486058961c557833f77afd"
+      }
+    },
+    {
+      "id": "twin-tail-nekomata",
+      "name": "Twin-Tail Nekomata",
+      "catalogId": "BST-003",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/twin-tail-nekomata-portrait-v1.png",
+        "sha256": "8c9362ee0fc5df122473c8907a9f09fa3eb33a0f61e075cb214f821cf30c5b0c",
+        "sha256Rgba": "3c7fe0f1608541f1300b02c3f32ebd599f3d3f28e8f451ad3462b1c2a176e80c",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          6,
+          3,
+          89,
+          93
+        ],
+        "transparentGutters": {
+          "left": 6,
+          "top": 3,
+          "right": 7,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/twin-tail-nekomata-field-four-view-v1.png",
+        "sha256": "139e7d4eb39bfc599a87624aa9e64dd1eabdbf6f75295873501a4449cf6e9f33",
+        "frames": [
+          {
+            "sha256Rgba": "184b9e72b6f3599432cda92446e7a7f15d21a9b04d348eb6c698c8dfda643ea4",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              14,
+              3,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 14,
+              "top": 3,
+              "right": 14,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "9173431f50bcebfc38c1cf9de587e9b98c763590063715c6369e06cf4b1f338e",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "c32c7df131377af259558f6b1a0248c5e53d8d4246e410ee2a627b2bd8683ed1",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              14,
+              3,
+              34,
+              46
+            ],
+            "transparentGutters": {
+              "left": 14,
+              "top": 3,
+              "right": 14,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "5654d87b20ab0c254db3c2a0100a844f11d8d3a4da60aa1b3ba165d0574fe69e",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              13,
+              2,
+              35,
+              46
+            ],
+            "transparentGutters": {
+              "left": 13,
+              "top": 2,
+              "right": 13,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/twin-tail-nekomata-four-pose-v1.png",
+        "sha256": "966ab2690a89c884d14a296acde83810e3f52459c4217659ccb4b7eb22bec7d2"
+      },
+      "preview": {
+        "path": "previews/twin-tail-nekomata-coverage-preview-v1.png",
+        "sha256": "877dcc002969fc3ea954371f51164e9e7dda9de4ec80934018f232a36e41dc6a"
+      }
+    },
+    {
+      "id": "silk-jorogumo",
+      "name": "Silk Jorogumo",
+      "catalogId": "BST-004",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-a",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/silk-jorogumo-portrait-v1.png",
+        "sha256": "6451bfaf4525f55b80b075d739ee7db8c98c94c1cd88a73195002716a04ebe90",
+        "sha256Rgba": "d4c9a06998974878afc550584aeb391c124820335d18259c25a5c597d8b3f77b",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          7,
+          93,
+          89
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 7,
+          "right": 3,
+          "bottom": 7
+        }
+      },
+      "topDown": {
+        "path": "field/silk-jorogumo-field-four-view-v1.png",
+        "sha256": "2ce191190a8876b0bfa09332542e22fd74b9c30c49c8e0d8674687f74bf8a708",
+        "frames": [
+          {
+            "sha256Rgba": "f4d0a953d040841eea08d5b530bcfd6cf23b92d09b8f33fd9e1f292057140859",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              3,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 3,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "a88d39a5db7c38bc5058cdbb25b82d1ef462211cb95ec0086e46d9e8657e92c6",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              9,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 9,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "9c77c7129e14b47d19416a339a77b1434470e2264a0dd864fc4e36ada7c373f9",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "6c4dd451a01ccf1c21e17cb5b9bbda1b7fe4a1c4dd4d35b4323c5f3531f00265",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              6,
+              46,
+              45
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 6,
+              "right": 2,
+              "bottom": 3
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/silk-jorogumo-four-pose-v1.png",
+        "sha256": "c9159a00d20df58a6f764334b4b71175576d9b6e0492df1a9888e67ed894785a"
+      },
+      "preview": {
+        "path": "previews/silk-jorogumo-coverage-preview-v1.png",
+        "sha256": "018c3e583778b96ff1cc466ff567dd912b527b9de5adbf2e386b0d399bfec916"
+      }
+    },
+    {
+      "id": "sickle-weasel",
+      "name": "Sickle Weasel",
+      "catalogId": "BST-005",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/sickle-weasel-portrait-v1.png",
+        "sha256": "54f3bd8fff16d0f2240511bc7c3ae15b0e64a61e3e0baeb695340cca56e29382",
+        "sha256Rgba": "956365955c15bf70635f8d9c58d9ae2dc22ef964abf2a6dfa68f5f8e930da062",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          8,
+          93,
+          87
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 8,
+          "right": 3,
+          "bottom": 9
+        }
+      },
+      "topDown": {
+        "path": "field/sickle-weasel-field-four-view-v1.png",
+        "sha256": "7e0d2c0f26711b7fd0e7f16d18e48aa6b47adf35aae376b8255e6d18c34a242b",
+        "frames": [
+          {
+            "sha256Rgba": "d3d5a886ed548689950c0ed4c3da9b9e61017b913e3eda1f2777c2ee5afd530e",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              3,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 3,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "cb0c5c2506325054b5496c3da5c39f56e13a362533eeabc585c31ac2b0581658",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              14,
+              46,
+              45
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 14,
+              "right": 2,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "10ec8b50ae5130bbc74d8c3c540760d126f9499773007a17948f7799a0a9c043",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              36,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 12,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "09f7e7c55d2b80d05136141d438e09688dce88230e07318b3fb6cfb4fda474b9",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/sickle-weasel-four-pose-v1.png",
+        "sha256": "25543dbd0ae495f0270e3fd3e1e7c0f01e426a1c7796d12f83d9db543d96c097"
+      },
+      "preview": {
+        "path": "previews/sickle-weasel-coverage-preview-v1.png",
+        "sha256": "7c202819edd8b6b63ecd9e5eedd854af38d0a70d89f3635dfad3277d187cc756"
+      }
+    },
+    {
+      "id": "drum-tanuki",
+      "name": "Drum Tanuki",
+      "catalogId": "BST-006",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/drum-tanuki-portrait-v1.png",
+        "sha256": "c5f3d1d6cff6a915dc5bdcb6ad4ab0be32f22c5357e7d27846de867f5be9a118",
+        "sha256Rgba": "0485a5c64febd840e4389437334eeafa6fc1bebe077b770ba0ddd7f6d22282b8",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          7,
+          93,
+          89
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 7,
+          "right": 3,
+          "bottom": 7
+        }
+      },
+      "topDown": {
+        "path": "field/drum-tanuki-field-four-view-v1.png",
+        "sha256": "76c9715ae13184b5169da0ac5883ba91f1aac8fc7dcacc2a424550e036800817",
+        "frames": [
+          {
+            "sha256Rgba": "c2f8a48609a721aed30bdfa84e80d000e18104a0c728d2505285621f9aead551",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              8,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 8,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "9d613bedee7119d80da59ffba09fb2a1099a4faf468e0dfb7c5baa15a5abe8e7",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              10,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 10,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "0597c269a3718f055656319fdf7da1b9db851d47cbf098c5229dee29d07d7173",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              10,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 10,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "d78b546a8affe946971889450c1088409b59cd6c29f56c54827d32e3a8927aae",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              3,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 3,
+              "right": 3,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/drum-tanuki-four-pose-v1.png",
+        "sha256": "cc3ac5b99af060b119cd9246cdc19aee0a0a051ba7a8025581485e61baf2688a"
+      },
+      "preview": {
+        "path": "previews/drum-tanuki-coverage-preview-v1.png",
+        "sha256": "1b78fae060b957b0fb4a7b8839d3959bab1595b3fe8fe0e50185e9e9f292c5cb"
+      }
+    },
+    {
+      "id": "marsh-kappa-beast",
+      "name": "Marsh Kappa-Beast",
+      "catalogId": "BST-007",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/marsh-kappa-beast-portrait-v1.png",
+        "sha256": "b3028d8a7972b04355da288361d0f7f9a436368176fb62670b13d698c7d30591",
+        "sha256Rgba": "8325cf6b8ab438abb962939c97376df59682b4dce84ef5b16a88ffaf2c2b5c7a",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          10,
+          93,
+          85
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 10,
+          "right": 3,
+          "bottom": 11
+        }
+      },
+      "topDown": {
+        "path": "field/marsh-kappa-beast-field-four-view-v1.png",
+        "sha256": "615824032cece9eaa28fdf11d73193a1ea33e6fa5ae5f3aaae7223c63db76f17",
+        "frames": [
+          {
+            "sha256Rgba": "994b5e9cd802d240ee69e8cf1a60f00e8a218cc379c5657a10c901914effef6c",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "251fe6b5efb8e05aed5cf69a2d6daea4f7d5e503a07b9bd52a9a4695ea6dab8e",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              16,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 16,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "47c6359218d41b6ea4f65e50d0746b99e59c078c15b64fb16da67ffa072db009",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "36dad8c241d8eedf896d6f10d4016f8871d1482068d0b55a67211758dad9199f",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              4,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 4,
+              "right": 7,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/marsh-kappa-beast-four-pose-v1.png",
+        "sha256": "a1758d9a5f853cbec8547832d61a10f895ec8c2b07a95dd887a39c81e0d31f46"
+      },
+      "preview": {
+        "path": "previews/marsh-kappa-beast-coverage-preview-v1.png",
+        "sha256": "3b5a36dd8ac564dd93b91c43586119b6f48278862bd55e8331fcbca0803c5d66"
+      }
+    },
+    {
+      "id": "ushi-oni-behemoth",
+      "name": "Ushi-Oni Behemoth",
+      "catalogId": "BST-008",
+      "group": "enemy-v3-beast",
+      "sourceBoard": "enemy-v3-beasts-b",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/ushi-oni-behemoth-portrait-v1.png",
+        "sha256": "f555930f42e574e6ff4f8b0b48fa5627d7f5d174832cb7ed058fa1013b9be3e1",
+        "sha256Rgba": "1d9ef0d09ab059a1099dc4c0c0eb58aedff41d286af1cbbd4515447e636c7bb8",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          14,
+          93,
+          81
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 14,
+          "right": 3,
+          "bottom": 15
+        }
+      },
+      "topDown": {
+        "path": "field/ushi-oni-behemoth-field-four-view-v1.png",
+        "sha256": "c3c00db931d937a53ffa4daa29971222c66bc339e2f78a2468aaa230bba5b2a7",
+        "frames": [
+          {
+            "sha256Rgba": "d6fb5efcb11861de2c4032bde5c25339a3335f21c6fd96512da486cd5f529ab8",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              2,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 2,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "6b2fdd7140101c9016b4833d7c9c121ba44d328967bdbc4103a78314cd122b53",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              18,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 18,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "4828cce7d4f7d62861f1cd5b5ba24905e8bab13225206493dc706bc888981e9d",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              2,
+              42,
+              45
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 2,
+              "right": 6,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "4afab30e3e97fb9c709593d353bfcdd8a92e874b1492d2aaa8dd59dde0b2ea78",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              5,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 5,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ushi-oni-behemoth-four-pose-v1.png",
+        "sha256": "bea17852b1e5abbfc69c5ce6101741c464820d498551aa4c5a44db02bae10bf9"
+      },
+      "preview": {
+        "path": "previews/ushi-oni-behemoth-coverage-preview-v1.png",
+        "sha256": "dfb5c738ec2a5b2baf7057288f063cafc66b8c67cbe39a0d4e22b3929ad02e3c"
+      }
+    },
+    {
+      "id": "black-chrysanthemum-nest-woman",
+      "name": "Black Chrysanthemum Nest-Woman",
+      "catalogId": "PLT-001",
+      "group": "enemy-v3-plant",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/black-chrysanthemum-nest-woman-portrait-v1.png",
+        "sha256": "91f5c8a8fc6f37644b13f08183eab422cad4ff1158788f1eae2c6342640a64dc",
+        "sha256Rgba": "b196be5deb7cd5d7416bf5e2098df60dfea979ba66b7dba7acbc611e1a6d54ff",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          4,
+          7,
+          93,
+          89
+        ],
+        "transparentGutters": {
+          "left": 4,
+          "top": 7,
+          "right": 3,
+          "bottom": 7
+        }
+      },
+      "topDown": {
+        "path": "field/black-chrysanthemum-nest-woman-field-four-view-v1.png",
+        "sha256": "281eda37a1c00722d1adb3a6fe5761a780186b236cf7022a8d3e19410ecfde1c",
+        "frames": [
+          {
+            "sha256Rgba": "92e7e704da837016e230256c69ee053677207bfc895c5f404f501f01f19ac95a",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              3,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 3,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "0ef394a8920603653c2574d0adf30b681882799640dc573f7573f9ebeea6e7af",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              14,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 14,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "56eb6c1030e2619f754dddaf4c7c4bf4fd426e35ba2a5cd9fceaca85465e3556",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              5,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 5,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "fe9dc88373095087bcc1d65e074d95d57cc4e8a7b8dc7328a8312cd75191f1a5",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              14,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 14,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/black-chrysanthemum-nest-woman-four-pose-v1.png",
+        "sha256": "ac52344e22ac994b90858bb2922a0e351e801ffb72e47232d4e41b402f15498f"
+      },
+      "preview": {
+        "path": "previews/black-chrysanthemum-nest-woman-coverage-preview-v1.png",
+        "sha256": "c445dea22bc1d539e0770a9107c9717b4ad126400d9e9104f7cfd08d36e853da"
+      }
+    },
+    {
+      "id": "razor-bamboo-stalker",
+      "name": "Razor Bamboo Stalker",
+      "catalogId": "PLT-002",
+      "group": "enemy-v3-plant",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/razor-bamboo-stalker-portrait-v1.png",
+        "sha256": "4c8be853380985d8f5e29bac797f826bd65191cc06440e5d911a51ef701f0552",
+        "sha256Rgba": "97f3b758f5823129f87f71eed1fbe2a3a0a731671b2b0fd9c2b922c34b385c43",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          10,
+          92,
+          85
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 10,
+          "right": 4,
+          "bottom": 11
+        }
+      },
+      "topDown": {
+        "path": "field/razor-bamboo-stalker-field-four-view-v1.png",
+        "sha256": "d58420253de6c129094217a1309a9fa17c3ed85e9b2b598e6f6c6f3a69b1c28a",
+        "frames": [
+          {
+            "sha256Rgba": "1fc506c9fcea4b0247173171ce123a77cd2ae5a392420efc9f3311fb2201c9b8",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              3,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 3,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "1daaeffe0a54933b54b54d654858275ad51d405448a7b4ee8a92e42a90a236be",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              16,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 16,
+              "right": 3,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "8208899ff0112e2b64a325848ef7fee52dd496c4ff879fedce29847fb3ca5429",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              4,
+              2,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 4,
+              "top": 2,
+              "right": 4,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "a713b790bf6f875732850d26839990341e73f99b97980c4467eaa773ccad8b95",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              16,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 16,
+              "right": 5,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/razor-bamboo-stalker-four-pose-v1.png",
+        "sha256": "d2b1d145890f59d37cb27b08951e6cdc3184e0add9d3f56fe18a5711cee75a9e"
+      },
+      "preview": {
+        "path": "previews/razor-bamboo-stalker-coverage-preview-v1.png",
+        "sha256": "a1f7b4b4ed004b70749dd5b5b294759022b390590c8cbdcc2a101258d5fb2c34"
+      }
+    },
+    {
+      "id": "spider-lily-ambusher",
+      "name": "Spider-Lily Ambusher",
+      "catalogId": "PLT-003",
+      "group": "enemy-v3-plant",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/spider-lily-ambusher-portrait-v1.png",
+        "sha256": "4fd271672e6fc082efb4f5efd97cbc94c404c1c40de472371edb7f9e3eba8928",
+        "sha256Rgba": "33ea7b96c3fce242a948a5cdc338e707789cd96b5a5f4bb951679a4b2d8b6687",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          4,
+          14,
+          93,
+          81
+        ],
+        "transparentGutters": {
+          "left": 4,
+          "top": 14,
+          "right": 3,
+          "bottom": 15
+        }
+      },
+      "topDown": {
+        "path": "field/spider-lily-ambusher-field-four-view-v1.png",
+        "sha256": "2993f32086f5e539499e9d542e3d35b7c925a995d6db8aa78c550a5bdfd255ab",
+        "frames": [
+          {
+            "sha256Rgba": "e2b996fdb65f37cd1d66e84f9dd3f579d9a6f0a3411c8c3f64db8fee211819b2",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              13,
+              46,
+              45
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 13,
+              "right": 2,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "c06ee1b63440aac90dbefd5d2173e707668c67361573e36d5bc654db6b987110",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              22,
+              41,
+              45
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 22,
+              "right": 7,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "8137faef2c343e6055c9086f30146b336989f5516fafc0cedb23238284557e6a",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              14,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 14,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "8ee36e1b6a7f3644eb81922a8b6bdff1d91b225a91ab9a41030bd30895b95212",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              24,
+              42,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 24,
+              "right": 6,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/spider-lily-ambusher-four-pose-v1.png",
+        "sha256": "3ad4a4537bec8a08fb7832050fcb38476f9ddf631329b63378be5ab9c7159f88"
+      },
+      "preview": {
+        "path": "previews/spider-lily-ambusher-coverage-preview-v1.png",
+        "sha256": "b515b58721c14f213c8e317262252214fb430ae4ec58a2c6ece14b117e18340e"
+      }
+    },
+    {
+      "id": "lantern-vine-maw",
+      "name": "Lantern-Vine Maw",
+      "catalogId": "PLT-004",
+      "group": "enemy-v3-plant",
+      "sourceBoard": "enemy-v3-plants",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/lantern-vine-maw-portrait-v1.png",
+        "sha256": "4658a4683d392d7dac04be28d174746cc6a01a8ce9e89dee199da1ce331df6d5",
+        "sha256Rgba": "d8519370b66f574fbf136e0f28408d96280445a5c84268d21cc1ef0b98602f6c",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          4,
+          8,
+          93,
+          88
+        ],
+        "transparentGutters": {
+          "left": 4,
+          "top": 8,
+          "right": 3,
+          "bottom": 8
+        }
+      },
+      "topDown": {
+        "path": "field/lantern-vine-maw-field-four-view-v1.png",
+        "sha256": "d924d28c7865ad9448e58e1418118643be63d9b45faccd178b69478cdc493850",
+        "frames": [
+          {
+            "sha256Rgba": "0914f71cca0f57c3f3f3e2f7344d37bd7b373dba9bb537fe2e50f74c442fa425",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              4,
+              45,
+              45
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 4,
+              "right": 3,
+              "bottom": 3
+            }
+          },
+          {
+            "sha256Rgba": "e79cfb308a00c651ffbde0a600017c4394d0f8b5b3dbe19543334a800a44c7ab",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              2,
+              7,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 2,
+              "top": 7,
+              "right": 2,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "db1b9dbe57f9b51bc6abc22e8cbe3eb39da0177cbbf7eb68234f0818785349c9",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              2,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 2,
+              "right": 3,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "ddc80ae8e585181356acfd44a17e17ebb61c28f93ac14b128d4af4a7a231fac2",
+            "visibleColors": 16,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              16,
+              46,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 16,
+              "right": 2,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/lantern-vine-maw-four-pose-v1.png",
+        "sha256": "93ebb5a43fd0236455a66fca174a0d75d2e8988dafcb446d566d9e6580c564a3"
+      },
+      "preview": {
+        "path": "previews/lantern-vine-maw-coverage-preview-v1.png",
+        "sha256": "03c787eeb3eb8e339d53270e078ffb38386cb28ef8533cb40e51cf44d324331c"
+      }
+    },
+    {
+      "id": "kurozane-court-human",
+      "name": "Kurozane — Court Human",
+      "catalogId": "BOS-001-A",
+      "group": "boss",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 0,
+      "portrait": {
+        "path": "portraits/kurozane-court-human-portrait-v1.png",
+        "sha256": "5e066b2da8258ddd6ae45640361f8860c2145574e7041c66082974506cd557c1",
+        "sha256Rgba": "aa7df0864f4ee4fddc898b2f363bdd92aa6d1f5da15ee3d3a00665096a32b0c4",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          11,
+          3,
+          85,
+          93
+        ],
+        "transparentGutters": {
+          "left": 11,
+          "top": 3,
+          "right": 11,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/kurozane-court-human-field-four-view-v1.png",
+        "sha256": "5fa86cdf09f908694223d1fe6f5286282bf328e64d1a3b67cda4062a2442aae4",
+        "frames": [
+          {
+            "sha256Rgba": "6d9e43a93fa1d8b532ac17395d69a9adf3f0cd8c845dd08f3456958e11af9c9f",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              8,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 8,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "dcc23d9b4016020514b31fed268df551071a39f31f59938912cb0a5e29986ad2",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              7,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 7,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "ba2c90fc88feb564c17359cc60621ac43e32c9040226262bf69763f2980ce39e",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              39,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 9,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "cc6c16409f3d50da9d60fd7469aa95bcb2630aa36528c58950509a572b668a59",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              2,
+              40,
+              46
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 2,
+              "right": 8,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-court-human-four-pose-v1.png",
+        "sha256": "14658886e6c83898ec89b4200e3d591d39a32f78e74de9ab30af38e370ed6085"
+      },
+      "preview": {
+        "path": "previews/kurozane-court-human-coverage-preview-v1.png",
+        "sha256": "1c475dc62df8f06074fa0522eb4acd1e59e0c978ceb0c3db6fb44b6ac9e72e16"
+      }
+    },
+    {
+      "id": "kurozane-oni-armor",
+      "name": "Kurozane — Oni Armor",
+      "catalogId": "BOS-001-B",
+      "group": "boss",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 1,
+      "portrait": {
+        "path": "portraits/kurozane-oni-armor-portrait-v1.png",
+        "sha256": "00e02f65e988b2857321159bb8734eca333e306aa9c43b25c8d83e68b1b65ddf",
+        "sha256Rgba": "ceeaa2e92cee77deabbe052f291f734166c48663712a2c3827dd9100b8becf77",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          7,
+          3,
+          89,
+          93
+        ],
+        "transparentGutters": {
+          "left": 7,
+          "top": 3,
+          "right": 7,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/kurozane-oni-armor-field-four-view-v1.png",
+        "sha256": "a6ba70cc5350714795442d6a3c9853f2d8f16922fb87fdcc145c3c48efa0aff2",
+        "frames": [
+          {
+            "sha256Rgba": "386a6475c0fe069354013255edfb79f2fd885d038c40cf087b4e988a2c00dc03",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              37,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 11,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "ffb251e05b06b4b0d313e6577f1aefea920962206261f8319588e13cdd49a677",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              2,
+              45,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 2,
+              "right": 3,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "62a60a4bcc82a1ed0d266ea77fe5bbed2755811f166e8c7dce0f6785206bc5c8",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              36,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 12,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "8cc9ecb0c6afd7f2e3d6acae615d3b5e36fb30085f6ab35044d0e28a3dfb246d",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              8,
+              2,
+              39,
+              46
+            ],
+            "transparentGutters": {
+              "left": 8,
+              "top": 2,
+              "right": 9,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-oni-armor-four-pose-v1.png",
+        "sha256": "7820c0eeec84d28497c78f8ce610e16efeebd08339e7de8fabc7231ce27c7624"
+      },
+      "preview": {
+        "path": "previews/kurozane-oni-armor-coverage-preview-v1.png",
+        "sha256": "68f92dee70bb1a57f764c13d67b88e0d3f5e05ee2eeccab65123596962dd525a"
+      }
+    },
+    {
+      "id": "kurozane-demon-mode",
+      "name": "Kurozane — Demon Mode",
+      "catalogId": "BOS-001-C",
+      "group": "boss",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 2,
+      "portrait": {
+        "path": "portraits/kurozane-demon-mode-portrait-v1.png",
+        "sha256": "f5b30ca214ed438deee99e51b30e738cd82a3bb29fb77e5073f5cd24173b2247",
+        "sha256Rgba": "7df6051298f7e49858a2fd544175c7bf0f6b9ed52b0b85d33c842c5c7cc4cd4a",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          3,
+          4,
+          93,
+          91
+        ],
+        "transparentGutters": {
+          "left": 3,
+          "top": 4,
+          "right": 3,
+          "bottom": 5
+        }
+      },
+      "topDown": {
+        "path": "field/kurozane-demon-mode-field-four-view-v1.png",
+        "sha256": "9cddec48b17142ed066d8d3b8a2649d17dec56f2fe62702539b760790b23bf05",
+        "frames": [
+          {
+            "sha256Rgba": "ff587599b5a72d7dfd849ef39d45d1d8a13d85a24b16027d1ccf04138af2c7c6",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              3,
+              42,
+              46
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 3,
+              "right": 6,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "fd4671776a2c27f15d90b994c8652e0f075e46fe293f04185cb57d01520d3838",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              6,
+              3,
+              42,
+              46
+            ],
+            "transparentGutters": {
+              "left": 6,
+              "top": 3,
+              "right": 6,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "a5e965ec6851c50d579768d9a113ab5760f436b410b816fd56c7bc3eacde26fe",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              3,
+              39,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 3,
+              "right": 9,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "90b65fbb5bce379733afa7f2a3bffb2347a469e7aa4a43860cc79fcad88a3994",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              3,
+              44,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 3,
+              "right": 4,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-demon-mode-four-pose-v1.png",
+        "sha256": "bde159987f2bf407cc4b84298583a1397f1af59045b0559d68ff0948035f2c63"
+      },
+      "preview": {
+        "path": "previews/kurozane-demon-mode-coverage-preview-v1.png",
+        "sha256": "a92a770b22c27175ab1a03e322daa3f256e6ff1a3404c4efd096903cfe9ec5c8"
+      }
+    },
+    {
+      "id": "kurozane-ward-broken",
+      "name": "Kurozane — Ward Broken",
+      "catalogId": "BOS-001-D",
+      "group": "boss",
+      "sourceBoard": "kurozane-states",
+      "sourceRow": 3,
+      "portrait": {
+        "path": "portraits/kurozane-ward-broken-portrait-v1.png",
+        "sha256": "7c298717a7b393267a73dcdc5b19b9f749b5fafaa710f244db0c414f99d94f44",
+        "sha256Rgba": "fd179230353da5cd9dda2fef30e1571314003b0a5a4caa2e169b242a665f50c0",
+        "visibleColors": 31,
+        "binaryAlpha": true,
+        "visibleBounds": [
+          7,
+          3,
+          88,
+          93
+        ],
+        "transparentGutters": {
+          "left": 7,
+          "top": 3,
+          "right": 8,
+          "bottom": 3
+        }
+      },
+      "topDown": {
+        "path": "field/kurozane-ward-broken-field-four-view-v1.png",
+        "sha256": "6cc146171499ae922109208afa8b787a00b1c395372dc9529aefeb5c3beb7c0a",
+        "frames": [
+          {
+            "sha256Rgba": "5941b0803450f50177d5184e522d772f45dcb5e9521968d6d30ae68fa3437b40",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              11,
+              2,
+              36,
+              46
+            ],
+            "transparentGutters": {
+              "left": 11,
+              "top": 2,
+              "right": 12,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "edb287c2b9299f4c0be774dab8de481678b0c0ba480e6ca09e9af84f16f58a9b",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              3,
+              2,
+              43,
+              46
+            ],
+            "transparentGutters": {
+              "left": 3,
+              "top": 2,
+              "right": 5,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "b0d4e074e8ba042c8c1517a3b93039b946c9701621b3857060e80ef0702ad8ed",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              9,
+              2,
+              38,
+              46
+            ],
+            "transparentGutters": {
+              "left": 9,
+              "top": 2,
+              "right": 10,
+              "bottom": 2
+            }
+          },
+          {
+            "sha256Rgba": "cafe88d2d746295c64a0c3a604a007250f09d4f702d3f6f278c17021d6023efa",
+            "visibleColors": 15,
+            "binaryAlpha": true,
+            "visibleBounds": [
+              5,
+              2,
+              41,
+              46
+            ],
+            "transparentGutters": {
+              "left": 5,
+              "top": 2,
+              "right": 7,
+              "bottom": 2
+            }
+          }
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-ward-broken-four-pose-v1.png",
+        "sha256": "e9ce9c7616c547e5c5e0146f539e99b544ffe7c87fb36719f0c25b492ff7f1ff"
+      },
+      "preview": {
+        "path": "previews/kurozane-ward-broken-coverage-preview-v1.png",
+        "sha256": "d36929da66142eb54df10bfb4ad2ee7749b85829491ad5f2175153e71f4ce402"
+      }
+    }
+  ]
+}

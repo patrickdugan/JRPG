@@ -1,0 +1,2258 @@
+{
+  "schemaVersion": 1,
+  "assetId": "world-tileset-suite-v1",
+  "status": "pixel-authored-production-foundation",
+  "provenance": {
+    "classification": "pixel-authored production asset",
+    "sourceMethod": "original code-native pixel primitives authored at native resolution",
+    "generatorUsed": false,
+    "originalityPolicy": "Original secular material vocabulary using cedar, stone, water, ash, paper, lacquer, iron, and invented bell machinery; no copied game tiles, real heraldry, readable sacred text, or franchise motifs."
+  },
+  "topDown": {
+    "contract": {
+      "tileWidth": 16,
+      "tileHeight": 16,
+      "columns": 16,
+      "rows": 8,
+      "atlasWidth": 256,
+      "atlasHeight": 128,
+      "alphaPolicy": "opaque",
+      "roleOrder": [
+        "floor-a",
+        "floor-b",
+        "floor-detail",
+        "path",
+        "wall",
+        "wall-cap",
+        "edge-north",
+        "edge-south",
+        "edge-west",
+        "edge-east",
+        "outer-corner",
+        "inner-corner",
+        "hazard-or-liquid",
+        "prop-base",
+        "threshold",
+        "foreground-occluder"
+      ]
+    },
+    "atlas": "top-down-regional-tiles-v1.png",
+    "atlasSha256": "402cb31656d7f0806d63648fe6d82fe2a87415c99a74c2a8f6629ed9a7edfc65",
+    "contactSheet": "top-down-regional-tiles-contact-sheet-v1.png",
+    "contactSheetSha256": "77df589ee67db29690a10ef2efc9653f1699a3eca871fa2a0e67a021ca15e4fa",
+    "tiles": [
+      {
+        "themeId": "takamine-rain-village",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "fb0400c59b13805d619161d12a00a434ccdcb5ccd384bc5c8053edcb80266963",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "aaa45b0de9fada5d9e76a790bd81e2dacd99c4dcfcfb4c17c0e859999e06a503",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "31ce396f8c56c3a1d1d0211ed2584fd49b9af1bfcb524b2a8319d93b600fa42d",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "e22ff8a90e66dcaaa6b30f8c90f09c9094fd12d4390642e114e832c59358f340",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "e31e0f3a9c34270e9d26b5311d86f53bd044f4ccb1edcb6af32b4aaa27248b7c",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "ff1726c2c111d2a4d3c685aacfbdba6e1c87518d210b75e6b52ee9d1421eaa1b",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "2ef49cdf6c95911d5ac97f62ff454b91357ccb32323f808243617d44c8b58f6f",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "5487513713ad21d5fa970b52aac11d66b633c40f6415fc4b74598e166efb640d",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "b7582725be8acee7149b764795645aec9884b30146d4d0859e36c84af0963c3d",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "0ecdf3fc03741ce63d05992c634b9341e347fde9ebdcec97a188e4762cd1e49c",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "6e500597c4754bbd0590c29989d2020e41d964c9ea1ad745f5596adbde3021b1",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "b9a166eb42954f627fb5daf65bb03e32bc672c692dd282553ed74c7291539180",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "78b3ce4969a9625fa8769e975f1914df8fe485f0699ae48dab904395fbc4c0c7",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "0b1ae7bda8ac982b0f87f9f00800c8e50d91671dbe3d2a868b0e6efc113969a4",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "6e8c6dab5f0c3f1ee3a9c6e40233557e0c7c51d6515921366b30b43ad5411116",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "c372a07365cb37fdbceb43701b2bb2dd07d22904af39d7ee3722d19cca9ff29b",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "dce595e296ce9bf101f64313de4ab10030bac90eb4cf6803726760c6e3cd99d1",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "5c977f01b6df2aa68fcd4224a3c899e0bdbbb51c4ea4536e074edd469d4e933e",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "80f8200336495f7351d7d12994f198cbd7637300a0805942419d39bce2c6083e",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "5c1a478b117c68cc143ae8eb34f2508b5f22906d00192455f3effe363a4cbfd5",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "1ec9d2c81142d50ea2e0b60ee994c21a716c1b0bc15975fee11084bb50057ad5",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "9d8e9b0404c41b085c18992b1cf7c444e79a1f6fa51cb58c77ff00eb6ae0868b",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "04e83bca0d659fea200ae1810a789515b753b4d8ea404441155c9180ba0fe763",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "d78c48e12d6f6a31be91c0212affb7bf5c8250a372584b7edd5622c8f2072143",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "aaaebb8f6db9a1ecc951a0a6aac7d90aeefe6b21d0b5f37a91f0a38de580a517",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "37066c848ccf0d09cf130ef672f7e682b0051637972ff631a446a7a37dc44b1f",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "be3be1b5ca907f9b682e512be3ed40896d2dc49614f217c2dab7506cd7a4d46c",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "a3474a45a0a17f7542eb8078837e08e34814aa36396ae0a7494b7ea7acffac9f",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "bc8f890f0e5e143999529320607db97e7bdafaf0133696d5a257ff031235baa1",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "716ece514d548c3bf18b56f088c806041b369435f48024ece2353e06fcfe7b2b",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "8e2b28be7fa71736dd2cb4586b135d36acea5bc582e2517871a5f6a0682c1c5b",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "de6eaa633b44171e5d427d8ffc039ad8173fbb0ca0bd133fa3dc1a8bba5ba896",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "16a52bc070c226629c32d06c595c7da8d9ef8e330fe8f4e86e4a51b1be3715b9",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "76737e43e9f388ee1f27974cff4c07764d689eedef6bc8a7f329c52a6408910d",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "843986365f9e1e34429c702cdf868eb15c258270ae347d105639ce3817c97be1",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "72996421152dcef60c995bd5d24bf2b6f59c2d4e205cea4ae155dbb212adec5f",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "604b08401f98271d3661bf0ee55d57765a9185f88046477a705faf8baf428bf9",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "978021daf09fa05c83c61da7caadc8c65a6fd69e00a2590aeb0171f3abfa086d",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "2537e1f8a3e8ff1182e10dfc68e5ca5571a9fa537aea8d24ad7a27ee0a52cbd3",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "b476845a588b643fe7fd30382c3274a2dd44d6a66b2fc4aff221a761c7fb67df",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "ec613cb48a612e910179e17bafee64eb96faba9e9113296f0925813124d0f96e",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "de769013fb1c93463e0da5b44cd67fda2a9e8f26c9781a04b8f14e03209e5f34",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "412a0f2fa61c4c53b595d241f0389c37e8249eac356fba90f2441c6134a258b6",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "e8366a3ac99c04102e50fa811d81b9567970173b72d4b5283bb7098c971f52a7",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "fce5714fd12c91a375fca80f20e9aa7359353e744d93cc928fdcb7713d0fc56c",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "8926f0f7c217745e2f5da2a57f0af6505af2fcc9478aa6d45808ae7696c48d70",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "881873e72108a56af728762929002b2959f36890cef569a6417cea7a4a48772d",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "89644d8cd53da662db402527bc683a613ce1caf692ca8037f6a7613c08553770",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "c37ec8344d1116ad002137db14cb66a96d02905bcdadc73f1dc257b309416115",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "17f0edf6c6d979a970509ec27810a77176aa59d41019f39f58ddb471061a867b",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "b612bf9f79c849c8c7a9c73faad09d44f412276761df815c6feb30811183140d",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "167d9cfcdf9da6d789ea477ef46eb229597ea41dac6b1985207f5671b57da76d",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "b983ae40ca3beb34987e9e4bde7e31376d2adc3306df35fc059cb11fefa76984",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "8b59e743bdc9af09abfa609d72cf950d7447b1eea100872faee4103127959474",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "cdc8fa56885162065f6d38e44a87f73b6f6a8551cf14cea00984394ce36cb31b",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "0984105acd04afc95dc89be22ff908ad41fabcc6b054168e6a1771623b2e2b8e",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "f759c31a4ccf4f09fae80479aedec5d66a2cdf56fda4d2c4d81b33320b23f2fe",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "4bf3e01608285322a9ba2453c546a3cab20d1daf78ce95bc4ef10e5d122a5a21",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "d652903de3307a1ed03e4224b966c6f44a02fb9845647b75552f317977aeaf81",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "d7ddbb2a211224b210f87bc2826a052df5bca57f3f58b424b2675aac1c25c05e",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "22b3bb42e3fd53139b4bc63b1997a5d59fd0e400c8176551728ee3f52f84b11f",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "badd8a337e092286bba980977e38571256560f70d16d72c73e8ba4e63b5d3981",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "dec39f5ddd474272e8dce6e2cd025f98530556b7a8d5c23244934770b470c0e4",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "ba9d4a2c6f594f3acd11bbb592a810ce88eed7fd4c7c32823068d075ef75a724",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "bb2bb9d18ab26296ee9bafcea20a842ce9b8b4d1f4e331a0a39cecb3019cd7d3",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "b09490c0cc256c0bda92ac4ad9cc2ea0d6db8af0ab6d5c4c71a56350ec29570d",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "df070c0080b08b98f9e1a7ac5cfb2dac637e85493145a15eff0dd4fcbd16fd92",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "a7f8d65cc842deaccd74a24d1c73e92088f0472260c5c46e87562206b72d85b8",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "437dc9d01720e8972e0b5df8076ec3b100685e4444fa12a487d3782cd72b0f03",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "26f8b331eecce2455a46126000c26e3804a7830ba128870d7a5aa0e5d6e73b31",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "8a31b78e6c8b27aede0e15b3611da2183001462bbb30e6c488d9a57def075c01",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "db75bf05711336cf61284a4ff88aa9d7154b3dccdaa266155389e7bbe247572b",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "659b0d6f62940af82cba98d778336dc5ebdc226776c9371ff6dc87be8d3d6222",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "46a9d78ea985e2d1773edd8a6447d57c01dbb6f1c2191fe5aa9a451cf6c0dced",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "4b031ae7fa6d97f4fe777fd35f30a38c97a4804cfbcf9d12c87ce516669060b2",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "84bfd0068150220ac51a0be449fe1eca4baa6604d4abbf66fa2cc8b86b5b361d",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "60558e803f659f55e1ae9142f2e5da9d8b7f7f7f149cb0e82ced9b383e92427f",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "ee3401e488953ab583f182362bc86ba7b6582a8a029ada1ba171eb0baa51f4e6",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "5e36094317f2a983c18fa156152e602d9ee9e9109b43d1ac764d246674a08fc3",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "e7a5084cb5fa4f322a04d787211158093102b2ac6abcc271e37534fbeaa80734",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "20b90cc7edcedf5cb9672779d3d4e51a1bdfaf7c577de0094ba9f84211a6802f",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "155d738ddb51713a85bafd254e20442eb65538a94bb5a922cef53902e2a43734",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "a2e33ff2a6c4f9cd04b892cca62b6269c4f3bf746dc44405fc7d283836199631",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "400b7179fb93bbeba53892e60d1918bf7f750f8b6548a9c9b9cb7dd2f48a7a03",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "eb8382c14580cdd68c17e9e925aaa07fe3341eabcd932917c7e72a33908d237d",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "0dc1560d7ffe6d67302101436863538e3a3cd0ea31995250f7e97eae72cab4be",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "3f3f6f33c27dd7c116faf8b4cd6fd9d5e2861584fa4ee9bbed6919d1eeb0fb37",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "83a6f508896090cf160e27b93589e01ef851237337e8c82ccc05850253249c98",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "fae2162bbe69b7151f999739342dcd62d9cbea0bf6fc548762f16ebd405c0bcf",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "c4c0630e180901b113d22a562a8bb5b3a79e5fc5a0793e9941dacb9aa9460ef1",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "ac3893be79b4be4ea5bda98a503f699ebfbe123edd9435c322c14ab91c1adb7b",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "62a2555150e2a56ad90bb82236f1ce1794b813d98a38d74b018727e171acda7d",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "eecbd11cee5e400c48c8c6960592cad93903f9c71604e605944e3002ac25bda1",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "a471f51882441b447d7b6bcd9b332ec56d511d233293b3d2e0bc5699cbe6b302",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "383c6a648c9aa7d095379662f51e54705157c6ca2339e471d8ae4ab763537728",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "cfc6425259604242707fb25230677a91ad8742a557aae64bff6867c3b25cbbb8",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "ade2f9f9e93d204b0f4aa76d9ccc5a7b66800becdea60fbc6b325dcb81680335",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "df37e9506505da704bfd2d4da61057a6f425f76742c9ddd0cb0d476df3d6a7c0",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "9cf2554b570965b712d427f7ac8bfaf6dd2d806372f560350c7a1627be19c023",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "4206ccd4502c50f59e0cd7ef0b24c69c9c35e2295c59ff1b164f4cbc45bea14a",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "23726ef25a56a635f12510f6b06534bcd5aa20ab22d10e7e1085bfdfcafe4107",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "4a37e95f46356bd96360a6a13c12aaf2d2b5b23aaeb2d87685278f5e1e97822f",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "c61db7df0987aaa839a011ab07c3fcd0867035b9deaacc8abda8d40f315e93f2",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "85c48a28837d37cf37401552f3b3207fa6d32e08dad1a8024cc67ad284ec0923",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "9d3bd05455f9fb968ca6f756a41f93b6263a867a7b5d3153d53bc9b2ee2d6604",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "e9030fe8ab3d763723f97fc691588dfb138751bb1776ca79d4cf711adf173ba3",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "b3ada45d4db15cbe2222e72cbd7fadd826f36f2a2b0aeedeeda7ded8a730c6b4",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "2bff94d7f385c02a89f1bb7ca7f16860a7c45ba6a1620a17b4202428bcef1658",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "e6948cd778fcd50614c0aef3498d6da1706c547c96d9b814e366a27659076da8",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "2292fc0ede90e07cfadb78501f28bc7198d3b610c8bf3b8cc6fc47d77524381f",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "cefad3cbfbdcff75a8d386cbc189bfe712468af7d3e19ead9bd7b542d5da18e7",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "d1c67f2749eecec8f3b0530b1c5e901202ec246b0665330e342bc22b6b062da1",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "floor-a",
+        "index": 0,
+        "sha256Rgba": "294ebe693927939ecb681d13854a6a107cd5d78f826fd3ce0c4500f62f9beace",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "floor-b",
+        "index": 1,
+        "sha256Rgba": "0106bda6428635da0c1e80bca5453a569bad9de42539c1c8fb1ea0a54c02676a",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "floor-detail",
+        "index": 2,
+        "sha256Rgba": "10440cda4fb596ca5019a1147f3295aae2ce8375fd348d890ccf3fafaa24802f",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "path",
+        "index": 3,
+        "sha256Rgba": "9ac6766acf24c4d8cf90afd4326384ce21163fbea2605fba92a9304a1a05c2f7",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "wall",
+        "index": 4,
+        "sha256Rgba": "830ca338b105c512d961582825f5a9c9714073a73a56fe8338336820e955e06c",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "wall-cap",
+        "index": 5,
+        "sha256Rgba": "ee6213f5c0b99aa4afdee981bd054cfd19226ff70d20d86735075fb367233f7d",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "edge-north",
+        "index": 6,
+        "sha256Rgba": "8528eaf2e437d0a9691b2b4c8db8c060d2b662998da530ce361dbde5da458741",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "edge-south",
+        "index": 7,
+        "sha256Rgba": "63228e1ca8d35dd14f947bf02722bc07e11e284d401ad4eb2ee5e37a13bdaa61",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "edge-west",
+        "index": 8,
+        "sha256Rgba": "130d35e403d392d3049e38f488d4f515ae1bd4953a8ff423839b5ae3e94e13e4",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "edge-east",
+        "index": 9,
+        "sha256Rgba": "262045a1793e0fffea07ab12820d39ff4ec66e9d145f83291d409840d589df3b",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "outer-corner",
+        "index": 10,
+        "sha256Rgba": "e853dcfd4f0c925928b7391178295d882006738018a3d294627717c38259caf9",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "inner-corner",
+        "index": 11,
+        "sha256Rgba": "cfc4c751308cfbf9af06fd350a8e4137f16eeda7122b9fe2327007ce8a903615",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "hazard-or-liquid",
+        "index": 12,
+        "sha256Rgba": "56da6e427e5b58f1147b43775495ac2ea671d68879e3aa69951ab3519651929e",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "prop-base",
+        "index": 13,
+        "sha256Rgba": "db6d0f28c8eedfc0705cdd94f0211e4409defa1ec08911b7fc4dee1a4805b9a1",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "threshold",
+        "index": 14,
+        "sha256Rgba": "498224ac953c4f5da8b83890e232e2f3b8e7594ce0e66720b9fe6c4fc1ab397e",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "foreground-occluder",
+        "index": 15,
+        "sha256Rgba": "14f80a2a01f5ff15ee7971b8b02bcf6276c83da9643860f80d5cc766b00cb0e2",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      }
+    ]
+  },
+  "sideView": {
+    "contract": {
+      "tileWidth": 32,
+      "tileHeight": 32,
+      "columns": 16,
+      "rows": 8,
+      "atlasWidth": 512,
+      "atlasHeight": 256,
+      "alphaPolicy": "opaque",
+      "roleOrder": [
+        "backfill",
+        "ground-left",
+        "ground-middle",
+        "ground-right",
+        "platform-left",
+        "platform-middle",
+        "platform-right",
+        "wall",
+        "ceiling",
+        "slope-up",
+        "stairs-up",
+        "pillar",
+        "hazard",
+        "prop",
+        "door",
+        "foreground"
+      ]
+    },
+    "atlas": "side-view-regional-tiles-v1.png",
+    "atlasSha256": "dec53fdd84aecfb620a6fa22e291053707e5356f5e47c78b007f71e744875487",
+    "contactSheet": "side-view-regional-tiles-contact-sheet-v1.png",
+    "contactSheetSha256": "036e16ce1278750a6ad05523ba03149e8c7af07877d0a2821538009b9e0d7dc5",
+    "tiles": [
+      {
+        "themeId": "takamine-rain-village",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "2bd409e56008fa4fced76277503860080afa7860b499728d6bd0441cee73a685",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "3ac0ae71b31469c2b2a1bb91efec20623b16ccbd51da06800881d7880a3606a0",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "aea0894112d30c50009a1a2523018190b91477e8d9d9b8ee09dc66e952236cdf",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "d9ed21920be588c9e3050e369daaacad228c153bebbcb5c9e4dd636b3e19efa9",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "9f48139682edaa0a613b0f72323f4111d1d3065582b72474a5c63e98df115e77",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "4889a94df412623b454c84ed1e9fd4d373812457d8fb582c1df3f7330448b04f",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "0fa72f5d6aed3344780ed1d8e0c6d2fd7f65c4836587e91becae0ebca384e7b5",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "2195260b40fd47b575ebf7e873fdfe4880f008ee0c6a14470397cb7bd865d813",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "99e10ba41888207dad8ed0a62ed6a6a682167578956d8edbbe594ec4f6625e6f",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "63d146f43e072d01c7b9fd85fe674a043b40ac405cadfb2964ce7a0a53c59dd1",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "ec125e62fd5adf0260850ee6845d7be2793aeb30fd25b4cab2fe12c0005fa828",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "d65d859eaf5fae1a1a52031f2519d46936484c873943192c3af39c1bb7476143",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "b6459d5a49d659ecaf6eb1ae6ce05e541cc6e335f6163b50581bca914560964a",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "cb8d7d0113487f993a295c7e865efda8d1f616e82fdfa9249d1922b8740b2561",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "ab8443e4f9eecf5f474e386d4b543bc2393b0e153a84abf4fd37bb7e276b8c84",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "takamine-rain-village",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "360388bc6eca380f14d0f6f54957f3182c784367079e0e7d19bdee2a5d446e43",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "3e5802046f94a745ca09919612aa83444b037ef2c8e7e1299796313fe40e15fc",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "9afa4fce06d146e486063dc0bdd757a019fe4c281396c051790a228388c3fb04",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "56301b24bc69686f01cdb53164bf4633fb1847ec9e441831e645cfc0234e9165",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "399ff94357faf619c11be905eeb018661fa8ff46bcd9beceb1558faee40f41e6",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "8489b65cca1fbbf40cdd730e6e19fee31862a75da8ab4f89d2d48304a9e7d695",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "9755fd81b7ea7ff2f8481607d76a82117b7d8766125b3dd5b67c137f5fcab92d",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "31af15393423afd238aa918f7bcc4dbdb4e3e4a98a8159e53c240cd4a0e3894d",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "59e6e47e0ba0fa8a4d84456b1bdc2c9187b7c0cf28d896f62395286cf3d855ad",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "409c47e23b2199bf028237cbd156e0f27ab47c655b7ecbf8a66f7d8383bd39f2",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "f21871c420480a1566580b1e581718e249b2d0d03ae81a42253e0256ff1d2e47",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "2c5cb34fafc4a9d3ae4331e5ae2e10cf6064069c589f71a2bc97888a646d80a1",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "b68457fc2273f5ff5653eb21721fb68bf25a04c7fe4079e85addfd41ef3276b5",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "c0908daf18018274effcbc7a88fe4031ed78409a862c8ee63be1e43436942d49",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "ab1d799ab5dcff538079b4e3d4093d9da94107110ac03b36eb6bd102c77b7dc8",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "fb2762f1e49efe1f03957e85bf5a3b2c8245f123b2b154f672a38521460b540f",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hoshigawa-river-ward",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "e5a1a65772faf254fb4f58a479dba463a71af83e91c1afc8af3e7af1d9df33bb",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "25286a285f976a84cda428d3ab2fc2cc477082757ce480f37ce7f082d5e571f6",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "7e94bb24ae4369b6085fd29064bc670fb6e59bdcd3f158d27a48f32af07bd6af",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "6688a3c22038fcfa9eedea9a346f41fa5e248555c6b20a71e011f44af180b103",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "59dba82aa2a43d0902024d3de83ce2e928f7d8faa58aa6b2317153e39b535614",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "f0d9530c0c87d229d007f5f1a9851f62806965f81e91ffd93ea1bfc5680d69af",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "e36dac9a0364bbbf7a84d076fada65ac07bcb24b4551041667ccedba62a39854",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "1a1c539bd5d37d4711773a0a4db323ebd21ff2bb25259a6b158c3eacbe141ea3",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "3d5dfb25cc227ff04996781bb6e93cd5d19ed636fb46abfdea38cec46e0fffa3",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "97817f1ee13360817aa1f27d85ac9f32a0ea9bfa55407ba27522e07c09567997",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "d3bece327348da0b98aa4e5beef21f4f50d3fee41425c14a2d055e6e426eeed5",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "6582c2c835de619000447a3862d0b716f5cc8b3ea14c93da1e8f470685e57f5d",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "11c51d8504b785666f5dee2898c7ecbafc52334d8f56442925da7f00e10fae8a",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "1214c436e7cc6254e712a7316171206fa506ea4631b938135f4a99af1fb0698e",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "f91c2ea9cacd856a5ddc94efb075b30e22b17b116999f3f08c23d53336d9dc82",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "5da57fe33aed6831fbb5f5f4cd59f03649094aca0b621f1c7a16923dc259740e",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "sodegaura-relay-road",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "6935f1d6a5b109f699d564e19f881ee6042f2bf195f6eb17d14c7985fb86d3bd",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "1e26998b0943c27daac2a0e9447679a4166a002760dda00e153ccfcbb80bbae5",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "84ee47877144b15ecd90fd409472ef75b36ce03b7e0435c87cf5db39394e3218",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "efa7f0fa604bfbdfde9bac21adc00677789f81f1d0ca0c8acd8cd910a29649e3",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "db3f58a400e86b6e6de744368e926dbf3cf26aeef84e1b9b8c83b79c7073b06e",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "310627a8e0a6d5928781ccbb918f154b448bfd0a8d9b7a8cf07f63c8dd7c52d7",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "812ba5225801b585e5f3290da69297bcfaed23f8d1fc89403fb0f5317fa40b5c",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "22054f5d01117c1a9140b11b0c7bbcf23c75959afd2ac9d948d6371f2f9d9040",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "e2dfa84446a69495cca42e8ddf24338bbf7e2408a2e77476fe4cf4ba30efd428",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "7b59dec32eed80c4d6a68791b70aab39c33b74e7e1cc6dd45776d648fc1eefce",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "320bd9acae7b6ed21360e279cca6a446e763417e2c3b64d3195d0011b1ef0bd6",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "928c31c9617b198b916daa33949770a31c532b0bab8ffd2054ff292295f2d153",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "7aaaaa44b7a75b669f6bbbe9ce29e1b15242351992bd2e630bf88eab5b0329b5",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "eaf8a9553c7863c13414e7d2fc229aaadb4e25ff9fd4dc410b36239c0134f435",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "38171c20411e4e935eb0f9c30a44701cea8e988ea2d6fadfe0f7920d1f9be0e5",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "4276ba320ff6c2a47e88c610b080a018de7287ebae7d2feb88319dce62263a48",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kagura-ash-pass",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "a8ecdd20d1391f3f28b0db84bf7a167448ea6141514f6412c42b00344b79d6e6",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "d9504f5769f271e5faee523db1687ef70ea807d1252133bcc708bdddca62f0c3",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "df482caa0cb7ed2401d7fb005f7af6a6c2851d5ddeb6d4a96c9df8b63bc5c3de",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "4131bcf432be3eb02c99e97b1144d6947a664c58599ae37d0eece3446d7ebf0a",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "32003614f698ac926e7c99761f6c4bf4c73bd70e648c8ec7539e268263cc7287",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "e2f326a1a70b6ac2688f39dc1f04e1a700dfb096ad21739687d387b3bf62bb13",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "b5a46c5a9bb43f0ef02e4f70a81efe708971c43bfb1b02a2dbb1af478b4fec87",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "1319e135a771ab34d01ed1d99080ff0d08844b8f5f0dbabe24552e466e58af5e",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "c2e4fb0839023df6859f05141e9af1975b63ffafa3a229eed7799cb311abd6fe",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "8d4ba47716aff18e3cf724662380cf52e8334fdaa05f9f0f030cabb6445c6a9c",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "4298ac5b58d1e3d896c4d88b8fd70435c834867bd256ccc734ae9ab3d40afc64",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "555d68cd76cdc3ad91941647605f44b69a964df5cea4cbc37932bd8831c5da6b",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "1755f492211fd99d81b4c832610505be5a7f100a55983e6a3c6c3e7a5bb3975b",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "43e1bfca780c92b0e04d7a80009581259c603d825f22dfa6209d8f8333b3b656",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "44b6638d5a1d725353b49e05a6cb9eccbd75069df8bb69fdbceb652ab8999689",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "61828a82b03a537e3192196f258ed391e598438168e34e87329ba92abfc5b69c",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "kurohana-black-castle",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "f7585a8a97c47440c5fd58b0b4ef9659c741a62d06faa584f3afe186df490e5d",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "43b2e913f19ccc23e8d8e943b6ee2b0434475f67be31130ca9734f657c13bdb6",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "e86120f05fa211330dd7af4155e3d589ccb26d251330f5f7cde76dd24c9fcb45",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "f19e65212c76e644bdfa64d76a46e76aef3340df8537a479ddcbf6410826234a",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "c1747325b584d4f4e5c4888eeb3049f30e4842e8c746eaffafecf168edd78058",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "371f89d7352deace177bca81b99f03109d10651598815202ff0a06a539b24863",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "ade31d676b8b323bcbd36bb07ea8a9386e8a453eb8636844bd14dc4dd6756e19",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "bae6e2c8f4c641b7048dfb10275813dc97262850fc76775c44f36dbd4f2bd747",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "8f0b9a834a17e25b9e8eb35f5d6be39b9f205a9eca9a83fa1237019f85e39cfc",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "2c2ba9add06124ce3bb181b58e282e95750e1b835cdae7ef35932644bd91254a",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "e7a3f9d86bf20f43e38c89320456d0e5dd3324a28c08d8a7dfafb8d45a8c3b21",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "2bbd62c0718e10e9f2a69d32cc04f660dcffa282ed12127159be764a018de33d",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "8d4c401a6ab6b4f8c33e2eef99f79f3b0055dc89a717b4c6301c96846e68a7fd",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "fc54ecb41240ab973b7274e5a71c2630f1b7c5ed464672ac2957f3e7f0371a3c",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "d6531a676e342054cddf8a2e905616f44dca4de55cdbfada20be2fe002279a37",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "bc4727d6bbb3b631cce1e189be26c0af1991952be0e26d9f2f961f6c1dbfcf35",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "hidden-archive-chapel",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "0e8e3625516eaf869732f3dc6ed550f5a83df7c051d69454bfaff96bc5eb26fb",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "dcb81d47286126466d123d2ad3d91b24f9273ea9517a170c6e92df5cd4401cec",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "18a1fe686c476e4785b35fd685bde39fac7f294e88c7a9602e8a817419180e01",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "dfee0047bc1cc9eedd20ff4462d10559e0358edfe0a6bb6517abd76a054bdfec",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "6a9095ea57d952e07d79a0e0ca03d5579b733ee32976afa30374d1bc4e013b24",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "8616ea09ecafd192f625c65a0560e626fb889d924af606fa11eb319e5b373cb2",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "b25d8c0d966cae86c264e4ef2b917bdd4119b529ecd52026accf0b4011ff5497",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "8da84fdcb54a89f736bf47f07d3d279775ac3839048db9eeebd4fe4a2cc17f62",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "b6284b7dfb9cf14e2cdc67d3f2027ccd24e800594aef7e43e46abd25b8fab82e",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "c88df1ff4b4f80dad6ff867d233da7cde20213f23de6c35fb7984d63da90467a",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "ebdcf2b01147db42234bcf42746e46425f878ef73fd84f7fd536600ecec3eca0",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "dc394f41b8e7f578dbfa54e940be649dd0914f2e2c6c6076f8ad3a9556cbe074",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "9bba506858e1a3b7592480b020bed5acbe36cafeee142a11cf86e507930e3b38",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "5d76974a6eb2444fc9d2dda13b475bdd32806b8fd53d89ebbdcde8a942a18e6b",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "9dfd654e6976e4405f6c5babf2cf7b98f33cab3b1b7ed0bfb017486656fe1243",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "e9537f9f4da1e1f21212e4fa5e9b9deb1530a1fbc68bee86a6e08b407488e5b0",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "oni-forge",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "21f9e2ec5e812c20df707f08fd27f53dc0dc0aed507fa0d11ccfcf442c4c822c",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "backfill",
+        "index": 0,
+        "sha256Rgba": "eddf46823bad55a12370463cc7b40012adf790fe626708b17e8214bcefbc3494",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "ground-left",
+        "index": 1,
+        "sha256Rgba": "d5770d8006f3ade7297f445586e1f100c82869556058492212087717b927550f",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "ground-middle",
+        "index": 2,
+        "sha256Rgba": "52c8cff6931ead0534dc6b41874462699efa8953c287ce70ae0b2c8119069c42",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "ground-right",
+        "index": 3,
+        "sha256Rgba": "637f4845a1c054dcf8e2b833146de4ebaa3f637ab65ff0391457484626546d07",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "platform-left",
+        "index": 4,
+        "sha256Rgba": "6c9ddc8b31a0ed76a5f9cb08eba605e57cb0d55d272837bd1de56388fdd9695a",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "platform-middle",
+        "index": 5,
+        "sha256Rgba": "15384e4392a7ad5a20c092362f7f00611e558773895be99e619168cd64b96062",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "platform-right",
+        "index": 6,
+        "sha256Rgba": "8eb624e3d29b149ecac3ee9c259a13b6bca3277cffd1fe0952c79d7a1c2370d6",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "wall",
+        "index": 7,
+        "sha256Rgba": "b394d261a9cf28f42e2d54d7e9644e7047a80cc394c8cde07fec2b07d3282c20",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "ceiling",
+        "index": 8,
+        "sha256Rgba": "0f05d73e5361c6aa16db3dd04ee60ef2ee5c6c71ccd488c68cd09e3042e00b88",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "slope-up",
+        "index": 9,
+        "sha256Rgba": "ee05a3c835d53857e766dd3d81b21723d1de5f63da0ba40de03dc21c4c992630",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "stairs-up",
+        "index": 10,
+        "sha256Rgba": "7da29b6e0d12dd9e59ff13c96332d4b1e9b8131de64b0b560a2c8dca2e940916",
+        "actualColors": 3,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "pillar",
+        "index": 11,
+        "sha256Rgba": "4a7c6b6a4825399d2ff0d2371e9ea87a5653f1daac7887d53f3924bae8215a36",
+        "actualColors": 6,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "hazard",
+        "index": 12,
+        "sha256Rgba": "d808e652728ef0e30437fd96e7d7bce054d09f709d584c46335d93c50a08d6df",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "prop",
+        "index": 13,
+        "sha256Rgba": "708dd89ddb4a56469d6ce87f41400123b5e5015660b967c0797f651f23e7f735",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "door",
+        "index": 14,
+        "sha256Rgba": "7de840ac985867e8261387c4457dc81ef9203d5ee20209862867314018d3191e",
+        "actualColors": 5,
+        "opaqueAlpha": true
+      },
+      {
+        "themeId": "black-bell-engine",
+        "role": "foreground",
+        "index": 15,
+        "sha256Rgba": "114cc1a99328d617f8e80629a37956bdaaf4f4ac9d456c255d56b7bc75f22495",
+        "actualColors": 4,
+        "opaqueAlpha": true
+      }
+    ]
+  },
+  "themes": [
+    {
+      "id": "takamine-rain-village",
+      "name": "Takamine Rain Village",
+      "motif": "cedar",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#16233A",
+        "shadow": "#24344B",
+        "mid": "#455666",
+        "light": "#6B7F8C",
+        "material": "#5A3A2C",
+        "accent": "#A08B58",
+        "hazard": "#4F7392"
+      }
+    },
+    {
+      "id": "hoshigawa-river-ward",
+      "name": "Hoshigawa River Ward",
+      "motif": "river",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#173047",
+        "shadow": "#25475B",
+        "mid": "#3F6470",
+        "light": "#6F91A6",
+        "material": "#547675",
+        "accent": "#D7C99A",
+        "hazard": "#2E6B86"
+      }
+    },
+    {
+      "id": "sodegaura-relay-road",
+      "name": "Sodegaura Relay Road",
+      "motif": "road",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#2B2526",
+        "shadow": "#473638",
+        "mid": "#665044",
+        "light": "#8B6A54",
+        "material": "#5A3A2C",
+        "accent": "#B09155",
+        "hazard": "#762B32"
+      }
+    },
+    {
+      "id": "kagura-ash-pass",
+      "name": "Kagura Ash Pass",
+      "motif": "ash",
+      "palette": {
+        "outline": "#090D16",
+        "deep": "#1B1B22",
+        "shadow": "#303039",
+        "mid": "#4B4B52",
+        "light": "#77736E",
+        "material": "#3A2B2B",
+        "accent": "#B35A3E",
+        "hazard": "#E06B32"
+      }
+    },
+    {
+      "id": "kurohana-black-castle",
+      "name": "Kurohana Black Castle",
+      "motif": "lacquer",
+      "palette": {
+        "outline": "#080A10",
+        "deep": "#111522",
+        "shadow": "#252434",
+        "mid": "#3C3340",
+        "light": "#65515B",
+        "material": "#401D2B",
+        "accent": "#9E3742",
+        "hazard": "#781E39"
+      }
+    },
+    {
+      "id": "hidden-archive-chapel",
+      "name": "Hidden Archive Chapel",
+      "motif": "archive",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#242331",
+        "shadow": "#403947",
+        "mid": "#665A57",
+        "light": "#9A8B73",
+        "material": "#5A3A2C",
+        "accent": "#D7C99A",
+        "hazard": "#F0C978"
+      }
+    },
+    {
+      "id": "oni-forge",
+      "name": "Oni Forge",
+      "motif": "forge",
+      "palette": {
+        "outline": "#080A0F",
+        "deep": "#171A20",
+        "shadow": "#292D31",
+        "mid": "#44464A",
+        "light": "#72716D",
+        "material": "#4A3029",
+        "accent": "#A05A32",
+        "hazard": "#F08032"
+      }
+    },
+    {
+      "id": "black-bell-engine",
+      "name": "Black Bell Engine",
+      "motif": "bell-engine",
+      "palette": {
+        "outline": "#080A10",
+        "deep": "#141A24",
+        "shadow": "#28343C",
+        "mid": "#46545A",
+        "light": "#718077",
+        "material": "#4A3A2A",
+        "accent": "#A08B58",
+        "hazard": "#7A233B"
+      }
+    }
+  ],
+  "builder": {
+    "path": "build_world_tileset_suite.py",
+    "sha256": "7e02a2ecf928c7d2e061da8561b1eebc27f107f1868f31f963eae8a9f43ee9ab",
+    "deterministic": true,
+    "integerAligned": true,
+    "resampling": "none at native scale; NEAREST for review sheets"
+  }
+}

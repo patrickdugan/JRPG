@@ -1,0 +1,1165 @@
+{
+  "schemaVersion": 1,
+  "combatIdentityCount": 36,
+  "statePackageCount": 39,
+  "portraitCoverage": 39,
+  "topDownCoverage": 39,
+  "sideViewCoverage": 39,
+  "entries": [
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "catalogId": "PTY-001",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 0,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 0,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ren-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "catalogId": "PTY-002",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 1,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 1,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/aya-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "nikola-drazanic",
+      "name": "Nikola Dražanić",
+      "catalogId": "PTY-003",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 2,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 2,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/nikola-drazanic-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "catalogId": "PTY-004",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 3,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 3,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/mateus-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "catalogId": "PTY-005",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 4,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 4,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/genta-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "catalogId": "PTY-006",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 5,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 5,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kiku-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "miyo-senda",
+      "name": "Miyo Senda",
+      "catalogId": "PTY-007",
+      "group": "party",
+      "portrait": {
+        "path": "../party-portrait-suite-v2/party-portrait-expressions-v2.png",
+        "row": 6,
+        "neutralColumn": 0,
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "../party-field-suite/party-field-foundation.png",
+        "row": 6,
+        "frameSize": [
+          32,
+          48
+        ],
+        "directions": [
+          "north",
+          "east",
+          "south",
+          "west"
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/miyo-senda-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "cinder-hound",
+      "name": "Cinder Hound",
+      "catalogId": "ENM-001",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/cinder-hound-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/cinder-hound-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/cinder-hound-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "ash-wisp",
+      "name": "Ash Wisp",
+      "catalogId": "ENM-002",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/ash-wisp-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/ash-wisp-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ash-wisp-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "bell-moth",
+      "name": "Bell Moth",
+      "catalogId": "ENM-003",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/bell-moth-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/bell-moth-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/bell-moth-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "tithe-enforcer",
+      "name": "Tithe Enforcer",
+      "catalogId": "ENM-004",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/tithe-enforcer-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/tithe-enforcer-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/tithe-enforcer-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "registry-hound",
+      "name": "Registry Hound",
+      "catalogId": "ENM-005",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/registry-hound-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/registry-hound-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/registry-hound-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "drowned-retainer",
+      "name": "Drowned Retainer",
+      "catalogId": "ENM-006",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/drowned-retainer-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/drowned-retainer-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/drowned-retainer-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "lantern-leech",
+      "name": "Lantern Leech",
+      "catalogId": "ENM-007",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/lantern-leech-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/lantern-leech-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/lantern-leech-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "salt-warden",
+      "name": "Salt Warden",
+      "catalogId": "ENM-008",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/salt-warden-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/salt-warden-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/salt-warden-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "ashen-spearman",
+      "name": "Ashen Spearman",
+      "catalogId": "ENM-009",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/ashen-spearman-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/ashen-spearman-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ashen-spearman-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "ashen-banner-guard",
+      "name": "Ashen Banner Guard",
+      "catalogId": "ENM-010",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/ashen-banner-guard-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/ashen-banner-guard-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ashen-banner-guard-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "forge-thrall",
+      "name": "Forge Thrall",
+      "catalogId": "ENM-011",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/forge-thrall-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/forge-thrall-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/forge-thrall-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "bell-scribe",
+      "name": "Bell Scribe",
+      "catalogId": "ENM-012",
+      "group": "enemy-v2",
+      "portrait": {
+        "path": "portraits/bell-scribe-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/bell-scribe-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/bell-scribe-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "mourning-ronin",
+      "name": "Mourning Ronin",
+      "catalogId": "HUM-001",
+      "group": "enemy-v3-human",
+      "portrait": {
+        "path": "portraits/mourning-ronin-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/mourning-ronin-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/mourning-ronin-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "court-arquebusier",
+      "name": "Court Arquebusier",
+      "catalogId": "HUM-002",
+      "group": "enemy-v3-human",
+      "portrait": {
+        "path": "portraits/court-arquebusier-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/court-arquebusier-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/court-arquebusier-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "veil-courier",
+      "name": "Veil Courier",
+      "catalogId": "HUM-003",
+      "group": "enemy-v3-human",
+      "portrait": {
+        "path": "portraits/veil-courier-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/veil-courier-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/veil-courier-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "provincial-banner-guard",
+      "name": "Provincial Banner Guard",
+      "catalogId": "HUM-004",
+      "group": "enemy-v3-human",
+      "portrait": {
+        "path": "portraits/provincial-banner-guard-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/provincial-banner-guard-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/provincial-banner-guard-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "storm-nue",
+      "name": "Storm Nue",
+      "catalogId": "BST-001",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/storm-nue-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/storm-nue-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/storm-nue-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "dream-baku",
+      "name": "Dream Baku",
+      "catalogId": "BST-002",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/dream-baku-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/dream-baku-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/dream-baku-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "twin-tail-nekomata",
+      "name": "Twin-Tail Nekomata",
+      "catalogId": "BST-003",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/twin-tail-nekomata-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/twin-tail-nekomata-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/twin-tail-nekomata-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "silk-jorogumo",
+      "name": "Silk Jorogumo",
+      "catalogId": "BST-004",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/silk-jorogumo-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/silk-jorogumo-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/silk-jorogumo-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "sickle-weasel",
+      "name": "Sickle Weasel",
+      "catalogId": "BST-005",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/sickle-weasel-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/sickle-weasel-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/sickle-weasel-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "drum-tanuki",
+      "name": "Drum Tanuki",
+      "catalogId": "BST-006",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/drum-tanuki-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/drum-tanuki-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/drum-tanuki-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "marsh-kappa-beast",
+      "name": "Marsh Kappa-Beast",
+      "catalogId": "BST-007",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/marsh-kappa-beast-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/marsh-kappa-beast-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/marsh-kappa-beast-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "ushi-oni-behemoth",
+      "name": "Ushi-Oni Behemoth",
+      "catalogId": "BST-008",
+      "group": "enemy-v3-beast",
+      "portrait": {
+        "path": "portraits/ushi-oni-behemoth-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/ushi-oni-behemoth-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/ushi-oni-behemoth-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "black-chrysanthemum-nest-woman",
+      "name": "Black Chrysanthemum Nest-Woman",
+      "catalogId": "PLT-001",
+      "group": "enemy-v3-plant",
+      "portrait": {
+        "path": "portraits/black-chrysanthemum-nest-woman-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/black-chrysanthemum-nest-woman-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/black-chrysanthemum-nest-woman-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "razor-bamboo-stalker",
+      "name": "Razor Bamboo Stalker",
+      "catalogId": "PLT-002",
+      "group": "enemy-v3-plant",
+      "portrait": {
+        "path": "portraits/razor-bamboo-stalker-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/razor-bamboo-stalker-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/razor-bamboo-stalker-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "spider-lily-ambusher",
+      "name": "Spider-Lily Ambusher",
+      "catalogId": "PLT-003",
+      "group": "enemy-v3-plant",
+      "portrait": {
+        "path": "portraits/spider-lily-ambusher-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/spider-lily-ambusher-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/spider-lily-ambusher-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "lantern-vine-maw",
+      "name": "Lantern-Vine Maw",
+      "catalogId": "PLT-004",
+      "group": "enemy-v3-plant",
+      "portrait": {
+        "path": "portraits/lantern-vine-maw-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/lantern-vine-maw-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/lantern-vine-maw-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "kurozane-court-human",
+      "name": "Kurozane — Court Human",
+      "catalogId": "BOS-001-A",
+      "group": "boss",
+      "portrait": {
+        "path": "portraits/kurozane-court-human-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/kurozane-court-human-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-court-human-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "kurozane-oni-armor",
+      "name": "Kurozane — Oni Armor",
+      "catalogId": "BOS-001-B",
+      "group": "boss",
+      "portrait": {
+        "path": "portraits/kurozane-oni-armor-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/kurozane-oni-armor-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-oni-armor-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "kurozane-demon-mode",
+      "name": "Kurozane — Demon Mode",
+      "catalogId": "BOS-001-C",
+      "group": "boss",
+      "portrait": {
+        "path": "portraits/kurozane-demon-mode-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/kurozane-demon-mode-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-demon-mode-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    },
+    {
+      "id": "kurozane-ward-broken",
+      "name": "Kurozane — Ward Broken",
+      "catalogId": "BOS-001-D",
+      "group": "boss",
+      "portrait": {
+        "path": "portraits/kurozane-ward-broken-portrait-v1.png",
+        "frameSize": [
+          96,
+          96
+        ]
+      },
+      "topDown": {
+        "path": "field/kurozane-ward-broken-field-four-view-v1.png",
+        "frameSize": [
+          48,
+          48
+        ]
+      },
+      "sideView": {
+        "path": "../late-snes-roster-suite-v1/sprites/kurozane-ward-broken-four-pose-v1.png",
+        "frameSize": [
+          64,
+          64
+        ]
+      },
+      "coverageComplete": true
+    }
+  ]
+}
