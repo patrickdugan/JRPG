@@ -139,6 +139,11 @@ import {
   partyAtlasImageHasExpectedSize,
 } from './sprite-atlas.mjs';
 import {
+  COMBAT_CHARACTER_FIELD_ATLAS,
+  combatCharacterFieldImageHasExpectedSize,
+  getCombatCharacterFieldTemplateFrame,
+} from './combat-character-field-atlas.mjs';
+import {
   createFieldFormationPresentation,
   recordFieldFormationDeparture,
   resolveFieldFollowerPlacements,
@@ -226,6 +231,21 @@ partyAtlasImage.addEventListener('error', () => {
   renderCurrentSceneDirection();
 }, { once: true });
 partyAtlasImage.src = PARTY_ATLAS.url;
+const enemyFieldAtlasImage = new Image();
+let enemyFieldAtlasState = 'loading';
+mapCanvas.dataset.enemyArtState = enemyFieldAtlasState;
+enemyFieldAtlasImage.decoding = 'async';
+enemyFieldAtlasImage.addEventListener('load', () => {
+  enemyFieldAtlasState = combatCharacterFieldImageHasExpectedSize(enemyFieldAtlasImage) ? 'ready' : 'error';
+  mapCanvas.dataset.enemyArtState = enemyFieldAtlasState;
+  renderCurrentSceneDirection();
+}, { once: true });
+enemyFieldAtlasImage.addEventListener('error', () => {
+  enemyFieldAtlasState = 'error';
+  mapCanvas.dataset.enemyArtState = enemyFieldAtlasState;
+  renderCurrentSceneDirection();
+}, { once: true });
+enemyFieldAtlasImage.src = COMBAT_CHARACTER_FIELD_ATLAS.url;
 const npcFieldAtlasImage = new Image();
 let npcFieldAtlasState = 'loading';
 mapCanvas.dataset.npcArtState = npcFieldAtlasState;
@@ -1368,6 +1388,52 @@ function drawFieldFormationFollowers(level, originX, originY, cell, now) {
   mapCanvas.dataset.fieldFormationKey = context.formation.join('|');
 }
 
+function drawEnemyFieldMarker(enemy, position, partyPosition, px, py, cell, { boss = false } = {}) {
+  if (
+    enemyFieldAtlasState !== 'ready'
+    || !combatCharacterFieldImageHasExpectedSize(enemyFieldAtlasImage)
+  ) return false;
+  const dx = Math.sign(partyPosition.x - position.x);
+  const dy = Math.sign(partyPosition.y - position.y);
+  const facing = atlasDirectionForMovement(dx, dy, 'south');
+  const frame = getCombatCharacterFieldTemplateFrame(enemy.id, facing, 'idle');
+  if (!frame) return false;
+  const drawHeight = cell * 1.42 * frame.displayScale;
+  const drawWidth = drawHeight * (frame.width / frame.height);
+  const footY = py + cell * 0.31;
+  mapCtx.fillStyle = boss ? 'rgba(153, 53, 52, 0.44)' : 'rgba(0, 0, 0, 0.36)';
+  mapCtx.beginPath();
+  mapCtx.ellipse(
+    px,
+    footY,
+    cell * (boss ? 0.29 : 0.23),
+    cell * (boss ? 0.09 : 0.07),
+    0,
+    0,
+    Math.PI * 2,
+  );
+  mapCtx.fill();
+  mapCtx.drawImage(
+    enemyFieldAtlasImage,
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height,
+    px - drawWidth / 2,
+    footY - drawHeight * (frame.pivotY / frame.height),
+    drawWidth,
+    drawHeight,
+  );
+  if (boss) {
+    mapCtx.strokeStyle = 'rgba(232, 106, 83, 0.82)';
+    mapCtx.lineWidth = 2;
+    mapCtx.beginPath();
+    mapCtx.ellipse(px, footY, cell * 0.31, cell * 0.11, 0, 0, Math.PI * 2);
+    mapCtx.stroke();
+  }
+  return true;
+}
+
 function drawMap(level, encounter, now) {
   const width = level?.width ?? 12;
   const height = level?.height ?? 7;
@@ -1527,6 +1593,7 @@ function drawMap(level, encounter, now) {
     mapCtx.fillRect(px - 1, py + cell * 0.1, 2, 2);
   }
 
+  const partyPosition = fieldPosition();
   const enemyTokens = (encounter?.enemies ?? []).flatMap((enemy, enemyIndex) => {
     const positions = enemy.positions ?? (enemy.position ? [enemy.position] : []);
     return positions.map((position, positionIndex) => ({
@@ -1537,13 +1604,15 @@ function drawMap(level, encounter, now) {
   enemyTokens.slice(0, 8).forEach(({ enemy, position }, index) => {
     const px = originX + position.x * cell + cell / 2;
     const py = originY + position.y * cell + cell / 2;
-    mapCtx.fillStyle = index === 0 && encounter?.format === 'boss' ? '#d76b57' : '#9b5d76';
-    mapCtx.fillRect(px - cell * 0.18, py - cell * 0.2, cell * 0.36, cell * 0.42);
-    mapCtx.fillStyle = '#e5d8c8';
-    mapCtx.fillRect(px - cell * 0.08, py - cell * 0.1, cell * 0.16, cell * 0.1);
+    const boss = index === 0 && encounter?.format === 'boss';
+    if (!drawEnemyFieldMarker(enemy, position, partyPosition, px, py, cell, { boss })) {
+      mapCtx.fillStyle = boss ? '#d76b57' : '#9b5d76';
+      mapCtx.fillRect(px - cell * 0.18, py - cell * 0.2, cell * 0.36, cell * 0.42);
+      mapCtx.fillStyle = '#e5d8c8';
+      mapCtx.fillRect(px - cell * 0.08, py - cell * 0.1, cell * 0.16, cell * 0.1);
+    }
   });
 
-  const partyPosition = fieldPosition();
   const fieldLeaderId = effectiveFieldLeader(level);
   mapCanvas.dataset.fieldLeaderId = fieldLeaderId;
   const partyX = originX + partyPosition.x * cell + cell / 2;

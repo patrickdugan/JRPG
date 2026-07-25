@@ -38,13 +38,13 @@ export const PARTY_ANIMATION_CLIPS = deepFreeze([
 ]);
 
 export const ENEMY_TRIGGER_GEOMETRY = deepFreeze({
-  frameWidth: 48,
-  frameHeight: 48,
+  frameWidth: 80,
+  frameHeight: 80,
   columns: 12,
   rows: 32,
-  pivot: [24, 46],
-  footPoint: [24, 46],
-  atlasPath: './assets/art/roster-animation-runtime-v1/enemy-encounter-trigger-atlas-v1.png',
+  pivot: [40, 77],
+  footPoint: [40, 77],
+  atlasPath: './assets/art/enemy-field-suite-v3/enemy-encounter-trigger-atlas-v3.png',
 });
 
 export const ENEMY_TRIGGER_ENTRIES = deepFreeze([
@@ -58,7 +58,7 @@ export const ENEMY_TRIGGER_ENTRIES = deepFreeze([
   ['salt-warden', 'Salt Warden', 'humanoid'],
   ['ashen-spearman', 'Ashen Spearman', 'humanoid'],
   ['ashen-banner-guard', 'Ashen Banner Guard', 'humanoid'],
-  ['forge-thrall', 'Forge Thrall', 'beast'],
+  ['forge-thrall', 'Forge Thrall', 'heavy'],
   ['bell-scribe', 'Bell Scribe', 'humanoid'],
   ['mourning-ronin', 'Mourning Ronin', 'humanoid'],
   ['court-arquebusier', 'Court Arquebusier', 'humanoid'],
@@ -71,14 +71,14 @@ export const ENEMY_TRIGGER_ENTRIES = deepFreeze([
   ['sickle-weasel', 'Sickle Weasel', 'rush'],
   ['drum-tanuki', 'Drum Tanuki', 'beast'],
   ['marsh-kappa-beast', 'Marsh Kappa-Beast', 'beast'],
-  ['ushi-oni-behemoth', 'Ushi-Oni Behemoth', 'beast'],
+  ['ushi-oni-behemoth', 'Ushi-Oni Behemoth', 'heavy'],
   ['black-chrysanthemum-nest-woman', 'Black Chrysanthemum Nest-Woman', 'ambush'],
   ['razor-bamboo-stalker', 'Razor Bamboo Stalker', 'ambush'],
   ['spider-lily-ambusher', 'Spider-Lily Ambusher', 'ambush'],
   ['lantern-vine-maw', 'Lantern-Vine Maw', 'ambush'],
   ['kurozane-court-human', 'Kurozane — Court Human', 'humanoid'],
-  ['kurozane-oni-armor', 'Kurozane — Oni Armor', 'humanoid'],
-  ['kurozane-demon-mode', 'Kurozane — Demon Mode', 'beast'],
+  ['kurozane-oni-armor', 'Kurozane — Oni Armor', 'heavy'],
+  ['kurozane-demon-mode', 'Kurozane — Demon Mode', 'heavy'],
   ['kurozane-ward-broken', 'Kurozane — Ward Broken', 'humanoid'],
 ].map(([id, name, profile], row) => ({ id, name, profile, row })));
 

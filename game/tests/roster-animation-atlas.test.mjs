@@ -17,26 +17,33 @@ import {
 
 const suiteUrl = new URL('../../assets/art/roster-animation-runtime-v1/', import.meta.url);
 const runtimeUrl = new URL('../assets/art/roster-animation-runtime-v1/', import.meta.url);
+const enemySuiteUrl = new URL('../../assets/art/enemy-field-suite-v3/', import.meta.url);
+const enemyRuntimeUrl = new URL('../assets/art/enemy-field-suite-v3/', import.meta.url);
 
-test('runtime metadata covers all seven party and thirty-two enemy/boss entries', async () => {
-  const source = JSON.parse(
+test('runtime metadata covers all seven party and thirty-two PS1-density enemy/boss entries', async () => {
+  const partySource = JSON.parse(
     await readFile(new URL('roster-animation-runtime.source.json', suiteUrl), 'utf8'),
   );
+  const enemyManifest = JSON.parse(await readFile(new URL('manifest.json', enemySuiteUrl), 'utf8'));
   assert.equal(PARTY_ANIMATION_CHARACTERS.length, 7);
   assert.equal(ENEMY_TRIGGER_ENTRIES.length, 32);
   assert.equal(PARTY_ANIMATION_CHARACTERS.length + ENEMY_TRIGGER_ENTRIES.length, 39);
   assert.deepEqual(
     PARTY_ANIMATION_CHARACTERS.map(({ id }) => id),
-    source.party.characters.map(({ id }) => id),
+    partySource.party.characters.map(({ id }) => id),
   );
   assert.deepEqual(
     ENEMY_TRIGGER_ENTRIES.map(({ id }) => id),
-    source.enemyTriggers.entries.map(({ id }) => id),
+    enemyManifest.rows.map(({ id }) => id),
   );
-  assert.deepEqual(PARTY_ANIMATION_CLIPS, source.party.clips);
-  assert.deepEqual(ENEMY_TRIGGER_CLIPS, source.enemyTriggers.clips);
+  assert.deepEqual(
+    ENEMY_TRIGGER_ENTRIES.map(({ profile }) => profile),
+    enemyManifest.rows.map(({ profile }) => profile),
+  );
+  assert.deepEqual(PARTY_ANIMATION_CLIPS, partySource.party.clips);
+  assert.deepEqual(ENEMY_TRIGGER_CLIPS, enemyManifest.triggerClips);
   assert.deepEqual(PARTY_ANIMATION_GEOMETRY.pivot, [24, 58]);
-  assert.deepEqual(ENEMY_TRIGGER_GEOMETRY.pivot, [24, 46]);
+  assert.deepEqual(ENEMY_TRIGGER_GEOMETRY.pivot, [40, 77]);
 });
 
 test('party sampling exposes exact attack events and stable atlas rectangles', () => {
@@ -68,7 +75,7 @@ test('enemy trigger sampling exposes alert and contact only on active frames', (
   assert.equal(contact.event, 'encounter-contact');
   assert.equal(contact.atlasFrame, 10);
   assert.equal(contact.profile, 'ambush');
-  assert.deepEqual(contact.rect, [10 * 48, 24 * 48, 48, 48]);
+  assert.deepEqual(contact.rect, [10 * 80, 24 * 80, 80, 80]);
   assert.throws(() => sampleEnemyTriggerAnimation('unknown', 'alert', 0), RangeError);
 });
 
@@ -100,16 +107,14 @@ test('encounter trigger state moves through readable grace phases and emits an i
 });
 
 test('runtime atlases are byte-identical to production outputs and module stays storage-free', async () => {
-  for (const filename of [
-    'party-combat-animation-atlas-v1.png',
-    'enemy-encounter-trigger-atlas-v1.png',
-  ]) {
-    const [source, runtime] = await Promise.all([
-      readFile(new URL(filename, suiteUrl)),
-      readFile(new URL(filename, runtimeUrl)),
-    ]);
-    assert.equal(runtime.equals(source), true, filename);
-  }
+  const [partySource, partyRuntime, enemySource, enemyRuntime] = await Promise.all([
+    readFile(new URL('party-combat-animation-atlas-v1.png', suiteUrl)),
+    readFile(new URL('party-combat-animation-atlas-v1.png', runtimeUrl)),
+    readFile(new URL('enemy-encounter-trigger-atlas-v3.png', enemySuiteUrl)),
+    readFile(new URL('enemy-encounter-trigger-atlas-v3.png', enemyRuntimeUrl)),
+  ]);
+  assert.equal(partyRuntime.equals(partySource), true, 'party-combat-animation-atlas-v1.png');
+  assert.equal(enemyRuntime.equals(enemySource), true, 'enemy-encounter-trigger-atlas-v3.png');
   const moduleSource = await readFile(new URL('../roster-animation-atlas.mjs', import.meta.url), 'utf8');
   assert.doesNotMatch(moduleSource, /localStorage|sessionStorage|campaign.*settle/iu);
 });
