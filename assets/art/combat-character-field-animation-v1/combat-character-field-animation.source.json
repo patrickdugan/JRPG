@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "assetId": "combat-character-field-animation-v1",
+  "status": "runtime-candidate",
+  "classification": "deterministically-pixelified-raster",
+  "sourceCoveragePackage": "../combat-character-coverage-v1",
+  "frame": {
+    "width": 48,
+    "height": 48,
+    "pivot": [24, 46],
+    "footPoint": [24, 46],
+    "minimumTransparentGutter": 1,
+    "alphaPolicy": "binary",
+    "visibleColorCeiling": 16
+  },
+  "directions": ["north", "east", "south", "west"],
+  "phaseOrder": ["idle", "contact", "compression", "passing", "extension"],
+  "walkClip": ["contact", "compression", "passing", "extension"],
+  "frameDurationMs": {
+    "contact": 90,
+    "compression": 75,
+    "passing": 90,
+    "extension": 105
+  },
+  "eastPolicy": "precomputed deterministic mirror of west",
+  "rootMotionOwnership": "runtime-simulation",
+  "derivation": {
+    "resampling": "nearest-neighbor only",
+    "alpha": "binary preserved",
+    "palette": "source colors preserved per frame",
+    "motion": "integer translation, anchored one-pixel compression, and one-pixel upper-body lean"
+  },
+  "preview": {
+    "contactSheetScale": 2,
+    "motionPreviewScale": 2,
+    "motionPreviewFrameDurationMs": 120
+  }
+}

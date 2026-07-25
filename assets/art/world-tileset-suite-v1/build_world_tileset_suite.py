@@ -17,6 +17,7 @@ SIDE_ATLAS = "side-view-regional-tiles-v1.png"
 TOP_CONTACT = "top-down-regional-tiles-contact-sheet-v1.png"
 SIDE_CONTACT = "side-view-regional-tiles-contact-sheet-v1.png"
 MANIFEST_NAME = "manifest.json"
+RUNTIME_CONTRACT = "world-tileset-runtime-v1.json"
 
 
 def color(value: str) -> tuple[int, int, int, int]:
@@ -260,6 +261,54 @@ def tile_receipt(tile: Image.Image, theme: dict, role: str, index: int) -> dict:
     }
 
 
+def runtime_contract(spec: dict) -> dict:
+    themes = spec["themes"]
+    views = {}
+    for view_id, atlas_name in (("topDown", TOP_ATLAS), ("sideView", SIDE_ATLAS)):
+        contract = spec[view_id]
+        roles = []
+        for column, role in enumerate(contract["roleOrder"]):
+            roles.append({
+                "id": role,
+                "column": column,
+                "rect": [
+                    column * contract["tileWidth"],
+                    0,
+                    contract["tileWidth"],
+                    contract["tileHeight"],
+                ],
+                **contract["roleSemantics"][role],
+            })
+        views[view_id] = {
+            "atlas": atlas_name,
+            "tileWidth": contract["tileWidth"],
+            "tileHeight": contract["tileHeight"],
+            "columns": contract["columns"],
+            "rows": contract["rows"],
+            "atlasWidth": contract["atlasWidth"],
+            "atlasHeight": contract["atlasHeight"],
+            "alphaPolicy": contract["alphaPolicy"],
+            "roles": roles,
+        }
+    return {
+        "schemaVersion": 1,
+        "assetId": spec["assetId"],
+        "themeOrder": [theme["id"] for theme in themes],
+        "themes": [
+            {
+                "id": theme["id"],
+                "name": theme["name"],
+                "row": row,
+                "motif": theme["motif"],
+                "palette": theme["palette"],
+            }
+            for row, theme in enumerate(themes)
+        ],
+        "views": views,
+        "runtimePolicy": spec["runtimePolicy"],
+    }
+
+
 def build(output_root: Path) -> list[Path]:
     spec = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
     themes = spec["themes"]
@@ -283,10 +332,12 @@ def build(output_root: Path) -> list[Path]:
     side_path = output_root / SIDE_ATLAS
     top_contact_path = output_root / TOP_CONTACT
     side_contact_path = output_root / SIDE_CONTACT
+    runtime_contract_path = output_root / RUNTIME_CONTRACT
     top_atlas.save(top_path, optimize=False)
     side_atlas.save(side_path, optimize=False)
     contact_sheet(top_atlas, themes, 16, 4, "TOP-DOWN REGIONAL TILE FAMILIES · 16x16 NATIVE").save(top_contact_path, optimize=False)
     contact_sheet(side_atlas, themes, 32, 2, "SIDE-VIEW REGIONAL TILE FAMILIES · 32x32 NATIVE").save(side_contact_path, optimize=False)
+    runtime_contract_path.write_text(json.dumps(runtime_contract(spec), indent=2) + "\n", encoding="utf-8")
 
     manifest = {
         "schemaVersion": 1,
@@ -310,6 +361,14 @@ def build(output_root: Path) -> list[Path]:
             "tiles": side_receipts,
         },
         "themes": themes,
+        "runtimeContract": {
+            "path": RUNTIME_CONTRACT,
+            "sha256": sha256_path(runtime_contract_path),
+            "collisionAuthority": spec["runtimePolicy"]["collisionAuthority"],
+            "hazardAuthority": spec["runtimePolicy"]["hazardAuthority"],
+            "transitionAuthority": spec["runtimePolicy"]["transitionAuthority"],
+            "occlusionAuthority": spec["runtimePolicy"]["occlusionAuthority"],
+        },
         "builder": {
             "path": BUILDER_PATH.name,
             "sha256": sha256_path(BUILDER_PATH),
@@ -320,7 +379,14 @@ def build(output_root: Path) -> list[Path]:
     }
     manifest_path = output_root / MANIFEST_NAME
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    return [Path(TOP_ATLAS), Path(SIDE_ATLAS), Path(TOP_CONTACT), Path(SIDE_CONTACT), Path(MANIFEST_NAME)]
+    return [
+        Path(TOP_ATLAS),
+        Path(SIDE_ATLAS),
+        Path(TOP_CONTACT),
+        Path(SIDE_CONTACT),
+        Path(RUNTIME_CONTRACT),
+        Path(MANIFEST_NAME),
+    ]
 
 
 def check() -> None:

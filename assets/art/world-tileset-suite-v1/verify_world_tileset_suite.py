@@ -12,6 +12,7 @@ SPEC = json.loads((ROOT / "world-tileset-suite.source.json").read_text(encoding=
 
 def main() -> None:
     errors: list[str] = []
+    runtime = json.loads((ROOT / "world-tileset-runtime-v1.json").read_text(encoding="utf-8"))
     top = Image.open(ROOT / "top-down-regional-tiles-v1.png").convert("RGBA")
     side = Image.open(ROOT / "side-view-regional-tiles-v1.png").convert("RGBA")
     if top.size != (256, 128):
@@ -22,6 +23,26 @@ def main() -> None:
         errors.append("top-down atlas is not opaque")
     if set(side.getchannel("A").getdata()) != {255}:
         errors.append("side-view atlas is not opaque")
+    if runtime["themeOrder"] != [theme["id"] for theme in SPEC["themes"]]:
+        errors.append("runtime theme order does not match source")
+    for view_id in ("topDown", "sideView"):
+        view = runtime["views"][view_id]
+        source_view = SPEC[view_id]
+        if [role["id"] for role in view["roles"]] != source_view["roleOrder"]:
+            errors.append(f"{view_id} runtime role order does not match source")
+        for column, role in enumerate(view["roles"]):
+            if role["column"] != column:
+                errors.append(f"{view_id} {role['id']}: runtime column mismatch")
+            if role["collisionHint"] not in {
+                "none", "passable", "solid", "one-way", "slope-up", "stairs-up", "level-authored",
+            }:
+                errors.append(f"{view_id} {role['id']}: invalid collision hint")
+            if role["layer"] not in {
+                "background", "ground", "structure", "effect", "interaction", "foreground",
+            }:
+                errors.append(f"{view_id} {role['id']}: invalid render layer")
+    if runtime["runtimePolicy"]["collisionAuthority"] != SPEC["runtimePolicy"]["collisionAuthority"]:
+        errors.append("runtime collision authority drifted")
 
     for row, theme in enumerate(SPEC["themes"]):
         palette_ceiling = len(theme["palette"])
@@ -49,7 +70,7 @@ def main() -> None:
     print(
         "Tileset verification passed: eight themes, 128 top-down 16x16 tiles, "
         "128 side-view 32x32 tiles, bounded palettes, opaque alpha, integer geometry, "
-        "and seamless repeat borders for base floors."
+        "seamless repeat borders for base floors, and level-authoritative runtime semantics."
     )
 
 

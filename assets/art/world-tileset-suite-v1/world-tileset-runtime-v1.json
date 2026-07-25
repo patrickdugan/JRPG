@@ -1,0 +1,664 @@
+{
+  "schemaVersion": 1,
+  "assetId": "world-tileset-suite-v1",
+  "themeOrder": [
+    "takamine-rain-village",
+    "hoshigawa-river-ward",
+    "sodegaura-relay-road",
+    "kagura-ash-pass",
+    "kurohana-black-castle",
+    "hidden-archive-chapel",
+    "oni-forge",
+    "black-bell-engine"
+  ],
+  "themes": [
+    {
+      "id": "takamine-rain-village",
+      "name": "Takamine Rain Village",
+      "row": 0,
+      "motif": "cedar",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#16233A",
+        "shadow": "#24344B",
+        "mid": "#455666",
+        "light": "#6B7F8C",
+        "material": "#5A3A2C",
+        "accent": "#A08B58",
+        "hazard": "#4F7392"
+      }
+    },
+    {
+      "id": "hoshigawa-river-ward",
+      "name": "Hoshigawa River Ward",
+      "row": 1,
+      "motif": "river",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#173047",
+        "shadow": "#25475B",
+        "mid": "#3F6470",
+        "light": "#6F91A6",
+        "material": "#547675",
+        "accent": "#D7C99A",
+        "hazard": "#2E6B86"
+      }
+    },
+    {
+      "id": "sodegaura-relay-road",
+      "name": "Sodegaura Relay Road",
+      "row": 2,
+      "motif": "road",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#2B2526",
+        "shadow": "#473638",
+        "mid": "#665044",
+        "light": "#8B6A54",
+        "material": "#5A3A2C",
+        "accent": "#B09155",
+        "hazard": "#762B32"
+      }
+    },
+    {
+      "id": "kagura-ash-pass",
+      "name": "Kagura Ash Pass",
+      "row": 3,
+      "motif": "ash",
+      "palette": {
+        "outline": "#090D16",
+        "deep": "#1B1B22",
+        "shadow": "#303039",
+        "mid": "#4B4B52",
+        "light": "#77736E",
+        "material": "#3A2B2B",
+        "accent": "#B35A3E",
+        "hazard": "#E06B32"
+      }
+    },
+    {
+      "id": "kurohana-black-castle",
+      "name": "Kurohana Black Castle",
+      "row": 4,
+      "motif": "lacquer",
+      "palette": {
+        "outline": "#080A10",
+        "deep": "#111522",
+        "shadow": "#252434",
+        "mid": "#3C3340",
+        "light": "#65515B",
+        "material": "#401D2B",
+        "accent": "#9E3742",
+        "hazard": "#781E39"
+      }
+    },
+    {
+      "id": "hidden-archive-chapel",
+      "name": "Hidden Archive Chapel",
+      "row": 5,
+      "motif": "archive",
+      "palette": {
+        "outline": "#0B1020",
+        "deep": "#242331",
+        "shadow": "#403947",
+        "mid": "#665A57",
+        "light": "#9A8B73",
+        "material": "#5A3A2C",
+        "accent": "#D7C99A",
+        "hazard": "#F0C978"
+      }
+    },
+    {
+      "id": "oni-forge",
+      "name": "Oni Forge",
+      "row": 6,
+      "motif": "forge",
+      "palette": {
+        "outline": "#080A0F",
+        "deep": "#171A20",
+        "shadow": "#292D31",
+        "mid": "#44464A",
+        "light": "#72716D",
+        "material": "#4A3029",
+        "accent": "#A05A32",
+        "hazard": "#F08032"
+      }
+    },
+    {
+      "id": "black-bell-engine",
+      "name": "Black Bell Engine",
+      "row": 7,
+      "motif": "bell-engine",
+      "palette": {
+        "outline": "#080A10",
+        "deep": "#141A24",
+        "shadow": "#28343C",
+        "mid": "#46545A",
+        "light": "#718077",
+        "material": "#4A3A2A",
+        "accent": "#A08B58",
+        "hazard": "#7A233B"
+      }
+    }
+  ],
+  "views": {
+    "topDown": {
+      "atlas": "top-down-regional-tiles-v1.png",
+      "tileWidth": 16,
+      "tileHeight": 16,
+      "columns": 16,
+      "rows": 8,
+      "atlasWidth": 256,
+      "atlasHeight": 128,
+      "alphaPolicy": "opaque",
+      "roles": [
+        {
+          "id": "floor-a",
+          "column": 0,
+          "rect": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "floor-b",
+          "column": 1,
+          "rect": [
+            16,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "floor-detail",
+          "column": 2,
+          "rect": [
+            32,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "path",
+          "column": 3,
+          "rect": [
+            48,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "wall",
+          "column": 4,
+          "rect": [
+            64,
+            0,
+            16,
+            16
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        {
+          "id": "wall-cap",
+          "column": 5,
+          "rect": [
+            80,
+            0,
+            16,
+            16
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        {
+          "id": "edge-north",
+          "column": 6,
+          "rect": [
+            96,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "edge-south",
+          "column": 7,
+          "rect": [
+            112,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "edge-west",
+          "column": 8,
+          "rect": [
+            128,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "edge-east",
+          "column": 9,
+          "rect": [
+            144,
+            0,
+            16,
+            16
+          ],
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "outer-corner",
+          "column": 10,
+          "rect": [
+            160,
+            0,
+            16,
+            16
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        {
+          "id": "inner-corner",
+          "column": 11,
+          "rect": [
+            176,
+            0,
+            16,
+            16
+          ],
+          "layer": "structure",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        {
+          "id": "hazard-or-liquid",
+          "column": 12,
+          "rect": [
+            192,
+            0,
+            16,
+            16
+          ],
+          "layer": "effect",
+          "collisionHint": "level-authored",
+          "hazardHint": true,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "prop-base",
+          "column": 13,
+          "rect": [
+            208,
+            0,
+            16,
+            16
+          ],
+          "layer": "structure",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "threshold",
+          "column": 14,
+          "rect": [
+            224,
+            0,
+            16,
+            16
+          ],
+          "layer": "interaction",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": true
+        },
+        {
+          "id": "foreground-occluder",
+          "column": 15,
+          "rect": [
+            240,
+            0,
+            16,
+            16
+          ],
+          "layer": "foreground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        }
+      ]
+    },
+    "sideView": {
+      "atlas": "side-view-regional-tiles-v1.png",
+      "tileWidth": 32,
+      "tileHeight": 32,
+      "columns": 16,
+      "rows": 8,
+      "atlasWidth": 512,
+      "atlasHeight": 256,
+      "alphaPolicy": "opaque",
+      "roles": [
+        {
+          "id": "backfill",
+          "column": 0,
+          "rect": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "layer": "background",
+          "collisionHint": "none",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "ground-left",
+          "column": 1,
+          "rect": [
+            32,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "ground-middle",
+          "column": 2,
+          "rect": [
+            64,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "ground-right",
+          "column": 3,
+          "rect": [
+            96,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "platform-left",
+          "column": 4,
+          "rect": [
+            128,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "one-way",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "platform-middle",
+          "column": 5,
+          "rect": [
+            160,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "one-way",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "platform-right",
+          "column": 6,
+          "rect": [
+            192,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "one-way",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "wall",
+          "column": 7,
+          "rect": [
+            224,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        {
+          "id": "ceiling",
+          "column": 8,
+          "rect": [
+            256,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "slope-up",
+          "column": 9,
+          "rect": [
+            288,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "slope-up",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "stairs-up",
+          "column": 10,
+          "rect": [
+            320,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "stairs-up",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "pillar",
+          "column": 11,
+          "rect": [
+            352,
+            0,
+            32,
+            32
+          ],
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        {
+          "id": "hazard",
+          "column": 12,
+          "rect": [
+            384,
+            0,
+            32,
+            32
+          ],
+          "layer": "effect",
+          "collisionHint": "level-authored",
+          "hazardHint": true,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "prop",
+          "column": 13,
+          "rect": [
+            416,
+            0,
+            32,
+            32
+          ],
+          "layer": "interaction",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        {
+          "id": "door",
+          "column": 14,
+          "rect": [
+            448,
+            0,
+            32,
+            32
+          ],
+          "layer": "interaction",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": true
+        },
+        {
+          "id": "foreground",
+          "column": 15,
+          "rect": [
+            480,
+            0,
+            32,
+            32
+          ],
+          "layer": "foreground",
+          "collisionHint": "none",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        }
+      ]
+    }
+  },
+  "runtimePolicy": {
+    "collisionAuthority": "authored level data; collisionHint is a default authoring recommendation only",
+    "hazardAuthority": "authored level data; hazardHint never applies damage by itself",
+    "transitionAuthority": "authored level exits and interactions",
+    "occlusionAuthority": "render-layer composition using occludesActor as the default sorting hint",
+    "paletteIdDefaults": {
+      "takamine-rain": "takamine-rain-village",
+      "archive-indigo": "hidden-archive-chapel",
+      "coast-fog": "hoshigawa-river-ward",
+      "kagura-ash": "kagura-ash-pass",
+      "court-vermilion": "kurohana-black-castle",
+      "daybreak-parchment": "takamine-rain-village"
+    }
+  }
+}

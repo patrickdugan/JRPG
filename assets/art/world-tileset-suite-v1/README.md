@@ -42,6 +42,12 @@ This is a modular foundation, not final room composition. Collision, hazards,
 exits, foreground masking, and interaction authority remain owned by level
 data and runtime systems.
 
+`world-tileset-runtime-v1.json` makes every theme row and tile-role column
+addressable and supplies conservative collision, hazard, transition, and
+occlusion hints. These hints never supersede authored level data: a hazard tile
+does not deal damage and a door does not transition scenes without an authored
+level contract.
+
 ## Rebuild and verify
 
 ```powershell

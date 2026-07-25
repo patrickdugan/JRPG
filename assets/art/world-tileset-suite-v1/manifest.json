@@ -34,7 +34,121 @@
         "prop-base",
         "threshold",
         "foreground-occluder"
-      ]
+      ],
+      "roleSemantics": {
+        "floor-a": {
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "floor-b": {
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "floor-detail": {
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "path": {
+          "layer": "ground",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "wall": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        "wall-cap": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        "edge-north": {
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "edge-south": {
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "edge-west": {
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "edge-east": {
+          "layer": "ground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "outer-corner": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        "inner-corner": {
+          "layer": "structure",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        "hazard-or-liquid": {
+          "layer": "effect",
+          "collisionHint": "level-authored",
+          "hazardHint": true,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "prop-base": {
+          "layer": "structure",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "threshold": {
+          "layer": "interaction",
+          "collisionHint": "passable",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": true
+        },
+        "foreground-occluder": {
+          "layer": "foreground",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        }
+      }
     },
     "atlas": "top-down-regional-tiles-v1.png",
     "atlasSha256": "402cb31656d7f0806d63648fe6d82fe2a87415c99a74c2a8f6629ed9a7edfc65",
@@ -1093,7 +1207,121 @@
         "prop",
         "door",
         "foreground"
-      ]
+      ],
+      "roleSemantics": {
+        "backfill": {
+          "layer": "background",
+          "collisionHint": "none",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "ground-left": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "ground-middle": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "ground-right": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "platform-left": {
+          "layer": "structure",
+          "collisionHint": "one-way",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "platform-middle": {
+          "layer": "structure",
+          "collisionHint": "one-way",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "platform-right": {
+          "layer": "structure",
+          "collisionHint": "one-way",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "wall": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        "ceiling": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "slope-up": {
+          "layer": "structure",
+          "collisionHint": "slope-up",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "stairs-up": {
+          "layer": "structure",
+          "collisionHint": "stairs-up",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "pillar": {
+          "layer": "structure",
+          "collisionHint": "solid",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        },
+        "hazard": {
+          "layer": "effect",
+          "collisionHint": "level-authored",
+          "hazardHint": true,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "prop": {
+          "layer": "interaction",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": false
+        },
+        "door": {
+          "layer": "interaction",
+          "collisionHint": "level-authored",
+          "hazardHint": false,
+          "occludesActor": false,
+          "transitionHint": true
+        },
+        "foreground": {
+          "layer": "foreground",
+          "collisionHint": "none",
+          "hazardHint": false,
+          "occludesActor": true,
+          "transitionHint": false
+        }
+      }
     },
     "atlas": "side-view-regional-tiles-v1.png",
     "atlasSha256": "dec53fdd84aecfb620a6fa22e291053707e5356f5e47c78b007f71e744875487",
@@ -2248,9 +2476,17 @@
       }
     }
   ],
+  "runtimeContract": {
+    "path": "world-tileset-runtime-v1.json",
+    "sha256": "3a6a2f8b1837ec5791f96f1941a604de5c341d1dca4fc2466bdffccf8e839373",
+    "collisionAuthority": "authored level data; collisionHint is a default authoring recommendation only",
+    "hazardAuthority": "authored level data; hazardHint never applies damage by itself",
+    "transitionAuthority": "authored level exits and interactions",
+    "occlusionAuthority": "render-layer composition using occludesActor as the default sorting hint"
+  },
   "builder": {
     "path": "build_world_tileset_suite.py",
-    "sha256": "7e02a2ecf928c7d2e061da8561b1eebc27f107f1868f31f963eae8a9f43ee9ab",
+    "sha256": "dc0cf2d325b74f310dbdf7b51bcc0644dcd2860d5ef2ee1852e1d002e9e986e4",
     "deterministic": true,
     "integerAligned": true,
     "resampling": "none at native scale; NEAREST for review sheets"
