@@ -29,7 +29,7 @@
   "sources": [
     {
       "path": "regional-battle-stages.source.json",
-      "sha256": "cadbb68409e1d9329d6f245945c41d1ffe8645ded6c02c760cd65bc850d052f9"
+      "sha256": "aba0737b6faac58ffb6112ef0515e0e5081fdf1bebf6b4d3fafa7f56867ff4cc"
     },
     {
       "path": "build_regional_battle_stages.py",
@@ -1948,7 +1948,7 @@
       "style": "outer-archive",
       "export": "krh-outer-archive-board-v01.png",
       "victimFixtureCount": 14,
-      "occupancySha256": "7e3d3b822c6062f542c6bd48f3faf370e4f3e960d68faa931b3d4816a14a5bae",
+      "occupancySha256": "520e38e73ddf7fd4d8a2bbaf46cf4e075bd7185d558d275f27955f7a05473963",
       "snapshot": {
         "id": "krh-outer-archive",
         "chapterId": "chapter-9",
@@ -2002,8 +2002,12 @@
         "specialCells": {
           "exits": [
             {
-              "id": "observatory-stair",
+              "id": "audience-hall-door",
               "at": "11,3"
+            },
+            {
+              "id": "dawn-archive-exit",
+              "at": "0,3"
             }
           ],
           "interactables": [

@@ -6,10 +6,12 @@ import {
   ACT_ROUTE_THEATERS,
   buildAct3SequencePlan,
   buildAct4SequencePlan,
+  buildAct5SequencePlan,
   getActSequenceContextForBeat,
 } from '../content/act-route-sequences.mjs';
 import { STORYWORLD_CLUSTER_BY_ID } from '../content/storyworld-encounters.generated.mjs';
 import { getEncounter } from '../content/encounters.mjs';
+import { getLateActActionArena } from '../content/late-act-level-design.mjs';
 import { getLevel } from '../content/levels.mjs';
 import { getSceneDirection } from '../content/scene-direction.mjs';
 import { getSceneOperation } from '../content/scene-operations.mjs';
@@ -49,10 +51,14 @@ test('every sequence reference resolves to an authored map, encounter, beat scri
     const sequences = [
       ...buildAct3SequencePlan({ priorityTheater }).sequences,
       ...buildAct4SequencePlan({ priorityTheater }).sequences,
+      ...buildAct5SequencePlan().sequences,
     ];
     for (const sequence of sequences) {
       for (const mapId of sequence.mapIds ?? []) assert.ok(getLevel(mapId), `${sequence.id}/${mapId}`);
       for (const encounterId of sequence.encounterIds ?? []) assert.ok(getEncounter(encounterId), `${sequence.id}/${encounterId}`);
+      for (const arenaId of sequence.actionArenaIds ?? []) {
+        assert.ok(getLateActActionArena(arenaId), `${sequence.id}/${arenaId}`);
+      }
       for (const clusterId of sequence.storyworldClusterIds ?? []) {
         assert.ok(STORYWORLD_CLUSTER_BY_ID.get(clusterId), `${sequence.id}/${clusterId}`);
       }

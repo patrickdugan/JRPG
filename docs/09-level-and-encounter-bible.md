@@ -2,7 +2,7 @@
 
 **Status:** runtime-ready content kit, schema version 1
 **Owners:** level design and encounter design
-**Runtime sources:** `game/content/levels.mjs` and `game/content/encounters.mjs`
+**Runtime sources:** `game/content/levels.mjs`, `game/content/encounters.mjs`, `game/action-stages.mjs`, and `game/content/late-act-level-design.mjs`
 
 This is the level-design handoff for the whole campaign. The vision, technical combat contract, beats outline, and detailed FP-1 outline remain canonical. This document turns them into concrete boards, terrain rules, telegraphs, and objectives without adding traversal powers, real-time reactions, or unannounced hazards.
 
@@ -13,7 +13,8 @@ All positions are zero-based `x,y` tile keys with the origin at the top-left.
 | Surface | Grid | Tile size | Authority |
 | --- | ---: | ---: | --- |
 | Field map | 20 × 12 | 16 logical px | Exact walking, interaction, field hazards, exits |
-| Battle stage | 12 × 7 | 32 logical px | Pace movement, targeting, hazards, objectives |
+| Compatibility battle stage | 12 × 7 | 32 logical px | Pace movement, targeting, hazards, objectives in canonical Campaign Battle |
+| Action-combat stage | 960 × 540 world px | continuous | Side-view ground, one-way platforms, spawn slots, objective anchors |
 
 `LEVELS` exports the required `{ id, chapterId, name, width, height, blocked, terrain, spawn, exits, objective, palette }` data plus hazards, interactables, and encounter triggers. `ENCOUNTERS` exports the required `{ id, chapterId, levelId, name, objective, lesson, enemies, bossMechanic, reward }` data plus deployment, Ledger, skill, and phase data.
 
@@ -24,6 +25,12 @@ All positions are zero-based `x,y` tile keys with the origin at the top-left.
 - Enemy telegraphs name their shape, warning, and Recovery. Animation must communicate these facts but may not alter them.
 - Each campaign chapter has a `primary` map and encounter. Every encounter has a valid level reference; static party and enemy spawns are kept off blocked tiles.
 - `getLevelForChapter`, `getEncounterForChapter`, tile lookup helpers, and validation helpers are provided for a browser runtime without DOM coupling.
+
+### Late-act topology
+
+Acts IV and V use a separate validated flow contract without increasing the 48-level catalog. The three return maps converge at `c8-black-gate`, then the castle advances through `krh-outer-archive` → `krh-audience-hall` → `krh-blood-conservatory` → `krh-bell-spine` → `krh-observatory`. After Kurozane, the observatory returns to the now-safe Outer Archive for one evacuation pass before the epilogue.
+
+The exact room order, critical interactions, route consequences, and five encounter-specific side-view arena variants live in `game/content/late-act-level-design.mjs`. The complete handoff is [Acts IV–V level design](37-act-iv-and-v-level-design.md).
 
 ## FP-1 Takamine vertical slice
 
@@ -147,7 +154,7 @@ Every boss mechanic is designed around a small visible question.
 
 1. A static spawn, objective token, interactable, and exit must be in-bounds and non-blocked unless the object explicitly has a non-walkable terrain state. Dynamic summons must name a legal spawn rule.
 2. A hazard always declares its trigger. “Storm water” never deals damage merely because it looks charged; it checks the stated Storm condition.
-3. No battle requires real-time input. All attacks, hazards, Guard, Dodge, Swap, and Recovery resolve under turn ownership.
+3. Compatibility Campaign Battle remains turn-owned. The action-combat cutover uses fixed-step real-time input, authored animation commitment, free movement during post-animation cooldown, and deterministic telegraphs; it may not change an encounter’s objective or Storyworld consequence.
 4. Field hazards use a clear warning, a recoverable outcome, and a checkpoint before repeated punishment. Bell Stair cannot kill the player and has no jump input.
 5. Elemental language remains consistent: Cut / Pierce / Crush / Arcane delivery; Ember / Frost / Storm / Radiance / Umbral essence. Values are visible multipliers, not hidden build math.
 6. Bosses involving named human characters resolve through disarmament, custody, surrender, testimony, or release where the story calls for it. No real people, sacred objects, celebrity likenesses, or copied game scenes are used.

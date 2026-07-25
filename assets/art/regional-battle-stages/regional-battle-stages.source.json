@@ -137,7 +137,7 @@
       "id":"krh-outer-archive","chapterId":"chapter-9","name":"Kurohana Outer Archive","kitId":"court-v01","style":"outer-archive","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion","environmentalVictimFixtures":{"count":14,"context":"fictional Kirishitan execution processional","variants":["crucified","impaled"]},
       "blocked":["0,0","1,0","10,0","11,0","0,6","1,6","10,6","11,6","5,2","6,2","5,3","6,3","5,4","6,4"],
       "terrain":[{"at":"2,1","tag":"bell-node"},{"at":"9,1","tag":"bell-node"},{"at":"2,5","tag":"bell-node"},{"at":"9,5","tag":"bell-node"},{"at":"4,3","tag":"archive-floor"},{"at":"7,3","tag":"archive-floor"}],
-      "specialCells":{"exits":[{"id":"observatory-stair","at":"11,3"}],"interactables":[{"id":"archive-node-a","at":"2,1"},{"id":"archive-node-b","at":"9,1"},{"id":"archive-node-c","at":"9,5"}],"hazards":[{"id":"catalogue-line","tiles":[]}],"spawn":{"x":2,"y":3}}
+      "specialCells":{"exits":[{"id":"audience-hall-door","at":"11,3"},{"id":"dawn-archive-exit","at":"0,3"}],"interactables":[{"id":"archive-node-a","at":"2,1"},{"id":"archive-node-b","at":"9,1"},{"id":"archive-node-c","at":"9,5"}],"hazards":[{"id":"catalogue-line","tiles":[]}],"spawn":{"x":2,"y":3}}
     },
     {
       "id":"krh-observatory","chapterId":"chapter-9","name":"Kurohana Throne Observatory","kitId":"court-v01","style":"throne-observatory","width":12,"height":7,"spacePx":32,"paletteId":"court-vermilion","environmentalVictimFixtures":{"count":14,"context":"fictional Kirishitan execution processional","variants":["crucified","impaled"]},

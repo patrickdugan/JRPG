@@ -14,7 +14,7 @@ This is the production map for the eleven implemented Storyworld clusters. The a
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,440 visible words and at most 21 explicit decisions across all eleven clusters. Its 338.514-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,440 visible words and at most 21 explicit decisions across all eleven clusters. Its 338.710-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
 
 ## Carry-forward contract
 
@@ -94,7 +94,7 @@ For a related battle, the presentation card carries the selected decision text, 
 
 ## Act III and IV major-sequence integration
 
-[`game/content/act-route-sequences.mjs`](../game/content/act-route-sequences.mjs) is the shared contract consumed by scene operations, presentation direction, tests, and the campaign UI. A route contains exactly eight major sequences; the smaller canonical beats remain its mapping and scripting units.
+[`game/content/act-route-sequences.mjs`](../game/content/act-route-sequences.mjs) is the shared contract consumed by scene operations, presentation direction, tests, and the campaign UI. Acts III and IV contain exactly eight major sequences each; convergent Act V contains five. The smaller canonical beats remain their mapping and scripting units.
 
 | # | Act III — The Three-Road War | Production binding |
 |---|---|---|
@@ -118,7 +118,15 @@ For a related battle, the presentation card carries the selected decision text, 
 | 7 | Three Terms for the Cinder Fan | `sw-enma-three-terms` |
 | 8 | The Outer Archive Breathes | `c9-01-archive-breathes`, `krh-outer-archive`, `c9-archive-nodes`; Act V starts at `c9-02-ujiros-last-ledger` |
 
-Every Act III–V canonical beat now receives the same `actId`, `majorSequenceId`, route-theater, and operation metadata in both its map operation and its presentation script. Automated validation fails if those two scripting surfaces drift or if a sequence references a missing beat, map, encounter, or Storyworld cluster.
+| # | Act V — The Living Castle | Production binding |
+|---|---|---|
+| 1 | Ujiro’s Last Ledger | `c9-02-ujiros-last-ledger`, `krh-audience-hall`; rescue both living prisoners before custody |
+| 2 | The Conservatory Offers | `c9-03-conservatory-offers`, `krh-blood-conservatory`; Miyo’s refusal plus six playable offer refusals |
+| 3 | The Bell Spine and the Yearless Bell | `krh-bell-spine` → transformed `krh-observatory`, `sw9-mateus-living-archive`, `c9-04-yearless-bell` |
+| 4 | Dawn at the Observatory | `krh-observatory`, `c9-kurozane`, `sw10-corrections-desk`; physical defeat before political resolution |
+| 5 | Leave the Evidence Alive | `c9-06-leave-evidence-alive`, safe reverse pass through `krh-outer-archive`, then epilogue |
+
+Every Act III–V canonical beat now receives the same `actId`, `majorSequenceId`, route-theater, and operation metadata in both its map operation and its presentation script. Automated validation fails if those two scripting surfaces drift or if a sequence references a missing beat, map, encounter, or Storyworld cluster. The six exact Act V map visits, including the Outer Archive evacuation return, are validated separately in [`game/content/late-act-level-design.mjs`](../game/content/late-act-level-design.mjs).
 
 ## Cultural and narrative guardrails
 

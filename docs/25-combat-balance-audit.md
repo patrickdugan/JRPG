@@ -63,4 +63,4 @@ node --test tests/combat-balance-audit.test.mjs tests/battle-solvability.test.mj
 npm run check
 ```
 
-The canonical receipt changes are intentional: 95 enemy activations and signature `fnv1a32:6ae3636e`. Updated low/reference/high projections are 193.429/319.314/514.408 canonical-only minutes, 230.138/403.762/707.998 canonical-plus-quest/chronicle minutes, and 784.234/1,243.367/1,934.830 all-finite minutes. The narrative-plus-Storyworld reference is 338.514 minutes after the Act III war table, Lady Enma spool, and Act V confrontation rewrite. None is observed duration evidence.
+The canonical receipt changes are intentional: 95 enemy activations and signature `fnv1a32:b671cd00`. Updated low/reference/high projections are 193.529/319.510/514.800 canonical-only minutes, 230.238/403.958/708.389 canonical-plus-quest/chronicle minutes, and 784.334/1,243.563/1,935.222 all-finite minutes. The narrative-plus-Storyworld reference is 338.710 minutes after the Act III war table, Lady Enma spool, and Act V confrontation rewrite. None is observed duration evidence.

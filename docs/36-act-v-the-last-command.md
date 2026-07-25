@@ -5,6 +5,8 @@
 **Storyworld consequence:** `sw10-corrections-desk` / **The Last Command**  
 **Primary dramatic engine:** defeat the immortal ruler in combat, then prove the country does not need an immortal ruler to survive.
 
+The exact room topology, field interactions, checkpoint boundaries, and side-view arena geometry are specified in [Acts IV–V level design](37-act-iv-and-v-level-design.md). The observatory now returns to the Outer Archive after Kurozane so `c9-06-leave-evidence-alive` plays as a short evacuation pass rather than an abstract post-boss card.
+
 ## Act promise
 
 Act V must move like a Gothic action climax, not a council meeting with a boss attached. Every room advances toward Kurozane. Every argument occurs while someone is opening a gate, protecting a name, refusing a bargain, breaking a Bell node, recovering from an attack, or deciding whether a spear falls.

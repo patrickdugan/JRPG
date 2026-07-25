@@ -175,28 +175,33 @@ test('every canonical beat-to-next-map route has a satisfiable authored exit cha
   }
 });
 
-test('every battle board exit unlocks from its canonical victories and authored interactions', async (t) => {
+test('every battle board exit unlocks from canonical encounter producers and authored interactions', async (t) => {
   const battleLevels = LEVELS.filter((level) => level.kind === 'battle' && (level.exits?.length ?? 0) > 0);
 
   for (const level of battleLevels) {
     const encounters = ENCOUNTERS.filter((encounter) => encounter.levelId === level.id);
     await t.test(level.id, () => {
       assert.ok(encounters.length > 0, `${level.id} has an exit but no canonical encounter.`);
-      const externalFlags = flagsFromWonEncounters(encounters.map(({ id }) => id));
+      const localVictoryFlags = flagsFromWonEncounters(encounters.map(({ id }) => id));
+      const allEncounterFlags = flagsFromWonEncounters(ENCOUNTERS.map(({ id }) => id));
 
       for (const exit of level.exits) {
-        let state = createFieldState({
-          levelId: level.id,
-          beatId: `battle-exit-audit:${level.id}`,
-          position: exit.at,
-          flags: externalFlags,
-        });
-        state = consumeAvailableInteractions(state, level, externalFlags);
-        const result = useFieldExit(state, exit.id, { flags: externalFlags });
+        let result = null;
+        for (const externalFlags of [localVictoryFlags, [...localVictoryFlags, ...allEncounterFlags]]) {
+          let state = createFieldState({
+            levelId: level.id,
+            beatId: `battle-exit-audit:${level.id}`,
+            position: exit.at,
+            flags: externalFlags,
+          });
+          state = consumeAvailableInteractions(state, level, externalFlags);
+          result = useFieldExit(state, exit.id, { flags: externalFlags });
+          if (result.ok) break;
+        }
         assert.equal(
           result.ok,
           true,
-          `${level.id}/${exit.id} remains locked by "${exit.condition ?? '(none)'}" after canonical victory.`,
+          `${level.id}/${exit.id} remains locked by "${exit.condition ?? '(none)'}" after its canonical encounter producers.`,
         );
       }
     });

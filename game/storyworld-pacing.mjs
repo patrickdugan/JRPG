@@ -3,7 +3,7 @@
 import { STORYWORLD_CLUSTERS } from './content/storyworld-encounters.generated.mjs';
 
 export const STORYWORLD_PACING_ASSUMPTIONS = Object.freeze({
-  fullCanonicalCatalogReferenceMinutes: 319.314,
+  fullCanonicalCatalogReferenceMinutes: 319.51,
   readingWordsPerMinute: 200,
   decisionDwellSeconds: 20,
   narrativeTargetMinimumMinutes: 300,

@@ -870,7 +870,7 @@ const AUTHORED_LEVELS = [
       },
     ],
     spawn: { x: 2, y: 3, facing: 'east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
-    exits: [{ id: 'archive-evacuation', at: '11,3', destinationLevelId: 'epi-hoshigawa-archive', condition: 'kurozane-defeated-and-records-secured' }],
+    exits: [{ id: 'archive-evacuation', at: '11,3', destinationLevelId: 'krh-outer-archive', condition: 'kurozane-defeated-and-records-secured' }],
     objective: 'Break the final nodes, defeat Kurozane, and leave the archive evidence intact for public custody.',
     palette: courtPalette,
     interactables: [
@@ -1143,7 +1143,10 @@ const AUTHORED_LEVELS = [
       },
     ],
     spawn: { x: 2, y: 3, facing: 'east', formation: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'] },
-    exits: [{ id: 'observatory-stair', at: '11,3', destinationLevelId: 'krh-observatory', condition: 'three-archive-nodes-broken' }],
+    exits: [
+      { id: 'audience-hall-door', at: '11,3', destinationLevelId: 'krh-audience-hall', condition: 'three-archive-nodes-broken' },
+      { id: 'dawn-archive-exit', at: '0,3', destinationLevelId: 'epi-hoshigawa-archive', condition: 'kurozane-defeated-and-records-secured' },
+    ],
     objective: 'Break key-locked archive nodes while keeping released spirit routes open.',
     palette: courtPalette,
     interactables: [{ id: 'archive-node-a', at: '2,1', action: 'break-node', requires: 'bell-key-1' }, { id: 'archive-node-b', at: '9,1', action: 'break-node', requires: 'bell-key-2' }, { id: 'archive-node-c', at: '9,5', action: 'break-node', requires: 'bell-key-3' }],

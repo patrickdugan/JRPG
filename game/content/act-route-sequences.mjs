@@ -3,11 +3,13 @@
  *
  * Canonical beats remain the authored production units. This layer groups
  * those beats, maps, encounters, and Storyworld decisions into the eight
- * major sequences a player sees in Acts III and IV.
+ * major sequences a player sees in Acts III and IV, plus the five-room
+ * convergent ascent that gives Act V its own inspectable level flow.
  */
 
 import { CAMPAIGN } from './campaign.mjs';
 import { getEncounter } from './encounters.mjs';
+import { getLateActActionArena } from './late-act-level-design.mjs';
 import { getLevel } from './levels.mjs';
 
 function deepFreeze(value) {
@@ -239,11 +241,13 @@ export function buildAct4SequencePlan({ priorityTheater = 'salt' } = {}) {
         beatIds: ['c8-04-lantern-breach'],
         mapIds: ['c8-black-gate'],
         encounterIds: ['c8-outer-court'],
+        actionArenaIds: ['act4-black-gate-outer-court'],
       }),
       sequence('act4-sequence-06', 6, 'Lady Enma — The Last Mask', 'gate-boss', {
         beatIds: ['c8-05-gate-opened'],
         mapIds: ['c8-black-gate'],
         encounterIds: ['c8-lady-enma'],
+        actionArenaIds: ['act4-black-gate-enma'],
       }),
       sequence('act4-sequence-07', 7, 'Three Terms for the Cinder Fan', 'storyworld-consequence', {
         anchorBeatIds: ['c8-05-gate-opened'],
@@ -254,6 +258,45 @@ export function buildAct4SequencePlan({ priorityTheater = 'salt' } = {}) {
         beatIds: ['c9-01-archive-breathes'],
         mapIds: ['krh-outer-archive'],
         encounterIds: ['c9-archive-nodes'],
+        actionArenaIds: ['act5-outer-archive-release'],
+      }),
+    ],
+  });
+}
+
+export function buildAct5SequencePlan() {
+  return deepFreeze({
+    actId: 'act-v',
+    title: 'Act V — The Living Castle',
+    sequences: [
+      sequence('act5-sequence-01', 1, 'Ujiro’s Last Ledger', 'custody-room', {
+        beatIds: ['c9-02-ujiros-last-ledger'],
+        mapIds: ['krh-audience-hall'],
+      }),
+      sequence('act5-sequence-02', 2, 'The Conservatory Offers', 'character-gauntlet', {
+        beatIds: ['c9-03-conservatory-offers'],
+        mapIds: ['krh-blood-conservatory'],
+      }),
+      sequence('act5-sequence-03', 3, 'The Bell Spine and the Yearless Bell', 'hazard-ascent-and-boss', {
+        beatIds: ['c9-04-yearless-bell'],
+        anchorBeatIds: ['c9-04-yearless-bell'],
+        mapIds: ['krh-bell-spine', 'krh-observatory'],
+        encounterIds: ['c9-yearless-bell'],
+        actionArenaIds: ['act5-yearless-bell'],
+        storyworldClusterIds: ['sw9-mateus-living-archive'],
+      }),
+      sequence('act5-sequence-04', 4, 'Dawn at the Observatory', 'final-boss-and-political-consequence', {
+        beatIds: ['c9-05-dawn-at-observatory'],
+        anchorBeatIds: ['c9-05-dawn-at-observatory'],
+        mapIds: ['krh-observatory'],
+        encounterIds: ['c9-kurozane'],
+        actionArenaIds: ['act5-kurozane'],
+        storyworldClusterIds: ['sw10-corrections-desk'],
+      }),
+      sequence('act5-sequence-05', 5, 'Leave the Evidence Alive', 'evacuation-return-pass', {
+        beatIds: ['c9-06-leave-evidence-alive'],
+        mapIds: ['krh-outer-archive'],
+        result: 'The player retraces one readable archive edge in reverse, evacuating people and records instead of repeating the dungeon.',
       }),
     ],
   });
@@ -317,20 +360,16 @@ for (const entry of [
   });
 }
 
-registerBeatContext([
-  'c9-02-ujiros-last-ledger',
-  'c9-03-conservatory-offers',
-  'c9-04-yearless-bell',
-  'c9-05-dawn-at-observatory',
-  'c9-06-leave-evidence-alive',
-], {
-  actId: 'act-v',
-  actLabel: 'Act V — The Living Castle',
-  majorSequenceId: 'act5-inner-castle',
-  majorSequenceLabel: 'The Living Castle and the Last Command',
-  routeTheater: null,
-  operationId: null,
-});
+for (const entry of buildAct5SequencePlan().sequences) {
+  registerBeatContext(entry.beatIds ?? [], {
+    actId: 'act-v',
+    actLabel: 'Act V — The Living Castle',
+    majorSequenceId: entry.id,
+    majorSequenceLabel: entry.title,
+    routeTheater: null,
+    operationId: null,
+  });
+}
 
 export function getActSequenceContextForBeat(beatId) {
   return STATIC_CONTEXT_BY_BEAT.get(beatId) ?? null;
@@ -352,6 +391,23 @@ function validateCatalog() {
       for (const encounterId of entry.encounterIds ?? []) {
         if (!getEncounter(encounterId)) errors.push(`${entry.id} references missing encounter ${encounterId}.`);
       }
+      for (const arenaId of entry.actionArenaIds ?? []) {
+        if (!getLateActActionArena(arenaId)) errors.push(`${entry.id} references missing action arena ${arenaId}.`);
+      }
+    }
+  }
+  const act5 = buildAct5SequencePlan();
+  if (act5.sequences.length !== 5) errors.push('Act V must contain exactly five convergent level sequences.');
+  for (const entry of act5.sequences) {
+    for (const beatId of [...(entry.beatIds ?? []), ...(entry.anchorBeatIds ?? [])]) {
+      if (!canonicalBeatIds.has(beatId)) errors.push(`${entry.id} references missing beat ${beatId}.`);
+    }
+    for (const mapId of entry.mapIds ?? []) if (!getLevel(mapId)) errors.push(`${entry.id} references missing map ${mapId}.`);
+    for (const encounterId of entry.encounterIds ?? []) {
+      if (!getEncounter(encounterId)) errors.push(`${entry.id} references missing encounter ${encounterId}.`);
+    }
+    for (const arenaId of entry.actionArenaIds ?? []) {
+      if (!getLateActActionArena(arenaId)) errors.push(`${entry.id} references missing action arena ${arenaId}.`);
     }
   }
   if (errors.length) throw new Error(`Invalid act route sequence catalog:\n${errors.join('\n')}`);
