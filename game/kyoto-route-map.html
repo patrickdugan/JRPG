@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17151b">
+  <title>Three Passages to Miyako</title>
+  <link rel="stylesheet" href="./kyoto-route-map.css">
+</head>
+<body>
+  <a class="skip-link" href="#routeChoices">Skip to route choices</a>
+  <main class="route-shell">
+    <header class="route-header">
+      <p class="eyebrow">Nagasaki to Kyoto · three passages</p>
+      <h1>Three Passages to Miyako</h1>
+      <p>Choose what the party risks crossing western Japan. The shortest line is not always the safest road.</p>
+    </header>
+
+    <section class="map-panel" aria-labelledby="mapHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Tactical atlas</p>
+          <h2 id="mapHeading">Nagasaki to Kyoto (Miyako)</h2>
+        </div>
+        <p id="mapRouteLabel" class="map-route-label">Northern Road selected</p>
+      </div>
+      <canvas id="routeMap" width="480" height="270" aria-describedby="mapDescription">
+        The western Japan map offers a direct sea passage, a northern overland
+        road, and a southern passage through Shikoku. All reach Kyoto.
+      </canvas>
+      <p id="mapDescription" class="sr-only">
+        Direct Sea Passage sails north from Nagasaki through Hirado and Kanmon,
+        crosses the Seto Inland Sea, lands at Sakai, and finishes overland.
+        Northern Road crosses northern Kyushu and western Honshu. Southern
+        Passage turns through Shimabara, crosses Bungo, and traverses Shikoku
+        and Awaji before climbing to inland Kyoto.
+      </p>
+    </section>
+
+    <section class="choice-panel" aria-labelledby="choiceHeading">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Council decision</p>
+          <h2 id="choiceHeading">Choose the passage</h2>
+        </div>
+        <p class="key-hint">↑ ↓ choose · Z confirm · X reconsider · 1–3 jump</p>
+      </div>
+
+      <div id="routeChoices" class="route-choices" role="radiogroup" aria-label="Routes from Nagasaki to Kyoto">
+        <button class="route-choice" type="button" role="radio" aria-checked="false" data-route-id="direct-sea">
+          <span class="route-swatch route-swatch-sea" aria-hidden="true"></span>
+          <span><strong>Direct Sea Passage</strong><small>Fast / volatile</small></span>
+        </button>
+        <button class="route-choice" type="button" role="radio" aria-checked="true" data-route-id="northern-road">
+          <span class="route-swatch route-swatch-north" aria-hidden="true"></span>
+          <span><strong>Northern Road</strong><small>Balanced / witnessed</small></span>
+        </button>
+        <button class="route-choice" type="button" role="radio" aria-checked="false" data-route-id="southern-passage">
+          <span class="route-swatch route-swatch-south" aria-hidden="true"></span>
+          <span><strong>Southern Passage</strong><small>Slow / supplied</small></span>
+        </button>
+      </div>
+
+      <article class="route-brief" aria-labelledby="routeName">
+        <div>
+          <p class="eyebrow">Selected passage</p>
+          <h3 id="routeName">Northern Road</h3>
+          <p id="routeSummary">Cross Kyushu by post road, take the Kanmon gate, and carry testimony east along San'yo.</p>
+        </div>
+        <dl class="route-effects">
+          <div><dt>Travel</dt><dd id="routeTravel">2</dd></div>
+          <div><dt>Threat</dt><dd id="routeThreat">2</dd></div>
+          <div><dt>Supplies</dt><dd id="routeSupplies">±0</dd></div>
+          <div><dt>Witnesses</dt><dd id="routeWitnesses">+2</dd></div>
+        </dl>
+        <ol id="routeNodes" class="route-nodes" aria-label="Selected route stops"></ol>
+      </article>
+
+      <div class="route-actions">
+        <button id="confirmRoute" class="primary-action" type="button">Take this passage</button>
+        <button id="reconsiderRoute" class="secondary-action" type="button" disabled>Reconsider</button>
+      </div>
+      <output id="routeStatus" class="route-status" aria-live="polite">Northern Road is ready for review.</output>
+      <p class="boundary-note">Planning preview only. Campaign state changes only after the campaign consumes this choice.</p>
+    </section>
+  </main>
+  <script type="module" src="./kyoto-route-map.js"></script>
+</body>
+</html>

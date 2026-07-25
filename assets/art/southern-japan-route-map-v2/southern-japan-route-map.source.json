@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 2,
+  "assetId": "southern-japan-route-map-v2",
+  "status": "runtime-candidate",
+  "title": "Three Passages to Miyako",
+  "classification": "pixel-authored-production-asset",
+  "originalityPolicy": "Original late-32-bit tactical-atlas artwork, route topology, icons, labels, relief treatment, and interface composition. Geographic silhouettes are simplified from general map references; no Final Fantasy Tactics assets, UI, map geometry, sprites, or proprietary motifs are copied.",
+  "geographicFrame": {
+    "start": "Nagasaki",
+    "destination": "Kyoto (Miyako)",
+    "regionsShown": [
+      "Kyushu",
+      "western Honshu",
+      "Shikoku",
+      "Awaji",
+      "Seto Inland Sea",
+      "Osaka Bay"
+    ],
+    "interpretation": "The direct sea passage lands at Sakai and completes its final leg overland because Kyoto is inland."
+  },
+  "geometry": {
+    "nativeWidth": 480,
+    "nativeHeight": 270,
+    "previewScale": 3,
+    "iconWidth": 24,
+    "iconHeight": 24,
+    "iconCount": 10,
+    "alphaPolicy": {
+      "maps": "opaque",
+      "icons": "binary"
+    },
+    "rootCoordinates": "integer native pixels"
+  },
+  "palette": {
+    "ink": "#17151B",
+    "inkSoft": "#2A2630",
+    "frameDark": "#302733",
+    "frameMid": "#57434A",
+    "frameLight": "#9B755C",
+    "paperDark": "#8D704E",
+    "paper": "#C6A66A",
+    "paperLight": "#E8D38D",
+    "white": "#FFF1B8",
+    "oceanDeep": "#18354B",
+    "ocean": "#245269",
+    "water": "#34738A",
+    "waterLight": "#58A0A6",
+    "foam": "#98C7B6",
+    "landShadow": "#3E4139",
+    "landDark": "#4D5A43",
+    "land": "#69704B",
+    "landLight": "#8C8455",
+    "grass": "#77835A",
+    "forestDark": "#29493F",
+    "forest": "#3F684E",
+    "forestLight": "#6F8B54",
+    "mountainDark": "#5C4B45",
+    "mountain": "#846A55",
+    "mountainLight": "#BA976C",
+    "snow": "#E9D9A2",
+    "road": "#B68C59",
+    "routeMuted": "#655D57",
+    "seaRoute": "#62C4D0",
+    "northRoute": "#F0C35B",
+    "southRoute": "#E36B55",
+    "jewel": "#C93F55",
+    "holy": "#F4E58A"
+  },
+  "iconOrder": [
+    "start-port",
+    "port",
+    "post-town",
+    "castle-town",
+    "strait",
+    "ship",
+    "ferry",
+    "mountain-pass",
+    "capital",
+    "route-jewel"
+  ],
+  "sharedNodes": {
+    "nagasaki": {
+      "name": "Nagasaki",
+      "shortLabel": "NAGASAKI",
+      "position": [43, 153],
+      "icon": "start-port"
+    },
+    "kyoto": {
+      "name": "Kyoto (Miyako)",
+      "shortLabel": "KYOTO",
+      "position": [423, 82],
+      "icon": "capital"
+    }
+  },
+  "routes": [
+    {
+      "id": "direct-sea",
+      "name": "Direct Sea Passage",
+      "shortLabel": "SEA",
+      "color": "seaRoute",
+      "summary": "Ride tide and cannon smoke through Kanmon and the Inland Sea, then climb from Sakai to Miyako.",
+      "strategy": "Fast / volatile",
+      "campaignFlag": "kyoto_route_direct_sea",
+      "openingLevelId": "ngs-night-roads",
+      "supportBias": ["kiku", "mateus"],
+      "pathKind": "sea",
+      "effects": {
+        "travelTime": 1,
+        "threat": 3,
+        "supplies": 1,
+        "witnessSupport": 0,
+        "navalIntel": 2,
+        "forgeSalvage": 0
+      },
+      "nodes": [
+        {"id": "nagasaki", "shared": true},
+        {"id": "hirado-roads", "name": "Hirado Roads", "shortLabel": "HIRADO", "position": [39, 114], "icon": "ship", "levelId": "hrd-black-current"},
+        {"id": "genkai-reach", "name": "Genkai Reach", "shortLabel": "GENKAI", "position": [78, 85], "icon": "ship"},
+        {"id": "kanmon-pilotage", "name": "Kanmon Pilotage", "shortLabel": "KANMON", "position": [123, 99], "icon": "strait"},
+        {"id": "aki-waters", "name": "Aki Waters", "shortLabel": "AKI SEA", "position": [217, 137], "icon": "ship"},
+        {"id": "shodo-roads", "name": "Shodo Roads", "shortLabel": "SHODO", "position": [310, 134], "icon": "ship"},
+        {"id": "sakai-harbor", "name": "Sakai Harbor", "shortLabel": "SAKAI", "position": [386, 119], "icon": "port"},
+        {"id": "kyoto", "shared": true}
+      ]
+    },
+    {
+      "id": "northern-road",
+      "name": "Northern Road",
+      "shortLabel": "NORTH",
+      "color": "northRoute",
+      "summary": "Cross Kyushu by post road, take the Kanmon gate, and carry testimony east along San'yo.",
+      "strategy": "Balanced / witnessed",
+      "campaignFlag": "kyoto_route_northern_road",
+      "openingLevelId": "sga-rain-post",
+      "supportBias": ["aya", "ren"],
+      "pathKind": "land",
+      "effects": {
+        "travelTime": 2,
+        "threat": 2,
+        "supplies": 0,
+        "witnessSupport": 2,
+        "navalIntel": 0,
+        "forgeSalvage": 0
+      },
+      "nodes": [
+        {"id": "nagasaki", "shared": true},
+        {"id": "saga-post", "name": "Saga Post", "shortLabel": "SAGA", "position": [68, 128], "icon": "post-town", "levelId": "sga-rain-post"},
+        {"id": "hakata", "name": "Hakata", "shortLabel": "HAKATA", "position": [91, 108], "icon": "port"},
+        {"id": "kokura", "name": "Kokura", "shortLabel": "KOKURA", "position": [112, 113], "icon": "castle-town"},
+        {"id": "shimonoseki", "name": "Shimonoseki", "shortLabel": "SHIMONOSEKI", "position": [129, 105], "icon": "strait"},
+        {"id": "hiroshima", "name": "Hiroshima", "shortLabel": "HIROSHIMA", "position": [218, 102], "icon": "castle-town"},
+        {"id": "himeji", "name": "Himeji", "shortLabel": "HIMEJI", "position": [327, 105], "icon": "castle-town"},
+        {"id": "kyoto", "shared": true}
+      ]
+    },
+    {
+      "id": "southern-passage",
+      "name": "Southern Passage",
+      "shortLabel": "SOUTH",
+      "color": "southRoute",
+      "summary": "Turn through Shimabara and Bungo, then bind Shikoku's castles and ferries into one long march.",
+      "strategy": "Slow / supplied",
+      "campaignFlag": "kyoto_route_southern_passage",
+      "openingLevelId": "smb-ash-shore",
+      "supportBias": ["genta", "lise"],
+      "pathKind": "mixed",
+      "effects": {
+        "travelTime": 3,
+        "threat": 2,
+        "supplies": 2,
+        "witnessSupport": 1,
+        "navalIntel": 0,
+        "forgeSalvage": 1
+      },
+      "nodes": [
+        {"id": "nagasaki", "shared": true},
+        {"id": "shimabara", "name": "Shimabara", "shortLabel": "SHIMABARA", "position": [79, 158], "icon": "castle-town", "levelId": "smb-ash-shore"},
+        {"id": "kumamoto", "name": "Kumamoto", "shortLabel": "KUMAMOTO", "position": [88, 182], "icon": "castle-town"},
+        {"id": "bungo-crossing", "name": "Bungo Crossing", "shortLabel": "BUNGO", "position": [126, 149], "icon": "ferry"},
+        {"id": "matsuyama", "name": "Matsuyama", "shortLabel": "MATSUYAMA", "position": [222, 165], "icon": "castle-town"},
+        {"id": "takamatsu", "name": "Takamatsu", "shortLabel": "TAKAMATSU", "position": [307, 159], "icon": "castle-town"},
+        {"id": "awaji-crossing", "name": "Awaji Crossing", "shortLabel": "AWAJI", "position": [350, 142], "icon": "ferry"},
+        {"id": "kyoto", "shared": true}
+      ]
+    }
+  ],
+  "routeChoicePolicy": {
+    "visibleRoutes": 3,
+    "defaultRouteId": "northern-road",
+    "selectionAuthority": "player",
+    "canonicalMutation": "none until an explicit campaign adapter consumes a route receipt",
+    "convergence": "all routes begin at Nagasaki and reach Kyoto (Miyako)",
+    "exclusiveIntermediateNodesPerRoute": 6
+  }
+}

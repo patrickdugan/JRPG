@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "assetId": "southern-japan-route-map-v2",
+  "status": "runtime-candidate",
+  "provenance": {
+    "classification": "pixel-authored-production-asset",
+    "sourceMethod": "original code-native pixel primitives at 480x270 with 24x24 icons",
+    "generatorUsed": false,
+    "originalityPolicy": "Original late-32-bit tactical-atlas artwork, route topology, icons, labels, relief treatment, and interface composition. Geographic silhouettes are simplified from general map references; no Final Fantasy Tactics assets, UI, map geometry, sprites, or proprietary motifs are copied."
+  },
+  "source": {
+    "path": "southern-japan-route-map.source.json",
+    "sha256": "b85068fe6db82880f022094f38c06c4be30a8cf60007826e13d6061142773981"
+  },
+  "geometry": {
+    "nativeWidth": 480,
+    "nativeHeight": 270,
+    "previewScale": 3,
+    "iconWidth": 24,
+    "iconHeight": 24,
+    "iconCount": 10,
+    "alphaPolicy": {
+      "maps": "opaque",
+      "icons": "binary"
+    },
+    "rootCoordinates": "integer native pixels"
+  },
+  "palette": {
+    "ceiling": 33,
+    "colors": {
+      "ink": "#17151B",
+      "inkSoft": "#2A2630",
+      "frameDark": "#302733",
+      "frameMid": "#57434A",
+      "frameLight": "#9B755C",
+      "paperDark": "#8D704E",
+      "paper": "#C6A66A",
+      "paperLight": "#E8D38D",
+      "white": "#FFF1B8",
+      "oceanDeep": "#18354B",
+      "ocean": "#245269",
+      "water": "#34738A",
+      "waterLight": "#58A0A6",
+      "foam": "#98C7B6",
+      "landShadow": "#3E4139",
+      "landDark": "#4D5A43",
+      "land": "#69704B",
+      "landLight": "#8C8455",
+      "grass": "#77835A",
+      "forestDark": "#29493F",
+      "forest": "#3F684E",
+      "forestLight": "#6F8B54",
+      "mountainDark": "#5C4B45",
+      "mountain": "#846A55",
+      "mountainLight": "#BA976C",
+      "snow": "#E9D9A2",
+      "road": "#B68C59",
+      "routeMuted": "#655D57",
+      "seaRoute": "#62C4D0",
+      "northRoute": "#F0C35B",
+      "southRoute": "#E36B55",
+      "jewel": "#C93F55",
+      "holy": "#F4E58A"
+    }
+  },
+  "iconOrder": [
+    "start-port",
+    "port",
+    "post-town",
+    "castle-town",
+    "strait",
+    "ship",
+    "ferry",
+    "mountain-pass",
+    "capital",
+    "route-jewel"
+  ],
+  "routes": [
+    {
+      "id": "direct-sea",
+      "campaignFlag": "kyoto_route_direct_sea",
+      "nodeIds": [
+        "nagasaki",
+        "hirado-roads",
+        "genkai-reach",
+        "kanmon-pilotage",
+        "aki-waters",
+        "shodo-roads",
+        "sakai-harbor",
+        "kyoto"
+      ],
+      "pathSignature": "nagasaki>hirado-roads>genkai-reach>kanmon-pilotage>aki-waters>shodo-roads>sakai-harbor>kyoto",
+      "exclusiveIntermediateNodes": 6,
+      "reachesKyoto": true,
+      "pathKind": "sea",
+      "effects": {
+        "travelTime": 1,
+        "threat": 3,
+        "supplies": 1,
+        "witnessSupport": 0,
+        "navalIntel": 2,
+        "forgeSalvage": 0
+      }
+    },
+    {
+      "id": "northern-road",
+      "campaignFlag": "kyoto_route_northern_road",
+      "nodeIds": [
+        "nagasaki",
+        "saga-post",
+        "hakata",
+        "kokura",
+        "shimonoseki",
+        "hiroshima",
+        "himeji",
+        "kyoto"
+      ],
+      "pathSignature": "nagasaki>saga-post>hakata>kokura>shimonoseki>hiroshima>himeji>kyoto",
+      "exclusiveIntermediateNodes": 6,
+      "reachesKyoto": true,
+      "pathKind": "land",
+      "effects": {
+        "travelTime": 2,
+        "threat": 2,
+        "supplies": 0,
+        "witnessSupport": 2,
+        "navalIntel": 0,
+        "forgeSalvage": 0
+      }
+    },
+    {
+      "id": "southern-passage",
+      "campaignFlag": "kyoto_route_southern_passage",
+      "nodeIds": [
+        "nagasaki",
+        "shimabara",
+        "kumamoto",
+        "bungo-crossing",
+        "matsuyama",
+        "takamatsu",
+        "awaji-crossing",
+        "kyoto"
+      ],
+      "pathSignature": "nagasaki>shimabara>kumamoto>bungo-crossing>matsuyama>takamatsu>awaji-crossing>kyoto",
+      "exclusiveIntermediateNodes": 6,
+      "reachesKyoto": true,
+      "pathKind": "mixed",
+      "effects": {
+        "travelTime": 3,
+        "threat": 2,
+        "supplies": 2,
+        "witnessSupport": 1,
+        "navalIntel": 0,
+        "forgeSalvage": 1
+      }
+    }
+  ],
+  "choicePolicy": {
+    "visibleRoutes": 3,
+    "defaultRouteId": "northern-road",
+    "selectionAuthority": "player",
+    "canonicalMutation": "none until an explicit campaign adapter consumes a route receipt",
+    "convergence": "all routes begin at Nagasaki and reach Kyoto (Miyako)",
+    "exclusiveIntermediateNodesPerRoute": 6
+  },
+  "outputs": [
+    {
+      "path": "southern-japan-route-map-base-v2.png",
+      "sha256": "cf6f4fa74a2f598ba5033e9b73e7826c283cc1f2a56b14f2609f8e403d0bd297",
+      "dimensions": [
+        480,
+        270
+      ],
+      "actualColors": 30,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "opaque-native-runtime-background"
+    },
+    {
+      "path": "southern-japan-route-map-all-routes-v2.png",
+      "sha256": "5e96ff2bdee7ca1fec20c3580d821867bd3f01e4a6dec311ae04f475d8d33a78",
+      "dimensions": [
+        480,
+        270
+      ],
+      "actualColors": 29,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "opaque-native-all-route-review"
+    },
+    {
+      "path": "southern-japan-route-map-preview-v2.png",
+      "sha256": "2ff01248ed33455dd343739387f06b4483e3e083b2453b46a499462824dae27b",
+      "dimensions": [
+        1440,
+        810
+      ],
+      "actualColors": 29,
+      "alphaValues": [
+        255
+      ],
+      "purpose": "nearest-neighbor-review"
+    },
+    {
+      "path": "southern-japan-route-icon-atlas-v2.png",
+      "sha256": "92dc63be4fc940e3509f5675787e5ef6d0db719deddc84791cf57a30c0711e35",
+      "dimensions": [
+        240,
+        24
+      ],
+      "actualColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "purpose": "binary-alpha-runtime-icon-atlas"
+    }
+  ],
+  "inventory": {
+    "path": "top-down-tile-inventory-v1.json",
+    "sha256": "f60dc067db8523b0b3e7d225fd1480ec9673d452c1e8e66a8ff6841e6a87ffbb"
+  },
+  "builder": {
+    "path": "build_southern_japan_route_map.py",
+    "sha256": "c3bdf8b51f3e1a4780123bfd210a4c9f17d07aac76d3bbcb52646e0614474447",
+    "pillowVersion": "11.3.0",
+    "deterministic": true,
+    "integerAligned": true,
+    "nativeResampling": "none",
+    "previewResampling": "nearest-neighbor"
+  }
+}

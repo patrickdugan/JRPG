@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "scope": "current top-down production inventory",
+  "liveLevelCoverage": {
+    "totalLevels": 48,
+    "fieldLevels": 29,
+    "battleLevels": 19
+  },
+  "regionalTileFoundation": {
+    "package": "../world-tileset-suite-v1",
+    "themeCount": 8,
+    "rolesPerTheme": 16,
+    "nativeTile": [
+      16,
+      16
+    ],
+    "tileCount": 128,
+    "roles": [
+      "floor-a",
+      "floor-b",
+      "floor-detail",
+      "path",
+      "wall",
+      "wall-cap",
+      "edge-north",
+      "edge-south",
+      "edge-west",
+      "edge-east",
+      "outer-corner",
+      "inner-corner",
+      "hazard-or-liquid",
+      "prop-base",
+      "threshold",
+      "foreground-occluder"
+    ]
+  },
+  "terrainOverlays": {
+    "package": "../field-terrain-suite",
+    "nativeTile": [
+      16,
+      16
+    ],
+    "count": 19,
+    "roles": [
+      "stone",
+      "wet-stone",
+      "shallow-puddle",
+      "paper-litter",
+      "cracked-board",
+      "swing-beam-lane",
+      "water",
+      "storm-water",
+      "cold-pool",
+      "ash-field",
+      "ember-ash",
+      "umbral-ash",
+      "bell-node",
+      "furnace-grate",
+      "legal-seal",
+      "flowing-water",
+      "high-gallery",
+      "archive-floor",
+      "dry-lantern"
+    ]
+  },
+  "fieldActors": {
+    "partyCharacters": 7,
+    "npcRoles": 16,
+    "enemyAndBossStates": 32
+  },
+  "remainingHoles": [
+    {
+      "id": "roof-autotiles",
+      "priority": "P1",
+      "needed": "ridge, eave, corner, snow/rain caps"
+    },
+    {
+      "id": "bridge-sets",
+      "priority": "P1",
+      "needed": "wood, stone, rope, broken states"
+    },
+    {
+      "id": "shoreline-transitions",
+      "priority": "P1",
+      "needed": "inner/outer corners, shallows, banks, foam"
+    },
+    {
+      "id": "multi-tile-buildings",
+      "priority": "P1",
+      "needed": "homes, post stations, warehouses, gates, castle compounds"
+    },
+    {
+      "id": "vegetation-clusters",
+      "priority": "P2",
+      "needed": "cedar, bamboo, reeds, chrysanthemum, dead ash growth"
+    },
+    {
+      "id": "elevation-transitions",
+      "priority": "P2",
+      "needed": "cliffs, stairs, ramps, retaining walls"
+    },
+    {
+      "id": "animated-water-weather",
+      "priority": "P2",
+      "needed": "water cycles, rain splashes, ash drift, lightning reflection"
+    },
+    {
+      "id": "interior-furniture",
+      "priority": "P2",
+      "needed": "tables, shelves, screens, braziers, beds, workshop pieces"
+    },
+    {
+      "id": "large-landmarks",
+      "priority": "P2",
+      "needed": "bells, furnaces, ferry cranes, archive machinery"
+    },
+    {
+      "id": "route-map-iconography",
+      "priority": "filled-v2",
+      "needed": "expanded by southern-japan-route-map-v2"
+    }
+  ]
+}
