@@ -58,6 +58,7 @@ export const PARTY_COUNCIL_JOIN_BEAT_BY_MEMBER = deepFreeze({
   mateus: 'c2-06-name-from-europe',
   genta: 'c3-05-gentas-order',
   kiku: 'c4-06-kikus-terms',
+  miyo: 'c7-01-decision-map-table',
 });
 
 const COUNCIL_SLOTS = [
@@ -84,7 +85,7 @@ const COUNCIL_SLOTS = [
   ['c8-03-black-gate-bargain', 'roadside-lantern', ['lise', 'mateus', 'genta', 'kiku']],
 
   ['c8-05-gate-opened', 'lantern-safehouse', ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']],
-  ['c9-01-archive-breathes', 'hidden-infirmary', ['ren', 'aya', 'mateus']],
+  ['c9-01-archive-breathes', 'hidden-infirmary', ['ren', 'aya', 'mateus', 'miyo']],
   ['c9-02-ujiros-last-ledger', 'roadside-lantern', ['aya', 'lise', 'mateus', 'genta']],
   ['c9-03-conservatory-offers', 'lantern-safehouse', ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']],
   ['c9-04-yearless-bell', 'hidden-infirmary', ['ren', 'lise', 'mateus', 'kiku']],

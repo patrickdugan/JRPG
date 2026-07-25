@@ -62,7 +62,7 @@ test('public reading begins once, advances one paragraph, and saves every mutati
   assert.match(advance, /if \(!saved\.ok\)/);
   assert.match(advance, /No reward or ownership claim was created/);
   assert.match(advance, /progress\?\.complete && Number\.isSafeInteger\(archiveReviewParagraphIndex\)/);
-  assert.match(advance, /finite state was unchanged/);
+  assert.match(advance, /completion was unchanged/);
 });
 
 test('archive mutations persist synchronously, cached pages reload, and New Game clears their save namespace', () => {

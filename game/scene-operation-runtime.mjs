@@ -61,8 +61,8 @@ export function getSceneOperationRecord(state, beatId) {
   return state?.records?.find((record) => record.beatId === beatId) ?? null;
 }
 
-export function getSceneOperationProgress(state, beatId) {
-  const operation = getSceneOperation(beatId);
+export function getSceneOperationProgress(state, beatId, { priorityTheater = null } = {}) {
+  const operation = getSceneOperation(beatId, { priorityTheater });
   if (!operation) return null;
   const record = getSceneOperationRecord(state, beatId);
   const completedNodeCount = record?.nextNodeIndex ?? 0;
@@ -104,7 +104,7 @@ export function advanceSceneOperation(state, beatId, nodeId, evidence = {}) {
   const validation = validateSceneOperationPayload(state);
   if (!validation.ok) return failed(state, 'invalid-state', validation.errors.join(' '));
   const trustedState = validation.state;
-  const progress = getSceneOperationProgress(trustedState, beatId);
+  const progress = getSceneOperationProgress(trustedState, beatId, { priorityTheater: evidence.routeTheater ?? null });
   if (!progress) return failed(trustedState, 'unknown-beat', 'Unknown scene operation beat.');
   if (progress.complete) return failed(trustedState, 'already-complete', 'This finite scene operation is already complete.');
   const node = progress.currentNode;
@@ -144,7 +144,7 @@ export function advanceSceneOperation(state, beatId, nodeId, evidence = {}) {
     state: nextState,
     node,
     beatCompleted: completed,
-    progress: getSceneOperationProgress(nextState, beatId),
+    progress: getSceneOperationProgress(nextState, beatId, { priorityTheater: evidence.routeTheater ?? null }),
   });
 }
 

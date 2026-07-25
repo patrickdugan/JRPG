@@ -13,10 +13,11 @@ function section(startMarker, endMarker) {
 
 test('current Chrome smoke keeps narrative completion separate from observed timing proof', () => {
   const credits = section('            credits_seed = page.evaluate(', '            context.close()');
-  assert.match(credits, /STORYWORLD_CLUSTERS/);
+  assert.match(credits, /getCampaignRouteSchedule\('salt'\)/);
+  assert.match(credits, /STORYWORLD_CLUSTER_BY_ID/);
   assert.match(credits, /recordRunStoryworldDecision/);
-  assert.match(credits, /"playedScenes"\]\s*==\s*82/);
-  assert.match(credits, /"storyworldScenes"\]\s*==\s*22/);
+  assert.match(credits, /"playedScenes"\]\s*==\s*75/);
+  assert.match(credits, /"storyworldScenes"\]\s*==\s*20/);
   assert.match(credits, /"active-playtime-incomplete"/);
   assert.match(credits, /locator\("#sealCredits"\)\.is_disabled\(\)/);
   assert.match(credits, /exported_report\.get\("schemaVersion"\)\s*==\s*3/);

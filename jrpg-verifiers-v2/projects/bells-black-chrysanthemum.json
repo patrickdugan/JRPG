@@ -1,0 +1,260 @@
+{
+  "$schema": "../schemas/project.schema.json",
+  "schemaVersion": 2,
+  "kind": "jrpg-verifier-project",
+  "id": "bells-black-chrysanthemum",
+  "title": "Bells of the Black Chrysanthemum",
+  "root": "../..",
+  "nodeEvidence": {
+    "source.template": {
+      "declaredStatus": "ready",
+      "sources": [],
+      "artifacts": [
+        { "path": "JRPG Project Plan Template.md", "role": "template authority" }
+      ]
+    },
+    "design.vision": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/01-vision-doc.md", "role": "vision" }
+      ]
+    },
+    "design.technical-gdd": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/02-technical-gdd.md", "role": "mechanical specification" }
+      ]
+    },
+    "narrative.beats": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/03-beats-outline.md", "role": "chapter beats" }
+      ]
+    },
+    "narrative.detailed-outline": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/04-detailed-outline.md", "role": "ordered scenes" }
+      ]
+    },
+    "production.asset-list": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/06-master-asset-list.md", "role": "asset inventory" }
+      ]
+    },
+    "presentation.battle-shot": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "assets/production/bells-party-roster-v1.png", "role": "battle presentation reference" },
+        { "path": "docs/05-art-direction.md", "role": "visual intent" }
+      ]
+    },
+    "presentation.world-shot": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "assets/production/bells-takamine-keyframe-v1.png", "role": "world presentation reference" },
+        { "path": "docs/05-art-direction.md", "role": "visual intent" }
+      ]
+    },
+    "presentation.menu-shot": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "game/index.html", "role": "implemented shell" },
+        { "path": "docs/05-art-direction.md", "role": "menu direction" }
+      ]
+    },
+    "presentation.video-teaser": {
+      "declaredStatus": "planned",
+      "sources": "dependencies",
+      "artifacts": []
+    },
+    "production.staffing": {
+      "declaredStatus": "partial",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/00-production-roadmap.md", "role": "production outline, not a committed staffing plan" }
+      ]
+    },
+    "engine.asset-management": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "assets/production/README.md", "role": "asset workflow" },
+        { "path": "assets/art/party-field-suite/manifest.json", "role": "machine-readable asset manifest" }
+      ]
+    },
+    "engine.field": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/09-level-and-encounter-bible.md", "role": "field contract" },
+        { "path": "game/field-runtime.mjs", "role": "field implementation" }
+      ]
+    },
+    "engine.battle": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/02-technical-gdd.md", "role": "battle contract" },
+        { "path": "game/campaign-combat.mjs", "role": "canonical combat implementation" }
+      ]
+    },
+    "engine.stats-gear": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/13-advancement-and-runtime-pacing.md", "role": "advancement contract" },
+        { "path": "game/loadout.mjs", "role": "loadout implementation" }
+      ]
+    },
+    "engine.data": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/12-progression-save-contract.md", "role": "save contract" },
+        { "path": "game/progression.mjs", "role": "persistence implementation" }
+      ]
+    },
+    "engine.fx": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/10-animation-bible.md", "role": "animation and effects contract" },
+        { "path": "assets/art/takamine-bell-chamber/manifest.json", "role": "effect-capable art manifest" }
+      ]
+    },
+    "pipeline.content": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/08-campaign-content-pipeline.md", "role": "content pipeline" }
+      ]
+    },
+    "tooling.scene": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/08-campaign-content-pipeline.md", "role": "scene authoring contract" },
+        { "path": "game/campaign.js", "role": "scene runtime" }
+      ]
+    },
+    "tooling.battle": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/09-level-and-encounter-bible.md", "role": "encounter authoring contract" },
+        { "path": "game/battle.js", "role": "battle runtime" }
+      ]
+    },
+    "milestone.first-playable": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/04-detailed-outline.md", "role": "first-playable definition and script" },
+        { "path": "docs/07-first-playable-qa.md", "role": "first-playable acceptance card" }
+      ]
+    },
+    "fp.script": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/04-detailed-outline.md", "role": "first-playable script source" }
+      ]
+    },
+    "fp.assets": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/06-master-asset-list.md", "role": "first-playable asset ledger" },
+        { "path": "assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png", "role": "first-playable environment board" }
+      ]
+    },
+    "fp.entities": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "assets/art/takamine-bell-chamber/manifest.json", "role": "entity data evidence" },
+        { "path": "game/content/encounters.mjs", "role": "entity definitions" }
+      ]
+    },
+    "fp.battles": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "game/content/encounters.mjs", "role": "battle definitions" },
+        { "path": "game/tests/campaign-content.test.mjs", "role": "battle content tests" }
+      ]
+    },
+    "fp.maps": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "game/content/levels.mjs", "role": "map definitions" },
+        { "path": "assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png", "role": "map presentation evidence" }
+      ]
+    },
+    "fp.scenes": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/04-detailed-outline.md", "role": "scene plan" },
+        { "path": "game/content/campaign.mjs", "role": "implemented scenes" }
+      ]
+    },
+    "fp.playtest": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/07-first-playable-qa.md", "role": "acceptance evidence" },
+        { "path": "game/tests/browser-flow-integration.test.mjs", "role": "route test" }
+      ]
+    },
+    "chapter.template": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/08-campaign-content-pipeline.md", "role": "chapter authoring template" },
+        { "path": "docs/00-production-roadmap.md", "role": "chapter production and playtest gates" }
+      ]
+    },
+    "chapter.content": {
+      "declaredStatus": "ready",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/04-detailed-outline.md", "role": "chapter narrative" },
+        { "path": "game/content/campaign.mjs", "role": "chapter implementation" },
+        { "path": "docs/rendered-route-playtest-evidence.json", "role": "chapter route data" },
+        { "path": "game/tests/campaign-content.test.mjs", "role": "chapter content tests" }
+      ]
+    },
+    "qa.final-playtests": {
+      "declaredStatus": "partial",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/19-human-playtest-protocol.md", "role": "human test protocol" },
+        { "path": "docs/rendered-route-playtest-evidence.json", "role": "automated route evidence, not fresh human findings" }
+      ]
+    },
+    "qa.release-readiness": {
+      "declaredStatus": "partial",
+      "sources": "dependencies",
+      "artifacts": [
+        { "path": "docs/11-build-qa-report.md", "role": "build QA" },
+        { "path": "docs/23-current-build-accessibility-audit.md", "role": "accessibility audit" },
+        { "path": "docs/24-external-cultural-review-packet.md", "role": "cultural review packet" },
+        { "path": "docs/25-combat-balance-audit.md", "role": "balance audit" },
+        { "path": "docs/rendered-route-playtest-evidence.json", "role": "machine-readable QA evidence" },
+        { "path": "game/tests/browser-flow-integration.test.mjs", "role": "release route test" }
+      ]
+    }
+  }
+}

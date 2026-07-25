@@ -6,9 +6,9 @@
     "frameWidth": 32,
     "frameHeight": 48,
     "columns": 14,
-    "rows": 6,
+    "rows": 7,
     "sheetWidth": 448,
-    "sheetHeight": 288,
+    "sheetHeight": 336,
     "pivot": [
       16,
       44
@@ -22,7 +22,7 @@
       2,
       4,
       446,
-      285
+      333
     ]
   },
   "layerOrder": [
@@ -39,7 +39,8 @@
     "lise",
     "mateus",
     "genta",
-    "kiku"
+    "kiku",
+    "miyo"
   ],
   "columnOrder": [
     "north-idle",
@@ -68,7 +69,7 @@
     ],
     "standingFrame": "idle",
     "reducedMotionFrame": "idle",
-    "legacyFrameRgbaSha256Digest": "794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25",
+    "legacyFrameRgbaSha256Digest": "5a7547681e0258d7738a82aaa7dae87e8f5eb94f67630614881948234f90ba4c",
     "supersededPreNikolaFrameRgbaSha256Digest": "72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2"
   },
   "paletteIds": {
@@ -77,7 +78,8 @@
     "lise": "party-nikola-oxblood-dusk-v2",
     "mateus": "party-mateus-charcoal-wine-v1",
     "genta": "party-genta-earth-metal-v1",
-    "kiku": "party-kiku-herb-candle-v1"
+    "kiku": "party-kiku-herb-candle-v1",
+    "miyo": "party-miyo-storm-indigo-v1"
   },
   "characterIdentity": {
     "ren": {
@@ -107,6 +109,15 @@
     },
     "kiku": {
       "name": "Kiku Nawa"
+    },
+    "miyo": {
+      "name": "Miyo Senda",
+      "lineage": {
+        "relation": "literal granddaughter of Mateus Avelar through his half-Japanese daughter and the Japanese Senda household",
+        "ancestry": "three-quarters Japanese and one-quarter Portuguese",
+        "publicName": "Miyo Senda",
+        "baptismalRecord": "Inês Avelar appears only in an abandoned private family book and is never her default presentation name"
+      }
     }
   },
   "frames": [
@@ -2461,23 +2472,415 @@
         45
       ],
       "rgbaSha256": "de989e71648b44082247bcdaad25e1c80078b4bc5ad8b8b46dc115f68f035bc4"
+    },
+    {
+      "id": "miyo-north-idle",
+      "characterId": "miyo",
+      "tag": "north-idle",
+      "direction": "north",
+      "state": "idle",
+      "rect": [
+        0,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "6e7569a0dae14246f0273c3802259424a5b8df26def7d649c408a91b5b34f565"
+    },
+    {
+      "id": "miyo-north-walk",
+      "characterId": "miyo",
+      "tag": "north-walk",
+      "direction": "north",
+      "state": "walk",
+      "rect": [
+        32,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "d291eba71fe778c8419a02bb4faad202dcb06307feb5a9d5f3dc12b4bc04236c"
+    },
+    {
+      "id": "miyo-east-idle",
+      "characterId": "miyo",
+      "tag": "east-idle",
+      "direction": "east",
+      "state": "idle",
+      "rect": [
+        64,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "fc1a3d8da5b53292a59cb229585c845104b3c11c4b103364446d54300f4e0322"
+    },
+    {
+      "id": "miyo-east-walk",
+      "characterId": "miyo",
+      "tag": "east-walk",
+      "direction": "east",
+      "state": "walk",
+      "rect": [
+        96,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "5832c14c418180246becf431f992206cf8c30538a3d59cb71c1a1c7adc41b545"
+    },
+    {
+      "id": "miyo-south-idle",
+      "characterId": "miyo",
+      "tag": "south-idle",
+      "direction": "south",
+      "state": "idle",
+      "rect": [
+        128,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "b6ce8c3eda65a037ee6ff0eb7d78045d7f3cb0e25c0b04307c367379d5d56c00"
+    },
+    {
+      "id": "miyo-south-walk",
+      "characterId": "miyo",
+      "tag": "south-walk",
+      "direction": "south",
+      "state": "walk",
+      "rect": [
+        160,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "bd8b6d47d2d81357127d5beb1e1a4c262b411810fd2a92ae84be31af74550480"
+    },
+    {
+      "id": "miyo-west-idle",
+      "characterId": "miyo",
+      "tag": "west-idle",
+      "direction": "west",
+      "state": "idle",
+      "rect": [
+        192,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        3,
+        8,
+        30,
+        45
+      ],
+      "rgbaSha256": "df39f9069000a2a5eed4d8e502e0c1feac90a98e18967cafbbbc9f7463595953"
+    },
+    {
+      "id": "miyo-west-walk",
+      "characterId": "miyo",
+      "tag": "west-walk",
+      "direction": "west",
+      "state": "walk",
+      "rect": [
+        224,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        3,
+        8,
+        30,
+        45
+      ],
+      "rgbaSha256": "e385d6b5ac45fce5dc8b1e2dfc5f19284d77d6134b2fdae373d0def26fb76665"
+    },
+    {
+      "id": "miyo-south-interact",
+      "characterId": "miyo",
+      "tag": "south-interact",
+      "direction": "south",
+      "state": "interact",
+      "rect": [
+        256,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        31,
+        45
+      ],
+      "rgbaSha256": "dfad3cc8f35505d17c7d991cbe4368c2c071ad25bba152a53e31f9684a378132"
+    },
+    {
+      "id": "miyo-south-hurt",
+      "characterId": "miyo",
+      "tag": "south-hurt",
+      "direction": "south",
+      "state": "hurt",
+      "rect": [
+        288,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        31,
+        45
+      ],
+      "rgbaSha256": "1132e416f93a5ce86c3ea64f872c1b00ae200a7f3db90e7473600e25459a314a"
+    },
+    {
+      "id": "miyo-north-walk-b",
+      "characterId": "miyo",
+      "tag": "north-walk-b",
+      "direction": "north",
+      "state": "walk-b",
+      "rect": [
+        320,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "59cf639aec18fa4db33b540fe19379fc9a173fbf40f07149b9b7ddbda48a83e0"
+    },
+    {
+      "id": "miyo-east-walk-b",
+      "characterId": "miyo",
+      "tag": "east-walk-b",
+      "direction": "east",
+      "state": "walk-b",
+      "rect": [
+        352,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "79dbb6d10f23789f060236a6765e4ad082083db15f49c3fdee2710ea4bdcce58"
+    },
+    {
+      "id": "miyo-south-walk-b",
+      "characterId": "miyo",
+      "tag": "south-walk-b",
+      "direction": "south",
+      "state": "walk-b",
+      "rect": [
+        384,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        2,
+        8,
+        29,
+        45
+      ],
+      "rgbaSha256": "d3ef928a72a617dd3af92174e618ce47e0fdb8e14587fa5235690d2d22e026d8"
+    },
+    {
+      "id": "miyo-west-walk-b",
+      "characterId": "miyo",
+      "tag": "west-walk-b",
+      "direction": "west",
+      "state": "walk-b",
+      "rect": [
+        416,
+        288,
+        32,
+        48
+      ],
+      "pivot": [
+        16,
+        44
+      ],
+      "footPoint": [
+        16,
+        44
+      ],
+      "localAlphaBounds": [
+        3,
+        8,
+        30,
+        45
+      ],
+      "rgbaSha256": "49b4aa49038ab87aa150958117eccf6780a45b4ceba40338835f1558b4ef4525"
     }
   ],
   "sources": [
     {
       "path": "party-field-suite.source.json",
       "format": "json",
-      "sha256": "31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a"
+      "sha256": "d6bb3642702be7bb43fa021a30be494219d2e42590b0a36408414a9c15d17e87"
     },
     {
       "path": "party-field-walk-inbetweens.source.json",
       "format": "json",
-      "sha256": "751a6f722fc585d8a6d86445fbe126ba6cf83da1d4ef3771f170091ca119543f"
+      "sha256": "b4faf5ad24537cc87e4427c8efa84739605da5fd95bb71a89c596a6aab69423c"
     },
     {
       "path": "build_party_field_suite.py",
       "format": "python",
-      "sha256": "9b6346767bcce97f77b45f1d21400348dc7ffe8601d8583ca44eaa29771f73a2"
+      "sha256": "52983191382ec426febcf01edeae17aad090854a8515abaae48a72fe15c7f895"
     }
   ],
   "exports": [
@@ -2485,24 +2888,24 @@
       "path": "party-field-foundation.png",
       "purpose": "transparent-runtime-candidate",
       "width": 448,
-      "height": 288,
+      "height": 336,
       "mode": "RGBA",
-      "sha256": "a241ffe4bfebb775aa21276e5b2ee53a299a2c1728303f1631d80f2109245228"
+      "sha256": "95da87e9a1e3c9af3164e58b65421c72bf0e6ac5fcdaac59eb2fcd46586958fa"
     },
     {
       "path": "party-field-foundation-contact-sheet.png",
       "purpose": "labeled-review-only-not-runtime",
       "width": 1888,
-      "height": 1210,
+      "height": 1402,
       "mode": "RGBA",
-      "sha256": "4ac888d11a824e732b7f91dc8eea7348bbda5177b731f6b45aed31b4b1e2383b"
+      "sha256": "ebe8d79675c2fdab49cf65a2491c9a380fbdcdc89a68b322f9fe24f727e3f42a"
     }
   ],
   "validation": {
-    "frameCount": 84,
-    "legacyFrameCount": 60,
-    "legacyFrameRgbaSha256Digest": "794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25",
-    "uniqueRgbaValues": 35,
+    "frameCount": 98,
+    "legacyFrameCount": 70,
+    "legacyFrameRgbaSha256Digest": "5a7547681e0258d7738a82aaa7dae87e8f5eb94f67630614881948234f90ba4c",
+    "uniqueRgbaValues": 40,
     "allOuterFrameBordersTransparent": true,
     "bottomTransparentRowsPerFrame": 3,
     "deterministicCommand": "python build_party_field_suite.py --check"

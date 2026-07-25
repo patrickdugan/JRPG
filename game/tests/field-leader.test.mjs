@@ -51,7 +51,7 @@ test('all 48 level formations are exact and make every authored party row select
       counts[memberId] += 1;
     }
   }
-  assert.deepEqual(counts, { ren: 48, aya: 45, lise: 37, mateus: 30, genta: 29, kiku: 27 });
+  assert.deepEqual(counts, { ren: 48, aya: 45, lise: 37, mateus: 30, genta: 29, kiku: 27, miyo: 16 });
 });
 
 test('Campaign exposes one accessible formation-owned selector and uses its effective ID everywhere visible', async () => {

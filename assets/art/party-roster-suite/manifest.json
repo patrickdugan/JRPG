@@ -13,7 +13,8 @@
     "lise",
     "mateus",
     "genta",
-    "kiku"
+    "kiku",
+    "miyo"
   ],
   "presentationNames": {
     "ren": "Ren Ishikawa",
@@ -21,7 +22,8 @@
     "lise": "Nikola Dražanić",
     "mateus": "Father Mateus Avelar",
     "genta": "Genta Mononobe",
-    "kiku": "Kiku Nawa"
+    "kiku": "Kiku Nawa",
+    "miyo": "Miyo Senda"
   },
   "nikolaLineage": {
     "birthAndStation": "Croatian-born frontier minor aristocrat",
@@ -31,26 +33,32 @@
     "affiliation": "Covenant of the Severed Dragon",
     "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"
   },
+  "miyoLineage": {
+    "relation": "literal granddaughter of Mateus Avelar through his half-Japanese daughter and the Japanese Senda household",
+    "ancestry": "three-quarters Japanese and one-quarter Portuguese",
+    "publicName": "Miyo Senda",
+    "baptismalRecord": "Inês Avelar is archival context only"
+  },
   "sources": [
     {
       "path": "party-roster-suite.source.json",
       "role": "editable-composition-contract",
-      "sha256": "f8d6b1a2e59b49c42f5b50ca8813f31df3704c0584b39af1b0786c92590c750c"
+      "sha256": "51d0ba21430506ae667f79607d8747dd156392cf52c457773c1e629bd1eae43e"
     },
     {
       "path": "../party-combat-suite/party-combat-actions.png",
       "role": "canonical-authored-sprite-input",
-      "sha256": "5bc36a20307177c0b1fddeb73668bd89f5b39de9b601114c1330b2773a9020b7"
+      "sha256": "d27552ab06ae2eed8e41fae74153a31e71e2f25df6ca1be80fa1f7c37f4fadfc"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-name-contract",
-      "sha256": "31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a"
+      "sha256": "d6bb3642702be7bb43fa021a30be494219d2e42590b0a36408414a9c15d17e87"
     },
     {
       "path": "build_party_roster_suite.py",
       "role": "deterministic-builder",
-      "sha256": "9939248e295f07cb25fa576a3c27cf156553d91d439889187b26553f194781b7"
+      "sha256": "97bde72edbc4f0196c2f5f455ec672ae6f513b31392e506eefbee569fb0d37c2"
     }
   ],
   "exports": [
@@ -60,7 +68,7 @@
       "width": 1440,
       "height": 900,
       "mode": "RGBA",
-      "sha256": "2fff1fe8b443c65b984eb271efd3641d4a6a3872a8c674401030dff625dca999"
+      "sha256": "72ed5b743045a005fb43603e993ae63b124f1c30626ddcbf4153f17fc31fc5eb"
     }
   ],
   "validation": {

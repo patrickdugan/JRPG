@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.jrpg.dev/verifiers-v2/dag.schema.json",
+  "title": "JRPG template extrapolation DAG",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "id", "title", "source", "nodes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 2 },
+    "kind": { "const": "jrpg-template-extrapolation-dag" },
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "required": ["path", "use"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "author": { "type": "string" },
+        "use": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/node" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["id", "label", "kind", "templateAnchor", "dependsOn", "required", "contract", "extrapolation"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "templateAnchor": { "type": "string", "minLength": 1 },
+        "dependsOn": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "required": { "type": "boolean" },
+        "contract": { "$ref": "#/$defs/contract" },
+        "extrapolation": { "$ref": "#/$defs/extrapolation" }
+      },
+      "additionalProperties": false
+    },
+    "contract": {
+      "type": "object",
+      "properties": {
+        "minimumArtifacts": { "type": "integer", "minimum": 0 },
+        "minimumWords": { "type": "integer", "minimum": 0 },
+        "requiredKinds": { "type": "array", "uniqueItems": true, "items": { "enum": ["markdown", "data", "source", "image", "test"] } },
+        "requiredTermGroups": {
+          "type": "array",
+          "items": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+        }
+      },
+      "additionalProperties": false
+    },
+    "extrapolation": {
+      "type": "object",
+      "required": ["objective", "output", "sections"],
+      "properties": {
+        "objective": { "type": "string", "minLength": 1 },
+        "output": { "type": "string", "minLength": 1 },
+        "sections": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

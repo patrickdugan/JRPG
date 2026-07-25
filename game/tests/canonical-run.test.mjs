@@ -37,28 +37,28 @@ test('canonical DOM-free run legally completes every authority without fabricati
   assert.equal(run.fieldCoverage.complete, true);
   assert.equal(run.summary.requiredRouteCount, 34);
   assert.equal(run.summary.routeCount, run.summary.requiredRouteCount);
-  assert.equal(run.summary.fieldSteps, 1_428);
-  assert.equal(run.summary.interactionCount, 239);
+  assert.equal(run.summary.fieldSteps, 1_429);
+  assert.equal(run.summary.interactionCount, 241);
   assert.equal(run.summary.sceneOperationCount, 60);
-  assert.equal(run.summary.sceneOperationNodeCount, 183);
+  assert.equal(run.summary.sceneOperationNodeCount, 185);
   assert.equal(run.summary.exitCount, 41);
-  assert.equal(run.summary.restCount, 17);
-  assert.equal(run.summary.dialogueLineCount, 2_768);
-  assert.equal(run.summary.playerCommands, 231);
-  assert.equal(run.summary.enemyActivations, 98);
+  assert.equal(run.summary.restCount, 19);
+  assert.equal(run.summary.dialogueLineCount, 2_789);
+  assert.equal(run.summary.playerCommands, 224);
+  assert.equal(run.summary.enemyActivations, 95);
   assert.deepEqual(run.fieldCoverage.routeGaps, []);
   assert.deepEqual(run.fieldCoverage.finalObjectiveGaps, []);
   assert.equal(run.fieldCoverage.sceneOperations.campaignComplete, true);
-  assert.equal(run.fieldCoverage.sceneOperations.completedNodeCount, 183);
+  assert.equal(run.fieldCoverage.sceneOperations.completedNodeCount, 185);
 
   for (const encounter of ENCOUNTERS) {
     assert.equal(getEncounterWinCount(run.states.advancement, encounter.id), 1, encounter.id);
   }
   const party = getParty(run.states.advancement, { unlockedOnly: true });
-  assert.equal(party.length, 6);
+  assert.equal(party.length, 7);
   assert.ok(party.every(({ level }) => level === 40));
   assert.equal(run.states.advancement.inventory.currency, 3402);
-  assert.equal(run.states.loadout.currency, 2887);
+  assert.equal(run.states.loadout.currency, 2817);
   assert.ok(Object.values(run.states.loadout.vitals).every((vitals) =>
     vitals.hp === vitals.maxHp && vitals.statuses.length === 0));
   for (const beat of BEATS) {
@@ -72,7 +72,7 @@ test('canonical trace and signature replay identically under the same hard bound
   const replay = runCanonicalCompletion();
 
   assert.match(first.signature, /^fnv1a32:[0-9a-f]{8}$/);
-  assert.equal(first.signature, 'fnv1a32:462b7ff8');
+  assert.equal(first.signature, 'fnv1a32:2e7f5885');
   assert.equal(replay.signature, first.signature);
   assert.deepEqual(replay.summary, first.summary);
   assert.deepEqual(replay.trace, first.trace);

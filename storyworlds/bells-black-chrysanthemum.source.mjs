@@ -3,12 +3,12 @@
  *
  * The generated SweepWeave JSON and browser registry are derived from this
  * file by game/tools/build-storyworld.mjs.  The 60 canonical Campaign beats
- * remain save-stable; these eleven clusters add thirty-four authored
+ * remain save-stable; these eleven clusters add thirty-five authored
  * interstitial scene nodes, twenty-two of which are experienced in a complete
  * narrative run.
  */
 
-export const STORYWORLD_SOURCE_VERSION = 2;
+export const STORYWORLD_SOURCE_VERSION = 3;
 export const STORYWORLD_IFID = '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4';
 export const STORYWORLD_CHARACTER_ID = 'char_lantern_network';
 
@@ -38,6 +38,17 @@ export const STORYWORLD_PROPERTIES = Object.freeze([
   property('enma_killed', 'Lady Enma killed at the Black Gate', 0),
   property('enma_compact', 'Lady Enma bound by a witnessed defection compact', 0),
   property('enma_testimony', 'Lady Enma testimony reliability', 0.30),
+  property('act3_salt_priority', 'Act III priority: Salt Road', 0),
+  property('act3_ash_priority', 'Act III priority: Ash Road', 0),
+  property('act3_paper_priority', 'Act III priority: Paper Road', 0),
+  property('salt_commitment', 'Salt-road coalition commitment', 0.20),
+  property('ash_commitment', 'Ash-road coalition commitment', 0.20),
+  property('paper_commitment', 'Paper-road coalition commitment', 0.20),
+  property('evacuation_capacity', 'Evacuation capacity', 0.20),
+  property('oni_supply_disruption', 'Oni supply disruption', 0.10),
+  property('succession_readiness', 'Civil succession readiness', 0.10),
+  property('bell_intelligence', 'Bell-network intelligence', 0.10),
+  property('garrison_defection', 'Garrison defection readiness', 0.10),
 ]);
 
 const reaction = (text, effects, outcomeKey = undefined) => Object.freeze({
@@ -64,9 +75,30 @@ const cluster = (definition) => Object.freeze({
   ...definition,
   options: Object.freeze(definition.options),
   relatedEncounterIds: Object.freeze(definition.relatedEncounterIds ?? []),
+  entryRouteEffects: Object.freeze({ ...(definition.entryRouteEffects ?? {}) }),
+  outcomeRouteEffects: Object.freeze({ ...(definition.outcomeRouteEffects ?? {}) }),
   accordOutcome: outcome(...definition.accordOutcome),
   revisionOutcome: outcome(...definition.revisionOutcome),
   ...(definition.thirdOutcome ? { thirdOutcome: outcome(...definition.thirdOutcome) } : {}),
+});
+
+const actIntegration = (actId, majorSequenceId, role, routeTheater = null) => Object.freeze({
+  actId,
+  majorSequenceId,
+  role,
+  routeTheater,
+});
+
+export const STORYWORLD_ACT_INTEGRATION = Object.freeze({
+  'sw3-sayos-warehouse-conditions': actIntegration('act-iii', 'act3-sequence-01', 'route-decision'),
+  'sw4-margin-varga-journal': actIntegration('act-iii', 'act3-operation-nagi', 'route-operation', 'salt'),
+  'sw5-cipher-handoff': actIntegration('act-iii', 'act3-operation-kagura', 'route-operation', 'ash'),
+  'sw6-tribunal-afterword': actIntegration('act-iii', 'act3-operation-kozui', 'route-operation', 'paper'),
+  'sw7-soldier-will-not-follow': actIntegration('act-iii', 'act3-sequence-07', 'fixed-emergency', 'ash'),
+  'sw8-boats-with-conditions': actIntegration('act-iv', 'act4-sequence-04', 'approach-consequence', 'salt'),
+  'sw-enma-three-terms': actIntegration('act-iv', 'act4-sequence-07', 'gate-boss-consequence'),
+  'sw9-mateus-living-archive': actIntegration('act-v', 'act5-living-archive', 'inner-castle-decision'),
+  'sw10-corrections-desk': actIntegration('act-v', 'act5-last-command', 'final-political-consequence'),
 });
 
 export const STORYWORLD_CLUSTERS = Object.freeze([
@@ -147,38 +179,46 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
   cluster({
     id: 'sw3-sayos-warehouse-conditions',
     chapterId: 'chapter-3',
-    anchorBeatId: 'c3-04-lantern-boat-escort',
+    anchorBeatId: 'c3-01-separate-arrivals',
     placement: 'before-beat',
-    sequenceRole: 'before-boss-decision',
-    relatedEncounterIds: ['c3-dock-patrol'],
-    title: "Sayo's Warehouse Conditions",
-    text: 'Sayo of Sodegaura has already divided prayer, household, and testimony routes so one seizure cannot expose them together. She meets the party as a local organizer, not a quest giver waiting for foreign expertise. The patrol tide is turning, carrier capacity is finite, and she requires the group to choose what moves first under her conditions.',
+    sequenceRole: 'act-route-decision',
+    relatedEncounterIds: [],
+    title: 'The Bellless House War Table',
+    text: "Rain maps three ways north across the Bellless House floor. Sayo's salt boats can move households and testimony without merging their custody. Kagura's furnace route can starve the Oni collars of ash and blood. Kozui's printers can prepare governors, garrisons, and towns to survive a transfer of power. The coalition has time to finish only three of four regional operations before Kurozane closes the roads. Ren asks which road receives the first signal, resources, and political promise.",
     options: [
-      option('households-first', 'Move households before testimony.', 'p_party_respects_limits',
-        { text: 'Sayo assigns the warehouse route because the party has followed limits before. Testimony waits while people move beyond the checkpoint in small groups.', effects: { witness_safety: 0.10, network_consent: 0.10, route_safety: 0.05 } },
-        { text: 'Sayo refuses party escorts but accepts ordinary supplies. Ren records the smaller role, and the household route remains under local control.', effects: { care_capacity: 0.10, ren_noncoercion: 0.10, p_party_respects_limits: 0.05 } }),
-      option('testimony-first', 'Move an independent testimony copy before households.', 'proof_integrity',
-        { text: 'Because the copy can stand without its source names, Sayo permits one boat packet to leave. No household schedule is attached to it.', effects: { proof_integrity: 0.10, public_reach: 0.10, route_safety: 0.05 } },
-        { text: 'The packet would expose the household route by timing alone. Sayo keeps it, and Aya records that publication has been delayed for safety.', effects: { witness_safety: 0.10, network_consent: 0.10, court_pressure: 0.05 } }),
-      option('split-schedule', 'Keep the routes separate and let Sayo schedule both.', 'network_consent',
-        { text: 'Sayo publishes bounded handoff windows to the people doing the carrying. The party supports both routes without merging their custody.', effects: { route_safety: 0.10, network_consent: 0.10, party_cohesion: 0.05 } },
-        { text: 'Too few carriers make two routes impossible. Sayo chooses people first, and the evidence delay remains visible rather than blamed on the households.', effects: { care_capacity: 0.10, witness_safety: 0.10, public_reach: -0.05 } }),
+      option('salt-road-first', "Back Sayo's Salt Road: boats, households, and separated testimony routes.", 'network_consent',
+        { text: 'Sayo accepts the first signal because her boat leads keep cancellation authority. The coalition commits escorts and stores without taking command of either civilian route.', outcomeKey: 'accord', effects: { act3_salt_priority: 0.10, salt_commitment: 0.10, evacuation_capacity: 0.05 } },
+        { text: 'Sayo rejects a single coalition timetable, then accepts a narrower promise of supplies. Her refusal changes the plan without changing the chosen Salt Road priority.', outcomeKey: 'accord', effects: { act3_salt_priority: 0.10, salt_commitment: 0.05, ren_noncoercion: 0.10 } }),
+      option('ash-road-first', "Back Kagura's Ash Road: break the collar furnaces before the Oni muster.", 'court_pressure',
+        { text: 'The coalition assigns saboteurs to the ash fields and rescue crews to the locks. Destroying production, not conscripted bodies, becomes the first military objective.', outcomeKey: 'revision', effects: { act3_ash_priority: 0.10, ash_commitment: 0.10, oni_supply_disruption: 0.05 } },
+        { text: 'Kagura cannot promise a clean strike, but the table accepts her warning and funds prisoner routes beside sabotage. The Ash Road remains first without pretending its cost is solved.', outcomeKey: 'revision', effects: { act3_ash_priority: 0.10, ash_commitment: 0.05, witness_safety: 0.10 } }),
+      option('paper-road-first', "Back Kozui's Paper Road: publish the transfer case before taking the palace.", 'proof_integrity',
+        { text: 'Aya divides the blocks among independent printers while Kozui delegates prepare provisional offices. The first victory sought is a country able to receive surrendered seals.', outcomeKey: 'negotiated', effects: { act3_paper_priority: 0.10, paper_commitment: 0.10, succession_readiness: 0.05 } },
+        { text: 'Several delegates refuse a manifesto written by the party. Aya accepts their revisions, and the Paper Road begins as a distributed argument rather than a foreign proclamation.', outcomeKey: 'negotiated', effects: { act3_paper_priority: 0.10, paper_commitment: 0.05, public_reach: 0.10 } }),
     ],
     accordOutcome: [
-      'Two Routes, Two Custodians',
-      'The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Nikola supplies patrol observations through Aya, then bristles when Sayo refuses his offer to command an escort; Mateus remains outside the planning circle. Nikola obeys. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy.',
-      'Confirm which authority can halt the movement.',
+      'Salt Before Steel',
+      "Sayo lays separate blue cords for households, testimony, and the armed escort. Nikola offers to command the boats; she tells him his useful place is reading patrol formations and obeying local stop signals. He does. Mateus recognizes a blood-census mark and gives it to Aya without entering the custody circle. Sodegaura will receive the first coalition resources, making evacuation and independent evidence routes stronger when the palace closes the coast.",
+      'Set the Salt Road condition that no commander may overrule.',
       'network_consent',
-      { text: 'Sayo gives each route lead an independent stop signal. The party accepts that either signal can interrupt its preferred timing without further permission.', effects: { network_consent: 0.05, witness_safety: 0.05, route_safety: 0.05 } },
-      { text: 'The party initially asks for a shared signal, concentrating authority again. Sayo divides it, and Ren repeats the corrected rule to every escort.', effects: { ren_noncoercion: 0.05, truth_completeness: 0.05, p_party_respects_limits: 0.05 } },
+      { text: 'Every boat lead retains an immediate stop signal, even if delay costs the coalition its preferred operation. Ren writes the rule onto the military route card.', effects: { salt_commitment: 0.05, evacuation_capacity: 0.05, network_consent: 0.05 } },
+      { text: 'Nikola asks for an emergency exception and withdraws it when Sayo names who would bear the risk. The corrected order leaves cancellation local and visible.', effects: { salt_commitment: 0.05, lise_oath_revision: 0.05, witness_safety: 0.05 } },
     ],
     revisionOutcome: [
-      'Capacity Chooses the Order',
-      'There are not enough trusted carriers for every plan. Sayo chooses the household movement and keeps the testimony copy under separate custody. Aya marks the publication delay and its reason. The scene ends without pretending scarcity has vanished, but also without turning local refusal into an obstacle for the heroes to overcome.',
-      'Name the cost without assigning blame.',
-      'truth_completeness',
-      { text: 'Aya records the lost publication window, the preserved household route, and the exact capacity limit. The tradeoff remains legible to later readers.', effects: { truth_completeness: 0.05, aya_archive_openness: 0.05, witness_safety: 0.05 } },
-      { text: 'The first record praises sacrifice and hides the burden. Kiku replaces it with numbers, names no victims, and keeps the missing capacity visible.', effects: { care_capacity: 0.05, proof_integrity: 0.05, public_reach: -0.05 } },
+      'Ash Before the Muster',
+      "Kagura marks furnaces, prison locks, and the paths by which bound Oni are fed into Kurozane's garrisons. Ren refuses a plan that counts every collared soldier as a target. Rescue lanes and sabotage therefore share the same clock, slowing the strike but denying the court both weapons and fresh servants. The Ash Road receives the first coalition resources, and Kurozane's counterstroke will come through requisition towns and bell wardens rather than the coast.",
+      'State what destruction must spare.',
+      'witness_safety',
+      { text: 'The order protects prison locks, name slips, water routes, and every worker who can be separated from a collar. Only production nodes receive demolition marks.', effects: { ash_commitment: 0.05, oni_supply_disruption: 0.05, witness_safety: 0.05 } },
+      { text: 'A broad furnace symbol would also burn the prisoner passage. Ren splits the target, accepting a harder attack that preserves the release route.', effects: { ash_commitment: 0.05, party_cohesion: 0.05, ren_noncoercion: 0.05 } },
+    ],
+    thirdOutcome: [
+      'Paper Before the Throne',
+      "Kozui's printers reject a proclamation authored by victorious foreigners and rebuild it as questions every district must answer: who holds grain, who may order a garrison, how a blood command is proved ended, and who can remove a provisional keeper. Aya distributes blocks that disagree in wording but share an inventory. The Paper Road receives the first coalition resources, preparing institutions that can accept Kurozane's seals without simply handing them to his killer.",
+      'Name the authority the printed plan cannot create by itself.',
+      'succession_readiness',
+      { text: 'The blocks can publish procedures and evidence, but only participating towns and offices can confer provisional authority. Aya prints that limit beside every proposed transfer.', effects: { paper_commitment: 0.05, succession_readiness: 0.05, aya_archive_openness: 0.05 } },
+      { text: 'Nikola asks whether his covenant can guarantee the transfer. The printers answer that it can restrain a vampire, not appoint a government, and he accepts the distinction.', effects: { paper_commitment: 0.05, lise_oath_revision: 0.05, network_consent: 0.05 } },
     ],
   }),
   cluster({
@@ -188,6 +228,8 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     placement: 'after-beat',
     sequenceRole: 'after-level-consequence',
     relatedEncounterIds: [],
+    entryRouteEffects: { salt_commitment: 0.05 },
+    outcomeRouteEffects: { bell_intelligence: 0.05 },
     // The ids above remain stable for existing campaign bindings. Their visible
     // scene is now the Severed Dragon house testament and Nikola's
     // rank/complicity arc; the old ids remain save-compatible.
@@ -228,6 +270,8 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     placement: 'before-beat',
     sequenceRole: 'before-boss-decision',
     relatedEncounterIds: ['c5-furnace-abbot'],
+    entryRouteEffects: { ash_commitment: 0.05 },
+    outcomeRouteEffects: { oni_supply_disruption: 0.05 },
     title: 'The Cipher Handoff',
     text: "The cipher room turns people into numbered transfers between clerks, furnaces, and prison locks. Mateus understands the mechanism because he helped build an earlier form of it. Aya can reconstruct much from records, while a local clerk can map the ordinary process that the Court weaponized. The party must decide who explains first and who may correct whom.",
     options: [
@@ -265,6 +309,8 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     placement: 'after-beat',
     sequenceRole: 'after-boss-consequence',
     relatedEncounterIds: ['c6-ujiro'],
+    entryRouteEffects: { paper_commitment: 0.05 },
+    outcomeRouteEffects: { succession_readiness: 0.05 },
     title: 'Tribunal Afterword',
     text: "Mateus has admitted his part before a tribunal that cannot promise safety to every listener. The records prove some claims, contradict others, and leave dangerous omissions. Printers are already preparing copies while Kiku watches the exits. The party must decide whether corroboration, challenge, or immediate protection governs the next portion of testimony.",
     options: [
@@ -302,6 +348,8 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     placement: 'before-beat',
     sequenceRole: 'before-boss-decision',
     relatedEncounterIds: ['c7-name-slip-release'],
+    entryRouteEffects: { ash_commitment: 0.05 },
+    outcomeRouteEffects: { garrison_defection: 0.05 },
     title: 'The Soldier Who Will Not Follow',
     text: "A former retainer refuses both Kurozane's order and Genta's invitation to join another command. The party still needs route facts, and the soldier's group still needs food and an unarmed exit map. Genta must decide whether assistance can remain assistance when no service, allegiance, confession, or later gratitude is promised.",
     options: [
@@ -339,6 +387,8 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     placement: 'before-beat',
     sequenceRole: 'before-boss-decision',
     relatedEncounterIds: ['c8-outer-court'],
+    entryRouteEffects: { evacuation_capacity: 0.05 },
+    outcomeRouteEffects: { salt_commitment: 0.05 },
     title: 'Boats With Conditions',
     text: "Neighborhood boat crews will help breach Kurohana's isolation, but they refuse to become an unnamed rebel fleet. Their capacity belongs first to evacuation, and every additional bundle changes inspection risk. Ren presents three bounded plans while making clear that local leads can reject, revise, or stop any contribution without penalty.",
     options: [

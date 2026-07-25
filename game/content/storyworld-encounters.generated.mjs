@@ -8,13 +8,13 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:cda027a434bd5f95301d65dc27c059d49cdbe2d6751b3d3e93e4bb1eb77f86a2";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:65e7f9ca2458c213a54d260636ec86caa2d7abc237e4bb28ecdcb2257b3cc12d";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 2,
+  "sourceVersion": 3,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:c487a443ccbef01c0354a7ea0d2c003bac724d0f5bb230f1b4ad673170b2c2a9",
-  "bindingHash": "sha256:00820724b6dbb3a52720a9ce0f84660a7a0fe96f7420d2119cbf18dc6cb4ff32",
+  "sourceHash": "sha256:d7f7e5c040c90ddd02afcb4ffa73e45be0e897639683e7490d1a6ad0fba3ce8f",
+  "bindingHash": "sha256:fab206454eb58fcbdcd02cda9ad67baec9bf000f14a0f32eb7b69efbe4e5cef6",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
     {
@@ -121,6 +121,61 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "id": "enma_testimony",
       "label": "Lady Enma testimony reliability",
       "defaultValue": 0.3
+    },
+    {
+      "id": "act3_salt_priority",
+      "label": "Act III priority: Salt Road",
+      "defaultValue": 0
+    },
+    {
+      "id": "act3_ash_priority",
+      "label": "Act III priority: Ash Road",
+      "defaultValue": 0
+    },
+    {
+      "id": "act3_paper_priority",
+      "label": "Act III priority: Paper Road",
+      "defaultValue": 0
+    },
+    {
+      "id": "salt_commitment",
+      "label": "Salt-road coalition commitment",
+      "defaultValue": 0.2
+    },
+    {
+      "id": "ash_commitment",
+      "label": "Ash-road coalition commitment",
+      "defaultValue": 0.2
+    },
+    {
+      "id": "paper_commitment",
+      "label": "Paper-road coalition commitment",
+      "defaultValue": 0.2
+    },
+    {
+      "id": "evacuation_capacity",
+      "label": "Evacuation capacity",
+      "defaultValue": 0.2
+    },
+    {
+      "id": "oni_supply_disruption",
+      "label": "Oni supply disruption",
+      "defaultValue": 0.1
+    },
+    {
+      "id": "succession_readiness",
+      "label": "Civil succession readiness",
+      "defaultValue": 0.1
+    },
+    {
+      "id": "bell_intelligence",
+      "label": "Bell-network intelligence",
+      "defaultValue": 0.1
+    },
+    {
+      "id": "garrison_defection",
+      "label": "Garrison defection readiness",
+      "defaultValue": 0.1
     }
   ],
   "clusters": [
@@ -131,7 +186,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "placement": "after-beat",
       "sequenceRole": "after-level-consequence",
       "relatedEncounterIds": [],
+      "actIntegration": null,
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_0000",
       "outcomeKeys": [
         "accord",
@@ -472,7 +533,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "fp1-mateus"
       ],
+      "actIntegration": null,
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw02_decision",
       "outcomeKeys": [
         "accord",
@@ -807,81 +874,92 @@ export const STORYWORLD_CATALOG = deepFreeze({
     {
       "id": "sw3-sayos-warehouse-conditions",
       "chapterId": "chapter-3",
-      "anchorBeatId": "c3-04-lantern-boat-escort",
+      "anchorBeatId": "c3-01-separate-arrivals",
       "placement": "before-beat",
-      "sequenceRole": "before-boss-decision",
-      "relatedEncounterIds": [
-        "c3-dock-patrol"
-      ],
+      "sequenceRole": "act-route-decision",
+      "relatedEncounterIds": [],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-sequence-01",
+        "role": "route-decision",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw03_decision",
       "outcomeKeys": [
         "accord",
-        "revision"
+        "revision",
+        "negotiated"
       ],
       "outcomeEncounterIds": [
         "page_sw03_accord",
-        "page_sw03_revision"
+        "page_sw03_revision",
+        "page_sw03_negotiated"
       ],
       "entry": {
         "id": "page_sw03_decision",
-        "title": "Sayo's Warehouse Conditions",
-        "text": "Sayo of Sodegaura has already divided prayer, household, and testimony routes so one seizure cannot expose them together. She meets the party as a local organizer, not a quest giver waiting for foreign expertise. The patrol tide is turning, carrier capacity is finite, and she requires the group to choose what moves first under her conditions.",
+        "title": "The Bellless House War Table",
+        "text": "Rain maps three ways north across the Bellless House floor. Sayo's salt boats can move households and testimony without merging their custody. Kagura's furnace route can starve the Oni collars of ash and blood. Kozui's printers can prepare governors, garrisons, and towns to survive a transfer of power. The coalition has time to finish only three of four regional operations before Kurozane closes the roads. Ren asks which road receives the first signal, resources, and political promise.",
         "prompt": "",
         "terminal": false,
         "options": [
           {
-            "id": "page_sw03_decision_opt_households-first",
-            "text": "Move households before testimony.",
+            "id": "page_sw03_decision_opt_salt-road-first",
+            "text": "Back Sayo's Salt Road: boats, households, and separated testimony routes.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw03_decision_opt_households-first_r_accord",
-                "text": "Sayo assigns the warehouse route because the party has followed limits before. Testimony waits while people move beyond the checkpoint in small groups.",
+                "id": "page_sw03_decision_opt_salt-road-first_r_accord",
+                "text": "Sayo accepts the first signal because her boat leads keep cancellation authority. The coalition commits escorts and stores without taking command of either civilian route.",
                 "consequenceId": "page_sw03_accord",
                 "score": {
-                  "propertyId": "p_party_respects_limits",
+                  "propertyId": "network_consent",
                   "invert": false,
                   "offset": 0.01
                 },
                 "effects": [
                   {
-                    "propertyId": "witness_safety",
+                    "propertyId": "act3_salt_priority",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "network_consent",
+                    "propertyId": "salt_commitment",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "route_safety",
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw03_decision_opt_households-first_r_revision",
-                "text": "Sayo refuses party escorts but accepts ordinary supplies. Ren records the smaller role, and the household route remains under local control.",
-                "consequenceId": "page_sw03_revision",
+                "id": "page_sw03_decision_opt_salt-road-first_r_revision",
+                "text": "Sayo rejects a single coalition timetable, then accepts a narrower promise of supplies. Her refusal changes the plan without changing the chosen Salt Road priority.",
+                "consequenceId": "page_sw03_accord",
                 "score": {
-                  "propertyId": "p_party_respects_limits",
+                  "propertyId": "network_consent",
                   "invert": true,
                   "offset": 0.01
                 },
                 "effects": [
                   {
-                    "propertyId": "care_capacity",
+                    "propertyId": "act3_salt_priority",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
                   },
                   {
                     "propertyId": "ren_noncoercion",
                     "delta": 0.1
-                  },
-                  {
-                    "propertyId": "p_party_respects_limits",
-                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -889,57 +967,57 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw03_decision_opt_testimony-first",
-            "text": "Move an independent testimony copy before households.",
+            "id": "page_sw03_decision_opt_ash-road-first",
+            "text": "Back Kagura's Ash Road: break the collar furnaces before the Oni muster.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw03_decision_opt_testimony-first_r_accord",
-                "text": "Because the copy can stand without its source names, Sayo permits one boat packet to leave. No household schedule is attached to it.",
-                "consequenceId": "page_sw03_accord",
+                "id": "page_sw03_decision_opt_ash-road-first_r_accord",
+                "text": "The coalition assigns saboteurs to the ash fields and rescue crews to the locks. Destroying production, not conscripted bodies, becomes the first military objective.",
+                "consequenceId": "page_sw03_revision",
                 "score": {
-                  "propertyId": "proof_integrity",
+                  "propertyId": "court_pressure",
                   "invert": false,
                   "offset": 0.01
                 },
                 "effects": [
                   {
-                    "propertyId": "proof_integrity",
+                    "propertyId": "act3_ash_priority",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "public_reach",
+                    "propertyId": "ash_commitment",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "route_safety",
+                    "propertyId": "oni_supply_disruption",
                     "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw03_decision_opt_testimony-first_r_revision",
-                "text": "The packet would expose the household route by timing alone. Sayo keeps it, and Aya records that publication has been delayed for safety.",
+                "id": "page_sw03_decision_opt_ash-road-first_r_revision",
+                "text": "Kagura cannot promise a clean strike, but the table accepts her warning and funds prisoner routes beside sabotage. The Ash Road remains first without pretending its cost is solved.",
                 "consequenceId": "page_sw03_revision",
                 "score": {
-                  "propertyId": "proof_integrity",
+                  "propertyId": "court_pressure",
                   "invert": true,
                   "offset": 0.01
                 },
                 "effects": [
                   {
+                    "propertyId": "act3_ash_priority",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "witness_safety",
                     "delta": 0.1
-                  },
-                  {
-                    "propertyId": "network_consent",
-                    "delta": 0.1
-                  },
-                  {
-                    "propertyId": "court_pressure",
-                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -947,57 +1025,57 @@ export const STORYWORLD_CATALOG = deepFreeze({
             ]
           },
           {
-            "id": "page_sw03_decision_opt_split-schedule",
-            "text": "Keep the routes separate and let Sayo schedule both.",
+            "id": "page_sw03_decision_opt_paper-road-first",
+            "text": "Back Kozui's Paper Road: publish the transfer case before taking the palace.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
-                "id": "page_sw03_decision_opt_split-schedule_r_accord",
-                "text": "Sayo publishes bounded handoff windows to the people doing the carrying. The party supports both routes without merging their custody.",
-                "consequenceId": "page_sw03_accord",
+                "id": "page_sw03_decision_opt_paper-road-first_r_accord",
+                "text": "Aya divides the blocks among independent printers while Kozui delegates prepare provisional offices. The first victory sought is a country able to receive surrendered seals.",
+                "consequenceId": "page_sw03_negotiated",
                 "score": {
-                  "propertyId": "network_consent",
+                  "propertyId": "proof_integrity",
                   "invert": false,
                   "offset": 0.01
                 },
                 "effects": [
                   {
-                    "propertyId": "route_safety",
+                    "propertyId": "act3_paper_priority",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "network_consent",
+                    "propertyId": "paper_commitment",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "party_cohesion",
+                    "propertyId": "succession_readiness",
                     "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
               },
               {
-                "id": "page_sw03_decision_opt_split-schedule_r_revision",
-                "text": "Too few carriers make two routes impossible. Sayo chooses people first, and the evidence delay remains visible rather than blamed on the households.",
-                "consequenceId": "page_sw03_revision",
+                "id": "page_sw03_decision_opt_paper-road-first_r_revision",
+                "text": "Several delegates refuse a manifesto written by the party. Aya accepts their revisions, and the Paper Road begins as a distributed argument rather than a foreign proclamation.",
+                "consequenceId": "page_sw03_negotiated",
                 "score": {
-                  "propertyId": "network_consent",
+                  "propertyId": "proof_integrity",
                   "invert": true,
                   "offset": 0.01
                 },
                 "effects": [
                   {
-                    "propertyId": "care_capacity",
+                    "propertyId": "act3_paper_priority",
                     "delta": 0.1
                   },
                   {
-                    "propertyId": "witness_safety",
-                    "delta": 0.1
+                    "propertyId": "paper_commitment",
+                    "delta": 0.05
                   },
                   {
                     "propertyId": "public_reach",
-                    "delta": -0.05
+                    "delta": 0.1
                   }
                 ],
                 "authoredIndex": 1
@@ -1009,20 +1087,20 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "outcomes": [
         {
           "id": "page_sw03_accord",
-          "title": "Two Routes, Two Custodians",
-          "text": "The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Nikola supplies patrol observations through Aya, then bristles when Sayo refuses his offer to command an escort; Mateus remains outside the planning circle. Nikola obeys. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy.",
-          "prompt": "Confirm which authority can halt the movement.",
+          "title": "Salt Before Steel",
+          "text": "Sayo lays separate blue cords for households, testimony, and the armed escort. Nikola offers to command the boats; she tells him his useful place is reading patrol formations and obeying local stop signals. He does. Mateus recognizes a blood-census mark and gives it to Aya without entering the custody circle. Sodegaura will receive the first coalition resources, making evacuation and independent evidence routes stronger when the palace closes the coast.",
+          "prompt": "Set the Salt Road condition that no commander may overrule.",
           "terminal": false,
           "options": [
             {
               "id": "page_sw03_accord_opt_carry",
-              "text": "Confirm which authority can halt the movement.",
+              "text": "Set the Salt Road condition that no commander may overrule.",
               "visible": true,
               "performable": true,
               "reactions": [
                 {
                   "id": "page_sw03_accord_opt_carry_r_accord",
-                  "text": "Sayo gives each route lead an independent stop signal. The party accepts that either signal can interrupt its preferred timing without further permission.",
+                  "text": "Every boat lead retains an immediate stop signal, even if delay costs the coalition its preferred operation. Ren writes the rule onto the military route card.",
                   "consequenceId": "page_sw04_decision",
                   "score": {
                     "propertyId": "network_consent",
@@ -1031,15 +1109,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   "effects": [
                     {
+                      "propertyId": "salt_commitment",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "evacuation_capacity",
+                      "delta": 0.05
+                    },
+                    {
                       "propertyId": "network_consent",
-                      "delta": 0.05
-                    },
-                    {
-                      "propertyId": "witness_safety",
-                      "delta": 0.05
-                    },
-                    {
-                      "propertyId": "route_safety",
                       "delta": 0.05
                     }
                   ],
@@ -1047,7 +1125,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw03_accord_opt_carry_r_revision",
-                  "text": "The party initially asks for a shared signal, concentrating authority again. Sayo divides it, and Ren repeats the corrected rule to every escort.",
+                  "text": "Nikola asks for an emergency exception and withdraws it when Sayo names who would bear the risk. The corrected order leaves cancellation local and visible.",
                   "consequenceId": "page_sw04_decision",
                   "score": {
                     "propertyId": "network_consent",
@@ -1056,15 +1134,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   "effects": [
                     {
-                      "propertyId": "ren_noncoercion",
+                      "propertyId": "salt_commitment",
                       "delta": 0.05
                     },
                     {
-                      "propertyId": "truth_completeness",
+                      "propertyId": "lise_oath_revision",
                       "delta": 0.05
                     },
                     {
-                      "propertyId": "p_party_respects_limits",
+                      "propertyId": "witness_safety",
                       "delta": 0.05
                     }
                   ],
@@ -1077,33 +1155,33 @@ export const STORYWORLD_CATALOG = deepFreeze({
         },
         {
           "id": "page_sw03_revision",
-          "title": "Capacity Chooses the Order",
-          "text": "There are not enough trusted carriers for every plan. Sayo chooses the household movement and keeps the testimony copy under separate custody. Aya marks the publication delay and its reason. The scene ends without pretending scarcity has vanished, but also without turning local refusal into an obstacle for the heroes to overcome.",
-          "prompt": "Name the cost without assigning blame.",
+          "title": "Ash Before the Muster",
+          "text": "Kagura marks furnaces, prison locks, and the paths by which bound Oni are fed into Kurozane's garrisons. Ren refuses a plan that counts every collared soldier as a target. Rescue lanes and sabotage therefore share the same clock, slowing the strike but denying the court both weapons and fresh servants. The Ash Road receives the first coalition resources, and Kurozane's counterstroke will come through requisition towns and bell wardens rather than the coast.",
+          "prompt": "State what destruction must spare.",
           "terminal": false,
           "options": [
             {
               "id": "page_sw03_revision_opt_carry",
-              "text": "Name the cost without assigning blame.",
+              "text": "State what destruction must spare.",
               "visible": true,
               "performable": true,
               "reactions": [
                 {
                   "id": "page_sw03_revision_opt_carry_r_accord",
-                  "text": "Aya records the lost publication window, the preserved household route, and the exact capacity limit. The tradeoff remains legible to later readers.",
+                  "text": "The order protects prison locks, name slips, water routes, and every worker who can be separated from a collar. Only production nodes receive demolition marks.",
                   "consequenceId": "page_sw04_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
+                    "propertyId": "witness_safety",
                     "invert": false,
                     "offset": 0.01
                   },
                   "effects": [
                     {
-                      "propertyId": "truth_completeness",
+                      "propertyId": "ash_commitment",
                       "delta": 0.05
                     },
                     {
-                      "propertyId": "aya_archive_openness",
+                      "propertyId": "oni_supply_disruption",
                       "delta": 0.05
                     },
                     {
@@ -1115,25 +1193,25 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 },
                 {
                   "id": "page_sw03_revision_opt_carry_r_revision",
-                  "text": "The first record praises sacrifice and hides the burden. Kiku replaces it with numbers, names no victims, and keeps the missing capacity visible.",
+                  "text": "A broad furnace symbol would also burn the prisoner passage. Ren splits the target, accepting a harder attack that preserves the release route.",
                   "consequenceId": "page_sw04_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
+                    "propertyId": "witness_safety",
                     "invert": true,
                     "offset": 0.01
                   },
                   "effects": [
                     {
-                      "propertyId": "care_capacity",
+                      "propertyId": "ash_commitment",
                       "delta": 0.05
                     },
                     {
-                      "propertyId": "proof_integrity",
+                      "propertyId": "party_cohesion",
                       "delta": 0.05
                     },
                     {
-                      "propertyId": "public_reach",
-                      "delta": -0.05
+                      "propertyId": "ren_noncoercion",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -1142,6 +1220,74 @@ export const STORYWORLD_CATALOG = deepFreeze({
             }
           ],
           "resolutionKey": "revision"
+        },
+        {
+          "id": "page_sw03_negotiated",
+          "title": "Paper Before the Throne",
+          "text": "Kozui's printers reject a proclamation authored by victorious foreigners and rebuild it as questions every district must answer: who holds grain, who may order a garrison, how a blood command is proved ended, and who can remove a provisional keeper. Aya distributes blocks that disagree in wording but share an inventory. The Paper Road receives the first coalition resources, preparing institutions that can accept Kurozane's seals without simply handing them to his killer.",
+          "prompt": "Name the authority the printed plan cannot create by itself.",
+          "terminal": false,
+          "options": [
+            {
+              "id": "page_sw03_negotiated_opt_carry",
+              "text": "Name the authority the printed plan cannot create by itself.",
+              "visible": true,
+              "performable": true,
+              "reactions": [
+                {
+                  "id": "page_sw03_negotiated_opt_carry_r_accord",
+                  "text": "The blocks can publish procedures and evidence, but only participating towns and offices can confer provisional authority. Aya prints that limit beside every proposed transfer.",
+                  "consequenceId": "page_sw04_decision",
+                  "score": {
+                    "propertyId": "succession_readiness",
+                    "invert": false,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "paper_commitment",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 0
+                },
+                {
+                  "id": "page_sw03_negotiated_opt_carry_r_revision",
+                  "text": "Nikola asks whether his covenant can guarantee the transfer. The printers answer that it can restrain a vampire, not appoint a government, and he accepts the distinction.",
+                  "consequenceId": "page_sw04_decision",
+                  "score": {
+                    "propertyId": "succession_readiness",
+                    "invert": true,
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "paper_commitment",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 1
+                }
+              ]
+            }
+          ],
+          "resolutionKey": "negotiated"
         }
       ]
     },
@@ -1152,7 +1298,17 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "placement": "after-beat",
       "sequenceRole": "after-level-consequence",
       "relatedEncounterIds": [],
-      "requiredForNarrativeCredits": true,
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-nagi",
+        "role": "route-operation",
+        "routeTheater": "salt"
+      },
+      "requiredForNarrativeCredits": false,
+      "requiredOnRoutes": [
+        "salt",
+        "paper"
+      ],
       "entryEncounterId": "page_sw04_decision",
       "outcomeKeys": [
         "accord",
@@ -1196,6 +1352,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "lise_oath_revision",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1221,6 +1381,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "aya_archive_openness",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1254,6 +1418,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "party_cohesion",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1278,6 +1446,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "public_reach",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
                     "delta": 0.05
                   }
                 ],
@@ -1312,6 +1484,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "lise_oath_revision",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1336,6 +1512,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "p_party_respects_limits",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
                     "delta": 0.05
                   }
                 ],
@@ -1380,6 +1560,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "truth_completeness",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1405,6 +1589,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "party_cohesion",
                       "delta": -0.05
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -1448,6 +1636,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "network_consent",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1473,6 +1665,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "p_party_respects_limits",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -1493,7 +1689,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c5-furnace-abbot"
       ],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-kagura",
+        "role": "route-operation",
+        "routeTheater": "ash"
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw05_decision",
       "outcomeKeys": [
         "accord",
@@ -1537,6 +1744,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "proof_integrity",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1562,6 +1773,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "truth_completeness",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1595,6 +1810,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "route_safety",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1619,6 +1838,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
                     "delta": 0.05
                   }
                 ],
@@ -1653,6 +1876,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "mateus_accountability",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1677,6 +1904,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
                     "delta": 0.05
                   }
                 ],
@@ -1721,6 +1952,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "route_safety",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1745,6 +1980,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "mateus_accountability",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
                       "delta": 0.05
                     }
                   ],
@@ -1789,6 +2028,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "p_mateus_truthfulness",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1814,6 +2057,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "route_safety",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -1834,7 +2081,17 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c6-ujiro"
       ],
-      "requiredForNarrativeCredits": true,
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-kozui",
+        "role": "route-operation",
+        "routeTheater": "paper"
+      },
+      "requiredForNarrativeCredits": false,
+      "requiredOnRoutes": [
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw06_decision",
       "outcomeKeys": [
         "accord",
@@ -1878,6 +2135,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "public_reach",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "paper_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1903,6 +2164,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "p_mateus_truthfulness",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "paper_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1936,6 +2201,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "proof_integrity",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "paper_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1961,6 +2230,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "public_reach",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "paper_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1994,6 +2267,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "mateus_accountability",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "paper_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2018,6 +2295,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "party_cohesion",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "paper_commitment",
                     "delta": 0.05
                   }
                 ],
@@ -2062,6 +2343,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "witness_safety",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2086,6 +2371,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "mateus_accountability",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "succession_readiness",
                       "delta": 0.05
                     }
                   ],
@@ -2130,6 +2419,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "public_reach",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2155,6 +2448,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "ren_noncoercion",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -2175,7 +2472,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c7-name-slip-release"
       ],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-sequence-07",
+        "role": "fixed-emergency",
+        "routeTheater": "ash"
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw07_decision",
       "outcomeKeys": [
         "accord",
@@ -2219,6 +2527,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "p_party_respects_limits",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2243,6 +2555,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "genta_accountability",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
                     "delta": 0.05
                   }
                 ],
@@ -2277,6 +2593,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "genta_accountability",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2302,6 +2622,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "route_safety",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -2335,6 +2659,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "route_safety",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2360,6 +2688,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "route_safety",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -2403,6 +2735,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "party_cohesion",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2427,6 +2763,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "p_party_respects_limits",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
                       "delta": 0.05
                     }
                   ],
@@ -2471,6 +2811,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "ren_noncoercion",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2496,6 +2840,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "route_safety",
                       "delta": -0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -2516,7 +2864,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c8-outer-court"
       ],
+      "actIntegration": {
+        "actId": "act-iv",
+        "majorSequenceId": "act4-sequence-04",
+        "role": "approach-consequence",
+        "routeTheater": "salt"
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw08_decision",
       "outcomeKeys": [
         "accord",
@@ -2560,6 +2919,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "network_consent",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2584,6 +2947,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "p_party_respects_limits",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2618,6 +2985,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "proof_integrity",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2642,6 +3013,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "ren_noncoercion",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2676,6 +3051,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "route_safety",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -2700,6 +3079,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "route_safety",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2744,6 +3127,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "p_party_respects_limits",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "salt_commitment",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2768,6 +3155,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "truth_completeness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "salt_commitment",
                       "delta": 0.05
                     }
                   ],
@@ -2812,6 +3203,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "network_consent",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "salt_commitment",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2837,6 +3232,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "route_safety",
                       "delta": -0.05
+                    },
+                    {
+                      "propertyId": "salt_commitment",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -2857,7 +3256,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c8-lady-enma"
       ],
+      "actIntegration": {
+        "actId": "act-iv",
+        "majorSequenceId": "act4-sequence-07",
+        "role": "gate-boss-consequence",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw09_decision",
       "outcomeKeys": [
         "accord",
@@ -3268,7 +3678,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c9-yearless-bell"
       ],
+      "actIntegration": {
+        "actId": "act-v",
+        "majorSequenceId": "act5-living-archive",
+        "role": "inner-castle-decision",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw10_decision",
       "outcomeKeys": [
         "accord",
@@ -3609,7 +4030,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "relatedEncounterIds": [
         "c9-kurozane"
       ],
+      "actIntegration": {
+        "actId": "act-v",
+        "majorSequenceId": "act5-last-command",
+        "role": "final-political-consequence",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw11_decision",
       "outcomeKeys": [
         "accord",
@@ -3826,10 +4258,33 @@ export const STORYWORLD_CATALOG = deepFreeze({
   ],
   "metrics": {
     "canonicalSceneCount": 60,
-    "storyworldAuthoredSceneCount": 34,
-    "authoredSceneCount": 94,
-    "completeRunStoryworldSceneCount": 22,
-    "completeRunSceneCount": 82,
+    "storyworldAuthoredSceneCount": 35,
+    "authoredSceneCount": 95,
+    "narrativeRoutes": {
+      "salt": {
+        "canonicalSceneCount": 55,
+        "storyworldSceneCount": 20,
+        "playedSceneCount": 75
+      },
+      "ash": {
+        "canonicalSceneCount": 54,
+        "storyworldSceneCount": 20,
+        "playedSceneCount": 74
+      },
+      "paper": {
+        "canonicalSceneCount": 55,
+        "storyworldSceneCount": 22,
+        "playedSceneCount": 77
+      }
+    },
+    "completeRunStoryworldSceneCountRange": {
+      "minimum": 20,
+      "maximum": 22
+    },
+    "completeRunSceneCountRange": {
+      "minimum": 74,
+      "maximum": 77
+    },
     "clusterCount": 11,
     "entryOptionCount": 33
   }

@@ -5,6 +5,7 @@ export const PARTY_COMBAT_MEMBERS = Object.freeze([
   'mateus',
   'genta',
   'kiku',
+  'miyo',
 ]);
 
 export const PARTY_COMBAT_POSES = Object.freeze([
@@ -25,9 +26,9 @@ export const PARTY_DEFEAT_HOLD_MS = 420;
 export const PARTY_COMBAT_ATLAS = Object.freeze({
   url: './assets/art/party-combat-suite/party-combat-actions.png',
   width: 480,
-  height: 384,
+  height: 448,
   columns: 10,
-  rows: 6,
+  rows: 7,
   cellWidth: 48,
   cellHeight: 64,
   pivotX: 24,
@@ -43,6 +44,10 @@ export const PARTY_COMBAT_SKILL_POSES = Object.freeze({
   'penitent-night': 'signature-a',
   'pilgrim-maul': 'signature-a',
   'cold-medicine': 'signature-a',
+  'cinder-glyph': 'signature-a',
+  'white-current': 'signature-a',
+  'thunder-thread': 'signature-b',
+  'crosswind-step': 'move',
 });
 
 export function getPartyCombatFrame(memberId, pose = 'idle') {

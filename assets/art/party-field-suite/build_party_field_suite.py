@@ -30,7 +30,7 @@ LEGACY_COLUMNS = (
 )
 WALK_B_COLUMNS = ("north-walk-b", "east-walk-b", "south-walk-b", "west-walk-b")
 SHEET_COLUMNS = LEGACY_COLUMNS + WALK_B_COLUMNS
-SHEET_ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
+SHEET_ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku", "miyo")
 REVIEW_ROW_LABELS = {"lise": "NIKOLA"}
 
 
@@ -157,6 +157,14 @@ def draw_head(s: Sprite, style: str):
         s.rect((10, 9, 12, 17), "hair")
         s.rect((19, 9, 21, 17), "hair")
         s.pixel(9, 14, "hair")
+    elif style == "miyo":
+        # Center-parted hair tied into a compact working loop. The small brass
+        # pin belongs to her weather ruler, not to a borrowed costume motif.
+        s.rect((10, 9, 12, 17), "hair")
+        s.rect((19, 9, 21, 17), "hair")
+        s.pixel(15, 9, "skinShadow")
+        s.rect((8, 13, 10, 18), "hair")
+        s.pixel(8, 16, "accent")
 
 
 def draw_legs(s: Sprite, primary: str = "primary", long_coat: bool = False):
@@ -309,6 +317,28 @@ def draw_kiku(s: Sprite):
     draw_head(s, "kiku")
 
 
+def draw_miyo(s: Sprite):
+    draw_legs(s)
+    # Short Japanese travel coat with split working sleeves. Its low, layered
+    # silhouette stays separate from Aya's archive case and Kiku's medicine box.
+    s.polygon([(8, 19), (12, 17), (20, 17), (24, 20), (23, 34), (19, 38), (15, 34), (11, 38), (7, 32)], "outline")
+    s.polygon([(10, 20), (13, 19), (19, 19), (22, 21), (21, 32), (18, 35), (15, 32), (12, 35), (9, 31)], "primary")
+    s.rect((13, 20, 19, 28), "secondary")
+    s.line([(9, 26), (14, 30)], "light", 2)
+    s.line([(21, 25), (18, 31)], "light", 2)
+    s.line([(11, 31), (21, 31)], "accent")
+    # Folding bamboo weather ruler: four plain hinged lengths and three brass
+    # pressure joints. It is a measuring instrument, not a wand or sacred prop.
+    s.line([(5, 35), (10, 28), (16, 25), (22, 20), (27, 14)], "outline", 3)
+    s.line([(6, 35), (11, 29), (16, 26), (22, 21), (27, 15)], "paper")
+    for x, y in ((10, 28), (16, 25), (22, 20)):
+        s.rect((x - 1, y - 1, x + 1, y + 1), "accent")
+    # Two free ribbons read air direction without copying an existing mage cape.
+    s.line([(8, 22), (4, 20), (2, 22)], "light")
+    s.line([(8, 24), (4, 25), (2, 24)], "secondary")
+    draw_head(s, "miyo")
+
+
 DRAWERS = {
     "ren": draw_ren,
     "aya": draw_aya,
@@ -316,6 +346,7 @@ DRAWERS = {
     "mateus": draw_mateus,
     "genta": draw_genta,
     "kiku": draw_kiku,
+    "miyo": draw_miyo,
 }
 
 
@@ -329,6 +360,7 @@ def draw_field_pose_overlay(sprite: Sprite, character_id: str, state: str):
             "mateus": ((19, 25), (23, 24), (27, 21)),
             "genta": ((19, 26), (23, 25), (27, 23)),
             "kiku": ((18, 25), (23, 24), (27, 22)),
+            "miyo": ((18, 25), (23, 23), (27, 20)),
         }
         start, elbow, hand = reaches[character_id]
         sprite.line([start, elbow, hand], "outline", 4)

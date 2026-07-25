@@ -12,6 +12,7 @@ const DOC = readFileSync(
 );
 
 const placementLabel = Object.freeze({
+  'act-route-decision': 'act route',
   'after-level-consequence': 'after level',
   'after-boss-consequence': 'after boss',
   'before-boss-decision': 'before boss',
@@ -35,17 +36,19 @@ test('production map covers every authored sequence binding and consequence titl
   assert.deepEqual(roleCounts, {
     'after-level-consequence': 2,
     'after-boss-consequence': 4,
-    'before-boss-decision': 5,
+    'act-route-decision': 1,
+    'before-boss-decision': 4,
   });
 });
 
 test('production map locks authored-versus-played arithmetic and core guardrails', () => {
-  assert.equal(STORYWORLD_METRICS.authoredSceneCount, 94);
-  assert.equal(STORYWORLD_METRICS.completeRunSceneCount, 82);
-  assert.match(DOC, /\*\*94 scenes\*\*/);
-  assert.match(DOC, /\*\*82 played scenes\*\*/);
-  assert.equal(STORYWORLD_PACING_REPORT.withinFiveToSixHourTarget, true);
-  assert.match(DOC, /330\.726 minutes \(about 5\.51 hours\)/);
+  assert.equal(STORYWORLD_METRICS.authoredSceneCount, 95);
+  assert.deepEqual(STORYWORLD_METRICS.completeRunSceneCountRange, { minimum: 74, maximum: 77 });
+  assert.match(DOC, /\*\*95 scenes\*\*/);
+  assert.match(DOC, /\*\*74 played scenes\*\*/);
+  assert.match(DOC, /\*\*75 played scenes\*\*/);
+  assert.match(DOC, /\*\*77 played scenes\*\*/);
+  assert.equal(STORYWORLD_PACING_REPORT.diagnosticOnly, true);
   assert.match(DOC, /\*\*The Last Command\*\*/u);
   assert.match(DOC, /\*\*The Seals Returned\*\* \/ \*\*The Empty Throne Mobilizes\*\*/u);
   assert.match(DOC, /\*\*Custody Without a Trophy\*\* \/ \*\*The Cinder Fan Ends\*\* \/ \*\*A Defection Under Witness\*\*/u);

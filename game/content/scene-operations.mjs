@@ -16,6 +16,9 @@ import {
   tileKey,
 } from './levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncountersForLevel } from './encounters.mjs';
+import { getActSequenceContextForBeat } from './act-route-sequences.mjs';
+import { ACT_ROUTE_THEATERS } from './act-route-sequences.mjs';
+import { getRouteMapIdForBeat } from '../campaign-route-scheduler.mjs';
 
 export const SCENE_OPERATION_SCHEMA_VERSION = 1;
 
@@ -261,6 +264,7 @@ const TASKS_BY_BEAT = {
     task('council', 'Confirm', 'Confirm no single route or archive holds every surviving copy.'),
   ],
   'c7-01-decision-map-table': [
+    task('inspect', 'Verify', 'Verify Miyo Senda\'s corrected chain table against the ferry council copy before using it.'),
     task('inspect', 'Count', 'Count the prisoners moving along Hushroad before comparing strike routes.'),
     task('council', 'Reject', 'Reject the early assault calculation that writes those prisoners off.'),
     task('mechanism', 'Mark', 'Mark the rescue route on the map table and leave the gate route for later.'),
@@ -321,10 +325,11 @@ const TASKS_BY_BEAT = {
     task('council', 'Transfer', 'Transfer Ujiro to public custody without destroying the evidence in his room.'),
   ],
   'c9-03-conservatory-offers': [
+    task('council', 'Refuse', 'Let Miyo reject Kurozane\'s attempt to turn her two recorded names into a seventh tailored chamber.'),
     task('interview', 'Hear', 'Hear each tailored offer without allowing Kurozane to address the party as one will.'),
     task('council', 'Refuse', 'Let Ren, Aya, and Nikola state their own refusals.'),
     task('council', 'Refuse', 'Let Mateus, Genta, and Kiku state their own refusals.'),
-    task('inspect', 'Record', 'Record all six refusals as choices, never as proof that the offers were harmless.'),
+    task('inspect', 'Record', 'Record Miyo\'s refusal of classification and the six tailored refusals as choices, never as proof that the offers were harmless.'),
   ],
   'c9-04-yearless-bell': [
     task('inspect', 'Read', 'Read the Yearless Bell\'s exposed node cycle before assigning the party.'),
@@ -467,6 +472,7 @@ function combatAnchor(beat, level) {
 
 function deriveRoute(beat, tasks) {
   const level = getLevel(beat.mapId);
+  const actContext = getActSequenceContextForBeat(beat.id);
   if (!level) throw new Error(`Scene operation references missing level ${beat.mapId}.`);
   const reserved = reservedTiles(level);
   const reachable = reachableTiles(level);
@@ -528,6 +534,7 @@ function deriveRoute(beat, tasks) {
     beatId: beat.id,
     chapterId: beat.chapterId,
     levelId: beat.mapId,
+    ...(actContext ?? {}),
     repeatable: false,
     completionPolicy: 'once-per-save',
     placement,
@@ -541,7 +548,16 @@ const CANONICAL_BEATS = CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map
 const operations = CANONICAL_BEATS.map((beat) => {
   const tasks = TASKS_BY_BEAT[beat.id];
   if (!tasks) throw new Error(`Missing authored scene-operation tasks for ${beat.id}.`);
-  return deriveRoute(beat, tasks);
+  const canonical = deriveRoute(beat, tasks);
+  if (beat.id !== 'c8-02-consent-not-conscription') return canonical;
+  const routeVariants = Object.fromEntries(Object.keys(ACT_ROUTE_THEATERS).map((priorityTheater) => {
+    const mapId = getRouteMapIdForBeat(beat.id, priorityTheater, beat.mapId);
+    return [priorityTheater, {
+      ...deriveRoute({ ...beat, mapId }, tasks),
+      routeTheater: priorityTheater,
+    }];
+  }));
+  return { ...canonical, routeVariants };
 });
 
 const authoredTaskIds = Object.keys(TASKS_BY_BEAT);
@@ -597,8 +613,11 @@ export const SCENE_OPERATIONS = deepFreeze({
 const operationByBeatId = new Map(SCENE_OPERATIONS.operations.map((operation) => [operation.beatId, operation]));
 
 /** Return the immutable on-map operation for one canonical beat, or null. */
-export function getSceneOperation(beatId) {
-  return operationByBeatId.get(beatId) ?? null;
+export function getSceneOperation(beatId, { priorityTheater = null } = {}) {
+  const operation = operationByBeatId.get(beatId) ?? null;
+  return priorityTheater && operation?.routeVariants?.[priorityTheater]
+    ? operation.routeVariants[priorityTheater]
+    : operation;
 }
 
 /** Return exact finite node and shortest-path counts; no time estimate is declared. */
@@ -635,6 +654,12 @@ export function validateSceneOperations(catalog = SCENE_OPERATIONS) {
     if (operation.beatId !== beat.id) errors.push(`operation ${operationIndex} must cover ${beat.id}.`);
     if (operation.chapterId !== beat.chapterId) errors.push(`${beat.id} chapterId does not match.`);
     if (operation.levelId !== beat.mapId || !level) errors.push(`${beat.id} levelId does not match its canonical map.`);
+    const expectedActContext = getActSequenceContextForBeat(beat.id);
+    for (const field of ['actId', 'actLabel', 'majorSequenceId', 'majorSequenceLabel', 'routeTheater', 'operationId']) {
+      if (operation[field] !== (expectedActContext ? expectedActContext[field] : undefined)) {
+        errors.push(`${beat.id} ${field} does not match its act-sequence mapping.`);
+      }
+    }
     if (operation.repeatable !== false || operation.completionPolicy !== 'once-per-save') errors.push(`${beat.id} is not once-per-save.`);
     if (seenOperations.has(operation.beatId)) errors.push(`duplicate operation ${operation.beatId}.`);
     seenOperations.add(operation.beatId);
@@ -688,6 +713,28 @@ export function validateSceneOperations(catalog = SCENE_OPERATIONS) {
       }
     });
     if (operation.shortestPathSteps !== computedSteps) errors.push(`${beat.id} route step total should be ${computedSteps}.`);
+    if (beat.id === 'c8-02-consent-not-conscription') {
+      for (const priorityTheater of Object.keys(ACT_ROUTE_THEATERS)) {
+        const variant = operation.routeVariants?.[priorityTheater];
+        const expectedLevelId = getRouteMapIdForBeat(beat.id, priorityTheater, beat.mapId);
+        const variantLevel = getLevel(expectedLevelId);
+        if (!variant || variant.levelId !== expectedLevelId || !variantLevel) {
+          errors.push(`${beat.id} lacks its ${priorityTheater} route-map operation.`);
+          continue;
+        }
+        if (variant.routeTheater !== priorityTheater) errors.push(`${beat.id} ${priorityTheater} variant has the wrong theater.`);
+        if (variant.nodes.length !== operation.nodes.length) errors.push(`${beat.id} ${priorityTheater} variant changes node count.`);
+        let variantPrevious = { x: variantLevel.spawn.x, y: variantLevel.spawn.y };
+        for (const node of variant.nodes) {
+          const point = parseTileKey(node.at);
+          const steps = shortestPathSteps(variantLevel, variantPrevious, point);
+          if (steps === null || node.pathFromPreviousSteps !== steps) {
+            errors.push(`${beat.id} ${priorityTheater} variant has unreachable or inexact node ${node.id}.`);
+          }
+          variantPrevious = point;
+        }
+      }
+    }
   });
 
   const actualMetrics = buildMetrics(entries);

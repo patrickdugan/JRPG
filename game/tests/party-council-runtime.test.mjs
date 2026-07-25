@@ -20,7 +20,7 @@ import {
 } from '../party-council-runtime.mjs';
 
 const ALL_BEAT_IDS = CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id));
-const ALL_PARTY = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'].map((id) => ({ id, unlocked: true }));
+const ALL_PARTY = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'].map((id) => ({ id, unlocked: true }));
 
 function contextFor(council, completedBeatIds = ALL_BEAT_IDS) {
   return {

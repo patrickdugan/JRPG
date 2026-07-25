@@ -6,7 +6,7 @@
 
 **Completion policy:** one explicit decision per council, once per save
 
-**Shipped catalogue volume:** 993 main lines, 180 authored response lines across both branches, 60 options, and 27,506 counted words
+**Shipped catalogue volume:** 993 main lines, 180 authored response lines across both branches, 60 options, and 27,511 counted words
 
 ## Dramatic purpose
 
@@ -99,9 +99,9 @@ Catalogue volume includes both authored branches. Duration modeling uses a canon
 | Dialogue lines seen | - | 1,083 |
 | Options authored or displayed | 60 authored | 60 labels displayed |
 | Explicit decisions | 30 | 30 |
-| Counted words | 27,506 | 25,072 visible |
+| Counted words | 27,511 | 25,077 visible |
 
-The 25,072-word visible path includes title, theme, prompt, both option labels, every main line, the selected first response, and the selected consequence summary. It excludes the unselected response and unselected consequence summary. The 1,083 visible dialogue lines are exactly 993 main lines plus 90 selected response lines.
+The 25,077-word visible path includes title, theme, prompt, both option labels, every main line, the selected first response, and the selected consequence summary. It excludes the unselected response and unselected consequence summary. The 1,083 visible dialogue lines are exactly 993 main lines plus 90 selected response lines.
 
 ## DOM-free completion witness
 
@@ -118,7 +118,7 @@ The 25,072-word visible path includes title, theme, prompt, both option labels, 
 | Trace events | 1,174 |
 | Recorded timed duration | 0 ms / 0 minutes |
 
-The 1,143 successful transitions are 30 starts, 993 main-line acknowledgements, 30 choices, and 90 response acknowledgements. The 1,174-event trace adds one canonical-seed event and 30 replay-refusal events. Its prose-bound catalogue signature is `fnv1a32:10ab0f26`; the completion signature is `fnv1a32:0bd87a13`.
+The 1,143 successful transitions are 30 starts, 993 main-line acknowledgements, 30 choices, and 90 response acknowledgements. The 1,174-event trace adds one canonical-seed event and 30 replay-refusal events. Its prose-bound catalogue signature is `fnv1a32:7bd9b978`; the completion signature is `fnv1a32:058ef1f3`.
 
 This witness proves deterministic reachability, authored-line coverage, canonical first-choice settlement, unique consequence flags, exact bounds, and once-per-save replay refusal. It does not exercise human reading, reflection, browser presentation, accessibility, or elapsed play.
 

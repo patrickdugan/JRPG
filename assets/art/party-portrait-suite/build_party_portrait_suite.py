@@ -20,7 +20,7 @@ ATLAS_NAME = "party-portrait-expressions.png"
 CONTACT_NAME = "party-portrait-expressions-contact-sheet.png"
 MANIFEST_NAME = "manifest.json"
 README_NAME = "README.md"
-ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
+ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku", "miyo")
 REVIEW_ROW_LABELS = {"lise": "NIKOLA"}
 COLUMNS = ("neutral", "resolve", "strain", "soften", "concern", "anger", "surprise", "quiet")
 CELL = 64
@@ -94,6 +94,7 @@ FACE = {
     "mateus": {"left":20,"right":45,"top":10,"jaw":43,"chin":50,"eyeY":27,"mouthY":38},
     "genta": {"left":16,"right":47,"top":11,"jaw":46,"chin":49,"eyeY":27,"mouthY":38},
     "kiku": {"left":18,"right":44,"top":11,"jaw":43,"chin":48,"eyeY":27,"mouthY":37},
+    "miyo": {"left":18,"right":45,"top":10,"jaw":44,"chin":49,"eyeY":27,"mouthY":37},
 }
 
 
@@ -130,6 +131,12 @@ def draw_shoulders(p: Portrait, character_id: str):
             p.poly([(15,51),(24,46),(31,54),(41,46),(49,52),(47,59),(16,59)], "primary")
             p.rect((45,50,51,57), "secondary")
             p.px(48,52,"dawn"); p.px(48,55,"brass")
+        elif character_id == "miyo":
+            p.poly([(14,52),(24,46),(31,54),(40,46),(50,52),(47,59),(17,59)], "secondary")
+            p.line([(20,49),(31,56),(43,48)], "light", 2)
+            # One plain brass hinge from the folded weather ruler.
+            p.rect((47,50,52,55), "outline")
+            p.rect((49,51,51,53), "accent")
 
 
 def draw_neck(p: Portrait, f: dict):
@@ -188,6 +195,12 @@ def draw_hair(p: Portrait, character_id: str, f: dict):
         p.poly([(left-3,top+10),(left+1,top-3),(right-6,top-4),(right+2,top+4),(right+1,31),(40,top+8),(33,top+4),(26,top+8),(21,34),(left-2,41)],"hair")
         p.rect((15,24,20,41),"hair"); p.poly([(43,20),(49,25),(48,34),(43,31)],"hair")
         p.rect((47,27,51,34),"accent")
+    elif character_id == "miyo":
+        # Center part, long side sections, and a compact looped working tie.
+        p.poly([(left-3,top+10),(left+1,top-3),(30,top-5),(right-5,top-4),(right+2,top+4),(right+2,34),(43,41),(40,top+9),(34,top+3),(31,top+8),(27,top+3),(22,top+9),(20,40),(left-2,42)],"hair")
+        p.rect((15,23,20,42),"hair"); p.rect((43,22,48,42),"hair")
+        p.poly([(16,35),(11,38),(12,45),(18,45),(20,40)],"hair")
+        p.rect((11,39,14,42),"accent")
 
 
 def draw_features(p: Portrait, character_id: str, f: dict):

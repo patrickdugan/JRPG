@@ -22,7 +22,7 @@ export const CAMPAIGN = deepFreeze({
   title: 'Bells of the Black Chrysanthemum',
   format: 'Original pixel-art, party-based turn RPG',
   campaignTarget: '20-25 hour critical path; 3-5 optional hours',
-  premise: 'In alternate Genna 8 (1622) Japan, six people cross a court-made bell network that turns fear and falsified records into undead force.',
+  premise: 'In alternate Genna 8 (1622) Japan, six travelers and a late-arriving Japanese weather scholar cross a court-made bell network that turns fear and falsified records into undead force.',
   historicalFraming: {
     date: 'The fictional story deliberately shares the year 1622 with the Great Genna Martyrdom but does not reenact that event or use its victims, locations, or methods.',
     missions: 'After the 1614 nationwide ban, active missionaries are clandestine holdovers or returnees; Japanese Christian communities are not open foreign missions.',
@@ -65,6 +65,14 @@ export const CAMPAIGN = deepFreeze({
       arc: 'Faces his complicity through costly protection and testimony, never instant forgiveness.',
       background: 'Reached Japan through Goa and Macao before 1614, remained clandestinely after the ban, and later betrayed the routes and language once entrusted to him.',
     },
+    miyo: {
+      id: 'miyo',
+      speakerId: 'MIYO',
+      name: 'Miyo Senda',
+      role: 'Japanese weather scholar and mobile Arcane specialist using Ember, Frost, Storm, and wind-driven repositioning',
+      arc: 'Claims her family history without becoming evidence of Mateus\'s redemption, and turns private weather calculations into a shared rescue practice.',
+      background: 'The literal granddaughter of Mateus Avelar through his half-Japanese daughter and the Japanese Senda household. Miyo is three-quarters Japanese and uses her Japanese name in every public setting; “Inês Avelar” survives only as a baptismal entry in the family book Mateus abandoned. Her fourfold weather calculus combines Japanese household teaching, coastal observation, navigation tables, and her own experiment rather than reproducing any inherited foreign school.',
+    },
     genta: {
       id: 'genta',
       name: 'Genta Mononobe',
@@ -96,7 +104,7 @@ export const CAMPAIGN = deepFreeze({
     c6_first_copy: 'The first evidence-copy task completed in Kozui.',
     c7_first_name_released: 'The first Ashen Oni released by returning a name slip to water.',
     c8_hub_assets: 'Concrete community contributions selected for the Black Gate breach.',
-    c9_offer_responses: 'The six refusals of Kurozane, used only for opening-boss readout flavor and minor resistance values.',
+    c9_offer_responses: 'Miyo rejects Kurozane\'s identity classification before six tailored refusals; only the tailored choices affect opening-boss readout flavor and minor resistance values.',
     epilogue_testimony_opened: 'The public archive opened with corrections and acknowledged gaps.',
   },
   chapters: [
@@ -1239,14 +1247,14 @@ export const CAMPAIGN = deepFreeze({
       number: 7,
       title: 'The Road of the Dead',
       subtitle: 'Rescue is not a delay in the real objective.',
-      summary: 'With all three keys, the party could strike Kurohana, but Ren chooses to rescue prisoners at Hushroad. Genta meets former subordinates, Nikola rewrites his oath, and the party learns how to release Ashen Oni nonlethally.',
+      summary: 'With all three keys, the party could strike Kurohana, but Ren chooses to rescue prisoners at Hushroad. Miyo Senda confronts the grandfather who abandoned her family and joins on her own terms; Genta meets former subordinates, Nikola rewrites his oath, and the party learns how to release Ashen Oni nonlethally.',
       objective: 'Rescue prisoners being taken through Hushroad before the Yearless Bell can claim them.',
       estimatedMinutes: 125,
-      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       partyMeta: {
         activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
-        joins: [],
-        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        joins: [{ id: 'miyo', atBeat: 'c7-01-decision-map-table', permanent: true }],
+        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       },
       boss: {
         id: 'bell-warden-chiyo',
@@ -1280,6 +1288,9 @@ export const CAMPAIGN = deepFreeze({
           mapId: 'hsh-map-table',
           trigger: 'chapter_start',
           text: [
+            { speaker: 'MIYO', line: 'The north relay has already changed its chain schedule. Your short route is gone.' },
+            { speaker: 'MATEUS', line: 'Inês?' },
+            { speaker: 'MIYO', line: 'Miyo Senda. Inês is ink in a book you left behind.' },
             { speaker: 'GENTA', line: 'With three keys, we can reach Kurohana before the guards reset.' },
             { speaker: 'REN', line: 'Not while people are being carried past us.' },
             { speaker: 'AYA', line: 'We cannot call it liberation if the first calculation writes them off.' },
@@ -1324,6 +1335,7 @@ export const CAMPAIGN = deepFreeze({
           text: [
             { speaker: 'AYA', line: 'The water takes the ash when it takes the name.' },
             { speaker: 'KIKU', line: 'Then we do not need to kill everyone the court turned.' },
+            { speaker: 'MIYO', line: 'I can hold the current cold without freezing it shut. The name will keep moving.' },
             { speaker: 'REN', line: 'Give me the slip.' },
           ],
           choices: [
@@ -1343,6 +1355,7 @@ export const CAMPAIGN = deepFreeze({
           trigger: 'reach_lantern_alcove',
           text: [
             { speaker: 'NIKOLA', line: 'My family changed a check on immortal office into a right to purge a bloodline.' },
+            { speaker: 'MIYO', line: 'Then write the person before the bloodline. My grandfather is not my verdict.' },
             { speaker: 'NIKOLA', line: 'I inherit no such right. I will sever blood from command, protect named people, and leave judgment outside my house.' },
             { speaker: 'MATEUS', line: 'Do not write me into it as proof of your mercy.' },
             { speaker: 'NIKOLA', line: 'I was not going to.' },
@@ -1387,11 +1400,11 @@ export const CAMPAIGN = deepFreeze({
       summary: 'The party revisits three hubs and asks communities what support they can offer. When Lady Enma proposes trading Mateus and Nikola for selected villages, the network rejects the bargain together and opens Kurohana by choice.',
       objective: 'Coordinate a consent-based breach of the Black Gate and open the route into Kurohana.',
       estimatedMinutes: 125,
-      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       partyMeta: {
-        activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
         joins: [],
-        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       },
       boss: {
         id: 'lady-enma-of-ash',
@@ -1543,11 +1556,11 @@ export const CAMPAIGN = deepFreeze({
       summary: 'Inside Kurohana, the party breaks bell nodes, preserves the archive, confronts Ujiro with copied records, and defeats Kurozane before a Storyworld consequence resolves witnessed transfer or a civil-war vacuum.',
       objective: 'Break the Yearless Bell, defeat Kurozane without erasing the political choice, and leave the archive alive as evidence.',
       estimatedMinutes: 165,
-      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       partyMeta: {
-        activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
         joins: [],
-        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       },
       boss: {
         id: 'shogun-kurozane',
@@ -1565,7 +1578,7 @@ export const CAMPAIGN = deepFreeze({
       maps: [
         { id: 'krh-outer-archive', name: 'Kurohana Outer Archive', purpose: 'Cross the first rows of crucified and impaled Kirishitan victims, break bell nodes, and release named spirits.' },
         { id: 'krh-audience-hall', name: 'Living Audience Hall', purpose: 'Cut down two living prisoners beneath the execution display, then confront Ujiro.' },
-        { id: 'krh-blood-conservatory', name: 'Blood Conservatory', purpose: 'Refuse six tailored offers beneath galleries of court-made martyrs.' },
+        { id: 'krh-blood-conservatory', name: 'Blood Conservatory', purpose: 'Let Miyo refuse Kurozane\'s identity classification, then refuse six tailored offers beneath galleries of court-made martyrs.' },
         { id: 'krh-bell-spine', name: 'Bell Spine', purpose: 'Climb through the densest stake gallery into the Yearless Bell node sequence.' },
         { id: 'krh-observatory', name: 'Throne Observatory', purpose: 'Fight Kurozane inside the final ring of execution beams.' },
       ],
@@ -1627,6 +1640,7 @@ export const CAMPAIGN = deepFreeze({
           mapId: 'krh-blood-conservatory',
           trigger: 'enter_offer_chamber',
           text: [
+            { speaker: 'MIYO', line: 'My household name and the baptismal entry are not two doors into me. Build no chamber from either.' },
             { speaker: 'KUROZANE', line: 'Ren: safety through obedience. Aya: a perfect archive. Nikola: the war that makes your covenant necessary again.' },
             { speaker: 'KUROZANE', line: 'Mateus: no guilt. Genta: restored rank. Kiku: a village untouched by pain.' },
             { speaker: 'AYA', line: 'A perfect record without consent is another prison.' },
@@ -1742,11 +1756,11 @@ export const CAMPAIGN = deepFreeze({
       summary: 'Three months later, survivors create public records, medical stores, testimony, and local defense practices. No one receives a total absolution or a perfect restoration.',
       objective: 'Open an accountable public archive and carry a new packet of people asking after one another.',
       estimatedMinutes: 25,
-      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+      party: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       partyMeta: {
-        activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        activeAtStart: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
         joins: [],
-        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'],
+        campAvailableAfter: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'],
       },
       boss: {
         id: 'no-combat-epilogue',

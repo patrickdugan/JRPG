@@ -10,6 +10,7 @@ import {
   STORYWORLD_PROPERTIES,
 } from './content/storyworld-encounters.generated.mjs';
 import { getDefaultBrowserStorage } from './browser-storage.mjs';
+import { getCampaignRouteSchedule } from './campaign-route-scheduler.mjs';
 
 export const STORYWORLD_SCHEMA_VERSION = 1;
 export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWORLD_SCHEMA_VERSION}`;
@@ -17,10 +18,10 @@ export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWO
 // Exact former identities migrate only across revisions whose choice structure
 // remains compatible. The two pre-Severed-Dragon identities stop before the
 // structurally revised Chapter 9 sequence so the old Corrections Desk can never
-// become a surrender or execution the player did not choose. The later English-
-// heiress revision was choice-compatible at the time, but the later Lady Enma
-// resolution inserts a new three-outcome decision after the eighth record. No
-// legacy identity may cross that point without making the player choose it.
+// become a surrender or execution the player did not choose. Act III now begins
+// with a three-road strategic choice in the former third cluster slot. No legacy
+// identity may cross the first two compatible records and have its old Sayo
+// warehouse choice reinterpreted as a Salt, Ash, or Paper campaign priority.
 // Accepted prefixes are validated and immediately re-frozen with current hashes.
 export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
   Object.freeze({
@@ -28,28 +29,42 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     sourceHash: 'sha256:0066e58a7aaf8d749c2937c356015210277a86b730f467c032c6ceec9f1156c5',
     catalogSignature: 'sha256:fc3584c223773b6df0da2986a26a9393aba46a6d749d2d2b8186b22898c0a3ec',
     migrationId: 'lise-to-nikola-canon-v1',
-    maximumCompatibleRecordCount: 8,
+    maximumCompatibleRecordCount: 2,
   }),
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
     sourceHash: 'sha256:3ea35ca34387a6844506552dc52f8edef4844859c568d5a1c236aa6ae93510f5',
     catalogSignature: 'sha256:7f439953b6dac6d20d1283f0c3b564005aa99770584cbe9838cd55deee962fee',
     migrationId: 'severed-dragon-ending-v1',
-    maximumCompatibleRecordCount: 8,
+    maximumCompatibleRecordCount: 2,
   }),
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
     sourceHash: 'sha256:dda93670de31a2df06e84f328edce857ffa606ea5f128df1fd481e0358c0f894',
     catalogSignature: 'sha256:1c9a56037dbc2bf3f4a6f38f5bcc95e6fcbbfe152a9e7f24a919cf037ea5808d',
     migrationId: 'english-heiress-lineage-v1',
-    maximumCompatibleRecordCount: 8,
+    maximumCompatibleRecordCount: 2,
   }),
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
     sourceHash: 'sha256:1b73ec6c717a0ca4899922d0bbdd5293ac564ed274af6e96c8a9032806b3f0e0',
     catalogSignature: 'sha256:a3408c9b8e65c8ee87646e2148f781dc9f3cb2a4c58b5ceb33a33b1b9a5916cb',
     migrationId: 'enma-three-terms-v1',
-    maximumCompatibleRecordCount: 8,
+    maximumCompatibleRecordCount: 2,
+  }),
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:c487a443ccbef01c0354a7ea0d2c003bac724d0f5bb230f1b4ad673170b2c2a9',
+    catalogSignature: 'sha256:cda027a434bd5f95301d65dc27c059d49cdbe2d6751b3d3e93e4bb1eb77f86a2',
+    migrationId: 'act-three-war-table-v1',
+    maximumCompatibleRecordCount: 2,
+  }),
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:4f94ed4bddfbec7f603fd0ac7bdbb8a97ce72852a42cb1b70e41745cef323d2f',
+    catalogSignature: 'sha256:6add624a6c0495c10a8c2d5de9573fbfd275d29da853b22635385cafa854fb7e',
+    migrationId: 'nonlinear-route-scheduler-v1',
+    maximumCompatibleRecordCount: 2,
   }),
 ]);
 
@@ -59,6 +74,11 @@ const CLUSTER_INDEX = new Map(STORYWORLD_CLUSTERS.map((cluster, index) => [clust
 const PROPERTY_DEFAULTS = Object.freeze(Object.fromEntries(
   STORYWORLD_PROPERTIES.map(({ id, defaultValue }) => [id, defaultValue]),
 ));
+const ROUTE_KEY_BY_WAR_TABLE_OUTCOME = Object.freeze({
+  accord: 'salt',
+  revision: 'ash',
+  negotiated: 'paper',
+});
 const STATE_KEYS = Object.freeze([
   'schemaVersion',
   'campaignId',
@@ -195,6 +215,29 @@ function validateRecord(record, index, errors) {
   return cluster;
 }
 
+function routeTheaterFromRecords(records) {
+  const record = records?.find(({ clusterId }) => clusterId === 'sw3-sayos-warehouse-conditions');
+  if (!record?.outcomeEncounterId) return null;
+  const cluster = STORYWORLD_CLUSTER_BY_ID.get('sw3-sayos-warehouse-conditions');
+  const outcome = cluster?.outcomes.find(({ id }) => id === record.outcomeEncounterId);
+  return ROUTE_KEY_BY_WAR_TABLE_OUTCOME[outcome?.resolutionKey] ?? null;
+}
+
+function orderedClusterIdsForRecords(records) {
+  const priorityTheater = routeTheaterFromRecords(records);
+  return priorityTheater
+    ? getCampaignRouteSchedule(priorityTheater).storyworldDecisionIds
+    : STORYWORLD_CLUSTERS.map(({ id }) => id);
+}
+
+function requiredClusterIdsForState(state) {
+  const orderedIds = orderedClusterIdsForRecords(state.records);
+  return orderedIds.filter((clusterId) => {
+    const cluster = STORYWORLD_CLUSTER_BY_ID.get(clusterId);
+    return CAMPAIGN_BEAT_INDEX.get(cluster.anchorBeatId) >= state.coverageStartBeatIndex;
+  });
+}
+
 export function createStoryworldState({
   runId,
   coverageStartBeatIndex = 0,
@@ -233,15 +276,18 @@ export function validateStoryworldPayload(payload) {
   if (!Array.isArray(payload.records)) errors.push('records must be an array.');
   else {
     const seen = new Set();
+    const orderedClusterIds = orderedClusterIdsForRecords(payload.records);
+    const routeOrder = new Map(orderedClusterIds.map((clusterId, index) => [clusterId, index]));
     let priorIndex = -1;
     let expectedRevision = 0;
     for (const [index, record] of payload.records.entries()) {
       const cluster = validateRecord(record, index, errors);
       if (!cluster) continue;
-      const clusterIndex = CLUSTER_INDEX.get(cluster.id);
+      const clusterIndex = routeOrder.get(cluster.id);
       if (seen.has(cluster.id)) errors.push(`records[${index}] duplicates cluster ${cluster.id}.`);
       seen.add(cluster.id);
-      if (clusterIndex <= priorIndex) errors.push('records must use canonical Storyworld cluster order.');
+      if (clusterIndex == null) errors.push(`records[${index}] belongs to an operation omitted by the selected route.`);
+      if (clusterIndex != null && clusterIndex <= priorIndex) errors.push('records must use the selected-route Storyworld cluster order.');
       priorIndex = clusterIndex;
       const anchorIndex = CAMPAIGN_BEAT_INDEX.get(cluster.anchorBeatId);
       if (anchorIndex < payload.coverageStartBeatIndex) errors.push(`records[${index}] predates coverageStartBeatIndex.`);
@@ -266,7 +312,12 @@ function assertState(state) {
 function replaceRecord(state, replacement) {
   const records = state.records.filter(({ clusterId }) => clusterId !== replacement.clusterId);
   records.push(replacement);
-  records.sort((left, right) => CLUSTER_INDEX.get(left.clusterId) - CLUSTER_INDEX.get(right.clusterId));
+  const orderedClusterIds = orderedClusterIdsForRecords(records);
+  const routeOrder = new Map(orderedClusterIds.map((clusterId, index) => [clusterId, index]));
+  records.sort((left, right) => (
+    (routeOrder.get(left.clusterId) ?? CLUSTER_INDEX.get(left.clusterId))
+      - (routeOrder.get(right.clusterId) ?? CLUSTER_INDEX.get(right.clusterId))
+  ));
   return freezeState({ ...state, records, revision: state.revision + 1 });
 }
 
@@ -341,6 +392,18 @@ export function getLadyEnmaResolution(state) {
   ] ?? null;
 }
 
+/** Return the war-table route once its consequence is selected, otherwise null. */
+export function getStoryworldRouteTheater(state) {
+  const snapshot = assertState(state);
+  return routeTheaterFromRecords(snapshot.records);
+}
+
+/** Return only the Storyworld clusters required by this run's selected route. */
+export function getRequiredStoryworldClusterIds(state) {
+  const snapshot = assertState(state);
+  return Object.freeze(requiredClusterIdsForState(snapshot));
+}
+
 export function getStoryworldGateForBeat(state, beatId, placement = 'after-beat') {
   const snapshot = assertState(state);
   const cluster = getStoryworldClusterForBeat(beatId);
@@ -350,6 +413,9 @@ export function getStoryworldGateForBeat(state, beatId, placement = 'after-beat'
   const anchorIndex = CAMPAIGN_BEAT_INDEX.get(beatId);
   if (anchorIndex < snapshot.coverageStartBeatIndex) {
     return Object.freeze({ required: false, complete: true, cluster, phase: 'legacy-exempt', placement });
+  }
+  if (!requiredClusterIdsForState(snapshot).includes(cluster.id)) {
+    return Object.freeze({ required: false, complete: true, cluster, phase: 'route-skipped', placement });
   }
   const progress = getStoryworldProgress(snapshot, cluster.id);
   return Object.freeze({ required: true, complete: progress.complete, cluster, phase: progress.phase, placement });
@@ -361,6 +427,9 @@ export function beginStoryworldEncounter(state, clusterId) {
   if (!cluster) return result(false, snapshot, { code: 'unknown-cluster' });
   const anchorIndex = CAMPAIGN_BEAT_INDEX.get(cluster.anchorBeatId);
   if (anchorIndex < snapshot.coverageStartBeatIndex) return result(false, snapshot, { code: 'legacy-exempt' });
+  if (!requiredClusterIdsForState(snapshot).includes(clusterId)) {
+    return result(false, snapshot, { code: 'route-skipped' });
+  }
   const existing = snapshot.records.find((record) => record.clusterId === clusterId);
   if (existing) return result(false, snapshot, { code: existing.phase === 'complete' ? 'already-complete' : 'already-started' });
   const record = {
@@ -450,11 +519,9 @@ export function getCompletedStoryworldClusterIds(state) {
 
 export function isStoryworldNarrativeComplete(state) {
   const snapshot = assertState(state);
-  return STORYWORLD_CLUSTERS.every((cluster) => {
-    const anchorIndex = CAMPAIGN_BEAT_INDEX.get(cluster.anchorBeatId);
-    if (anchorIndex < snapshot.coverageStartBeatIndex) return true;
-    return snapshot.records.some((record) => record.clusterId === cluster.id && record.phase === 'complete');
-  });
+  return requiredClusterIdsForState(snapshot).every((clusterId) => (
+    snapshot.records.some((record) => record.clusterId === clusterId && record.phase === 'complete')
+  ));
 }
 
 export function serializeStoryworldState(state) {

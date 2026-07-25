@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the deterministic 25-item Camp icon atlas and review sheet."""
+"""Build the deterministic 26-item Camp icon atlas and review sheet."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ CELL = 16
 COLUMNS = 5
 ITEM_IDS = (
     "courier-saber", "warding-brush", "salt-etched-rapier", "dusk-censer", "cedar-maul",
-    "pilgrim-knife", "dawnsteel-blade", "bellglass-focus", "quilted-haori", "river-silk-robe",
+    "weather-ruler", "pilgrim-knife", "dawnsteel-blade", "bellglass-focus", "quilted-haori", "river-silk-robe",
     "bell-iron-lamellar", "ash-lacquer-coat", "dawn-thread-mantle", "road-sandals", "lantern-bead-cord",
     "frostglass-pin", "storm-kite-toggle", "iron-knot", "cedar-route-note", "temple-charm",
     "river-salve", "ward-tonic", "spirit-tea", "dawn-salt", "traveler-plum",
@@ -57,8 +57,8 @@ def load_source() -> dict:
         raise ValueError("Item icons must retain original code-native authorship")
     if source.get("frame") != {"width": 16, "height": 16, "transparentGutter": 1}:
         raise ValueError("Item icon geometry drifted")
-    if source.get("sheet") != {"columns": 5, "rows": 5}:
-        raise ValueError("Item icon sheet must remain 5 x 5")
+    if source.get("sheet") != {"columns": 5, "rows": 6}:
+        raise ValueError("Item icon sheet must remain 5 x 6")
     items = source.get("items", [])
     if tuple(item.get("id") for item in items) != ITEM_IDS:
         raise ValueError("Item icon order must match the live item catalogue")
@@ -98,6 +98,10 @@ def draw_icon(item: dict) -> Image.Image:
     elif motif == "maul":
         line([(4, 13), (10, 5)], "outline", 3); line([(4, 13), (10, 5)], "body")
         poly([(6, 2), (13, 3), (14, 7), (7, 6)], "outline"); rect((7, 3, 12, 5), "light"); rect((7, 6, 12, 7), "shadow")
+    elif motif == "weather-ruler":
+        line([(2, 13), (8, 7), (13, 3)], "outline", 4); line([(2, 13), (8, 7), (13, 3)], "body", 2)
+        line([(3, 4), (8, 7), (13, 11)], "outline", 4); line([(3, 4), (8, 7), (13, 11)], "shadow", 2)
+        rect((7, 6, 9, 8), "accent"); rect((8, 7, 8, 7), "light")
     elif motif == "knife":
         poly([(4, 12), (10, 3), (13, 2), (11, 7), (6, 13)], "outline")
         poly([(7, 10), (10, 4), (12, 3), (10, 7)], "light"); rect((3, 11, 6, 13), "accent"); rect((2, 13, 4, 14), "shadow")
@@ -169,7 +173,7 @@ def draw_icon(item: dict) -> Image.Image:
 
 
 def build_outputs(source: dict) -> dict[Path, bytes]:
-    rows = len(ITEM_IDS) // COLUMNS
+    rows = (len(ITEM_IDS) + COLUMNS - 1) // COLUMNS
     atlas = Image.new("RGBA", (CELL * COLUMNS, CELL * rows), (0, 0, 0, 0))
     frames = []
     frame_hashes = set()

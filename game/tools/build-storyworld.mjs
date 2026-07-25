@@ -11,7 +11,9 @@ import {
   STORYWORLD_IFID,
   STORYWORLD_PROPERTIES,
   STORYWORLD_SOURCE_VERSION,
+  STORYWORLD_ACT_INTEGRATION,
 } from '../../storyworlds/bells-black-chrysanthemum.source.mjs';
+import { getNarrativeRouteSchedules } from '../campaign-route-scheduler.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
@@ -68,6 +70,16 @@ function afterEffects(effects) {
   return Object.entries(effects).map(([propertyId, delta]) => effect(propertyId, delta));
 }
 
+function mergeEffects(...sources) {
+  const merged = {};
+  for (const source of sources) {
+    for (const [propertyId, delta] of Object.entries(source ?? {})) {
+      merged[propertyId] = Math.max(-0.1, Math.min(0.1, (merged[propertyId] ?? 0) + delta));
+    }
+  }
+  return merged;
+}
+
 function outcomeBranches(cluster) {
   return Object.freeze(['accord', 'revision', ...(cluster.thirdOutcome ? ['negotiated'] : [])]);
 }
@@ -85,9 +97,11 @@ function clusterNodeIds(index, cluster = STORYWORLD_CLUSTERS[index]) {
 
 function spoolIdForCluster(cluster, index) {
   if (cluster.spoolId) return cluster.spoolId;
-  if (index < 3) return 'spool_act1';
-  if (index < 6) return 'spool_act2';
-  if (cluster.id !== 'sw10-corrections-desk' && index < 10) return 'spool_act3';
+  if (index < 2) return 'spool_act1';
+  const integration = STORYWORLD_ACT_INTEGRATION[cluster.id];
+  if (integration?.actId === 'act-iii') return 'spool_act3';
+  if (integration?.actId === 'act-iv') return 'spool_act4';
+  if (cluster.id !== 'sw10-corrections-desk' && integration?.actId === 'act-v') return 'spool_act5';
   return 'spool_endings';
 }
 
@@ -130,7 +144,7 @@ function buildEntryEncounter(cluster, index, ids, creationIndex) {
             propertyId: sourceOption.gateProperty,
             invert: false,
             consequenceId: ids[sourceOption.accord.outcomeKey ?? 'accord'],
-            effects: sourceOption.accord.effects,
+            effects: mergeEffects(sourceOption.accord.effects, cluster.entryRouteEffects),
           }),
           buildReaction({
             id: `${optionId}_r_revision`,
@@ -138,7 +152,7 @@ function buildEntryEncounter(cluster, index, ids, creationIndex) {
             propertyId: sourceOption.gateProperty,
             invert: true,
             consequenceId: ids[sourceOption.revision.outcomeKey ?? 'revision'],
-            effects: sourceOption.revision.effects,
+            effects: mergeEffects(sourceOption.revision.effects, cluster.entryRouteEffects),
           }),
         ],
         benchmark_tags: [`slot:${cluster.id}`, `option:${optionIndex + 1}`],
@@ -183,7 +197,7 @@ function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId, creatio
           propertyId: source.gateProperty,
           invert: false,
           consequenceId: nextEntryId,
-          effects: source.accord.effects,
+          effects: mergeEffects(source.accord.effects, cluster.outcomeRouteEffects),
         }),
         buildReaction({
           id: `${optionId}_r_revision`,
@@ -191,7 +205,7 @@ function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId, creatio
           propertyId: source.gateProperty,
           invert: true,
           consequenceId: nextEntryId,
-          effects: source.revision.effects,
+          effects: mergeEffects(source.revision.effects, cluster.outcomeRouteEffects),
         }),
       ],
       benchmark_tags: [`slot:${cluster.id}`, `outcome:${branch}`],
@@ -224,11 +238,12 @@ function buildStoryworld() {
 
   const propertyDefaults = Object.fromEntries(STORYWORLD_PROPERTIES.map(({ id, defaultValue }) => [id, defaultValue]));
   const spools = [
-    ['spool_act1', 'Act I — Custody and Terms', true],
-    ['spool_act2', 'Act II — Account and Corroboration', false],
-    ['spool_act3', 'Act III — Authority and Repair', false],
+    ['spool_act1', 'Acts I-II — Arrival, Witness, and Terms', true],
+    ['spool_act3', 'Act III — The Three-Road War', false],
+    ['spool_act4', 'Act IV — The Black Gate', false],
     ['spool_enma', 'The Cinder Fan — Death, Custody, or Compact', false],
-    ['spool_endings', 'Epilogue — A Revisable Archive', false],
+    ['spool_act5', 'Act V — The Living Castle', false],
+    ['spool_endings', 'The Last Command — Transfer or Civil War', false],
   ].map(([id, spoolName, startsActive], creationIndex) => ({
     id,
     spool_name: spoolName,
@@ -254,7 +269,7 @@ function buildStoryworld() {
     font_size: 16,
     language: 'en',
     rating: 'Teen',
-    about_text: 'Thirty-four reaction-driven interstitial scene nodes anchored to the sixty-scene JRPG campaign. Every complete narrative run experiences eleven decisions and one authored consequence scene per decision; Lady Enma has distinct death, custody, and negotiated-defection outcomes.',
+    about_text: 'Thirty-five reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three distinct outcomes.',
     characters: [{
       id: STORYWORLD_CHARACTER_ID,
       name: 'The Lantern Network',
@@ -337,23 +352,31 @@ function compileEncounter(sourceEncounter) {
 }
 
 function buildBindings(storyworld) {
+  const narrativeRoutes = getNarrativeRouteSchedules();
   return {
     schemaVersion: 1,
     campaignId: 'bells-black-chrysanthemum',
     sourceIFID: storyworld.IFID,
     authoredSceneCount: storyworld.encounters.length,
-    clusters: STORYWORLD_CLUSTERS.map((cluster, index) => ({
-      id: cluster.id,
-      chapterId: cluster.chapterId,
-      anchorBeatId: cluster.anchorBeatId,
-      placement: cluster.placement,
-      sequenceRole: cluster.sequenceRole,
-      relatedEncounterIds: cluster.relatedEncounterIds,
-      requiredForNarrativeCredits: true,
-      entryEncounterId: clusterNodeIds(index, cluster).entry,
-      outcomeKeys: outcomeBranches(cluster),
-      outcomeEncounterIds: outcomeBranches(cluster).map((branch) => clusterNodeIds(index, cluster)[branch]),
-    })),
+    clusters: STORYWORLD_CLUSTERS.map((cluster, index) => {
+      const requiredOnRoutes = narrativeRoutes
+        .filter(({ storyworldDecisionIds }) => storyworldDecisionIds.includes(cluster.id))
+        .map(({ priorityTheater }) => priorityTheater);
+      return {
+        id: cluster.id,
+        chapterId: cluster.chapterId,
+        anchorBeatId: cluster.anchorBeatId,
+        placement: cluster.placement,
+        sequenceRole: cluster.sequenceRole,
+        relatedEncounterIds: cluster.relatedEncounterIds,
+        actIntegration: STORYWORLD_ACT_INTEGRATION[cluster.id] ?? null,
+        requiredForNarrativeCredits: requiredOnRoutes.length === narrativeRoutes.length,
+        requiredOnRoutes,
+        entryEncounterId: clusterNodeIds(index, cluster).entry,
+        outcomeKeys: outcomeBranches(cluster),
+        outcomeEncounterIds: outcomeBranches(cluster).map((branch) => clusterNodeIds(index, cluster)[branch]),
+      };
+    }),
   };
 }
 
@@ -367,6 +390,15 @@ function sha256(text) {
 
 function buildRuntime(storyworld, bindings, sourceHash, bindingHash) {
   const encounterById = new Map(storyworld.encounters.map((encounter) => [encounter.id, encounter]));
+  const narrativeRouteMetrics = Object.fromEntries(getNarrativeRouteSchedules().map((schedule) => [
+    schedule.priorityTheater,
+    {
+      canonicalSceneCount: schedule.playedCanonicalSceneCount,
+      storyworldSceneCount: schedule.playedStoryworldSceneCount,
+      playedSceneCount: schedule.playedSceneCount,
+    },
+  ]));
+  const routeMetrics = Object.values(narrativeRouteMetrics);
   const compiled = {
     schemaVersion: 1,
     sourceVersion: STORYWORLD_SOURCE_VERSION,
@@ -387,8 +419,15 @@ function buildRuntime(storyworld, bindings, sourceHash, bindingHash) {
       canonicalSceneCount: 60,
       storyworldAuthoredSceneCount: storyworld.encounters.length,
       authoredSceneCount: 60 + storyworld.encounters.length,
-      completeRunStoryworldSceneCount: STORYWORLD_CLUSTERS.length * 2,
-      completeRunSceneCount: 60 + STORYWORLD_CLUSTERS.length * 2,
+      narrativeRoutes: narrativeRouteMetrics,
+      completeRunStoryworldSceneCountRange: {
+        minimum: Math.min(...routeMetrics.map(({ storyworldSceneCount }) => storyworldSceneCount)),
+        maximum: Math.max(...routeMetrics.map(({ storyworldSceneCount }) => storyworldSceneCount)),
+      },
+      completeRunSceneCountRange: {
+        minimum: Math.min(...routeMetrics.map(({ playedSceneCount }) => playedSceneCount)),
+        maximum: Math.max(...routeMetrics.map(({ playedSceneCount }) => playedSceneCount)),
+      },
       clusterCount: STORYWORLD_CLUSTERS.length,
       entryOptionCount: STORYWORLD_CLUSTERS.reduce((sum, cluster) => sum + cluster.options.length, 0),
     },

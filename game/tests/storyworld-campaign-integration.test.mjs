@@ -210,6 +210,6 @@ test('the completionist ledger remains visible but never blocks narrative advanc
     "chapterList.addEventListener('click'",
   );
   assert.doesNotMatch(advance, /entryDueActivityCount/);
-  assert.match(campaignHtml, /Optional 20-hour route/);
+  assert.match(campaignHtml, /Optional discoveries/);
   assert.match(campaignHtml, /never blocks story progress/);
 });

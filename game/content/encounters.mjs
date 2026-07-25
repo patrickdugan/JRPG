@@ -640,7 +640,7 @@ export const ENCOUNTERS = [
     format: 'nonlethal-encounter',
     objective: { type: 'returnItemToTile', text: 'Carry a name slip to flowing water and release the bound patrol.', item: 'name-slip', targetTiles: ['2,1', '3,1'], failure: 'all-active-party-defeated' },
     lesson: { primary: 'Movement and swaps can solve a board objective that damage cannot.', playerRead: 'The carrying actor is marked and their route is visible.', successSignal: 'The patrol turns neutral and opens a safe route once the slip reaches water.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,2']]) },
     enemies: [
       {
         id: 'bound-ashen-patrol', name: 'Bound Ashen Patrol', count: 2, positions: ['8,2', '8,4'], role: 'releaseable lane guards',
@@ -663,7 +663,7 @@ export const ENCOUNTERS = [
     format: 'boss-rescue',
     objective: { type: 'extractAllBeforeCountdown', text: 'Break chains and extract all prisoners before the fourth bell count. Defeating Chiyo alone is a tactical loss.', targets: ['prisoner-a', 'prisoner-b', 'prisoner-c'], maxBossCounts: 4, failure: 'countdown-complete-or-all-active-party-defeated' },
     lesson: { primary: 'Rescue spaces, swaps, and countdowns turn positioning into an explicit win condition.', playerRead: 'Every prisoner chain, extraction zone, and next bell count is permanently visible.', successSignal: 'The player values extraction over lethal damage when the count becomes urgent.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]), objectiveTokens: [{ id: 'prisoner-a', at: '8,1' }, { id: 'prisoner-b', at: '9,3' }, { id: 'prisoner-c', at: '8,5' }] },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,3']]), objectiveTokens: [{ id: 'prisoner-a', at: '8,1' }, { id: 'prisoner-b', at: '9,3' }, { id: 'prisoner-c', at: '8,5' }] },
     enemies: [
       {
         id: 'bell-warden-chiyo', name: 'Bell Warden Chiyo', count: 1, positions: ['6,3'], role: 'chain-countdown commander',
@@ -688,8 +688,8 @@ export const ENCOUNTERS = [
     name: 'Outer Court Lantern Breach',
     format: 'party-combination',
     objective: { type: 'activateRelays', text: 'Stabilize two lantern relays while releasing the outer Ashen garrison.', relays: ['lantern-relay-west', 'lantern-relay-east'], failure: 'all-active-party-defeated' },
-    lesson: { primary: 'The six-character party combines around familiar hazards rather than each receiving a disconnected puzzle.', playerRead: 'Each relay names which role can help: ward, remedy, anchor, redirect, expose, or protect.', successSignal: 'The player deliberately sequences at least two roles on the same lane.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
+    lesson: { primary: 'The seven-character party combines around familiar hazards rather than each receiving a disconnected puzzle.', playerRead: 'Each relay names which role can help: ward, remedy, anchor, redirect, expose, protect, or alter the weather lane.', successSignal: 'The player deliberately sequences at least two roles on the same lane.' },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,3']]) },
     enemies: [
       {
         id: 'ashen-garrison', name: 'Ashen Garrison', count: 3, positions: ['8,1', '9,3', '8,5'], role: 'hazard-lane guard',
@@ -699,7 +699,7 @@ export const ENCOUNTERS = [
         ai: ['Guard the unlit relay.', 'Attack anyone carrying a revealed name slip.', 'Turn neutral once the relay release resolves.'],
       },
     ],
-    bossMechanic: { type: 'combination-relays', telegraphs: ['ash-lane-guard'], rule: 'Aya wards, Kiku alters terrain, Genta anchors, Ren redirects, Nikola exposes, and Mateus protects; no role is mandatory for every action.' },
+    bossMechanic: { type: 'combination-relays', telegraphs: ['ash-lane-guard'], rule: 'Aya wards, Kiku alters terrain, Genta anchors, Ren redirects, Nikola exposes, Mateus protects, and Miyo changes the weather lane; no role is mandatory for every action.' },
     reward: { flags: ['outer-court-relays-lit'], story: 'Lantern signals show people inside the castle that outer routes remain open.' },
   },
 
@@ -712,7 +712,7 @@ export const ENCOUNTERS = [
     format: 'boss',
     objective: { type: 'defeatBossAndRelease', text: 'Break Lady Enma\'s last mask while turning Ember and Umbral ash lanes into safe routes; her death, custody, or defection is decided afterward.', bossResolution: 'subdue-for-storyworld', failure: 'all-active-party-defeated' },
     lesson: { primary: 'Late-game hazards remain readable because the tag, essence, and counter-role never change.', playerRead: 'Orange means Ember and violet means Umbral on every telegraph and tile.', successSignal: 'The party creates or holds a safe lane before Enma’s paired zone resolves.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,2']]) },
     enemies: [
       {
         id: 'lady-enma', name: 'Lady Enma of Ash — Last Mask', count: 1, positions: ['8,3'], role: 'recurring vampire paired-hazard commander',
@@ -733,7 +733,7 @@ export const ENCOUNTERS = [
         { id: 'cinder-wing', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.50 }, when: 'hp-at-or-below-50-percent', rule: 'The last mask breaks; Cinder Parasol Wing joins the cadence but declares a full activation and Recovery 3.' },
         { id: 'subdued-for-terms', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.01 }, rule: 'At the near-zero restraint threshold, the Severed Dragon ward and released-garrison witnesses hold Enma alive. The Storyworld spool resolves death, rotating custody, or bounded defection.' },
       ],
-      counterplay: 'Ward, terrain change, anchor, redirect, expose, and protection answer declared lanes; Frost and Radiance punish her Recovery 3 without restricting free movement.',
+      counterplay: 'Ward, terrain change, anchor, redirect, expose, protection, and Miyo\'s weather calculus answer declared lanes; Frost and Radiance punish her Recovery 3 without restricting free movement.',
     },
     reward: { flags: ['enma-last-mask-broken', 'enma-resolution-pending'], story: 'The Ashen garrison is released, the Black Gate opens, and Enma remains alive until the Three Terms spool records her fate.' },
   },
@@ -746,7 +746,7 @@ export const ENCOUNTERS = [
     format: 'dungeon-objective',
     objective: { type: 'breakObjects', text: 'Use the three bell keys to break three archive nodes while protecting released spirits.', objectCount: 3, failure: 'all-active-party-defeated-or-three-spirits-lost' },
     lesson: { primary: 'The final dungeon restates earlier rescue priorities before the final boss.', playerRead: 'Each node has a key slot, HP bar, and a spirit escape lane.', successSignal: 'The party creates a path for a released spirit instead of only maximizing damage.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,2']]) },
     enemies: [
       {
         id: 'archive-warden', name: 'Archive Warden', count: 2, positions: ['8,2', '8,4'], role: 'node defender',
@@ -768,7 +768,7 @@ export const ENCOUNTERS = [
     format: 'boss-phase',
     objective: { type: 'breakPhaseObjects', text: 'Protect the archive core and break the four stage nodes before Kurozane fully manifests.', objectIds: ['north-node', 'east-node', 'south-node', 'west-node'], failure: 'archive-core-destroyed-or-all-active-party-defeated' },
     lesson: { primary: 'A multi-phase boss can expose a clear objective before its damage race begins.', playerRead: 'The active ring, node HP, and archive core HP never share a UI layer.', successSignal: 'The party uses position around the bell core to protect objects rather than chasing an invulnerable boss.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,2']]) },
     enemies: [
       {
         id: 'yearless-bell', name: 'Yearless Bell', count: 1, positions: ['6,1'], role: 'invulnerable phase-object',
@@ -791,7 +791,7 @@ export const ENCOUNTERS = [
     format: 'final-boss',
     objective: { type: 'defeatBossAndEvacuate', text: 'Defeat Kurozane, protect the surviving archive evidence, and leave through the evacuation exit.', failure: 'all-active-party-defeated-or-archive-core-destroyed' },
     lesson: { primary: 'The final exam recombines every taught system without a new hidden rule.', playerRead: 'Every phase repeats a known grammar: command clone, node position, then recovery window and Radiance dawn lane.', successSignal: 'The player explains why each phase has a positional, elemental, or recovery answer.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4']]) },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,2']]) },
     enemies: [
       {
         id: 'kurozane', name: 'Shogun Kurozane', count: 1, positions: ['8,3'], role: 'vampire ruler and full-system final boss',
@@ -822,7 +822,7 @@ export const ENCOUNTERS = [
       ],
       counterplay: 'Never use Umbral on Kurozane, protect the archive core, use Pace against marked shapes, then spend the final Recovery window in the dawn lane.',
     },
-    reward: { story: 'The bell network breaks, evidence survives, and the six heroes leave repair choices to living communities.' },
+    reward: { story: 'The bell network breaks, evidence survives, and the seven heroes leave repair choices to living communities.' },
   },
 
   {
@@ -834,7 +834,7 @@ export const ENCOUNTERS = [
     format: 'noncombat-resolution',
     objective: { type: 'completeInteractions', text: 'Open the testimony table, record a correction, deliver medical supplies, and light the tower lantern.', interactions: ['testimony-table', 'corrections-shelf', 'unfiled-names', 'tower-lantern'], failure: 'none' },
     lesson: { primary: 'The closing interaction loop is repair and accountability, not a victory combat encounter.', playerRead: 'Every action names a concrete person-facing practice: testimony, correction, care, or contact.', successSignal: 'The final packet contains people asking after one another, not an order.' },
-    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'], deployment: partyDeployment([['ren', '10,10'], ['aya', '9,10'], ['lise', '11,10'], ['mateus', '8,10'], ['genta', '12,10'], ['kiku', '10,11']]) },
+    party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '10,10'], ['aya', '9,10'], ['lise', '11,10'], ['mateus', '8,10'], ['genta', '12,10'], ['kiku', '10,11'], ['miyo', '9,11']]) },
     enemies: [
       {
         id: 'unfiled-testimony', name: 'Unfiled Testimony', count: 1, positions: ['13,5'], role: 'non-hostile narrative obstacle',

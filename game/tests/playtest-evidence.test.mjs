@@ -4,9 +4,10 @@ import test from 'node:test';
 import { createAdvancementState } from '../advancement.mjs';
 import { createArchiveRecordState } from '../archive-record-runtime.mjs';
 import { createCampConversationState } from '../camp-conversation-runtime.mjs';
+import { getCampaignRouteSchedule } from '../campaign-route-scheduler.mjs';
 import { CAMPAIGN } from '../content/campaign.mjs';
 import { ENCOUNTERS } from '../content/encounters.mjs';
-import { STORYWORLD_CLUSTERS } from '../content/storyworld-encounters.generated.mjs';
+import { STORYWORLD_CLUSTER_BY_ID } from '../content/storyworld-encounters.generated.mjs';
 import { createPartyCouncilState } from '../party-council-runtime.mjs';
 import {
   createPlaytestEvidenceReport,
@@ -60,15 +61,20 @@ function freshReceipt({
   }).state;
 }
 
-function resolveStoryworld(runId, receipt) {
+function resolveStoryworld(runId, receipt, theater = 'salt') {
+  const schedule = getCampaignRouteSchedule(theater);
   let storyworld = createStoryworldState({ runId });
   let nextReceipt = receipt;
-  for (const cluster of STORYWORLD_CLUSTERS) {
+  for (const clusterId of schedule.storyworldDecisionIds) {
+    const cluster = STORYWORLD_CLUSTER_BY_ID.get(clusterId);
     storyworld = beginStoryworldEncounter(storyworld, cluster.id).state;
+    const entryOptionIndex = cluster.id === 'sw3-sayos-warehouse-conditions'
+      ? { salt: 0, ash: 1, paper: 2 }[theater]
+      : 0;
     storyworld = chooseStoryworldOption(
       storyworld,
       cluster.id,
-      getVisibleStoryworldOptions(storyworld, cluster.id)[0].id,
+      getVisibleStoryworldOptions(storyworld, cluster.id)[entryOptionIndex].id,
     ).state;
     storyworld = advanceStoryworldEncounter(storyworld, cluster.id).state;
     if (!getStoryworldProgress(storyworld, cluster.id).outcome.terminal) {
@@ -86,9 +92,10 @@ function resolveStoryworld(runId, receipt) {
 
 function completeNarrativeRun({ attributed = true } = {}) {
   const runId = 'evidence-narrative-0001';
+  const schedule = getCampaignRouteSchedule('salt');
   let receipt = freshReceipt({ runId, profileId: RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H });
-  for (const chapter of CAMPAIGN.chapters) {
-    for (const beat of chapter.beats) receipt = recordRunBeatCompletion(receipt, runId, beat.id).state;
+  for (const beatId of schedule.beatIds) {
+    receipt = recordRunBeatCompletion(receipt, runId, beatId).state;
   }
   const resolved = resolveStoryworld(runId, receipt);
   receipt = resolved.receipt;
@@ -128,8 +135,8 @@ test('partial playtest exports publish separate, explicit profile verdicts', () 
   assert.equal(report.playtime.unattributedMs, 0);
   assert.equal(report.pacing.diagnosticOnly, true);
   assert.equal(report.pacing.observedPlaytimeProof, false);
-  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:c0e61174');
-  assert.equal(report.pacing.aggregateReferenceTargetMs, 74_178_683);
+  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:4de159bc');
+  assert.equal(report.pacing.aggregateReferenceTargetMs, 74_298_333);
   assert.equal(report.pacing.chapters.length, 11);
   assert.equal(report.narrativeRoute.applicable, false);
   assert.equal(report.narrativeRoute.releaseTargetProven, false);
@@ -140,7 +147,7 @@ test('partial playtest exports publish separate, explicit profile verdicts', () 
   assert.deepEqual(JSON.parse(serializePlaytestEvidenceReport(report)), report);
 });
 
-test('narrative evidence proves reconciled 60 plus 22 scenes and five attributed hours without 215 completion', () => {
+test('narrative evidence proves the reconciled 75-scene Salt route and five attributed hours', () => {
   const { receipt, storyworld } = completeNarrativeRun();
   const report = createPlaytestEvidenceReport(
     receipt,
@@ -148,16 +155,16 @@ test('narrative evidence proves reconciled 60 plus 22 scenes and five attributed
     storyworld,
   );
   assert.equal(report.profileId, RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H);
-  assert.equal(report.story.completedBeatCount, 60);
-  assert.equal(report.story.completedStoryworldPlayedSceneCount, 22);
-  assert.equal(report.story.playedSceneCount, 82);
+  assert.equal(report.story.completedBeatCount, 55);
+  assert.equal(report.story.completedStoryworldPlayedSceneCount, 20);
+  assert.equal(report.story.playedSceneCount, 75);
   assert.equal(report.requiredRoute.complete, false);
   assert.equal(report.narrativeRoute.applicable, true);
   assert.equal(report.narrativeRoute.strictCreditsGateReady, true);
   assert.deepEqual(report.narrativeRoute.strictCreditsGateReasons, []);
-  assert.equal(report.narrativeRoute.completedCanonicalSceneCount, 60);
-  assert.equal(report.narrativeRoute.completedStoryworldSceneCount, 22);
-  assert.equal(report.narrativeRoute.completedStoryworldClusterIds.length, 11);
+  assert.equal(report.narrativeRoute.completedCanonicalSceneCount, 55);
+  assert.equal(report.narrativeRoute.completedStoryworldSceneCount, 20);
+  assert.equal(report.narrativeRoute.completedStoryworldClusterIds.length, 10);
   assert.equal(report.narrativeRoute.minimumPlaytimeMet, true);
   assert.equal(report.narrativeRoute.chapterTimingComplete, true);
   assert.equal(report.narrativeRoute.releaseTargetProven, true);

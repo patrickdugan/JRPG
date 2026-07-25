@@ -69,6 +69,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
             )
             response = page.goto(
                 f"{base}/action-campaign-battle.html?encounter=c1-cinder-hounds"
+                "&lead=ren&support=miyo"
                 "&return=campaign.html%3Fprobe%3D1",
                 wait_until="domcontentloaded",
             )
@@ -93,6 +94,8 @@ def run_probe(chromium: Path) -> dict[str, object]:
                     objectiveSupported: snapshot.objective.supported,
                     objectiveStatus: snapshot.objective.status,
                     controlledActorId: snapshot.kernel.controlledActorId,
+                    controlledMovementProfileId: controlled.movementProfileId,
+                    supportActorId: snapshot.duo.supportActorId,
                     controlledX: controlled.position.x,
                     continueHidden: document.querySelector('#continueCampaign').hidden,
                     returnTarget: document.querySelector('#continueCampaign').getAttribute('href'),
@@ -109,6 +112,8 @@ def run_probe(chromium: Path) -> dict[str, object]:
             require(before["stageId"] == "c1-flooded-cedars", f"Wrong authored stage: {before}")
             require(before["objectiveSupported"] is True and before["objectiveStatus"] == "pending", f"Objective runtime missing: {before}")
             require(before["controlledActorId"] == "ren", f"Party control missing: {before}")
+            require(before["controlledMovementProfileId"] == "infiltrator", f"Ren movement profile missing: {before}")
+            require(before["supportActorId"] == "miyo", f"Selected Miyo support missing: {before}")
             require(before["continueHidden"] is True, f"Continue exposed before settlement: {before}")
             require(before["returnTarget"] == "campaign.html?probe=1", f"Return handoff drifted: {before}")
             require(before["storageKeys"] == [], f"Page load touched the isolated persistent profile: {before}")
@@ -202,8 +207,6 @@ def run_probe(chromium: Path) -> dict[str, object]:
                 }"""
             )
             combo_page.locator("#actionCampaignCanvas").focus()
-            combo_page.keyboard.press("Tab")
-            combo_page.keyboard.press("Tab")
             combo_page.wait_for_function(
                 """() => {
                   const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
@@ -227,7 +230,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
                 }"""
             )
             require(combo_ready["comboAvailable"] is True, f"Widow combo was not ready: {combo_ready}")
-            require(combo_ready["controlledActorId"] == "lise", f"Two Tab presses did not select Nikola: {combo_ready}")
+            require(combo_ready["controlledActorId"] == "lise", f"Default duo did not lead with Nikola: {combo_ready}")
             require(combo_ready["storageKeys"] == [], f"Fresh combo context had persistent storage: {combo_ready}")
             require(
                 {participant["actorId"] for participant in combo_ready["participants"]} == {"lise", "mateus"},

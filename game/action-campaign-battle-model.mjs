@@ -6,7 +6,7 @@
  * can prove without tokens, destructible scenery, casts, or interactions.
  */
 
-import { ActionCombatKernel } from './action-combat.mjs';
+import { ACTION_MANEUVER_IDS, ActionCombatKernel } from './action-combat.mjs';
 import {
   HUNTER_PRIEST_COMBO_CONTRACT,
   getHunterPriestComboAvailability,
@@ -20,12 +20,17 @@ import {
 import { adaptActionObjective } from './action-objectives.mjs';
 import { createActionObjectiveRuntime } from './action-objective-runtime.mjs';
 import {
+  ACTION_SUBWEAPON_IDS,
+  ACTION_SUBWEAPONS,
+  createActionSubweaponStock,
+  getActionSubweapon,
+} from './action-subweapons.mjs';
+import {
   createActionStagePhysicsHooks,
   getActionStage,
   toActionKernelStage,
 } from './action-stages.mjs';
 import { createBattleResultRecord } from './battle-result-contract.mjs';
-import { settleBattleVictory } from './battle-settlement.mjs';
 import { getEncounter, ENCOUNTERS } from './content/encounters.mjs';
 import { BATTLE_ITEM_IDS, getLoadoutModifiers } from './loadout.mjs';
 
@@ -79,6 +84,11 @@ function actorTemplateMap(spec) {
 function applySpawnSlots(actors, stage) {
   const party = actors.filter(({ faction }) => faction === 'player');
   const enemies = actors.filter(({ faction }) => faction === 'enemy');
+  if (party.length > stage.spawns.party.length || enemies.length > stage.spawns.enemy.length) {
+    throw new RangeError(
+      `Action stage ${stage.id} lacks spawn capacity for ${party.length} party and ${enemies.length} enemy actors.`,
+    );
+  }
   const result = actors.map((actor) => clone(actor));
   const byId = new Map(result.map((actor) => [actor.id, actor]));
   for (const [index, actor] of party.entries()) {
@@ -140,6 +150,21 @@ function applyLoadout(actors, attacks, manifest, loadoutState) {
     nextAttacks[record.adapterAttackId].cooldownMs = actionCooldownForRecovery(recoveryPulses);
   }
   return { actors: nextActors, attacks: nextAttacks };
+}
+
+function applyPartyVitals(actors, partyVitals) {
+  if (partyVitals == null) return actors;
+  if (typeof partyVitals !== 'object' || Array.isArray(partyVitals)) {
+    throw new TypeError('partyVitals must be an object when supplied.');
+  }
+  return actors.map((actor) => {
+    if (actor.faction !== 'player' || !Object.hasOwn(partyVitals, actor.id)) return actor;
+    const hp = partyVitals[actor.id]?.hp;
+    if (!Number.isSafeInteger(hp) || hp < 0 || hp > actor.maxHp) {
+      throw new RangeError(`partyVitals.${actor.id}.hp must be an integer from zero through ${actor.maxHp}.`);
+    }
+    return { ...actor, hp };
+  });
 }
 
 function requirementView(contract, completedIds) {
@@ -307,6 +332,9 @@ export function createActionCampaignBattleSession({
   encounterId,
   advancementState,
   loadoutState,
+  partyVitals = null,
+  supportActorId = null,
+  fighterActorIds = null,
   objectiveRuntimeFactory = createActionObjectiveRuntime,
 } = {}) {
   const encounter = getEncounter(encounterId);
@@ -315,11 +343,27 @@ export function createActionCampaignBattleSession({
   const objectiveContract = adaptActionObjective(encounter, { stage });
   const sourceSpec = adaptActionEncounter(encounter.id, {
     advancementState,
-    partyVitals: loadoutState?.vitals,
+    partyVitals: partyVitals ?? loadoutState?.vitals,
+    supportActorId,
+    fighterActorIds,
   });
   let actors = applySpawnSlots(sourceSpec.kernelConfig.actors, stage);
   let attacks = clone(sourceSpec.kernelConfig.attacks);
   ({ actors, attacks } = applyLoadout(actors, attacks, sourceSpec.attackManifest, loadoutState));
+  actors = applyPartyVitals(actors, partyVitals);
+  for (const subweaponId of ACTION_SUBWEAPON_IDS) {
+    const subweapon = ACTION_SUBWEAPONS[subweaponId];
+    attacks[subweapon.attackId] = clone(subweapon.attack);
+  }
+  actors = actors.map((actor) => actor.faction === 'player'
+    ? {
+        ...actor,
+        attackIds: [
+          ...actor.attackIds,
+          ...ACTION_SUBWEAPON_IDS.map((id) => ACTION_SUBWEAPONS[id].attackId),
+        ],
+      }
+    : actor);
   const spec = deepFreeze({
     ...clone(sourceSpec),
     kernelConfig: {
@@ -343,6 +387,7 @@ export function createActionCampaignBattleSession({
     objectiveRuntime: null,
     outcome: null,
     recentEvents: [],
+    subweaponStock: createActionSubweaponStock(),
   };
   session.objectiveRuntime = createObjectiveBridge(session, objectiveRuntimeFactory);
   return session;
@@ -360,7 +405,9 @@ export function switchActionCampaignActor(session, direction = 1) {
 export function getActionCampaignAttackChoices(session, actorId = session.kernel.snapshot().controlledActorId) {
   const actor = session.kernel.getActor(actorId);
   if (!actor) return Object.freeze([]);
-  return Object.freeze(actor.attackIds.map((attackId) => {
+  return Object.freeze(actor.attackIds.filter((attackId) => (
+    session.spec.kernelConfig.attacks[attackId]?.kind !== 'subweapon'
+  )).map((attackId) => {
     const source = session.spec.kernelConfig.attacks[attackId];
     return deepFreeze({
       id: attackId,
@@ -370,6 +417,47 @@ export function getActionCampaignAttackChoices(session, actorId = session.kernel
       state: session.kernel.getAttackState(actorId, attackId),
     });
   }));
+}
+
+/** UI-ready, session-local holy subweapon stock and readiness. */
+export function getActionCampaignSubweaponChoices(
+  session,
+  actorId = session.kernel.snapshot().controlledActorId,
+) {
+  if (!actorId) return Object.freeze([]);
+  const actor = session.kernel.getActor(actorId);
+  return Object.freeze(ACTION_SUBWEAPON_IDS.map((id) => {
+    const subweapon = getActionSubweapon(id);
+    const attackState = session.kernel.getAttackState(actorId, subweapon.attackId);
+    const stock = session.subweaponStock[id] ?? 0;
+    const requiresGround = id === 'holy-water' && !actor?.grounded;
+    return deepFreeze({
+      id,
+      attackId: subweapon.attackId,
+      name: subweapon.name,
+      input: subweapon.input,
+      description: subweapon.description,
+      stock,
+      state: {
+        ...attackState,
+        ready: stock > 0 && !requiresGround && attackState.ready,
+        reason: stock <= 0 ? 'out-of-stock' : requiresGround ? 'requires-ground' : attackState.reason,
+      },
+    });
+  }));
+}
+
+/** UI-ready movement verbs and their live deterministic readiness. */
+export function getActionCampaignManeuverChoices(session, actorId = session.kernel.snapshot().controlledActorId) {
+  const actor = session.kernel.getActor(actorId);
+  if (!actor) return Object.freeze([]);
+  return Object.freeze(ACTION_MANEUVER_IDS.map((maneuverId) => session.kernel.getManeuverDefinition(actorId, maneuverId))
+    .filter(Boolean)
+    .map((maneuver) => deepFreeze({
+    id: maneuver.id,
+    name: maneuver.name,
+    state: session.kernel.getManeuverState(actorId, maneuver.id),
+    })));
 }
 
 /** UI-ready Hunter–Priest availability derived only from the shared contract. */
@@ -398,18 +486,68 @@ export function getActionCampaignComboState(session, initiatorActorId = session.
 export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
   if (session.outcome) return snapshotActionCampaignBattle(session);
   const controlledActorId = session.kernel.snapshot().controlledActorId;
+  const controllerEvents = [];
   if (controlledActorId) {
+    const jumpHeld = input.jumpHeld ?? Boolean(input.jumpPressed);
     session.kernel.setMovement(controlledActorId, {
       x: Number(Boolean(input.right)) - Number(Boolean(input.left)),
       y: 0,
     });
-    if (input.jumpPressed) session.kernel.requestJump(controlledActorId);
+    session.kernel.setJumpHeld(controlledActorId, jumpHeld);
+    if (input.jumpPressed) session.kernel.requestJump(controlledActorId, { buffer: true, held: jumpHeld });
+    if (typeof input.maneuverPressed === 'string') {
+      const started = session.kernel.requestManeuver(controlledActorId, input.maneuverPressed);
+      if (!started.ok) {
+        controllerEvents.push({
+          type: 'maneuver-blocked',
+          actorId: controlledActorId,
+          maneuverId: input.maneuverPressed,
+          reason: started.reason,
+          remainingMs: started.remainingMs ?? 0,
+        });
+      }
+    }
     if (Number.isSafeInteger(input.attackIndex)) {
-      const attackId = session.kernel.getActor(controlledActorId)?.attackIds[input.attackIndex];
+      const attackId = getActionCampaignAttackChoices(session, controlledActorId)[input.attackIndex]?.id;
       if (attackId) session.kernel.requestAttack(controlledActorId, attackId);
     }
+    if (typeof input.subweaponPressed === 'string') {
+      const choice = getActionCampaignSubweaponChoices(session, controlledActorId)
+        .find(({ id }) => id === input.subweaponPressed);
+      if (!choice?.state.ready) {
+        controllerEvents.push({
+          type: 'subweapon-blocked',
+          actorId: controlledActorId,
+          subweaponId: input.subweaponPressed,
+          name: choice?.name ?? input.subweaponPressed,
+          reason: choice?.state.reason ?? 'unknown-subweapon',
+          remainingMs: choice?.state.effectiveCooldownRemainingMs ?? 0,
+        });
+      } else {
+        const started = session.kernel.requestAttack(controlledActorId, choice.attackId);
+        if (started.ok) {
+          session.subweaponStock[choice.id] -= 1;
+          controllerEvents.push({
+            type: 'subweapon-used',
+            actorId: controlledActorId,
+            subweaponId: choice.id,
+            attackId: choice.attackId,
+            name: choice.name,
+            stockRemaining: session.subweaponStock[choice.id],
+          });
+        } else {
+          controllerEvents.push({
+            type: 'subweapon-blocked',
+            actorId: controlledActorId,
+            subweaponId: choice.id,
+            name: choice.name,
+            reason: started.reason,
+            remainingMs: started.remainingMs ?? 0,
+          });
+        }
+      }
+    }
   }
-  const controllerEvents = [];
   if (input.comboPressed) {
     const combo = getActionCampaignComboState(session, controlledActorId);
     if (combo.available) {
@@ -459,13 +597,24 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
 
 export function snapshotActionCampaignBattle(session) {
   const kernelSnapshot = session.kernel.snapshot();
+  const livingParty = kernelSnapshot.actors.filter(({ faction, hp }) => faction === 'player' && hp > 0);
+  const aiControlledActorIds = livingParty
+    .filter(({ id }) => id !== kernelSnapshot.controlledActorId)
+    .map(({ id }) => id);
   return deepFreeze({
     schemaVersion: ACTION_CAMPAIGN_BATTLE_SCHEMA_VERSION,
     encounterId: session.encounter.id,
     outcome: session.outcome,
     kernel: kernelSnapshot,
+    duo: {
+      enabled: livingParty.length >= 2,
+      directActorId: kernelSnapshot.controlledActorId,
+      supportActorId: aiControlledActorIds[0] ?? null,
+      aiControlledActorIds,
+    },
     objective: objectiveSnapshot(session, kernelSnapshot),
     combo: getActionCampaignComboState(session, kernelSnapshot.controlledActorId),
+    subweapons: getActionCampaignSubweaponChoices(session, kernelSnapshot.controlledActorId),
     combatSatisfied: combatSatisfied(session, kernelSnapshot),
     recentEvents: clone(session.recentEvents),
   });
@@ -483,12 +632,4 @@ export function createActionCampaignBattleResult(session, itemDebits = {}) {
     outcome: 'victory',
   }, { itemDebits: canonicalDebits });
   return createBattleResultRecord(projected);
-}
-
-export function settleActionCampaignBattleVictory({ session, itemDebits, ...settlement } = {}) {
-  return settleBattleVictory({
-    ...settlement,
-    encounter: session.encounter,
-    resultRecord: createActionCampaignBattleResult(session, itemDebits),
-  });
 }

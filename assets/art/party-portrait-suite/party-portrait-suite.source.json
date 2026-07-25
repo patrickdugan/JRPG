@@ -10,12 +10,12 @@
   },
   "atlas": {
     "width": 512,
-    "height": 384,
+    "height": 448,
     "contentWidth": 512,
     "transparentRightPadding": 0
   },
   "sheet": {
-    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku"],
+    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku", "miyo"],
     "columns": ["neutral", "resolve", "strain", "soften", "concern", "anger", "surprise", "quiet"]
   },
   "expressions": {
@@ -34,6 +34,7 @@
     {"id": "lise", "name": "Nikola Dražanić", "legacyCompatibilityId": "lise", "lineage": {"birthAndStation": "Croatian-born frontier minor aristocrat", "claimedDescent": "Nikola claims a Wallachian covenant line transmitted through noblewomen", "englishAncestry": "Nikola is English through his fictional mother Margaret Wychmere", "inheritanceChain": "the supposed male line is repeatedly rebuilt through heiresses and marriage contracts exchanging refuge, money, land, ships, and protection", "affiliation": "Covenant of the Severed Dragon", "historicity": "entirely invented alternate-history lore; makes no real-world claim that vampires, vampire hunters, or this Covenant existed"}, "faceShape": "square-angular-male", "hairShape": "high-forehead-backswept", "facialHair": "narrow-moustache-and-trim-pointed-beard", "costumeMotif": "dusk-blue rain cloak over an oxblood doublet, plain falling band, and brass signet clasp", "anchors": {"eyeLine": [19, 27, 44, 27], "mouth": [36, 38], "focus": [36, 27]}, "likenessPolicy": "original fictional Croatian-English male face and proportions; no real-person or actor reference"},
     {"id": "mateus", "faceShape": "narrow-gaunt", "hairShape": "plain-receded-wave", "costumeMotif": "charcoal high collar and dried-wine seam", "anchors": {"eyeLine": [21, 27, 43, 27], "mouth": [36, 38], "focus": [36, 27]}, "likenessPolicy": "original fictional face, age lines, proportions, and hair; no real-person or actor reference"},
     {"id": "genta", "faceShape": "broad-square", "hairShape": "cropped-heavy", "costumeMotif": "earth-gray shoulder mantle and oxidized-gold clasp", "anchors": {"eyeLine": [19, 27, 44, 27], "mouth": [35, 38], "focus": [35, 27]}},
-    {"id": "kiku", "faceShape": "round-tapered", "hairShape": "practical-side-tie", "costumeMotif": "herb-green short cloak and candle-ivory medicine tab", "anchors": {"eyeLine": [20, 27, 43, 27], "mouth": [35, 37], "focus": [35, 27]}}
+    {"id": "kiku", "faceShape": "round-tapered", "hairShape": "practical-side-tie", "costumeMotif": "herb-green short cloak and candle-ivory medicine tab", "anchors": {"eyeLine": [20, 27, 43, 27], "mouth": [35, 37], "focus": [35, 27]}},
+    {"id": "miyo", "name": "Miyo Senda", "faceShape": "soft-angular", "hairShape": "center-parted-looped-tie", "costumeMotif": "storm-blue Japanese travel collar, pale working underlayer, and one brass weather-ruler joint", "lineage": {"relation": "literal granddaughter of Mateus Avelar", "ancestry": "three-quarters Japanese", "publicName": "Miyo Senda", "baptismalRecord": "Inês Avelar is archival context only"}, "anchors": {"eyeLine": [20, 27, 43, 27], "mouth": [35, 37], "focus": [35, 27]}, "originalityPolicy": "original fictional Japanese face and costume; no borrowed or real-person likeness"}
   ]
 }

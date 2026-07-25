@@ -20,7 +20,7 @@ ATLAS_NAME = "party-combat-actions.png"
 CONTACT_NAME = "party-combat-actions-contact-sheet.png"
 MANIFEST_NAME = "manifest.json"
 README_NAME = "README.md"
-ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku")
+ROWS = ("ren", "aya", "lise", "mateus", "genta", "kiku", "miyo")
 REVIEW_ROW_LABELS = {"lise": "NIKOLA"}
 COLUMNS = ("idle", "move", "guard", "hit", "basic-strike-windup", "basic-strike-active", "signature-a", "signature-b", "recovery", "defeat")
 W, H = 48, 64
@@ -82,7 +82,8 @@ def combined_palette(field: dict, character_id: str) -> dict[str, str]:
     palette.update({
         "ember": "#b34a3e", "emberLight": "#f0a060", "radiance": "#d7f0d5",
         "dawn": "#88c8c5", "umbral": "#781e39", "violet": "#401d42",
-        "frost": "#9bd8df", "white": "#f6e8b9", "impact": "#d7b080",
+        "frost": "#9bd8df", "storm": "#f0cf62", "stormDeep": "#8c6e2e",
+        "white": "#f6e8b9", "impact": "#d7b080",
     })
     return palette
 
@@ -106,9 +107,13 @@ def draw_head(cel: Cel, character_id: str, x: int, y: int):
     cel.px(x + 3, y + 5, "skinLight")
     cel.px(x + 2, y + 6, "deep")
     cel.px(x + 4, y + 8, "outline")
-    if character_id in ("aya", "kiku"):
+    if character_id in ("aya", "kiku", "miyo"):
         cel.rect((x - 7, y + 1, x - 5, y + 10), "hair")
         cel.px(x - 8, y + 8, "hair")
+    if character_id == "miyo":
+        cel.rect((x + 2, y + 1, x + 5, y + 9), "hair")
+        cel.px(x - 1, y, "skinShadow")
+        cel.px(x - 8, y + 7, "accent")
     if character_id == "lise":
         # Legacy key `lise` presents Nikola's high forehead, backswept hair,
         # narrow moustache, and clipped beard.
@@ -186,9 +191,12 @@ def draw_defeat_head(cel: Cel, character_id: str, x=11, y=44):
     cel.rect((x - 5, y + 2, x - 2, y + 4), "skinShadow")
     cel.px(x + 3, y + 1, "skinLight")
     cel.px(x + 4, y + 2, "deep")
-    if character_id in ("aya", "kiku"):
+    if character_id in ("aya", "kiku", "miyo"):
         cel.rect((x - 6, y - 2, x - 4, y + 6), "hair")
         cel.px(x - 5, y + 7, "hair")
+    if character_id == "miyo":
+        cel.rect((x + 3, y - 3, x + 6, y + 4), "hair")
+        cel.px(x - 6, y + 5, "accent")
     if character_id == "lise":
         cel.rect((x - 5, y - 5, x + 4, y - 3), "hair")
         cel.px(x - 6, y - 3, "hair")
@@ -497,7 +505,63 @@ def draw_kiku(cel: Cel):
     if cel.pose == "hit": cel.line([(8,24),(15,31)], "impact", 2)
 
 
-DRAW = {"ren": draw_ren, "aya": draw_aya, "lise": draw_lise, "mateus": draw_mateus, "genta": draw_genta, "kiku": draw_kiku}
+def draw_miyo(cel: Cel):
+    if cel.pose == "recovery":
+        x = draw_recovery_body(cel, "miyo")
+        cel.line([(x - 14, 43), (x - 7, 34), (x + 1, 30), (x + 10, 22)], "outline", 3)
+        cel.line([(x - 13, 43), (x - 6, 35), (x + 2, 31), (x + 10, 23)], "paper")
+        for px, py in ((x - 7, 34), (x + 1, 30), (x + 10, 22)):
+            cel.rect((px - 1, py - 1, px + 1, py + 1), "accent")
+        cel.line([(x + 7, 35), (x + 15, 32), (x + 18, 36)], "light", 2)
+        return
+    if cel.pose == "defeat":
+        draw_defeat_body(cel, "miyo")
+        cel.line([(19, 50), (27, 45), (35, 42), (43, 38)], "outline", 3)
+        cel.line([(20, 50), (28, 46), (36, 43), (42, 39)], "paper")
+        for px, py in ((27, 45), (35, 42)):
+            cel.px(px, py, "accent")
+        return
+    x = body(cel, "miyo")
+    # Split working sleeves and a pale underlayer keep the silhouette Japanese
+    # and practical; the hinged ruler is visibly a measuring instrument.
+    cel.poly([(x-9,24),(x-14,30),(x-10,42),(x-5,38)], "outline")
+    cel.poly([(x-9,26),(x-12,31),(x-9,39),(x-6,36)], "light")
+    cel.poly([(x+5,25),(x+12,29),(x+9,41),(x+4,38)], "outline")
+    cel.poly([(x+6,27),(x+10,30),(x+8,38),(x+5,36)], "light")
+    cel.line([(x-4, 34), (x+5, 34)], "accent")
+    if cel.pose == "guard":
+        cel.line([(x+1,25),(x+13,20),(x+16,37),(x+6,42)], "outline", 3)
+        cel.line([(x+2,26),(x+12,22),(x+14,36),(x+7,40)], "paper")
+    elif cel.pose == "basic-strike-windup":
+        cel.line([(8,42),(16,34),(25,28),(34,17)], "outline", 3)
+        cel.line([(9,41),(17,35),(26,29),(34,18)], "paper")
+    elif cel.pose == "basic-strike-active":
+        cel.line([(x+3,31),(29,28),(36,23),(41,18)], "outline", 3)
+        cel.line([(x+5,30),(30,29),(37,24),(40,19)], "paper")
+        for px, py in ((29,28),(37,23)):
+            cel.rect((px-1,py-1,px+1,py+1), "accent")
+        impact_cleft(cel, 39, 27, "storm")
+    else:
+        cel.line([(x+7,42),(x+4,33),(x+10,27),(x+8,18)], "outline", 3)
+        cel.line([(x+8,41),(x+5,33),(x+11,27),(x+9,19)], "paper")
+        for px, py in ((x+4,33),(x+10,27)):
+            cel.px(px, py, "accent")
+    if cel.pose == "signature-a":
+        # A two-temperature calculus key: runtime essence VFX selects the
+        # actual Ember or Frost result while the pose remains atlas-stable.
+        cel.line([(30,20),(37,25),(40,34),(34,42)], "frost", 2)
+        cel.line([(31,42),(39,37),(42,28),(37,19)], "ember", 2)
+        cel.px(41, 27, "emberLight")
+        cel.px(34, 22, "white")
+    if cel.pose == "signature-b":
+        cel.line([(29,42),(35,33),(31,28),(40,18)], "stormDeep", 4)
+        cel.line([(30,41),(36,33),(32,28),(41,17)], "storm", 2)
+        cel.line([(12,43),(7,39),(10,35)], "light", 2)
+        cel.line([(15,46),(9,48),(6,45)], "secondary", 2)
+    if cel.pose == "hit": cel.line([(8,24),(15,31)], "impact", 2)
+
+
+DRAW = {"ren": draw_ren, "aya": draw_aya, "lise": draw_lise, "mateus": draw_mateus, "genta": draw_genta, "kiku": draw_kiku, "miyo": draw_miyo}
 
 
 def validate_cel(image: Image.Image, frame_id: str):

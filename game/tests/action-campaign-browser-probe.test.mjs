@@ -6,6 +6,9 @@ const probe = readFileSync(new URL('../tools/action-campaign-browser-probe.py', 
 
 test('installed-Chrome probe covers movement, the locked gate, and the live two-actor combo lifecycle', () => {
   assert.match(probe, /action-campaign-battle\.html\?encounter=c1-cinder-hounds/u);
+  assert.match(probe, /lead=ren&support=miyo/u);
+  assert.match(probe, /controlledMovementProfileId.*infiltrator/su);
+  assert.match(probe, /supportActorId.*miyo/su);
   assert.match(probe, /dataset\.partyArtState === 'ready'/u);
   assert.match(probe, /dataset\.enemyArtState === 'ready'/u);
   assert.match(probe, /dataset\.stageArtState === 'ready'/u);
@@ -19,7 +22,7 @@ test('installed-Chrome probe covers movement, the locked gate, and the live two-
   assert.match(probe, /participant-missing/u);
   assert.match(probe, /page\.keyboard\.press\("l"\)/u);
   assert.match(probe, /action-campaign-battle\.html\?encounter=c4-widow-of-fog/u);
-  assert.match(probe, /combo_page\.keyboard\.press\("Tab"\)[\s\S]*combo_page\.keyboard\.press\("Tab"\)/u);
+  assert.doesNotMatch(probe, /combo_page\.keyboard\.press\("Tab"\)/u);
   assert.match(probe, /snapshot\.combo\.available === true/u);
   assert.match(probe, /active\.length === 2/u);
   assert.match(probe, /event\.type === 'attack-complete'/u);

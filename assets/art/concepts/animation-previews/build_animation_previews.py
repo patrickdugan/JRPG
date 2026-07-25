@@ -44,18 +44,128 @@ ACTIONS = (
     },
 )
 
-CHARACTERS = (
+ACTORS = (
     {
-        "id": "dravanic",
+        "id": "ren",
+        "displayName": "Ren Ishikawa",
+        "category": "party",
+        "sheet": "ren-animation-sheet-v1.png",
+        "gif": "ren-all-actions-v1.gif",
+        "signature": "Cinder Route",
+    },
+    {
+        "id": "aya",
+        "displayName": "Aya Shinohara",
+        "category": "party",
+        "sheet": "aya-animation-sheet-v1.png",
+        "gif": "aya-all-actions-v1.gif",
+        "signature": "Warding Script",
+    },
+    {
+        "id": "nikola",
+        "displayName": "Nikola Dravanić (Dravanic)",
+        "category": "party",
         "sheet": "dravanic-longinus-animation-sheet-v1.png",
         "gif": "dravanic-longinus-all-actions-v1.gif",
         "signature": "holy Longinus power",
     },
     {
-        "id": "vampire-priest",
+        "id": "mateus",
+        "displayName": "Father Mateus Avelar",
+        "category": "party",
         "sheet": "vampire-priest-animation-sheet-v1.png",
         "gif": "vampire-priest-all-actions-v1.gif",
         "signature": "red-eyed bloodlust",
+    },
+    {
+        "id": "genta",
+        "displayName": "Genta Mononobe",
+        "category": "party",
+        "sheet": "genta-animation-sheet-v1.png",
+        "gif": "genta-all-actions-v1.gif",
+        "signature": "Standing Bridge",
+    },
+    {
+        "id": "kiku",
+        "displayName": "Kiku Nawa",
+        "category": "party",
+        "sheet": "kiku-animation-sheet-v1.png",
+        "gif": "kiku-all-actions-v1.gif",
+        "signature": "Cold Medicine / Terrain Remedy",
+    },
+    {
+        "id": "miyo",
+        "displayName": "Miyo Senda",
+        "category": "party",
+        "sheet": "miyo-animation-sheet-v1.png",
+        "gif": "miyo-all-actions-v1.gif",
+        "signature": "Thunder Thread",
+        "postprocess": "nearest-neighbor per-cell normalization from 1586x992 to 1536x1024",
+    },
+    {
+        "id": "cinder-hound",
+        "displayName": "Cinder Hound",
+        "category": "enemy",
+        "sheet": "cinder-hound-animation-sheet-v1.png",
+        "gif": "cinder-hound-all-actions-v1.gif",
+        "signature": "Cinder Overload",
+    },
+    {
+        "id": "ash-wisp",
+        "displayName": "Ash Wisp",
+        "category": "enemy",
+        "sheet": "ash-wisp-animation-sheet-v1.png",
+        "gif": "ash-wisp-all-actions-v1.gif",
+        "signature": "Ash Nova",
+        "postprocess": "active bolt cell composited with the sheet's own visible canonical core",
+    },
+    {
+        "id": "ashen-bailiff",
+        "displayName": "Ashen Bailiff",
+        "category": "enemy",
+        "sheet": "ashen-bailiff-animation-sheet-v1.png",
+        "gif": "ashen-bailiff-all-actions-v1.gif",
+        "signature": "Tithe Seal",
+    },
+    {
+        "id": "court-retainer",
+        "displayName": "Court Retainer",
+        "category": "enemy",
+        "sheet": "court-retainer-animation-sheet-v1.png",
+        "gif": "court-retainer-all-actions-v1.gif",
+        "signature": "Docket Sever",
+    },
+    {
+        "id": "widow-of-fog",
+        "displayName": "Widow of Fog",
+        "category": "enemy",
+        "sheet": "widow-of-fog-animation-sheet-v1.png",
+        "gif": "widow-of-fog-all-actions-v1.gif",
+        "signature": "Tide Inversion",
+    },
+    {
+        "id": "ash-furnace",
+        "displayName": "Ash Furnace",
+        "category": "enemy",
+        "sheet": "ash-furnace-animation-sheet-v1.png",
+        "gif": "ash-furnace-all-actions-v1.gif",
+        "signature": "Overheat",
+    },
+    {
+        "id": "bell-warden",
+        "displayName": "Bell Warden",
+        "category": "enemy",
+        "sheet": "bell-warden-animation-sheet-v1.png",
+        "gif": "bell-warden-all-actions-v1.gif",
+        "signature": "Resonance Overload",
+    },
+    {
+        "id": "black-court",
+        "displayName": "Black Court",
+        "category": "enemy",
+        "sheet": "black-court-animation-sheet-v1.png",
+        "gif": "black-court-all-actions-v1.gif",
+        "signature": "Decree Fracture",
     },
 )
 
@@ -131,10 +241,10 @@ def encode_gif(
 
 def build_artifacts() -> dict[str, bytes]:
     artifacts: dict[str, bytes] = {}
-    character_records: list[dict] = []
+    actor_records: list[dict] = []
 
-    for character in CHARACTERS:
-        sheet_path = ROOT / character["sheet"]
+    for actor in ACTORS:
+        sheet_path = ROOT / actor["sheet"]
         sheet_bytes = sheet_path.read_bytes()
         sheet, cell_width, cell_height = load_sheet(sheet_path)
         rows = crop_rows(sheet, cell_width, cell_height)
@@ -148,7 +258,7 @@ def build_artifacts() -> dict[str, bytes]:
 
         frames, durations = build_sequence(rows)
         gif_bytes = encode_gif(sheet, frames, durations)
-        gif_name = character["gif"]
+        gif_name = actor["gif"]
         artifacts[gif_name] = gif_bytes
 
         with Image.open(io.BytesIO(gif_bytes)) as gif:
@@ -159,12 +269,13 @@ def build_artifacts() -> dict[str, bytes]:
                 f"{gif_name} encoded {gif_frame_count} frames; expected {len(frames)}"
             )
 
-        character_records.append(
-            {
-                "id": character["id"],
-                "signature": character["signature"],
+        record = {
+                "id": actor["id"],
+                "displayName": actor["displayName"],
+                "category": actor["category"],
+                "signature": actor["signature"],
                 "sheet": {
-                    "path": character["sheet"],
+                    "path": actor["sheet"],
                     "width": sheet.width,
                     "height": sheet.height,
                     "sha256": sha256(sheet_bytes),
@@ -179,10 +290,12 @@ def build_artifacts() -> dict[str, bytes]:
                     "sha256": sha256(gif_bytes),
                 },
             }
-        )
+        if actor.get("postprocess"):
+            record["postprocess"] = actor["postprocess"]
+        actor_records.append(record)
 
     manifest = {
-        "assetId": "dravanic-vampire-priest-animation-preview-v1",
+        "assetId": "jrpg-party-enemy-animation-preview-standard-roster-v1",
         "status": "review-quality-generated-animation-concepts",
         "runtimeIntegration": "not-integrated",
         "grid": {
@@ -201,10 +314,13 @@ def build_artifacts() -> dict[str, bytes]:
             }
             for action in ACTIONS
         ],
-        "characters": character_records,
+        "actors": actor_records,
         "notes": [
             "GIFs are deterministic previews cropped from the 6x4 sheets.",
             "These generated concepts do not replace the canonical 48x64 runtime atlas.",
+            "The Portuguese hidden-cross vampire-priest concept is mapped to canonical Father Mateus Avelar.",
+            "This set includes the full seven-member party and all eight standard enemy families.",
+            "Named bosses remain a separate animation-sheet pass.",
         ],
     }
     artifacts["manifest.json"] = (

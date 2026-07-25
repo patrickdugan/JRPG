@@ -193,7 +193,7 @@ export const ACTION_STAGES = deepFreeze([
   }),
   stage({
     id: 'hsh-prison-ferry', groundY: 452,
-    partyX: [130, 184, 238, 292, 346, 400], enemyX: [720, 802, 858],
+    partyX: [130, 184, 238, 292, 346, 400, 454], enemyX: [720, 802, 858],
     platforms: [{ id: 'ferry-deck', left: 602, right: 892, y: 316, oneWay: true }],
     objectiveAnchors: [
       anchor('name-slip-source', 'item-source', 442, 452),
@@ -203,7 +203,7 @@ export const ACTION_STAGES = deepFreeze([
   }),
   stage({
     id: 'hsh-bell-aqueduct', groundY: 448,
-    partyX: [124, 178, 232, 286, 340, 394], enemyX: [690, 772, 850],
+    partyX: [124, 178, 232, 286, 340, 394, 448], enemyX: [690, 772, 850],
     platforms: [
       { id: 'aqueduct-west', left: 52, right: 298, y: 304, oneWay: true },
       { id: 'aqueduct-east', left: 662, right: 908, y: 304, oneWay: true },
@@ -217,7 +217,7 @@ export const ACTION_STAGES = deepFreeze([
   }),
   stage({
     id: 'c8-black-gate', groundY: 444,
-    partyX: [126, 180, 234, 288, 342, 396], enemyX: [714, 788, 856],
+    partyX: [126, 180, 234, 288, 342, 396, 450], enemyX: [714, 788, 856],
     platforms: [
       { id: 'gate-wall-west', left: 54, right: 284, y: 290, oneWay: true },
       { id: 'gate-wall-east', left: 676, right: 906, y: 290, oneWay: true },
@@ -230,7 +230,7 @@ export const ACTION_STAGES = deepFreeze([
   }),
   stage({
     id: 'krh-outer-archive', groundY: 442,
-    partyX: [124, 178, 232, 286, 340, 394], enemyX: [706, 784, 850],
+    partyX: [124, 178, 232, 286, 340, 394, 448], enemyX: [706, 784, 850],
     platforms: [
       { id: 'archive-stack-west', left: 52, right: 300, y: 300, oneWay: true },
       { id: 'archive-stack-east', left: 660, right: 908, y: 300, oneWay: true },
@@ -244,7 +244,7 @@ export const ACTION_STAGES = deepFreeze([
   }),
   stage({
     id: 'krh-observatory', groundY: 438,
-    partyX: [122, 176, 230, 284, 338, 392], enemyX: [718, 790, 852],
+    partyX: [122, 176, 230, 284, 338, 392, 446], enemyX: [718, 790, 852],
     platforms: [
       { id: 'observatory-ring-west', left: 64, right: 306, y: 296, oneWay: true },
       { id: 'observatory-ring-east', left: 654, right: 896, y: 296, oneWay: true },
@@ -260,7 +260,7 @@ export const ACTION_STAGES = deepFreeze([
   }),
   stage({
     id: 'epi-hoshigawa-archive', groundY: 448,
-    partyX: [226, 280, 334, 388, 442, 496], enemyX: [824],
+    partyX: [199, 253, 307, 361, 415, 469, 523], enemyX: [824],
     platforms: [{ id: 'memorial-gallery', left: 612, right: 892, y: 310, oneWay: true }],
     objectiveAnchors: [
       anchor('testimony-table', 'interaction', 226, 448),

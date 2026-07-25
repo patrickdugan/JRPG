@@ -166,7 +166,7 @@ function sceneHub(config) {
   };
 }
 
-export const LEVELS = [
+const AUTHORED_LEVELS = [
   {
     id: 'hsh-census-square',
     chapterId: 'prologue',
@@ -1371,6 +1371,17 @@ export const LEVELS = [
     lesson: 'The final image is a small lantern and a silent bell, not a claim that repair is complete.',
   }),
 ];
+
+const MIYO_FIELD_CHAPTERS = new Set(['chapter-7', 'chapter-8', 'chapter-9', 'epilogue']);
+
+/** Miyo joins at the opening Chapter 7 beat and remains selectable thereafter. */
+export const LEVELS = AUTHORED_LEVELS.map((level) => {
+  if (!MIYO_FIELD_CHAPTERS.has(level.chapterId) || level.spawn.formation.includes('miyo')) return level;
+  return {
+    ...level,
+    spawn: { ...level.spawn, formation: [...level.spawn.formation, 'miyo'] },
+  };
+});
 
 export function tileKey(x, y) {
   return `${x},${y}`;

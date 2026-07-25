@@ -9,6 +9,11 @@
  */
 
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
+import {
+  CAMPAIGN_ROUTE_SCHEDULES,
+  getCampaignRouteSchedule,
+  inferRouteScheduleFromPrefix,
+} from './campaign-route-scheduler.mjs';
 
 export const PROGRESSION_SCHEMA_VERSION = 1;
 export const DEFAULT_PROGRESSION_SAVE_KEY = `${CAMPAIGN.id}.progression.v${PROGRESSION_SCHEMA_VERSION}`;
@@ -250,14 +255,14 @@ export function validateSavePayload(payload) {
         }
         if (seen.has(beatId)) errors.push(`save.completedBeatIds contains duplicate ID ${beatId}.`);
         seen.add(beatId);
-        if (CATALOG.beatIds[index] !== beatId) {
-          errors.push('save.completedBeatIds must be the canonical contiguous campaign prefix.');
-        }
       }
     }
 
-    if (currentRecord && Array.isArray(payload.completedBeatIds) && currentRecord.index > completedBeatIds.length) {
-      errors.push('save.current must be a completed beat or the next canonical beat.');
+    if (currentRecord && Array.isArray(payload.completedBeatIds)) {
+      const schedules = inferRouteScheduleFromPrefix(completedBeatIds, currentRecord.id);
+      if (!schedules.length) {
+        errors.push('save.completedBeatIds and save.current must form a contiguous campaign prefix for the canonical or selected route.');
+      }
     }
 
     let choiceIds = [];
@@ -275,7 +280,7 @@ export function validateSavePayload(payload) {
         }
         if (seen.has(choiceId)) errors.push(`save.choiceIds contains duplicate ID ${choiceId}.`);
         seen.add(choiceId);
-        if (choiceRecord.beatIndex > completedBeatIds.length) {
+        if (!completedBeatIds.includes(choiceRecord.beatId) && currentRecord?.id !== choiceRecord.beatId) {
           errors.push(`save.choiceIds contains a choice from locked beat ${choiceRecord.beatId}.`);
         }
       }
@@ -341,6 +346,27 @@ export function getCanonicalBeatIds() {
   return CATALOG.beatIds;
 }
 
+function routeScheduleForState(snapshot, priorityTheater = null) {
+  if (priorityTheater) {
+    const selected = getCampaignRouteSchedule(priorityTheater);
+    const compatible = snapshot.completedBeatIds.every((beatId, index) => selected.beatIds[index] === beatId)
+      && (
+        snapshot.completedBeatIds.includes(snapshot.current.beatId)
+        || selected.beatIds[snapshot.completedBeatIds.length] === snapshot.current.beatId
+      );
+    if (!compatible) throw new RangeError(`Campaign progress is incompatible with the ${priorityTheater} route.`);
+    return selected;
+  }
+  const candidates = inferRouteScheduleFromPrefix(snapshot.completedBeatIds, snapshot.current.beatId);
+  return candidates.find(({ id }) => id === CAMPAIGN_ROUTE_SCHEDULES.canonical.id) ?? candidates[0];
+}
+
+/** Return the active ordered beat schedule; pass the Storyworld theater at the route frontier. */
+export function getScheduledBeatIds(state, { priorityTheater = null } = {}) {
+  const snapshot = assertValidState(state);
+  return routeScheduleForState(snapshot, priorityTheater).beatIds;
+}
+
 /** Return the authored chapter for the state cursor. */
 export function getCurrentChapter(state) {
   const snapshot = assertValidState(state);
@@ -354,17 +380,19 @@ export function getCurrentBeat(state) {
 }
 
 /** Return the next canonical beat after the cursor, or null at campaign end. */
-export function getNextBeat(state) {
+export function getNextBeat(state, { priorityTheater = null } = {}) {
   const snapshot = assertValidState(state);
-  const currentRecord = CATALOG.beatById.get(snapshot.current.beatId);
-  return CATALOG.beatById.get(CATALOG.beatIds[currentRecord.index + 1])?.beat ?? null;
+  const schedule = routeScheduleForState(snapshot, priorityTheater);
+  const currentIndex = schedule.beatIds.indexOf(snapshot.current.beatId);
+  return CATALOG.beatById.get(schedule.beatIds[currentIndex + 1])?.beat ?? null;
 }
 
 /** Return completed beats plus the next beat available for play. */
-export function getUnlockedBeatIds(state) {
+export function getUnlockedBeatIds(state, { priorityTheater = null } = {}) {
   const snapshot = assertValidState(state);
+  const schedule = routeScheduleForState(snapshot, priorityTheater);
   const unlocked = [...snapshot.completedBeatIds];
-  const nextBeatId = CATALOG.beatIds[snapshot.completedBeatIds.length];
+  const nextBeatId = schedule.beatIds[snapshot.completedBeatIds.length];
   if (nextBeatId) unlocked.push(nextBeatId);
   return freezeArray(unlocked);
 }
@@ -376,14 +404,15 @@ export function isBeatCompleted(state, beatId) {
 
 export function isCampaignComplete(state) {
   const snapshot = assertValidState(state);
-  return snapshot.completedBeatIds.length === CATALOG.beatIds.length;
+  return inferRouteScheduleFromPrefix(snapshot.completedBeatIds, snapshot.current.beatId)
+    .some((schedule) => snapshot.completedBeatIds.length === schedule.beatIds.length);
 }
 
 /**
  * Move the cursor to an already completed beat or the next unlocked beat.
  * This supports journal replay without permitting access to future story data.
  */
-export function moveToBeat(state, chapterId, beatId) {
+export function moveToBeat(state, chapterId, beatId, { priorityTheater = null } = {}) {
   const snapshot = assertValidState(state);
   const chapterRecord = CATALOG.chapterById.get(chapterId);
   const beatRecord = CATALOG.beatById.get(beatId);
@@ -391,8 +420,8 @@ export function moveToBeat(state, chapterId, beatId) {
   if (!beatRecord || beatRecord.chapterId !== chapterRecord.id) {
     throw new RangeError(`Beat ${beatId} does not belong to chapter ${chapterId}.`);
   }
-  const finalUnlockedIndex = Math.min(snapshot.completedBeatIds.length, CATALOG.beatIds.length - 1);
-  if (beatRecord.index > finalUnlockedIndex) {
+  const unlocked = new Set(getUnlockedBeatIds(snapshot, { priorityTheater }));
+  if (!unlocked.has(beatId)) {
     throw new RangeError(`Beat ${beatId} is not unlocked.`);
   }
   if (snapshot.current.beatId === beatId) return snapshot;
@@ -409,16 +438,17 @@ export function moveToBeat(state, chapterId, beatId) {
  * cursor by one beat. Replaying a completed beat advances without completing
  * additional unseen content.
  */
-export function completeCurrentBeat(state) {
+export function completeCurrentBeat(state, { priorityTheater = null } = {}) {
   const snapshot = assertValidState(state);
-  const currentRecord = CATALOG.beatById.get(snapshot.current.beatId);
+  const schedule = routeScheduleForState(snapshot, priorityTheater);
   const completedCount = snapshot.completedBeatIds.length;
-  const isFrontierBeat = currentRecord.index === completedCount;
+  const currentIndex = schedule.beatIds.indexOf(snapshot.current.beatId);
+  const isFrontierBeat = schedule.beatIds[completedCount] === snapshot.current.beatId;
   const completedBeatIds = isFrontierBeat
-    ? [...snapshot.completedBeatIds, currentRecord.id]
+    ? [...snapshot.completedBeatIds, snapshot.current.beatId]
     : snapshot.completedBeatIds;
-  const nextIndex = Math.min(currentRecord.index + 1, CATALOG.beatIds.length - 1);
-  const nextBeatId = CATALOG.beatIds[nextIndex];
+  const nextIndex = Math.min(currentIndex + 1, schedule.beatIds.length - 1);
+  const nextBeatId = schedule.beatIds[nextIndex];
 
   if (!isFrontierBeat && nextBeatId === snapshot.current.beatId) return snapshot;
   return buildState({

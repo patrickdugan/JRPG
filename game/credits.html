@@ -33,7 +33,7 @@
             <p class="eyebrow">ENDING LEDGER</p>
             <h2 id="creditsHeading">Credits</h2>
           </div>
-          <span id="creditsStatus" class="receipt-status" tabindex="-1">Loading clean-run receipt…</span>
+          <span id="creditsStatus" class="receipt-status" tabindex="-1">Preparing the final page…</span>
         </div>
 
         <div class="credit-grid">
@@ -48,13 +48,13 @@
           </section>
           <section>
             <h3>World &amp; systems</h3>
-            <p>Original story, setting, encounter design, level plans, combat rules, dialogue, and deterministic runtime</p>
-            <p>Built as a local playable production proof</p>
+            <p>Original story, setting, encounter design, level plans, combat rules, and dialogue</p>
+            <p>Created as an original interactive work</p>
           </section>
           <section>
             <h3>Visual production</h3>
-            <p>Original pixel-art direction and generated production sheets</p>
-            <p>Party field atlas, roster, enemy atlas, boss sheet, and Takamine ending keyframe</p>
+            <p>Original pixel-art direction and production art</p>
+            <p>Party and enemy art, portraits, battle stages, and the Takamine ending scene</p>
           </section>
           <section>
             <h3>With thanks</h3>
@@ -65,7 +65,7 @@
 
         <blockquote>“An archive is not the end of a road. It is a promise that another person may question where the road led.”</blockquote>
 
-        <section class="timing-card" aria-labelledby="timingHeading">
+        <section class="timing-card" aria-labelledby="timingHeading" data-developer-only hidden>
           <div class="timing-heading">
             <div>
               <p class="eyebrow">ACTIVE-PLAY RECEIPT</p>
@@ -88,16 +88,16 @@
 
         <section class="seal-card" aria-labelledby="sealHeading">
           <div>
-            <p class="eyebrow">CLEAN-RUN BOUNDARY</p>
-            <h2 id="sealHeading">Finish the credits</h2>
-            <p id="creditsProof">Checking 60 canonical scenes, 22 Storyworld scenes, and active play…</p>
-            <p id="routeProof">Checking optional 215-activity completionist status…</p>
-            <p id="creditsActionHint" class="hint">This explicit action freezes the run receipt. Visit camp first if you still want post-final content to count.</p>
+            <p class="eyebrow">THE LAST PAGE</p>
+            <h2 id="sealHeading">Finish the journey</h2>
+            <p id="creditsProof">Checking your journey…</p>
+            <p id="routeProof" data-developer-only hidden>Checking optional completionist status…</p>
+            <p id="creditsActionHint" class="hint">Visit Camp first if you have unfinished conversations or preparations.</p>
           </div>
           <div class="seal-actions">
-            <button id="sealCredits" type="button" aria-describedby="creditsProof creditsActionHint">Complete credits &amp; seal run receipt</button>
-            <button id="exportEvidence" type="button" aria-describedby="evidenceExportHint" disabled>Export playtest evidence (.json)</button>
-            <p id="evidenceExportHint" class="hint" role="status" aria-live="polite" aria-atomic="true">Loading export readiness…</p>
+            <button id="sealCredits" type="button" aria-describedby="creditsProof creditsActionHint">Complete credits</button>
+            <button id="exportEvidence" type="button" aria-describedby="evidenceExportHint" data-developer-only hidden disabled>Export playtest evidence (.json)</button>
+            <p id="evidenceExportHint" class="hint" role="status" aria-live="polite" aria-atomic="true" data-developer-only hidden>Loading export readiness…</p>
           </div>
         </section>
 

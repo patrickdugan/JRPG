@@ -32,11 +32,11 @@ test('fresh progress exposes the exact first node and immutable campaign metrics
   assert.equal(Object.isFrozen(state), true);
   assert.deepEqual(getSceneOperationRuntimeMetrics(state), {
     operationCount: 60,
-    nodeCount: 183,
+    nodeCount: 185,
     completedOperationCount: 0,
     completedNodeCount: 0,
     remainingOperationCount: 60,
-    remainingNodeCount: 183,
+    remainingNodeCount: 185,
     campaignComplete: false,
   });
 });

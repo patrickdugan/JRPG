@@ -128,8 +128,8 @@ test('schema, lookup, metrics, and every nested record are immutable', () => {
     reservedFallbackCount: SCENE_OPERATION_METRICS.reservedFallbackCount,
   }, {
     operationCount: 60,
-    nodeCount: 183,
-    shortestPathStepCount: 919,
+    nodeCount: 185,
+    shortestPathStepCount: 926,
     encounterBindingCount: 23,
     reservedFallbackCount: 0,
   });

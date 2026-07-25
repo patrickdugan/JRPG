@@ -8,7 +8,8 @@ const surfaces = [
   ['campaign.html', 'campaign.js', 'exploration'],
   ['battle.html', 'battle.js', null],
   ['camp.html', 'camp.js', 'exploration'],
-  ['index.html', 'game.js', 'battle'],
+  ['index.html', 'title.js', 'exploration'],
+  ['training.html', 'game.js', 'battle'],
   ['credits.html', 'credits.js', 'exploration'],
 ];
 

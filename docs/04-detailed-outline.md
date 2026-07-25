@@ -278,7 +278,7 @@ The outer-court battle alternates party combat with lantern signals visible in t
 ### C8-05 — Recurring boss finale: Lady Enma of Ash
 
 Enma's third fight combines the rain-mask fan lane, archive-mask reflection read, and new paired Ember/Umbral hazards. Each hero has a useful response, producing the late-game party-combination tutorial. At zero HP the Severed Dragon boundary subdues her alive rather than silently fixing her fate.<br>
-**Exit:** The Ashen garrison is released. Before the six heroes enter Kurohana, the `spool_enma` hearing records one of three material outcomes: killed with testimony lost, held under rotating civilian custody, or defected under revocable terms with no pardon.
+**Exit:** The Ashen garrison is released. Before the seven heroes enter Kurohana, the `spool_enma` hearing records one of three material outcomes: killed with testimony lost, held under rotating civilian custody, or defected under revocable terms with no pardon.
 
 ## Chapter 9 — The Black Chrysanthemum
 

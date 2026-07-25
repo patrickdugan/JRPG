@@ -989,43 +989,45 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             credits_seed = page.evaluate(
                 """async () => {
                   const receipt = await import('./run-receipt.mjs');
-                  const { CAMPAIGN } = await import('./content/campaign.mjs');
+                  const { getCampaignRouteSchedule } = await import('./campaign-route-scheduler.mjs');
                   const storyworld = await import('./storyworld-runtime.mjs');
-                  const { STORYWORLD_CLUSTERS } = await import('./content/storyworld-encounters.generated.mjs');
+                  const { STORYWORLD_CLUSTER_BY_ID } = await import('./content/storyworld-encounters.generated.mjs');
                   const { deriveNarrativeCreditsGate } = await import('./narrative-credits-gate.mjs');
+                  const schedule = getCampaignRouteSchedule('salt');
                   const adapter = receipt.createRunReceiptStorageAdapter();
                   const loaded = adapter.load();
                   if (!loaded.ok || !loaded.found) throw new Error('Clean receipt is missing.');
                   let state = loaded.state;
-                  for (const beat of CAMPAIGN.chapters.flatMap(chapter => chapter.beats)) {
-                    if (state.completedBeatIds.includes(beat.id)) continue;
-                    const result = receipt.recordRunBeatCompletion(state, state.runId, beat.id);
+                  for (const beatId of schedule.beatIds) {
+                    if (state.completedBeatIds.includes(beatId)) continue;
+                    const result = receipt.recordRunBeatCompletion(state, state.runId, beatId);
                     if (!result.ok) throw new Error(result.errors.join(' '));
                     state = result.state;
                   }
                   let storyworldState = storyworld.createStoryworldState({ runId: state.runId });
-                  for (const cluster of STORYWORLD_CLUSTERS) {
-                    let result = storyworld.beginStoryworldEncounter(storyworldState, cluster.id);
-                    if (!result.ok) throw new Error(`Could not begin ${cluster.id}: ${result.code}`);
+                  for (const clusterId of schedule.storyworldDecisionIds) {
+                    const cluster = STORYWORLD_CLUSTER_BY_ID.get(clusterId);
+                    let result = storyworld.beginStoryworldEncounter(storyworldState, clusterId);
+                    if (!result.ok) throw new Error(`Could not begin ${clusterId}: ${result.code}`);
                     storyworldState = result.state;
-                    const entryOption = storyworld.getVisibleStoryworldOptions(storyworldState, cluster.id)[0];
-                    result = storyworld.chooseStoryworldOption(storyworldState, cluster.id, entryOption.id);
-                    if (!result.ok) throw new Error(`Could not choose ${cluster.id}: ${result.code}`);
+                    const entryOption = storyworld.getVisibleStoryworldOptions(storyworldState, clusterId)[0];
+                    result = storyworld.chooseStoryworldOption(storyworldState, clusterId, entryOption.id);
+                    if (!result.ok) throw new Error(`Could not choose ${clusterId}: ${result.code}`);
                     storyworldState = result.state;
-                    result = storyworld.advanceStoryworldEncounter(storyworldState, cluster.id);
-                    if (!result.ok) throw new Error(`Could not advance ${cluster.id}: ${result.code}`);
+                    result = storyworld.advanceStoryworldEncounter(storyworldState, clusterId);
+                    if (!result.ok) throw new Error(`Could not advance ${clusterId}: ${result.code}`);
                     storyworldState = result.state;
-                    const progress = storyworld.getStoryworldProgress(storyworldState, cluster.id);
+                    const progress = storyworld.getStoryworldProgress(storyworldState, clusterId);
                     if (!progress.outcome.terminal) {
-                      const outcomeOption = storyworld.getVisibleStoryworldOptions(storyworldState, cluster.id)[0];
-                      result = storyworld.chooseStoryworldOption(storyworldState, cluster.id, outcomeOption.id);
-                      if (!result.ok) throw new Error(`Could not resolve ${cluster.id}: ${result.code}`);
+                      const outcomeOption = storyworld.getVisibleStoryworldOptions(storyworldState, clusterId)[0];
+                      result = storyworld.chooseStoryworldOption(storyworldState, clusterId, outcomeOption.id);
+                      if (!result.ok) throw new Error(`Could not resolve ${clusterId}: ${result.code}`);
                       storyworldState = result.state;
                     }
-                    result = storyworld.advanceStoryworldEncounter(storyworldState, cluster.id);
-                    if (!result.ok) throw new Error(`Could not complete ${cluster.id}: ${result.code}`);
+                    result = storyworld.advanceStoryworldEncounter(storyworldState, clusterId);
+                    if (!result.ok) throw new Error(`Could not complete ${clusterId}: ${result.code}`);
                     storyworldState = result.state;
-                    const receiptResult = receipt.recordRunStoryworldDecision(state, state.runId, cluster.id);
+                    const receiptResult = receipt.recordRunStoryworldDecision(state, state.runId, clusterId);
                     if (!receiptResult.ok) throw new Error(receiptResult.errors.join(' '));
                     state = receiptResult.state;
                   }
@@ -1051,8 +1053,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(
                 credits_seed["profileId"] == "narrative-5-6h-v1"
                 and credits_seed["storyComplete"] is True
-                and credits_seed["playedScenes"] == 82
-                and credits_seed["storyworldScenes"] == 22
+                and credits_seed["playedScenes"] == 75
+                and credits_seed["storyworldScenes"] == 20
                 and credits_seed["creditsComplete"] is False
                 and credits_seed["durationProven"] is False
                 and credits_seed["gateReady"] is False
@@ -1113,7 +1115,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 and credits_final["storyComplete"] is True
                 and credits_final["creditsComplete"] is False
                 and credits_final["durationProven"] is False
-                and credits_final["playedScenes"] == 82,
+                and credits_final["playedScenes"] == 75,
                 f"Blocked narrative credits mutated or upgraded the receipt: {credits_final}.",
             )
             page.locator("#exportEvidence").wait_for()
@@ -1126,8 +1128,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             exported_report = json.loads(Path(download_path).read_text(encoding="utf-8"))
             require(exported_report.get("schemaVersion") == 3, "Evidence export schema drifted.")
             require(exported_report.get("story", {}).get("creditsComplete") is False, "Blocked credits were exported as complete.")
-            require(exported_report.get("story", {}).get("playedSceneCount") == 82, "Evidence export omitted the 82-scene route.")
-            require(exported_report.get("story", {}).get("completedStoryworldPlayedSceneCount") == 22,
+            require(exported_report.get("story", {}).get("playedSceneCount") == 75, "Evidence export omitted the 75-scene Salt route.")
+            require(exported_report.get("story", {}).get("completedStoryworldPlayedSceneCount") == 20,
                     "Evidence export omitted Storyworld completion.")
             require(exported_report.get("requiredRoute", {}).get("complete") is False,
                     "Evidence export promoted optional completionist work to complete.")
@@ -1715,7 +1717,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 else None,
             )
             responsive_pages = (
-                ("index.html", ".campaign-link"),
+                ("index.html", "#continueGame"),
+                ("training.html?dev=1", "#gameCanvas"),
                 ("campaign.html", "#resetCampaign"),
                 (f"battle.html?encounter={encounter_id}", "#encounterTitle"),
                 ("camp.html", "#memberName"),
@@ -1785,6 +1788,9 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     f"{path} skip link did not move focus to main content.",
                 )
 
+                if path == "index.html":
+                    responsive_page.locator("#toggleOptions").click()
+
                 audio_toggle = responsive_page.locator("#audioToggle")
                 audio_volume = responsive_page.get_by_label("Volume", exact=True)
                 audio_status = responsive_page.locator("#audioStatus")
@@ -1833,7 +1839,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 )
                 require(gameplay_after == gameplay_before, f"{path} changed gameplay while the volume range owned ArrowRight.")
 
-                if path == "index.html":
+                if path.startswith("training.html"):
                     move = responsive_page.evaluate(
                         """() => {
                           const engine = window.bellsPrototype.engine;
@@ -1987,7 +1993,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             reduced_page.set_default_navigation_timeout(60_000)
             reduced_motion_canvases: dict[str, bool] = {}
             for path, canvas_selector in (
-                ("index.html", "#gameCanvas"),
+                ("training.html?dev=1", "#gameCanvas"),
                 ("campaign.html", "#mapCanvas"),
                 (f"battle.html?encounter={encounter_id}", "#battleCanvas"),
                 ("battle.html?encounter=fp1-mateus", "#battleCanvas"),

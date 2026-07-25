@@ -87,13 +87,13 @@ def render() -> Image.Image:
     if rows != [entry["id"] for entry in field["characters"]]:
         raise ValueError("roster rows must match the canonical field source")
     atlas = Image.open(COMBAT_PATH).convert("RGBA")
-    if atlas.size != (480, 384):
-        raise ValueError(f"combat atlas must be 480x384, got {atlas.size}")
+    if atlas.size != (480, 448):
+        raise ValueError(f"combat atlas must be 480x448, got {atlas.size}")
     width, height = source["canvas"]["width"], source["canvas"]["height"]
     scale, baseline = source["sprite"]["integerScale"], source["sprite"]["baselineY"]
     image = build_background(width, height)
     draw = ImageDraw.Draw(image)
-    centers = (130, 366, 602, 838, 1074, 1310)
+    centers = (110, 313, 516, 720, 924, 1127, 1330)
     for row, (character_id, center_x) in enumerate(zip(rows, centers, strict=True)):
         cell = atlas.crop((0, row * 64, 48, row * 64 + 64))
         sprite = cell.resize((48 * scale, 64 * scale), Image.Resampling.NEAREST)
@@ -101,7 +101,7 @@ def render() -> Image.Image:
         draw.ellipse((center_x - 78, baseline - 16, center_x + 78, baseline + 14), fill=(1, 3, 8, 150))
         alpha_composite_at(image, sprite, left, top)
         alpha_composite_at(image, reflection(sprite), left, baseline + 8)
-        # Palette-owned plinth ticks distinguish the six positions without text.
+        # Palette-owned plinth ticks distinguish the seven positions without text.
         color = field["characters"][row]["colors"]["accent"]
         draw.rectangle((center_x - 36, baseline + 2, center_x + 36, baseline + 7), fill=color)
     return image
@@ -120,9 +120,10 @@ def build_files() -> dict[str, bytes]:
         "status": "deterministic-runtime-key-art",
         "authorship": "original-code-native-pixel-composition",
         "geometry": {"width": image.width, "height": image.height, "mode": image.mode},
-        "rowOrder": ["ren", "aya", "lise", "mateus", "genta", "kiku"],
+        "rowOrder": source["rowOrder"],
         "presentationNames": source["presentationNames"],
         "nikolaLineage": source["nikolaLineage"],
+        "miyoLineage": source["miyoLineage"],
         "sources": [
             {"path": SOURCE_PATH.name, "role": "editable-composition-contract", "sha256": sha256(source_data)},
             {"path": "../party-combat-suite/party-combat-actions.png", "role": "canonical-authored-sprite-input", "sha256": sha256(combat_data)},
@@ -136,7 +137,7 @@ def build_files() -> dict[str, bytes]:
     manifest_data = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
     readme = """# Deterministic party roster key art
 
-This player-facing 1440 × 900 pixel-art composition is built entirely from the authored party combat atlas. It replaces the obsolete generated roster on live Campaign chapters. The third row retains the internal compatibility key `lise`, but its visible/source identity is Nikola Dražanić: a Croatian-born frontier minor aristocrat with English ancestry through his fictional mother Margaret Wychmere. His house claims a Wallachian covenant line repeatedly transmitted through noblewomen and marriage contracts. This lineage is entirely alternate-history fiction and makes no real-world claim that vampires, vampire hunters, or the Covenant existed.
+This player-facing 1440 × 900 pixel-art composition is built entirely from the authored seven-member party combat atlas. It replaces the obsolete generated roster on live Campaign chapters. The third row retains the internal compatibility key `lise`, but its visible/source identity is Nikola Dražanić: a Croatian-born frontier minor aristocrat with English ancestry through his fictional mother Margaret Wychmere. His house claims a Wallachian covenant line repeatedly transmitted through noblewomen and marriage contracts. This lineage is entirely alternate-history fiction and makes no real-world claim that vampires, vampire hunters, or the Covenant existed. The seventh row is Miyo Senda, Mateus Avelar's three-quarters-Japanese granddaughter, presented in a storm-blue Japanese travel coat with an original folding weather ruler.
 
 - `party-roster-suite.source.json` fixes dimensions, row order, presentation names, and input contracts.
 - `party-roster-key-art.png` is the runtime image.

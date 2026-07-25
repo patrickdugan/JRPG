@@ -63,12 +63,12 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   }, {
     chapters: 11,
     beats: 60,
-    lines: 2_768,
-    words: 38_243,
+    lines: 2_789,
+    words: 38_527,
     authoredChoices: 68,
     canonicalChoices: 59,
-    moves: 1_428,
-    interactions: 239,
+    moves: 1_429,
+    interactions: 241,
     exits: 41,
     finiteQuests: 13,
     finiteQuestObjectives: 59,
@@ -83,7 +83,7 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   assert.equal(audit.content.repeatableContractCount, 4);
   assert.equal(audit.content.repeatableContractObjectiveCount, 12);
   assert.equal(audit.content.sceneOperationCount, 60);
-  assert.equal(audit.content.sceneOperationNodeCount, 183);
+  assert.equal(audit.content.sceneOperationNodeCount, 185);
   assert.equal(audit.finiteContentEvidence.completionProof.valid, true);
   assert.equal(audit.finiteContentEvidence.completionProof.finiteSideQuestsComplete, true);
   assert.equal(audit.finiteContentEvidence.completionProof.witnessChroniclesComplete, true);
@@ -175,8 +175,8 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   assert.equal(PARTY_COUNCIL_METRICS.councilCount, 30);
   assert.equal(PARTY_COUNCIL_METRICS.mainLineCount, 993);
   assert.equal(PARTY_COUNCIL_METRICS.responseLineCount, 180);
-  assert.equal(PARTY_COUNCIL_METRICS.wordCount, 27_506);
-  assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount, 25_072);
+  assert.equal(PARTY_COUNCIL_METRICS.wordCount, 27_511);
+  assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount, 25_077);
   assert.deepEqual(audit.partyCouncil.metrics, {
     dialogueWords: PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount,
     dialogueLines: PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount,
@@ -258,15 +258,15 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
   );
 
   assert.deepEqual(audit.estimates.reference.canonicalOnly.quantities, {
-    dialogueWords: 38_243,
-    dialogueLines: 2_768,
+    dialogueWords: 38_527,
+    dialogueLines: 2_789,
     choices: 59,
-    fieldMoves: 1_428,
-    interactions: 239,
+    fieldMoves: 1_429,
+    interactions: 241,
     exits: 41,
-    playerCommands: 231,
-    enemyActivations: 98,
-    campRests: 17,
+    playerCommands: 224,
+    enemyActivations: 95,
+    campRests: 19,
     finiteEncounterCount: 23,
     finiteQuestCount: 0,
     finiteQuestObjectiveCount: 0,
@@ -291,8 +291,8 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
       - audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedSeconds
       - audit.estimates.reference.postStoryPreCredits.estimatedSeconds,
   ) < 1e-9);
-  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 312.481);
-  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 396.929);
+  assert.equal(audit.estimates.reference.canonicalOnly.estimatedMinutes, 314.253);
+  assert.equal(audit.estimates.reference.optionalInclusive.estimatedMinutes, 398.701);
   assert.ok(audit.estimates.low.allFiniteBeforeStoryCompletion.estimatedMinutes
     < audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes);
   assert.ok(audit.estimates.reference.allFiniteBeforeStoryCompletion.estimatedMinutes
@@ -302,23 +302,23 @@ test('duration audit derives concrete shipped quantities and keeps estimates unp
       name,
       estimate.allFiniteBeforeStoryCompletion.estimatedMinutes,
     ])),
-    { low: 772.261, reference: 1_225.371, high: 1_908.609 },
+    { low: 773.608, reference: 1_227.366, high: 1_911.688 },
   );
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates).map(([name, estimate]) => [
       name,
       estimate.allFiniteContent.estimatedMinutes,
     ])),
-    { low: 779.587, reference: 1_236.311, high: 1_924.351 },
+    { low: 780.934, reference: 1_238.306, high: 1_927.43 },
   );
   assert.equal(audit.estimates.reference.allFiniteContent.requiredRepeatPresentationMs, 37_600);
   assert.equal(audit.estimates.reference.allFiniteContent.breakdownMinutes.requiredRepeatPresentation, 0.627);
   assert.deepEqual(
     Object.fromEntries(Object.entries(audit.estimates.reference.allFiniteContent.repeatSpeedVariants)
       .map(([speed, variant]) => [speed, variant.estimatedMinutes])),
-    { 1: 1_236.311, 2: 1_235.998, 4: 1_235.841 },
+    { 1: 1_238.306, 2: 1_237.992, 4: 1_237.836 },
   );
-  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 36.311);
+  assert.equal(audit.estimates.reference.allFiniteContent.modelSurplusMinutesOver20Hours, 38.306);
   assert.equal(audit.estimates.low.allFiniteContent.reaches20HoursUnderModel, false);
   assert.equal(audit.estimates.reference.allFiniteContent.reaches20HoursUnderModel, true);
   assert.equal(audit.estimates.high.allFiniteContent.reaches20HoursUnderModel, true);

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.jrpg.dev/verifiers-v2/project.schema.json",
+  "title": "JRPG verifier v2 project evidence",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "id", "root", "nodeEvidence"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 2 },
+    "kind": { "const": "jrpg-verifier-project" },
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "root": { "type": "string", "minLength": 1 },
+    "nodeEvidence": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/evidence" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["declaredStatus", "sources", "artifacts"],
+      "properties": {
+        "declaredStatus": { "enum": ["ready", "partial", "planned", "not-applicable"] },
+        "sources": {
+          "oneOf": [
+            { "const": "dependencies" },
+            { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+          ]
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string", "minLength": 1 },
+              {
+                "type": "object",
+                "required": ["path"],
+                "properties": {
+                  "path": { "type": "string", "minLength": 1 },
+                  "role": { "type": ["string", "null"] }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

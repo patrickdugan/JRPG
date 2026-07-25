@@ -16,17 +16,17 @@ test('item icon suite rebuilds byte-identically', () => {
   });
 });
 
-test('manifest locks 25 distinct live frames and byte-identical runtime art', async () => {
+test('manifest locks 26 distinct live frames and byte-identical runtime art', async () => {
   const manifest = JSON.parse(await readFile(new URL('manifest.json', suiteUrl), 'utf8'));
   const source = JSON.parse(await readFile(new URL('item-icon-suite.source.json', suiteUrl), 'utf8'));
   const atlas = await readFile(new URL('item-icon-atlas.png', suiteUrl));
   const runtime = await readFile(runtimeUrl);
   assert.equal(manifest.assetId, source.assetId);
   assert.equal(manifest.geometry.sheetWidth, 80);
-  assert.equal(manifest.geometry.sheetHeight, 80);
-  assert.equal(manifest.frames.length, 25);
+  assert.equal(manifest.geometry.sheetHeight, 96);
+  assert.equal(manifest.frames.length, 26);
   assert.deepEqual(manifest.itemOrder, source.items.map((item) => item.id));
-  assert.equal(new Set(manifest.frames.map((frame) => frame.rgbaSha256)).size, 25);
+  assert.equal(new Set(manifest.frames.map((frame) => frame.rgbaSha256)).size, 26);
   for (const frame of manifest.frames) {
     assert.equal(frame.localAlphaBounds.every((value) => Number.isInteger(value)), true);
     assert.ok(frame.localAlphaBounds[0] >= 1 && frame.localAlphaBounds[1] >= 1);

@@ -1,6 +1,6 @@
 export const ITEM_ICON_IDS = Object.freeze([
   'courier-saber', 'warding-brush', 'salt-etched-rapier', 'dusk-censer', 'cedar-maul',
-  'pilgrim-knife', 'dawnsteel-blade', 'bellglass-focus', 'quilted-haori', 'river-silk-robe',
+  'weather-ruler', 'pilgrim-knife', 'dawnsteel-blade', 'bellglass-focus', 'quilted-haori', 'river-silk-robe',
   'bell-iron-lamellar', 'ash-lacquer-coat', 'dawn-thread-mantle', 'road-sandals', 'lantern-bead-cord',
   'frostglass-pin', 'storm-kite-toggle', 'iron-knot', 'cedar-route-note', 'temple-charm',
   'river-salve', 'ward-tonic', 'spirit-tea', 'dawn-salt', 'traveler-plum',
@@ -12,9 +12,9 @@ export const ITEM_ICON_ATLAS = Object.freeze({
   frameWidth: 16,
   frameHeight: 16,
   columns: 5,
-  rows: 5,
+  rows: 6,
   width: 80,
-  height: 80,
+  height: 96,
 });
 
 const FRAMES = Object.freeze(Object.fromEntries(ITEM_ICON_IDS.map((id, index) => [id, Object.freeze({

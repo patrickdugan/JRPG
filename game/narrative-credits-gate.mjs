@@ -1,4 +1,4 @@
-/** Cross-authority gate for the ordinary 82-scene narrative credits route. */
+/** Cross-authority gate for the selected nonlinear narrative route. */
 
 import {
   RUN_RECEIPT_PROFILE_IDS,

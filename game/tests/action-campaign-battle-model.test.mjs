@@ -6,25 +6,15 @@ import {
   createActionCampaignBattleResult,
   createActionCampaignBattleSession,
   getActionCampaignComboState,
+  getActionCampaignManeuverChoices,
   parseActionCampaignBattleQuery,
-  settleActionCampaignBattleVictory,
   snapshotActionCampaignBattle,
+  switchActionCampaignActor,
 } from '../action-campaign-battle-model.mjs';
 import { HUNTER_PRIEST_COMBO_CONTRACT } from '../action-combos.mjs';
-import { createAdvancementState, getEncounterWinCount } from '../advancement.mjs';
+import { createAdvancementState } from '../advancement.mjs';
 import { validateBattleResultRecord } from '../battle-result-contract.mjs';
 import { createLoadoutState } from '../loadout.mjs';
-import { createCampaignState } from '../progression.mjs';
-import { createRunReceipt } from '../run-receipt.mjs';
-
-function memoryAdapter(initialState) {
-  let state = initialState;
-  return {
-    load() { return { ok: true, found: true, state }; },
-    save(nextState) { state = nextState; return { ok: true }; },
-    get state() { return state; },
-  };
-}
 
 function coreStates() {
   return { advancement: createAdvancementState(), loadout: createLoadoutState() };
@@ -81,6 +71,184 @@ test('session composes the real encounter, authored action stage, loadout vitals
   const ren = snapshot.kernel.actors.find(({ id }) => id === 'ren');
   assert.equal(ren.position.x, session.stage.spawns.party[0].x);
   assert.equal(ren.maxHp > 104, true, 'shipped loadout HP modifier is applied over advancement HP');
+});
+
+test('Action Lab can deploy one AI support and swaps direct/AI roles without resetting either fighter', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'prologue-ashen-bailiff',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+    supportActorId: 'aya',
+  });
+  let snapshot = snapshotActionCampaignBattle(session);
+  assert.deepEqual(
+    snapshot.kernel.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
+    ['ren', 'aya'],
+  );
+  assert.deepEqual(snapshot.duo, {
+    enabled: true,
+    directActorId: 'ren',
+    supportActorId: 'aya',
+    aiControlledActorIds: ['aya'],
+  });
+
+  snapshot = advanceActionCampaignBattle(session, 20);
+  assert.equal(snapshot.recentEvents.some(({ type, actorId, action }) => (
+    type === 'companion-decision' && actorId === 'aya' && ['follow', 'guard', 'move', 'attack'].includes(action)
+  )), true);
+  const beforeSwitch = snapshot.kernel.actors.map(({ id, hp, position }) => ({ id, hp, position }));
+  assert.equal(switchActionCampaignActor(session, 1).ok, true);
+  snapshot = snapshotActionCampaignBattle(session);
+  assert.equal(snapshot.duo.directActorId, 'aya');
+  assert.equal(snapshot.duo.supportActorId, 'ren');
+  assert.deepEqual(
+    snapshot.kernel.actors.map(({ id, hp, position }) => ({ id, hp, position })),
+    beforeSwitch,
+  );
+});
+
+test('strict duo deployment tags between character movement identities without resetting traversal state', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c9-kurozane',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+    fighterActorIds: ['lise', 'mateus'],
+  });
+  let snapshot = snapshotActionCampaignBattle(session);
+  assert.deepEqual(
+    snapshot.kernel.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
+    ['lise', 'mateus'],
+  );
+  assert.equal(snapshot.duo.directActorId, 'lise');
+  assert.equal(snapshot.duo.supportActorId, 'mateus');
+  assert.equal(snapshot.kernel.actors.find(({ id }) => id === 'lise').movementProfileId, 'hunter');
+  assert.deepEqual(getActionCampaignManeuverChoices(session).map(({ name }) => name), [
+    'Hunter Step', 'Salt-Knee Slide', 'Rising Stake', 'Falling Stake',
+  ]);
+
+  advanceActionCampaignBattle(session, 20, { right: true, maneuverPressed: 'dash' });
+  const beforeTag = session.kernel.getActor('lise');
+  assert.equal(beforeTag.activeManeuver.id, 'dash');
+  const cooldownBeforeTag = beforeTag.maneuverCooldowns.dash;
+  assert.equal(switchActionCampaignActor(session, 1).ok, true);
+  snapshot = advanceActionCampaignBattle(session, 20);
+  const nikola = snapshot.kernel.actors.find(({ id }) => id === 'lise');
+  const mateus = snapshot.kernel.actors.find(({ id }) => id === 'mateus');
+  assert.equal(snapshot.duo.directActorId, 'mateus');
+  assert.equal(mateus.movementProfileId, 'vampire');
+  assert.deepEqual(getActionCampaignManeuverChoices(session).map(({ name }) => name), [
+    'Night Passage', 'Low Shadow', 'Vesper Ascent', 'Penitent Fall',
+  ]);
+  assert.equal(nikola.activeManeuver.id, 'dash');
+  assert.equal(nikola.maneuverCooldowns.dash, cooldownBeforeTag - 20);
+  assert.equal(mateus.airDashUsesRemaining, 2);
+});
+
+test('session-local party vitals override the laboratory seed without reviving a downed partner', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c1-ash-wisps',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+    fighterActorIds: ['lise', 'mateus'],
+    partyVitals: {
+      lise: { hp: 23, maxHp: 109 },
+      mateus: { hp: 0, maxHp: 98 },
+    },
+  });
+  const party = snapshotActionCampaignBattle(session).kernel.actors
+    .filter(({ faction }) => faction === 'player');
+  assert.deepEqual(party.map(({ id, hp, maxHp }) => ({ id, hp, maxHp })), [
+    { id: 'lise', hp: 23, maxHp: 109 },
+    { id: 'mateus', hp: 0, maxHp: 98 },
+  ]);
+  advanceActionCampaignBattle(session, 20);
+  assert.equal(snapshotActionCampaignBattle(session).kernel.controlledActorId, 'lise');
+});
+
+test('Nikola AI support can use Rising Stake to join Mateus on the high cedar root', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c1-ash-wisps',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+    fighterActorIds: ['mateus', 'lise'],
+  });
+  const mateus = session.kernel.getActor('mateus');
+  const nikola = session.kernel.getActor('lise');
+  mateus.position = { x: 740, y: 318 };
+  mateus.grounded = true;
+  nikola.position = { x: 740, y: 452 };
+  nikola.grounded = true;
+  for (const actor of session.kernel.actors.values()) {
+    if (actor.faction === 'enemy') actor.ai = null;
+  }
+
+  session.kernel.advance(20);
+  const events = session.kernel.drainEvents();
+  assert.ok(events.some(({ type, actorId, action }) => (
+    type === 'companion-decision' && actorId === 'lise' && action === 'rise-follow'
+  )));
+  let joined = false;
+  for (let step = 0; step < 100; step += 1) {
+    session.kernel.advance(20);
+    if (nikola.grounded && nikola.position.y === 318) {
+      joined = true;
+      break;
+    }
+  }
+  assert.equal(joined, true);
+});
+
+test('campaign adapter exposes and edge-triggers Ren\'s four infiltrator movement verbs', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c1-cinder-hounds',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  assert.deepEqual(getActionCampaignManeuverChoices(session).map(({ id, name }) => ({ id, name })), [
+    { id: 'dash', name: 'Roofline Rush' },
+    { id: 'slide', name: 'Eaves Slide' },
+    { id: 'uppercut', name: 'Gutter Hook' },
+    { id: 'thunder-kick', name: 'Rafter Dive' },
+  ]);
+  const before = snapshotActionCampaignBattle(session).kernel.actors.find(({ id }) => id === 'ren');
+  let snapshot = advanceActionCampaignBattle(session, 20, {
+    right: true,
+    jumpHeld: false,
+    maneuverPressed: 'dash',
+  });
+  let ren = snapshot.kernel.actors.find(({ id }) => id === 'ren');
+  assert.equal(ren.activeManeuver.id, 'dash');
+  assert.equal(ren.position.x > before.position.x, true);
+  assert.equal(snapshot.recentEvents.some(({ type, maneuverId }) => type === 'maneuver-start' && maneuverId === 'dash'), true);
+
+  snapshot = advanceActionCampaignBattle(session, 20, { right: true, jumpHeld: false });
+  ren = snapshot.kernel.actors.find(({ id }) => id === 'ren');
+  assert.equal(ren.activeManeuver.elapsedMs, 40, 'held frames do not retrigger an edge-triggered maneuver');
+});
+
+test('invalid contextual maneuver input produces an accessible blocked event without mutation', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c1-cinder-hounds',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const actor = session.kernel.getActor('ren');
+  actor.position.y -= 80;
+  actor.grounded = false;
+  const before = session.kernel.snapshot().actors.find(({ id }) => id === 'ren');
+  const snapshot = advanceActionCampaignBattle(session, 0, { maneuverPressed: 'slide' });
+  const after = snapshot.kernel.actors.find(({ id }) => id === 'ren');
+  assert.equal(after.activeManeuver, null);
+  assert.deepEqual(after.position, before.position);
+  assert.ok(snapshot.recentEvents.some(({ type, maneuverId, reason }) => (
+    type === 'maneuver-blocked' && maneuverId === 'slide' && reason === 'requires-ground'
+  )));
 });
 
 test('Hunter–Priest combo is contract-locked when Nikola and Mateus are absent', () => {
@@ -162,37 +330,18 @@ test('objective-authoritative terminal projection passes battle-result-contract'
   assert.deepEqual(Object.keys(record.partyVitals), ['ren', 'aya']);
 });
 
-test('one real first-clear settles in memory without touching a persistent user profile', () => {
+test('laboratory victory produces an engine-neutral result without settlement', () => {
   const states = coreStates();
-  const receipt = createRunReceipt({
-    runId: 'action-first-clear-0001',
-    campaignState: createCampaignState(),
-    advancementState: states.advancement,
-  });
-  assert.equal(receipt.ok, true, receipt.errors?.join(' '));
   const session = createActionCampaignBattleSession({
     encounterId: 'c1-cinder-hounds',
     advancementState: states.advancement,
     loadoutState: states.loadout,
   });
   forceEnemyDefeat(session);
-  const adapters = {
-    advancement: memoryAdapter(states.advancement),
-    loadout: memoryAdapter(states.loadout),
-    runReceipt: memoryAdapter(receipt.state),
-  };
-  const settled = settleActionCampaignBattleVictory({
-    session,
-    states: { ...states, runReceipt: receipt.state },
-    adapters,
-    flushPlaytime: () => ({ ok: true, state: receipt.state }),
-  });
-  assert.equal(settled.ok, true, settled.message);
-  assert.equal(getEncounterWinCount(settled.states.advancement, session.encounter.id), 1);
-  assert.deepEqual(settled.states.runReceipt.firstClearEncounterIds, ['c1-cinder-hounds']);
-  assert.equal(adapters.advancement.state, settled.states.advancement);
-  assert.equal(adapters.loadout.state, settled.states.loadout);
-  assert.equal(adapters.runReceipt.state, settled.states.runReceipt);
+  const result = createActionCampaignBattleResult(session);
+  assert.equal(result.result, 'victory');
+  assert.equal(result.encounterId, 'c1-cinder-hounds');
+  assert.deepEqual(Object.keys(result.partyVitals), ['ren', 'aya']);
 });
 
 test('post-boss objectives stay live until the required interaction or evacuation overlap', () => {

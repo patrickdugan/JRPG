@@ -1,4 +1,5 @@
 import { CAMPAIGN } from './content/campaign.mjs';
+import { applyPresentationMode, PRESENTATION_MODES } from './presentation-mode.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
 import {
   createAdvancementState,
@@ -91,6 +92,10 @@ import {
   getPartyCouncilRuntimeMetrics,
 } from './party-council-runtime.mjs';
 
+const presentationMode = applyPresentationMode();
+const developerMode = presentationMode === PRESENTATION_MODES.DEVELOPER;
+const campTabs = document.querySelector('#campTabs');
+const campLayout = document.querySelector('.camp-layout');
 const partyList = document.querySelector('#campPartyList');
 const partyCurrency = document.querySelector('#partyCurrency');
 const campSelect = document.querySelector('#campSelect');
@@ -199,6 +204,7 @@ const ROUTE_FOCUS_SELECTORS = Object.freeze({
   'archive-record': 'archiveRecordId',
 });
 let routeFocusPending = Boolean(ROUTE_FOCUS_SELECTORS[requestedRouteType] && requestedRouteId);
+let activeCampTab = ROUTE_FOCUS_SELECTORS[requestedRouteType] ? 'stories' : 'party';
 const reducedMotionPreference = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
 const campPartyAtlasImage = new Image();
 let campPartyAtlasState = 'loading';
@@ -324,10 +330,78 @@ function combinedStats(member, modifiers) {
   return Object.fromEntries(Object.entries(member.stats).map(([key, value]) => [key, value + (modifiers.stats[key] ?? 0)]));
 }
 
+function titleCase(value) {
+  return String(value).replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function effectiveItemModifiers(item, forgeRank = 0) {
+  if (!item?.modifiers) return {};
+  const stats = { ...(item.modifiers.stats ?? {}) };
+  for (const [key, value] of Object.entries(item.upgradePerLevel ?? {})) {
+    stats[key] = (stats[key] ?? 0) + value * forgeRank;
+  }
+  return { ...item.modifiers, stats };
+}
+
+function formatMechanics(modifiers = {}) {
+  const parts = [];
+  for (const [key, value] of Object.entries(modifiers.stats ?? {})) {
+    parts.push(`${value >= 0 ? '+' : ''}${value} ${titleCase(key)}`);
+  }
+  for (const [key, value] of Object.entries(modifiers.delivery ?? {})) {
+    const percent = Math.round(Math.abs(1 - value) * 100);
+    parts.push(value <= 1 ? `${percent}% ${titleCase(key)} damage resistance` : `${percent}% more ${titleCase(key)} damage taken`);
+  }
+  for (const [key, value] of Object.entries(modifiers.essence ?? {})) {
+    const percent = Math.round(Math.abs(1 - value) * 100);
+    parts.push(value <= 1 ? `${percent}% ${titleCase(key)} damage resistance` : `${percent}% more ${titleCase(key)} damage taken`);
+  }
+  for (const [key, value] of Object.entries(modifiers.statusResistance ?? {})) {
+    parts.push(`${Math.round(value * 100)}% ${titleCase(key)} resistance`);
+  }
+  if (modifiers.paceDelta) parts.push(`Pace ${modifiers.paceDelta > 0 ? '+' : ''}${modifiers.paceDelta}`);
+  if (modifiers.recoveryPulsesDelta) {
+    parts.push(`Recovery ${Math.abs(modifiers.recoveryPulsesDelta)} ${modifiers.recoveryPulsesDelta < 0 ? 'pulse faster' : 'pulse slower'}`);
+  }
+  for (const skillId of modifiers.skillIds ?? []) parts.push(`Unlocks ${titleCase(skillId)}`);
+  return parts.join(' · ') || 'No mechanical change';
+}
+
+function formatStatPreview(stats, currentModifiers = {}, nextModifiers = {}) {
+  const currentStats = currentModifiers.stats ?? {};
+  const nextStats = nextModifiers.stats ?? {};
+  const keys = [...new Set([...Object.keys(currentStats), ...Object.keys(nextStats)])];
+  const changes = keys.map((key) => {
+    const before = stats[key] ?? 0;
+    const after = before - (currentStats[key] ?? 0) + (nextStats[key] ?? 0);
+    return before === after ? null : `${titleCase(key)} ${before} → ${after}`;
+  }).filter(Boolean);
+  return changes.join(' · ') || 'Core statistics unchanged';
+}
+
+function renderCampTab() {
+  campLayout.dataset.activeCampTab = activeCampTab;
+  campLayout.querySelectorAll('[data-camp-panels]').forEach((panel) => {
+    panel.hidden = !panel.dataset.campPanels.split(/\s+/).includes(activeCampTab);
+  });
+  campLayout.querySelectorAll('[data-loadout-only]').forEach((section) => {
+    section.hidden = activeCampTab !== 'loadout';
+  });
+  campTabs.querySelectorAll('[data-camp-tab]').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.campTab === activeCampTab));
+  });
+}
+
 function renderMember() {
   const member = getPartyMember(advancementState, selectedMemberId);
   const summary = getCharacterSummary(loadoutState, selectedMemberId);
   const stats = combinedStats(member, summary.modifiers);
+  const previewStats = {
+    ...stats,
+    hp: summary.vitals.maxHp,
+    mp: summary.vitals.maxMp,
+    spirit: summary.vitals.maxSpirit,
+  };
   memberRole.textContent = ROLES[selectedMemberId];
   memberName.textContent = member.name;
   const portraitFrame = getPartyPortraitFrame(selectedMemberId, 'neutral');
@@ -374,25 +448,43 @@ function renderMember() {
     const candidates = Object.values(ITEM_CATALOGUE).filter((item) => item.kind === 'equipment'
       && item.slot === slot && item.allowedMembers.includes(selectedMemberId)
       && ((loadoutState.inventory[item.id] ?? 0) > 0 || item.id === current));
-    select.append(new Option('— Empty —', ''), ...candidates.map((item) => new Option(`${item.name}${item.id === current ? ' · equipped' : ` · ${loadoutState.inventory[item.id]} stored`}`, item.id)));
+    select.append(new Option('— Empty —', ''), ...candidates.map((item) => {
+      const rank = loadoutState.upgrades[item.id] ?? 0;
+      return new Option(`${item.name} · ${formatMechanics(effectiveItemModifiers(item, rank))}${item.id === current ? ' · equipped' : ''}`, item.id);
+    }));
     select.value = current;
-    const button = element('button', '', 'Unequip');
-    button.type = 'button';
-    button.dataset.unequipSlot = slot;
-    button.disabled = !current;
-    button.setAttribute(
+    const currentItem = ITEM_CATALOGUE[current];
+    const currentModifiers = effectiveItemModifiers(currentItem, loadoutState.upgrades[current] ?? 0);
+    const mechanics = element('p', 'mechanic-summary', currentItem ? `Current effects: ${formatMechanics(currentModifiers)}` : 'This slot is empty.');
+    const preview = element('p', 'stat-preview', 'Choose another item to preview its statistics.');
+    const apply = element('button', '', 'Equip selection');
+    apply.type = 'button';
+    apply.dataset.applyEquipmentSlot = slot;
+    apply.disabled = true;
+    const unequip = element('button', '', 'Unequip');
+    unequip.type = 'button';
+    unequip.dataset.unequipSlot = slot;
+    unequip.disabled = !current;
+    unequip.setAttribute(
       'aria-label',
       current
         ? `Unequip ${itemName(current)} from ${member.name}'s ${slot}`
         : `Nothing equipped in ${member.name}'s ${slot}`,
     );
-    card.append(label, select, button);
+    card.append(label, select, mechanics, preview, apply, unequip);
     return card;
   }));
   vowSlotSummary.textContent = `${summary.vows.length}/2 slots`;
   equippedVows.replaceChildren(...(summary.vows.length ? summary.vows.map((vow) => {
     const card = element('article', 'vow-card');
-    card.append(element('small', '', 'Bound'), element('strong', '', vow.name), element('span', '', vow.description));
+    const beforeStats = Object.fromEntries(Object.entries(previewStats).map(([key, value]) => [key, value - (vow.modifiers.stats?.[key] ?? 0)]));
+    card.append(
+      element('small', '', 'Bound'),
+      element('strong', '', vow.name),
+      element('span', '', vow.description),
+      element('p', 'mechanic-summary', `Active effects: ${formatMechanics(vow.modifiers)}`),
+      element('p', 'stat-preview', formatStatPreview(beforeStats, {}, vow.modifiers)),
+    );
     const button = element('button', '', 'Release Vow');
     button.type = 'button';
     button.dataset.unequipVow = vow.id;
@@ -404,7 +496,13 @@ function renderMember() {
   vowCatalogue.replaceChildren(...availableVows.map((vow) => {
     const unlocked = loadoutState.unlockedVows.includes(vow.id);
     const card = element('article', 'vow-card');
-    card.append(element('small', '', unlocked ? 'Learned' : `${vow.cost} mon`), element('strong', '', vow.name), element('span', '', vow.description));
+    card.append(
+      element('small', '', unlocked ? 'Learned' : `${vow.cost} mon`),
+      element('strong', '', vow.name),
+      element('span', '', vow.description),
+      element('p', 'mechanic-summary', formatMechanics(vow.modifiers)),
+      element('p', 'stat-preview', formatStatPreview(previewStats, {}, vow.modifiers)),
+    );
     const button = element('button', '', unlocked ? 'Bind Vow' : 'Learn Vow');
     button.type = 'button';
     button.dataset[unlocked ? 'equipVow' : 'learnVow'] = vow.id;
@@ -424,6 +522,7 @@ function renderInventory() {
   inventoryList.replaceChildren(...(entries.length ? entries.map(({ item, quantity }) => {
     const card = element('article', 'inventory-entry has-item-icon');
     card.append(itemIconElement(item.id), element('small', '', `${item.kind} · ${quantity} held`), element('strong', '', item.name), element('span', '', item.description));
+    if (item.kind === 'equipment') card.append(element('p', 'mechanic-summary', formatMechanics(effectiveItemModifiers(item, loadoutState.upgrades[item.id] ?? 0))));
     const actions = element('div', 'inventory-entry-actions');
     if (item.kind === 'consumable') {
       const use = element('button', '', `Use on ${castName(selectedMemberId).split(' ')[0]}`);
@@ -450,6 +549,7 @@ function renderShop() {
     const card = element('article', 'shop-entry has-item-icon');
     const upgrade = loadoutState.upgrades[item.id] ?? 0;
     card.append(itemIconElement(item.id), element('small', '', `${item.kind}${item.slot ? ` · ${item.slot}` : ''}${upgrade ? ` · forge ${upgrade}` : ''}`), element('strong', '', item.name), element('span', '', item.description));
+    if (item.kind === 'equipment') card.append(element('p', 'mechanic-summary', formatMechanics(effectiveItemModifiers(item, upgrade))));
     const actions = element('div', 'shop-entry-actions');
     const buy = element('button', '', `Buy · ${item.price}`);
     buy.type = 'button'; buy.dataset.buyItem = item.id;
@@ -546,7 +646,9 @@ function renderCampConversationStage() {
 
 function renderCampConversations() {
   const metrics = getCampConversationRuntimeMetrics(campConversationState);
-  campConversationSummary.textContent = `${metrics.completedConversationCount} / ${metrics.conversationCount} complete`;
+  campConversationSummary.textContent = developerMode
+    ? `${metrics.completedConversationCount} / ${metrics.conversationCount} complete`
+    : `${metrics.completedConversationCount} remembered`;
   const completedBeats = new Set(campaignState.completedBeatIds ?? []);
   const activeId = campConversationState.records.find((record) => record.status === 'active')?.id ?? null;
   const visible = CAMP_CONVERSATIONS.conversations.filter((conversation) => {
@@ -633,14 +735,16 @@ function renderPartyCouncilStage() {
   }
   partyCouncilLine.textContent = progress.selectedOption
     ? `${progress.selectedOption.label} — ${progress.selectedOption.consequence.summary}`
-    : 'This finite council is recorded.';
+    : 'This council is remembered.';
   advancePartyCouncil.textContent = 'Council complete';
   advancePartyCouncil.disabled = true;
 }
 
 function renderPartyCouncils() {
   const metrics = getPartyCouncilRuntimeMetrics(partyCouncilState);
-  partyCouncilSummary.textContent = `${metrics.completedCouncilCount} / ${metrics.councilCount} complete`;
+  partyCouncilSummary.textContent = developerMode
+    ? `${metrics.completedCouncilCount} / ${metrics.councilCount} complete`
+    : `${metrics.completedCouncilCount} remembered`;
   const completedBeats = new Set(campaignState.completedBeatIds ?? []);
   const activeId = partyCouncilState.records.find((record) => record.status === 'active')?.id ?? null;
   const visible = PARTY_COUNCILS.councils.filter((council) => {
@@ -706,14 +810,16 @@ function renderArchiveRecordStage() {
     advanceArchiveRecord.textContent = `Review passage ${archiveReviewParagraphIndex + 1}/${progress.paragraphCount}`;
     return;
   }
-  archiveRecordParagraph.textContent = 'This finite public reading is recorded. Its correction and access terms remain attached.';
+  archiveRecordParagraph.textContent = 'This public reading is complete. Its correction and access terms remain attached.';
   advanceArchiveRecord.textContent = 'Reading complete';
   advanceArchiveRecord.disabled = true;
 }
 
 function renderArchiveRecords() {
   const metrics = getArchiveRecordRuntimeMetrics(archiveRecordState);
-  archiveRecordSummary.textContent = `${metrics.completedRecordCount} / ${metrics.recordCount} read`;
+  archiveRecordSummary.textContent = developerMode
+    ? `${metrics.completedRecordCount} / ${metrics.recordCount} read`
+    : `${metrics.completedRecordCount} read`;
   const completedBeats = new Set(campaignState.completedBeatIds ?? []);
   const activeId = archiveRecordState.records.find((record) => record.status === 'active')?.id ?? null;
   const visible = ARCHIVE_RECORDS.records.filter((record) => {
@@ -749,6 +855,7 @@ function renderArchiveRecords() {
 }
 
 function render() {
+  renderCampTab();
   partyCurrency.textContent = `${loadoutState.currency} mon`;
   renderParty();
   renderMember();
@@ -803,7 +910,7 @@ function applyRequestedRouteFocus() {
   const target = selector ? document.querySelector(selector) : null;
   routeFocusPending = false;
   if (!target) {
-    campFeedback.textContent = 'The requested route entry is not available for this save frontier.';
+    campFeedback.textContent = 'That story is not available yet.';
     return;
   }
   target.classList.add('is-route-focus');
@@ -828,13 +935,43 @@ equipmentSlots.addEventListener('change', (event) => {
   const select = event.target.closest('[data-equipment-slot]');
   if (!select) return;
   const current = loadoutState.equipment[selectedMemberId][select.dataset.equipmentSlot];
-  if (select.value === current) return;
-  commit(select.value ? equipItem(loadoutState, selectedMemberId, select.value) : unequipItem(loadoutState, selectedMemberId, select.dataset.equipmentSlot));
+  const member = getPartyMember(advancementState, selectedMemberId);
+  const summary = getCharacterSummary(loadoutState, selectedMemberId);
+  const stats = {
+    ...combinedStats(member, summary.modifiers),
+    hp: summary.vitals.maxHp,
+    mp: summary.vitals.maxMp,
+    spirit: summary.vitals.maxSpirit,
+  };
+  const currentItem = ITEM_CATALOGUE[current];
+  const nextItem = ITEM_CATALOGUE[select.value];
+  const currentModifiers = effectiveItemModifiers(currentItem, loadoutState.upgrades[current] ?? 0);
+  const nextModifiers = effectiveItemModifiers(nextItem, loadoutState.upgrades[select.value] ?? 0);
+  const card = select.closest('.equipment-slot');
+  card.querySelector('.mechanic-summary').textContent = nextItem
+    ? `Selected effects: ${formatMechanics(nextModifiers)}`
+    : 'Selected: empty slot';
+  card.querySelector('.stat-preview').textContent = formatStatPreview(stats, currentModifiers, nextModifiers);
+  card.querySelector('[data-apply-equipment-slot]').disabled = select.value === current;
 });
 
 equipmentSlots.addEventListener('click', (event) => {
+  const apply = event.target.closest('[data-apply-equipment-slot]');
   const button = event.target.closest('[data-unequip-slot]');
-  if (button) commit(unequipItem(loadoutState, selectedMemberId, button.dataset.unequipSlot));
+  if (apply) {
+    const select = apply.closest('.equipment-slot').querySelector('[data-equipment-slot]');
+    commit(select.value
+      ? equipItem(loadoutState, selectedMemberId, select.value)
+      : unequipItem(loadoutState, selectedMemberId, apply.dataset.applyEquipmentSlot));
+  } else if (button) commit(unequipItem(loadoutState, selectedMemberId, button.dataset.unequipSlot));
+});
+
+campTabs.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-camp-tab]');
+  if (!button) return;
+  activeCampTab = button.dataset.campTab;
+  renderCampTab();
+  button.focus();
 });
 
 vowCatalogue.addEventListener('click', (event) => {
@@ -906,7 +1043,7 @@ campConversationList.addEventListener('click', (event) => {
     campConversationState = result.state;
     render();
     focusCampConversationStage();
-    campFeedback.textContent = `Camp conversation begun: ${conversation.title}. Every line and one explicit response will be recorded once.`;
+    campFeedback.textContent = `Conversation begun: ${conversation.title}.`;
     return;
   }
   renderCampConversations();
@@ -983,14 +1120,14 @@ partyCouncilList.addEventListener('click', (event) => {
     partyCouncilState = result.state;
     render();
     advancePartyCouncil.focus();
-    campFeedback.textContent = `Party council begun: ${council.title}. Every speaker and one explicit decision will be recorded once.`;
+    campFeedback.textContent = `Council begun: ${council.title}.`;
     return;
   }
   renderPartyCouncils();
   if (record.status === 'completed') partyCouncilTitle.focus();
   else advancePartyCouncil.focus();
   campFeedback.textContent = record.status === 'completed'
-    ? `Reviewing the recorded consequence of ${council.title}; finite state remains unchanged.`
+    ? `Reviewing the outcome of ${council.title}.`
     : `Continuing ${council.title}.`;
 });
 
@@ -1055,7 +1192,7 @@ archiveRecordList.addEventListener('click', (event) => {
     archiveReviewParagraphIndex = 0;
     renderArchiveRecords();
     focusArchiveRecordStage();
-    campFeedback.textContent = `Reviewing ${record.title}. Review does not change finite completion state.`;
+    campFeedback.textContent = `Reviewing ${record.title}.`;
     return;
   }
   archiveReviewParagraphIndex = null;
@@ -1087,9 +1224,9 @@ advanceArchiveRecord.addEventListener('click', () => {
     archiveReviewParagraphIndex += 1;
     if (archiveReviewParagraphIndex >= progress.paragraphCount) {
       archiveReviewParagraphIndex = null;
-      campFeedback.textContent = 'Read-only archive review complete; finite state was unchanged.';
+      campFeedback.textContent = 'Archive review complete; completion was unchanged.';
     } else {
-      campFeedback.textContent = 'Review passage advanced without changing finite completion state.';
+      campFeedback.textContent = 'Reviewing the next passage.';
     }
     renderArchiveRecordStage();
     focusArchiveRecordStage();

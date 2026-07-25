@@ -12,6 +12,10 @@ import {
   createCampaignState,
 } from '../progression.mjs';
 import {
+  getCampaignRouteSchedule,
+  getNarrativeRouteSchedules,
+} from '../campaign-route-scheduler.mjs';
+import {
   completeRunCredits,
   createRunReceipt,
   createRunReceiptStorageAdapter,
@@ -57,10 +61,15 @@ function startNarrative(runId = 'run-narrative-0001') {
   return result.state;
 }
 
-function completeNarrativeStory(state) {
+function completeNarrativeStory(state, theater = 'salt') {
+  const schedule = getCampaignRouteSchedule(theater);
   let next = state;
-  for (const beatId of BEAT_IDS) next = recordRunBeatCompletion(next, next.runId, beatId).state;
-  for (const decisionId of NARRATIVE_STORYWORLD_DECISION_IDS) {
+  for (const beatId of schedule.beatIds) {
+    const result = recordRunBeatCompletion(next, next.runId, beatId);
+    assert.equal(result.ok, true, result.errors?.join(' '));
+    next = result.state;
+  }
+  for (const decisionId of schedule.storyworldDecisionIds) {
     next = recordRunStoryworldDecision(next, next.runId, decisionId).state;
   }
   return next;
@@ -150,10 +159,11 @@ test('narrative profile is explicit and records the eleven Storyworld decisions 
   assert.equal(notTracked.code, 'profile-does-not-track-storyworld');
 });
 
-test('narrative credits require 60 canonical scenes, 11 Storyworld decisions, and 300 active minutes', () => {
+test('narrative credits require every scene in the selected route and 300 active minutes', () => {
+  const schedule = getCampaignRouteSchedule('salt');
   let state = startNarrative('run-narrative-proof');
-  for (const beatId of BEAT_IDS) state = recordRunBeatCompletion(state, state.runId, beatId).state;
-  for (const decisionId of NARRATIVE_STORYWORLD_DECISION_IDS.slice(0, -1)) {
+  for (const beatId of schedule.beatIds) state = recordRunBeatCompletion(state, state.runId, beatId).state;
+  for (const decisionId of schedule.storyworldDecisionIds.slice(0, -1)) {
     state = recordRunStoryworldDecision(state, state.runId, decisionId).state;
   }
   state = recordMinutes(state, 300);
@@ -161,7 +171,7 @@ test('narrative credits require 60 canonical scenes, 11 Storyworld decisions, an
   assert.equal(missingDecision.ok, false);
   assert.equal(missingDecision.code, 'story-incomplete');
 
-  state = recordRunStoryworldDecision(state, state.runId, NARRATIVE_STORYWORLD_DECISION_IDS.at(-1)).state;
+  state = recordRunStoryworldDecision(state, state.runId, schedule.storyworldDecisionIds.at(-1)).state;
   const sealed = completeRunCredits(state, state.runId);
   assert.equal(sealed.ok, true, sealed.errors?.join(' '));
   const proof = getRunProofReport(sealed.state);
@@ -169,12 +179,14 @@ test('narrative credits require 60 canonical scenes, 11 Storyworld decisions, an
   assert.equal(proof.profileLabel, 'Narrative 5-6 hour route');
   assert.equal(proof.canonicalStoryComplete, true);
   assert.equal(proof.storyworldDecisionsComplete, true);
-  assert.equal(proof.completedStoryworldDecisionCount, 11);
-  assert.equal(proof.requiredStoryworldDecisionCount, 11);
-  assert.equal(proof.completedStoryworldPlayedSceneCount, 22);
-  assert.equal(proof.requiredStoryworldPlayedSceneCount, 22);
-  assert.equal(proof.playedSceneCount, 82);
-  assert.equal(proof.requiredPlayedSceneCount, 82);
+  assert.equal(proof.completedStoryworldDecisionCount, schedule.storyworldDecisionIds.length);
+  assert.equal(proof.requiredStoryworldDecisionCount, schedule.storyworldDecisionIds.length);
+  assert.equal(proof.completedStoryworldPlayedSceneCount, schedule.playedStoryworldSceneCount);
+  assert.equal(proof.requiredStoryworldPlayedSceneCount, schedule.playedStoryworldSceneCount);
+  assert.equal(proof.playedSceneCount, schedule.playedSceneCount);
+  assert.equal(proof.requiredPlayedSceneCount, schedule.playedSceneCount);
+  assert.equal(proof.routeTheater, 'salt');
+  assert.equal(proof.routeLabel, 'Salt Road');
   assert.equal(proof.firstClearCount, 0);
   assert.equal(proof.requiredFirstClearCount, 0);
   assert.equal(proof.firstClearsComplete, true);
@@ -182,6 +194,29 @@ test('narrative credits require 60 canonical scenes, 11 Storyworld decisions, an
   assert.equal(proof.targetMaximumMinutes, 360);
   assert.equal(proof.durationWithinTarget, true);
   assert.equal(proof.durationProven, true);
+});
+
+test('each Act III choice seals against its own playable scene and Storyworld totals', () => {
+  const expected = {
+    salt: { beats: 55, decisions: 10, played: 75 },
+    ash: { beats: 54, decisions: 10, played: 74 },
+    paper: { beats: 55, decisions: 11, played: 77 },
+  };
+  for (const schedule of getNarrativeRouteSchedules()) {
+    const state = completeNarrativeStory(
+      startNarrative(`run-route-${schedule.priorityTheater}`),
+      schedule.priorityTheater,
+    );
+    const proof = getRunProofReport(state);
+    assert.equal(proof.routeTheater, schedule.priorityTheater);
+    assert.equal(proof.requiredBeatCount, expected[schedule.priorityTheater].beats);
+    assert.equal(
+      proof.requiredStoryworldDecisionCount,
+      expected[schedule.priorityTheater].decisions,
+    );
+    assert.equal(proof.requiredPlayedSceneCount, expected[schedule.priorityTheater].played);
+    assert.equal(proof.storyComplete, true);
+  }
 });
 
 test('narrative credits reject sub-five-hour receipts but do not disqualify overtime', () => {

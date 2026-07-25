@@ -1,58 +1,91 @@
 import {
   advanceActionCampaignBattle,
+  createActionCampaignBattleResult,
   createActionCampaignBattleSession,
   getActionCampaignAttackChoices,
+  getActionCampaignManeuverChoices,
+  getActionCampaignSubweaponChoices,
   parseActionCampaignBattleQuery,
-  settleActionCampaignBattleVictory,
   snapshotActionCampaignBattle,
   switchActionCampaignActor,
 } from './action-campaign-battle-model.mjs';
 import {
   createAdvancementState,
-  createAdvancementStorageAdapter,
-  getEncounterWinCount,
   getParty,
   preparePartyForEncounter,
 } from './advancement.mjs';
+import {
+  captureCanonicalStorageSnapshot,
+  canonicalStorageSnapshotsMatch,
+  loadActionLaboratorySeed,
+} from './action-laboratory-storage.mjs';
+import {
+  resolveCompactActionKeyDown,
+  resolveCompactActionKeyUp,
+} from './action-input-grammar.mjs';
+import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import { getBattleStageArt } from './battle-stage-art.mjs';
 import { BOSS_COMBAT_ATLAS, getBossCombatDrawPlacement, getBossCombatFrame, hasBossCombatTemplate } from './boss-combat-atlas.mjs';
-import { createFieldStorageAdapter } from './field-runtime.mjs';
 import { ENEMY_ATLAS, getEnemyAtlasFrame } from './enemy-atlas.mjs';
 import {
   createLoadoutState,
-  createLoadoutStorageAdapter,
   syncPartyVitals,
 } from './loadout.mjs';
 import { PARTY_COMBAT_ATLAS, getPartyCombatFrame } from './party-combat-atlas.mjs';
-import { createQuestStorageAdapter } from './quest-runtime.mjs';
-import { createRunReceiptStorageAdapter, recordRunPlaytime } from './run-receipt.mjs';
 import { loadStoryworldBattlePresentation } from './storyworld-battle-bridge.mjs';
-import { createWitnessChronicleStorageAdapter } from './witness-chronicle-runtime.mjs';
+import {
+  ACTION_SLICE_STORAGE_KEY,
+  getActionSliceExpectedEncounter,
+  hydrateActionSliceRun,
+  recordActionSliceBattleReceipt,
+  serializeActionSliceRun,
+} from './action-slice-model.mjs';
 
 const query = parseActionCampaignBattleQuery(window.location.search);
-const advancementAdapter = createAdvancementStorageAdapter();
-const advancementLoad = advancementAdapter.load();
+const publicFighterIds = Object.freeze({
+  ren: 'ren',
+  nikola: 'lise',
+  lise: 'lise',
+  mateus: 'mateus',
+  miyo: 'miyo',
+});
+const laboratoryQuery = new URLSearchParams(window.location.search);
+const sliceRequested = laboratoryQuery.get('slice') === '1';
+let sliceRun = null;
+if (sliceRequested) {
+  const hydrated = hydrateActionSliceRun(sessionStorage.getItem(ACTION_SLICE_STORAGE_KEY));
+  const expected = hydrated.ok ? getActionSliceExpectedEncounter(hydrated.value) : null;
+  if (hydrated.ok && expected?.encounterId === query.encounterId) sliceRun = hydrated.value;
+  else window.location.replace('action-slice.html?checkpoint=invalid');
+}
+const sliceMode = sliceRun != null;
+const requestedLeadId = publicFighterIds[String(laboratoryQuery.get('lead') ?? '').toLowerCase()] ?? 'lise';
+let requestedSupportId = publicFighterIds[String(laboratoryQuery.get('support') ?? '').toLowerCase()] ?? 'mateus';
+if (requestedSupportId === requestedLeadId) requestedSupportId = requestedLeadId === 'mateus' ? 'lise' : 'mateus';
+const ACTION_LAB_FIGHTER_ACTOR_IDS = Object.freeze(sliceMode
+  ? [...sliceRun.fighters]
+  : [requestedLeadId, requestedSupportId]);
+const sliceBattleVitals = sliceMode ? structuredClone(sliceRun.vitals) : null;
+const canonicalStorage = getDefaultBrowserStorage();
+const canonicalStorageAtEntry = captureCanonicalStorageSnapshot(canonicalStorage);
+const laboratorySeed = sliceMode
+  ? { advancement: createAdvancementState(), loadout: createLoadoutState(), runReceipt: null }
+  : loadActionLaboratorySeed(canonicalStorage);
 let advancementState = preparePartyForEncounter(
-  advancementLoad.ok ? advancementLoad.state : createAdvancementState(),
+  laboratorySeed.advancement,
   query.encounterId,
 );
-const loadoutAdapter = createLoadoutStorageAdapter();
-const loadoutLoad = loadoutAdapter.load();
-let loadoutState = loadoutLoad.ok ? loadoutLoad.value : createLoadoutState();
+let loadoutState = laboratorySeed.loadout;
 const syncedLoadout = syncPartyVitals(loadoutState, getParty(advancementState));
 if (syncedLoadout.ok) loadoutState = syncedLoadout.state;
-
-const runReceiptAdapter = createRunReceiptStorageAdapter();
-const runReceiptLoad = runReceiptAdapter.load();
-let runReceiptState = runReceiptLoad.ok && runReceiptLoad.found ? runReceiptLoad.state : null;
-const questAdapter = createQuestStorageAdapter();
-const fieldAdapter = createFieldStorageAdapter();
-const witnessAdapter = createWitnessChronicleStorageAdapter();
+const runReceiptState = laboratorySeed.runReceipt;
 
 let session = createActionCampaignBattleSession({
   encounterId: query.encounterId,
   advancementState,
   loadoutState,
+  fighterActorIds: ACTION_LAB_FIGHTER_ACTOR_IDS,
+  partyVitals: sliceBattleVitals,
 });
 
 const elements = {
@@ -71,6 +104,12 @@ const elements = {
   objectiveRuntimeStatus: document.querySelector('#objectiveRuntimeStatus'),
   objectiveRequirements: document.querySelector('#objectiveRequirements'),
   attackTimers: document.querySelector('#attackTimers'),
+  subweaponTimers: document.querySelector('#subweaponTimers'),
+  movementReadout: document.querySelector('#movementReadout'),
+  risingGuide: document.querySelector('#risingGuide'),
+  airGuide: document.querySelector('#airGuide'),
+  risingTouch: document.querySelector('#risingTouch'),
+  airTouch: document.querySelector('#airTouch'),
   comboAvailability: document.querySelector('#comboAvailability'),
   comboArts: document.querySelector('#comboArts'),
   comboProximity: document.querySelector('#comboProximity'),
@@ -88,26 +127,42 @@ const elements = {
 
 const context = elements.canvas.getContext('2d');
 context.imageSmoothingEnabled = false;
-const held = { left: false, right: false, interact: false };
-const pressed = { jump: false, attackIndex: null, combo: false };
+const held = {
+  left: false,
+  right: false,
+  up: false,
+  down: false,
+  jump: false,
+  interact: false,
+};
+const gamepadHeld = { left: false, right: false, up: false, down: false, jump: false, interact: false };
+const previousGamepadButtons = [];
+const pressed = { jump: false, attackIndex: null, subweaponId: null, combo: false };
+const lastDirectionTapAt = { left: -Infinity, right: -Infinity };
 let lastTimestamp = performance.now();
 let hidden = document.hidden;
-let settled = false;
-let settlementPending = false;
-let settlementRetryAt = 0;
-let runReceiptPendingMs = 0;
-let runReceiptCategory = getEncounterWinCount(advancementState, session.encounter.id) > 0 ? 'grind' : 'firstClearCombat';
+let laboratoryComplete = false;
+let laboratoryResult = null;
 const recentMessages = [];
 const flyouts = [];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const displayedObjectiveText = sliceMode && session.encounter.id === 'c1-tithe-hound'
+  ? 'Defeat the Tithe Hound.'
+  : session.encounter.objective.text;
 
 elements.encounterTitle.textContent = session.encounter.name;
-elements.encounterSubtitle.textContent = `${session.encounter.format} · ${session.encounter.objective.text}`;
+elements.encounterSubtitle.textContent = displayedObjectiveText;
 elements.stageName.textContent = session.stage.id.replaceAll('-', ' ').toUpperCase();
 elements.campaignLink.href = query.returnTarget;
 elements.continueCampaign.href = query.returnTarget;
 elements.canvas.dataset.encounterId = session.encounter.id;
 elements.canvas.dataset.stageId = session.stage.id;
+elements.canvas.dataset.sliceMode = String(sliceMode);
+if (sliceMode) {
+  elements.campaignLink.textContent = 'Leave slice';
+  elements.continueCampaign.textContent = 'Continue slice';
+  elements.settlementStatus.textContent = 'Victory preserves duo HP only in this session-local slice checkpoint.';
+}
 
 const storyworld = loadStoryworldBattlePresentation({
   encounterId: session.encounter.id,
@@ -150,10 +205,18 @@ for (const key of ['party', 'enemy', 'boss', 'stage']) loadArt(key);
 function clearHeld() {
   held.left = false;
   held.right = false;
+  held.up = false;
+  held.down = false;
+  held.jump = false;
   held.interact = false;
+  lastDirectionTapAt.left = -Infinity;
+  lastDirectionTapAt.right = -Infinity;
   pressed.jump = false;
   pressed.attackIndex = null;
+  pressed.subweaponId = null;
   pressed.combo = false;
+  Object.assign(gamepadHeld, { left: false, right: false, up: false, down: false, jump: false, interact: false });
+  previousGamepadButtons.length = 0;
 }
 
 function announce(message) {
@@ -173,29 +236,126 @@ function attackName(attackId) {
   return session.spec.kernelConfig.attacks[attackId]?.name ?? attackId;
 }
 
+function maneuverName(maneuverId, actorId = null) {
+  return getActionCampaignManeuverChoices(session, actorId ?? undefined)
+    .find(({ id }) => id === maneuverId)?.name ?? maneuverId;
+}
+
+function queueManeuver(maneuverId) {
+  if (hidden || session.outcome) return;
+  const inputRequest = { id: maneuverId, requestedAt: performance.now() };
+  const snapshot = advanceActionCampaignBattle(session, 0, {
+    left: held.left,
+    right: held.right,
+    jumpHeld: held.jump,
+    maneuverPressed: maneuverId,
+  });
+  consumeSnapshotEvents(snapshot, inputRequest);
+  renderDom(snapshot);
+}
+
+function queueTagSwitch(direction = 1) {
+  if (hidden || session.outcome) return;
+  const result = switchActionCampaignActor(session, direction);
+  if (!result.ok) {
+    const wait = result.remainingMs > 0 ? ` (${result.remainingMs} ms)` : '';
+    announce(`Tag unavailable: ${String(result.reason).replaceAll('-', ' ')}${wait}.`);
+  }
+  renderDom(snapshotActionCampaignBattle(session));
+}
+
+function controlledActorIsGrounded() {
+  const kernel = snapshotActionCampaignBattle(session).kernel;
+  return kernel.actors.find(({ id }) => id === kernel.controlledActorId)?.grounded ?? true;
+}
+
+function applyCompactEdge(edge) {
+  if (edge?.type === 'maneuver') queueManeuver(edge.id);
+  else if (edge?.type === 'jump') pressed.jump = true;
+  else if (edge?.type === 'attack') pressed.attackIndex = edge.index;
+  else if (edge?.type === 'subweapon') pressed.subweaponId = edge.id;
+}
+
 function describeEvent(event, snapshot) {
   const actor = snapshot.kernel.actors.find(({ id }) => id === event.actorId);
   const target = snapshot.kernel.actors.find(({ id }) => id === event.targetId);
   if (event.type === 'combo-start') {
     const arts = snapshot.combo.participants.map(({ attackName }) => attackName).join(' + ');
-    return `${snapshot.combo.name} begins atomically: ${arts}.`;
+    return `${snapshot.combo.name} begins: ${arts}.`;
   }
   if (event.type === 'combo-blocked') {
     return `${event.name} unavailable: ${formatComboReason(event.reasons?.[0])}.`;
+  }
+  if (event.type === 'subweapon-used') {
+    return `${actor?.name ?? event.actorId} spends ${event.name}; ${event.stockRemaining} remaining.`;
+  }
+  if (event.type === 'subweapon-blocked') {
+    const wait = event.remainingMs > 0 ? ` (${event.remainingMs} ms)` : '';
+    return `${event.name} unavailable: ${String(event.reason).replaceAll('-', ' ')}${wait}.`;
   }
   if (event.type === 'attack-start') return event.comboId
     ? `${actor?.name ?? event.actorId} links ${attackName(event.attackId)} into ${snapshot.combo.name}.`
     : `${actor?.name ?? event.actorId} commits ${attackName(event.attackId)}.`;
   if (event.type === 'attack-complete') return event.comboId
-    ? `${actor?.name ?? event.actorId}'s linked ${attackName(event.attackId)} completes; its own cooldown is preserved at ${event.individualCooldownMs} ms.`
-    : `${actor?.name ?? event.actorId} recovers movement; offense cooldown ${event.sharedCooldownMs} ms.`;
+    ? `${actor?.name ?? event.actorId} completes ${attackName(event.attackId)} and can move again.`
+    : `${actor?.name ?? event.actorId} can move again; attack ready in ${event.sharedCooldownMs} ms.`;
+  if (event.type === 'maneuver-start') return `${actor?.name ?? event.actorId}: ${event.name}.`;
+  if (event.type === 'maneuver-complete' && event.reason === 'cancelled') {
+    return `${actor?.name ?? event.actorId} cancels ${event.name} into ${String(event.nextAction).replaceAll('-', ' ')}.`;
+  }
+  if (event.type === 'maneuver-blocked') {
+    const wait = event.remainingMs > 0 ? ` (${event.remainingMs} ms)` : '';
+    return `${maneuverName(event.maneuverId)} unavailable: ${String(event.reason).replaceAll('-', ' ')}${wait}.`;
+  }
   if (event.type === 'hit') {
-    flyouts.push({ x: target?.position.x ?? 480, y: (target?.position.y ?? 400) - 70, text: `${event.damage} ${event.delivery ?? ''}`.trim(), life: 850 });
-    return `${event.comboId ? `${snapshot.combo.name} linked hit — ` : ''}${actor?.name ?? event.actorId} hits ${target?.name ?? event.targetId} with ${attackName(event.attackId)}: ${event.damage} ${event.delivery ?? 'typed'} damage${event.essence ? ` · ${event.essence}` : ''}.`;
+    const elementalRead = event.essenceMultiplier > 1
+      ? ' WEAK'
+      : event.essenceMultiplier < 1 ? ' RESIST' : '';
+    flyouts.push({
+      x: target?.position.x ?? 480,
+      y: (target?.position.y ?? 400) - 70,
+      text: `${event.damage} ${event.delivery ?? ''}${elementalRead}`.trim(),
+      tone: event.essenceMultiplier > 1 ? 'weak' : event.essenceMultiplier < 1 ? 'resist' : 'normal',
+      life: 850,
+      maxLife: 850,
+    });
+    const actionName = event.maneuverId ? maneuverName(event.maneuverId, event.actorId) : attackName(event.attackId);
+    return `${event.comboId ? `${snapshot.combo.name} linked hit — ` : ''}${actor?.name ?? event.actorId} hits ${target?.name ?? event.targetId} with ${actionName}: ${event.damage} ${event.delivery ?? 'typed'} damage${event.essence ? ` · ${event.essence}` : ''}.`;
+  }
+  if (event.type === 'hit-ignored') {
+    flyouts.push({
+      x: target?.position.x ?? 480,
+      y: (target?.position.y ?? 400) - 70,
+      text: 'INVULNERABLE',
+      tone: 'resist',
+      life: 520,
+      maxLife: 520,
+    });
+    return `${target?.name ?? event.targetId} is briefly invulnerable.`;
   }
   if (event.type === 'control-switch') return `${actor?.name ?? event.actorId} is now under direct control.`;
   if (event.type === 'combat-end') return event.outcome === 'victory' ? 'Objective and combat conditions complete.' : 'The active party has fallen.';
   return null;
+}
+
+function consumeSnapshotEvents(snapshot, inputRequest = null) {
+  for (const event of snapshot.recentEvents) {
+    announce(describeEvent(event, snapshot));
+    if (event.type === 'hit') {
+      elements.canvas.dataset.lastHitTargetId = event.targetId;
+      elements.canvas.dataset.lastHitDamage = String(event.damage);
+      elements.canvas.dataset.lastHitAtMs = String(event.nowMs);
+    }
+    if (event.type !== 'maneuver-start') continue;
+    elements.canvas.dataset.lastManeuverId = event.maneuverId;
+    elements.canvas.dataset.lastManeuverStartedAtMs = String(event.nowMs);
+    if (inputRequest?.id === event.maneuverId) {
+      elements.canvas.dataset.lastManeuverInputLatencyMs = String(Math.max(
+        0,
+        Math.round((performance.now() - inputRequest.requestedAt) * 100) / 100,
+      ));
+    }
+  }
 }
 
 function formatComboReason(reason) {
@@ -211,76 +371,36 @@ function formatComboReason(reason) {
   return String(reason.code).replaceAll('-', ' ');
 }
 
-function flushRunReceiptPlaytime() {
-  if (!runReceiptState || runReceiptState.status !== 'active') {
-    runReceiptPendingMs = 0;
-    return true;
-  }
-  if (runReceiptPendingMs <= 0) return true;
-  const result = recordRunPlaytime(
-    runReceiptState,
-    runReceiptState.runId,
-    runReceiptCategory,
-    Math.min(60_000, Math.round(runReceiptPendingMs)),
-    { chapterId: session.encounter.chapterId },
-  );
-  if (!result.ok || !runReceiptAdapter.save(result.state).ok) return false;
-  runReceiptState = result.state;
-  runReceiptPendingMs = 0;
-  return true;
-}
-
-function queueRunReceiptPlaytime(elapsedMs) {
-  if (!runReceiptState || runReceiptState.status !== 'active' || session.outcome) return;
-  runReceiptPendingMs += Math.max(0, Math.round(elapsedMs));
-  if (runReceiptPendingMs >= 1_000) flushRunReceiptPlaytime();
-}
-
-function trySettlement(now) {
-  if (settled || settlementPending || session.outcome !== 'victory' || now < settlementRetryAt) return;
-  settlementPending = true;
-  elements.settlementStatus.textContent = 'Victory earned. Committing advancement, vitals, rewards, and route evidence…';
-  let result;
+function completeLaboratoryResult() {
+  if (laboratoryComplete || session.outcome !== 'victory') return;
   try {
-    result = settleActionCampaignBattleVictory({
-      session,
-      states: { advancement: advancementState, loadout: loadoutState, runReceipt: runReceiptState },
-      adapters: {
-        advancement: advancementAdapter,
-        loadout: loadoutAdapter,
-        quest: questAdapter,
-        field: fieldAdapter,
-        witness: witnessAdapter,
-        runReceipt: runReceiptAdapter,
-      },
-      handoff: query.handoff,
-      flushPlaytime: () => ({ ok: flushRunReceiptPlaytime(), state: runReceiptState }),
-    });
+    laboratoryResult = createActionCampaignBattleResult(session);
+    if (sliceMode) {
+      sliceRun = recordActionSliceBattleReceipt(sliceRun, laboratoryResult);
+      sessionStorage.setItem(ACTION_SLICE_STORAGE_KEY, serializeActionSliceRun(sliceRun));
+    }
   } catch (error) {
-    result = { ok: false, message: error instanceof Error ? error.message : 'The victory record could not be created.' };
-  }
-  settlementPending = false;
-  if (!result.ok) {
-    elements.settlementStatus.textContent = result.message;
-    settlementRetryAt = now + 1_000;
-    announce(result.message);
+    const message = error instanceof Error ? error.message : 'The laboratory result could not be created.';
+    elements.settlementStatus.textContent = message;
+    announce(message);
     return;
   }
-  advancementState = result.states.advancement;
-  loadoutState = result.states.loadout;
-  runReceiptState = result.states.runReceipt;
-  settled = true;
-  elements.canvas.dataset.settlement = 'settled';
-  elements.settlementStatus.textContent = result.messages.join(' ');
+  laboratoryComplete = true;
+  elements.canvas.dataset.laboratoryResult = 'complete';
+  elements.settlementStatus.textContent = sliceMode
+    ? 'Victory and surviving duo HP were saved to the session-only slice checkpoint. Campaign progress, inventory, and rewards are unchanged.'
+    : 'Training victory recorded for this session only. Campaign progress, party health, inventory, and rewards are unchanged.';
   elements.continueCampaign.hidden = false;
   elements.continueCampaign.setAttribute('aria-disabled', 'false');
   elements.continueCampaign.focus();
-  announce('Victory settled. Continue is unlocked.');
+  announce(sliceMode ? 'Encounter complete. Continue the combat slice when ready.' : 'Training complete. Return to the campaign when ready.');
 }
 
 function actorPhase(actor) {
   if (actor.hp <= 0) return 'defeat';
   if (actor.activeAttack) return actor.activeAttack.phase;
+  if (actor.activeManeuver) return actor.activeManeuver.id;
+  if (!actor.grounded) return 'airborne';
   if (Math.abs(actor.movementIntent.x) > 0) return 'move';
   return 'idle';
 }
@@ -291,7 +411,9 @@ function partyPose(actor) {
   if (phase === 'windup') return 'basic-strike-windup';
   if (phase === 'active') return actor.activeAttack?.attackId.includes('courier-cut') ? 'basic-strike-active' : 'signature-a';
   if (phase === 'recovery') return 'recovery';
-  if (phase === 'move' && !reducedMotion.matches) return 'move';
+  if (phase === 'uppercut') return 'signature-a';
+  if (phase === 'thunder-kick') return 'signature-b';
+  if (['dash', 'slide', 'move', 'airborne'].includes(phase) && !reducedMotion.matches) return 'move';
   return 'idle';
 }
 
@@ -355,17 +477,37 @@ function drawStage() {
 }
 
 function drawFallback(actor, color) {
+  const sliding = actor.activeManeuver?.id === 'slide';
+  const height = sliding ? 28 : 52;
   context.fillStyle = color;
-  context.fillRect(actor.position.x - 18, actor.position.y - 52, 36, 52);
+  context.fillRect(actor.position.x - 18, actor.position.y - height, 36, height);
 }
 
 function drawParty(actor) {
   const frame = getPartyCombatFrame(templateId(actor.id), partyPose(actor));
   const scale = 1.75;
   if (!art.party.ready) return drawFallback(actor, '#78c4c1');
+  const maneuver = actor.activeManeuver;
+  if (maneuver && ['dash', 'slide'].includes(maneuver.id) && !reducedMotion.matches) {
+    for (const [index, distance] of [18, 34].entries()) {
+      context.save();
+      context.globalAlpha = index === 0 ? 0.2 : 0.09;
+      context.translate(actor.position.x - maneuver.direction * distance, actor.position.y);
+      if (actor.facing < 0) context.scale(-1, 1);
+      context.drawImage(art.party.image, frame.x, frame.y, frame.width, frame.height,
+        -frame.pivotX * scale, -frame.pivotY * scale, frame.width * scale, frame.height * scale);
+      context.restore();
+    }
+  }
   context.save();
   context.translate(actor.position.x, actor.position.y);
   if (actor.facing < 0) context.scale(-1, 1);
+  if (maneuver?.id === 'slide') {
+    context.translate(0, 5);
+    context.scale(1.08, 0.72);
+  } else if (maneuver?.id === 'thunder-kick') {
+    context.rotate(actor.facing * 0.34);
+  }
   context.drawImage(art.party.image, frame.x, frame.y, frame.width, frame.height,
     -frame.pivotX * scale, -frame.pivotY * scale, frame.width * scale, frame.height * scale);
   context.restore();
@@ -409,12 +551,36 @@ function drawActors(snapshot) {
     context.beginPath();
     context.ellipse(actor.position.x, actor.position.y + 2, actor.faction === 'player' ? 26 : 34, 7, 0, 0, Math.PI * 2);
     context.fill();
-    if (actor.faction === 'player') drawParty(actor);
-    else if (actor.faction === 'enemy') drawEnemy(actor);
-    context.fillStyle = actor.id === snapshot.kernel.controlledActorId ? '#ffe18b' : '#ddd2bf';
+    const drawActorBody = () => {
+      if (actor.faction === 'player') drawParty(actor);
+      else if (actor.faction === 'enemy') drawEnemy(actor);
+    };
+    drawActorBody();
+    if (actor.hitFlashRemainingMs > 0) {
+      context.save();
+      context.globalAlpha = Math.min(0.72, actor.hitFlashRemainingMs / 120);
+      context.filter = 'brightness(3) saturate(0)';
+      drawActorBody();
+      context.restore();
+      const hurtbox = actor.effectiveHurtbox;
+      context.save();
+      context.globalAlpha = Math.min(0.9, actor.hitFlashRemainingMs / 90);
+      context.strokeStyle = '#fff3d0';
+      context.lineWidth = 3;
+      context.strokeRect(hurtbox.left - 3, hurtbox.top - 3,
+        hurtbox.right - hurtbox.left + 6, hurtbox.bottom - hurtbox.top + 6);
+      context.restore();
+    }
+    const isDirectlyControlled = actor.id === snapshot.kernel.controlledActorId;
+    context.fillStyle = isDirectlyControlled ? '#ffe18b' : '#ddd2bf';
     context.font = '700 10px ui-monospace, monospace';
     context.textAlign = 'center';
     context.fillText(actor.name.toUpperCase(), actor.position.x, actor.position.y - (actor.faction === 'player' ? 118 : 126));
+    if (actor.faction === 'player') {
+      context.fillStyle = isDirectlyControlled ? '#ffe18b' : '#78c4c1';
+      context.font = '800 8px ui-monospace, monospace';
+      context.fillText(isDirectlyControlled ? 'YOU' : 'AI SUPPORT', actor.position.x, actor.position.y - 106);
+    }
   }
 }
 
@@ -422,13 +588,18 @@ function drawFlyouts(elapsedMs) {
   context.save();
   context.font = '900 15px ui-monospace, monospace';
   context.textAlign = 'center';
+  context.lineJoin = 'round';
   for (let index = flyouts.length - 1; index >= 0; index -= 1) {
     const item = flyouts[index];
     item.life -= elapsedMs;
     if (item.life <= 0) { flyouts.splice(index, 1); continue; }
     context.globalAlpha = Math.min(1, item.life / 180);
-    context.fillStyle = '#f3d795';
-    context.fillText(item.text.toUpperCase(), item.x, item.y - (reducedMotion.matches ? 0 : (850 - item.life) * .03));
+    context.fillStyle = item.tone === 'weak' ? '#fff0a6' : item.tone === 'resist' ? '#9fd8e8' : '#f3d795';
+    context.strokeStyle = 'rgba(8, 5, 12, .92)';
+    context.lineWidth = 4;
+    const y = item.y - (reducedMotion.matches ? 0 : (item.maxLife - item.life) * .03);
+    context.strokeText(item.text.toUpperCase(), item.x, y);
+    context.fillText(item.text.toUpperCase(), item.x, y);
   }
   context.restore();
 }
@@ -443,50 +614,72 @@ function draw(snapshot, elapsedMs) {
     context.fillStyle = snapshot.outcome === 'victory' ? '#e8cf7b' : '#e26772';
     context.font = '500 48px Georgia, serif';
     context.textAlign = 'center';
-    context.fillText(snapshot.outcome === 'victory' ? 'Record Secured' : 'Route Broken', 480, 250);
+    context.fillText(snapshot.outcome === 'victory' ? 'Training Complete' : 'Party Defeated', 480, 250);
     context.fillStyle = '#d2c7b5';
     context.font = '700 12px ui-monospace, monospace';
-    context.fillText(snapshot.outcome === 'victory' ? (settled ? 'CONTINUE UNLOCKED' : 'SETTLING VICTORY…') : 'PRESS R TO RESTART', 480, 278);
+    context.fillText(snapshot.outcome === 'victory' ? (laboratoryComplete ? 'TRAINING COMPLETE' : 'RECORDING RESULT…') : 'PRESS R TO RESTART', 480, 278);
   }
 }
 
 function actorListItem(actor, controlledActorId) {
   const item = document.createElement('li');
   item.dataset.defeated = String(actor.hp <= 0);
+  const isDirectlyControlled = actor.id === controlledActorId;
+  const controlRole = actor.faction === 'player' ? (isDirectlyControlled ? 'direct' : 'support') : 'hostile';
+  item.dataset.controlRole = controlRole;
   const name = document.createElement('span');
-  name.textContent = `${actor.id === controlledActorId ? '◆ ' : ''}${actor.name}`;
+  name.textContent = `${controlRole === 'direct' ? 'YOU · ' : controlRole === 'support' ? 'AI SUPPORT · ' : ''}${actor.name}`;
   const hp = document.createElement('strong');
-  hp.textContent = `${Math.ceil(actor.hp)} / ${Math.ceil(actor.maxHp)} HP`;
+  hp.textContent = `${Math.ceil(actor.hp)} / ${Math.ceil(actor.maxHp)} HP · ${Math.round(actor.guard)} Armor`;
+  const radiance = document.createElement('small');
+  const radianceMultiplier = actor.resistances?.essence?.radiance ?? 1;
+  radiance.textContent = radianceMultiplier === 1
+    ? 'Radiance neutral'
+    : `Radiance ${Math.round(radianceMultiplier * 100)}% · ${radianceMultiplier > 1 ? 'WEAK' : 'RESIST'}`;
   const state = document.createElement('small');
-  state.textContent = actor.hp <= 0 ? 'DEFEATED' : actor.activeAttack ? `${attackName(actor.activeAttack.attackId)} · ${actor.activeAttack.phase}` : 'FREE MOVEMENT';
-  item.append(name, hp, state);
+  state.textContent = actor.hp <= 0
+    ? 'DEFEATED'
+    : actor.hitStunRemainingMs > 0
+      ? `HIT STUN · ${actor.hitStunRemainingMs} ms`
+      : actor.activeAttack
+      ? `${attackName(actor.activeAttack.attackId)} · ${actor.activeAttack.phase}`
+      : actor.activeManeuver
+        ? maneuverName(actor.activeManeuver.id, actor.id).toUpperCase()
+        : 'FREE MOVEMENT';
+  item.append(name, hp, radiance, state);
   return item;
 }
 
 function renderDom(snapshot) {
   const controlled = snapshot.kernel.actors.find(({ id }) => id === snapshot.kernel.controlledActorId);
-  elements.controlledActor.textContent = controlled
-    ? `${controlled.name} · Level ${controlled.level} · ${controlled.grounded ? 'grounded' : 'airborne'} · X ${Math.round(controlled.position.x)}`
-    : 'No living controlled fighter';
   const party = snapshot.kernel.actors.filter(({ faction }) => faction === 'player');
+  const support = party.find(({ id }) => id === snapshot.duo.supportActorId);
+  const movementState = controlled?.activeManeuver
+    ? maneuverName(controlled.activeManeuver.id)
+    : controlled?.grounded ? 'Grounded' : 'Airborne';
+  elements.controlledActor.textContent = controlled
+    ? `${controlled.name} · Level ${controlled.level} · ${movementState} · ${Math.round(Math.abs(controlled.velocity.x))} px/s · Support: ${support?.name ?? 'none'}`
+    : 'No living controlled fighter';
   const enemies = snapshot.kernel.actors.filter(({ faction }) => faction === 'enemy');
   elements.partyReadout.replaceChildren(...party.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));
   elements.enemyReadout.replaceChildren(...enemies.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));
 
-  elements.objectiveText.textContent = session.objectiveContract.text;
+  elements.objectiveText.textContent = displayedObjectiveText;
   elements.objectiveRuntimeStatus.dataset.supported = String(snapshot.objective.supported);
-  elements.objectiveRuntimeStatus.textContent = `${snapshot.objective.status.toUpperCase()} · ${snapshot.objective.message}`;
+  elements.objectiveRuntimeStatus.textContent = snapshot.objective.supported
+    ? (snapshot.objective.complete ? 'Completed' : 'In progress')
+    : 'This scenario is not available in Action Lab yet.';
   elements.objectiveRequirements.replaceChildren(...snapshot.objective.requirements.map((requirement) => {
     const item = document.createElement('li');
     item.dataset.complete = String(requirement.complete);
-    item.textContent = `${requirement.complete ? '✓' : '○'} ${requirement.id.replaceAll('-', ' ')} · ${requirement.semantics}`;
+    item.textContent = `${requirement.complete ? '✓' : '○'} ${requirement.id.replaceAll('-', ' ')}`;
     return item;
   }));
 
   elements.comboTitle.textContent = snapshot.combo.name;
   elements.comboAvailability.dataset.available = String(snapshot.combo.available || snapshot.combo.active);
   elements.comboAvailability.textContent = snapshot.combo.active
-    ? 'LINKED · both contributing arts are committed atomically'
+    ? 'LINKED · both fighters are committed'
     : snapshot.combo.available
       ? 'READY · press L to invoke the linked cast'
       : `LOCKED · ${formatComboReason(snapshot.combo.reasons[0])}`;
@@ -507,7 +700,11 @@ function renderDom(snapshot) {
     name.textContent = `${choice.name} · ${choice.delivery}${choice.essence ? ` · ${choice.essence}` : ''}`;
     const output = document.createElement('output');
     const remaining = choice.state.effectiveCooldownRemainingMs;
-    output.textContent = choice.state.reason === 'animation-commitment' ? 'COMMITTED' : remaining > 0 ? `${remaining} ms` : 'READY';
+    output.textContent = choice.state.reason === 'hit-stun'
+      ? 'HIT STUN'
+      : ['animation-commitment', 'maneuver-commitment'].includes(choice.state.reason)
+      ? 'COMMITTED'
+      : remaining > 0 ? `${remaining} ms` : 'READY';
     const meter = document.createElement('div');
     meter.className = 'meter';
     meter.setAttribute('role', 'meter');
@@ -522,6 +719,40 @@ function renderDom(snapshot) {
     return row;
   }));
 
+  const subweapons = getActionCampaignSubweaponChoices(session, snapshot.kernel.controlledActorId);
+  elements.subweaponTimers.replaceChildren(...subweapons.map((choice) => {
+    const row = document.createElement('div');
+    row.className = 'attack-timer';
+    row.dataset.ready = String(choice.state.ready);
+    const name = document.createElement('strong');
+    name.textContent = `${choice.name} ×${choice.stock} · ${choice.input}`;
+    const output = document.createElement('output');
+    output.textContent = choice.stock <= 0
+      ? 'EMPTY'
+      : choice.state.effectiveCooldownRemainingMs > 0
+        ? `${choice.state.effectiveCooldownRemainingMs} ms`
+        : choice.state.ready ? 'READY' : String(choice.state.reason).replaceAll('-', ' ');
+    const detail = document.createElement('small');
+    detail.textContent = choice.description;
+    row.append(name, output, detail);
+    return row;
+  }));
+
+  const maneuvers = getActionCampaignManeuverChoices(session, snapshot.kernel.controlledActorId);
+  const risingName = maneuvers.find(({ id }) => id === 'uppercut')?.name ?? 'Rising maneuver';
+  const airName = maneuvers.find(({ id }) => id === 'thunder-kick')?.name ?? 'Air descent';
+  if (elements.risingGuide) elements.risingGuide.textContent = risingName;
+  if (elements.airGuide) elements.airGuide.textContent = airName;
+  if (elements.risingTouch) elements.risingTouch.textContent = risingName;
+  if (elements.airTouch) elements.airTouch.textContent = airName;
+  elements.movementReadout.replaceChildren(...maneuvers.map((choice) => {
+    const item = document.createElement('span');
+    item.dataset.ready = String(choice.state.ready);
+    const remaining = choice.state.cooldownRemainingMs;
+    item.textContent = `${choice.name}: ${remaining > 0 ? `${remaining} ms` : choice.state.ready ? 'READY' : String(choice.state.reason).replaceAll('-', ' ')}`;
+    return item;
+  }));
+
   elements.stateBadge.dataset.state = snapshot.outcome ?? snapshot.objective.status;
   elements.stateBadge.textContent = snapshot.outcome?.toUpperCase() ?? (hidden ? 'PAUSED' : snapshot.objective.status.toUpperCase());
   elements.eventLog.replaceChildren(...recentMessages.map((message) => {
@@ -534,6 +765,24 @@ function renderDom(snapshot) {
   elements.canvas.dataset.objectiveComplete = String(snapshot.objective.complete);
   elements.canvas.dataset.combatSatisfied = String(snapshot.combatSatisfied);
   elements.canvas.dataset.controlledActorId = snapshot.kernel.controlledActorId ?? '';
+  elements.canvas.dataset.duoEnabled = String(snapshot.duo.enabled);
+  elements.canvas.dataset.supportActorId = snapshot.duo.supportActorId ?? '';
+  elements.canvas.dataset.supportState = support == null
+    ? 'unavailable'
+    : support.activeAttack ? 'attacking' : Math.abs(support.velocity.x) > 0 ? 'moving' : 'guarding';
+  elements.canvas.dataset.tagCooldownRemainingMs = String(snapshot.kernel.tagCooldownRemainingMs);
+  elements.canvas.dataset.movementState = controlled?.activeManeuver?.id ?? (controlled?.grounded ? 'grounded' : 'airborne');
+  elements.canvas.dataset.movementProfileId = controlled?.movementProfileId ?? '';
+  elements.canvas.dataset.movementVelocityX = controlled == null ? '' : String(Math.round(controlled.velocity.x));
+  elements.canvas.dataset.movementVelocityY = controlled == null ? '' : String(Math.round(controlled.velocity.y));
+  elements.canvas.dataset.movementPositionX = controlled == null ? '' : String(Math.round(controlled.position.x * 100) / 100);
+  elements.canvas.dataset.airDashUsesRemaining = controlled == null ? '' : String(controlled.airDashUsesRemaining);
+  elements.canvas.dataset.airJumpUsesRemaining = controlled == null ? '' : String(controlled.airJumpUsesRemaining);
+  elements.canvas.dataset.wallContactSide = controlled?.wallContactSide == null ? '' : String(controlled.wallContactSide);
+  elements.canvas.dataset.hitStunRemainingMs = controlled == null ? '' : String(controlled.hitStunRemainingMs);
+  elements.canvas.dataset.hitInvulnerabilityRemainingMs = controlled == null
+    ? ''
+    : String(controlled.hitInvulnerabilityRemainingMs);
   elements.canvas.dataset.comboId = snapshot.combo.comboId;
   elements.canvas.dataset.comboAvailable = String(snapshot.combo.available);
   elements.canvas.dataset.comboActive = String(snapshot.combo.active);
@@ -542,11 +791,26 @@ function renderDom(snapshot) {
 }
 
 function restart() {
-  if (settled) return;
-  session = createActionCampaignBattleSession({ encounterId: query.encounterId, advancementState, loadoutState });
-  settlementRetryAt = 0;
+  session = createActionCampaignBattleSession({
+    encounterId: query.encounterId,
+  advancementState,
+  loadoutState,
+  fighterActorIds: ACTION_LAB_FIGHTER_ACTOR_IDS,
+  partyVitals: sliceBattleVitals,
+});
+  laboratoryComplete = false;
+  laboratoryResult = null;
   recentMessages.length = 0;
   flyouts.length = 0;
+  elements.canvas.dataset.laboratoryResult = 'active';
+  delete elements.canvas.dataset.lastManeuverId;
+  delete elements.canvas.dataset.lastManeuverInputLatencyMs;
+  delete elements.canvas.dataset.lastManeuverStartedAtMs;
+  elements.settlementStatus.textContent = sliceMode
+    ? 'Encounter restored from the session-only slice checkpoint.'
+    : 'This training session never changes campaign progress or party state.';
+  elements.continueCampaign.hidden = true;
+  elements.continueCampaign.setAttribute('aria-disabled', 'true');
   clearHeld();
   announce(`Restarted ${session.encounter.name}.`);
   elements.canvas.focus();
@@ -556,17 +820,81 @@ function isTypingTarget(target) {
   return target instanceof HTMLInputElement || target instanceof HTMLButtonElement || target instanceof HTMLAnchorElement;
 }
 
+function pollBattleGamepad() {
+  const pad = navigator.getGamepads?.().find(Boolean);
+  if (!pad || hidden) {
+    Object.assign(gamepadHeld, { left: false, right: false, up: false, down: false, jump: false, interact: false });
+    previousGamepadButtons.length = 0;
+    return;
+  }
+  const down = (index) => Boolean(pad.buttons[index]?.pressed);
+  const edge = (index) => down(index) && !previousGamepadButtons[index];
+  const axisX = Math.abs(pad.axes[0] ?? 0) >= .28 ? pad.axes[0] : 0;
+  const axisY = Math.abs(pad.axes[1] ?? 0) >= .4 ? pad.axes[1] : 0;
+  gamepadHeld.left = down(14) || axisX < 0;
+  gamepadHeld.right = down(15) || axisX > 0;
+  gamepadHeld.up = down(12) || axisY < 0;
+  gamepadHeld.down = down(13) || axisY > 0;
+  gamepadHeld.jump = down(0);
+  gamepadHeld.interact = down(1);
+
+  if (edge(0)) {
+    if (gamepadHeld.down) queueManeuver('slide');
+    else pressed.jump = true;
+  }
+  if (edge(2)) {
+    if (gamepadHeld.up) queueManeuver('uppercut');
+    else if (gamepadHeld.down && !controlledActorIsGrounded()) queueManeuver('thunder-kick');
+    else pressed.attackIndex = 0;
+  }
+  if (edge(3)) {
+    if (gamepadHeld.up) pressed.subweaponId = 'throwing-cross';
+    else if (gamepadHeld.down) pressed.subweaponId = 'holy-water';
+    else pressed.attackIndex = 1;
+  }
+  if (edge(4)) pressed.combo = true;
+  if (edge(5)) queueTagSwitch(1);
+  if (edge(6)) queueManeuver('slide');
+  if (edge(7)) queueManeuver('dash');
+  for (let index = 0; index < pad.buttons.length; index += 1) previousGamepadButtons[index] = down(index);
+}
+
 window.addEventListener('keydown', (event) => {
   if (isTypingTarget(event.target) || hidden) return;
   const key = event.key.toLowerCase();
-  if (key === 'a' || key === 'arrowleft') held.left = true;
-  else if (key === 'd' || key === 'arrowright') held.right = true;
-  else if ((key === 'w' || key === 'arrowup') && !event.repeat) pressed.jump = true;
-  else if ((key === 'j' || key === ' ') && !event.repeat) pressed.attackIndex = 0;
+  const compactInput = resolveCompactActionKeyDown({
+    key,
+    repeat: event.repeat,
+    held,
+    grounded: controlledActorIsGrounded(),
+    lastDirectionTapAt,
+    nowMs: performance.now(),
+  });
+  if (compactInput.handled) {
+    Object.assign(held, compactInput.held);
+    if (compactInput.tap) lastDirectionTapAt[compactInput.tap.direction] = compactInput.tap.at;
+    applyCompactEdge(compactInput.edge);
+    event.preventDefault();
+    return;
+  }
+
+  if (key === 'a') held.left = true;
+  else if (key === 'd') held.right = true;
+  else if (key === 'w') {
+    held.jump = true;
+    if (!event.repeat) pressed.jump = true;
+  }
+  else if ((key === 'q' || key === 'shift') && !event.repeat) queueManeuver('dash');
+  else if (key === 's' && !event.repeat) queueManeuver('slide');
+  else if (key === 'u' && !event.repeat) queueManeuver('uppercut');
+  else if (key === 'i' && !event.repeat) queueManeuver('thunder-kick');
+  else if (key === 'j' && !event.repeat) pressed.attackIndex = 0;
   else if (key === 'k' && !event.repeat) pressed.attackIndex = 1;
+  else if (key === 'c' && !event.repeat) pressed.subweaponId = 'holy-water';
+  else if (key === 'v' && !event.repeat) pressed.subweaponId = 'throwing-cross';
   else if (key === 'l' && !event.repeat) pressed.combo = true;
   else if (key === 'e') held.interact = true;
-  else if (key === 'tab' && !event.repeat) switchActionCampaignActor(session, event.shiftKey ? -1 : 1);
+  else if (key === 'tab' && !event.repeat) queueTagSwitch(event.shiftKey ? -1 : 1);
   else if (key === 'r' && !event.repeat) restart();
   else return;
   event.preventDefault();
@@ -574,8 +902,15 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('keyup', (event) => {
   const key = event.key.toLowerCase();
-  if (key === 'a' || key === 'arrowleft') held.left = false;
-  else if (key === 'd' || key === 'arrowright') held.right = false;
+  const compactInput = resolveCompactActionKeyUp(key);
+  if (compactInput.handled) {
+    Object.assign(held, compactInput.held);
+    event.preventDefault();
+    return;
+  }
+  if (key === 'a') held.left = false;
+  else if (key === 'd') held.right = false;
+  else if (key === 'w') held.jump = false;
   else if (key === 'e') held.interact = false;
 });
 
@@ -606,11 +941,17 @@ for (const button of document.querySelectorAll('[data-held-control]')) {
 for (const button of document.querySelectorAll('[data-action-control]')) {
   button.addEventListener('click', () => {
     const action = button.dataset.actionControl;
-    if (action === 'jump') pressed.jump = true;
+    if (action === 'jump') {
+      held.jump = false;
+      pressed.jump = true;
+    }
+    else if (['dash', 'slide', 'uppercut', 'thunder-kick'].includes(action)) queueManeuver(action);
     else if (action === 'attack-0') pressed.attackIndex = 0;
     else if (action === 'attack-1') pressed.attackIndex = 1;
+    else if (action === 'holy-water') pressed.subweaponId = 'holy-water';
+    else if (action === 'throwing-cross') pressed.subweaponId = 'throwing-cross';
     else if (action === 'combo') pressed.combo = true;
-    else if (action === 'switch') switchActionCampaignActor(session, 1);
+    else if (action === 'switch') queueTagSwitch(1);
     elements.canvas.focus();
   });
 }
@@ -621,22 +962,25 @@ elements.restartBattle.addEventListener('click', restart);
 function frame(timestamp) {
   const elapsedMs = Math.max(0, Math.min(100, timestamp - lastTimestamp));
   lastTimestamp = timestamp;
+  pollBattleGamepad();
   let snapshot;
   if (!hidden && !session.outcome) {
-    queueRunReceiptPlaytime(elapsedMs);
     snapshot = advanceActionCampaignBattle(session, elapsedMs, {
-      left: held.left,
-      right: held.right,
+      left: held.left || gamepadHeld.left,
+      right: held.right || gamepadHeld.right,
       jumpPressed: pressed.jump,
+      jumpHeld: held.jump || gamepadHeld.jump,
       attackIndex: pressed.attackIndex,
+      subweaponPressed: pressed.subweaponId,
       comboPressed: pressed.combo,
-      interactHeld: held.interact,
-      interactPressed: held.interact,
+      interactHeld: held.interact || gamepadHeld.interact,
+      interactPressed: held.interact || gamepadHeld.interact,
     });
     pressed.jump = false;
     pressed.attackIndex = null;
+    pressed.subweaponId = null;
     pressed.combo = false;
-    for (const event of snapshot.recentEvents) announce(describeEvent(event, snapshot));
+    consumeSnapshotEvents(snapshot);
     const comboResponseEvent = snapshot.recentEvents.find((event) => (
       event.type === 'combo-start' || event.type === 'combo-blocked'
     ));
@@ -646,18 +990,23 @@ function frame(timestamp) {
   }
   renderDom(snapshot);
   draw(snapshot, elapsedMs);
-  trySettlement(timestamp);
+  completeLaboratoryResult();
   requestAnimationFrame(frame);
 }
 
 const initial = snapshotActionCampaignBattle(session);
 announce(initial.objective.supported
-  ? `${session.encounter.name} loaded. Objective and combat conditions are authoritative.`
+  ? `${session.encounter.name} loaded. This is an isolated training session.`
   : initial.objective.message);
 renderDom(initial);
 requestAnimationFrame(frame);
 
 globalThis.__ACTION_CAMPAIGN_BATTLE__ = Object.freeze({
   getSnapshot: () => snapshotActionCampaignBattle(session),
-  get settlementComplete() { return settled; },
+  getResult: () => laboratoryResult,
+  get laboratoryComplete() { return laboratoryComplete; },
+  canonicalStorageUnchanged: () => canonicalStorageSnapshotsMatch(
+    canonicalStorageAtEntry,
+    captureCanonicalStorageSnapshot(canonicalStorage),
+  ),
 });

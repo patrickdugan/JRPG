@@ -9,7 +9,7 @@ import { inflateSync } from 'node:zlib';
 const GAME_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SUITE_ROOT = resolve(GAME_ROOT, '..', 'assets', 'art', 'party-field-suite');
 const EXTENSION_SOURCE_PATH = resolve(SUITE_ROOT, 'party-field-walk-inbetweens.source.json');
-const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
+const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'];
 const COLUMNS = [
   'north-idle', 'north-walk', 'east-idle', 'east-walk',
   'south-idle', 'south-walk', 'west-idle', 'west-walk',
@@ -17,7 +17,7 @@ const COLUMNS = [
   'north-walk-b', 'east-walk-b', 'south-walk-b', 'west-walk-b',
 ];
 const LEGACY_COLUMNS = COLUMNS.slice(0, 10);
-const LEGACY_FRAME_DIGEST = '794ab3b03b5068ff0aa6a6e979316746cfb41c7efcbfcbc888a4f8f3bc68da25';
+const LEGACY_FRAME_DIGEST = '5a7547681e0258d7738a82aaa7dae87e8f5eb94f67630614881948234f90ba4c';
 const SUPERSEDED_PRE_NIKOLA_DIGEST = '72b35797d6688ceab2518bc03eca9cc7e0789e7299ebc6ec0bf6645bb24400a2';
 const NIKOLA_LINEAGE = {
   birthAndStation: 'Croatian-born frontier minor aristocrat',
@@ -99,14 +99,14 @@ function rgbaFrameBytes(image, frame) {
   return bytes;
 }
 
-test('Nikola migration preserves the stable six-by-fourteen field contract', async () => {
+test('Miyo extension preserves the stable seven-by-fourteen field contract', async () => {
   const [sourceText, extensionText] = await Promise.all([
     readFile(resolve(SUITE_ROOT, 'party-field-suite.source.json'), 'utf8'),
     readFile(EXTENSION_SOURCE_PATH, 'utf8'),
   ]);
   const source = JSON.parse(sourceText);
   const extension = JSON.parse(extensionText);
-  assert.equal(sha256(Buffer.from(sourceText)), '31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a');
+  assert.equal(sha256(Buffer.from(sourceText)), 'd6bb3642702be7bb43fa021a30be494219d2e42590b0a36408414a9c15d17e87');
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.deepEqual(source.frame, {
     width: 32,
@@ -135,9 +135,13 @@ test('Nikola migration preserves the stable six-by-fourteen field contract', asy
   assert.match(nikola.silhouette, /square-shouldered.*doublet.*rapier.*upright/u);
   assert.match(nikola.likenessPolicy, /original fictional Croatian male face and proportions; no real-person or actor reference/u);
   assert.match(source.characters.find(({ id }) => id === 'mateus').likenessPolicy, /original fictional face and proportions/u);
+  const miyo = source.characters.find(({ id }) => id === 'miyo');
+  assert.equal(miyo.name, 'Miyo Senda');
+  assert.equal(miyo.lineage.ancestry, 'three-quarters Japanese and one-quarter Portuguese');
+  assert.match(miyo.originalityPolicy, /no borrowed character name, costume, spell silhouette, or franchise insignia/u);
 });
 
-test('manifest maps all 84 frames to stable pivots and preserves the migrated legacy-column digest', async () => {
+test('manifest maps all 98 frames to stable pivots and preserves the seven-row legacy-column digest', async () => {
   const manifest = JSON.parse(await readFile(resolve(SUITE_ROOT, 'manifest.json'), 'utf8'));
   assert.deepEqual(manifest.rowOrder, ROWS);
   assert.deepEqual(manifest.columnOrder, COLUMNS);
@@ -145,16 +149,16 @@ test('manifest maps all 84 frames to stable pivots and preserves the migrated le
     frameWidth: 32,
     frameHeight: 48,
     columns: 14,
-    rows: 6,
+    rows: 7,
     sheetWidth: 448,
-    sheetHeight: 288,
+    sheetHeight: 336,
     pivot: [16, 44],
     footPoint: [16, 44],
     transparentGutter: 1,
-    alphaBoundingBox: [2, 4, 446, 285],
+    alphaBoundingBox: [2, 4, 446, 333],
   });
-  assert.equal(manifest.frames.length, 84);
-  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 84);
+  assert.equal(manifest.frames.length, 98);
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 98);
   manifest.frames.forEach((frame, index) => {
     const row = Math.floor(index / COLUMNS.length);
     const column = index % COLUMNS.length;
@@ -166,7 +170,8 @@ test('manifest maps all 84 frames to stable pivots and preserves the migrated le
   });
   assert.deepEqual(Object.keys(manifest.paletteIds), ROWS);
   assert.deepEqual(manifest.characterIdentity.lise.lineage, NIKOLA_LINEAGE);
-  assert.equal(manifest.validation.legacyFrameCount, 60);
+  assert.equal(manifest.characterIdentity.miyo.lineage.ancestry, 'three-quarters Japanese and one-quarter Portuguese');
+  assert.equal(manifest.validation.legacyFrameCount, 70);
   assert.equal(manifest.validation.legacyFrameRgbaSha256Digest, LEGACY_FRAME_DIGEST);
   assert.equal(manifest.review.runtimeIntegration, 'current-browser-selectable-field-leader-two-phase-directional-walk-interact-hurt');
   assert.equal(manifest.review.fullAnimationExpansion, 'alternate-action-facings-and-additional-inbetweens-pending');
@@ -191,7 +196,7 @@ test('transparent runtime PNG matches its manifest and shipped hashes and preser
   assert.equal(sha256(runtimeBytes), record.sha256);
   assert.equal(runtimeBytes.equals(bytes), true);
   const image = decodeRgbaPng(bytes);
-  assert.deepEqual([image.width, image.height], [448, 288]);
+  assert.deepEqual([image.width, image.height], [448, 336]);
   for (const frame of manifest.frames) {
     assert.equal(sha256(rgbaFrameBytes(image, frame)), frame.rgbaSha256, frame.id);
   }
@@ -221,7 +226,7 @@ test('contact sheet is labeled review material and builder has no generated-art 
   ]);
   const manifest = JSON.parse(manifestText);
   const contact = manifest.exports.find(({ purpose }) => purpose === 'labeled-review-only-not-runtime');
-  assert.deepEqual([contact.width, contact.height], [1888, 1210]);
+  assert.deepEqual([contact.width, contact.height], [1888, 1402]);
   assert.equal(sha256(contactBytes), contact.sha256);
   assert.doesNotMatch(builderText, /assets[\\/](?:production|concepts)/iu);
   assert.doesNotMatch(builderText, /Adam Driver|celebrity likeness|\bofuda\b|\bkamon\b/iu);

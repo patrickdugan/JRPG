@@ -4,7 +4,7 @@
 **Audience:** art director, environment artists, character artists, UI/UX, VFX, animation, technical art<br>
 **Scope:** 2D pixel-art JRPG, 320 x 180 logical pixels, integer-scaled; the first playable and the 20-25 hour production target.
 
-**Runtime note (2026-07-20):** the current Campaign reuses its original 84-frame party field atlas for visible formation followers. The stable third-row key remains `lise` solely for save, formation, and atlas compatibility, while every authored pixel and visible/source name in that row presents Nikola Dražanić. A deterministic player-facing roster is composed from the same combat atlas, replacing the obsolete generated female roster. Only successful persisted departures enter a bounded presentation trail; followers disappear on context changes and never imply collision, hazard, interaction, or save authority. Campaign Battle also uses code-native typed damage flyouts for exact values and WEAK/RESIST/IMMUNE/ABSORB/GUARD/WARD reads. These are production-foundation implementations, not final subjective readability approval.
+**Runtime note (2026-07-21):** the current Campaign uses a 98-frame, seven-row party field atlas for visible formation followers. The stable third-row key remains `lise` solely for save, formation, and atlas compatibility, while every authored pixel and visible/source name in that row presents Nikola Dražanić. The seventh row presents Miyo Senda with her storm-blue travel coat and folding Fourfold Weather Ruler. A deterministic player-facing roster is composed from the same combat atlas. Only successful persisted departures enter a bounded presentation trail; followers disappear on context changes and never imply collision, hazard, interaction, or save authority. Campaign Battle also uses code-native typed damage flyouts for exact values and WEAK/RESIST/IMMUNE/ABSORB/GUARD/WARD reads. These are production-foundation implementations, not final subjective readability approval.
 
 ## 1. Visual thesis
 
@@ -114,7 +114,7 @@ At 32 x 48, each party member must be identifiable in monochrome, from either fi
 | Genta Mononobe | broad shoulder mantle, tetsubo or shield mass | earth gray + oxidized gold | braced stance and lane-blocking impact |
 | Kiku Nawa | medicine box, short cloak, bottle/packet read | herb green + candle ivory | toss, mix, and terrain placement instead of attack flourishes |
 
-Combat portraits use 32 x 32 or 40 x 40 frames with a flat value field behind them. Portraits should communicate role and current state, not fashion illustration detail.
+Dialogue and combat portraits use 96 x 96 transparent frames. Their original gothic 32-bit-era finish uses ink-like contours, baroque value shaping, restrained costume detail, and one shared 64-color visible palette across the party. Portraits communicate identity, role, and current state before ornament; expression changes must preserve face, crop, costume, lighting, and eye line. The v2 runtime atlas is honestly classified as a deterministic pixelification of AI-generated identity-locked sources, not hand-pixeled art.
 
 ### Enemy hierarchy
 

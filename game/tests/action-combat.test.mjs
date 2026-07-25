@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  ACTION_COMPANION_AI,
   ACTION_FIXED_STEP_MS,
+  ACTION_HIT_FLASH_MS,
+  ACTION_HIT_INVULNERABILITY_MS,
+  ACTION_HIT_STUN_MS,
+  ACTION_KNOCKBACK_SPEED_X,
+  ACTION_MOVEMENT_PROFILES,
+  ACTION_TAG_COOLDOWN_MS,
   ActionCombatKernel,
   calculateActionDamage,
   cooldownMultiplierForLevel,
@@ -130,6 +137,7 @@ function partyKernel(options = {}) {
     ],
     controlledActorId: options.controlledActorId ?? 'ren',
     automaticVictory: options.automaticVictory,
+    physicsHooks: options.physicsHooks,
   });
 }
 
@@ -166,6 +174,232 @@ test('arbitrary elapsed chunks produce the same fixed-step side-view movement', 
   assert.deepEqual(chunked.snapshot(), whole.snapshot());
   assert.equal(actorSnapshot(whole, 'ren').position.x, 124);
   assert.equal(whole.snapshot().fixedStepMs, ACTION_FIXED_STEP_MS);
+});
+
+test('dash responds on the next fixed step and travels an exact chunk-independent burst', () => {
+  const whole = kernel();
+  const chunked = kernel();
+  for (const engine of [whole, chunked]) {
+    engine.setMovement('ren', { x: 1 });
+    assert.deepEqual(engine.requestManeuver('ren', 'dash'), {
+      ok: true,
+      actorId: 'ren',
+      maneuverId: 'dash',
+      startedAtMs: 0,
+      direction: 1,
+      durationMs: 120,
+    });
+  }
+  whole.advance(120);
+  for (const elapsed of [7, 13, 19, 21, 40, 20]) chunked.advance(elapsed);
+  assert.deepEqual(chunked.snapshot(), whole.snapshot());
+  const ren = actorSnapshot(whole, 'ren');
+  assert.equal(ren.position.x, 143.2, 'six fixed steps move at exactly 3x actor speed');
+  assert.equal(ren.activeManeuver, null);
+  assert.equal(ren.velocity.x, 120, 'held walk speed resumes without a dead frame');
+  assert.equal(ren.maneuverCooldowns.dash, 100);
+  assert.deepEqual(whole.drainEvents().filter(({ type }) => type.startsWith('maneuver')).map(({ type, maneuverId, reason }) => ({
+    type,
+    maneuverId,
+    reason,
+  })), [
+    { type: 'maneuver-start', maneuverId: 'dash', reason: undefined },
+    { type: 'maneuver-complete', maneuverId: 'dash', reason: 'duration' },
+  ]);
+});
+
+test('slide lowers the live hurtbox and exposes its jump cancel on the exact authored step', () => {
+  const engine = kernel();
+  engine.setMovement('ren', { x: 1 });
+  assert.equal(engine.requestManeuver('ren', 'slide').ok, true);
+  engine.advance(60);
+  let ren = actorSnapshot(engine, 'ren');
+  assert.equal(ren.activeManeuver.id, 'slide');
+  assert.equal(ren.effectiveHurtbox.bottom - ren.effectiveHurtbox.top, 24);
+  assert.deepEqual(engine.requestJump('ren'), { ok: false, reason: 'maneuver-commitment' });
+  engine.advance(20);
+  assert.deepEqual(engine.requestJump('ren'), { ok: true, actorId: 'ren', velocityY: -200 });
+  ren = actorSnapshot(engine, 'ren');
+  assert.equal(ren.activeManeuver, null);
+  assert.equal(ren.grounded, false);
+  assert.equal(ren.effectiveHurtbox.bottom - ren.effectiveHurtbox.top, 48);
+  const cancel = engine.drainEvents().find(({ type, maneuverId }) => type === 'maneuver-complete' && maneuverId === 'slide');
+  assert.deepEqual({ reason: cancel.reason, nextAction: cancel.nextAction, elapsedMs: cancel.elapsedMs }, {
+    reason: 'cancelled',
+    nextAction: 'jump',
+    elapsedMs: 80,
+  });
+});
+
+test('uppercut and thunder kick carry deterministic strike geometry through their movement arcs', () => {
+  const uppercut = kernel();
+  uppercut.setMovement('ren', { x: 1 });
+  assert.equal(uppercut.requestManeuver('ren', 'uppercut').ok, true);
+  uppercut.advance(80);
+  const rising = actorSnapshot(uppercut, 'ren');
+  assert.equal(rising.grounded, false);
+  assert.equal(rising.position.y < 300, true);
+  assert.equal(actorSnapshot(uppercut, 'oni').hp < 200, true);
+  assert.equal(uppercut.drainEvents().filter(({ type, maneuverId }) => type === 'hit' && maneuverId === 'uppercut').length, 1);
+  uppercut.advance(120);
+  assert.equal(uppercut.drainEvents().filter(({ type, maneuverId }) => type === 'hit' && maneuverId === 'uppercut').length, 0,
+    'one moving maneuver cannot damage the same target twice');
+
+  const diving = kernel({
+    actorOverrides: { ren: { position: { x: 100, y: 240 }, grounded: false, velocity: { x: 0, y: 0 } } },
+  });
+  diving.setMovement('ren', { x: 1 });
+  assert.equal(diving.requestManeuver('ren', 'thunder-kick').ok, true);
+  diving.advance(180);
+  const landed = actorSnapshot(diving, 'ren');
+  assert.equal(landed.grounded, true);
+  assert.equal(landed.activeManeuver, null);
+  assert.equal(landed.airDashUsesRemaining, 1);
+  assert.equal(actorSnapshot(diving, 'oni').hp < 200, true);
+  assert.equal(diving.drainEvents().filter(({ type, maneuverId }) => type === 'hit' && maneuverId === 'thunder-kick').length, 1);
+});
+
+test('dash-to-attack cancel, one-use air dash, variable jump, and landing buffer are explicit', () => {
+  const cancelling = kernel();
+  cancelling.setMovement('ren', { x: 1 });
+  cancelling.requestManeuver('ren', 'dash');
+  cancelling.advance(20);
+  assert.deepEqual(cancelling.requestAttack('ren', 'slash'), { ok: false, reason: 'maneuver-commitment' });
+  cancelling.advance(20);
+  assert.equal(cancelling.requestAttack('ren', 'slash').ok, true);
+  const cancel = cancelling.drainEvents().find(({ type, maneuverId }) => type === 'maneuver-complete' && maneuverId === 'dash');
+  assert.equal(cancel.nextAction, 'attack');
+  assert.equal(cancel.elapsedMs, 40);
+
+  const airborne = kernel({
+    actorOverrides: { ren: { position: { x: 100, y: 180 }, grounded: false, velocity: { x: 0, y: 0 } } },
+  });
+  airborne.setMovement('ren', { x: 1 });
+  airborne.requestManeuver('ren', 'dash');
+  airborne.advance(220);
+  assert.deepEqual(airborne.requestManeuver('ren', 'dash'), {
+    ok: false,
+    reason: 'air-dash-spent',
+    remainingMs: 0,
+  });
+
+  const held = kernel();
+  const released = kernel();
+  held.requestJump('ren');
+  released.requestJump('ren');
+  held.setJumpHeld('ren', true);
+  released.setJumpHeld('ren', false);
+  held.advance(100);
+  released.advance(100);
+  assert.equal(actorSnapshot(held, 'ren').position.y < actorSnapshot(released, 'ren').position.y, true,
+    'holding jump yields a higher arc than releasing it');
+
+  const buffered = kernel({
+    actorOverrides: { ren: { position: { x: 100, y: 299 }, grounded: false, velocity: { x: 0, y: 120 } } },
+  });
+  assert.deepEqual(buffered.requestJump('ren', { buffer: true, held: true }), {
+    ok: true,
+    actorId: 'ren',
+    buffered: true,
+    windowMs: 120,
+  });
+  buffered.advance(20);
+  assert.equal(actorSnapshot(buffered, 'ren').grounded, false);
+  assert.equal(actorSnapshot(buffered, 'ren').velocity.y, -200, 'the buffered press fires on the landing step');
+  assert.equal(buffered.drainEvents().some(({ type, reason }) => type === 'jump' && reason === 'buffered-landing'), true);
+});
+
+test('character movement profiles preserve the shared grammar while changing traversal physics', () => {
+  const profileActor = (id, movementProfileId, position = { x: 100, y: 300 }, grounded = true) => ({
+    id,
+    faction: 'player',
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    moveSpeed: 120,
+    position,
+    grounded,
+    attackIds: [],
+    movementProfileId,
+  });
+  const createProfileKernel = (actor) => createActionCombat({
+    stage: { minX: 0, maxX: 500, minY: 0, maxY: 300, groundY: 300 },
+    attacks: {},
+    actors: [actor],
+    controlledActorId: actor.id,
+    automaticVictory: false,
+  });
+
+  const ren = createProfileKernel(profileActor('ren', 'infiltrator'));
+  const nikola = createProfileKernel(profileActor('lise', 'hunter'));
+  const mateus = createProfileKernel(profileActor('mateus', 'vampire', { x: 100, y: 140 }, false));
+  const miyo = createProfileKernel(profileActor('miyo', 'weather-scholar'));
+
+  assert.deepEqual([
+    actorSnapshot(ren, 'ren').movementProfileId,
+    actorSnapshot(nikola, 'lise').movementProfileId,
+    actorSnapshot(mateus, 'mateus').movementProfileId,
+    actorSnapshot(miyo, 'miyo').movementProfileId,
+  ], ['infiltrator', 'hunter', 'vampire', 'weather-scholar']);
+  assert.deepEqual([
+    actorSnapshot(ren, 'ren').moveSpeed,
+    actorSnapshot(nikola, 'lise').moveSpeed,
+    actorSnapshot(mateus, 'mateus').moveSpeed,
+    actorSnapshot(miyo, 'miyo').moveSpeed,
+  ], [141.6, 115.2, 117.6, 124.8]);
+  assert.equal(ren.getManeuverDefinition('ren', 'dash').name, 'Roofline Rush');
+  assert.equal(nikola.getManeuverDefinition('lise', 'dash').name, 'Hunter Step');
+  assert.equal(mateus.getManeuverDefinition('mateus', 'dash').name, 'Night Passage');
+  assert.equal(miyo.getManeuverDefinition('miyo', 'dash').name, 'Crosswind Step');
+  assert.equal(nikola.getManeuverState('lise', 'dash').ready, true);
+
+  assert.equal(miyo.requestJump('miyo').ok, true);
+  miyo.advance(20);
+  assert.equal(miyo.requestJump('miyo').ok, true, 'Miyo may spend one weather-lift air jump');
+  assert.equal(actorSnapshot(miyo, 'miyo').airJumpUsesRemaining, 0);
+  assert.equal(actorSnapshot(miyo, 'miyo').velocity.y, -ACTION_MOVEMENT_PROFILES['weather-scholar'].jumpSpeed);
+
+  assert.equal(actorSnapshot(mateus, 'mateus').airDashUsesRemaining, 2);
+  assert.equal(mateus.requestManeuver('mateus', 'dash').ok, true);
+  assert.equal(actorSnapshot(mateus, 'mateus').airDashUsesRemaining, 1);
+});
+
+test('Ren alone can arrest a fall at a stage wall and rebound without a progression gate', () => {
+  const wallKernel = (movementProfileId) => createActionCombat({
+    stage: { minX: 0, maxX: 500, minY: 0, maxY: 300, groundY: 300 },
+    attacks: {},
+    actors: [{
+      id: 'runner',
+      faction: 'player',
+      hp: 100,
+      maxHp: 100,
+      moveSpeed: 120,
+      position: { x: 0, y: 180 },
+      velocity: { x: 0, y: 180 },
+      grounded: false,
+      movementProfileId,
+      attackIds: [],
+    }],
+    controlledActorId: 'runner',
+    automaticVictory: false,
+  });
+  const ren = wallKernel('infiltrator');
+  const ordinary = wallKernel('standard');
+  ren.setMovement('runner', { x: -1 });
+  ordinary.setMovement('runner', { x: -1 });
+  ren.advance(20);
+  ordinary.advance(20);
+  assert.equal(actorSnapshot(ren, 'runner').wallContactSide, -1);
+  assert.equal(actorSnapshot(ren, 'runner').velocity.y, ACTION_MOVEMENT_PROFILES.infiltrator.wallTechnique.clingFallSpeed);
+  assert.equal(actorSnapshot(ordinary, 'runner').wallContactSide, null);
+  assert.equal(actorSnapshot(ordinary, 'runner').velocity.y > actorSnapshot(ren, 'runner').velocity.y, true);
+
+  assert.deepEqual(ren.requestJump('runner'), { ok: true, actorId: 'runner', wallJump: true, wallSide: -1 });
+  ren.advance(20);
+  const rebound = actorSnapshot(ren, 'runner');
+  assert.equal(rebound.position.x > 0, true);
+  assert.equal(rebound.velocity.x > 0, true);
+  assert.equal(ren.drainEvents().some(({ type }) => type === 'wall-jump'), true);
 });
 
 test('grounded movement supports deterministic jump, gravity, velocity, and landing', () => {
@@ -271,6 +505,112 @@ test('active hitbox resolves once and preserves delivery, essence, HP, and audit
   assert.equal(hits[0].hpAfter, 171);
 });
 
+test('a damaging hit applies fixed-step stun, knockback, flash, and post-hit invulnerability', () => {
+  const engine = kernel();
+  engine.requestAttack('ren', 'slash');
+  engine.advance(40);
+
+  const impacted = actorSnapshot(engine, 'oni');
+  assert.equal(impacted.hitStunRemainingMs, ACTION_HIT_STUN_MS);
+  assert.equal(impacted.hitInvulnerabilityRemainingMs, ACTION_HIT_INVULNERABILITY_MS);
+  assert.equal(impacted.hitFlashRemainingMs, ACTION_HIT_FLASH_MS);
+  assert.equal(impacted.knockbackVelocityX, ACTION_KNOCKBACK_SPEED_X);
+  assert.equal(impacted.position.x, 143.2, 'knockback moves on the same deterministic fixed step');
+  assert.equal(impacted.grounded, false, 'grounded victims receive the modest lift impulse');
+  assert.deepEqual(engine.requestAttack('oni', 'thrust'), {
+    ok: false,
+    reason: 'hit-stun',
+    remainingMs: ACTION_HIT_STUN_MS,
+  });
+
+  const hit = engine.drainEvents().find(({ type }) => type === 'hit');
+  assert.equal(hit.hitStunMs, ACTION_HIT_STUN_MS);
+  assert.equal(hit.invulnerabilityMs, ACTION_HIT_INVULNERABILITY_MS);
+  assert.equal(hit.knockbackVelocityX, ACTION_KNOCKBACK_SPEED_X);
+
+  engine.advance(ACTION_HIT_STUN_MS);
+  const recovered = actorSnapshot(engine, 'oni');
+  assert.equal(recovered.hitStunRemainingMs, 0);
+  assert.equal(recovered.knockbackVelocityX, 0);
+  assert.equal(recovered.hitInvulnerabilityRemainingMs,
+    ACTION_HIT_INVULNERABILITY_MS - ACTION_HIT_STUN_MS);
+  engine.advance(ACTION_HIT_INVULNERABILITY_MS - ACTION_HIT_STUN_MS);
+  assert.equal(actorSnapshot(engine, 'oni').hitInvulnerabilityRemainingMs, 0);
+});
+
+test('post-hit invulnerability rejects overlapping independent hits but preserves linked combo hits', () => {
+  const engine = createActionCombat({
+    stage: { minX: 0, maxX: 500, minY: 0, maxY: 300, groundY: 300 },
+    attacks: ATTACKS,
+    actors: [
+      actors()[0],
+      { ...actors()[1], id: 'oni-a', position: { x: 100, y: 300 }, facing: 'right' },
+      { ...actors()[1], id: 'oni-b', position: { x: 100, y: 300 }, facing: 'right' },
+    ],
+  });
+  engine.requestAttack('oni-a', 'thrust');
+  engine.requestAttack('oni-b', 'thrust');
+  engine.advance(20);
+
+  const impactEvents = engine.drainEvents().filter(({ type }) => ['hit', 'hit-ignored'].includes(type));
+  assert.deepEqual(impactEvents.map(({ type, actorId, targetId, reason }) => ({
+    type, actorId, targetId, reason,
+  })), [
+    { type: 'hit', actorId: 'oni-a', targetId: 'ren', reason: undefined },
+    {
+      type: 'hit-ignored',
+      actorId: 'oni-b',
+      targetId: 'ren',
+      reason: 'post-hit-invulnerability',
+    },
+  ]);
+  assert.equal(actorSnapshot(engine, 'ren').hp, impactEvents[0].hpAfter);
+
+  const linked = partyKernel({
+    enemyAi: null,
+    actorOverrides: { oni: { ai: null, position: { x: 130, y: 300 } } },
+  });
+  linked.requestCombo('hunter-priest', 'ren', [
+    { actorId: 'ren', attackId: 'slash' },
+    { actorId: 'aya', attackId: 'slash' },
+  ]);
+  linked.advance(40);
+  const linkedEvents = linked.drainEvents();
+  assert.equal(linkedEvents.filter(({ type }) => type === 'hit').length, 2);
+  assert.equal(linkedEvents.some(({ type }) => type === 'hit-ignored'), false);
+});
+
+test('hit stun pauses an authored attack phase without rewriting its animation or cooldown values', () => {
+  const engine = kernel();
+  engine.requestAttack('ren', 'slash');
+  engine.requestAttack('oni', 'thrust');
+  engine.advance(20);
+  assert.equal(actorSnapshot(engine, 'ren').activeAttack.elapsedMs, 20);
+  assert.equal(actorSnapshot(engine, 'ren').hitStunRemainingMs, ACTION_HIT_STUN_MS);
+
+  engine.advance(80);
+  assert.equal(actorSnapshot(engine, 'ren').activeAttack.elapsedMs, 20,
+    'the committed frame is held for the readable hit-stun window');
+  engine.advance(20);
+  assert.equal(actorSnapshot(engine, 'ren').activeAttack.elapsedMs, 40);
+  engine.advance(100);
+  const recovered = actorSnapshot(engine, 'ren');
+  assert.equal(recovered.activeAttack, null);
+  assert.equal(recovered.offensiveCooldownRemainingMs, 400,
+    'the unchanged authored shared cooldown starts only after animation completion');
+  assert.equal(recovered.attackCooldowns.slash, 800);
+});
+
+test('diminishing armor remains useful without creating immunity and penetration stays bounded', () => {
+  const attacker = { power: 30 };
+  const attack = { power: 0, delivery: null, essence: null };
+  const target = (guard) => ({ guard, resistances: { delivery: {}, essence: {} } });
+  assert.equal(calculateActionDamage(attacker, target(0), attack).damage, 30);
+  assert.equal(calculateActionDamage(attacker, target(60), attack).damage, 15);
+  assert.equal(calculateActionDamage(attacker, target(180), attack).damage, 8);
+  assert.equal(calculateActionDamage(attacker, target(60), { ...attack, guardPierce: 0.5 }).damage, 20);
+});
+
 test('opaque statuses and deterministic status hooks extend movement and hit resolution', () => {
   const engine = kernel({
     actorOverrides: { ren: { statuses: [{ id: 'fury', stacks: 1 }] } },
@@ -345,12 +685,18 @@ test('exactly one party actor accepts player input and tag switching preserves l
   assert.deepEqual(engine.snapshot().actors, actorsDuringCommitment,
     'switching changes input authority without touching HP, position, cooldown, or animation state');
   assert.equal(engine.snapshot().controlledActorId, 'aya');
+  assert.equal(engine.snapshot().tagCooldownRemainingMs, ACTION_TAG_COOLDOWN_MS);
+  assert.deepEqual(engine.setControlledActor('ren'), {
+    ok: false,
+    reason: 'tag-cooldown',
+    remainingMs: ACTION_TAG_COOLDOWN_MS,
+  });
   assert.equal(engine.setMovement('aya', { x: -1 }).ok, true);
   assert.equal(engine.setMovement('ren', { x: 1 }).reason, 'not-controlled-actor');
 
-  engine.advance(120);
+  engine.advance(ACTION_TAG_COOLDOWN_MS);
   const actorsWithCooldown = engine.snapshot().actors;
-  assert.equal(actorSnapshot(engine, 'ren').offensiveCooldownRemainingMs, 400);
+  assert.equal(actorSnapshot(engine, 'ren').offensiveCooldownRemainingMs, 280);
   assert.equal(engine.setControlledActor('ren').ok, true);
   assert.deepEqual(engine.snapshot().actors, actorsWithCooldown,
     'switching back does not reset the former actor cooldown');
@@ -543,6 +889,136 @@ test('companion and enemy AI are deterministic, target only hostile factions, an
   assert.equal(enemyDecisions.every(({ actorId, targetId }) => actorId === 'oni' && ['ren', 'aya'].includes(targetId)), true);
   assert.equal(wholeEvents.some(({ type, targetId }) => type === 'hit' && targetId === 'witness'), false);
   assert.equal(actorSnapshot(whole, 'witness').hp, 50);
+});
+
+test('AI support holds formation, follows beyond its leash, and hands the role over on control switch', () => {
+  const guarding = partyKernel({
+    enemyAi: null,
+    actorOverrides: {
+      ren: { position: { x: 100, y: 300 } },
+      aya: { position: { x: 70, y: 300 } },
+      oni: { position: { x: 480, y: 300 } },
+    },
+  });
+  guarding.advance(ACTION_FIXED_STEP_MS);
+  const guardDecision = guarding.drainEvents().find(({ type }) => type === 'companion-decision');
+  assert.equal(guardDecision.action, 'guard');
+  assert.equal(guardDecision.actorId, 'aya');
+  assert.equal(guardDecision.targetId, 'ren');
+  assert.deepEqual(actorSnapshot(guarding, 'aya').movementIntent, { x: 0, y: 0 });
+
+  const following = partyKernel({
+    enemyAi: null,
+    actorOverrides: {
+      ren: { position: { x: 300, y: 300 } },
+      aya: { position: { x: 20, y: 300 } },
+      oni: { position: { x: 490, y: 300 } },
+    },
+  });
+  assert.equal(300 - 20 > ACTION_COMPANION_AI.leashDistancePx, true);
+  following.advance(ACTION_FIXED_STEP_MS);
+  const followDecision = following.drainEvents().find(({ type }) => type === 'companion-decision');
+  assert.equal(followDecision.action, 'follow');
+  assert.equal(followDecision.actorId, 'aya');
+  assert.equal(followDecision.targetId, 'ren');
+  assert.equal(actorSnapshot(following, 'aya').position.x > 20, true);
+
+  assert.equal(following.switchControlledActor('aya').ok, true);
+  following.drainEvents();
+  following.advance(ACTION_FIXED_STEP_MS);
+  assert.equal(following.drainEvents().some(({ type, actorId }) => (
+    type === 'companion-decision' && actorId === 'ren'
+  )), true);
+});
+
+test('AI support jumps onto an authored one-way platform to rejoin the controlled fighter', () => {
+  const platformY = 240;
+  const engine = partyKernel({
+    enemyAi: null,
+    actorOverrides: {
+      ren: { position: { x: 240, y: platformY }, grounded: true },
+      aya: { position: { x: 220, y: 300 }, grounded: true },
+      oni: { position: { x: 480, y: 300 } },
+    },
+    physicsHooks: {
+      resolveGround({ actor, previousPosition, proposedPosition }) {
+        if (actor.velocity.y >= 0
+            && proposedPosition.x >= 180
+            && proposedPosition.x <= 320
+            && previousPosition.y <= platformY
+            && proposedPosition.y >= platformY) {
+          return { grounded: true, groundY: platformY };
+        }
+        if (proposedPosition.y >= 300) return { grounded: true, groundY: 300 };
+        return { grounded: false, groundY: 300 };
+      },
+    },
+  });
+  engine.advance(ACTION_FIXED_STEP_MS);
+  const launched = actorSnapshot(engine, 'aya');
+  assert.equal(launched.grounded, false);
+  assert.equal(launched.position.y < 300, true);
+  assert.equal(engine.drainEvents().some(({ type, action, actorId }) => (
+    type === 'companion-decision' && action === 'jump-follow' && actorId === 'aya'
+  )), true);
+
+  let reunited = null;
+  for (let step = 0; step < 60; step += 1) {
+    engine.advance(20);
+    const support = actorSnapshot(engine, 'aya');
+    if (support.grounded && support.position.y === platformY) {
+      reunited = support;
+      break;
+    }
+  }
+  assert.notEqual(reunited, null);
+  assert.equal(reunited.position.y, platformY);
+});
+
+test('AI support uses its character rising maneuver when an authored platform exceeds normal jump height', () => {
+  const platformY = 180;
+  const engine = partyKernel({
+    enemyAi: null,
+    actorOverrides: {
+      ren: { position: { x: 240, y: platformY }, grounded: true },
+      aya: { position: { x: 220, y: 300 }, grounded: true, movementProfileId: 'hunter' },
+      oni: { position: { x: 480, y: 300 } },
+    },
+    physicsHooks: {
+      resolveGround({ actor, previousPosition, proposedPosition }) {
+        if (actor.velocity.y >= 0
+            && proposedPosition.x >= 180
+            && proposedPosition.x <= 320
+            && previousPosition.y <= platformY
+            && proposedPosition.y >= platformY) {
+          return { grounded: true, groundY: platformY };
+        }
+        if (proposedPosition.y >= 300) return { grounded: true, groundY: 300 };
+        return { grounded: false, groundY: 300 };
+      },
+    },
+  });
+  engine.advance(ACTION_FIXED_STEP_MS);
+  const launched = actorSnapshot(engine, 'aya');
+  const events = engine.drainEvents();
+  assert.equal(launched.activeManeuver?.id, 'uppercut');
+  assert.equal(events.some(({ type, action, actorId }) => (
+    type === 'companion-decision' && action === 'rise-follow' && actorId === 'aya'
+  )), true);
+  assert.equal(events.some(({ type, maneuverId, actorId }) => (
+    type === 'maneuver-start' && maneuverId === 'uppercut' && actorId === 'aya'
+  )), true);
+
+  let reunited = null;
+  for (let step = 0; step < 100; step += 1) {
+    engine.advance(20);
+    const support = actorSnapshot(engine, 'aya');
+    if (support.grounded && support.position.y === platformY) {
+      reunited = support;
+      break;
+    }
+  }
+  assert.notEqual(reunited, null);
 });
 
 test('a defeated controlled actor deterministically transfers control to the next living party actor', () => {

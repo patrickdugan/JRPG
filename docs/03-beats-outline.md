@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 canonical story beats; the v8 quantity audit estimates this story-only route at 188.936/312.481/504.237 minutes low/reference/high (about 3.15/5.21/8.40 hours)<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 779.587/1,236.311/1,924.351 minutes (about 12.99/20.61/32.07 hours), not measured playtime<br>
+**Campaign structure:** 60 authored story beats; Salt/Ash/Paper schedules play 55/54/55 of them. The v8 quantity audit's 190.129/314.253/507.008-minute range covers the full authored catalog, not one selected route.<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 780.934/1,238.306/1,927.430 minutes (about 13.02/20.64/32.12 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 
@@ -28,7 +28,7 @@
 | 6. The Court of Masks | Publish the proof before it is erased | Kōzui relay city, tribunal | Aya leads; human collaborators make their choices visible | Magistrate Ujiro Arata | multi-target threat triage |
 | 7. The Road of the Dead | Recover survivors taken for the final bell | Hushroad tunnels, prison ferries | Ren chooses rescue over a direct strike at Kurozane | Bell Warden Chiyo | swap and positional rescue |
 | 8. Lanterns Unhidden | Unite routes to breach Kurohana | return hubs, Black Gate | the party asks allies for consent, not obedience | Lady Enma of Ash | party combinations and hazards |
-| 9. The Black Chrysanthemum | Break the Yearless Bell and face Kurozane | Kurohana Castle | all six characters complete their central choice | Shogun Kurozane | full-system final exam |
+| 9. The Black Chrysanthemum | Break the Yearless Bell and face Kurozane | Kurohana Castle | all seven characters complete their central choice | Shogun Kurozane | full-system final exam |
 | Epilogue | Restore names and choose repair | Hoshigawa, Sodegaura, Takamine | accountability, mourning, and forward motion | — | no combat |
 
 ## Prologue — The Night Census
@@ -214,7 +214,7 @@
 
 **Recurring boss:** Lady Enma of Ash, Kurozane's vampire Cinder Fan and former court entertainer. The Black Gate is her third fight after the Rain Docks first mask and Archive Roof second mask. She creates Ember and Umbral hazard zones that become safe only through character combinations: Aya wards, Kiku changes terrain, Genta anchors, Ren redirects, Nikola exposes, and Mateus protects. Her last defeat subdues her alive; a dedicated Storyworld spool then records death, rotating custody, or a revocable negotiated defection.
 
-**Exit state:** The network holds the gate while the six heroes enter Kurohana Castle. No ally is sent on a suicide mission off-screen.
+**Exit state:** The network holds the gate while the seven heroes enter Kurohana Castle. No ally is sent on a suicide mission off-screen.
 
 ## Chapter 9 — The Black Chrysanthemum
 

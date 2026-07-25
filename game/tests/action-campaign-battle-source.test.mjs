@@ -5,9 +5,10 @@ import test from 'node:test';
 const html = readFileSync(new URL('../action-campaign-battle.html', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../action-campaign-battle.css', import.meta.url), 'utf8');
 const browser = readFileSync(new URL('../action-campaign-battle.js', import.meta.url), 'utf8');
+const inputGrammar = readFileSync(new URL('../action-input-grammar.mjs', import.meta.url), 'utf8');
 const model = readFileSync(new URL('../action-campaign-battle-model.mjs', import.meta.url), 'utf8');
 
-test('isolated action campaign page uses the shared action, objective, result, and settlement seams', () => {
+test('isolated action laboratory uses shared action, objective, and result seams without settlement', () => {
   assert.match(html, /action-campaign-battle\.css/u);
   assert.match(html, /action-campaign-battle\.js/u);
   assert.match(browser, /from '\.\/action-campaign-battle-model\.mjs'/u);
@@ -15,11 +16,14 @@ test('isolated action campaign page uses the shared action, objective, result, a
   assert.match(model, /from '\.\/action-combos\.mjs'/u);
   assert.match(model, /from '\.\/action-objective-runtime\.mjs'/u);
   assert.match(model, /from '\.\/battle-result-contract\.mjs'/u);
-  assert.match(model, /from '\.\/battle-settlement\.mjs'/u);
+  assert.doesNotMatch(model, /from '\.\/battle-settlement\.mjs'|settleActionCampaignBattleVictory/u);
+  assert.match(browser, /loadActionLaboratorySeed/u);
+  assert.match(browser, /canonicalStorageUnchanged/u);
+  assert.doesNotMatch(browser, /createAdvancementStorageAdapter|createLoadoutStorageAdapter|createRunReceiptStorageAdapter|recordRunPlaytime/u);
   assert.doesNotMatch(browser, /from '\.\/battle\.js'|from '\.\/engine\.mjs'/u);
 });
 
-test('page carries text authority, keyboard and touch controls, and a settlement-locked Continue gate', () => {
+test('page carries text authority, keyboard and touch controls, and a session-local result gate', () => {
   const canvas = html.match(/<canvas[\s\S]*?<\/canvas>/u)?.[0] ?? '';
   assert.match(canvas, /tabindex="0"/u);
   assert.match(canvas, /aria-describedby="battleInstructions battleReadout"/u);
@@ -30,8 +34,34 @@ test('page carries text authority, keyboard and touch controls, and a settlement
   assert.match(html, /id="continueCampaign"[^>]*hidden[^>]*aria-disabled="true"/u);
   assert.match(html, /<kbd>E<\/kbd>[\s\S]*Hold objective action/u);
   assert.match(html, /<kbd>L<\/kbd>[\s\S]*Hunter–Priest combo/u);
+  assert.match(html, /<kbd>Q<\/kbd><kbd>Shift<\/kbd>[\s\S]*Dash/u);
+  assert.match(html, /<kbd>S<\/kbd>[\s\S]*Low slide/u);
+  assert.match(html, /<kbd>U<\/kbd>[\s\S]*Character rising maneuver/u);
+  assert.match(html, /<kbd>I<\/kbd>[\s\S]*Character air descent/u);
+  assert.match(html, /id="risingGuide"/u);
+  assert.match(html, /id="airGuide"/u);
+  assert.match(html, /<kbd>←<\/kbd><kbd>→<\/kbd>[\s\S]*double-tap dash/u);
+  assert.match(html, /<kbd>Space<\/kbd>[\s\S]*Jump/u);
+  assert.match(html, /<kbd>Z<\/kbd>[\s\S]*Weapon[\s\S]*risingGuide[\s\S]*slide \/[\s\S]*airGuide/u);
+  assert.match(html, /<kbd>X<\/kbd>[\s\S]*Art/u);
+  assert.match(html, /<kbd>Tab<\/kbd>[\s\S]*Swap with AI support/u);
+  assert.match(html, /id="partyTitle">Duo fighters/u);
+  assert.match(html, /id="partyReadout"[^>]*aria-label="Duo combat party"/u);
   assert.match(html, /data-held-control="left"/u);
+  assert.match(html, /id="movementReadout"[^>]*aria-label="Movement readiness"/u);
+  assert.match(html, /data-action-control="dash"/u);
+  assert.match(html, /data-action-control="slide"/u);
+  assert.match(html, /data-action-control="uppercut"/u);
+  assert.match(html, /data-action-control="thunder-kick"/u);
   assert.match(html, /data-action-control="switch"/u);
+  assert.match(browser, /ACTION_LAB_FIGHTER_ACTOR_IDS/u);
+  assert.match(browser, /fighterActorIds: ACTION_LAB_FIGHTER_ACTOR_IDS/u);
+  assert.doesNotMatch(browser, /ACTION_LAB_SUPPORT_ACTOR_ID = 'aya'/u);
+  assert.match(browser, /AI SUPPORT/u);
+  assert.match(browser, /dataset\.duoEnabled/u);
+  assert.match(browser, /dataset\.supportActorId/u);
+  assert.match(browser, /dataset\.supportState/u);
+  assert.match(model, /aiControlledActorIds/u);
   assert.match(html, /data-action-control="combo"[^>]*>Hunter \+ Priest</u);
 });
 
@@ -42,6 +72,30 @@ test('combo input is edge-triggered and calls the kernel only on an explicit req
   assert.match(model, /if \(input\.comboPressed\)[\s\S]*session\.kernel\.requestCombo/u);
   assert.match(model, /HUNTER_PRIEST_COMBO_CONTRACT\.id/u);
   assert.match(model, /combo\.attackRequests\.map/u);
+});
+
+test('movement input preserves key edges, jump hold duration, and browser-observable state', () => {
+  assert.match(browser, /key === 'q' \|\| key === 'shift'[\s\S]*queueManeuver\('dash'\)/u);
+  assert.match(browser, /key === 's'[\s\S]*queueManeuver\('slide'\)/u);
+  assert.match(browser, /key === 'u'[\s\S]*queueManeuver\('uppercut'\)/u);
+  assert.match(browser, /key === 'i'[\s\S]*queueManeuver\('thunder-kick'\)/u);
+  assert.match(browser, /resolveCompactActionKeyDown/u);
+  assert.match(browser, /resolveCompactActionKeyUp/u);
+  assert.match(inputGrammar, /COMPACT_DASH_TAP_WINDOW_MS = 220/u);
+  assert.match(inputGrammar, /normalizedKey === 'arrowleft' \|\| normalizedKey === 'arrowright'/u);
+  assert.match(inputGrammar, /held\.up[\s\S]*id: 'uppercut'/u);
+  assert.match(inputGrammar, /held\.down[\s\S]*grounded \? 'slide' : 'thunder-kick'/u);
+  assert.match(inputGrammar, /normalizedKey === 'z'[\s\S]*type: 'attack', index: 0/u);
+  assert.match(inputGrammar, /normalizedKey === 'x'[\s\S]*type: 'attack', index: 1/u);
+  assert.match(browser, /jumpHeld: held\.jump/u);
+  assert.match(browser, /advanceActionCampaignBattle\(session, 0,[\s\S]*maneuverPressed: maneuverId/u);
+  assert.doesNotMatch(browser, /maneuverPressed: pressed\.maneuver/u);
+  assert.match(browser, /dataset\.movementState/u);
+  assert.match(browser, /dataset\.movementVelocityX/u);
+  assert.match(browser, /dataset\.movementPositionX/u);
+  assert.match(browser, /dataset\.lastManeuverInputLatencyMs/u);
+  assert.match(model, /session\.kernel\.requestManeuver/u);
+  assert.match(model, /type: 'maneuver-blocked'/u);
 });
 
 test('combo readout exposes name, contributing arts, reason, proximity, and linked event callouts', () => {
@@ -59,13 +113,9 @@ test('combo readout exposes name, contributing arts, reason, proximity, and link
   assert.match(browser, /if \(comboResponseEvent\) announce\(describeEvent\(comboResponseEvent, snapshot\)\)/u);
 });
 
-test('runtime loads advancement, loadout, Storyworld, all handoffs, and pauses while hidden', () => {
-  assert.match(browser, /createAdvancementStorageAdapter/u);
-  assert.match(browser, /createLoadoutStorageAdapter/u);
+test('runtime clones advancement and loadout, reads Storyworld context, and pauses while hidden', () => {
+  assert.match(browser, /loadActionLaboratorySeed/u);
   assert.match(browser, /loadStoryworldBattlePresentation/u);
-  assert.match(browser, /createQuestStorageAdapter/u);
-  assert.match(browser, /createFieldStorageAdapter/u);
-  assert.match(browser, /createWitnessChronicleStorageAdapter/u);
   assert.match(browser, /document\.addEventListener\('visibilitychange'/u);
   assert.match(browser, /if \(!hidden && !session\.outcome\)/u);
   assert.match(browser, /pauseCurtain\.hidden = !hidden/u);
@@ -80,5 +130,31 @@ test('shipped party, enemy, boss, and regional stage art retain accessible text 
   assert.match(browser, /drawFallback/u);
   assert.match(browser, /actorListItem/u);
   assert.match(browser, /elements\.canvas\.dataset\.objectiveSupported/u);
-  assert.match(browser, /elements\.canvas\.dataset\.settlement/u);
+  assert.match(browser, /elements\.canvas\.dataset\.laboratoryResult/u);
+});
+
+test('combat impacts expose a flashed hurtbox, outlined damage flyouts, and browser-auditable hits', () => {
+  assert.match(browser, /actor\.hitFlashRemainingMs > 0/u);
+  assert.match(browser, /brightness\(3\) saturate\(0\)/u);
+  assert.match(browser, /context\.strokeText\(item\.text\.toUpperCase\(\)/u);
+  assert.match(browser, /text: 'INVULNERABLE'/u);
+  assert.match(browser, /dataset\.lastHitTargetId/u);
+  assert.match(browser, /dataset\.lastHitDamage/u);
+  assert.match(browser, /dataset\.hitStunRemainingMs/u);
+  assert.match(browser, /dataset\.hitInvulnerabilityRemainingMs/u);
+});
+
+test('vertical-slice battles carry checkpoint vitals, settle receipts, and expose controller input', () => {
+  assert.match(browser, /ACTION_SLICE_STORAGE_KEY/u);
+  assert.match(browser, /hydrateActionSliceRun/u);
+  assert.match(browser, /recordActionSliceBattleReceipt/u);
+  assert.match(browser, /displayedObjectiveText/u);
+  assert.match(browser, /Defeat the Tithe Hound\./u);
+  assert.match(browser, /partyVitals: sliceBattleVitals/u);
+  assert.match(browser, /sessionStorage\.setItem/u);
+  assert.match(browser, /function pollBattleGamepad\(\)/u);
+  assert.match(browser, /navigator\.getGamepads/u);
+  assert.match(browser, /queueTagSwitch\(1\)/u);
+  assert.match(html, /aria-label="Controller controls"/u);
+  assert.match(html, /LB Combo · RB Tag/u);
 });

@@ -178,12 +178,12 @@ function legacyStoryworldCheckpoint(currentCheckpoint, identityIndex = 0) {
   return { ...body, signature: `fnv1a32:${fnv1a32(JSON.stringify(body))}` };
 }
 
-function resolveStoryworldCluster(state, cluster) {
+function resolveStoryworldCluster(state, cluster, entryOptionIndex = 0) {
   state = beginStoryworldEncounter(state, cluster.id).state;
   state = chooseStoryworldOption(
     state,
     cluster.id,
-    getVisibleStoryworldOptions(state, cluster.id)[0].id,
+    getVisibleStoryworldOptions(state, cluster.id)[entryOptionIndex].id,
   ).state;
   state = advanceStoryworldEncounter(state, cluster.id).state;
   const progress = getStoryworldProgress(state, cluster.id);
@@ -200,7 +200,13 @@ function resolveStoryworldCluster(state, cluster) {
 function incompatibleCorrectionsDeskCheckpoint(currentCheckpoint, suffix, outcomeEncounterId) {
   const identity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[1];
   let state = createStoryworldState({ runId: RUN_ID });
-  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 9)) state = resolveStoryworldCluster(state, cluster);
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 9)) {
+    state = resolveStoryworldCluster(
+      state,
+      cluster,
+      cluster.id === 'sw3-sayos-warehouse-conditions' ? 2 : 0,
+    );
+  }
   state = {
     ...state,
     sourceIFID: identity.sourceIFID,

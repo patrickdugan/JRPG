@@ -35,7 +35,10 @@ import {
   serializePlaytestEvidenceReport,
 } from './playtest-evidence.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
+import { applyPresentationMode, PRESENTATION_MODES } from './presentation-mode.mjs';
 
+const presentationMode = applyPresentationMode();
+const developerMode = presentationMode === PRESENTATION_MODES.DEVELOPER;
 const creditsStatus = document.querySelector('#creditsStatus');
 const creditsProof = document.querySelector('#creditsProof');
 const routeProof = document.querySelector('#routeProof');
@@ -163,11 +166,17 @@ function render() {
     routeProof.textContent = `Completionist · ${routeTotals.completedActivityCount}/${routeTotals.requiredActivityCount} optional activities`;
     renderTimingLedger();
     creditsStatus.dataset.state = 'error';
-    creditsStatus.textContent = loadedReceipt.ok
-      ? 'No clean-run receipt is attached to this save.'
-      : 'The clean-run receipt could not be read.';
-    creditsProof.textContent = 'Credits remain viewable, but there is no valid run evidence to seal.';
-    creditsActionHint.textContent = 'Return to the campaign and start a clean New Game to create verified evidence.';
+    creditsStatus.textContent = developerMode
+      ? loadedReceipt.ok
+        ? 'No clean-run receipt is attached to this save.'
+        : 'The clean-run receipt could not be read.'
+      : 'Credits preview';
+    creditsProof.textContent = developerMode
+      ? 'Credits remain viewable, but there is no valid run evidence to seal.'
+      : 'This journey has no saved ending yet.';
+    creditsActionHint.textContent = developerMode
+      ? 'Return to the campaign and start a clean New Game to create verified evidence.'
+      : 'Return to Campaign and begin a New Game to record the journey.';
     sealCredits.disabled = true;
     exportEvidence.disabled = true;
     publishEvidenceExportHint('A valid clean-run receipt is required before evidence can be exported.');
@@ -189,51 +198,75 @@ function render() {
       ? 'The export contains a signed completionist proof with category, chapter, story, combat, and 215-activity evidence.'
       : 'The export records current evidence and names every missing condition; it never upgrades incomplete timing or route data.');
   const elapsed = formatPlaytime(report.totalMs);
-  creditsProof.textContent = narrativeRun
-    ? `${report.completedBeatCount}/${report.requiredBeatCount} canonical · ${report.completedStoryworldPlayedSceneCount}/${report.requiredStoryworldPlayedSceneCount} Storyworld · ${elapsed} active / 05:00:00 minimum`
-    : `${report.completedBeatCount}/${report.requiredBeatCount} story scenes · ${report.firstClearCount}/${report.requiredFirstClearCount} canonical first clears · ${elapsed} active play`;
+  creditsProof.textContent = developerMode
+    ? narrativeRun
+      ? `${report.completedBeatCount}/${report.requiredBeatCount} canonical · ${report.completedStoryworldPlayedSceneCount}/${report.requiredStoryworldPlayedSceneCount} Storyworld · ${elapsed} active / 05:00:00 minimum`
+      : `${report.completedBeatCount}/${report.requiredBeatCount} story scenes · ${report.firstClearCount}/${report.requiredFirstClearCount} canonical first clears · ${elapsed} active play`
+    : narrativeRun
+      ? `Story ${report.completedBeatCount}/${report.requiredBeatCount} · interludes ${report.completedStoryworldPlayedSceneCount}/${report.requiredStoryworldPlayedSceneCount} · ${elapsed} played`
+      : `Story ${report.completedBeatCount}/${report.requiredBeatCount} · battles ${report.firstClearCount}/${report.requiredFirstClearCount} · ${elapsed} played`;
   if (report.creditsComplete) {
     creditsStatus.dataset.state = 'sealed';
-    creditsStatus.textContent = narrativeRun
-      ? `Credits complete · 82-scene narrative receipt sealed at ${elapsed}`
-      : report.durationProven
-        ? `Credits complete · receipt sealed · 20-hour run proven at ${elapsed}`
-        : `Credits complete · receipt sealed at ${elapsed} · duration target not yet proven`;
-    creditsActionHint.textContent = 'This clean-run receipt is immutable. Camp and campaign replay remain available outside the sealed proof.';
-    sealCredits.textContent = 'Credits complete · receipt sealed';
+    creditsStatus.textContent = developerMode
+      ? narrativeRun
+        ? `Credits complete · ${report.requiredPlayedSceneCount}-scene ${report.routeLabel ?? 'selected-route'} narrative receipt sealed at ${elapsed}`
+        : report.durationProven
+          ? `Credits complete · receipt sealed · 20-hour run proven at ${elapsed}`
+          : `Credits complete · receipt sealed at ${elapsed} · duration target not yet proven`
+      : `Credits complete · ${elapsed}`;
+    creditsActionHint.textContent = developerMode
+      ? 'This clean-run receipt is immutable. Camp and campaign replay remain available outside the sealed proof.'
+      : 'Your completed journey is saved. Camp and Campaign remain available.';
+    sealCredits.textContent = developerMode ? 'Credits complete · receipt sealed' : 'Credits complete';
     sealCredits.disabled = true;
     return;
   }
   if (!report.storyComplete) {
     creditsStatus.dataset.state = 'error';
-    creditsStatus.textContent = 'Credits preview · story evidence is incomplete';
-    creditsActionHint.textContent = narrativeRun
-      ? 'Complete all 60 canonical scenes and all eleven Storyworld decision/consequence pairs before sealing the run.'
-      : 'Complete every canonical story scene before sealing the run.';
+    creditsStatus.textContent = developerMode ? 'Credits preview · story evidence is incomplete' : 'Credits preview';
+    creditsActionHint.textContent = developerMode
+      ? narrativeRun
+        ? `Complete all ${report.requiredBeatCount} selected-route story scenes and all ${report.requiredStoryworldDecisionCount} required Storyworld decision/consequence pairs before sealing the run.`
+        : 'Complete every canonical story scene before sealing the run.'
+      : 'Complete the story before finishing the credits.';
     sealCredits.disabled = true;
     return;
   }
   if (narrativeRun && !narrativeGate.ready) {
     creditsStatus.dataset.state = 'active';
-    creditsStatus.textContent = `Narrative complete · receipt active at ${elapsed}`;
-    creditsActionHint.textContent = narrativeGate.reasons.includes('active-playtime-incomplete')
-      ? `Keep playing with the game visible for ${formatPlaytime(Math.max(0, narrativeGate.targetMs - narrativeGate.totalMs))} before sealing. Optional completionist activities count toward active play.`
-      : `Narrative proof is not ready: ${narrativeGate.reasons.join(', ')}.`;
+    creditsStatus.textContent = developerMode
+      ? `Narrative complete · receipt active at ${elapsed}`
+      : `Story complete · ${elapsed}`;
+    creditsActionHint.textContent = developerMode
+      ? narrativeGate.reasons.includes('active-playtime-incomplete')
+        ? `Keep playing with the game visible for ${formatPlaytime(Math.max(0, narrativeGate.targetMs - narrativeGate.totalMs))} before sealing. Optional completionist activities count toward active play.`
+        : `Narrative proof is not ready: ${narrativeGate.reasons.join(', ')}.`
+      : narrativeGate.reasons.includes('active-playtime-incomplete')
+        ? `Spend another ${formatPlaytime(Math.max(0, narrativeGate.targetMs - narrativeGate.totalMs))} in the journey before finishing this page.`
+        : 'The ending is still settling. Return to Campaign and try again.';
     sealCredits.disabled = true;
     return;
   }
   if (!narrativeRun && !routeReady) {
     creditsStatus.dataset.state = 'active';
-    creditsStatus.textContent = `Story complete · intended route unfinished · receipt active at ${elapsed}`;
-    creditsActionHint.textContent = 'Return to Campaign and Camp to finish every unlocked quest, chronicle, conversation, council, archive record, and required repeat circuit.';
+    creditsStatus.textContent = developerMode
+      ? `Story complete · intended route unfinished · receipt active at ${elapsed}`
+      : `Story complete · ${elapsed}`;
+    creditsActionHint.textContent = developerMode
+      ? 'Return to Campaign and Camp to finish every unlocked quest, chronicle, conversation, council, archive record, and required repeat circuit.'
+      : 'Return to Campaign and Camp to finish the journeys still waiting for you.';
     sealCredits.disabled = true;
     return;
   }
   creditsStatus.dataset.state = 'active';
-  creditsStatus.textContent = `${narrativeRun ? 'Narrative proof ready' : 'Story complete'} · receipt still active at ${elapsed}`;
-  creditsActionHint.textContent = narrativeRun
-    ? 'The 82-scene narrative and five-hour active-play floor are complete. This explicit action freezes the clean-run receipt.'
-    : 'The 215-activity completionist route is complete. This explicit action freezes the clean-run receipt.';
+  creditsStatus.textContent = developerMode
+    ? `${narrativeRun ? 'Narrative proof ready' : 'Story complete'} · receipt still active at ${elapsed}`
+    : `Ready to finish · ${elapsed}`;
+  creditsActionHint.textContent = developerMode
+    ? narrativeRun
+      ? `The ${report.requiredPlayedSceneCount}-scene ${report.routeLabel ?? 'selected-route'} narrative and five-hour active-play floor are complete. This explicit action freezes the clean-run receipt.`
+      : 'The 215-activity completionist route is complete. This explicit action freezes the clean-run receipt.'
+    : 'Complete the credits to mark this journey finished.';
   sealCredits.disabled = false;
 }
 
@@ -271,7 +304,9 @@ sealCredits.addEventListener('click', () => {
   if (!receiptState) return;
   if (!flushPlaytime()) {
     creditsStatus.dataset.state = 'error';
-    creditsStatus.textContent = 'Active credits time could not be saved; the receipt remains open.';
+    creditsStatus.textContent = developerMode
+      ? 'Active credits time could not be saved; the receipt remains open.'
+      : 'Progress could not be saved. Please try again.';
     creditsStatus.focus();
     return;
   }
@@ -293,14 +328,16 @@ sealCredits.addEventListener('click', () => {
   const result = completeRunCredits(receiptState, receiptState.runId);
   if (!result.ok) {
     creditsStatus.dataset.state = 'error';
-    creditsStatus.textContent = result.errors.join(' ');
+    creditsStatus.textContent = developerMode ? result.errors.join(' ') : 'The credits could not be completed yet.';
     creditsStatus.focus();
     return;
   }
   const saved = receiptAdapter.save(result.state);
   if (!saved.ok) {
     creditsStatus.dataset.state = 'error';
-    creditsStatus.textContent = 'The sealed receipt could not be saved; the receipt remains open.';
+    creditsStatus.textContent = developerMode
+      ? 'The sealed receipt could not be saved; the receipt remains open.'
+      : 'Progress could not be saved. Please try again.';
     creditsStatus.focus();
     return;
   }

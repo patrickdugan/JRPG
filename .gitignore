@@ -9,5 +9,7 @@ node_modules/
 dist/
 build/
 .godot/
+__pycache__/
+*.py[cod]
 
 # Do not ignore designed source assets or documentation.

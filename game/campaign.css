@@ -15,6 +15,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   min-width: 320px;
@@ -208,6 +209,11 @@ h1 {
 .progress-track span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--aqua), var(--gold)); transition: width 180ms ease; }
 
 .encounter-rail { overflow: hidden; }
+.journal-drawer { border-top: 1px solid #303a56; }
+.journal-drawer > summary { display: grid; gap: 3px; padding: 12px 13px; color: var(--gold-soft); background: rgba(8, 11, 23, .42); cursor: pointer; font-size: .72rem; list-style-position: inside; }
+.journal-drawer > summary span { color: var(--muted); font-size: .59rem; font-weight: 400; }
+.journal-drawer[open] > summary { border-bottom: 1px solid #303a56; }
+.journal-drawer .journal-card:last-child { border-bottom: 0; }
 .key-art { display: block; width: 100%; max-height: 180px; object-fit: cover; border-bottom: 1px solid var(--line); image-rendering: pixelated; background: #0b0e18; }
 .briefing-card, .party-card, .journal-card { padding: 13px; border-bottom: 1px solid #303a56; }
 .briefing-card h2, .journal-card h2 { margin-bottom: 8px; color: #fff0cf; font-size: 0.95rem; line-height: 1.25; }

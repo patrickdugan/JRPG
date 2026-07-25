@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08070d">
+  <title>The Widow's Bell - Combat Slice</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="action-campaign-battle.css">
+  <link rel="stylesheet" href="action-slice.css">
+</head>
+<body>
+  <a class="skip-link" href="#fighterSelection">Skip to fighter selection</a>
+  <a class="skip-link skip-link-secondary" href="#sliceRoute">Skip to route</a>
+
+  <main id="actionSliceApp" class="battle-shell slice-shell" data-slice-state="not-started">
+    <header class="masthead slice-masthead">
+      <div>
+        <p class="eyebrow">COMBAT VERTICAL SLICE &middot; 15-MINUTE PLAYTEST</p>
+        <h1>The Widow's Bell</h1>
+        <p class="subtitle">Choose a tag duo, cross the flooded cedars, rest with Aya, and face the Tithe Hound.</p>
+      </div>
+      <a id="leaveSliceLink" class="quiet-link" href="campaign.html" data-slice-action="leave">Leave slice</a>
+    </header>
+
+    <section class="slice-intro panel" aria-labelledby="sliceBriefTitle">
+      <div>
+        <p class="panel-kicker">PLAYTEST BRIEF</p>
+        <h2 id="sliceBriefTitle">One route. Two fighters. No campaign commitment.</h2>
+        <p>Movement, attack recovery, tag timing, platform pursuit, healing, and a boss consequence are tested in one short run.</p>
+      </div>
+      <p id="sliceBuildStatus" class="state-badge slice-state" role="status" aria-live="polite" aria-atomic="true">NOT STARTED</p>
+    </section>
+
+    <div class="setup-grid">
+      <section id="fighterSelection" class="panel selection-panel" aria-labelledby="fighterSelectionTitle" tabindex="-1">
+        <p class="panel-kicker">ACTIVE TAG TEAM</p>
+        <h2 id="fighterSelectionTitle">Choose your fighters</h2>
+
+        <form id="fighterSelectionForm" data-slice-form="fighter-selection">
+          <fieldset id="fighterSelect" aria-describedby="fighterSelectionGuidance fighterSelectionStatus" data-selection-min="2" data-selection-max="2">
+            <legend class="sr-only">Playable fighter selection</legend>
+            <p id="fighterSelectionGuidance" class="selection-guidance"><strong>Choose exactly two.</strong> Nikola and Mateus are selected by default. Tag between them during combat.</p>
+
+            <div class="fighter-grid">
+              <label class="fighter-card" data-fighter-card="ren">
+                <input type="checkbox" name="fighters" value="ren" data-fighter-id="ren">
+                <span class="fighter-card-copy">
+                  <span class="fighter-heading"><strong>Ren Ishikawa</strong><small>INFILTRATOR</small></span>
+                  <span>Fastest ground speed, wall cling, rebound, roof rush, and throwing blades.</span>
+                  <span class="fighter-move">Traversal: Gutter Hook</span>
+                  <span class="selection-mark" aria-hidden="true">Selected</span>
+                </span>
+              </label>
+
+              <label class="fighter-card" data-fighter-card="lise">
+                <input type="checkbox" name="fighters" value="lise" data-fighter-id="lise" checked>
+                <span class="fighter-card-copy">
+                  <span class="fighter-heading"><strong>Nikola Dražanić</strong><small>HUNTER</small></span>
+                  <span>Grounded reach, holy tools, precise Pierce pressure, and committed counters.</span>
+                  <span class="fighter-move">Traversal: Hunter Step</span>
+                  <span class="selection-mark" aria-hidden="true">Selected</span>
+                </span>
+              </label>
+
+              <label class="fighter-card" data-fighter-card="mateus">
+                <input type="checkbox" name="fighters" value="mateus" data-fighter-id="mateus" checked>
+                <span class="fighter-card-copy">
+                  <span class="fighter-heading"><strong>Father Mateus Avelar</strong><small>VAMPIRE</small></span>
+                  <span>Floaty aerial control, sword pressure, Umbral rites, and two air passages.</span>
+                  <span class="fighter-move">Traversal: Vesper Ascent</span>
+                  <span class="selection-mark" aria-hidden="true">Selected</span>
+                </span>
+              </label>
+
+              <label class="fighter-card" data-fighter-card="miyo">
+                <input type="checkbox" name="fighters" value="miyo" data-fighter-id="miyo">
+                <span class="fighter-card-copy">
+                  <span class="fighter-heading"><strong>Miyo Senda</strong><small>WEATHER SCHOLAR</small></span>
+                  <span>Ember, Frost, and Storm control with wind-driven movement and an aerial lift.</span>
+                  <span class="fighter-move">Traversal: Stormlift</span>
+                  <span class="selection-mark" aria-hidden="true">Selected</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+        </form>
+
+        <p id="fighterSelectionStatus" class="selection-status" role="status" aria-live="polite" aria-atomic="true">2 of 2 selected: Nikola and Mateus.</p>
+      </section>
+
+      <section id="sliceLaunchArea" class="panel launch-panel" aria-labelledby="launchTitle" data-slice-launch-area>
+        <p class="panel-kicker">RUN CONTROL</p>
+        <h2 id="launchTitle">Begin at the flooded approach</h2>
+        <p id="launchGuidance" class="muted">A new run starts at movement training. Route progress is saved at encounter boundaries.</p>
+
+        <div class="launch-actions">
+          <button id="startSliceButton" class="primary-action" type="button" data-slice-action="start" aria-describedby="launchGuidance">Start new slice</button>
+          <button id="resumeSliceButton" type="button" data-slice-action="resume" aria-describedby="resumeHint" disabled>Resume saved slice</button>
+        </div>
+        <p id="resumeHint" class="hint">No resumable slice has been found.</p>
+
+        <div id="sliceRuntimeMount" class="runtime-mount" data-slice-runtime-mount tabindex="-1" aria-label="Combat slice launch area">
+          <p><strong>Route waiting.</strong> Select exactly two fighters, then start the slice.</p>
+        </div>
+      </section>
+    </div>
+
+    <section id="sliceRoute" class="panel route-panel" aria-labelledby="routeTitle" tabindex="-1">
+      <header class="section-heading">
+        <div>
+          <p class="panel-kicker">PLAYTEST ROUTE</p>
+          <h2 id="routeTitle">From bell road to camp</h2>
+        </div>
+        <p class="route-legend"><span aria-hidden="true"></span> All stages pending</p>
+      </header>
+
+      <ol id="sliceRouteTimeline" class="route-timeline" aria-label="Combat slice route progress">
+        <li data-route-step="briefing" data-step-kind="briefing" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">01</span>
+          <div><strong>Choose the Pair</strong><small>Briefing</small><p>Select exactly two fighters and learn their movement identities before committing to the route.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+        <li data-route-step="ordinary-encounter" data-step-kind="ordinary" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">02</span>
+          <div><strong>Cinder Hounds</strong><small>Ordinary encounter</small><p>Read the lunge lane and learn when a committed attack leaves room to move.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+        <li data-route-step="platform-encounter" data-step-kind="ordinary" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">03</span>
+          <div><strong>Ash Wisps Above the Cedars</strong><small>Platform encounter</small><p>Use the cedar roots as optional high ground while Radiance breaks the charged wisps.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+        <li data-route-step="aya-sanctuary" data-step-kind="sanctuary" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">04</span>
+          <div><strong>Aya's Sanctuary</strong><small>Passive healing checkpoint</small><p>Aya restores the duo, prepares wards, and records the route before the reef.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+        <li data-route-step="boss-encounter" data-step-kind="boss" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">05</span>
+          <div><strong>Tithe Hound</strong><small>Boss encounter</small><p>Read the predator's commitment, punish its recovery, and keep the copied names from its jaws.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+        <li data-route-step="consequence" data-step-kind="consequence" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">06</span>
+          <div><strong>Copy Before Fire</strong><small>Consequence</small><p>Aya preserves the rescued clerk's testimony before the false ledger is burned.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+        <li data-route-step="complete" data-step-kind="camp-return" data-step-state="pending">
+          <span class="route-index" aria-hidden="true">07</span>
+          <div><strong>Return to Camp</strong><small>Run review</small><p>Review the duo, damage taken, tags used, retries, and route outcome.</p></div>
+          <span class="route-state">Pending</span>
+        </li>
+      </ol>
+    </section>
+
+    <section id="sliceStatusReadout" class="readout-grid slice-readouts" aria-label="Combat slice text status">
+      <article class="panel duo-readout" aria-labelledby="activeDuoTitle">
+        <p class="panel-kicker">ACTIVE DUO</p>
+        <h2 id="activeDuoTitle">Selected fighters</h2>
+        <p id="activeDuoReadout" data-slice-readout="duo">Nikola Dražanić + Father Mateus Avelar</p>
+      </article>
+
+      <article class="panel checkpoint-readout" aria-labelledby="checkpointTitle">
+        <p class="panel-kicker">CURRENT CHECKPOINT</p>
+        <h2 id="checkpointTitle">Route position</h2>
+        <p id="currentCheckpoint" data-slice-readout="checkpoint">Not started</p>
+      </article>
+
+      <article class="panel progress-readout" aria-labelledby="progressTitle">
+        <p class="panel-kicker">RUN STATUS</p>
+        <h2 id="progressTitle">Progress</h2>
+        <p id="sliceProgressStatus" data-slice-readout="progress" role="status" aria-live="polite" aria-atomic="true">0 of 7 route stages resolved.</p>
+        <p id="sliceAnnouncement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+      </article>
+    </section>
+
+    <section id="sliceControlGuide" class="panel controls-panel" aria-labelledby="controlsTitle">
+      <header class="section-heading">
+        <div>
+          <p class="panel-kicker">INPUT GUIDE</p>
+          <h2 id="controlsTitle">Keyboard and controller</h2>
+        </div>
+        <p class="muted">Attack cooldowns continue while a fighter is tagged out.</p>
+      </header>
+
+      <div class="guide-grid">
+        <article aria-labelledby="keyboardGuideTitle">
+          <h3 id="keyboardGuideTitle">Keyboard</h3>
+          <dl class="input-list">
+            <div><dt><kbd>&larr;</kbd><kbd>&rarr;</kbd> / <kbd>A</kbd><kbd>D</kbd></dt><dd>Move; double-tap to dash</dd></div>
+            <div><dt><kbd>Space</kbd></dt><dd>Jump; hold for height</dd></div>
+            <div><dt><kbd>Z</kbd></dt><dd>Weapon</dd></div>
+            <div><dt><kbd>X</kbd></dt><dd>Character art</dd></div>
+            <div><dt><kbd>Tab</kbd></dt><dd>Tag fighters</dd></div>
+            <div><dt><kbd>E</kbd></dt><dd>Interact with route objective</dd></div>
+          </dl>
+        </article>
+
+        <article aria-labelledby="controllerGuideTitle">
+          <h3 id="controllerGuideTitle">Controller</h3>
+          <dl class="input-list">
+            <div><dt>D-pad / left stick</dt><dd>Move and aim</dd></div>
+            <div><dt>South face button</dt><dd>Jump</dd></div>
+            <div><dt>West face button</dt><dd>Weapon</dd></div>
+            <div><dt>North face button</dt><dd>Character art</dd></div>
+            <div><dt>Right bumper</dt><dd>Tag fighters</dd></div>
+            <div><dt>East face button</dt><dd>Interact or cancel</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel reset-panel" aria-labelledby="resetTitle">
+      <div>
+        <p class="panel-kicker">LOCAL SLICE DATA</p>
+        <h2 id="resetTitle">Restart the playtest route</h2>
+        <p id="resetWarning" class="muted">Reset removes only this slice's checkpoint and fighter selection. It does not change campaign progress.</p>
+      </div>
+      <button id="resetSliceButton" class="danger-action" type="button" data-slice-action="reset" aria-describedby="resetWarning">Reset slice</button>
+    </section>
+  </main>
+  <script type="module" src="action-slice.js"></script>
+</body>
+</html>

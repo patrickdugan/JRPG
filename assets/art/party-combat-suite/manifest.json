@@ -5,11 +5,11 @@
   "authorship": "original-code-native-pixel-primitives",
   "geometry": {
     "columns": 10,
-    "rows": 6,
+    "rows": 7,
     "cellWidth": 48,
     "cellHeight": 64,
     "sheetWidth": 480,
-    "sheetHeight": 384,
+    "sheetHeight": 448,
     "pivot": [
       24,
       58
@@ -26,7 +26,8 @@
     "lise",
     "mateus",
     "genta",
-    "kiku"
+    "kiku",
+    "miyo"
   ],
   "columnOrder": [
     "idle",
@@ -106,6 +107,17 @@
         "accent": "#88c8c5",
         "hair": "#24201f"
       }
+    },
+    "miyo": {
+      "paletteId": "party-miyo-storm-indigo-v1",
+      "silhouette": "storm-blue Japanese travel coat, split working sleeves, folding bamboo weather ruler, brass pressure joints",
+      "colors": {
+        "primary": "#355b78",
+        "secondary": "#c8bd91",
+        "light": "#6f91a6",
+        "accent": "#d9b45f",
+        "hair": "#171b22"
+      }
     }
   },
   "characterIdentity": {
@@ -125,7 +137,15 @@
     },
     "mateus": {},
     "genta": {},
-    "kiku": {}
+    "kiku": {},
+    "miyo": {
+      "name": "Miyo Senda",
+      "lineage": {
+        "relation": "literal granddaughter of Mateus Avelar",
+        "ancestry": "three-quarters Japanese",
+        "publicName": "Miyo Senda"
+      }
+    }
   },
   "actionSemantics": {
     "idle": {
@@ -2339,23 +2359,377 @@
         60
       ],
       "rgbaSha256": "49307751e4b8d8946dcbfb870d09f605497198836c49fac73a64201cd3529c96"
+    },
+    {
+      "id": "miyo:idle",
+      "characterId": "miyo",
+      "action": "idle",
+      "rect": [
+        0,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        34
+      ],
+      "phase": "neutral",
+      "event": "none",
+      "rule": "held combat stance",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        8,
+        8,
+        35,
+        59
+      ],
+      "rgbaSha256": "96dc906759fdcd22788947c9b0730fb6aff101f0dfc9bffd879e3a19cea94b72"
+    },
+    {
+      "id": "miyo:move",
+      "characterId": "miyo",
+      "action": "move",
+      "rect": [
+        48,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        33,
+        43
+      ],
+      "phase": "movement",
+      "event": "none",
+      "rule": "visual root motion only; simulation owns destination",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        11,
+        9,
+        38,
+        59
+      ],
+      "rgbaSha256": "278d4b7b9e143d70fdc2f17488d0c8b586fae4c4467a230ee59fe7444f188b4d"
+    },
+    {
+      "id": "miyo:guard",
+      "characterId": "miyo",
+      "action": "guard",
+      "rect": [
+        96,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        34,
+        36
+      ],
+      "phase": "commit",
+      "event": "guard",
+      "rule": "protected side faces threat",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        9,
+        10,
+        41,
+        59
+      ],
+      "rgbaSha256": "9399c84422b01f20bfac8174eef356942266d2b62ec36fe4966cc2548daea5d8"
+    },
+    {
+      "id": "miyo:hit",
+      "characterId": "miyo",
+      "action": "hit",
+      "rect": [
+        144,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        18,
+        32
+      ],
+      "phase": "reaction",
+      "event": "none",
+      "rule": "recoil does not move resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        4,
+        10,
+        32,
+        60
+      ],
+      "rgbaSha256": "2c042612f6ef5d59e16179afc221cb24e0c38a87aa5cba463f8e35d93935ef71"
+    },
+    {
+      "id": "miyo:basic-strike-windup",
+      "characterId": "miyo",
+      "action": "basic-strike-windup",
+      "rect": [
+        192,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        14,
+        31
+      ],
+      "phase": "windup",
+      "event": "none",
+      "rule": "commitment must read before impact",
+      "actionSemantic": {
+        "delivery": "arcane"
+      },
+      "localAlphaBounds": [
+        6,
+        9,
+        36,
+        59
+      ],
+      "rgbaSha256": "4c7ef55da42fea1e3d328864e1104996a7e287075853d7cbaca094cefd58c59c"
+    },
+    {
+      "id": "miyo:basic-strike-active",
+      "characterId": "miyo",
+      "action": "basic-strike-active",
+      "rect": [
+        240,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        42,
+        31
+      ],
+      "phase": "active",
+      "event": "damage",
+      "rule": "single authored damage-event key",
+      "actionSemantic": {
+        "delivery": "arcane"
+      },
+      "localAlphaBounds": [
+        12,
+        8,
+        44,
+        59
+      ],
+      "rgbaSha256": "08989e740f1510a6e342d7236f4ab90f24ab3426ad5ed8dcf15cb184f15a9088"
+    },
+    {
+      "id": "miyo:signature-a",
+      "characterId": "miyo",
+      "action": "signature-a",
+      "rect": [
+        288,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        37,
+        28
+      ],
+      "phase": "active-key",
+      "event": "skill-a",
+      "rule": "character-specific primary signature key",
+      "actionSemantic": {
+        "id": "cinder-glyph",
+        "name": "Cinder Glyph",
+        "delivery": "arcane",
+        "essence": "ember"
+      },
+      "localAlphaBounds": [
+        9,
+        8,
+        43,
+        59
+      ],
+      "rgbaSha256": "54661fa3c4d261e4bdf1349ee9e5013f31b79c5dbeb2106e33963d19577c2079"
+    },
+    {
+      "id": "miyo:signature-b",
+      "characterId": "miyo",
+      "action": "signature-b",
+      "rect": [
+        336,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        35,
+        27
+      ],
+      "phase": "active-key",
+      "event": "skill-b",
+      "rule": "character-specific secondary signature key",
+      "actionSemantic": {
+        "id": "thunder-thread",
+        "name": "Thunder Thread",
+        "delivery": "arcane",
+        "essence": "storm"
+      },
+      "localAlphaBounds": [
+        5,
+        9,
+        42,
+        59
+      ],
+      "rgbaSha256": "1b7eb35649f8c273c2e5b51eb7aefd0ab0713d9d54f13d69b2e57555ccef42f4"
+    },
+    {
+      "id": "miyo:recovery",
+      "characterId": "miyo",
+      "action": "recovery",
+      "rect": [
+        384,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        31,
+        42
+      ],
+      "phase": "recovery",
+      "event": "none",
+      "rule": "braced post-action hold; recovery timer owns duration and no damage event fires",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        7,
+        11,
+        42,
+        59
+      ],
+      "rgbaSha256": "0486c7df107694320792bd8674383aaa6171bca0aa51ffaa6ad79deedef22c74"
+    },
+    {
+      "id": "miyo:defeat",
+      "characterId": "miyo",
+      "action": "defeat",
+      "rect": [
+        432,
+        384,
+        48,
+        64
+      ],
+      "pivot": [
+        24,
+        58
+      ],
+      "footPoint": [
+        24,
+        58
+      ],
+      "hitAnchor": [
+        24,
+        50
+      ],
+      "phase": "terminal-hold",
+      "event": "none",
+      "rule": "non-gory collapsed hold; simulation owns defeat state and resolved cell",
+      "actionSemantic": null,
+      "localAlphaBounds": [
+        5,
+        37,
+        44,
+        60
+      ],
+      "rgbaSha256": "c00b0ff40f097a10faec89c2a330046f21f9b5245a8623df94e9df71b19dc92b"
     }
   ],
   "sources": [
     {
       "path": "party-combat-suite.source.json",
       "role": "editable-combat-contract",
-      "sha256": "372a54d89949df4b8dfd4b31c8a4909d82363dd46dd102cf650f377af89d53cf"
+      "sha256": "0f602acf4e4b3141594cea25c6df6758547693b9acbc9270c1f313b2edd8ebfb"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-and-silhouette-contract",
-      "sha256": "31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a"
+      "sha256": "d6bb3642702be7bb43fa021a30be494219d2e42590b0a36408414a9c15d17e87"
     },
     {
       "path": "build_party_combat_suite.py",
       "role": "deterministic-builder",
-      "sha256": "027119ec08a4c3d9032c5c260cef30a8c9053f5724a6772bcecab7b5a879b293"
+      "sha256": "b4cf82b483278bf30e7fc2c3b94a9077bceb20e2fa701251ae736c36b8d2d685"
     }
   ],
   "exports": [
@@ -2363,22 +2737,22 @@
       "path": "party-combat-actions.png",
       "role": "transparent-runtime-candidate",
       "width": 480,
-      "height": 384,
+      "height": 448,
       "mode": "RGBA",
-      "sha256": "5bc36a20307177c0b1fddeb73668bd89f5b39de9b601114c1330b2773a9020b7"
+      "sha256": "d27552ab06ae2eed8e41fae74153a31e71e2f25df6ca1be80fa1f7c37f4fadfc"
     },
     {
       "path": "party-combat-actions-contact-sheet.png",
       "role": "labeled-review-only-not-runtime",
       "width": 1556,
-      "height": 1222,
+      "height": 1414,
       "mode": "RGBA",
-      "sha256": "b8d614722f8361a5fc9175dc98dff84ace0ef5513cda0e9b19576a75bd853e3e"
+      "sha256": "12e65d6adef4eec34f6116bee41c8fcf43226a021f4b52736eb0325ac67ae200"
     }
   ],
   "validation": {
-    "frameCount": 60,
-    "distinctRgbaFrameHashes": 60,
+    "frameCount": 70,
+    "distinctRgbaFrameHashes": 70,
     "binaryTransparency": true,
     "minimumObservedGutter": 4,
     "deterministicCommand": "python build_party_combat_suite.py --check"

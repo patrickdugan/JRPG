@@ -5,7 +5,8 @@ import test from 'node:test';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const pageRecords = [
-  ['index.html', 'game.js'],
+  ['index.html', 'title.js'],
+  ['training.html', 'game.js'],
   ['campaign.html', 'campaign.js'],
   ['battle.html', 'battle.js'],
   ['camp.html', 'camp.js'],
@@ -69,7 +70,7 @@ test('the player-facing navigation graph and battle return handoff remain connec
 test('credits are an explicit durable seal boundary after story completion', () => {
   const campaignSource = pageRecords.find(({ sourceName }) => sourceName === 'campaign.js').source;
   const creditsSource = pageRecords.find(({ sourceName }) => sourceName === 'credits.js').source;
-  assert.match(campaignSource, /View credits & seal run/);
+  assert.match(campaignSource, /View credits →/);
   assert.doesNotMatch(campaignSource, /completeRunCredits/);
 
   const start = creditsSource.indexOf("sealCredits.addEventListener('click'");
@@ -110,7 +111,9 @@ test('all player-facing clean-run timers attach their samples to a canonical cha
 
 test('Camp narrative surfaces expose deterministic keyboard reading controls', () => {
   const camp = pageRecords.find(({ sourceName }) => sourceName === 'camp.js');
-  assert.match(camp.html, /<kbd>N<\/kbd> next line/);
+  for (const id of ['advanceCampConversation', 'advancePartyCouncil', 'advanceArchiveRecord']) {
+    assert.match(camp.html, new RegExp(`id=["']${id}["'][^>]*aria-keyshortcuts=["']N["']`));
+  }
   assert.match(camp.source, /function handleNarrativeKeyboard\(event\)/);
   assert.match(camp.source, /event\.key\.toLowerCase\(\) === 'n'/);
   assert.match(camp.source, /event\.key === '1' \|\| event\.key === '2'/);
@@ -124,7 +127,7 @@ test('narrative credits reconcile Storyworld proof while the 215-entry completio
   const credits = pageRecords.find(({ sourceName }) => sourceName === 'credits.js');
   assert.match(campaign.html, /id=["']routeSummary["']/);
   assert.match(campaign.html, /id=["']routeDueList["']/);
-  assert.match(campaign.html, /Optional 20-hour route/);
+  assert.match(campaign.html, /Optional discoveries/);
   assert.match(campaign.source, /deriveRequiredRouteProgress\(\{/);
   assert.match(campaign.source, /\.\.\.progress\.inProgressActivityIds, \.\.\.progress\.entryDueActivityIds/);
   assert.match(campaign.source, /const needsEntry = progress\.entryDueActivityIds\.includes\(activityId\)/);

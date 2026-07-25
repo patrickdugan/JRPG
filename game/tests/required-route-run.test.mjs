@@ -9,7 +9,7 @@ const routeRun = runRequiredRouteCompletion({ runId: 'required-route-test-0001' 
 test('required route executes every finite activity at its chronological frontier', () => {
   const run = routeRun;
   assert.equal(run.ok, true);
-  assert.equal(run.signature, 'fnv1a32:6a58eed2');
+  assert.equal(run.signature, 'fnv1a32:a9ae88b8');
   assert.deepEqual(run.summary, {
     canonicalBeatCount: 60,
     canonicalFirstClearCount: 23,
@@ -35,8 +35,8 @@ test('required route executes every finite activity at its chronological frontie
     repeatGrindMilestoneCount: 4,
     requiredRepeatWinCount: 4,
     rewardSettlementCount: 35,
-    transitionCount: 7580,
-    traceEventCount: 630,
+    transitionCount: 7599,
+    traceEventCount: 649,
     fieldworkStageCount: 67,
     fieldworkNodeCount: 152,
     fieldworkTraversalExecuted: true,

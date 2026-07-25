@@ -25,6 +25,10 @@ import {
   recordPlaytime,
   validatePlaytimePayload,
 } from './playtime.mjs';
+import {
+  CANONICAL_CAMPAIGN_BEAT_IDS,
+  getNarrativeRouteSchedules,
+} from './campaign-route-scheduler.mjs';
 
 export const RUN_RECEIPT_SCHEMA_VERSION = 3;
 export const DEFAULT_RUN_RECEIPT_SAVE_KEY = `${CAMPAIGN.id}.run-receipt.v${RUN_RECEIPT_SCHEMA_VERSION}`;
@@ -107,7 +111,7 @@ const V2_RUN_KEYS = Object.freeze([
   'revision',
 ]);
 const LEGACY_RUN_KEYS = Object.freeze(V2_RUN_KEYS.filter((key) => key !== 'creditsCompleted'));
-const BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
+const BEAT_IDS = CANONICAL_CAMPAIGN_BEAT_IDS;
 const ENCOUNTER_IDS = Object.freeze(ENCOUNTERS.map((encounter) => encounter.id));
 const ENCOUNTER_ID_SET = new Set(ENCOUNTER_IDS);
 
@@ -221,6 +225,24 @@ function validateCanonicalPrefix(ids, canonicalIds, label, errors) {
   return ids;
 }
 
+function narrativeRouteCandidates(completedBeatIds, completedStoryworldDecisionIds) {
+  return getNarrativeRouteSchedules().filter((schedule) => (
+    completedBeatIds.every((id, index) => schedule.beatIds[index] === id)
+      && completedStoryworldDecisionIds.every((id, index) => schedule.storyworldDecisionIds[index] === id)
+  ));
+}
+
+function validateNarrativeRoutePrefixes(completedBeatIds, completedStoryworldDecisionIds, errors) {
+  if (!Array.isArray(completedBeatIds)) errors.push('completedBeatIds must be an array.');
+  if (!Array.isArray(completedStoryworldDecisionIds)) errors.push('completedStoryworldDecisionIds must be an array.');
+  if (!Array.isArray(completedBeatIds) || !Array.isArray(completedStoryworldDecisionIds)) return [];
+  const candidates = narrativeRouteCandidates(completedBeatIds, completedStoryworldDecisionIds);
+  if (!candidates.length) {
+    errors.push('completed beat and Storyworld evidence must form one selected narrative-route prefix.');
+  }
+  return candidates;
+}
+
 function validateFirstClearIds(ids, errors) {
   if (!Array.isArray(ids)) {
     errors.push('firstClearEncounterIds must be an array.');
@@ -263,6 +285,13 @@ function validateStoryworldDecisionIds(ids, contract, errors) {
 function completionErrors(profileId, completedBeatIds, completedStoryworldDecisionIds) {
   const contract = profileContract(profileId);
   if (!contract) return ['Run profile is unsupported.'];
+  if (profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H) {
+    const complete = narrativeRouteCandidates(completedBeatIds, completedStoryworldDecisionIds).some((schedule) => (
+      completedBeatIds.length === schedule.beatIds.length
+        && completedStoryworldDecisionIds.length === schedule.storyworldDecisionIds.length
+    ));
+    return complete ? [] : ['every scene in the selected route', 'every required Storyworld decision'];
+  }
   const errors = [];
   if (completedBeatIds.length !== BEAT_IDS.length) errors.push('every canonical beat');
   if (completedStoryworldDecisionIds.length !== contract.requiredStoryworldDecisionIds.length) {
@@ -293,12 +322,16 @@ export function validateRunReceiptPayload(payload) {
 
   const playtimeValidation = validatePlaytimePayload(payload.playtime);
   if (!playtimeValidation.ok) errors.push(...playtimeValidation.errors.map((error) => `playtime: ${error}`));
-  const completedBeatIds = validateCanonicalPrefix(payload.completedBeatIds, BEAT_IDS, 'completedBeatIds', errors);
-  const completedStoryworldDecisionIds = validateStoryworldDecisionIds(
-    payload.completedStoryworldDecisionIds,
-    contract,
-    errors,
-  );
+  const narrativeProfile = payload.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H;
+  const completedBeatIds = narrativeProfile
+    ? (Array.isArray(payload.completedBeatIds) ? payload.completedBeatIds : [])
+    : validateCanonicalPrefix(payload.completedBeatIds, BEAT_IDS, 'completedBeatIds', errors);
+  const completedStoryworldDecisionIds = narrativeProfile
+    ? (Array.isArray(payload.completedStoryworldDecisionIds) ? payload.completedStoryworldDecisionIds : [])
+    : validateStoryworldDecisionIds(payload.completedStoryworldDecisionIds, contract, errors);
+  if (narrativeProfile) {
+    validateNarrativeRoutePrefixes(payload.completedBeatIds, payload.completedStoryworldDecisionIds, errors);
+  }
   const firstClearEncounterIds = validateFirstClearIds(payload.firstClearEncounterIds, errors);
   if (payload.creditsCompleted === true) {
     const missing = completionErrors(payload.profileId, completedBeatIds, completedStoryworldDecisionIds);
@@ -484,9 +517,16 @@ export function recordRunBeatCompletion(state, runId, beatId) {
   if (snapshot.completedBeatIds.includes(beatId)) {
     return success(snapshot, { recorded: false, campaignComplete: false });
   }
-  const expected = BEAT_IDS[snapshot.completedBeatIds.length];
-  if (beatId !== expected) {
-    return failure('out-of-order-beat', [`Expected canonical beat ${expected}; received ${beatId}.`], snapshot);
+  const contract = profileContract(snapshot.profileId);
+  const allowedNextBeatIds = snapshot.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H
+    ? narrativeRouteCandidates(snapshot.completedBeatIds, snapshot.completedStoryworldDecisionIds)
+      .map((schedule) => schedule.beatIds[snapshot.completedBeatIds.length])
+      .filter(Boolean)
+    : [BEAT_IDS[snapshot.completedBeatIds.length]];
+  if (!allowedNextBeatIds.includes(beatId)) {
+    return failure('out-of-order-beat', [
+      `Expected next route beat ${[...new Set(allowedNextBeatIds)].join(' or ')}; received ${beatId}.`,
+    ], snapshot);
   }
   const completedBeatIds = [...snapshot.completedBeatIds, beatId];
   const next = buildState({
@@ -519,7 +559,12 @@ export function recordRunStoryworldDecision(state, runId, decisionId) {
   const blocked = transitionGuard(snapshot, runId);
   if (blocked) return blocked;
   const contract = profileContract(snapshot.profileId);
-  const requiredIds = contract.requiredStoryworldDecisionIds;
+  const routeCandidates = snapshot.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H
+    ? narrativeRouteCandidates(snapshot.completedBeatIds, snapshot.completedStoryworldDecisionIds)
+    : [];
+  const requiredIds = snapshot.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H
+    ? routeCandidates[0]?.storyworldDecisionIds ?? []
+    : contract.requiredStoryworldDecisionIds;
   if (requiredIds.length === 0) {
     return failure('profile-does-not-track-storyworld', [
       `Run profile ${snapshot.profileId} does not track Storyworld decisions.`,
@@ -528,14 +573,18 @@ export function recordRunStoryworldDecision(state, runId, decisionId) {
   if (snapshot.completedStoryworldDecisionIds.includes(decisionId)) {
     return success(snapshot, {
       recorded: false,
-      storyworldComplete: snapshot.completedStoryworldDecisionIds.length === requiredIds.length,
+      storyworldComplete: routeCandidates.some((schedule) => (
+        snapshot.completedStoryworldDecisionIds.length === schedule.storyworldDecisionIds.length
+      )),
       completedStoryworldDecisionCount: snapshot.completedStoryworldDecisionIds.length,
     });
   }
-  const expected = requiredIds[snapshot.completedStoryworldDecisionIds.length];
-  if (decisionId !== expected) {
+  const expectedIds = snapshot.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H
+    ? routeCandidates.map((schedule) => schedule.storyworldDecisionIds[snapshot.completedStoryworldDecisionIds.length]).filter(Boolean)
+    : [requiredIds[snapshot.completedStoryworldDecisionIds.length]];
+  if (!expectedIds.includes(decisionId)) {
     return failure('out-of-order-storyworld-decision', [
-      `Expected Storyworld decision ${expected}; received ${decisionId}.`,
+      `Expected Storyworld decision ${[...new Set(expectedIds)].join(' or ')}; received ${decisionId}.`,
     ], snapshot);
   }
   const completedStoryworldDecisionIds = [...snapshot.completedStoryworldDecisionIds, decisionId];
@@ -545,7 +594,10 @@ export function recordRunStoryworldDecision(state, runId, decisionId) {
     revision: snapshot.revision + 1,
   }), {
     recorded: true,
-    storyworldComplete: completedStoryworldDecisionIds.length === requiredIds.length,
+    storyworldComplete: narrativeRouteCandidates(
+      snapshot.completedBeatIds,
+      completedStoryworldDecisionIds,
+    ).some((schedule) => completedStoryworldDecisionIds.length === schedule.storyworldDecisionIds.length),
     completedStoryworldDecisionCount: completedStoryworldDecisionIds.length,
   });
 }
@@ -613,9 +665,18 @@ function getNarrativePlaytimeReport(state, campaignComplete, firstClearEncounter
 export function getRunProofReport(state) {
   const snapshot = assertReceipt(state);
   const contract = profileContract(snapshot.profileId);
-  const canonicalStoryComplete = snapshot.completedBeatIds.length === BEAT_IDS.length;
+  const narrativeCandidates = snapshot.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H
+    ? narrativeRouteCandidates(snapshot.completedBeatIds, snapshot.completedStoryworldDecisionIds)
+    : [];
+  // Before the first route-exclusive beat or Storyworld cluster, all three
+  // schedules share the same evidence prefix. Keep the receipt route-neutral
+  // until that evidence identifies exactly one playable schedule.
+  const activeSchedule = narrativeCandidates.length === 1 ? narrativeCandidates[0] : null;
+  const requiredBeatIds = activeSchedule?.beatIds ?? BEAT_IDS;
+  const requiredStoryworldDecisionIds = activeSchedule?.storyworldDecisionIds ?? contract.requiredStoryworldDecisionIds;
+  const canonicalStoryComplete = snapshot.completedBeatIds.length === requiredBeatIds.length;
   const storyworldDecisionsComplete = snapshot.completedStoryworldDecisionIds.length
-    === contract.requiredStoryworldDecisionIds.length;
+    === requiredStoryworldDecisionIds.length;
   const storyComplete = canonicalStoryComplete && storyworldDecisionsComplete;
   const creditsComplete = snapshot.creditsCompleted === true;
   const campaignComplete = storyComplete && creditsComplete
@@ -644,21 +705,23 @@ export function getRunProofReport(state) {
     storyworldDecisionsComplete,
     creditsComplete,
     completedBeatCount: snapshot.completedBeatIds.length,
-    requiredBeatCount: BEAT_IDS.length,
-    missingBeatIds: BEAT_IDS.slice(snapshot.completedBeatIds.length),
+    requiredBeatCount: requiredBeatIds.length,
+    missingBeatIds: requiredBeatIds.slice(snapshot.completedBeatIds.length),
     completedBeatIds: snapshot.completedBeatIds,
     completedStoryworldDecisionCount: snapshot.completedStoryworldDecisionIds.length,
-    requiredStoryworldDecisionCount: contract.requiredStoryworldDecisionIds.length,
+    requiredStoryworldDecisionCount: requiredStoryworldDecisionIds.length,
     completedStoryworldDecisionIds: snapshot.completedStoryworldDecisionIds,
-    missingStoryworldDecisionIds: contract.requiredStoryworldDecisionIds.slice(
+    missingStoryworldDecisionIds: requiredStoryworldDecisionIds.slice(
       snapshot.completedStoryworldDecisionIds.length,
     ),
     completedStoryworldPlayedSceneCount: snapshot.completedStoryworldDecisionIds.length * 2,
-    requiredStoryworldPlayedSceneCount: contract.requiredStoryworldDecisionIds.length * 2,
+    requiredStoryworldPlayedSceneCount: requiredStoryworldDecisionIds.length * 2,
     playedSceneCount: snapshot.completedBeatIds.length
       + (snapshot.completedStoryworldDecisionIds.length * 2),
-    requiredPlayedSceneCount: BEAT_IDS.length
-      + (contract.requiredStoryworldDecisionIds.length * 2),
+    requiredPlayedSceneCount: requiredBeatIds.length
+      + (requiredStoryworldDecisionIds.length * 2),
+    routeTheater: activeSchedule?.priorityTheater ?? null,
+    routeLabel: activeSchedule?.priorityLabel ?? null,
     targetMinimumMinutes: contract.minimumActiveMinutes,
     targetMaximumMinutes: contract.maximumActiveMinutes,
     firstClearEncounterIds: snapshot.firstClearEncounterIds,

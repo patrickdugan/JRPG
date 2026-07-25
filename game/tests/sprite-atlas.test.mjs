@@ -65,7 +65,7 @@ test('party atlas addresses every member directional pair and appended live fiel
   assert.equal(rectangles.size, PARTY_ATLAS.rows * 10);
   assert.equal(PARTY_ATLAS.width, PARTY_ATLAS.cellWidth * PARTY_ATLAS.columns);
   assert.equal(PARTY_ATLAS.rowCells.length, PARTY_ATLAS.rows);
-  assert.deepEqual(PARTY_ATLAS.rowCells.map(({ y }) => y), [0, 48, 96, 144, 192, 240]);
+  assert.deepEqual(PARTY_ATLAS.rowCells.map(({ y }) => y), [0, 48, 96, 144, 192, 240, 288]);
   assert.equal(Object.isFrozen(PARTY_ATLAS.rowCells), true);
 });
 
@@ -153,8 +153,8 @@ test('eight-way movement resolves deterministically to four authored facings', (
 });
 
 test('party atlas image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 448, naturalHeight: 288 }), true);
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 447, naturalHeight: 288 }), false);
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 448, naturalHeight: 287 }), false);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 448, naturalHeight: 336 }), true);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 447, naturalHeight: 336 }), false);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 448, naturalHeight: 335 }), false);
   assert.equal(partyAtlasImageHasExpectedSize(null), false);
 });

@@ -1,4 +1,4 @@
-/** DOM-free frame addressing for the authored six-by-fourteen party field atlas. */
+/** DOM-free frame addressing for the authored seven-by-fourteen party field atlas. */
 
 const PARTY_SOURCE_INSET = 0;
 const PARTY_CELL_WIDTH = 32;
@@ -13,14 +13,15 @@ const PARTY_ROW_CELLS = Object.freeze([
   Object.freeze({ y: 144, height: PARTY_CELL_HEIGHT }),
   Object.freeze({ y: 192, height: PARTY_CELL_HEIGHT }),
   Object.freeze({ y: 240, height: PARTY_CELL_HEIGHT }),
+  Object.freeze({ y: 288, height: PARTY_CELL_HEIGHT }),
 ]);
 
 export const PARTY_ATLAS = Object.freeze({
   url: './assets/art/party-field-suite/party-field-foundation.png',
   width: 448,
-  height: 288,
+  height: 336,
   columns: 14,
-  rows: 6,
+  rows: 7,
   cellWidth: PARTY_CELL_WIDTH,
   cellHeight: PARTY_CELL_HEIGHT,
   sourceInset: PARTY_SOURCE_INSET,
@@ -36,6 +37,7 @@ export const PARTY_ATLAS_MEMBERS = Object.freeze([
   'mateus',
   'genta',
   'kiku',
+  'miyo',
 ]);
 
 export const PARTY_ATLAS_DIRECTIONS = Object.freeze(['north', 'east', 'south', 'west']);

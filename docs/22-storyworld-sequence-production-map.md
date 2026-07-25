@@ -5,19 +5,22 @@ This is the production map for the eleven implemented Storyworld clusters. The a
 ## Scene arithmetic
 
 - Canonical campaign: 60 scenes.
-- Storyworld: 11 decision scenes plus 23 mutually exclusive consequence scenes = 34 authored scenes. Lady Enma's dedicated spool has three outcomes; the other ten decisions have two each.
-- Total authored catalog: 60 + 34 = **94 scenes**.
-- Complete narrative run: 60 canonical + 11 decisions + one consequence per decision = **82 played scenes**. The other 12 consequence scenes belong to alternate paths.
+- Storyworld: 11 decision scenes plus 24 mutually exclusive consequence scenes = 35 authored scenes. The Act III war table and Lady Enma's dedicated spool each have three outcomes; the other nine decisions have two each.
+- Total authored catalog: 60 + 35 = **95 scenes**.
+- Salt route: 55 campaign scenes + 10 decisions + 10 consequences = **75 played scenes**.
+- Ash route: 54 campaign scenes + 10 decisions + 10 consequences = **74 played scenes**.
+- Paper route: 55 campaign scenes + 11 decisions + 11 consequences = **77 played scenes**.
+- The route scheduler omits one regional operation and its owned Storyworld cluster. The authored 95-scene catalog remains available across routes; it is not a single-playthrough count.
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) takes the longest visible path through every cluster: 2,249 words and at most 21 explicit decisions. At 200 words per minute plus 20 seconds of decision dwell, the Storyworld layer adds 18.245 reference minutes. Combined with the current 312.481-minute canonical reference, the 82-scene route is 330.726 minutes (about 5.51 hours). This is a content projection, not observed playtime proof; the run receipt separately requires at least 300 active minutes.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) still measures the full catalog ceiling: 2,297 visible words and at most 21 explicit decisions across all eleven clusters. Its former 332.738-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
 
 ## Carry-forward contract
 
-Every cluster is required for narrative credits. A `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions.
+Every cluster scheduled on the selected route is required for narrative credits. Salt omits `sw6-tribunal-afterword`, Ash omits `sw4-margin-varga-journal`, and Paper retains all eleven clusters while omitting the Sodegaura operation, which owns no separate cluster. The `act-route-decision` resolves before Act III's first campaign beat; a `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions, the Act IV approach, and Act V political parameters.
 
-The `sw10-corrections-desk` string remains an opaque internal compatibility ID, not a claim that the new scene has the old meaning. Exact legacy identities migrate only through the first eight Storyworld records. A prior save that crossed the new Lady Enma hearing or reached the old Chapter 9 translation/corrections sequence fails closed: the runtime will not invent an Enma fate or reinterpret **Corrections Remain Visible** as surrender and **The Limit Is Posted** as execution. Historical outcomes have explicit storage and signed-recovery rejection fixtures.
+The `sw3-sayos-warehouse-conditions` and `sw10-corrections-desk` strings remain opaque internal compatibility IDs, not claims that their new scenes have their old meanings. Exact legacy identities migrate only through the first two Storyworld records. A prior save that reached the old third record fails closed: the runtime will not reinterpret a warehouse-custody choice as a Salt, Ash, or Paper strategic priority. The same rule also prevents historical Enma and Corrections Desk outcomes from becoming political choices the player did not make.
 
 For a related battle, the presentation card carries the selected decision text, the consequence-scene title, and the resolved consequence reaction (falling back to consequence text). Pre-boss cards read **Decision carried into encounter**. After-boss records read **Recorded aftermath** when that encounter is subsequently presented. Clusters without a related encounter ID still carry their state and narrative context into later Storyworld selection, but do not create a battle card.
 
@@ -35,11 +38,11 @@ For a related battle, the presentation card carries the selected decision text, 
    - Consequences: **Terms of Distant Testimony** / **The Refusal Stands**.
    - Carry-forward: retrospective **Recorded aftermath** context for `fp1-mateus`, including the selected decision and resolved consequence.
 
-3. **Sayo's Warehouse Conditions** (`sw3-sayos-warehouse-conditions`)
-   - Anchor: `c3-04-lantern-boat-escort`; placement: **before boss** (`before-beat`, `before-boss-decision`).
-   - Related encounter ID: `c3-dock-patrol`.
-   - Consequences: **Two Routes, Two Custodians** / **Capacity Chooses the Order**.
-   - Carry-forward: **Decision carried into encounter** context for `c3-dock-patrol`, including Sayo's selected route conditions and their resolved consequence.
+3. **The Bellless House War Table** (`sw3-sayos-warehouse-conditions`, save-stable opaque ID)
+   - Anchor: `c3-01-separate-arrivals`; placement: **act route** (`before-beat`, `act-route-decision`).
+   - Related encounter IDs: none.
+   - Consequences: **Salt Before Steel** / **Ash Before the Muster** / **Paper Before the Throne**.
+   - Carry-forward: exact Salt, Ash, or Paper priority; initial theater commitment; Act IV approach-map selection; and Act V evacuation, Oni-supply, bell-intelligence, garrison-defection, succession, surrender-leverage, and civil-war-risk parameters.
 
 4. **A Margin in the Severed Dragon Testament** (`sw4-margin-varga-journal`, save-stable legacy ID)
    - Anchor: `c4-03-varga-journal`; placement: **after level** (`after-beat`, `after-level-consequence`).
@@ -88,6 +91,34 @@ For a related battle, the presentation card carries the selected decision text, 
     - Related encounter ID: `c9-kurozane`.
     - Consequences: **The Seals Returned** / **The Empty Throne Mobilizes**.
     - Carry-forward: final witnessed-transfer or execution/civil-war state, retrospective **Recorded aftermath** context for `c9-kurozane`, and the route-ending political record.
+
+## Act III and IV major-sequence integration
+
+[`game/content/act-route-sequences.mjs`](../game/content/act-route-sequences.mjs) is the shared contract consumed by scene operations, presentation direction, tests, and the campaign UI. A route contains exactly eight major sequences; the smaller canonical beats remain its mapping and scripting units.
+
+| # | Act III — The Three-Road War | Production binding |
+|---|---|---|
+| 1 | The Bellless House War Table | `sw3-sayos-warehouse-conditions`, `c3-01-separate-arrivals`, `hsh-map-table` |
+| 2 | Chosen regional operation 1 | One of Sodegaura, Nagi, Kagura, or Kozui; all authored beat/map/encounter IDs travel with the operation package |
+| 3 | Kurozane's counterstroke | Uses the first operation's closing map and boss encounter |
+| 4 | Chosen regional operation 2 | Second unique operation package |
+| 5 | Live Families at the Bellless House | `hsh-map-table`; reports live family, evacuation, evidence, and defection consequences |
+| 6 | Chosen regional operation 3 | Third unique operation package; the fourth operation is omitted because the roads close |
+| 7 | The Hushroad Emergency | Chapter 7 maps and encounters; `sw7-soldier-will-not-follow` |
+| 8 | The Coalition Commits | `c7-04-lises-revised-oath`; freezes palace approaches and final-act parameters |
+
+| # | Act IV — The Black Gate | Production binding |
+|---|---|---|
+| 1 | Three Homecomings | `c8-01-three-homecomings`; all three return maps |
+| 2 | Route-specific approach | Salt → `c8-sodegaura-return`; Ash → `c8-takamine-return`; Paper → `c8-hoshigawa-return` |
+| 3 | The Black Gate Bargain | `c8-03-black-gate-bargain`, `c8-black-gate` |
+| 4 | Boats With Conditions | `sw8-boats-with-conditions` |
+| 5 | The Lantern Breach | `c8-04-lantern-breach`, `c8-outer-court` |
+| 6 | Lady Enma — The Last Mask | `c8-05-gate-opened`, `c8-lady-enma` |
+| 7 | Three Terms for the Cinder Fan | `sw-enma-three-terms` |
+| 8 | The Outer Archive Breathes | `c9-01-archive-breathes`, `krh-outer-archive`, `c9-archive-nodes`; Act V starts at `c9-02-ujiros-last-ledger` |
+
+Every Act III–V canonical beat now receives the same `actId`, `majorSequenceId`, route-theater, and operation metadata in both its map operation and its presentation script. Automated validation fails if those two scripting surfaces drift or if a sequence references a missing beat, map, encounter, or Storyworld cluster.
 
 ## Cultural and narrative guardrails
 

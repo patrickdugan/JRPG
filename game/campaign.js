@@ -1,4 +1,6 @@
 import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
+import { applyPresentationMode, PRESENTATION_MODES } from './presentation-mode.mjs';
+import { getOpeningInteractionGate } from './opening-cadence.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
 import { getSceneAudioPresentation } from './scene-audio.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
@@ -10,6 +12,7 @@ import {
   getWitnessChroniclesForChapter,
 } from './content/witness-chronicles.mjs';
 import { getSceneDirection } from './content/scene-direction.mjs';
+import { getActSequenceContextForBeat } from './content/act-route-sequences.mjs';
 import { getFullDialogue } from './content/full-dialogue.mjs';
 import { getSceneOperation } from './content/scene-operations.mjs';
 import { getCampConversation } from './content/camp-conversations.mjs';
@@ -45,6 +48,7 @@ import {
   getCurrentBeat,
   getCurrentChapter,
   getSelectedChoiceIds,
+  getScheduledBeatIds,
   getUnlockedBeatIds,
   isBeatCompleted,
   isCampaignComplete,
@@ -115,11 +119,15 @@ import {
   createStoryworldState,
   createStoryworldStorageAdapter,
   deriveStoryworldProjection,
+  getStoryworldRouteTheater,
   getStoryworldClusterForBeat,
   getStoryworldGateForBeat,
   getStoryworldProgress,
   getVisibleStoryworldOptions,
 } from './storyworld-runtime.mjs';
+import { formatActRouteSummary } from './act-route-projection.mjs';
+import { getRouteMapIdForBeat } from './campaign-route-scheduler.mjs';
+
 import { STORYWORLD_CLUSTERS } from './content/storyworld-encounters.generated.mjs';
 import {
   PARTY_ATLAS,
@@ -192,6 +200,9 @@ import {
   createArchiveRecordStorageAdapter,
 } from './archive-record-runtime.mjs';
 
+let requestedNewGame = new URLSearchParams(window.location.search).get('new') === '1';
+const presentationMode = applyPresentationMode();
+const developerMode = presentationMode === PRESENTATION_MODES.DEVELOPER;
 const chapterList = document.querySelector('#chapterList');
 const completionLabel = document.querySelector('#completionLabel');
 const chapterKicker = document.querySelector('#chapterKicker');
@@ -354,6 +365,7 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const chapters = getAllChapters();
 const allBeatRecords = chapters.flatMap((chapter) => chapter.beats.map((beat) => ({ chapterId: chapter.id, beat })));
+const beatRecordById = new Map(allBeatRecords.map((record) => [record.beat.id, record]));
 const saveAdapter = createLocalStorageAdapter();
 const loadedSave = saveAdapter.load();
 let campaignState = loadedSave.ok ? loadedSave.state : createCampaignState();
@@ -456,6 +468,26 @@ function getBeat() {
   return getCurrentBeat(campaignState);
 }
 
+function currentRouteTheater() {
+  return getStoryworldRouteTheater(storyworldState);
+}
+
+function progressionRouteOptions() {
+  const priorityTheater = currentRouteTheater();
+  if (!priorityTheater) return {};
+  try {
+    getScheduledBeatIds(campaignState, { priorityTheater });
+    return { priorityTheater };
+  } catch {
+    return {};
+  }
+}
+
+function scheduledBeatRecords() {
+  const beatIds = getScheduledBeatIds(campaignState, progressionRouteOptions());
+  return beatIds.map((beatId) => beatRecordById.get(beatId)).filter(Boolean);
+}
+
 function getBeatEncounterState(beat = getBeat()) {
   const encounters = (beat.encounterIds ?? []).map(getEncounter).filter(Boolean);
   const pending = encounters.find((encounter) => getEncounterWinCount(advancementState, encounter.id) === 0) ?? null;
@@ -468,7 +500,7 @@ function currentBeatBattlesCleared() {
 }
 
 function currentSceneOperationProgress(beat = getBeat()) {
-  return getSceneOperationProgress(sceneOperationState, beat.id);
+  return getSceneOperationProgress(sceneOperationState, beat.id, { priorityTheater: currentRouteTheater() });
 }
 
 function currentSceneOperationComplete(beat = getBeat()) {
@@ -476,11 +508,11 @@ function currentSceneOperationComplete(beat = getBeat()) {
 }
 
 function chapterSceneCount() {
-  return chapters.reduce((sum, chapter) => sum + chapter.beats.length, 0);
+  return scheduledBeatRecords().length;
 }
 
 function unlockedSceneCount() {
-  return getUnlockedBeatIds(campaignState).length;
+  return getUnlockedBeatIds(campaignState, progressionRouteOptions()).length;
 }
 
 function currentChapterIndex() {
@@ -715,9 +747,10 @@ function normalizedWords(value) {
 
 function mapReferenceForBeat(chapter, beat) {
   const maps = chapter.maps ?? [];
-  const explicitLevel = beat.mapId ? getLevel(beat.mapId) : undefined;
+  const scheduledMapId = getRouteMapIdForBeat(beat.id, currentRouteTheater(), beat.mapId);
+  const explicitLevel = scheduledMapId ? getLevel(scheduledMapId) : undefined;
   if (explicitLevel) return { id: explicitLevel.id, name: explicitLevel.name, purpose: explicitLevel.objective };
-  const explicit = maps.find((map) => map.id === beat.mapId);
+  const explicit = maps.find((map) => map.id === scheduledMapId);
   if (explicit) return explicit;
   const location = String(beat.location ?? '').toLowerCase();
   const exact = maps.find((map) => String(map.name ?? '').toLowerCase() === location);
@@ -751,8 +784,9 @@ function getActiveLevelForBeat(chapter, beat) {
 }
 
 function nextBeatRecord(beat = getBeat()) {
-  const index = allBeatRecords.findIndex((record) => record.beat.id === beat.id);
-  return index >= 0 ? allBeatRecords[index + 1] ?? null : null;
+  const records = scheduledBeatRecords();
+  const index = records.findIndex((record) => record.beat.id === beat.id);
+  return index >= 0 ? records[index + 1] ?? null : null;
 }
 
 function fieldRouteReaches(startLevelId, targetLevelId) {
@@ -952,7 +986,7 @@ function getActiveWitnessMarker(level) {
 }
 
 function getActiveSceneOperationMarker(level, beat = getBeat()) {
-  const operation = getSceneOperation(beat.id);
+  const operation = getSceneOperation(beat.id, { priorityTheater: currentRouteTheater() });
   const progress = currentSceneOperationProgress(beat);
   const current = fieldRuntimeState?.current;
   if (!operation || !progress?.currentNode || progress.complete) return null;
@@ -1567,7 +1601,7 @@ function drawMap(level, encounter, now) {
   mapName.textContent = level?.name ?? 'Campaign map pending';
   const terrainTags = [...new Set((level?.terrain ?? []).map((entry) => entry.type ?? entry.terrain ?? entry.tag).filter(Boolean))];
   const terrainLegend = terrainTags.length ? terrainTags.join(' · ') : 'Tactical preview';
-  mapLegend.textContent = `${terrainLegend} · Story operation ■ · Witness ● · Side story ◆`;
+  mapLegend.textContent = `${terrainLegend} · Objective ■ · Witness ● · Side story ◆`;
 }
 
 function formatEnemies(enemies = []) {
@@ -1589,6 +1623,14 @@ function dialogueLinesForBeat(beat = getBeat()) {
 
 function narrativeProgressForBeat(beat = getBeat()) {
   return getNarrativeProgress(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
+}
+
+function currentDialogueInteractionGate(beat = getBeat(), progress = narrativeProgressForBeat(beat)) {
+  return getOpeningInteractionGate({
+    beatId: beat.id,
+    acknowledgedLines: progress.acknowledgedLines,
+    completedNodeCount: currentSceneOperationProgress(beat)?.completedNodeCount ?? 0,
+  });
 }
 
 function currentNarrativeComplete(beat = getBeat()) {
@@ -1640,6 +1682,7 @@ function storyworldReactionForProgress(progress) {
 }
 
 function storyworldPlacementLabel(cluster) {
+  if (cluster.sequenceRole === 'act-route-decision') return 'Act III opening · coalition route decision';
   if (cluster.sequenceRole === 'before-boss-decision') return `Before encounter · ${cluster.relatedEncounterIds.join(' · ')}`;
   if (cluster.sequenceRole === 'after-boss-consequence') return `After encounter · ${cluster.relatedEncounterIds.join(' · ')}`;
   return 'After level · consequence scene';
@@ -1655,9 +1698,14 @@ function renderStoryworldPanel(presentation) {
   storyworldPanel.dataset.clusterId = cluster.id;
   storyworldPanel.dataset.phase = progress.phase;
   storyworldPlacement.textContent = storyworldPlacementLabel(cluster);
-  storyworldProgress.textContent = `Storyworld ${clusterNumber}/${STORYWORLD_CLUSTERS.length} · authored path scene`;
+  storyworldProgress.textContent = developerMode
+    ? `Storyworld ${clusterNumber}/${STORYWORLD_CLUSTERS.length} · authored path scene`
+    : `Interlude ${clusterNumber}/${STORYWORLD_CLUSTERS.length}`;
   const projection = deriveStoryworldProjection(storyworldState);
-  storyworldStateSummary.textContent = `Working state · proof ${Math.round(projection.proof_integrity * 100)} · consent ${Math.round(projection.network_consent * 100)} · witness safety ${Math.round(projection.witness_safety * 100)}`;
+  const actRouteSummary = formatActRouteSummary(projection);
+  storyworldStateSummary.textContent = developerMode
+    ? `Working state · proof ${Math.round(projection.proof_integrity * 100)} · consent ${Math.round(projection.network_consent * 100)} · witness safety ${Math.round(projection.witness_safety * 100)} · ${actRouteSummary}`
+    : `Trust ${Math.round(projection.proof_integrity * 100)} · consent ${Math.round(projection.network_consent * 100)} · ${actRouteSummary}`;
 
   const encounter = ['outcome', 'outcome-reaction'].includes(progress.phase) ? progress.outcome : cluster.entry;
   storyworldTitle.textContent = encounter?.title ?? cluster.entry.title;
@@ -1697,7 +1745,7 @@ function applyStoryworldBeforeBeatLock(locked) {
     for (const button of choiceDeck.querySelectorAll('button')) button.disabled = true;
     launchBattle.removeAttribute('href');
     launchBattle.setAttribute('aria-disabled', 'true');
-    launchBattle.textContent = 'Resolve the pre-encounter Storyworld scene';
+    launchBattle.textContent = developerMode ? 'Resolve the pre-encounter Storyworld scene' : 'Resolve the preceding decision';
     battleStatus.textContent = 'This decision resolves before field and battle control.';
   }
 }
@@ -1716,7 +1764,9 @@ function commitStoryworldTransition(action, result) {
       result.progress.cluster.id,
     );
     if (!receiptResult.ok) {
-      fieldFeedback.textContent = `${action} could not update the narrative receipt (${receiptResult.code}).`;
+      fieldFeedback.textContent = developerMode
+        ? `${action} could not update the narrative receipt (${receiptResult.code}).`
+        : 'Progress could not be saved. Please try again.';
       return false;
     }
     nextRunReceiptState = receiptResult.state;
@@ -1751,11 +1801,16 @@ function renderDialogue(beat) {
   }
   const line = lines[progress.currentLineIndex ?? 0];
   sceneText.textContent = `${line.speaker}: ${line.line}`;
-  dialogueProgress.textContent = progress.complete
+  const interactionGate = currentDialogueInteractionGate(beat, progress);
+  dialogueProgress.textContent = interactionGate
+    ? interactionGate.prompt
+    : progress.complete
     ? `${progress.lineCount}/${progress.lineCount} lines acknowledged`
     : `Line ${progress.currentLineIndex + 1}/${progress.lineCount}`;
-  continueDialogue.disabled = progress.complete || isBeatCompleted(campaignState, beat.id);
-  continueDialogue.textContent = progress.acknowledgedLines === progress.lineCount - 1
+  continueDialogue.disabled = Boolean(interactionGate) || progress.complete || isBeatCompleted(campaignState, beat.id);
+  continueDialogue.textContent = interactionGate
+    ? 'Continue after exploring'
+    : progress.acknowledgedLines === progress.lineCount - 1
     ? 'Acknowledge scene'
     : 'Continue dialogue';
 }
@@ -1881,9 +1936,16 @@ function formatBrief(value, fallback) {
 
 function renderChapterList() {
   chapterList.replaceChildren();
-  const unlocked = new Set(getUnlockedBeatIds(campaignState));
+  const unlocked = new Set(getUnlockedBeatIds(campaignState, progressionRouteOptions()));
   const activeChapterId = getChapter().id;
-  chapters.forEach((chapter, index) => {
+  const firstLockedIndex = chapters.findIndex((chapter) => !chapter.beats.some((beat) => unlocked.has(beat.id)));
+  const visibleChapters = developerMode
+    ? chapters
+    : chapters.filter((chapter, index) => (
+      chapter.beats.some((beat) => unlocked.has(beat.id)) || index === firstLockedIndex
+    ));
+  visibleChapters.forEach((chapter) => {
+    const index = chapters.indexOf(chapter);
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'chapter-button';
@@ -1896,7 +1958,9 @@ function renderChapterList() {
     button.innerHTML = `<span class="chapter-index">${number}</span><span class="chapter-copy"><strong>${chapter.title}</strong><small>${chapter.subtitle ?? chapter.objective}</small></span>`;
     chapterList.append(button);
   });
-  completionLabel.textContent = `${campaignState.completedBeatIds.length} / ${chapterSceneCount()} scenes`;
+  completionLabel.textContent = developerMode
+    ? `${campaignState.completedBeatIds.length} / ${chapterSceneCount()} scenes`
+    : `${campaignState.completedBeatIds.length} scenes complete`;
 }
 
 function renderChoices(beat) {
@@ -2146,7 +2210,7 @@ function updateFieldDashboard(level) {
     ? scopedRequirements.map((item) => `${item.complete ? '✓' : '○'} ${item.label}`).join(' · ')
     : `${(level.interactables ?? []).length} authored interactions`;
   fieldProgress.textContent = sceneOperationMarker
-    ? `Story operation ${sceneOperationMarker.nodeIndex + 1}/${sceneOperationMarker.progress.nodeCount} · ${sceneOperationMarker.node.verb} · ${sceneOperationMarker.node.activityType}`
+    ? `Objective ${sceneOperationMarker.nodeIndex + 1}/${sceneOperationMarker.progress.nodeCount} · ${sceneOperationMarker.node.verb}`
     : witnessMarker
       ? `Witness chronicle: ${witnessMarker.chronicle.title} · ${witnessMarker.task.verb} ${witnessMarker.taskIndex + 1}/${witnessMarker.fieldwork.nodes.length} · ${witnessMarker.task.instruction}`
     : marker
@@ -2154,7 +2218,7 @@ function updateFieldDashboard(level) {
     : `${scopedRequirements.filter((item) => item.complete).length}/${scopedRequirements.length} route requirements · ${requirements}`;
   interactFieldButton.disabled = !sceneOperationNearby && !witnessNearby && !markerNearby && !authored && !status.exit;
   interactFieldButton.textContent = sceneOperationNearby
-    ? `${sceneOperationMarker.node.verb} story operation (X)`
+    ? `${sceneOperationMarker.node.verb} (X)`
     : witnessNearby
       ? (witnessMarker.progress.dialogueComplete
       ? witnessMarker.stage.encounterId ? 'Enter chronicle battle (X)' : 'Record witness stage (X)'
@@ -2165,8 +2229,9 @@ function updateFieldDashboard(level) {
 }
 
 function moveCampaignThroughExit(transition, enteredFieldState) {
-  const currentIndex = allBeatRecords.findIndex((record) => record.beat.id === getBeat().id);
-  const targetIndex = allBeatRecords.findIndex((record, index) => index > currentIndex
+  const routeRecords = scheduledBeatRecords();
+  const currentIndex = routeRecords.findIndex((record) => record.beat.id === getBeat().id);
+  const targetIndex = routeRecords.findIndex((record, index) => index > currentIndex
     && getLevelForBeat(chapters.find((chapter) => chapter.id === record.chapterId), record.beat).id === transition.destinationLevelId);
   if (targetIndex === currentIndex + 1 && currentBeatBattlesCleared()) {
     const routedFieldState = grantFieldFlags(enteredFieldState, fieldRouteFlag());
@@ -2185,9 +2250,9 @@ function moveCampaignThroughExit(transition, enteredFieldState) {
     fieldFeedback.textContent = 'Route exit recorded. Finish the remaining dialogue or decision before advancing the scene.';
     return Object.freeze({ ok: true, storyAdvanced: false });
   }
-  const target = targetIndex >= 0 ? allBeatRecords[targetIndex] : null;
-  if (target && getUnlockedBeatIds(campaignState).includes(target.beat.id)) {
-    const nextCampaignState = moveToBeat(campaignState, target.chapterId, target.beat.id);
+  const target = targetIndex >= 0 ? routeRecords[targetIndex] : null;
+  if (target && getUnlockedBeatIds(campaignState, progressionRouteOptions()).includes(target.beat.id)) {
+    const nextCampaignState = moveToBeat(campaignState, target.chapterId, target.beat.id, progressionRouteOptions());
     if (!commitStateChanges('Unlocked route transition', [
       { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: enteredFieldState },
       { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
@@ -2222,7 +2287,7 @@ function setKeyArt(chapter) {
   };
   const selected = artByChapter[chapter.id] ?? {
     path: 'assets/art/party-roster-suite/party-roster-key-art.png',
-    alt: 'Original pixel-art roster of Ren, Aya, Nikola, Mateus, Genta, and Kiku',
+    alt: 'Original pixel-art roster of Ren, Aya, Nikola, Mateus, Genta, Kiku, and Miyo',
   };
   keyArt.src = selected.path;
   keyArt.alt = selected.alt;
@@ -2275,25 +2340,35 @@ function requiredRouteActivityLabel(activityId) {
 
 function renderRequiredRouteLedger(progress) {
   const totals = progress.metrics.total;
-  routeSummary.textContent = `${totals.completedActivityCount} / ${totals.requiredActivityCount} complete`;
+  routeSummary.textContent = developerMode
+    ? `${totals.completedActivityCount} / ${totals.requiredActivityCount} complete`
+    : `${totals.completedActivityCount} discovered`;
   const invalidSources = Object.entries(progress.sourceValidity)
     .filter(([, valid]) => !valid)
     .map(([source]) => source);
   if (invalidSources.length) {
     routeStatus.dataset.state = 'due';
-    routeStatus.textContent = `Route evidence is unavailable for: ${invalidSources.join(', ')}. Progress fails closed.`;
+    routeStatus.textContent = developerMode
+      ? `Route evidence is unavailable for: ${invalidSources.join(', ')}. Progress fails closed.`
+      : 'Some optional journal entries are currently unavailable.';
   } else if (progress.creditsGate.creditsReady) {
     routeStatus.dataset.state = 'ready';
-    routeStatus.textContent = 'All 215 optional activities are complete. Completionist route status is ready.';
+    routeStatus.textContent = developerMode
+      ? 'All 215 optional activities are complete. Completionist route status is ready.'
+      : 'Every optional route has been explored.';
   } else if (totals.entryDueActivityCount > 0) {
     routeStatus.dataset.state = 'ready';
     routeStatus.textContent = `${totals.entryDueActivityCount} optional ${totals.entryDueActivityCount === 1 ? 'entry is' : 'entries are'} newly available; the narrative route can continue.`;
   } else if (totals.dueActivityCount > 0) {
     routeStatus.dataset.state = 'ready';
-    routeStatus.textContent = `${totals.dueActivityCount} entered optional ${totals.dueActivityCount === 1 ? 'activity remains' : 'activities remain'} finite; narrative credits do not wait for it.`;
+    routeStatus.textContent = developerMode
+      ? `${totals.dueActivityCount} entered optional ${totals.dueActivityCount === 1 ? 'activity remains' : 'activities remain'} finite; narrative credits do not wait for it.`
+      : `${totals.dueActivityCount} optional ${totals.dueActivityCount === 1 ? 'story is' : 'stories are'} still in progress.`;
   } else {
     routeStatus.dataset.state = 'ready';
-    routeStatus.textContent = 'No optional completionist entry is currently due.';
+    routeStatus.textContent = developerMode
+      ? 'No optional completionist entry is currently due.'
+      : 'No new optional discoveries are available right now.';
   }
 
   const prioritized = progress.entryDueActivityIds.length > 0
@@ -2316,7 +2391,7 @@ function renderRequiredRouteLedger(progress) {
   if (hiddenCount > 0) {
     const more = document.createElement('li');
     more.className = 'more';
-    more.textContent = `+ ${hiddenCount} more in the route ledger`;
+    more.textContent = `+ ${hiddenCount} more in the journal`;
     nodes.push(more);
   }
   if (!nodes.length) {
@@ -2363,8 +2438,11 @@ function render() {
   const encounter = beatBattleState.selected ?? getEncounterForChapter(chapter.id) ?? ENCOUNTERS[0];
   const chapterIndex = currentChapterIndex();
   const beatIndex = currentBeatIndex();
-  const recordIndex = allBeatRecords.findIndex((record) => record.beat.id === beat.id);
-  chapterKicker.textContent = `${chapter.act ?? 'Campaign'} · ${chapter.number ?? chapterIndex}`;
+  const recordIndex = scheduledBeatRecords().findIndex((record) => record.beat.id === beat.id);
+  const actSequenceContext = getActSequenceContextForBeat(beat.id);
+  chapterKicker.textContent = actSequenceContext
+    ? `${actSequenceContext.actLabel} · ${actSequenceContext.majorSequenceLabel}`
+    : `${chapter.act ?? 'Campaign'} · ${chapter.number ?? chapterIndex}`;
   chapterTitle.textContent = chapter.title;
   chapterObjective.textContent = chapter.objective;
   sceneNumber.textContent = `SCENE ${String(beatIndex + 1).padStart(2, '0')}/${String(chapter.beats.length).padStart(2, '0')}`;
@@ -2394,7 +2472,7 @@ function render() {
   nextScene.disabled = !campaignComplete
     && (!storyworldCleared || !operationCleared || !battlesCleared || !fieldRouteCleared || !narrativeCleared || !choicesCleared);
   nextScene.textContent = isCampaignComplete(campaignState)
-    ? 'View credits & seal run →'
+    ? 'View credits →'
     : !storyworldCleared ? `${storyworldPresentation.cluster.placement === 'before-beat' ? 'Resolve pre-encounter' : 'Record consequence'} Storyworld scene`
       : !operationCleared ? 'Complete the scene operation'
       : !battlesCleared ? 'Clear encounter to continue'
@@ -2445,7 +2523,7 @@ function renderRunProofStatus() {
     }
     if (report.storyComplete && !report.creditsComplete) {
       runProofStatus.dataset.proof = 'active';
-      runProofStatus.textContent = `82-scene story complete · ${elapsed} active · ${formatPlaytime(report.remainingMs)} to five-hour seal floor`;
+      runProofStatus.textContent = `${report.requiredPlayedSceneCount}-scene ${report.routeLabel ?? 'selected-route'} story complete · ${elapsed} active · ${formatPlaytime(report.remainingMs)} to five-hour seal floor`;
       return;
     }
     runProofStatus.dataset.proof = 'active';
@@ -2474,7 +2552,9 @@ function renderRunProofStatus() {
 function choose(choiceId) {
   const beat = getBeat();
   if (currentStoryworldBeforeBeatBlocked(beat)) {
-    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before recording the canonical scene decision.';
+    fieldFeedback.textContent = developerMode
+      ? 'Resolve the pre-encounter Storyworld scene before recording the canonical scene decision.'
+      : 'Resolve the preceding decision before choosing what happens next.';
     return;
   }
   if (isBeatCompleted(campaignState, beat.id)) {
@@ -2512,10 +2592,12 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
   const completedCount = campaignState.completedBeatIds.length;
   const flushed = flushRunReceiptPlaytime();
   if (!flushed.ok) {
-    fieldFeedback.textContent = `${action} is paused because active run time could not be saved.`;
+    fieldFeedback.textContent = developerMode
+      ? `${action} is paused because active run time could not be saved.`
+      : 'Progress could not be saved. Please try again.';
     return false;
   }
-  const nextCampaignState = completeCurrentBeat(campaignState);
+  const nextCampaignState = completeCurrentBeat(campaignState, progressionRouteOptions());
   const nextAdvancementState = isCampaignComplete(nextCampaignState)
     ? advancementState
     : unlockPartyMembers(advancementState, getCurrentChapter(nextCampaignState).party);
@@ -2530,7 +2612,9 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
   if (nextCampaignState.completedBeatIds.length > completedCount && runReceiptState) {
     const receiptResult = recordRunBeatCompletion(runReceiptState, runReceiptState.runId, completedBeatId);
     if (!receiptResult.ok) {
-      fieldFeedback.textContent = `${action} could not update the clean-run receipt (${receiptResult.code}).`;
+      fieldFeedback.textContent = developerMode
+        ? `${action} could not update the clean-run receipt (${receiptResult.code}).`
+        : 'Progress could not be saved. Please try again.';
       return false;
     }
     nextRunReceiptState = receiptResult.state;
@@ -2558,11 +2642,12 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
 
 function advance(direction) {
   playtimeCategory = 'narrative';
-  const currentIndex = allBeatRecords.findIndex((record) => record.beat.id === getBeat().id);
+  const routeRecords = scheduledBeatRecords();
+  const currentIndex = routeRecords.findIndex((record) => record.beat.id === getBeat().id);
   if (direction < 0) {
     if (currentIndex <= 0) return;
-    const previous = allBeatRecords[currentIndex - 1];
-    const nextCampaignState = moveToBeat(campaignState, previous.chapterId, previous.beat.id);
+    const previous = routeRecords[currentIndex - 1];
+    const nextCampaignState = moveToBeat(campaignState, previous.chapterId, previous.beat.id, progressionRouteOptions());
     if (!commitStateChanges('Previous-scene navigation', [
       { id: 'campaign', adapter: saveAdapter, previousState: campaignState, nextState: nextCampaignState },
     ]).ok) return;
@@ -2573,14 +2658,18 @@ function advance(direction) {
   if (isCampaignComplete(campaignState)) {
     const flushed = flushRunReceiptPlaytime();
     if (!flushed.ok) {
-      fieldFeedback.textContent = 'Credits navigation is paused because active run time could not be saved.';
+      fieldFeedback.textContent = developerMode
+        ? 'Credits navigation is paused because active run time could not be saved.'
+        : 'Progress could not be saved. Please try again.';
       return;
     }
     window.location.href = 'credits.html';
     return;
   }
   if (!currentSceneOperationComplete()) {
-    fieldFeedback.textContent = 'Complete every ordered field node in this scene operation before advancing the story.';
+    fieldFeedback.textContent = developerMode
+      ? 'Complete every ordered field node in this scene operation before advancing the story.'
+      : 'Complete each marked field objective before advancing the story.';
     return;
   }
   if (!currentBeatBattlesCleared()) {
@@ -2596,7 +2685,9 @@ function advance(direction) {
     return;
   }
   if (!currentFieldRouteComplete()) {
-    fieldFeedback.textContent = 'Complete this beat’s authored field route and use its terminal exit before advancing.';
+    fieldFeedback.textContent = developerMode
+      ? 'Complete this beat’s authored field route and use its terminal exit before advancing.'
+      : 'Complete this scene’s field route and use its final exit before advancing.';
     return;
   }
   persistCurrentBeatCompletion();
@@ -2606,11 +2697,11 @@ chapterList.addEventListener('click', (event) => {
   const button = event.target.closest('[data-chapter-id]');
   if (!button) return;
   const chapter = chapters.find((entry) => entry.id === button.dataset.chapterId);
-  const unlocked = new Set(getUnlockedBeatIds(campaignState));
+  const unlocked = new Set(getUnlockedBeatIds(campaignState, progressionRouteOptions()));
   const target = chapter?.beats.filter((beat) => unlocked.has(beat.id)).at(-1);
   if (!chapter || !target) return;
   playtimeCategory = 'narrative';
-  const nextCampaignState = moveToBeat(campaignState, chapter.id, target.id);
+  const nextCampaignState = moveToBeat(campaignState, chapter.id, target.id, progressionRouteOptions());
   const storyLevel = getLevelForBeat(chapter, target);
   const nextFieldState = enterField(fieldRuntimeState, storyLevel.id, target.id, { flags: externalFieldFlags() });
   if (!commitStateChanges('Chapter navigation', [
@@ -2653,11 +2744,19 @@ storyworldContinue.addEventListener('click', () => {
 
 continueDialogue.addEventListener('click', () => {
   if (currentStoryworldBeforeBeatBlocked()) {
-    fieldFeedback.textContent = 'Resolve the pre-encounter Storyworld scene before advancing the canonical dialogue.';
+    fieldFeedback.textContent = developerMode
+      ? 'Resolve the pre-encounter Storyworld scene before advancing the canonical dialogue.'
+      : 'Resolve the preceding decision before continuing the dialogue.';
     return;
   }
   playtimeCategory = 'narrative';
   const beat = getBeat();
+  const progress = narrativeProgressForBeat(beat);
+  const interactionGate = currentDialogueInteractionGate(beat, progress);
+  if (interactionGate) {
+    fieldFeedback.textContent = interactionGate.prompt;
+    return;
+  }
   const result = advanceNarrative(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
   if (!commitStateChanges('Dialogue progress', [
     { id: 'narrative', adapter: narrativeAdapter, previousState: narrativeState, nextState: result.state },
@@ -2706,7 +2805,9 @@ routeDueList.addEventListener('click', (event) => {
   if (!button) return;
   const activity = getRequiredRouteActivity(button.dataset.routeActivityId);
   if (!activity) {
-    fieldFeedback.textContent = 'This route entry is no longer part of the canonical itinerary.';
+    fieldFeedback.textContent = developerMode
+      ? 'This route entry is no longer part of the canonical itinerary.'
+      : 'This route is no longer available.';
     return;
   }
   focusAndActivateRouteEntry(activity);
@@ -2804,7 +2905,11 @@ interactFieldButton.addEventListener('click', () => {
       sceneOperationState,
       beat.id,
       sceneOperationMarker.node.id,
-      { at: keyOf(fieldPosition()), encounterWins: advancementState.encounterWins ?? {} },
+      {
+        at: keyOf(fieldPosition()),
+        encounterWins: advancementState.encounterWins ?? {},
+        routeTheater: currentRouteTheater(),
+      },
     );
     if (!result.ok && result.code === 'encounter-victory-required') {
       const encounterId = result.pendingEncounterIds[0];
@@ -2833,8 +2938,8 @@ interactFieldButton.addEventListener('click', () => {
     pageAudio.playCue('fieldInteract');
     render();
     fieldFeedback.textContent = result.beatCompleted
-      ? `Scene operation complete: all ${result.progress.nodeCount} finite field nodes are recorded.`
-      : `${result.node.verb} complete. Continue to story operation ${result.progress.currentNodeIndex + 1}/${result.progress.nodeCount}: ${result.progress.currentNode.instruction}`;
+      ? 'Objective complete. You can continue the scene.'
+      : `${result.node.verb} complete. Next: ${result.progress.currentNode.instruction}`;
     return;
   }
   const witnessMarker = getActiveWitnessMarker(level);
@@ -3056,7 +3161,7 @@ fieldLeaderSelect.addEventListener('change', () => {
 previousScene.addEventListener('click', () => advance(-1));
 nextScene.addEventListener('click', () => advance(1));
 resetCampaign.addEventListener('click', () => {
-  if (!window.confirm('Start a clean New Game? This clears story, Storyworld reactions, scene operations, battles, quests, companion conversations, party councils, public archive readings, camp inventory, field positions, playtime, and the prior run receipt.')) return;
+  if (!requestedNewGame && !window.confirm('Start a clean New Game? This clears story, conversations, battles, quests, Camp choices, inventory, field positions, and playtime.')) return;
   const nextCampaignState = resetCampaignState();
   const pristineAdvancementState = createAdvancementState();
   const nextAdvancementState = unlockPartyMembers(pristineAdvancementState, getCurrentChapter(nextCampaignState).party);
@@ -3075,7 +3180,9 @@ resetCampaign.addEventListener('click', () => {
     profileId: RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H,
   });
   if (!receipt.ok) {
-    fieldFeedback.textContent = 'The verified run receipt could not be created; the current game was left intact.';
+    fieldFeedback.textContent = developerMode
+      ? 'The verified run receipt could not be created; the current game was left intact.'
+      : 'A new journey could not be started; the current game was left intact.';
     return;
   }
   const nextStoryworldState = createStoryworldState({ runId: receipt.state.runId });
@@ -3117,6 +3224,10 @@ resetCampaign.addEventListener('click', () => {
   playtimeLastActivity = playtimeLastSample;
   playtimeUnsavedMs = 0;
   playtimeCategory = 'narrative';
+  if (requestedNewGame) {
+    window.history.replaceState(null, '', 'campaign.html');
+    requestedNewGame = false;
+  }
   render();
 });
 
@@ -3253,7 +3364,7 @@ recoveryFile.addEventListener('change', async () => {
   const { summary } = validation.checkpoint;
   const confirmed = window.confirm(
     `Restore the complete recovery-only checkpoint for run ${summary.runId.slice(0, 8)}?\n\n`
-      + `${summary.completedBeatCount}/60 scenes · ${summary.routeCompletedActivityCount}/${summary.routeRequiredActivityCount} route activities · ${formatPlaytime(summary.activePlaytimeMs)} active play.\n\n`
+      + `${summary.completedBeatCount} completed story scenes · ${summary.routeCompletedActivityCount}/${summary.routeRequiredActivityCount} route activities · ${formatPlaytime(summary.activePlaytimeMs)} active play.\n\n`
       + 'This replaces all fourteen current save records. Close other game tabs first. This is recovery, not independent playtest proof.',
   );
   if (!confirmed) return;
@@ -3281,8 +3392,11 @@ function animate(now) {
   requestAnimationFrame(animate);
 }
 
-document.title = `${CAMPAIGN.title} — Campaign Atlas`;
-render();
+document.title = `${CAMPAIGN.title} — Campaign`;
+if (requestedNewGame) {
+  resetCampaign.click();
+  if (requestedNewGame) render();
+} else render();
 requestAnimationFrame(animate);
 
 reducedMotion.addEventListener('change', () => {

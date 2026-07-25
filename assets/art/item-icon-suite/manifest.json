@@ -7,9 +7,9 @@
     "frameWidth": 16,
     "frameHeight": 16,
     "columns": 5,
-    "rows": 5,
+    "rows": 6,
     "sheetWidth": 80,
-    "sheetHeight": 80,
+    "sheetHeight": 96,
     "transparentGutter": 1
   },
   "itemOrder": [
@@ -18,6 +18,7 @@
     "salt-etched-rapier",
     "dusk-censer",
     "cedar-maul",
+    "weather-ruler",
     "pilgrim-knife",
     "dawnsteel-blade",
     "bellglass-focus",
@@ -126,10 +127,27 @@
       "rgbaSha256": "ab2f5500ee4c54694dfebefbfe6eec0084a8fe9e1ad56eed6bccc313cedfe0be"
     },
     {
+      "id": "weather-ruler",
+      "motif": "weather-ruler",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "localAlphaBounds": [
+        1,
+        2,
+        15,
+        15
+      ],
+      "rgbaSha256": "0def03508f377378de960409e54840180a73392c3b4ac33e05b3856b4cacac07"
+    },
+    {
       "id": "pilgrim-knife",
       "motif": "knife",
       "rect": [
-        0,
+        16,
         16,
         16,
         16
@@ -146,7 +164,7 @@
       "id": "dawnsteel-blade",
       "motif": "greatsword",
       "rect": [
-        16,
+        32,
         16,
         16,
         16
@@ -163,7 +181,7 @@
       "id": "bellglass-focus",
       "motif": "focus",
       "rect": [
-        32,
+        48,
         16,
         16,
         16
@@ -180,7 +198,7 @@
       "id": "quilted-haori",
       "motif": "haori",
       "rect": [
-        48,
+        64,
         16,
         16,
         16
@@ -197,8 +215,8 @@
       "id": "river-silk-robe",
       "motif": "robe",
       "rect": [
-        64,
-        16,
+        0,
+        32,
         16,
         16
       ],
@@ -214,7 +232,7 @@
       "id": "bell-iron-lamellar",
       "motif": "lamellar",
       "rect": [
-        0,
+        16,
         32,
         16,
         16
@@ -231,7 +249,7 @@
       "id": "ash-lacquer-coat",
       "motif": "coat",
       "rect": [
-        16,
+        32,
         32,
         16,
         16
@@ -248,7 +266,7 @@
       "id": "dawn-thread-mantle",
       "motif": "mantle",
       "rect": [
-        32,
+        48,
         32,
         16,
         16
@@ -265,7 +283,7 @@
       "id": "road-sandals",
       "motif": "sandals",
       "rect": [
-        48,
+        64,
         32,
         16,
         16
@@ -282,8 +300,8 @@
       "id": "lantern-bead-cord",
       "motif": "beads",
       "rect": [
-        64,
-        32,
+        0,
+        48,
         16,
         16
       ],
@@ -299,7 +317,7 @@
       "id": "frostglass-pin",
       "motif": "pin",
       "rect": [
-        0,
+        16,
         48,
         16,
         16
@@ -316,7 +334,7 @@
       "id": "storm-kite-toggle",
       "motif": "toggle",
       "rect": [
-        16,
+        32,
         48,
         16,
         16
@@ -333,7 +351,7 @@
       "id": "iron-knot",
       "motif": "knot",
       "rect": [
-        32,
+        48,
         48,
         16,
         16
@@ -350,7 +368,7 @@
       "id": "cedar-route-note",
       "motif": "note",
       "rect": [
-        48,
+        64,
         48,
         16,
         16
@@ -367,8 +385,8 @@
       "id": "temple-charm",
       "motif": "registry-token",
       "rect": [
+        0,
         64,
-        48,
         16,
         16
       ],
@@ -384,7 +402,7 @@
       "id": "river-salve",
       "motif": "salve",
       "rect": [
-        0,
+        16,
         64,
         16,
         16
@@ -401,7 +419,7 @@
       "id": "ward-tonic",
       "motif": "tonic",
       "rect": [
-        16,
+        32,
         64,
         16,
         16
@@ -418,7 +436,7 @@
       "id": "spirit-tea",
       "motif": "tea",
       "rect": [
-        32,
+        48,
         64,
         16,
         16
@@ -435,7 +453,7 @@
       "id": "dawn-salt",
       "motif": "packet",
       "rect": [
-        48,
+        64,
         64,
         16,
         16
@@ -452,8 +470,8 @@
       "id": "traveler-plum",
       "motif": "plum",
       "rect": [
-        64,
-        64,
+        0,
+        80,
         16,
         16
       ],
@@ -471,15 +489,15 @@
       "file": "item-icon-atlas.png",
       "purpose": "transparent-runtime-atlas",
       "width": 80,
-      "height": 80,
-      "sha256": "33ed882e230d01aa4755c1f09c76baed5700e380155543f1d1274a397fbee471"
+      "height": 96,
+      "sha256": "ad5a10aa5813aaae3cefe8d246f1f4313d889b7358a5d590b8705bba086f9031"
     },
     {
       "file": "item-icon-contact-sheet.png",
       "purpose": "labeled-review-only-not-runtime",
       "width": 644,
-      "height": 754,
-      "sha256": "02d84aa6f45ab27eba63fc7ac57bae65f9156a976e1f0e19bebb089d63bee2f1"
+      "height": 900,
+      "sha256": "095f83f4675d66f093e0955d5a088482f56c6012c5b2a538d0fa44af65298e9d"
     }
   ],
   "restrictions": [

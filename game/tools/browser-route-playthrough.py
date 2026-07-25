@@ -1130,7 +1130,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
     evidence: dict[str, object] = {
         "policy": "rendered-controls-only; no direct storage mutation; no runtime transition calls; optional recovery uses the rendered file control",
         "chromium": str(chromium),
-        "routeMode": "completionist-215" if args.completionist else "narrative-82-scenes",
+        "routeMode": "completionist-215" if args.completionist else "narrative-selected-route",
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
     }

@@ -1,0 +1,15 @@
+{
+  "name": "jrpg-game-design-verifiers-v2",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/core.mjs && node --check src/cli.mjs",
+    "test": "node --test",
+    "verify": "node src/cli.mjs verify",
+    "verify:strict": "node src/cli.mjs verify --strict",
+    "extrapolate": "node src/cli.mjs extrapolate",
+    "graph": "node src/cli.mjs graph --format mermaid",
+    "report": "node src/cli.mjs verify --json --out reports/current-verification.json && node src/cli.mjs verify --out reports/current-verification.md && node src/cli.mjs extrapolate --out reports/current-extrapolation.md && node src/cli.mjs graph --out reports/template-dag.mmd"
+  }
+}

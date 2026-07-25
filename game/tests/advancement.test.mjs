@@ -37,12 +37,12 @@ class MemoryStorage {
   removeItem(key) { this.values.delete(key); }
 }
 
-test('fresh advancement state tracks six canonical members and begins with Ren', () => {
+test('fresh advancement state tracks seven canonical members and begins with Ren', () => {
   const state = createAdvancementState();
 
   assert.equal(state.schemaVersion, ADVANCEMENT_SCHEMA_VERSION);
-  assert.deepEqual(PARTY_MEMBER_IDS, ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']);
-  assert.equal(state.party.length, 6);
+  assert.deepEqual(PARTY_MEMBER_IDS, ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo']);
+  assert.equal(state.party.length, 7);
   assert.deepEqual(getParty(state, { unlockedOnly: true }).map(({ id }) => id), ['ren']);
   assert.equal(Object.isFrozen(state), true);
   assert.equal(Object.isFrozen(state.party), true);

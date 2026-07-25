@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#08070d">
-  <title>Campaign Action Battle · Bells of the Black Chrysanthemum</title>
+  <title>Action Lab · Bells of the Black Chrysanthemum</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="action-campaign-battle.css">
 </head>
@@ -13,9 +13,9 @@
   <main class="battle-shell">
     <header class="masthead">
       <div>
-        <p class="eyebrow">NON-CANONICAL CAMPAIGN ACTION CONTROLLER</p>
+        <p class="eyebrow">ACTION LAB · ISOLATED TRAINING</p>
         <h1 id="encounterTitle">Loading encounter…</h1>
-        <p id="encounterSubtitle" class="subtitle">Side-view combat with free movement and post-animation cooldowns.</p>
+        <p id="encounterSubtitle" class="subtitle">Side-view combat with fixed-step movement, cancels, and committed attacks.</p>
       </div>
       <a id="campaignLink" class="quiet-link" href="campaign.html">Leave battle</a>
     </header>
@@ -30,7 +30,7 @@
     <section class="battle-frame" aria-labelledby="stageLabel">
       <header class="stage-heading">
         <div>
-          <p class="eyebrow" id="stageLabel">AUTHORED SIDE-VIEW STAGE</p>
+          <p class="eyebrow" id="stageLabel">SIDE-VIEW TRAINING STAGE</p>
           <h2 id="stageName">Preparing stage…</h2>
         </div>
         <span id="battleStateBadge" class="state-badge">LOADING</span>
@@ -42,7 +42,7 @@
           width="960"
           height="540"
           tabindex="0"
-          aria-label="Side-view action battle. Move the controlled party member freely, commit attacks, and satisfy the authored objective."
+          aria-label="Side-view action battle. Move, jump, and use character-specific maneuvers with the controlled fighter, then satisfy the objective."
           aria-describedby="battleInstructions battleReadout"
         >
           Canvas is unavailable. The complete battle state is in the text readout below.
@@ -51,30 +51,53 @@
       </div>
 
       <div class="control-ribbon" id="battleInstructions">
-        <div class="key-guide">
+        <div class="key-guide primary-key-guide" aria-label="Core keyboard controls">
+          <strong class="control-guide-label">Core controls</strong>
+          <span><kbd>←</kbd><kbd>→</kbd> Move · double-tap dash</span>
+          <span><kbd>Space</kbd> Jump · <kbd>↓</kbd>+<kbd>Space</kbd> slide</span>
+          <span><kbd>Z</kbd> Weapon · <kbd>↑</kbd>+<kbd>Z</kbd> <span id="risingGuide">rising uppercut</span> · <kbd>↓</kbd>+<kbd>Z</kbd> slide / air kick <span id="airGuide">descent</span></span>
+          <span><kbd>X</kbd> Art · <kbd>↑</kbd>+<kbd>X</kbd> Cross · <kbd>↓</kbd>+<kbd>X</kbd> Holy Water</span>
+        </div>
+        <div class="key-guide legacy-key-guide" aria-label="Direct maneuver hotkeys">
+          <strong class="control-guide-label">Direct hotkeys</strong>
           <span><kbd>A</kbd><kbd>D</kbd> Move</span>
-          <span><kbd>W</kbd> Jump</span>
+          <span><kbd>W</kbd> Variable jump</span>
+          <span><kbd>Q</kbd><kbd>Shift</kbd> Dash</span>
+          <span><kbd>S</kbd> Low slide</span>
+          <span><kbd>U</kbd> Character rising maneuver</span>
+          <span><kbd>I</kbd> Character air descent</span>
           <span><kbd>J</kbd> Weapon</span>
           <span><kbd>K</kbd> Art</span>
+          <span><kbd>C</kbd> Holy Water</span>
+          <span><kbd>V</kbd> Throwing Cross</span>
           <span><kbd>L</kbd> Hunter–Priest combo</span>
           <span><kbd>E</kbd> Hold objective action</span>
-          <span><kbd>Tab</kbd> Switch party</span>
+          <span><kbd>Tab</kbd> Swap with AI support</span>
           <span><kbd>R</kbd> Restart</span>
         </div>
+        <div class="key-guide controller-key-guide" aria-label="Controller controls">
+          <strong class="control-guide-label">Controller</strong>
+          <span>Left stick / D-pad Move and aim</span>
+          <span>A Jump · B Objective</span>
+          <span>X Weapon · Y Art</span>
+          <span>LB Combo · RB Tag</span>
+          <span>LT Slide · RT Dash</span>
+        </div>
+        <div id="movementReadout" class="movement-readout" aria-label="Movement readiness"></div>
         <button id="restartBattle" type="button">Restart encounter</button>
       </div>
     </section>
 
     <section id="battleReadout" class="readout-grid" aria-label="Text battle state" tabindex="-1">
       <article class="panel party-panel" aria-labelledby="partyTitle">
-        <p class="panel-kicker">PARTY · LIVE AUTHORITY</p>
-        <h2 id="partyTitle">Controlled fighter</h2>
+        <p class="panel-kicker">PARTY</p>
+        <h2 id="partyTitle">Duo fighters</h2>
         <div id="controlledActor"></div>
-        <ul id="partyReadout" class="actor-list" aria-label="Party health"></ul>
+        <ul id="partyReadout" class="actor-list" aria-label="Duo combat party"></ul>
       </article>
 
       <article class="panel objective-panel" aria-labelledby="objectiveTitle">
-        <p class="panel-kicker">AUTHORED OBJECTIVE CONTRACT</p>
+        <p class="panel-kicker">CURRENT GOAL</p>
         <h2 id="objectiveTitle">Objective</h2>
         <p id="objectiveText"></p>
         <p id="objectiveRuntimeStatus" class="runtime-status"></p>
@@ -82,7 +105,7 @@
       </article>
 
       <article class="panel enemy-panel" aria-labelledby="enemyTitle">
-        <p class="panel-kicker">HOSTILES · LIVE AUTHORITY</p>
+        <p class="panel-kicker">HOSTILES</p>
         <h2 id="enemyTitle">Enemy formation</h2>
         <ul id="enemyReadout" class="actor-list" aria-label="Enemy health"></ul>
       </article>
@@ -90,14 +113,16 @@
 
     <section class="lower-grid">
       <article class="panel cooldown-panel" aria-labelledby="cooldownTitle">
-        <p class="panel-kicker">POST-ANIMATION RECOVERY</p>
+        <p class="panel-kicker">ATTACK READINESS</p>
         <h2 id="cooldownTitle">Attack timers</h2>
         <div id="attackTimers" class="attack-timers"></div>
+        <h3>Holy subweapons</h3>
+        <div id="subweaponTimers" class="attack-timers" aria-label="Session-local holy subweapons"></div>
         <p class="muted">Attack animation commitment stops movement. Cooldowns begin only when the animation finishes; movement is free while they count down.</p>
       </article>
 
       <article class="panel combo-panel" aria-labelledby="comboTitle">
-        <p class="panel-kicker">LINKED PARTY ART</p>
+        <p class="panel-kicker">PARTY COMBINATION</p>
         <h2 id="comboTitle">Hunter–Priest combo</h2>
         <p id="comboAvailability" class="combo-availability">Checking party formation…</p>
         <ul id="comboArts" class="combo-arts" aria-label="Contributing combo arts"></ul>
@@ -105,25 +130,31 @@
       </article>
 
       <article class="panel log-panel" aria-labelledby="logTitle">
-        <p class="panel-kicker">ACCESSIBLE EVENT AUTHORITY</p>
-        <h2 id="logTitle">Battle callout</h2>
+        <p class="panel-kicker">COMBAT LOG</p>
+        <h2 id="logTitle">Recent events</h2>
         <p id="battleAnnouncement" role="status" aria-live="polite" aria-atomic="true">Loading battle…</p>
         <ol id="eventLog" aria-label="Recent battle events"></ol>
       </article>
 
       <article class="panel settlement-panel" aria-labelledby="settlementTitle">
-        <p class="panel-kicker">CAMPAIGN TRANSACTION</p>
-        <h2 id="settlementTitle">Continue gate</h2>
-        <p id="settlementStatus">Continue stays locked until an objective-authoritative victory is durably settled.</p>
-        <a id="continueCampaign" class="continue-link" href="campaign.html" hidden aria-disabled="true">Continue campaign</a>
+        <p class="panel-kicker">TRAINING RESULT</p>
+        <h2 id="settlementTitle">Return safely</h2>
+        <p id="settlementStatus">This training session never changes campaign progress or party state.</p>
+        <a id="continueCampaign" class="continue-link" href="campaign.html" hidden aria-disabled="true">Return to campaign</a>
       </article>
     </section>
 
     <div class="touch-controls" aria-label="On-screen battle controls">
       <button type="button" data-held-control="left" aria-label="Move left">←</button>
       <button type="button" data-action-control="jump">Jump</button>
+      <button type="button" data-action-control="dash">Dash</button>
+      <button type="button" data-action-control="slide">Slide</button>
       <button type="button" data-action-control="attack-0" class="weapon-button">Weapon</button>
       <button type="button" data-action-control="attack-1" class="art-button">Art</button>
+      <button type="button" data-action-control="holy-water" class="art-button">Holy Water</button>
+      <button type="button" data-action-control="throwing-cross" class="art-button">Cross</button>
+      <button id="risingTouch" type="button" data-action-control="uppercut" class="maneuver-button">Rise</button>
+      <button id="airTouch" type="button" data-action-control="thunder-kick" class="maneuver-button">Air</button>
       <button type="button" data-action-control="combo" class="combo-button">Hunter + Priest</button>
       <button type="button" data-held-control="interact">Objective</button>
       <button type="button" data-action-control="switch">Switch</button>

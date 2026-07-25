@@ -11,7 +11,7 @@
   "font_size": 16,
   "language": "en",
   "rating": "Teen",
-  "about_text": "Thirty-four reaction-driven interstitial scene nodes anchored to the sixty-scene JRPG campaign. Every complete narrative run experiences eleven decisions and one authored consequence scene per decision; Lady Enma has distinct death, custody, and negotiated-defection outcomes.",
+  "about_text": "Thirty-five reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three distinct outcomes.",
   "characters": [
     {
       "id": "char_lantern_network",
@@ -38,7 +38,18 @@
         "enma_custody": 0,
         "enma_killed": 0,
         "enma_compact": 0,
-        "enma_testimony": 0.3
+        "enma_testimony": 0.3,
+        "act3_salt_priority": 0,
+        "act3_ash_priority": 0,
+        "act3_paper_priority": 0,
+        "salt_commitment": 0.2,
+        "ash_commitment": 0.2,
+        "paper_commitment": 0.2,
+        "evacuation_capacity": 0.2,
+        "oni_supply_disruption": 0.1,
+        "succession_readiness": 0.1,
+        "bell_intelligence": 0.1,
+        "garrison_defection": 0.1
       },
       "creation_index": 0,
       "creation_time": 1784577000,
@@ -360,12 +371,177 @@
       "creation_index": 20,
       "creation_time": 1784577000,
       "modified_time": 1784577000
+    },
+    {
+      "id": "act3_salt_priority",
+      "property_name": "act3_salt_priority",
+      "property_label": "Act III priority: Salt Road",
+      "property_type": "bounded number",
+      "default_value": 0,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 21,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "act3_ash_priority",
+      "property_name": "act3_ash_priority",
+      "property_label": "Act III priority: Ash Road",
+      "property_type": "bounded number",
+      "default_value": 0,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 22,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "act3_paper_priority",
+      "property_name": "act3_paper_priority",
+      "property_label": "Act III priority: Paper Road",
+      "property_type": "bounded number",
+      "default_value": 0,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 23,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "salt_commitment",
+      "property_name": "salt_commitment",
+      "property_label": "Salt-road coalition commitment",
+      "property_type": "bounded number",
+      "default_value": 0.2,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 24,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "ash_commitment",
+      "property_name": "ash_commitment",
+      "property_label": "Ash-road coalition commitment",
+      "property_type": "bounded number",
+      "default_value": 0.2,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 25,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "paper_commitment",
+      "property_name": "paper_commitment",
+      "property_label": "Paper-road coalition commitment",
+      "property_type": "bounded number",
+      "default_value": 0.2,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 26,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "evacuation_capacity",
+      "property_name": "evacuation_capacity",
+      "property_label": "Evacuation capacity",
+      "property_type": "bounded number",
+      "default_value": 0.2,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 27,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "oni_supply_disruption",
+      "property_name": "oni_supply_disruption",
+      "property_label": "Oni supply disruption",
+      "property_type": "bounded number",
+      "default_value": 0.1,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 28,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "succession_readiness",
+      "property_name": "succession_readiness",
+      "property_label": "Civil succession readiness",
+      "property_type": "bounded number",
+      "default_value": 0.1,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 29,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "bell_intelligence",
+      "property_name": "bell_intelligence",
+      "property_label": "Bell-network intelligence",
+      "property_type": "bounded number",
+      "default_value": 0.1,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 30,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "garrison_defection",
+      "property_name": "garrison_defection",
+      "property_label": "Garrison defection readiness",
+      "property_type": "bounded number",
+      "default_value": 0.1,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 31,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
     }
   ],
   "spools": [
     {
       "id": "spool_act1",
-      "spool_name": "Act I — Custody and Terms",
+      "spool_name": "Acts I-II — Arrival, Witness, and Terms",
       "starts_active": true,
       "creation_index": 0,
       "creation_time": 1784577000,
@@ -376,20 +552,21 @@
         "page_sw01_revision",
         "page_sw02_decision",
         "page_sw02_accord",
-        "page_sw02_revision",
-        "page_sw03_decision",
-        "page_sw03_accord",
-        "page_sw03_revision"
+        "page_sw02_revision"
       ]
     },
     {
-      "id": "spool_act2",
-      "spool_name": "Act II — Account and Corroboration",
+      "id": "spool_act3",
+      "spool_name": "Act III — The Three-Road War",
       "starts_active": false,
       "creation_index": 1,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "encounters": [
+        "page_sw03_decision",
+        "page_sw03_accord",
+        "page_sw03_revision",
+        "page_sw03_negotiated",
         "page_sw04_decision",
         "page_sw04_accord",
         "page_sw04_revision",
@@ -398,26 +575,23 @@
         "page_sw05_revision",
         "page_sw06_decision",
         "page_sw06_accord",
-        "page_sw06_revision"
+        "page_sw06_revision",
+        "page_sw07_decision",
+        "page_sw07_accord",
+        "page_sw07_revision"
       ]
     },
     {
-      "id": "spool_act3",
-      "spool_name": "Act III — Authority and Repair",
+      "id": "spool_act4",
+      "spool_name": "Act IV — The Black Gate",
       "starts_active": false,
       "creation_index": 2,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "encounters": [
-        "page_sw07_decision",
-        "page_sw07_accord",
-        "page_sw07_revision",
         "page_sw08_decision",
         "page_sw08_accord",
-        "page_sw08_revision",
-        "page_sw10_decision",
-        "page_sw10_accord",
-        "page_sw10_revision"
+        "page_sw08_revision"
       ]
     },
     {
@@ -435,10 +609,23 @@
       ]
     },
     {
-      "id": "spool_endings",
-      "spool_name": "Epilogue — A Revisable Archive",
+      "id": "spool_act5",
+      "spool_name": "Act V — The Living Castle",
       "starts_active": false,
       "creation_index": 4,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "encounters": [
+        "page_sw10_decision",
+        "page_sw10_accord",
+        "page_sw10_revision"
+      ]
+    },
+    {
+      "id": "spool_endings",
+      "spool_name": "The Last Command — Transfer or Civil War",
+      "starts_active": false,
+      "creation_index": 5,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "encounters": [
@@ -3467,11 +3654,11 @@
     },
     {
       "id": "page_sw03_decision",
-      "title": "Sayo's Warehouse Conditions",
+      "title": "The Bellless House War Table",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Sayo of Sodegaura has already divided prayer, household, and testimony routes so one seizure cannot expose them together. She meets the party as a local organizer, not a quest giver waiting for foreign expertise. The patrol tide is turning, carrier capacity is finite, and she requires the group to choose what moves first under her conditions."
+        "value": "Rain maps three ways north across the Bellless House floor. Sayo's salt boats can move households and testimony without merging their custody. Kagura's furnace route can starve the Oni collars of ash and blood. Kozui's printers can prepare governors, garrisons, and towns to survive a transfer of power. The coalition has time to finish only three of four regional operations before Kurozane closes the roads. Ren asks which road receives the first signal, resources, and political promise."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -3479,7 +3666,7 @@
         "script_element_type": "Pointer",
         "character": "char_lantern_network",
         "keyring": [
-          "p_party_respects_limits"
+          "network_consent"
         ],
         "coefficient": 1
       },
@@ -3491,25 +3678,25 @@
       "graph_position_x": 880,
       "graph_position_y": 0,
       "connected_spools": [
-        "spool_act1"
+        "spool_act3"
       ],
       "options": [
         {
-          "id": "page_sw03_decision_opt_households-first",
+          "id": "page_sw03_decision_opt_salt-road-first",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Move households before testimony."
+            "value": "Back Sayo's Salt Road: boats, households, and separated testimony routes."
           },
           "visibility_script": true,
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw03_decision_opt_households-first_r_accord",
+              "id": "page_sw03_decision_opt_salt-road-first_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Sayo assigns the warehouse route because the party has followed limits before. Testimony waits while people move beyond the checkpoint in small groups."
+                "value": "Sayo accepts the first signal because her boat leads keep cancellation authority. The coalition commits escorts and stores without taking command of either civilian route."
               },
               "consequence_id": "page_sw03_accord",
               "desirability_script": {
@@ -3526,7 +3713,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "p_party_respects_limits"
+                      "network_consent"
                     ],
                     "coefficient": 1
                   }
@@ -3540,7 +3727,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "witness_safety"
+                      "act3_salt_priority"
                     ],
                     "coefficient": 1
                   },
@@ -3553,7 +3740,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "witness_safety"
+                          "act3_salt_priority"
                         ],
                         "coefficient": 1
                       },
@@ -3572,7 +3759,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "network_consent"
+                      "salt_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -3585,7 +3772,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "network_consent"
+                          "salt_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -3604,7 +3791,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "route_safety"
+                      "evacuation_capacity"
                     ],
                     "coefficient": 1
                   },
@@ -3617,7 +3804,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "route_safety"
+                          "evacuation_capacity"
                         ],
                         "coefficient": 1
                       },
@@ -3632,13 +3819,13 @@
               ]
             },
             {
-              "id": "page_sw03_decision_opt_households-first_r_revision",
+              "id": "page_sw03_decision_opt_salt-road-first_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Sayo refuses party escorts but accepts ordinary supplies. Ren records the smaller role, and the household route remains under local control."
+                "value": "Sayo rejects a single coalition timetable, then accepts a narrower promise of supplies. Her refusal changes the plan without changing the chosen Salt Road priority."
               },
-              "consequence_id": "page_sw03_revision",
+              "consequence_id": "page_sw03_accord",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -3662,7 +3849,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "p_party_respects_limits"
+                          "network_consent"
                         ],
                         "coefficient": 1
                       }
@@ -3678,7 +3865,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "care_capacity"
+                      "act3_salt_priority"
                     ],
                     "coefficient": 1
                   },
@@ -3691,7 +3878,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "care_capacity"
+                          "act3_salt_priority"
                         ],
                         "coefficient": 1
                       },
@@ -3699,6 +3886,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
                       }
                     ]
                   }
@@ -3734,38 +3953,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "p_party_respects_limits"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "p_party_respects_limits"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.05
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -3776,23 +3963,23 @@
           ]
         },
         {
-          "id": "page_sw03_decision_opt_testimony-first",
+          "id": "page_sw03_decision_opt_ash-road-first",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Move an independent testimony copy before households."
+            "value": "Back Kagura's Ash Road: break the collar furnaces before the Oni muster."
           },
           "visibility_script": true,
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw03_decision_opt_testimony-first_r_accord",
+              "id": "page_sw03_decision_opt_ash-road-first_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Because the copy can stand without its source names, Sayo permits one boat packet to leave. No household schedule is attached to it."
+                "value": "The coalition assigns saboteurs to the ash fields and rescue crews to the locks. Destroying production, not conscripted bodies, becomes the first military objective."
               },
-              "consequence_id": "page_sw03_accord",
+              "consequence_id": "page_sw03_revision",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -3807,7 +3994,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "proof_integrity"
+                      "court_pressure"
                     ],
                     "coefficient": 1
                   }
@@ -3821,7 +4008,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "proof_integrity"
+                      "act3_ash_priority"
                     ],
                     "coefficient": 1
                   },
@@ -3834,7 +4021,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "proof_integrity"
+                          "act3_ash_priority"
                         ],
                         "coefficient": 1
                       },
@@ -3853,7 +4040,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "public_reach"
+                      "ash_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -3866,7 +4053,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "public_reach"
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -3885,7 +4072,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "route_safety"
+                      "oni_supply_disruption"
                     ],
                     "coefficient": 1
                   },
@@ -3898,7 +4085,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "route_safety"
+                          "oni_supply_disruption"
                         ],
                         "coefficient": 1
                       },
@@ -3913,11 +4100,11 @@
               ]
             },
             {
-              "id": "page_sw03_decision_opt_testimony-first_r_revision",
+              "id": "page_sw03_decision_opt_ash-road-first_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The packet would expose the household route by timing alone. Sayo keeps it, and Aya records that publication has been delayed for safety."
+                "value": "Kagura cannot promise a clean strike, but the table accepts her warning and funds prisoner routes beside sabotage. The Ash Road remains first without pretending its cost is solved."
               },
               "consequence_id": "page_sw03_revision",
               "desirability_script": {
@@ -3943,7 +4130,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "proof_integrity"
+                          "court_pressure"
                         ],
                         "coefficient": 1
                       }
@@ -3952,6 +4139,70 @@
                 ]
               },
               "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "act3_ash_priority"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "act3_ash_priority"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
                 {
                   "effect_type": "Bounded Number Effect",
                   "Set": {
@@ -3980,70 +4231,6 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "network_consent"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "network_consent"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.1
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "court_pressure"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "court_pressure"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.05
                       }
                     ]
                   }
@@ -4057,23 +4244,23 @@
           ]
         },
         {
-          "id": "page_sw03_decision_opt_split-schedule",
+          "id": "page_sw03_decision_opt_paper-road-first",
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Keep the routes separate and let Sayo schedule both."
+            "value": "Back Kozui's Paper Road: publish the transfer case before taking the palace."
           },
           "visibility_script": true,
           "performability_script": true,
           "reactions": [
             {
-              "id": "page_sw03_decision_opt_split-schedule_r_accord",
+              "id": "page_sw03_decision_opt_paper-road-first_r_accord",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Sayo publishes bounded handoff windows to the people doing the carrying. The party supports both routes without merging their custody."
+                "value": "Aya divides the blocks among independent printers while Kozui delegates prepare provisional offices. The first victory sought is a country able to receive surrendered seals."
               },
-              "consequence_id": "page_sw03_accord",
+              "consequence_id": "page_sw03_negotiated",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -4088,7 +4275,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "network_consent"
+                      "proof_integrity"
                     ],
                     "coefficient": 1
                   }
@@ -4102,7 +4289,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "route_safety"
+                      "act3_paper_priority"
                     ],
                     "coefficient": 1
                   },
@@ -4115,7 +4302,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "route_safety"
+                          "act3_paper_priority"
                         ],
                         "coefficient": 1
                       },
@@ -4134,7 +4321,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "network_consent"
+                      "paper_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -4147,7 +4334,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "network_consent"
+                          "paper_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -4166,7 +4353,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "party_cohesion"
+                      "succession_readiness"
                     ],
                     "coefficient": 1
                   },
@@ -4179,7 +4366,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "party_cohesion"
+                          "succession_readiness"
                         ],
                         "coefficient": 1
                       },
@@ -4194,13 +4381,13 @@
               ]
             },
             {
-              "id": "page_sw03_decision_opt_split-schedule_r_revision",
+              "id": "page_sw03_decision_opt_paper-road-first_r_revision",
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Too few carriers make two routes impossible. Sayo chooses people first, and the evidence delay remains visible rather than blamed on the households."
+                "value": "Several delegates refuse a manifesto written by the party. Aya accepts their revisions, and the Paper Road begins as a distributed argument rather than a foreign proclamation."
               },
-              "consequence_id": "page_sw03_revision",
+              "consequence_id": "page_sw03_negotiated",
               "desirability_script": {
                 "operator_type": "Addition",
                 "script_element_type": "Operator",
@@ -4224,7 +4411,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "network_consent"
+                          "proof_integrity"
                         ],
                         "coefficient": 1
                       }
@@ -4240,7 +4427,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "care_capacity"
+                      "act3_paper_priority"
                     ],
                     "coefficient": 1
                   },
@@ -4253,7 +4440,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "care_capacity"
+                          "act3_paper_priority"
                         ],
                         "coefficient": 1
                       },
@@ -4272,7 +4459,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "witness_safety"
+                      "paper_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -4285,14 +4472,14 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "witness_safety"
+                          "paper_commitment"
                         ],
                         "coefficient": 1
                       },
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 0.1
+                        "value": 0.05
                       }
                     ]
                   }
@@ -4324,7 +4511,7 @@
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": -0.05
+                        "value": 0.1
                       }
                     ]
                   }
@@ -4341,16 +4528,16 @@
     },
     {
       "id": "page_sw03_accord",
-      "title": "Two Routes, Two Custodians",
+      "title": "Salt Before Steel",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "The warehouse doors open on separate signals. Sayo names who owns each schedule and where the party must stop. Nikola supplies patrol observations through Aya, then bristles when Sayo refuses his offer to command an escort; Mateus remains outside the planning circle. Nikola obeys. The resulting plan is slower than a single heroic convoy and far harder for one capture to destroy."
+        "value": "Sayo lays separate blue cords for households, testimony, and the armed escort. Nikola offers to command the boats; she tells him his useful place is reading patrol formations and obeying local stop signals. He does. Mateus recognizes a blood-census mark and gives it to Aya without entering the custody circle. Sodegaura will receive the first coalition resources, making evacuation and independent evidence routes stronger when the palace closes the coast."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Confirm which authority can halt the movement."
+        "value": "Set the Salt Road condition that no commander may overrule."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -4370,7 +4557,7 @@
       "graph_position_x": 1100,
       "graph_position_y": -220,
       "connected_spools": [
-        "spool_act1"
+        "spool_act3"
       ],
       "options": [
         {
@@ -4378,7 +4565,7 @@
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Confirm which authority can halt the movement."
+            "value": "Set the Salt Road condition that no commander may overrule."
           },
           "visibility_script": true,
           "performability_script": true,
@@ -4388,7 +4575,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Sayo gives each route lead an independent stop signal. The party accepts that either signal can interrupt its preferred timing without further permission."
+                "value": "Every boat lead retains an immediate stop signal, even if delay costs the coalition its preferred operation. Ren writes the rule onto the military route card."
               },
               "consequence_id": "page_sw04_decision",
               "desirability_script": {
@@ -4412,6 +4599,70 @@
                 ]
               },
               "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
                 {
                   "effect_type": "Bounded Number Effect",
                   "Set": {
@@ -4443,70 +4694,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "witness_safety"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "witness_safety"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.05
-                      }
-                    ]
-                  }
-                },
-                {
-                  "effect_type": "Bounded Number Effect",
-                  "Set": {
-                    "pointer_type": "Bounded Number Pointer",
-                    "script_element_type": "Pointer",
-                    "character": "char_lantern_network",
-                    "keyring": [
-                      "route_safety"
-                    ],
-                    "coefficient": 1
-                  },
-                  "to": {
-                    "operator_type": "Nudge",
-                    "script_element_type": "Operator",
-                    "operands": [
-                      {
-                        "pointer_type": "Bounded Number Pointer",
-                        "script_element_type": "Pointer",
-                        "character": "char_lantern_network",
-                        "keyring": [
-                          "route_safety"
-                        ],
-                        "coefficient": 1
-                      },
-                      {
-                        "pointer_type": "Bounded Number Constant",
-                        "script_element_type": "Pointer",
-                        "value": 0.05
-                      }
-                    ]
-                  }
                 }
               ]
             },
@@ -4515,7 +4702,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The party initially asks for a shared signal, concentrating authority again. Sayo divides it, and Ren repeats the corrected rule to every escort."
+                "value": "Nikola asks for an emergency exception and withdraws it when Sayo names who would bear the risk. The corrected order leaves cancellation local and visible."
               },
               "consequence_id": "page_sw04_decision",
               "desirability_script": {
@@ -4557,7 +4744,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "ren_noncoercion"
+                      "salt_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -4570,7 +4757,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "ren_noncoercion"
+                          "salt_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -4589,7 +4776,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "truth_completeness"
+                      "lise_oath_revision"
                     ],
                     "coefficient": 1
                   },
@@ -4602,7 +4789,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "truth_completeness"
+                          "lise_oath_revision"
                         ],
                         "coefficient": 1
                       },
@@ -4621,7 +4808,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "p_party_respects_limits"
+                      "witness_safety"
                     ],
                     "coefficient": 1
                   },
@@ -4634,7 +4821,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "p_party_respects_limits"
+                          "witness_safety"
                         ],
                         "coefficient": 1
                       },
@@ -4658,16 +4845,16 @@
     },
     {
       "id": "page_sw03_revision",
-      "title": "Capacity Chooses the Order",
+      "title": "Ash Before the Muster",
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "There are not enough trusted carriers for every plan. Sayo chooses the household movement and keeps the testimony copy under separate custody. Aya marks the publication delay and its reason. The scene ends without pretending scarcity has vanished, but also without turning local refusal into an obstacle for the heroes to overcome."
+        "value": "Kagura marks furnaces, prison locks, and the paths by which bound Oni are fed into Kurozane's garrisons. Ren refuses a plan that counts every collared soldier as a target. Rescue lanes and sabotage therefore share the same clock, slowing the strike but denying the court both weapons and fresh servants. The Ash Road receives the first coalition resources, and Kurozane's counterstroke will come through requisition towns and bell wardens rather than the coast."
       },
       "prompt_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Name the cost without assigning blame."
+        "value": "State what destruction must spare."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -4675,7 +4862,7 @@
         "script_element_type": "Pointer",
         "character": "char_lantern_network",
         "keyring": [
-          "truth_completeness"
+          "witness_safety"
         ],
         "coefficient": 1
       },
@@ -4687,7 +4874,7 @@
       "graph_position_x": 1100,
       "graph_position_y": 220,
       "connected_spools": [
-        "spool_act1"
+        "spool_act3"
       ],
       "options": [
         {
@@ -4695,7 +4882,7 @@
           "text_script": {
             "pointer_type": "String Constant",
             "script_element_type": "Pointer",
-            "value": "Name the cost without assigning blame."
+            "value": "State what destruction must spare."
           },
           "visibility_script": true,
           "performability_script": true,
@@ -4705,7 +4892,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "Aya records the lost publication window, the preserved household route, and the exact capacity limit. The tradeoff remains legible to later readers."
+                "value": "The order protects prison locks, name slips, water routes, and every worker who can be separated from a collar. Only production nodes receive demolition marks."
               },
               "consequence_id": "page_sw04_decision",
               "desirability_script": {
@@ -4722,7 +4909,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "truth_completeness"
+                      "witness_safety"
                     ],
                     "coefficient": 1
                   }
@@ -4736,7 +4923,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "truth_completeness"
+                      "ash_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -4749,7 +4936,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "truth_completeness"
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -4768,7 +4955,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "aya_archive_openness"
+                      "oni_supply_disruption"
                     ],
                     "coefficient": 1
                   },
@@ -4781,7 +4968,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "aya_archive_openness"
+                          "oni_supply_disruption"
                         ],
                         "coefficient": 1
                       },
@@ -4832,7 +5019,7 @@
               "text_script": {
                 "pointer_type": "String Constant",
                 "script_element_type": "Pointer",
-                "value": "The first record praises sacrifice and hides the burden. Kiku replaces it with numbers, names no victims, and keeps the missing capacity visible."
+                "value": "A broad furnace symbol would also burn the prisoner passage. Ren splits the target, accepting a harder attack that preserves the release route."
               },
               "consequence_id": "page_sw04_decision",
               "desirability_script": {
@@ -4858,7 +5045,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "truth_completeness"
+                          "witness_safety"
                         ],
                         "coefficient": 1
                       }
@@ -4874,7 +5061,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "care_capacity"
+                      "ash_commitment"
                     ],
                     "coefficient": 1
                   },
@@ -4887,7 +5074,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "care_capacity"
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -4906,7 +5093,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "proof_integrity"
+                      "party_cohesion"
                     ],
                     "coefficient": 1
                   },
@@ -4919,7 +5106,7 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "proof_integrity"
+                          "party_cohesion"
                         ],
                         "coefficient": 1
                       },
@@ -4938,7 +5125,7 @@
                     "script_element_type": "Pointer",
                     "character": "char_lantern_network",
                     "keyring": [
-                      "public_reach"
+                      "ren_noncoercion"
                     ],
                     "coefficient": 1
                   },
@@ -4951,14 +5138,14 @@
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "public_reach"
+                          "ren_noncoercion"
                         ],
                         "coefficient": 1
                       },
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": -0.05
+                        "value": 0.05
                       }
                     ]
                   }
@@ -4969,6 +5156,323 @@
           "benchmark_tags": [
             "slot:sw3-sayos-warehouse-conditions",
             "outcome:revision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page_sw03_negotiated",
+      "title": "Paper Before the Throne",
+      "text_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Kozui's printers reject a proclamation authored by victorious foreigners and rebuild it as questions every district must answer: who holds grain, who may order a garrison, how a blood command is proved ended, and who can remove a provisional keeper. Aya distributes blocks that disagree in wording but share an inventory. The Paper Road receives the first coalition resources, preparing institutions that can accept Kurozane's seals without simply handing them to his killer."
+      },
+      "prompt_script": {
+        "pointer_type": "String Constant",
+        "script_element_type": "Pointer",
+        "value": "Name the authority the printed plan cannot create by itself."
+      },
+      "acceptability_script": true,
+      "desirability_script": {
+        "pointer_type": "Bounded Number Pointer",
+        "script_element_type": "Pointer",
+        "character": "char_lantern_network",
+        "keyring": [
+          "succession_readiness"
+        ],
+        "coefficient": 1
+      },
+      "earliest_turn": 5,
+      "latest_turn": 5,
+      "creation_index": 9,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000,
+      "graph_position_x": 1100,
+      "graph_position_y": 0,
+      "connected_spools": [
+        "spool_act3"
+      ],
+      "options": [
+        {
+          "id": "page_sw03_negotiated_opt_carry",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Name the authority the printed plan cannot create by itself."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw03_negotiated_opt_carry_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "The blocks can publish procedures and evidence, but only participating towns and offices can confer provisional authority. Aya prints that limit beside every proposed transfer."
+              },
+              "consequence_id": "page_sw04_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "aya_archive_openness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "aya_archive_openness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw03_negotiated_opt_carry_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Nikola asks whether his covenant can guarantee the transfer. The printers answer that it can restrain a vampire, not appoint a government, and he accepts the distinction."
+              },
+              "consequence_id": "page_sw04_decision",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.01
+                  },
+                  {
+                    "operator_type": "Subtraction",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw3-sayos-warehouse-conditions",
+            "outcome:negotiated"
           ]
         }
       ]
@@ -4993,13 +5497,13 @@
       },
       "earliest_turn": 6,
       "latest_turn": 6,
-      "creation_index": 9,
+      "creation_index": 10,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1320,
       "graph_position_y": 0,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -5133,6 +5637,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
                       }
                     ]
                   }
@@ -5271,6 +5807,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
                       }
                     ]
                   }
@@ -5417,6 +5985,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -5545,6 +6145,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "public_reach"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -5698,6 +6330,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -5836,6 +6500,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -5872,13 +6568,13 @@
       },
       "earliest_turn": 7,
       "latest_turn": 7,
-      "creation_index": 10,
+      "creation_index": 11,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1540,
       "graph_position_y": -220,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -6005,6 +6701,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
                         ],
                         "coefficient": 1
                       },
@@ -6153,6 +6881,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -6189,13 +6949,13 @@
       },
       "earliest_turn": 7,
       "latest_turn": 7,
-      "creation_index": 11,
+      "creation_index": 12,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1540,
       "graph_position_y": 220,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -6322,6 +7082,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
                         ],
                         "coefficient": 1
                       },
@@ -6470,6 +7262,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -6501,13 +7325,13 @@
       },
       "earliest_turn": 8,
       "latest_turn": 8,
-      "creation_index": 12,
+      "creation_index": 13,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1760,
       "graph_position_y": 0,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -6634,6 +7458,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -6782,6 +7638,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -6925,6 +7813,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -7053,6 +7973,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -7206,6 +8158,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -7344,6 +8328,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -7380,13 +8396,13 @@
       },
       "earliest_turn": 9,
       "latest_turn": 9,
-      "creation_index": 13,
+      "creation_index": 14,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1980,
       "graph_position_y": -220,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -7513,6 +8529,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "route_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "oni_supply_disruption"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "oni_supply_disruption"
                         ],
                         "coefficient": 1
                       },
@@ -7661,6 +8709,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "oni_supply_disruption"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "oni_supply_disruption"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -7697,13 +8777,13 @@
       },
       "earliest_turn": 9,
       "latest_turn": 9,
-      "creation_index": 14,
+      "creation_index": 15,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 1980,
       "graph_position_y": 220,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -7830,6 +8910,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "p_mateus_truthfulness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "oni_supply_disruption"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "oni_supply_disruption"
                         ],
                         "coefficient": 1
                       },
@@ -7978,6 +9090,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "oni_supply_disruption"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "oni_supply_disruption"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -8009,13 +9153,13 @@
       },
       "earliest_turn": 10,
       "latest_turn": 10,
-      "creation_index": 15,
+      "creation_index": 16,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2200,
       "graph_position_y": 0,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -8149,6 +9293,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
                       }
                     ]
                   }
@@ -8290,6 +9466,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -8423,6 +9631,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "proof_integrity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -8571,6 +9811,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -8704,6 +9976,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "mateus_accountability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -8852,6 +10156,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "paper_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "paper_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -8888,13 +10224,13 @@
       },
       "earliest_turn": 11,
       "latest_turn": 11,
-      "creation_index": 16,
+      "creation_index": 17,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2420,
       "graph_position_y": -220,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -9021,6 +10357,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "witness_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
                         ],
                         "coefficient": 1
                       },
@@ -9169,6 +10537,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -9205,13 +10605,13 @@
       },
       "earliest_turn": 11,
       "latest_turn": 11,
-      "creation_index": 17,
+      "creation_index": 18,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2420,
       "graph_position_y": 220,
       "connected_spools": [
-        "spool_act2"
+        "spool_act3"
       ],
       "options": [
         {
@@ -9338,6 +10738,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "public_reach"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
                         ],
                         "coefficient": 1
                       },
@@ -9486,6 +10918,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -9517,7 +10981,7 @@
       },
       "earliest_turn": 12,
       "latest_turn": 12,
-      "creation_index": 18,
+      "creation_index": 19,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2640,
@@ -9660,6 +11124,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -9788,6 +11284,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "genta_accountability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -9941,6 +11469,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -10079,6 +11639,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -10212,6 +11804,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "route_safety"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -10360,6 +11984,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ash_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "ash_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -10396,7 +12052,7 @@
       },
       "earliest_turn": 13,
       "latest_turn": 13,
-      "creation_index": 19,
+      "creation_index": 20,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2860,
@@ -10529,6 +12185,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "party_cohesion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
                         ],
                         "coefficient": 1
                       },
@@ -10677,6 +12365,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -10713,7 +12433,7 @@
       },
       "earliest_turn": 13,
       "latest_turn": 13,
-      "creation_index": 20,
+      "creation_index": 21,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 2860,
@@ -10846,6 +12566,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "ren_noncoercion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
                         ],
                         "coefficient": 1
                       },
@@ -10994,6 +12746,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -11025,13 +12809,13 @@
       },
       "earliest_turn": 14,
       "latest_turn": 14,
-      "creation_index": 21,
+      "creation_index": 22,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3080,
       "graph_position_y": 0,
       "connected_spools": [
-        "spool_act3"
+        "spool_act4"
       ],
       "options": [
         {
@@ -11168,6 +12952,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -11296,6 +13112,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "p_party_respects_limits"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
                         ],
                         "coefficient": 1
                       },
@@ -11449,6 +13297,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -11577,6 +13457,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "ren_noncoercion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
                         ],
                         "coefficient": 1
                       },
@@ -11730,6 +13642,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -11868,6 +13812,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "evacuation_capacity"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "evacuation_capacity"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -11904,13 +13880,13 @@
       },
       "earliest_turn": 15,
       "latest_turn": 15,
-      "creation_index": 22,
+      "creation_index": 23,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3300,
       "graph_position_y": -220,
       "connected_spools": [
-        "spool_act3"
+        "spool_act4"
       ],
       "options": [
         {
@@ -12037,6 +14013,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "p_party_respects_limits"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -12185,6 +14193,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -12221,13 +14261,13 @@
       },
       "earliest_turn": 15,
       "latest_turn": 15,
-      "creation_index": 23,
+      "creation_index": 24,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3300,
       "graph_position_y": 220,
       "connected_spools": [
-        "spool_act3"
+        "spool_act4"
       ],
       "options": [
         {
@@ -12354,6 +14394,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "network_consent"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
                         ],
                         "coefficient": 1
                       },
@@ -12502,6 +14574,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "salt_commitment"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "salt_commitment"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -12533,7 +14637,7 @@
       },
       "earliest_turn": 16,
       "latest_turn": 16,
-      "creation_index": 24,
+      "creation_index": 25,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3520,
@@ -13412,7 +15516,7 @@
       },
       "earliest_turn": 17,
       "latest_turn": 17,
-      "creation_index": 25,
+      "creation_index": 26,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3740,
@@ -13729,7 +15833,7 @@
       },
       "earliest_turn": 17,
       "latest_turn": 17,
-      "creation_index": 26,
+      "creation_index": 27,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3740,
@@ -14046,7 +16150,7 @@
       },
       "earliest_turn": 17,
       "latest_turn": 17,
-      "creation_index": 27,
+      "creation_index": 28,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3740,
@@ -14358,13 +16462,13 @@
       },
       "earliest_turn": 18,
       "latest_turn": 18,
-      "creation_index": 28,
+      "creation_index": 29,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 3960,
       "graph_position_y": 0,
       "connected_spools": [
-        "spool_act3"
+        "spool_act5"
       ],
       "options": [
         {
@@ -15237,13 +17341,13 @@
       },
       "earliest_turn": 19,
       "latest_turn": 19,
-      "creation_index": 29,
+      "creation_index": 30,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 4180,
       "graph_position_y": -220,
       "connected_spools": [
-        "spool_act3"
+        "spool_act5"
       ],
       "options": [
         {
@@ -15554,13 +17658,13 @@
       },
       "earliest_turn": 19,
       "latest_turn": 19,
-      "creation_index": 30,
+      "creation_index": 31,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 4180,
       "graph_position_y": 220,
       "connected_spools": [
-        "spool_act3"
+        "spool_act5"
       ],
       "options": [
         {
@@ -15866,7 +17970,7 @@
       },
       "earliest_turn": 20,
       "latest_turn": 20,
-      "creation_index": 31,
+      "creation_index": 32,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 4400,
@@ -16745,7 +18849,7 @@
       },
       "earliest_turn": 21,
       "latest_turn": 21,
-      "creation_index": 32,
+      "creation_index": 33,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 4620,
@@ -16780,7 +18884,7 @@
       },
       "earliest_turn": 21,
       "latest_turn": 21,
-      "creation_index": 33,
+      "creation_index": 34,
       "creation_time": 1784577000,
       "modified_time": 1784577000,
       "graph_position_x": 4620,
@@ -16792,9 +18896,9 @@
     }
   ],
   "meta": {
-    "source_version": 2,
+    "source_version": 3,
     "canonical_scene_count": 60,
-    "storyworld_authored_scene_count": 34,
+    "storyworld_authored_scene_count": 35,
     "complete_run_storyworld_scene_count": 22,
     "complete_run_total_scene_count": 82,
     "reaction_tie_break": "later-authored-wins"

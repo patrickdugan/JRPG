@@ -14,9 +14,9 @@
     <main id="mainContent" class="camp-shell" tabindex="-1">
       <header class="camp-masthead">
         <div>
-          <p class="eyebrow">LANTERN CAMP · PARTY PREPARATION</p>
-          <h1>Camp &amp; Loadout</h1>
-          <p id="campSubtitle" class="subtitle">Rest, equip the party, and bind Vows before returning to the route. Reading controls: <kbd>N</kbd> next line · <kbd>1</kbd>/<kbd>2</kbd> choose.</p>
+          <p class="eyebrow">LANTERN CAMP</p>
+          <h1>Camp</h1>
+          <p id="campSubtitle" class="subtitle">Recover, prepare the party, or share the lantern before returning to the route.</p>
         </div>
         <div class="masthead-actions">
           <div class="audio-controls" role="group" aria-label="Sound controls">
@@ -24,13 +24,20 @@
             <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
             <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
           </div>
-          <span id="campPlaytime" class="playtime">00:00:00 active play</span>
+          <span id="campPlaytime" class="playtime" data-developer-only hidden>00:00:00 active play</span>
           <a class="return-link" href="campaign.html">← Return to Campaign</a>
         </div>
       </header>
 
-      <section class="camp-layout" aria-label="Camp menu">
-        <aside class="party-rail panel">
+      <nav id="campTabs" class="camp-tabs" aria-label="Camp sections">
+        <button type="button" data-camp-tab="party" aria-pressed="true">Party <small>Condition &amp; rest</small></button>
+        <button type="button" data-camp-tab="loadout" aria-pressed="false">Loadout <small>Equipment &amp; Vows</small></button>
+        <button type="button" data-camp-tab="supplies" aria-pressed="false">Supplies <small>Inventory &amp; trade</small></button>
+        <button type="button" data-camp-tab="stories" aria-pressed="false">Stories <small>Talks &amp; archive</small></button>
+      </nav>
+
+      <section class="camp-layout" aria-label="Camp menu" data-active-camp-tab="party">
+        <aside class="party-rail panel" data-camp-panels="party loadout supplies stories">
           <header class="panel-heading">
             <div><p class="eyebrow">Formation</p><h2>Party</h2></div>
             <span id="partyCurrency">0 mon</span>
@@ -44,7 +51,7 @@
           </section>
         </aside>
 
-        <section class="character-stage panel">
+        <section class="character-stage panel" data-camp-panels="party loadout">
           <header class="character-heading">
             <div class="portrait-token" id="portraitToken" aria-hidden="true"><span></span></div>
             <div>
@@ -57,19 +64,19 @@
 
           <div id="memberStats" class="stat-grid" aria-label="Derived character statistics"></div>
 
-          <section class="equipment-section">
+          <section class="equipment-section" data-loadout-only>
             <div class="section-heading"><div><p class="eyebrow">Equipment</p><h3>Loadout</h3></div><span id="equipmentSummary"></span></div>
             <div id="equipmentSlots" class="equipment-slots"></div>
           </section>
 
-          <section class="vow-section">
+          <section class="vow-section" data-loadout-only>
             <div class="section-heading"><div><p class="eyebrow">Character build</p><h3>Bound Vows</h3></div><span id="vowSlotSummary"></span></div>
             <div id="equippedVows" class="equipped-vows"></div>
             <div id="vowCatalogue" class="vow-catalogue"></div>
           </section>
         </section>
 
-        <aside class="inventory-rail panel">
+        <aside class="inventory-rail panel" data-camp-panels="supplies">
           <header class="panel-heading">
             <div><p class="eyebrow">Shared stores</p><h2>Inventory</h2></div>
             <span id="inventoryCount">0 items</span>
@@ -82,7 +89,7 @@
           <div id="inventoryList" class="inventory-list"></div>
         </aside>
 
-        <section class="camp-conversation-panel panel" aria-label="Finite companion conversations">
+        <section class="camp-conversation-panel panel" aria-label="Companion conversations" data-camp-panels="stories">
           <header class="panel-heading">
             <div><p class="eyebrow">Lantern voices</p><h2>Companion Conversations</h2></div>
             <span id="campConversationSummary">0 / 90 complete</span>
@@ -100,7 +107,7 @@
           </div>
         </section>
 
-        <section class="party-council-panel panel" aria-label="Finite multi-character party councils">
+        <section class="party-council-panel panel" aria-label="Multi-character party councils" data-camp-panels="stories">
           <header class="panel-heading">
             <div><p class="eyebrow">Shared lantern</p><h2>Party Councils</h2></div>
             <span id="partyCouncilSummary">0 / 30 complete</span>
@@ -118,7 +125,7 @@
           </div>
         </section>
 
-        <section class="archive-record-panel panel" aria-label="Finite public archive readings">
+        <section class="archive-record-panel panel" aria-label="Public archive readings" data-camp-panels="stories">
           <header class="panel-heading">
             <div><p class="eyebrow">Public leaves</p><h2>Archive Reading Table</h2></div>
             <span id="archiveRecordSummary">0 / 60 read</span>
@@ -135,15 +142,14 @@
           </div>
         </section>
 
-        <section class="shop-panel panel">
+        <section class="shop-panel panel" data-camp-panels="supplies">
           <header class="panel-heading">
             <div><p class="eyebrow">Route quartermaster</p><h2>Trade &amp; Upgrade</h2></div>
-            <span>Prices are explicit</span>
           </header>
           <div id="shopList" class="shop-list"></div>
         </section>
 
-        <section class="camp-log-panel panel">
+        <section class="camp-log-panel panel" data-camp-panels="party loadout supplies stories">
           <header class="panel-heading">
             <div><p class="eyebrow">Camp record</p><h2>Latest action</h2></div>
           </header>

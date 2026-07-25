@@ -14,6 +14,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { min-width: 320px; min-height: 100vh; margin: 0; color: var(--paper); background: radial-gradient(circle at 48% -12%, #453a36 0, #171a2d 34%, #070912 76%); font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
 button, select, a { font: inherit; }
 kbd { padding: 1px 4px; border: 1px solid #596783; border-radius: 3px; color: #f4dd94; background: #11172a; font: inherit; }
@@ -29,7 +30,17 @@ h2, h3 { color: #fff0d1; }
 .return-link, .playtime { padding: 9px 12px; border: 1px solid #806a3c; border-radius: 4px; font-size: 0.69rem; }
 .return-link { color: #ffe7a3; background: #382817; text-decoration: none; }
 .playtime { border-color: var(--line); color: var(--aqua); background: #11172a; }
-.camp-layout { display: grid; grid-template-columns: minmax(190px, 0.7fr) minmax(480px, 1.8fr) minmax(240px, 0.9fr); gap: 13px; align-items: start; }
+.camp-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 13px; }
+.camp-tabs button { display: grid; gap: 3px; min-height: 55px; padding: 9px 12px; border: 1px solid #3c4864; color: var(--muted); background: rgba(12, 16, 31, .82); cursor: pointer; text-align: left; }
+.camp-tabs button[aria-pressed="true"] { border-color: var(--gold); color: #fff0bd; background: rgba(128, 106, 60, .2); }
+.camp-tabs small { color: #909bb3; font-size: .55rem; }
+.camp-layout { display: grid; grid-template-columns: minmax(190px, 0.7fr) minmax(360px, 1.2fr) minmax(360px, 1.2fr); gap: 13px; align-items: start; }
+.camp-layout[data-active-camp-tab="party"] .character-stage,
+.camp-layout[data-active-camp-tab="loadout"] .character-stage { grid-column: 2 / -1; }
+.camp-layout[data-active-camp-tab="supplies"] .inventory-rail { grid-column: 2; }
+.camp-layout[data-active-camp-tab="stories"] .camp-conversation-panel,
+.camp-layout[data-active-camp-tab="stories"] .party-council-panel,
+.camp-layout[data-active-camp-tab="stories"] .archive-record-panel { grid-column: 2 / -1; }
 .panel { border: 1px solid var(--line); background: linear-gradient(150deg, rgba(30, 38, 65, 0.95), rgba(10, 13, 26, 0.97)); box-shadow: 0 18px 48px rgba(0,0,0,.28); }
 .party-rail, .inventory-rail, .shop-panel, .camp-log-panel, .camp-conversation-panel, .party-council-panel, .archive-record-panel { padding: 13px; }
 .character-stage { min-width: 0; padding: 16px; }
@@ -65,8 +76,10 @@ h2, h3 { color: #fff0d1; }
 .equipment-section, .vow-section { margin-top: 15px; padding-top: 13px; border-top: 1px solid #36415e; }
 .equipment-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
 .equipment-slot, .vow-card, .inventory-entry, .shop-entry { display: grid; gap: 5px; padding: 9px; border: 1px solid #3c4864; background: rgba(8,11,23,.62); }
+.mechanic-summary { margin: 0; color: var(--aqua) !important; font-size: .58rem !important; line-height: 1.5; }
+.stat-preview { margin: 0; color: #f0deae; font-size: .57rem; line-height: 1.5; }
 .inventory-entry.has-item-icon, .shop-entry.has-item-icon { grid-template-columns: 36px minmax(0, 1fr); align-items: start; }
-.has-item-icon > small, .has-item-icon > strong, .has-item-icon > span:not(.item-icon) { grid-column: 2; }
+.has-item-icon > small, .has-item-icon > strong, .has-item-icon > span:not(.item-icon), .has-item-icon > .mechanic-summary { grid-column: 2; }
 .item-icon { grid-column: 1; grid-row: 1 / span 3; width: 32px; height: 32px; image-rendering: pixelated; background-repeat: no-repeat; border: 1px solid #4a5877; box-shadow: inset 0 0 0 1px #111827; }
 .item-icon-fallback { background: repeating-linear-gradient(135deg, #263044 0 4px, #344058 4px 8px); }
 .has-item-icon > .inventory-entry-actions, .has-item-icon > .shop-entry-actions { grid-column: 1 / -1; }
@@ -169,6 +182,8 @@ h2, h3 { color: #fff0d1; }
   .camp-masthead { align-items: start; flex-direction: column; }
   .masthead-actions { justify-content: start; }
   .camp-layout { grid-template-columns: 1fr; }
+  .camp-tabs { grid-template-columns: repeat(2, 1fr); }
+  .camp-layout[data-active-camp-tab] > * { grid-column: auto !important; }
   .inventory-rail, .shop-panel, .camp-log-panel, .camp-conversation-panel, .party-council-panel, .archive-record-panel { grid-column: auto; }
   .stat-grid { grid-template-columns: repeat(3,1fr); }
   .equipment-slots, .equipped-vows, .vow-catalogue { grid-template-columns: 1fr; }

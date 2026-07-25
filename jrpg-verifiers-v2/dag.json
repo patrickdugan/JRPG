@@ -1,0 +1,426 @@
+{
+  "$schema": "./schemas/dag.schema.json",
+  "schemaVersion": 2,
+  "kind": "jrpg-template-extrapolation-dag",
+  "id": "holleman-jrpg-plan-v2",
+  "title": "JRPG project-plan extrapolation DAG",
+  "source": {
+    "path": "../JRPG Project Plan Template.md",
+    "author": "Patrick Holleman",
+    "use": "Template headings and production dependencies are transformed into verifiable deliverable contracts; the source text remains authoritative."
+  },
+  "nodes": [
+    {
+      "id": "source.template",
+      "label": "Project-plan template",
+      "kind": "source",
+      "templateAnchor": "JRPG PROJECT PLAN TEMPLATE",
+      "dependsOn": [],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 3000 },
+      "extrapolation": { "objective": "Retain the original template as the root authority.", "output": "JRPG Project Plan Template.md", "sections": [] }
+    },
+    {
+      "id": "design.vision",
+      "label": "Vision document",
+      "kind": "document",
+      "templateAnchor": "Vision Doc",
+      "dependsOn": ["source.template"],
+      "required": true,
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 900,
+        "requiredTermGroups": [["genre"], ["hook"], ["tone"], ["battle"], ["character"], ["location"], ["plot"]]
+      },
+      "extrapolation": {
+        "objective": "Define the stable 80% vision that constrains every downstream decision.",
+        "output": "docs/01-vision-doc.md",
+        "sections": ["Genre, hook, and tone", "Battle-system basics", "Characters", "Locations", "Highest-level plot beats", "Scope and exclusions"]
+      }
+    },
+    {
+      "id": "design.technical-gdd",
+      "label": "Technical GDD",
+      "kind": "document",
+      "templateAnchor": "Technical GDD",
+      "dependsOn": ["design.vision"],
+      "required": true,
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 1200,
+        "requiredTermGroups": [["combat", "battle"], ["exploration", "field"], ["save", "persistence"], ["data"], ["ui", "interface"]]
+      },
+      "extrapolation": {
+        "objective": "Specify mechanics and data contracts precisely enough for implementation.",
+        "output": "docs/02-technical-gdd.md",
+        "sections": ["Runtime loop", "Combat rules", "Field interaction", "Progression", "Data and saves", "Failure behavior", "Accessibility"]
+      }
+    },
+    {
+      "id": "narrative.beats",
+      "label": "Beats outline",
+      "kind": "document",
+      "templateAnchor": "Beats Outline",
+      "dependsOn": ["design.vision"],
+      "required": true,
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 700,
+        "requiredTermGroups": [["chapter"], ["quest", "objective"], ["boss", "encounter"], ["location", "map"]]
+      },
+      "extrapolation": {
+        "objective": "Give every chapter a quest, route, cast movement, and boss outcome.",
+        "output": "docs/03-beats-outline.md",
+        "sections": ["Chapter quest", "Locations", "Characters", "Boss", "Exit state"]
+      }
+    },
+    {
+      "id": "narrative.detailed-outline",
+      "label": "Detailed outline",
+      "kind": "document",
+      "templateAnchor": "Detailed Outline",
+      "dependsOn": ["narrative.beats"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 1200, "requiredTermGroups": [["scene"], ["theme", "thematic", "narrative target"], ["chapter"]] },
+      "extrapolation": {
+        "objective": "Order roughly 80% of scenes and expose their thematic and production consequences.",
+        "output": "docs/04-detailed-outline.md",
+        "sections": ["Ordered scenes", "Scene objective", "Location", "Participants", "Theme", "Required assets", "Transition"]
+      }
+    },
+    {
+      "id": "production.asset-list",
+      "label": "Master asset list",
+      "kind": "document",
+      "templateAnchor": "Asset List",
+      "dependsOn": ["design.vision", "narrative.detailed-outline"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 700, "requiredTermGroups": [["environment", "location"], ["character"], ["ui"], ["animation"], ["reference"]] },
+      "extrapolation": {
+        "objective": "Derive an authoritative, reference-backed production inventory from the outline.",
+        "output": "docs/06-master-asset-list.md",
+        "sections": ["Asset ID", "Owner", "Source scene/system", "Reference", "Dimensions or budget", "Status", "Acceptance gate"]
+      }
+    },
+    {
+      "id": "presentation.battle-shot",
+      "label": "One true battle shot",
+      "kind": "artifact",
+      "templateAnchor": "Battle Shot",
+      "dependsOn": ["design.vision", "design.technical-gdd", "production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["image", "markdown"] },
+      "extrapolation": {
+        "objective": "Show genre, turn/action structure, party composition, threat, and the combat hook in one authored frame.",
+        "output": "assets/production/jrpg-one-true-battle-shot.png",
+        "sections": ["Composition brief", "Hook read", "Party and threat read", "UI read", "Art provenance"]
+      }
+    },
+    {
+      "id": "presentation.world-shot",
+      "label": "One true world/story shot",
+      "kind": "artifact",
+      "templateAnchor": "World/Story Shot",
+      "dependsOn": ["design.vision", "narrative.detailed-outline", "production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["image", "markdown"] },
+      "extrapolation": {
+        "objective": "Make genre and tone legible in a single world/story composition.",
+        "output": "assets/production/jrpg-one-true-world-shot.png",
+        "sections": ["Location", "Dramatic beat", "Tone cues", "Character blocking", "Art provenance"]
+      }
+    },
+    {
+      "id": "presentation.menu-shot",
+      "label": "One true menu shot",
+      "kind": "artifact",
+      "templateAnchor": "Menu Shot",
+      "dependsOn": ["design.vision", "design.technical-gdd", "production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["source", "markdown"] },
+      "extrapolation": {
+        "objective": "Show the intended customization density, party identity, and decision hierarchy.",
+        "output": "assets/production/jrpg-one-true-menu-shot.png",
+        "sections": ["Primary decision", "Party read", "Customization depth", "Information hierarchy", "Accessibility"]
+      }
+    },
+    {
+      "id": "presentation.video-teaser",
+      "label": "Internal video teaser",
+      "kind": "artifact",
+      "templateAnchor": "Video Teaser",
+      "dependsOn": ["presentation.battle-shot", "presentation.world-shot", "presentation.menu-shot"],
+      "required": false,
+      "contract": { "minimumArtifacts": 1 },
+      "extrapolation": {
+        "objective": "Animate the battle and world vision for animation, VFX, and battle-scripting alignment.",
+        "output": "assets/production/jrpg-internal-teaser.mp4",
+        "sections": ["Shot list", "Timing", "Combat beat", "World beat", "Audio intent"]
+      }
+    },
+    {
+      "id": "production.staffing",
+      "label": "Staffing and contractor plan",
+      "kind": "document",
+      "templateAnchor": "Contractors/Staff",
+      "dependsOn": ["design.vision", "design.technical-gdd", "production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 300, "requiredTermGroups": [["artist", "art director", "art"], ["programmer", "engineer", "developer", "technical"], ["writer", "narrative"], ["producer", "production"]] },
+      "extrapolation": {
+        "objective": "Map JRPG-specific production responsibilities, capability gaps, and decision ownership.",
+        "output": "docs/27-staffing-and-contractor-plan.md",
+        "sections": ["Roles", "Relevant experience", "Ownership", "Hiring order", "Review gates", "Budget assumptions"]
+      }
+    },
+    {
+      "id": "engine.asset-management",
+      "label": "Asset-management pipeline",
+      "kind": "system",
+      "templateAnchor": "Asset Management",
+      "dependsOn": ["production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "data"] },
+      "extrapolation": {
+        "objective": "Make asset sources, exports, manifests, validation, and ownership reproducible.",
+        "output": "assets/production/README.md",
+        "sections": ["Source files", "Build commands", "Manifest", "Runtime copy", "Validation", "Ownership"]
+      }
+    },
+    {
+      "id": "engine.field",
+      "label": "World and field interaction",
+      "kind": "system",
+      "templateAnchor": "World and Field Maps/Interaction",
+      "dependsOn": ["design.technical-gdd", "engine.asset-management"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"] },
+      "extrapolation": {
+        "objective": "Implement and document movement, collision, interaction, cameras, routes, and map-specific mechanics.",
+        "output": "docs/09-level-and-encounter-bible.md",
+        "sections": ["Coordinate model", "Collision", "Interaction", "Camera", "Routes", "Failure cases"]
+      }
+    },
+    {
+      "id": "engine.battle",
+      "label": "Battle mechanics",
+      "kind": "system",
+      "templateAnchor": "Battle Mechanics",
+      "dependsOn": ["design.technical-gdd"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"], "requiredTermGroups": [["damage"], ["turn", "cooldown", "recovery"], ["enemy"], ["victory", "defeat"]] },
+      "extrapolation": {
+        "objective": "Implement the battle hook and all rules needed by content authors.",
+        "output": "docs/02-technical-gdd.md",
+        "sections": ["Command model", "Timing", "Damage", "Resources", "Enemy AI", "Objectives", "Victory and defeat"]
+      }
+    },
+    {
+      "id": "engine.stats-gear",
+      "label": "Stat and gear system",
+      "kind": "system",
+      "templateAnchor": "Stat and Gear System",
+      "dependsOn": ["design.technical-gdd", "engine.battle"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"], "requiredTermGroups": [["stat"], ["gear", "equipment"], ["level", "progression"]] },
+      "extrapolation": {
+        "objective": "Bound stats, levels, gear effects, acquisition, and their combat consequences.",
+        "output": "docs/13-advancement-and-runtime-pacing.md",
+        "sections": ["Stats", "Level curve", "Equipment slots", "Modifier rules", "Economy", "Balance gates"]
+      }
+    },
+    {
+      "id": "engine.data",
+      "label": "Data management",
+      "kind": "system",
+      "templateAnchor": "Data Management",
+      "dependsOn": ["design.technical-gdd"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"], "requiredTermGroups": [["schema", "version"], ["save", "persistence"], ["validation"]] },
+      "extrapolation": {
+        "objective": "Define authoritative schemas, storage boundaries, migrations, and rollback behavior.",
+        "output": "docs/12-progression-save-contract.md",
+        "sections": ["Authorities", "Schemas", "Validation", "Transactions", "Migration", "Recovery"]
+      }
+    },
+    {
+      "id": "engine.fx",
+      "label": "FX engine",
+      "kind": "system",
+      "templateAnchor": "FX Engine",
+      "dependsOn": ["engine.battle", "engine.asset-management"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "data"] },
+      "extrapolation": {
+        "objective": "Provide a bounded, reproducible VFX vocabulary for battle and field events.",
+        "output": "docs/10-animation-bible.md",
+        "sections": ["Signal vocabulary", "Timelines", "Atlases", "Reduced motion", "Fallbacks", "Validation"]
+      }
+    },
+    {
+      "id": "pipeline.content",
+      "label": "Content pipeline",
+      "kind": "pipeline",
+      "templateAnchor": "Content Pipeline",
+      "dependsOn": ["engine.field", "engine.battle", "engine.stats-gear", "engine.data", "engine.fx"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 500, "requiredTermGroups": [["scene"], ["battle"], ["content"], ["validation", "test"]] },
+      "extrapolation": {
+        "objective": "Turn approved design records into repeatable authored content and validated runtime data.",
+        "output": "docs/08-campaign-content-pipeline.md",
+        "sections": ["Inputs", "Identifiers", "Authoring", "Generation", "Validation", "Promotion"]
+      }
+    },
+    {
+      "id": "tooling.scene",
+      "label": "Scene tooling",
+      "kind": "tooling",
+      "templateAnchor": "Scene Tooling",
+      "dependsOn": ["pipeline.content", "engine.field", "engine.data"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"] },
+      "extrapolation": {
+        "objective": "Author, order, render, and validate scenes without hand-editing runtime state.",
+        "output": "docs/08-campaign-content-pipeline.md",
+        "sections": ["Scene schema", "Dialogue", "Blocking", "Operations", "Preview", "Validation"]
+      }
+    },
+    {
+      "id": "tooling.battle",
+      "label": "Battle tooling",
+      "kind": "tooling",
+      "templateAnchor": "Battle Tooling",
+      "dependsOn": ["pipeline.content", "engine.battle", "engine.data"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"] },
+      "extrapolation": {
+        "objective": "Author encounters, enemies, objectives, rewards, and balance traces through validated data.",
+        "output": "docs/09-level-and-encounter-bible.md",
+        "sections": ["Encounter schema", "Enemy kits", "Objectives", "Rewards", "Simulation", "Balance validation"]
+      }
+    },
+    {
+      "id": "milestone.first-playable",
+      "label": "First playable plan",
+      "kind": "milestone",
+      "templateAnchor": "First Playable",
+      "dependsOn": ["narrative.detailed-outline", "production.asset-list", "tooling.scene", "tooling.battle"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 250, "requiredTermGroups": [["first playable", "fp-1"], ["script", "scene"], ["battle"], ["map", "field"]] },
+      "extrapolation": {
+        "objective": "Bound one representative, end-to-end slice before chapter production scales.",
+        "output": "docs/07-first-playable-qa.md",
+        "sections": ["Player path", "Script", "Assets", "Entities", "Battles", "Maps", "Scenes", "Acceptance"]
+      }
+    },
+    {
+      "id": "fp.script",
+      "label": "First-playable script",
+      "kind": "content",
+      "templateAnchor": "First Playable (FP) Script",
+      "dependsOn": ["milestone.first-playable", "narrative.detailed-outline"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 400, "requiredTermGroups": [["dialogue", "scene"], ["objective"]] },
+      "extrapolation": { "objective": "Write the complete representative slice script.", "output": "docs/fp-script.md", "sections": ["Scene order", "Dialogue", "Objectives", "Transitions"] }
+    },
+    {
+      "id": "fp.assets",
+      "label": "First-playable assets",
+      "kind": "content",
+      "templateAnchor": "First Playable (FP) Assets",
+      "dependsOn": ["milestone.first-playable", "production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "image"] },
+      "extrapolation": { "objective": "Produce and validate the representative slice asset subset.", "output": "assets/production/fp/", "sections": ["Environment", "Characters", "Enemies", "UI", "FX"] }
+    },
+    {
+      "id": "fp.entities",
+      "label": "First-playable entities",
+      "kind": "content",
+      "templateAnchor": "FP Entities",
+      "dependsOn": ["fp.script", "fp.assets", "engine.stats-gear"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["data", "source"] },
+      "extrapolation": { "objective": "Bind slice characters, NPCs, enemies, props, and stats to runtime identities.", "output": "game/content/fp-entities.mjs", "sections": ["Party", "NPCs", "Enemies", "Props", "Stats"] }
+    },
+    {
+      "id": "fp.battles",
+      "label": "First-playable battles",
+      "kind": "content",
+      "templateAnchor": "FP Battles",
+      "dependsOn": ["fp.entities", "tooling.battle"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["source", "test"] },
+      "extrapolation": { "objective": "Ship the slice encounters with objective, balance, and result coverage.", "output": "game/content/fp-battles.mjs", "sections": ["Teaching battle", "Boss", "Objectives", "Rewards", "Tests"] }
+    },
+    {
+      "id": "fp.maps",
+      "label": "First-playable maps",
+      "kind": "content",
+      "templateAnchor": "FP Maps",
+      "dependsOn": ["fp.assets", "engine.field"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["source", "image"] },
+      "extrapolation": { "objective": "Ship the slice field route and battle environments.", "output": "game/content/fp-levels.mjs", "sections": ["Town", "Route", "Dungeon", "Battle stages", "Collision"] }
+    },
+    {
+      "id": "fp.scenes",
+      "label": "First-playable scenes",
+      "kind": "content",
+      "templateAnchor": "FP Scenes",
+      "dependsOn": ["fp.script", "fp.assets", "tooling.scene"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "source"] },
+      "extrapolation": { "objective": "Render and validate the complete slice scene chain.", "output": "game/content/fp-scenes.mjs", "sections": ["Dialogue", "Blocking", "Camera", "Interaction", "Transitions"] }
+    },
+    {
+      "id": "fp.playtest",
+      "label": "First-playable playtest",
+      "kind": "evidence",
+      "templateAnchor": "First Playable",
+      "dependsOn": ["fp.battles", "fp.maps", "fp.scenes"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "test"], "requiredTermGroups": [["acceptance", "pass"], ["player", "playtest"]] },
+      "extrapolation": { "objective": "Test the end-to-end slice with explicit comprehension, control, and pacing gates.", "output": "docs/07-first-playable-qa.md", "sections": ["Build", "Participants", "Tasks", "Findings", "Fixes", "Retest"] }
+    },
+    {
+      "id": "chapter.template",
+      "label": "Repeatable chapter-production contract",
+      "kind": "repeatable",
+      "templateAnchor": "Chapter 1",
+      "dependsOn": ["fp.playtest", "pipeline.content"],
+      "required": true,
+      "contract": { "minimumArtifacts": 1, "minimumWords": 350, "requiredTermGroups": [["chapter"], ["script"], ["asset"], ["battle"], ["map"], ["scene"], ["playtest"]] },
+      "extrapolation": { "objective": "Turn the template's Chapter 1/2 repetition into one parameterized production contract for every chapter.", "output": "docs/08-campaign-content-pipeline.md", "sections": ["Script", "Assets", "Entities", "Battles", "Maps", "Scenes", "Playtest"] }
+    },
+    {
+      "id": "chapter.content",
+      "label": "All chapter content",
+      "kind": "content",
+      "templateAnchor": "Chapter 2",
+      "dependsOn": ["chapter.template", "narrative.detailed-outline", "production.asset-list"],
+      "required": true,
+      "contract": { "minimumArtifacts": 4, "requiredKinds": ["markdown", "source", "data", "test"] },
+      "extrapolation": { "objective": "Instantiate the chapter contract across the complete game without skipping per-chapter evidence.", "output": "game/content/", "sections": ["Scripts", "Assets", "Entities", "Battles", "Maps", "Scenes", "Per-chapter tests"] }
+    },
+    {
+      "id": "qa.final-playtests",
+      "label": "Final playtests",
+      "kind": "evidence",
+      "templateAnchor": "Final Playtests",
+      "dependsOn": ["chapter.content"],
+      "required": true,
+      "contract": { "minimumArtifacts": 2, "requiredKinds": ["markdown", "data"], "requiredTermGroups": [["human"], ["playtest"], ["timing", "duration"], ["finding", "result"]] },
+      "extrapolation": { "objective": "Collect current-build human evidence for comprehension, balance, accessibility, pacing, and completion.", "output": "docs/19-human-playtest-protocol.md", "sections": ["Build identity", "Participants", "Protocol", "Observations", "Timing", "Defects", "Retest"] }
+    },
+    {
+      "id": "qa.release-readiness",
+      "label": "Release-readiness synthesis",
+      "kind": "release",
+      "templateAnchor": "Final Playtests",
+      "dependsOn": ["qa.final-playtests", "production.staffing"],
+      "required": true,
+      "contract": { "minimumArtifacts": 3, "requiredKinds": ["markdown", "data", "test"], "requiredTermGroups": [["accessibility"], ["cultural", "historical"], ["balance"], ["release", "readiness"]] },
+      "extrapolation": { "objective": "Synthesize human and automated evidence without promoting estimates or stale receipts into release claims.", "output": "docs/11-build-qa-report.md", "sections": ["Build identity", "Automated verification", "Human evidence", "Accessibility", "Cultural review", "Balance", "Known risks", "Verdict"] }
+    }
+  ]
+}

@@ -138,6 +138,26 @@ export const PARTY_SKILL_ANIMATIONS = deepFreeze({
     emissionKind: 'projectile', emissionVisual: 'frost-vial',
     durations: { windupMs: 240, movementMs: 80, emissionMs: 320, impactMs: 160, staggerMs: 160, statusGlyphMs: 160, recoveryMs: 240 },
   }),
+  'cinder-glyph': animationProfile({
+    id: 'cinder-glyph', delivery: 'arcane', essence: 'ember', movementKind: 'plant', lungeTiles: 0,
+    emissionKind: 'projectile', emissionVisual: 'measured-cinder-glyph',
+    durations: { windupMs: 240, movementMs: 80, emissionMs: 320, impactMs: 160, staggerMs: 160, statusGlyphMs: 160, recoveryMs: 240 },
+  }),
+  'white-current': animationProfile({
+    id: 'white-current', delivery: 'arcane', essence: 'frost', movementKind: 'plant', lungeTiles: 0,
+    emissionKind: 'trail', emissionVisual: 'white-current-line',
+    durations: { windupMs: 240, movementMs: 80, emissionMs: 320, impactMs: 160, staggerMs: 160, statusGlyphMs: 160, recoveryMs: 240 },
+  }),
+  'thunder-thread': animationProfile({
+    id: 'thunder-thread', delivery: 'arcane', essence: 'storm', movementKind: 'plant', lungeTiles: 0,
+    emissionKind: 'projectile', emissionVisual: 'brass-jointed-thunder-thread',
+    durations: { windupMs: 320, movementMs: 80, emissionMs: 400, impactMs: 160, staggerMs: 240, statusGlyphMs: 160, recoveryMs: 320 },
+  }),
+  'crosswind-step': animationProfile({
+    id: 'crosswind-step', delivery: 'arcane', movementKind: 'crosswind-step', lungeTiles: 2,
+    emissionKind: 'trail', emissionVisual: 'crosswind-ruler-ribbon',
+    durations: { windupMs: 160, movementMs: 240, emissionMs: 160, impactMs: 160, staggerMs: 160, statusGlyphMs: 160, recoveryMs: 160 },
+  }),
 });
 
 /** Every row in the enemy atlas has an explicit default attack language. */

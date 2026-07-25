@@ -22,7 +22,7 @@
       "south-interact",
       "south-hurt"
     ],
-    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku"]
+    "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku", "miyo"]
   },
   "poseSemantics": {
     "interact": "brief front-facing reach used by the live field Interact control",
@@ -94,6 +94,20 @@
       "paletteId": "party-kiku-herb-candle-v1",
       "silhouette": "short cloak, medicine box, bottles and packets",
       "colors": {"primary": "#496b55", "secondary": "#d7c99a", "light": "#779274", "accent": "#88c8c5", "hair": "#24201f"}
+    },
+    {
+      "id": "miyo",
+      "name": "Miyo Senda",
+      "paletteId": "party-miyo-storm-indigo-v1",
+      "lineage": {
+        "relation": "literal granddaughter of Mateus Avelar through his half-Japanese daughter and the Japanese Senda household",
+        "ancestry": "three-quarters Japanese and one-quarter Portuguese",
+        "publicName": "Miyo Senda",
+        "baptismalRecord": "Inês Avelar appears only in an abandoned private family book and is never her default presentation name"
+      },
+      "silhouette": "storm-blue Japanese travel coat, split working sleeves, folding bamboo weather ruler, brass pressure joints",
+      "colors": {"primary": "#355b78", "secondary": "#c8bd91", "light": "#6f91a6", "accent": "#d9b45f", "hair": "#171b22"},
+      "originalityPolicy": "original Japanese elemental scholar design; no borrowed character name, costume, spell silhouette, or franchise insignia"
     }
   ]
 }

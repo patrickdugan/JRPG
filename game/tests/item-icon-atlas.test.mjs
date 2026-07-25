@@ -12,7 +12,7 @@ import {
 
 test('item icon atlas addresses every live item exactly once in canonical order', () => {
   assert.deepEqual(ITEM_ICON_IDS, ITEM_IDS);
-  assert.equal(ITEM_ICON_IDS.length, 25);
+  assert.equal(ITEM_ICON_IDS.length, 26);
   assert.equal(new Set(ITEM_ICON_IDS).size, ITEM_ICON_IDS.length);
   assert.deepEqual(ITEM_ICON_ATLAS, {
     id: 'item-icon-suite-v1',
@@ -20,9 +20,9 @@ test('item icon atlas addresses every live item exactly once in canonical order'
     frameWidth: 16,
     frameHeight: 16,
     columns: 5,
-    rows: 5,
+    rows: 6,
     width: 80,
-    height: 80,
+    height: 96,
   });
   ITEM_ICON_IDS.forEach((id, index) => {
     const frame = getItemIconFrame(id);
@@ -46,8 +46,8 @@ test('item icon image validation fails closed on undecoded and wrong-size images
   assert.equal(itemIconImageHasExpectedSize(null), false);
   assert.equal(itemIconImageHasExpectedSize({ naturalWidth: 0, naturalHeight: 0 }), false);
   assert.equal(itemIconImageHasExpectedSize({ naturalWidth: 1, naturalHeight: 1 }), false);
-  assert.equal(itemIconImageHasExpectedSize({ naturalWidth: 80, naturalHeight: 79 }), false);
-  assert.equal(itemIconImageHasExpectedSize({ naturalWidth: 80, naturalHeight: 80 }), true);
+  assert.equal(itemIconImageHasExpectedSize({ naturalWidth: 80, naturalHeight: 95 }), false);
+  assert.equal(itemIconImageHasExpectedSize({ naturalWidth: 80, naturalHeight: 96 }), true);
 });
 
 test('Camp keeps item icons decorative and text-authoritative with a load fallback', async () => {

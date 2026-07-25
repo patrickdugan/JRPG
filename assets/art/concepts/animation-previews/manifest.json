@@ -1,5 +1,5 @@
 {
-  "assetId": "dravanic-vampire-priest-animation-preview-v1",
+  "assetId": "jrpg-party-enemy-animation-preview-standard-roster-v1",
   "status": "review-quality-generated-animation-concepts",
   "runtimeIntegration": "not-integrated",
   "grid": {
@@ -68,9 +68,53 @@
       "finalHoldMs": 420
     }
   ],
-  "characters": [
+  "actors": [
     {
-      "id": "dravanic",
+      "id": "ren",
+      "displayName": "Ren Ishikawa",
+      "category": "party",
+      "signature": "Cinder Route",
+      "sheet": {
+        "path": "ren-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "82079dcea5f6e2380f8ca3af46dfa490b26fa54eb160c8cbdca505a1b2de902c",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "ren-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "2d0a87da57f1a00a1a90360cb472ee3edb96e65a49e5cfacb32d676e246b62cd"
+      }
+    },
+    {
+      "id": "aya",
+      "displayName": "Aya Shinohara",
+      "category": "party",
+      "signature": "Warding Script",
+      "sheet": {
+        "path": "aya-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "5b2a6328725439e8b82bab2efbf2319cfc96c722b6cb6823f342cfc59df67467",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "aya-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "63eb79f165a208e8810c5ccd961283ead3a9148e38c1d5d078842012aaaa1c6c"
+      }
+    },
+    {
+      "id": "nikola",
+      "displayName": "Nikola Dravanić (Dravanic)",
+      "category": "party",
       "signature": "holy Longinus power",
       "sheet": {
         "path": "dravanic-longinus-animation-sheet-v1.png",
@@ -89,7 +133,9 @@
       }
     },
     {
-      "id": "vampire-priest",
+      "id": "mateus",
+      "displayName": "Father Mateus Avelar",
+      "category": "party",
       "signature": "red-eyed bloodlust",
       "sheet": {
         "path": "vampire-priest-animation-sheet-v1.png",
@@ -106,10 +152,246 @@
         "durationMs": 4445,
         "sha256": "6ca2d2a42bfc882af7140191609cff5173bb812e952f5cb8af22ec37a2b0176c"
       }
+    },
+    {
+      "id": "genta",
+      "displayName": "Genta Mononobe",
+      "category": "party",
+      "signature": "Standing Bridge",
+      "sheet": {
+        "path": "genta-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "dafc2a6aaae1e172f7a7cc826d1d5dd2a086d157d1a85dbb58e2a239f39fd20a",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "genta-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "4611fcd2c24f058e497bc3574c9769494cb58a1275539b8c7bb484714103a3e7"
+      }
+    },
+    {
+      "id": "kiku",
+      "displayName": "Kiku Nawa",
+      "category": "party",
+      "signature": "Cold Medicine / Terrain Remedy",
+      "sheet": {
+        "path": "kiku-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "70cea56ee39533dab72e0f1fc12caf1ab903369ea3e8d7cee23fb7c74e593ddb",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "kiku-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "ffc13d832d74ea4e75e4982e6354fbc595ea7c2084561ff968e2726605e17aba"
+      }
+    },
+    {
+      "id": "miyo",
+      "displayName": "Miyo Senda",
+      "category": "party",
+      "signature": "Thunder Thread",
+      "sheet": {
+        "path": "miyo-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "a238c51cb28c08662fcf2330a8cd70ae8e3629c0dbf0e742264201fa8a185236",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "miyo-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "b59e457c4c43c2a7d0b82246d9989585da02fceabed061688e99f280296cc2b3"
+      },
+      "postprocess": "nearest-neighbor per-cell normalization from 1586x992 to 1536x1024"
+    },
+    {
+      "id": "cinder-hound",
+      "displayName": "Cinder Hound",
+      "category": "enemy",
+      "signature": "Cinder Overload",
+      "sheet": {
+        "path": "cinder-hound-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "906fa622b962bfc5bd70b02ee3767ca9355a3264a71351b08a4f971d5d7513cc",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "cinder-hound-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "e003f4e32340f3f75e635fffe9607491fdc6c8bdde9d61893c56417569220851"
+      }
+    },
+    {
+      "id": "ash-wisp",
+      "displayName": "Ash Wisp",
+      "category": "enemy",
+      "signature": "Ash Nova",
+      "sheet": {
+        "path": "ash-wisp-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "9fa5368bab008ac7a13c18f3b0a705a2f305a970dd29d694cf9219fd94614820",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "ash-wisp-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "d78cb3529ca5027292ca523653ae5a01dd4767aeca125b22cfade8812f186c99"
+      },
+      "postprocess": "active bolt cell composited with the sheet's own visible canonical core"
+    },
+    {
+      "id": "ashen-bailiff",
+      "displayName": "Ashen Bailiff",
+      "category": "enemy",
+      "signature": "Tithe Seal",
+      "sheet": {
+        "path": "ashen-bailiff-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "fb896c7cc2eac209fbfa4e1a66e8b1aa60d7560fb08e4c3d9fac064dc67390d8",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "ashen-bailiff-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "51554ffbce08f0463ec4a45af3bf71f5846ff33cdf7566fb45ec21ab8c95a1f9"
+      }
+    },
+    {
+      "id": "court-retainer",
+      "displayName": "Court Retainer",
+      "category": "enemy",
+      "signature": "Docket Sever",
+      "sheet": {
+        "path": "court-retainer-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "c0a560ca2c7879ddeed953fae63f68db1b9756c4ca4d53f09c6bbb59ae5c51b6",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "court-retainer-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "a9012a6b4d33668080169dc9fe28a52d66f55c2d85476bc95113d0770e6fe567"
+      }
+    },
+    {
+      "id": "widow-of-fog",
+      "displayName": "Widow of Fog",
+      "category": "enemy",
+      "signature": "Tide Inversion",
+      "sheet": {
+        "path": "widow-of-fog-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "698c83cc15a9674c6c17cc6474c96516953f1cdf7d464eca4da6039b514916f3",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "widow-of-fog-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "3cfa16f95a8b637692e0247a79fcbef083250c2312786a4555a93c3f8f7d51b6"
+      }
+    },
+    {
+      "id": "ash-furnace",
+      "displayName": "Ash Furnace",
+      "category": "enemy",
+      "signature": "Overheat",
+      "sheet": {
+        "path": "ash-furnace-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "9a2f0769908aa567c81d2aca7359540f99096ccdd9220faf2e81c81ad8199e8c",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "ash-furnace-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "2f94fd2b50062aa71b3208ceb2967e8c20f402a94c5f48bcbf7845603c108ec4"
+      }
+    },
+    {
+      "id": "bell-warden",
+      "displayName": "Bell Warden",
+      "category": "enemy",
+      "signature": "Resonance Overload",
+      "sheet": {
+        "path": "bell-warden-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "30d927a594caf09bfc6407df0cf9fadfb8f819d1591bfe6cf91898754d1b7d4b",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "bell-warden-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "78dafef0e6996fd66fa8d6b72217cf93d9203a8dd6ad8bb958f266dfa6985f27"
+      }
+    },
+    {
+      "id": "black-court",
+      "displayName": "Black Court",
+      "category": "enemy",
+      "signature": "Decree Fracture",
+      "sheet": {
+        "path": "black-court-animation-sheet-v1.png",
+        "width": 1536,
+        "height": 1024,
+        "sha256": "63f7d878d9ec4bf3f2c163c308e75101bb030abdc8c311db46de25acfe48aa54",
+        "distinctCellHashes": 24
+      },
+      "gif": {
+        "path": "black-court-all-actions-v1.gif",
+        "width": 256,
+        "height": 256,
+        "frameCount": 30,
+        "durationMs": 4445,
+        "sha256": "6ab2d18d9174865aef8cd220e619d9061fc9525189d27dd8ec9561e9cc761845"
+      }
     }
   ],
   "notes": [
     "GIFs are deterministic previews cropped from the 6x4 sheets.",
-    "These generated concepts do not replace the canonical 48x64 runtime atlas."
+    "These generated concepts do not replace the canonical 48x64 runtime atlas.",
+    "The Portuguese hidden-cross vampire-priest concept is mapped to canonical Father Mateus Avelar.",
+    "This set includes the full seven-member party and all eight standard enemy families.",
+    "Named bosses remain a separate animation-sheet pass."
   ]
 }

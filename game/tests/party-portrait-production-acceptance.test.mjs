@@ -10,7 +10,7 @@ const GAME_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_ROOT = resolve(GAME_ROOT, '..');
 const SUITE_ROOT = resolve(REPO_ROOT, 'assets', 'art', 'party-portrait-suite');
 const FIELD_SOURCE_PATH = resolve(REPO_ROOT, 'assets', 'art', 'party-field-suite', 'party-field-suite.source.json');
-const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku'];
+const ROWS = ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'];
 const COLUMNS = ['neutral', 'resolve', 'strain', 'soften', 'concern', 'anger', 'surprise', 'quiet'];
 const NIKOLA_LINEAGE = {
   birthAndStation: 'Croatian-born frontier minor aristocrat',
@@ -84,12 +84,12 @@ function cellBytes(image, column, row) {
   return output;
 }
 
-test('portrait source defines the exact six-by-eight expression and originality contract', async () => {
+test('portrait source defines the exact seven-by-eight expression and originality contract', async () => {
   const source = JSON.parse(await readFile(resolve(SUITE_ROOT, 'party-portrait-suite.source.json'), 'utf8'));
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.equal(source.canonicalFieldSource, '../party-field-suite/party-field-suite.source.json');
   assert.deepEqual(source.frame, { width: 64, height: 64, minimumTransparentGutter: 4 });
-  assert.deepEqual(source.atlas, { width: 512, height: 384, contentWidth: 512, transparentRightPadding: 0 });
+  assert.deepEqual(source.atlas, { width: 512, height: 448, contentWidth: 512, transparentRightPadding: 0 });
   assert.deepEqual(source.sheet.rows, ROWS);
   assert.deepEqual(source.sheet.columns, COLUMNS);
   assert.deepEqual(Object.keys(source.expressions), COLUMNS);
@@ -103,6 +103,10 @@ test('portrait source defines the exact six-by-eight expression and originality 
   assert.match(nikola.likenessPolicy, /original fictional Croatian-English male face and proportions; no real-person or actor reference/u);
   const mateus = source.characters.find(({ id }) => id === 'mateus');
   assert.match(mateus.likenessPolicy, /original fictional face, age lines, proportions, and hair; no real-person or actor reference/u);
+  const miyo = source.characters.find(({ id }) => id === 'miyo');
+  assert.equal(miyo.name, 'Miyo Senda');
+  assert.equal(miyo.lineage.ancestry, 'three-quarters Japanese');
+  assert.match(miyo.originalityPolicy, /no borrowed or real-person likeness/u);
   assert.doesNotMatch(JSON.stringify(source), /Adam Driver|celebrity likeness/iu);
 });
 
@@ -117,13 +121,13 @@ test('manifest preserves canonical palette/costume motifs and exact expression a
   const field = JSON.parse(fieldText);
   assert.deepEqual(manifest.geometry, {
     columns: 8,
-    rows: 6,
+    rows: 7,
     cellWidth: 64,
     cellHeight: 64,
     contentWidth: 512,
-    contentHeight: 384,
+    contentHeight: 448,
     sheetWidth: 512,
-    sheetHeight: 384,
+    sheetHeight: 448,
     transparentRightPadding: 0,
     minimumTransparentGutter: 4,
   });
@@ -161,16 +165,16 @@ test('transparent portrait atlas is exact, binary-alpha, guttered, hashed, disti
   ]);
   const manifest = JSON.parse(manifestText);
   const record = manifest.exports.find(({ role }) => role === 'transparent-runtime-candidate');
-  assert.deepEqual([record.width, record.height, record.mode], [512, 384, 'RGBA']);
+  assert.deepEqual([record.width, record.height, record.mode], [512, 448, 'RGBA']);
   assert.equal(sha256(bytes), record.sha256);
   assert.equal(runtimeBytes.equals(bytes), true, 'browser and production portrait atlases must be byte-identical');
   const image = decodeRgbaPng(bytes);
-  assert.deepEqual([image.width, image.height], [512, 384]);
+  assert.deepEqual([image.width, image.height], [512, 448]);
   const alphaValues = new Set();
   for (let index = 3; index < image.pixels.length; index += 4) alphaValues.add(image.pixels[index]);
   assert.deepEqual([...alphaValues].sort((a, b) => a - b), [0, 255]);
   const actualHashes = new Set();
-  for (let row = 0; row < 6; row += 1) {
+  for (let row = 0; row < 7; row += 1) {
     for (let column = 0; column < 8; column += 1) {
       actualHashes.add(sha256(cellBytes(image, column, row)));
       const x0 = column * 64;
@@ -187,8 +191,8 @@ test('transparent portrait atlas is exact, binary-alpha, guttered, hashed, disti
       }
     }
   }
-  assert.equal(actualHashes.size, 48);
-  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 48);
+  assert.equal(actualHashes.size, 56);
+  assert.equal(new Set(manifest.frames.map(({ rgbaSha256 }) => rgbaSha256)).size, 56);
 });
 
 test('labeled contact sheet is review-only and builder has no generated raster dependency', async () => {
@@ -199,7 +203,7 @@ test('labeled contact sheet is review-only and builder has no generated raster d
   ]);
   const manifest = JSON.parse(manifestText);
   const contact = manifest.exports.find(({ role }) => role === 'labeled-review-only-not-runtime');
-  assert.deepEqual([contact.width, contact.height], [1648, 1220]);
+  assert.deepEqual([contact.width, contact.height], [1648, 1412]);
   assert.equal(sha256(contactBytes), contact.sha256);
   assert.equal(manifest.runtimeIntegration, 'current-browser-camp-and-scene-focus');
   assert.equal(manifest.review.mateusOriginalityConstraint, 'applied');

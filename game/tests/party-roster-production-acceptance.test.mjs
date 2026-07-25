@@ -28,7 +28,9 @@ test('deterministic roster retains the legacy row key but presents Nikola Draža
   assert.equal(source.assetId, 'party-roster-key-art-v2');
   assert.equal(source.formatVersion, 2);
   assert.equal(manifest.assetId, source.assetId);
-  assert.deepEqual(source.rowOrder, ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']);
+  assert.deepEqual(source.rowOrder, ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo']);
+  assert.equal(source.presentationNames.miyo, 'Miyo Senda');
+  assert.equal(source.miyoLineage.ancestry, 'three-quarters Japanese and one-quarter Portuguese');
   assert.equal(source.presentationNames.lise, 'Nikola Dražanić');
   assert.match(source.legacyCompatibility.lise, /stable internal actor and atlas row key/u);
   assert.deepEqual(source.nikolaLineage, NIKOLA_LINEAGE);
@@ -56,6 +58,6 @@ test('player-facing roster is exact, manifested, and byte-identical in the brows
 test('Campaign loads the deterministic roster and no longer loads the obsolete female roster', async () => {
   const campaign = await readFile(resolve(GAME_ROOT, 'campaign.js'), 'utf8');
   assert.match(campaign, /assets\/art\/party-roster-suite\/party-roster-key-art\.png/u);
-  assert.match(campaign, /Ren, Aya, Nikola, Mateus, Genta, and Kiku/u);
+  assert.match(campaign, /Ren, Aya, Nikola, Mateus, Genta, Kiku, and Miyo/u);
   assert.doesNotMatch(campaign, /bells-party-roster-v1\.png/u);
 });

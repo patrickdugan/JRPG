@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "campaignId": "bells-black-chrysanthemum",
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "authoredSceneCount": 34,
+  "authoredSceneCount": 35,
   "clusters": [
     {
       "id": "sw1-clerks-second-copy",
@@ -11,7 +11,13 @@
       "placement": "after-beat",
       "sequenceRole": "after-level-consequence",
       "relatedEncounterIds": [],
+      "actIntegration": null,
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_0000",
       "outcomeKeys": [
         "accord",
@@ -31,7 +37,13 @@
       "relatedEncounterIds": [
         "fp1-mateus"
       ],
+      "actIntegration": null,
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw02_decision",
       "outcomeKeys": [
         "accord",
@@ -45,21 +57,32 @@
     {
       "id": "sw3-sayos-warehouse-conditions",
       "chapterId": "chapter-3",
-      "anchorBeatId": "c3-04-lantern-boat-escort",
+      "anchorBeatId": "c3-01-separate-arrivals",
       "placement": "before-beat",
-      "sequenceRole": "before-boss-decision",
-      "relatedEncounterIds": [
-        "c3-dock-patrol"
-      ],
+      "sequenceRole": "act-route-decision",
+      "relatedEncounterIds": [],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-sequence-01",
+        "role": "route-decision",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw03_decision",
       "outcomeKeys": [
         "accord",
-        "revision"
+        "revision",
+        "negotiated"
       ],
       "outcomeEncounterIds": [
         "page_sw03_accord",
-        "page_sw03_revision"
+        "page_sw03_revision",
+        "page_sw03_negotiated"
       ]
     },
     {
@@ -69,7 +92,17 @@
       "placement": "after-beat",
       "sequenceRole": "after-level-consequence",
       "relatedEncounterIds": [],
-      "requiredForNarrativeCredits": true,
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-nagi",
+        "role": "route-operation",
+        "routeTheater": "salt"
+      },
+      "requiredForNarrativeCredits": false,
+      "requiredOnRoutes": [
+        "salt",
+        "paper"
+      ],
       "entryEncounterId": "page_sw04_decision",
       "outcomeKeys": [
         "accord",
@@ -89,7 +122,18 @@
       "relatedEncounterIds": [
         "c5-furnace-abbot"
       ],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-kagura",
+        "role": "route-operation",
+        "routeTheater": "ash"
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw05_decision",
       "outcomeKeys": [
         "accord",
@@ -109,7 +153,17 @@
       "relatedEncounterIds": [
         "c6-ujiro"
       ],
-      "requiredForNarrativeCredits": true,
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-kozui",
+        "role": "route-operation",
+        "routeTheater": "paper"
+      },
+      "requiredForNarrativeCredits": false,
+      "requiredOnRoutes": [
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw06_decision",
       "outcomeKeys": [
         "accord",
@@ -129,7 +183,18 @@
       "relatedEncounterIds": [
         "c7-name-slip-release"
       ],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-sequence-07",
+        "role": "fixed-emergency",
+        "routeTheater": "ash"
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw07_decision",
       "outcomeKeys": [
         "accord",
@@ -149,7 +214,18 @@
       "relatedEncounterIds": [
         "c8-outer-court"
       ],
+      "actIntegration": {
+        "actId": "act-iv",
+        "majorSequenceId": "act4-sequence-04",
+        "role": "approach-consequence",
+        "routeTheater": "salt"
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw08_decision",
       "outcomeKeys": [
         "accord",
@@ -169,7 +245,18 @@
       "relatedEncounterIds": [
         "c8-lady-enma"
       ],
+      "actIntegration": {
+        "actId": "act-iv",
+        "majorSequenceId": "act4-sequence-07",
+        "role": "gate-boss-consequence",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw09_decision",
       "outcomeKeys": [
         "accord",
@@ -191,7 +278,18 @@
       "relatedEncounterIds": [
         "c9-yearless-bell"
       ],
+      "actIntegration": {
+        "actId": "act-v",
+        "majorSequenceId": "act5-living-archive",
+        "role": "inner-castle-decision",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw10_decision",
       "outcomeKeys": [
         "accord",
@@ -211,7 +309,18 @@
       "relatedEncounterIds": [
         "c9-kurozane"
       ],
+      "actIntegration": {
+        "actId": "act-v",
+        "majorSequenceId": "act5-last-command",
+        "role": "final-political-consequence",
+        "routeTheater": null
+      },
       "requiredForNarrativeCredits": true,
+      "requiredOnRoutes": [
+        "salt",
+        "ash",
+        "paper"
+      ],
       "entryEncounterId": "page_sw11_decision",
       "outcomeKeys": [
         "accord",

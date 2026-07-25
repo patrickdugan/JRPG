@@ -15,7 +15,7 @@ import {
   partyCombatImageHasExpectedSize,
 } from '../party-combat-atlas.mjs';
 
-test('party combat atlas exposes all 60 exact authored cells', () => {
+test('party combat atlas exposes all 70 exact authored cells', () => {
   const rectangles = new Set();
   for (const [row, memberId] of PARTY_COMBAT_MEMBERS.entries()) {
     for (const [column, pose] of PARTY_COMBAT_POSES.entries()) {
@@ -36,17 +36,28 @@ test('party combat atlas exposes all 60 exact authored cells', () => {
       rectangles.add(`${frame.x},${frame.y},${frame.width},${frame.height}`);
     }
   }
-  assert.equal(rectangles.size, 60);
+  assert.equal(rectangles.size, 70);
   assert.equal(PARTY_COMBAT_ATLAS.width, PARTY_COMBAT_ATLAS.columns * PARTY_COMBAT_ATLAS.cellWidth);
   assert.equal(PARTY_COMBAT_ATLAS.height, PARTY_COMBAT_ATLAS.rows * PARTY_COMBAT_ATLAS.cellHeight);
   assert.throws(() => getPartyCombatFrame('unknown', 'idle'), /Unknown party combat member/);
   assert.throws(() => getPartyCombatFrame('ren', 'unknown'), /Unknown party combat pose/);
 });
 
-test('every canonical live skill maps to its owner profile signature slot', () => {
-  const expected = Object.fromEntries(Object.values(PARTY_PROFILES).flatMap((profile) => (
-    profile.skillIds.map((skillId, slot) => [skillId, slot === 0 ? 'signature-a' : 'signature-b'])
-  )));
+test('every canonical live skill maps to an authored owner pose', () => {
+  const expected = {
+    'courier-cut': 'signature-a',
+    'cinder-route': 'signature-b',
+    'warding-script': 'signature-a',
+    'hunter-thrust': 'signature-a',
+    'dawn-bolt': 'signature-b',
+    'penitent-night': 'signature-a',
+    'pilgrim-maul': 'signature-a',
+    'cold-medicine': 'signature-a',
+    'cinder-glyph': 'signature-a',
+    'white-current': 'signature-a',
+    'thunder-thread': 'signature-b',
+    'crosswind-step': 'move',
+  };
 
   assert.equal(Object.isFrozen(PARTY_COMBAT_SKILL_POSES), true);
   assert.deepEqual(PARTY_COMBAT_SKILL_POSES, expected);
@@ -56,14 +67,10 @@ test('every canonical live skill maps to its owner profile signature slot', () =
   );
 
   for (const profile of Object.values(PARTY_PROFILES)) {
-    assert.ok(profile.skillIds.length >= 1 && profile.skillIds.length <= 2, profile.id);
-    profile.skillIds.forEach((skillId, slot) => {
+    assert.ok(profile.skillIds.length >= 1 && profile.skillIds.length <= 4, profile.id);
+    profile.skillIds.forEach((skillId) => {
       assert.equal(PARTY_SKILLS[skillId]?.id, skillId, `${profile.id}:${skillId}`);
-      assert.equal(
-        PARTY_COMBAT_SKILL_POSES[skillId],
-        slot === 0 ? 'signature-a' : 'signature-b',
-        `${profile.id}:${skillId}`,
-      );
+      assert.ok(PARTY_COMBAT_POSES.includes(PARTY_COMBAT_SKILL_POSES[skillId]), `${profile.id}:${skillId}`);
     });
   }
 });
@@ -123,8 +130,8 @@ test('newly terminal party members replace pre-action ghosts only during their b
 });
 
 test('party combat image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 480, naturalHeight: 384 }), true);
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 479, naturalHeight: 384 }), false);
-  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 480, naturalHeight: 383 }), false);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 480, naturalHeight: 448 }), true);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 479, naturalHeight: 448 }), false);
+  assert.equal(partyCombatImageHasExpectedSize({ naturalWidth: 480, naturalHeight: 447 }), false);
   assert.equal(partyCombatImageHasExpectedSize(null), false);
 });

@@ -1,0 +1,2412 @@
+{
+  "schemaVersion": 2,
+  "kind": "jrpg-verification-report",
+  "generatedAt": "2026-07-21T22:50:47.699Z",
+  "environment": {
+    "id": "jrpg-game-design-verifiers-v2",
+    "directory": "C:\\projects\\JRPG\\jrpg-verifiers-v2"
+  },
+  "dag": {
+    "id": "holleman-jrpg-plan-v2",
+    "nodes": 32,
+    "order": [
+      "source.template",
+      "design.vision",
+      "design.technical-gdd",
+      "narrative.beats",
+      "engine.battle",
+      "engine.data",
+      "narrative.detailed-outline",
+      "engine.stats-gear",
+      "production.asset-list",
+      "presentation.battle-shot",
+      "presentation.world-shot",
+      "presentation.menu-shot",
+      "production.staffing",
+      "engine.asset-management",
+      "presentation.video-teaser",
+      "engine.field",
+      "engine.fx",
+      "pipeline.content",
+      "tooling.scene",
+      "tooling.battle",
+      "milestone.first-playable",
+      "fp.script",
+      "fp.assets",
+      "fp.entities",
+      "fp.maps",
+      "fp.scenes",
+      "fp.battles",
+      "fp.playtest",
+      "chapter.template",
+      "chapter.content",
+      "qa.final-playtests",
+      "qa.release-readiness"
+    ]
+  },
+  "project": {
+    "id": "bells-black-chrysanthemum",
+    "title": "Bells of the Black Chrysanthemum",
+    "root": "C:\\projects\\JRPG"
+  },
+  "ok": false,
+  "structurallyValid": true,
+  "counts": {
+    "verified": 28,
+    "optional-missing": 1,
+    "partial": 3
+  },
+  "requiredIncomplete": [
+    "production.staffing",
+    "qa.final-playtests",
+    "qa.release-readiness"
+  ],
+  "errors": [],
+  "warnings": [],
+  "nodes": [
+    {
+      "id": "source.template",
+      "label": "Project-plan template",
+      "kind": "source",
+      "required": true,
+      "templateAnchor": "JRPG PROJECT PLAN TEMPLATE",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 3000
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 8372,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "JRPG Project Plan Template.md",
+          "role": "template authority",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 50093,
+          "words": 8372,
+          "sha256": "19993fa28b513925e0a735ec9760f25d5f102ed3da6d8a4df39b9e88aa7ec50b",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Retain the original template as the root authority.",
+        "output": "JRPG Project Plan Template.md",
+        "sections": []
+      }
+    },
+    {
+      "id": "design.vision",
+      "label": "Vision document",
+      "kind": "document",
+      "required": true,
+      "templateAnchor": "Vision Doc",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "source.template"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 900,
+        "requiredTermGroups": [
+          [
+            "genre"
+          ],
+          [
+            "hook"
+          ],
+          [
+            "tone"
+          ],
+          [
+            "battle"
+          ],
+          [
+            "character"
+          ],
+          [
+            "location"
+          ],
+          [
+            "plot"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 4096,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/01-vision-doc.md",
+          "role": "vision",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 28044,
+          "words": 4096,
+          "sha256": "d044217cb0b67a0e951b326f80f3b6d316db4b801a0b07edac7f9e40f0ab5e97",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Define the stable 80% vision that constrains every downstream decision.",
+        "output": "docs/01-vision-doc.md",
+        "sections": [
+          "Genre, hook, and tone",
+          "Battle-system basics",
+          "Characters",
+          "Locations",
+          "Highest-level plot beats",
+          "Scope and exclusions"
+        ]
+      }
+    },
+    {
+      "id": "design.technical-gdd",
+      "label": "Technical GDD",
+      "kind": "document",
+      "required": true,
+      "templateAnchor": "Technical GDD",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.vision"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 1200,
+        "requiredTermGroups": [
+          [
+            "combat",
+            "battle"
+          ],
+          [
+            "exploration",
+            "field"
+          ],
+          [
+            "save",
+            "persistence"
+          ],
+          [
+            "data"
+          ],
+          [
+            "ui",
+            "interface"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 2785,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/02-technical-gdd.md",
+          "role": "mechanical specification",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 19529,
+          "words": 2785,
+          "sha256": "b7d34de8dc52d2c8533b993741441d1cbca33691474226cfcc501447f0f161e4",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Specify mechanics and data contracts precisely enough for implementation.",
+        "output": "docs/02-technical-gdd.md",
+        "sections": [
+          "Runtime loop",
+          "Combat rules",
+          "Field interaction",
+          "Progression",
+          "Data and saves",
+          "Failure behavior",
+          "Accessibility"
+        ]
+      }
+    },
+    {
+      "id": "narrative.beats",
+      "label": "Beats outline",
+      "kind": "document",
+      "required": true,
+      "templateAnchor": "Beats Outline",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.vision"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 700,
+        "requiredTermGroups": [
+          [
+            "chapter"
+          ],
+          [
+            "quest",
+            "objective"
+          ],
+          [
+            "boss",
+            "encounter"
+          ],
+          [
+            "location",
+            "map"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 4056,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/03-beats-outline.md",
+          "role": "chapter beats",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 26452,
+          "words": 4056,
+          "sha256": "53eb143f52c48c6eb67c1ab803c42fb1f7ea6a58ddd300ddc3a76943921d21e6",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Give every chapter a quest, route, cast movement, and boss outcome.",
+        "output": "docs/03-beats-outline.md",
+        "sections": [
+          "Chapter quest",
+          "Locations",
+          "Characters",
+          "Boss",
+          "Exit state"
+        ]
+      }
+    },
+    {
+      "id": "narrative.detailed-outline",
+      "label": "Detailed outline",
+      "kind": "document",
+      "required": true,
+      "templateAnchor": "Detailed Outline",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "narrative.beats"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 1200,
+        "requiredTermGroups": [
+          [
+            "scene"
+          ],
+          [
+            "theme",
+            "thematic",
+            "narrative target"
+          ],
+          [
+            "chapter"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 6015,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/04-detailed-outline.md",
+          "role": "ordered scenes",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 39417,
+          "words": 6015,
+          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Order roughly 80% of scenes and expose their thematic and production consequences.",
+        "output": "docs/04-detailed-outline.md",
+        "sections": [
+          "Ordered scenes",
+          "Scene objective",
+          "Location",
+          "Participants",
+          "Theme",
+          "Required assets",
+          "Transition"
+        ]
+      }
+    },
+    {
+      "id": "production.asset-list",
+      "label": "Master asset list",
+      "kind": "document",
+      "required": true,
+      "templateAnchor": "Asset List",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.vision",
+        "narrative.detailed-outline"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 700,
+        "requiredTermGroups": [
+          [
+            "environment",
+            "location"
+          ],
+          [
+            "character"
+          ],
+          [
+            "ui"
+          ],
+          [
+            "animation"
+          ],
+          [
+            "reference"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 3395,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/06-master-asset-list.md",
+          "role": "asset inventory",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 25531,
+          "words": 3395,
+          "sha256": "25d61fd34dacd520ce0f3515f67f4544e9c4c9606bae792f838bf2328f4047e5",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Derive an authoritative, reference-backed production inventory from the outline.",
+        "output": "docs/06-master-asset-list.md",
+        "sections": [
+          "Asset ID",
+          "Owner",
+          "Source scene/system",
+          "Reference",
+          "Dimensions or budget",
+          "Status",
+          "Acceptance gate"
+        ]
+      }
+    },
+    {
+      "id": "presentation.battle-shot",
+      "label": "One true battle shot",
+      "kind": "artifact",
+      "required": true,
+      "templateAnchor": "Battle Shot",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.vision",
+        "design.technical-gdd",
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "image",
+          "markdown"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 2968,
+        "kinds": [
+          "image",
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "assets/production/bells-party-roster-v1.png",
+          "role": "battle presentation reference",
+          "kinds": [
+            "image"
+          ],
+          "exists": true,
+          "bytes": 2409335,
+          "words": 0,
+          "sha256": "f6b28f192a35f19bbc60efd366cf88af10b0b79c2f2b4aa788d59ec749fe95c5",
+          "errors": []
+        },
+        {
+          "path": "docs/05-art-direction.md",
+          "role": "visual intent",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 21050,
+          "words": 2968,
+          "sha256": "ca6d900b89a3e791b04be91faf8888514c1ec79fb631ec362f7d10468fd20efa",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Show genre, turn/action structure, party composition, threat, and the combat hook in one authored frame.",
+        "output": "assets/production/jrpg-one-true-battle-shot.png",
+        "sections": [
+          "Composition brief",
+          "Hook read",
+          "Party and threat read",
+          "UI read",
+          "Art provenance"
+        ]
+      }
+    },
+    {
+      "id": "presentation.world-shot",
+      "label": "One true world/story shot",
+      "kind": "artifact",
+      "required": true,
+      "templateAnchor": "World/Story Shot",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.vision",
+        "narrative.detailed-outline",
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "image",
+          "markdown"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 2968,
+        "kinds": [
+          "image",
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "assets/production/bells-takamine-keyframe-v1.png",
+          "role": "world presentation reference",
+          "kinds": [
+            "image"
+          ],
+          "exists": true,
+          "bytes": 2611009,
+          "words": 0,
+          "sha256": "17aea41ebe154d79fcdd509c2951a6a5a3b0273d7c4fe569c5e40561d6be16ac",
+          "errors": []
+        },
+        {
+          "path": "docs/05-art-direction.md",
+          "role": "visual intent",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 21050,
+          "words": 2968,
+          "sha256": "ca6d900b89a3e791b04be91faf8888514c1ec79fb631ec362f7d10468fd20efa",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Make genre and tone legible in a single world/story composition.",
+        "output": "assets/production/jrpg-one-true-world-shot.png",
+        "sections": [
+          "Location",
+          "Dramatic beat",
+          "Tone cues",
+          "Character blocking",
+          "Art provenance"
+        ]
+      }
+    },
+    {
+      "id": "presentation.menu-shot",
+      "label": "One true menu shot",
+      "kind": "artifact",
+      "required": true,
+      "templateAnchor": "Menu Shot",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.vision",
+        "design.technical-gdd",
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "source",
+          "markdown"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 3310,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "game/index.html",
+          "role": "implemented shell",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 2968,
+          "words": 342,
+          "sha256": "66639b44a3b1db716d4f95f56f627f6fd34578437654ab910c5d27aaddb4926e",
+          "errors": []
+        },
+        {
+          "path": "docs/05-art-direction.md",
+          "role": "menu direction",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 21050,
+          "words": 2968,
+          "sha256": "ca6d900b89a3e791b04be91faf8888514c1ec79fb631ec362f7d10468fd20efa",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Show the intended customization density, party identity, and decision hierarchy.",
+        "output": "assets/production/jrpg-one-true-menu-shot.png",
+        "sections": [
+          "Primary decision",
+          "Party read",
+          "Customization depth",
+          "Information hierarchy",
+          "Accessibility"
+        ]
+      }
+    },
+    {
+      "id": "presentation.video-teaser",
+      "label": "Internal video teaser",
+      "kind": "artifact",
+      "required": false,
+      "templateAnchor": "Video Teaser",
+      "declaredStatus": "planned",
+      "status": "optional-missing",
+      "dependsOn": [
+        "presentation.battle-shot",
+        "presentation.world-shot",
+        "presentation.menu-shot"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1
+      },
+      "metrics": {
+        "artifacts": 0,
+        "words": 0,
+        "kinds": []
+      },
+      "artifacts": [],
+      "directErrors": [
+        {
+          "code": "contract.minimum-artifacts",
+          "message": "presentation.video-teaser needs at least 1 artifact(s).",
+          "nodeId": "presentation.video-teaser"
+        }
+      ],
+      "extrapolation": {
+        "objective": "Animate the battle and world vision for animation, VFX, and battle-scripting alignment.",
+        "output": "assets/production/jrpg-internal-teaser.mp4",
+        "sections": [
+          "Shot list",
+          "Timing",
+          "Combat beat",
+          "World beat",
+          "Audio intent"
+        ]
+      }
+    },
+    {
+      "id": "production.staffing",
+      "label": "Staffing and contractor plan",
+      "kind": "document",
+      "required": true,
+      "templateAnchor": "Contractors/Staff",
+      "declaredStatus": "partial",
+      "status": "partial",
+      "dependsOn": [
+        "design.vision",
+        "design.technical-gdd",
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 300,
+        "requiredTermGroups": [
+          [
+            "artist",
+            "art director",
+            "art"
+          ],
+          [
+            "programmer",
+            "engineer",
+            "developer",
+            "technical"
+          ],
+          [
+            "writer",
+            "narrative"
+          ],
+          [
+            "producer",
+            "production"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 1473,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/00-production-roadmap.md",
+          "role": "production outline, not a committed staffing plan",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10932,
+          "words": 1473,
+          "sha256": "8c7e6a88823f7eea55680c597c5cb2bf0898a41fb36df0691c99ff9c5efa2107",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Map JRPG-specific production responsibilities, capability gaps, and decision ownership.",
+        "output": "docs/27-staffing-and-contractor-plan.md",
+        "sections": [
+          "Roles",
+          "Relevant experience",
+          "Ownership",
+          "Hiring order",
+          "Review gates",
+          "Budget assumptions"
+        ]
+      }
+    },
+    {
+      "id": "engine.asset-management",
+      "label": "Asset-management pipeline",
+      "kind": "system",
+      "required": true,
+      "templateAnchor": "Asset Management",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "data"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 6166,
+        "kinds": [
+          "data",
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "assets/production/README.md",
+          "role": "asset workflow",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 22508,
+          "words": 3063,
+          "sha256": "1e5401186ce0004bd9a3828e8b359ed3058b7d3a407fa1545ff6adeb701bbfeb",
+          "errors": []
+        },
+        {
+          "path": "assets/art/party-field-suite/manifest.json",
+          "role": "machine-readable asset manifest",
+          "kinds": [
+            "data"
+          ],
+          "exists": true,
+          "bytes": 53987,
+          "words": 3103,
+          "sha256": "542fcf1b57fa60c21ce5b9996395769e18a652f39a81ed433e4fe00389ebab22",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Make asset sources, exports, manifests, validation, and ownership reproducible.",
+        "output": "assets/production/README.md",
+        "sections": [
+          "Source files",
+          "Build commands",
+          "Manifest",
+          "Runtime copy",
+          "Validation",
+          "Ownership"
+        ]
+      }
+    },
+    {
+      "id": "engine.field",
+      "label": "World and field interaction",
+      "kind": "system",
+      "required": true,
+      "templateAnchor": "World and Field Maps/Interaction",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.technical-gdd",
+        "engine.asset-management"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 8077,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/09-level-and-encounter-bible.md",
+          "role": "field contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 14182,
+          "words": 2004,
+          "sha256": "647a5e8ac0625d7c5ec9d2844faa526b34ffa0465bf647d49592900d503f7014",
+          "errors": []
+        },
+        {
+          "path": "game/field-runtime.mjs",
+          "role": "field implementation",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 58957,
+          "words": 6073,
+          "sha256": "aab13d6110d0b5ec66fe14a92efd90cb9ce630b290c908c1c4b4962cecbf95e6",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Implement and document movement, collision, interaction, cameras, routes, and map-specific mechanics.",
+        "output": "docs/09-level-and-encounter-bible.md",
+        "sections": [
+          "Coordinate model",
+          "Collision",
+          "Interaction",
+          "Camera",
+          "Routes",
+          "Failure cases"
+        ]
+      }
+    },
+    {
+      "id": "engine.battle",
+      "label": "Battle mechanics",
+      "kind": "system",
+      "required": true,
+      "templateAnchor": "Battle Mechanics",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.technical-gdd"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ],
+        "requiredTermGroups": [
+          [
+            "damage"
+          ],
+          [
+            "turn",
+            "cooldown",
+            "recovery"
+          ],
+          [
+            "enemy"
+          ],
+          [
+            "victory",
+            "defeat"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 8947,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/02-technical-gdd.md",
+          "role": "battle contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 19529,
+          "words": 2785,
+          "sha256": "b7d34de8dc52d2c8533b993741441d1cbca33691474226cfcc501447f0f161e4",
+          "errors": []
+        },
+        {
+          "path": "game/campaign-combat.mjs",
+          "role": "canonical combat implementation",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 60517,
+          "words": 6162,
+          "sha256": "7a3622da10b437a0251c1e2a79d3f6012f9761db572a54de690266b55188294d",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Implement the battle hook and all rules needed by content authors.",
+        "output": "docs/02-technical-gdd.md",
+        "sections": [
+          "Command model",
+          "Timing",
+          "Damage",
+          "Resources",
+          "Enemy AI",
+          "Objectives",
+          "Victory and defeat"
+        ]
+      }
+    },
+    {
+      "id": "engine.stats-gear",
+      "label": "Stat and gear system",
+      "kind": "system",
+      "required": true,
+      "templateAnchor": "Stat and Gear System",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.technical-gdd",
+        "engine.battle"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ],
+        "requiredTermGroups": [
+          [
+            "stat"
+          ],
+          [
+            "gear",
+            "equipment"
+          ],
+          [
+            "level",
+            "progression"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 7579,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/13-advancement-and-runtime-pacing.md",
+          "role": "advancement contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 8967,
+          "words": 1234,
+          "sha256": "431c42f877d3bd05953a3506d4bca5c55710b9985a4dce71013fe3d487915f99",
+          "errors": []
+        },
+        {
+          "path": "game/loadout.mjs",
+          "role": "loadout implementation",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 53961,
+          "words": 6345,
+          "sha256": "f91c37881a91206c04ae2565a9c1ee7e20a4c4e9ad2990047e3df1bde9e4f4d2",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Bound stats, levels, gear effects, acquisition, and their combat consequences.",
+        "output": "docs/13-advancement-and-runtime-pacing.md",
+        "sections": [
+          "Stats",
+          "Level curve",
+          "Equipment slots",
+          "Modifier rules",
+          "Economy",
+          "Balance gates"
+        ]
+      }
+    },
+    {
+      "id": "engine.data",
+      "label": "Data management",
+      "kind": "system",
+      "required": true,
+      "templateAnchor": "Data Management",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "design.technical-gdd"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ],
+        "requiredTermGroups": [
+          [
+            "schema",
+            "version"
+          ],
+          [
+            "save",
+            "persistence"
+          ],
+          [
+            "validation"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 3591,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/12-progression-save-contract.md",
+          "role": "save contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10895,
+          "words": 1393,
+          "sha256": "1e0da27ff32eca3b573f451a5bbe0561e3a716d137d08628a1c3a81fc3447718",
+          "errors": []
+        },
+        {
+          "path": "game/progression.mjs",
+          "role": "persistence implementation",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 20892,
+          "words": 2198,
+          "sha256": "f8a3b2b46708f9ca4cd8e3a8f171dabb27f3ec02f4e35633f3dbb26d17b65dac",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Define authoritative schemas, storage boundaries, migrations, and rollback behavior.",
+        "output": "docs/12-progression-save-contract.md",
+        "sections": [
+          "Authorities",
+          "Schemas",
+          "Validation",
+          "Transactions",
+          "Migration",
+          "Recovery"
+        ]
+      }
+    },
+    {
+      "id": "engine.fx",
+      "label": "FX engine",
+      "kind": "system",
+      "required": true,
+      "templateAnchor": "FX Engine",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "engine.battle",
+        "engine.asset-management"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "data"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 4749,
+        "kinds": [
+          "data",
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/10-animation-bible.md",
+          "role": "animation and effects contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 30837,
+          "words": 4452,
+          "sha256": "ba2fd7ff56d649ab2433d34189fb88dfc1d0e8f5885e22034932ec840c45eb86",
+          "errors": []
+        },
+        {
+          "path": "assets/art/takamine-bell-chamber/manifest.json",
+          "role": "effect-capable art manifest",
+          "kinds": [
+            "data"
+          ],
+          "exists": true,
+          "bytes": 4109,
+          "words": 297,
+          "sha256": "01302614467c24d69e7aef06ef7a224277c61a0420099403cbf3335da29a5883",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Provide a bounded, reproducible VFX vocabulary for battle and field events.",
+        "output": "docs/10-animation-bible.md",
+        "sections": [
+          "Signal vocabulary",
+          "Timelines",
+          "Atlases",
+          "Reduced motion",
+          "Fallbacks",
+          "Validation"
+        ]
+      }
+    },
+    {
+      "id": "pipeline.content",
+      "label": "Content pipeline",
+      "kind": "pipeline",
+      "required": true,
+      "templateAnchor": "Content Pipeline",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "engine.field",
+        "engine.battle",
+        "engine.stats-gear",
+        "engine.data",
+        "engine.fx"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 500,
+        "requiredTermGroups": [
+          [
+            "scene"
+          ],
+          [
+            "battle"
+          ],
+          [
+            "content"
+          ],
+          [
+            "validation",
+            "test"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 1440,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/08-campaign-content-pipeline.md",
+          "role": "content pipeline",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10761,
+          "words": 1440,
+          "sha256": "dd272b3708b3e864a3396e7249ef3c70da093d8090d7eb2d0f5d9f63c87d0425",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Turn approved design records into repeatable authored content and validated runtime data.",
+        "output": "docs/08-campaign-content-pipeline.md",
+        "sections": [
+          "Inputs",
+          "Identifiers",
+          "Authoring",
+          "Generation",
+          "Validation",
+          "Promotion"
+        ]
+      }
+    },
+    {
+      "id": "tooling.scene",
+      "label": "Scene tooling",
+      "kind": "tooling",
+      "required": true,
+      "templateAnchor": "Scene Tooling",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "pipeline.content",
+        "engine.field",
+        "engine.data"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 15159,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/08-campaign-content-pipeline.md",
+          "role": "scene authoring contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10761,
+          "words": 1440,
+          "sha256": "dd272b3708b3e864a3396e7249ef3c70da093d8090d7eb2d0f5d9f63c87d0425",
+          "errors": []
+        },
+        {
+          "path": "game/campaign.js",
+          "role": "scene runtime",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 155022,
+          "words": 13719,
+          "sha256": "1080aa262bcf27e0757f43ec2c6b7abef3d132994b2b04949bd05545634c12ff",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Author, order, render, and validate scenes without hand-editing runtime state.",
+        "output": "docs/08-campaign-content-pipeline.md",
+        "sections": [
+          "Scene schema",
+          "Dialogue",
+          "Blocking",
+          "Operations",
+          "Preview",
+          "Validation"
+        ]
+      }
+    },
+    {
+      "id": "tooling.battle",
+      "label": "Battle tooling",
+      "kind": "tooling",
+      "required": true,
+      "templateAnchor": "Battle Tooling",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "pipeline.content",
+        "engine.battle",
+        "engine.data"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 15411,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/09-level-and-encounter-bible.md",
+          "role": "encounter authoring contract",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 14182,
+          "words": 2004,
+          "sha256": "647a5e8ac0625d7c5ec9d2844faa526b34ffa0465bf647d49592900d503f7014",
+          "errors": []
+        },
+        {
+          "path": "game/battle.js",
+          "role": "battle runtime",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 139416,
+          "words": 13407,
+          "sha256": "4ad2f377bcef791a6f0772ebb0eb5c038d2b409f2e3100e083d86ea877ae9d74",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Author encounters, enemies, objectives, rewards, and balance traces through validated data.",
+        "output": "docs/09-level-and-encounter-bible.md",
+        "sections": [
+          "Encounter schema",
+          "Enemy kits",
+          "Objectives",
+          "Rewards",
+          "Simulation",
+          "Balance validation"
+        ]
+      }
+    },
+    {
+      "id": "milestone.first-playable",
+      "label": "First playable plan",
+      "kind": "milestone",
+      "required": true,
+      "templateAnchor": "First Playable",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "narrative.detailed-outline",
+        "production.asset-list",
+        "tooling.scene",
+        "tooling.battle"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 250,
+        "requiredTermGroups": [
+          [
+            "first playable",
+            "fp-1"
+          ],
+          [
+            "script",
+            "scene"
+          ],
+          [
+            "battle"
+          ],
+          [
+            "map",
+            "field"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 6365,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/04-detailed-outline.md",
+          "role": "first-playable definition and script",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 39417,
+          "words": 6015,
+          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "errors": []
+        },
+        {
+          "path": "docs/07-first-playable-qa.md",
+          "role": "first-playable acceptance card",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 2599,
+          "words": 350,
+          "sha256": "4dc678da7369908b641ef960b8cea934be189b228af4a7f4b9636b89125933f0",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Bound one representative, end-to-end slice before chapter production scales.",
+        "output": "docs/07-first-playable-qa.md",
+        "sections": [
+          "Player path",
+          "Script",
+          "Assets",
+          "Entities",
+          "Battles",
+          "Maps",
+          "Scenes",
+          "Acceptance"
+        ]
+      }
+    },
+    {
+      "id": "fp.script",
+      "label": "First-playable script",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "First Playable (FP) Script",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "milestone.first-playable",
+        "narrative.detailed-outline"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 400,
+        "requiredTermGroups": [
+          [
+            "dialogue",
+            "scene"
+          ],
+          [
+            "objective"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 1,
+        "words": 6015,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/04-detailed-outline.md",
+          "role": "first-playable script source",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 39417,
+          "words": 6015,
+          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Write the complete representative slice script.",
+        "output": "docs/fp-script.md",
+        "sections": [
+          "Scene order",
+          "Dialogue",
+          "Objectives",
+          "Transitions"
+        ]
+      }
+    },
+    {
+      "id": "fp.assets",
+      "label": "First-playable assets",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "First Playable (FP) Assets",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "milestone.first-playable",
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "image"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 3395,
+        "kinds": [
+          "image",
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/06-master-asset-list.md",
+          "role": "first-playable asset ledger",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 25531,
+          "words": 3395,
+          "sha256": "25d61fd34dacd520ce0f3515f67f4544e9c4c9606bae792f838bf2328f4047e5",
+          "errors": []
+        },
+        {
+          "path": "assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
+          "role": "first-playable environment board",
+          "kinds": [
+            "image"
+          ],
+          "exists": true,
+          "bytes": 5452,
+          "words": 0,
+          "sha256": "03c671d8408fa2195552ba62ab04df7808303d37fdc8f94577596afdf5c7e1ca",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Produce and validate the representative slice asset subset.",
+        "output": "assets/production/fp/",
+        "sections": [
+          "Environment",
+          "Characters",
+          "Enemies",
+          "UI",
+          "FX"
+        ]
+      }
+    },
+    {
+      "id": "fp.entities",
+      "label": "First-playable entities",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "FP Entities",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "fp.script",
+        "fp.assets",
+        "engine.stats-gear"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "data",
+          "source"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 9239,
+        "kinds": [
+          "data",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "assets/art/takamine-bell-chamber/manifest.json",
+          "role": "entity data evidence",
+          "kinds": [
+            "data"
+          ],
+          "exists": true,
+          "bytes": 4109,
+          "words": 297,
+          "sha256": "01302614467c24d69e7aef06ef7a224277c61a0420099403cbf3335da29a5883",
+          "errors": []
+        },
+        {
+          "path": "game/content/encounters.mjs",
+          "role": "entity definitions",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 74500,
+          "words": 8942,
+          "sha256": "8a60732f60f906a2701f0f584aa96eca08b750f0cefda6b73eeeaef2994ab259",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Bind slice characters, NPCs, enemies, props, and stats to runtime identities.",
+        "output": "game/content/fp-entities.mjs",
+        "sections": [
+          "Party",
+          "NPCs",
+          "Enemies",
+          "Props",
+          "Stats"
+        ]
+      }
+    },
+    {
+      "id": "fp.battles",
+      "label": "First-playable battles",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "FP Battles",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "fp.entities",
+        "tooling.battle"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "source",
+          "test"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 9713,
+        "kinds": [
+          "source",
+          "test"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "game/content/encounters.mjs",
+          "role": "battle definitions",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 74500,
+          "words": 8942,
+          "sha256": "8a60732f60f906a2701f0f584aa96eca08b750f0cefda6b73eeeaef2994ab259",
+          "errors": []
+        },
+        {
+          "path": "game/tests/campaign-content.test.mjs",
+          "role": "battle content tests",
+          "kinds": [
+            "source",
+            "test"
+          ],
+          "exists": true,
+          "bytes": 6459,
+          "words": 771,
+          "sha256": "80bec21ea9ebbee3b3842a5ed12544cd76634b9c22082e4b88fac026057ceadb",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Ship the slice encounters with objective, balance, and result coverage.",
+        "output": "game/content/fp-battles.mjs",
+        "sections": [
+          "Teaching battle",
+          "Boss",
+          "Objectives",
+          "Rewards",
+          "Tests"
+        ]
+      }
+    },
+    {
+      "id": "fp.maps",
+      "label": "First-playable maps",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "FP Maps",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "fp.assets",
+        "engine.field"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "source",
+          "image"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 9799,
+        "kinds": [
+          "image",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "game/content/levels.mjs",
+          "role": "map definitions",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 76988,
+          "words": 9799,
+          "sha256": "bf99082726c8156b01f5e7bf63b3ede8488658103b54f5b9d5e9f5599ce38594",
+          "errors": []
+        },
+        {
+          "path": "assets/art/takamine-bell-chamber/takamine-bell-chamber-board.png",
+          "role": "map presentation evidence",
+          "kinds": [
+            "image"
+          ],
+          "exists": true,
+          "bytes": 5452,
+          "words": 0,
+          "sha256": "03c671d8408fa2195552ba62ab04df7808303d37fdc8f94577596afdf5c7e1ca",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Ship the slice field route and battle environments.",
+        "output": "game/content/fp-levels.mjs",
+        "sections": [
+          "Town",
+          "Route",
+          "Dungeon",
+          "Battle stages",
+          "Collision"
+        ]
+      }
+    },
+    {
+      "id": "fp.scenes",
+      "label": "First-playable scenes",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "FP Scenes",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "fp.script",
+        "fp.assets",
+        "tooling.scene"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 17780,
+        "kinds": [
+          "markdown",
+          "source"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/04-detailed-outline.md",
+          "role": "scene plan",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 39417,
+          "words": 6015,
+          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "errors": []
+        },
+        {
+          "path": "game/content/campaign.mjs",
+          "role": "implemented scenes",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 111479,
+          "words": 11765,
+          "sha256": "573a93f0706b1dfa58d7fa91da86a1275daa05c876f41e72e350faa938a14fc0",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Render and validate the complete slice scene chain.",
+        "output": "game/content/fp-scenes.mjs",
+        "sections": [
+          "Dialogue",
+          "Blocking",
+          "Camera",
+          "Interaction",
+          "Transitions"
+        ]
+      }
+    },
+    {
+      "id": "fp.playtest",
+      "label": "First-playable playtest",
+      "kind": "evidence",
+      "required": true,
+      "templateAnchor": "First Playable",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "fp.battles",
+        "fp.maps",
+        "fp.scenes"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "test"
+        ],
+        "requiredTermGroups": [
+          [
+            "acceptance",
+            "pass"
+          ],
+          [
+            "player",
+            "playtest"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 1847,
+        "kinds": [
+          "markdown",
+          "source",
+          "test"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/07-first-playable-qa.md",
+          "role": "acceptance evidence",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 2599,
+          "words": 350,
+          "sha256": "4dc678da7369908b641ef960b8cea934be189b228af4a7f4b9636b89125933f0",
+          "errors": []
+        },
+        {
+          "path": "game/tests/browser-flow-integration.test.mjs",
+          "role": "route test",
+          "kinds": [
+            "source",
+            "test"
+          ],
+          "exists": true,
+          "bytes": 14948,
+          "words": 1497,
+          "sha256": "2c6cbfb20c3b9f1b6ea4bc1d25f3a76dee10625737b8a044ee67bcc8f5ad75b6",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Test the end-to-end slice with explicit comprehension, control, and pacing gates.",
+        "output": "docs/07-first-playable-qa.md",
+        "sections": [
+          "Build",
+          "Participants",
+          "Tasks",
+          "Findings",
+          "Fixes",
+          "Retest"
+        ]
+      }
+    },
+    {
+      "id": "chapter.template",
+      "label": "Repeatable chapter-production contract",
+      "kind": "repeatable",
+      "required": true,
+      "templateAnchor": "Chapter 1",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "fp.playtest",
+        "pipeline.content"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 1,
+        "minimumWords": 350,
+        "requiredTermGroups": [
+          [
+            "chapter"
+          ],
+          [
+            "script"
+          ],
+          [
+            "asset"
+          ],
+          [
+            "battle"
+          ],
+          [
+            "map"
+          ],
+          [
+            "scene"
+          ],
+          [
+            "playtest"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 2913,
+        "kinds": [
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/08-campaign-content-pipeline.md",
+          "role": "chapter authoring template",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10761,
+          "words": 1440,
+          "sha256": "dd272b3708b3e864a3396e7249ef3c70da093d8090d7eb2d0f5d9f63c87d0425",
+          "errors": []
+        },
+        {
+          "path": "docs/00-production-roadmap.md",
+          "role": "chapter production and playtest gates",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10932,
+          "words": 1473,
+          "sha256": "8c7e6a88823f7eea55680c597c5cb2bf0898a41fb36df0691c99ff9c5efa2107",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Turn the template's Chapter 1/2 repetition into one parameterized production contract for every chapter.",
+        "output": "docs/08-campaign-content-pipeline.md",
+        "sections": [
+          "Script",
+          "Assets",
+          "Entities",
+          "Battles",
+          "Maps",
+          "Scenes",
+          "Playtest"
+        ]
+      }
+    },
+    {
+      "id": "chapter.content",
+      "label": "All chapter content",
+      "kind": "content",
+      "required": true,
+      "templateAnchor": "Chapter 2",
+      "declaredStatus": "ready",
+      "status": "verified",
+      "dependsOn": [
+        "chapter.template",
+        "narrative.detailed-outline",
+        "production.asset-list"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 4,
+        "requiredKinds": [
+          "markdown",
+          "source",
+          "data",
+          "test"
+        ]
+      },
+      "metrics": {
+        "artifacts": 4,
+        "words": 19186,
+        "kinds": [
+          "data",
+          "markdown",
+          "source",
+          "test"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/04-detailed-outline.md",
+          "role": "chapter narrative",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 39417,
+          "words": 6015,
+          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "errors": []
+        },
+        {
+          "path": "game/content/campaign.mjs",
+          "role": "chapter implementation",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 111479,
+          "words": 11765,
+          "sha256": "573a93f0706b1dfa58d7fa91da86a1275daa05c876f41e72e350faa938a14fc0",
+          "errors": []
+        },
+        {
+          "path": "docs/rendered-route-playtest-evidence.json",
+          "role": "chapter route data",
+          "kinds": [
+            "data"
+          ],
+          "exists": true,
+          "bytes": 15297,
+          "words": 635,
+          "sha256": "bdf021e41dc7dbd42948756d19dec25e5bb25b682bb5874b19cb9f5366baa57a",
+          "errors": []
+        },
+        {
+          "path": "game/tests/campaign-content.test.mjs",
+          "role": "chapter content tests",
+          "kinds": [
+            "source",
+            "test"
+          ],
+          "exists": true,
+          "bytes": 6459,
+          "words": 771,
+          "sha256": "80bec21ea9ebbee3b3842a5ed12544cd76634b9c22082e4b88fac026057ceadb",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Instantiate the chapter contract across the complete game without skipping per-chapter evidence.",
+        "output": "game/content/",
+        "sections": [
+          "Scripts",
+          "Assets",
+          "Entities",
+          "Battles",
+          "Maps",
+          "Scenes",
+          "Per-chapter tests"
+        ]
+      }
+    },
+    {
+      "id": "qa.final-playtests",
+      "label": "Final playtests",
+      "kind": "evidence",
+      "required": true,
+      "templateAnchor": "Final Playtests",
+      "declaredStatus": "partial",
+      "status": "partial",
+      "dependsOn": [
+        "chapter.content"
+      ],
+      "blockedBy": [],
+      "contract": {
+        "minimumArtifacts": 2,
+        "requiredKinds": [
+          "markdown",
+          "data"
+        ],
+        "requiredTermGroups": [
+          [
+            "human"
+          ],
+          [
+            "playtest"
+          ],
+          [
+            "timing",
+            "duration"
+          ],
+          [
+            "finding",
+            "result"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 2,
+        "words": 1429,
+        "kinds": [
+          "data",
+          "markdown"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/19-human-playtest-protocol.md",
+          "role": "human test protocol",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 5965,
+          "words": 794,
+          "sha256": "6e4ed6eef3dbc9aafe9769b305595857b56dece0c1ac9ea39cc8cc2481642db5",
+          "errors": []
+        },
+        {
+          "path": "docs/rendered-route-playtest-evidence.json",
+          "role": "automated route evidence, not fresh human findings",
+          "kinds": [
+            "data"
+          ],
+          "exists": true,
+          "bytes": 15297,
+          "words": 635,
+          "sha256": "bdf021e41dc7dbd42948756d19dec25e5bb25b682bb5874b19cb9f5366baa57a",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Collect current-build human evidence for comprehension, balance, accessibility, pacing, and completion.",
+        "output": "docs/19-human-playtest-protocol.md",
+        "sections": [
+          "Build identity",
+          "Participants",
+          "Protocol",
+          "Observations",
+          "Timing",
+          "Defects",
+          "Retest"
+        ]
+      }
+    },
+    {
+      "id": "qa.release-readiness",
+      "label": "Release-readiness synthesis",
+      "kind": "release",
+      "required": true,
+      "templateAnchor": "Final Playtests",
+      "declaredStatus": "partial",
+      "status": "partial",
+      "dependsOn": [
+        "qa.final-playtests",
+        "production.staffing"
+      ],
+      "blockedBy": [
+        "qa.final-playtests",
+        "production.staffing"
+      ],
+      "contract": {
+        "minimumArtifacts": 3,
+        "requiredKinds": [
+          "markdown",
+          "data",
+          "test"
+        ],
+        "requiredTermGroups": [
+          [
+            "accessibility"
+          ],
+          [
+            "cultural",
+            "historical"
+          ],
+          [
+            "balance"
+          ],
+          [
+            "release",
+            "readiness"
+          ]
+        ]
+      },
+      "metrics": {
+        "artifacts": 6,
+        "words": 8390,
+        "kinds": [
+          "data",
+          "markdown",
+          "source",
+          "test"
+        ]
+      },
+      "artifacts": [
+        {
+          "path": "docs/11-build-qa-report.md",
+          "role": "build QA",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 32005,
+          "words": 4231,
+          "sha256": "05f683ad84299042ab5a86984cfe72697c7b37a05069c05a6ab2720f52c30499",
+          "errors": []
+        },
+        {
+          "path": "docs/23-current-build-accessibility-audit.md",
+          "role": "accessibility audit",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 3734,
+          "words": 466,
+          "sha256": "dda0b3792ceee954759c0a75f6cd4f07acecea310dd54f3f87edc657a9d87a65",
+          "errors": []
+        },
+        {
+          "path": "docs/24-external-cultural-review-packet.md",
+          "role": "cultural review packet",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 5331,
+          "words": 704,
+          "sha256": "ebb45a152cb2a6a31c434b7fbcc6ab86da71938ca5c7c6157589a7c75c241050",
+          "errors": []
+        },
+        {
+          "path": "docs/25-combat-balance-audit.md",
+          "role": "balance audit",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 5829,
+          "words": 857,
+          "sha256": "0420814d0743f5e1b238cf1492364815ee4cac27b3df544f2e819ac6eecf26c5",
+          "errors": []
+        },
+        {
+          "path": "docs/rendered-route-playtest-evidence.json",
+          "role": "machine-readable QA evidence",
+          "kinds": [
+            "data"
+          ],
+          "exists": true,
+          "bytes": 15297,
+          "words": 635,
+          "sha256": "bdf021e41dc7dbd42948756d19dec25e5bb25b682bb5874b19cb9f5366baa57a",
+          "errors": []
+        },
+        {
+          "path": "game/tests/browser-flow-integration.test.mjs",
+          "role": "release route test",
+          "kinds": [
+            "source",
+            "test"
+          ],
+          "exists": true,
+          "bytes": 14948,
+          "words": 1497,
+          "sha256": "2c6cbfb20c3b9f1b6ea4bc1d25f3a76dee10625737b8a044ee67bcc8f5ad75b6",
+          "errors": []
+        }
+      ],
+      "directErrors": [],
+      "extrapolation": {
+        "objective": "Synthesize human and automated evidence without promoting estimates or stale receipts into release claims.",
+        "output": "docs/11-build-qa-report.md",
+        "sections": [
+          "Build identity",
+          "Automated verification",
+          "Human evidence",
+          "Accessibility",
+          "Cultural review",
+          "Balance",
+          "Known risks",
+          "Verdict"
+        ]
+      }
+    }
+  ]
+}

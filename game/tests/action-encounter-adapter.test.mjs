@@ -3,21 +3,28 @@ import test from 'node:test';
 import {
   ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION,
   ACTION_ENCOUNTER_IDS,
+  ACTION_RECOVERY_PULSE_MS,
   ACTION_TILE_PX,
   adaptActionEncounter,
   adaptAllActionEncounters,
   actionCooldownForRecovery,
+  actionEnemyHp,
+  actionEnemyPower,
   createActionEncounterKernel,
   MINIMUM_SHARED_OFFENSIVE_COOLDOWN_MS,
   projectActionTerminalResult,
   sharedOffensiveCooldownMs,
   ZERO_RECOVERY_COOLDOWN_FLOOR_MS,
 } from '../action-encounter-adapter.mjs';
-import { ACTION_FIXED_STEP_MS, ActionCombatKernel } from '../action-combat.mjs';
+import {
+  ACTION_FIXED_STEP_MS,
+  ACTION_MOVEMENT_PROFILE_BY_ACTOR_ID,
+  ActionCombatKernel,
+} from '../action-combat.mjs';
 import { createAdvancementState, getChapterLevelTarget } from '../advancement.mjs';
 import { validateBattleResultRecord } from '../battle-result-contract.mjs';
 import { PARTY_PROFILES, PARTY_SKILLS } from '../campaign-combat.mjs';
-import { ENCOUNTERS, RECOVERY_PULSE_MS } from '../content/encounters.mjs';
+import { ENCOUNTERS } from '../content/encounters.mjs';
 
 function sourceEnemySkillCount(encounter) {
   return encounter.enemies.reduce((total, enemy) => total + (enemy.skills?.length ?? 0), 0);
@@ -115,10 +122,24 @@ test('every canonical encounter, profile, and skill record has an explicit actio
 test('Recovery pulses map to cooldown milliseconds with a nonzero zero-pulse floor', () => {
   assert.equal(actionCooldownForRecovery(0), ZERO_RECOVERY_COOLDOWN_FLOOR_MS);
   assert.equal(actionCooldownForRecovery(-1), ZERO_RECOVERY_COOLDOWN_FLOOR_MS);
-  assert.equal(actionCooldownForRecovery(1), RECOVERY_PULSE_MS);
-  assert.equal(actionCooldownForRecovery(3), RECOVERY_PULSE_MS * 3);
+  assert.equal(actionCooldownForRecovery(1), ACTION_RECOVERY_PULSE_MS);
+  assert.equal(actionCooldownForRecovery(3), ACTION_RECOVERY_PULSE_MS * 3);
   assert.equal(sharedOffensiveCooldownMs(0) > 0, true);
   assert.equal(sharedOffensiveCooldownMs(999), MINIMUM_SHARED_OFFENSIVE_COOLDOWN_MS);
+});
+
+test('Action Lab preserves ordinary enemy HP and compresses only the boss-health tail', () => {
+  assert.equal(actionEnemyHp(120), 120);
+  assert.equal(actionEnemyHp(400), 400);
+  assert.equal(actionEnemyHp(760), 634);
+  assert.equal(actionEnemyHp(1480), 1102);
+});
+
+test('Action Lab enemy Power follows party progression without an unbounded late-game spike', () => {
+  assert.equal(actionEnemyPower(20, 1), 20);
+  assert.equal(actionEnemyPower(20, 21), 30);
+  assert.equal(actionEnemyPower(20, 40), 38);
+  assert.equal(actionEnemyPower(20, 99), 38);
 });
 
 test('level geometry becomes grounded side-view positions instead of top-down lanes', () => {
@@ -142,6 +163,44 @@ test('actual advancement views override recommended party levels and stats', () 
 
   const explicit = adaptActionEncounter('c9-kurozane', { advancementState, partyLevels: { ren: 17 } });
   assert.equal(explicit.kernelConfig.actors.find(({ id }) => id === 'ren').level, 17);
+});
+
+test('canonical action fighters retain distinct movement profiles through adaptation and advancement', () => {
+  const expected = {
+    ren: 'infiltrator',
+    lise: 'hunter',
+    mateus: 'vampire',
+    miyo: 'weather-scholar',
+  };
+  assert.deepEqual(ACTION_MOVEMENT_PROFILE_BY_ACTOR_ID, expected);
+  for (const advancementState of [null, createAdvancementState()]) {
+    const spec = adaptActionEncounter('c9-kurozane', { advancementState });
+    const kernel = new ActionCombatKernel(spec.kernelConfig);
+    const snapshots = new Map(kernel.snapshot().actors.map((actor) => [actor.id, actor]));
+    for (const [actorId, movementProfileId] of Object.entries(expected)) {
+      const source = spec.kernelConfig.actors.find(({ id }) => id === actorId);
+      assert.equal(source.movementProfileId, movementProfileId);
+      assert.equal(snapshots.get(actorId).movementProfileId, movementProfileId);
+    }
+    assert.equal(snapshots.get('ren').moveSpeed > snapshots.get('miyo').moveSpeed, true);
+    assert.equal(snapshots.get('miyo').moveSpeed > snapshots.get('mateus').moveSpeed, true);
+    assert.equal(snapshots.get('mateus').moveSpeed > snapshots.get('lise').moveSpeed, true);
+  }
+});
+
+test('an explicit action fighter pair produces a strict duo in authored order', () => {
+  const spec = adaptActionEncounter('c9-kurozane', { fighterActorIds: ['lise', 'mateus'] });
+  assert.deepEqual(spec.kernelConfig.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id), ['lise', 'mateus']);
+  assert.deepEqual(spec.profiles.party.map(({ templateId }) => templateId), ['lise', 'mateus']);
+  assert.equal(spec.supportActorId, 'mateus');
+  assert.throws(
+    () => adaptActionEncounter('c9-kurozane', { fighterActorIds: ['lise', 'lise'] }),
+    /must be unique/u,
+  );
+  assert.throws(
+    () => adaptActionEncounter('c9-kurozane', { fighterActorIds: ['lise', 'unknown'] }),
+    /Unknown action fighter/u,
+  );
 });
 
 test('dormant summons and weak points are templates, never initial hostile actors', () => {
@@ -172,6 +231,27 @@ test('all specs are structurally accepted by ActionCombatKernel; representative 
 
   const finalBoss = createActionEncounterKernel('c9-kurozane');
   assert.equal(finalBoss.kernel.snapshot().actors.some(({ id }) => id === 'kurozane-1'), true);
+});
+
+test('an optional action support actor creates a duo without duplicating authored party members', () => {
+  const prologueDuo = adaptActionEncounter('prologue-ashen-bailiff', { supportActorId: 'aya' });
+  assert.equal(prologueDuo.supportActorId, 'aya');
+  assert.deepEqual(
+    prologueDuo.kernelConfig.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
+    ['ren', 'aya'],
+  );
+  assert.equal(prologueDuo.profiles.party.find(({ templateId }) => templateId === 'aya')?.sourceSkillIds.length > 0, true);
+  assert.equal(prologueDuo.attackManifest.some(({ ownerTemplateId }) => ownerTemplateId === 'aya'), true);
+
+  const authoredDuo = adaptActionEncounter('c1-cinder-hounds', { supportActorId: 'aya' });
+  assert.deepEqual(
+    authoredDuo.kernelConfig.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
+    ['ren', 'aya'],
+  );
+  assert.throws(
+    () => adaptActionEncounter('prologue-ashen-bailiff', { supportActorId: 'missing' }),
+    /Unknown action support actor missing/,
+  );
 });
 
 test('encounter construction accepts explicit control and objective-owned victory options', () => {

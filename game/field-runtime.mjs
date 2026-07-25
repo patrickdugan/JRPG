@@ -20,7 +20,7 @@ import {
 export const FIELD_SCHEMA_VERSION = 1;
 export const DEFAULT_FIELD_SAVE_KEY = `${CAMPAIGN.id}.field.v${FIELD_SCHEMA_VERSION}`;
 export const FIELD_PRESENTATION_LEADER_FLAG_PREFIX = 'presentation-field-leader-';
-export const FIELD_PRESENTATION_LEADER_IDS = Object.freeze(['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku']);
+export const FIELD_PRESENTATION_LEADER_IDS = Object.freeze(['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo']);
 
 export const FIELD_DIRECTIONS = Object.freeze({
   north: Object.freeze({ dx: 0, dy: -1, facing: 'north' }),

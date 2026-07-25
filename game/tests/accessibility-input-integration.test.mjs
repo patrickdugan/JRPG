@@ -5,7 +5,7 @@ import test from 'node:test';
 const source = (name) => readFileSync(new URL(`../${name}`, import.meta.url), 'utf8');
 
 test('every browser surface has a keyboard-visible main-content bypass', () => {
-  for (const page of ['index.html', 'campaign.html', 'battle.html', 'camp.html', 'credits.html']) {
+  for (const page of ['index.html', 'campaign.html', 'battle.html', 'camp.html', 'credits.html', 'training.html']) {
     const html = source(page);
     assert.match(html, /<a class="skip-link" href="#mainContent">Skip to main content<\/a>/);
     assert.match(html, /<main id="mainContent"/);
@@ -13,8 +13,8 @@ test('every browser surface has a keyboard-visible main-content bypass', () => {
   assert.match(source('audio-controls.css'), /\.skip-link:focus/);
 });
 
-test('FP-0 exposes eight touch directions and a textual tactical summary', () => {
-  const html = source('index.html');
+test('the developer Training Court exposes eight touch directions and a textual tactical summary', () => {
+  const html = source('training.html');
   assert.equal([...html.matchAll(/data-move="-?\d,-?\d"/g)].length, 8);
   assert.match(html, /id="boardSummary"/);
   assert.match(source('game.js'), /Legal destinations:/);

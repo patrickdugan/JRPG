@@ -109,6 +109,10 @@ export const PARTY_SKILLS = Object.freeze({
   'penitent-night': Object.freeze({ id: 'penitent-night', name: 'Penitent Night', delivery: 'arcane', essence: 'umbral', power: 16, range: 4, recoveryPulses: 3, dodgeable: false, spiritCost: 2, spiritGain: 0 }),
   'pilgrim-maul': Object.freeze({ id: 'pilgrim-maul', name: 'Pilgrim Maul', delivery: 'crush', power: 16, range: 1, recoveryPulses: 2, dodgeable: true, spiritCost: 0, spiritGain: 4 }),
   'cold-medicine': Object.freeze({ id: 'cold-medicine', name: 'Cold Medicine', delivery: 'arcane', essence: 'frost', power: 12, range: 4, recoveryPulses: 2, dodgeable: false, spiritCost: 1, spiritGain: 0 }),
+  'cinder-glyph': Object.freeze({ id: 'cinder-glyph', name: 'Cinder Glyph', delivery: 'arcane', essence: 'ember', power: 14, range: 4, recoveryPulses: 2, dodgeable: false, spiritCost: 2, spiritGain: 0 }),
+  'white-current': Object.freeze({ id: 'white-current', name: 'White Current', delivery: 'arcane', essence: 'frost', power: 13, range: 5, recoveryPulses: 2, dodgeable: false, spiritCost: 2, spiritGain: 0 }),
+  'thunder-thread': Object.freeze({ id: 'thunder-thread', name: 'Thunder Thread', delivery: 'arcane', essence: 'storm', power: 16, range: 5, recoveryPulses: 3, dodgeable: false, spiritCost: 3, spiritGain: 0 }),
+  'crosswind-step': Object.freeze({ id: 'crosswind-step', name: 'Crosswind Step', delivery: 'arcane', power: 5, range: 3, recoveryPulses: 1, dodgeable: true, spiritCost: 1, spiritGain: 1, effect: { reposition: { spaces: 2 } } }),
 });
 
 const partyProfile = (id, name, stats, skillIds, resistances = {}) => Object.freeze({
@@ -127,6 +131,7 @@ export const PARTY_PROFILES = Object.freeze({
   mateus: partyProfile('mateus', 'Father Mateus Avelar', { hp: 126, spirit: 42, power: 14, guard: 12, speed: 94 }, ['penitent-night'], { essence: { umbral: 0.5 } }),
   genta: partyProfile('genta', 'Genta', { hp: 148, spirit: 26, power: 15, guard: 15, speed: 84 }, ['pilgrim-maul']),
   kiku: partyProfile('kiku', 'Kiku', { hp: 102, spirit: 34, power: 11, guard: 10, speed: 99 }, ['cold-medicine'], { essence: { frost: 0.75 } }),
+  miyo: partyProfile('miyo', 'Miyo Senda', { hp: 104, spirit: 46, power: 16, guard: 9, speed: 106 }, ['cinder-glyph', 'white-current', 'thunder-thread', 'crosswind-step'], { essence: { ember: 0.9, frost: 0.9, storm: 0.8 } }),
 });
 
 function deepFreeze(value) {

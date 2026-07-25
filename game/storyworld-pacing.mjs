@@ -1,9 +1,9 @@
-/** Transparent reference pacing for the 22 Storyworld scenes played in one route. */
+/** Transparent full-catalog pacing ceiling; not a selected-route duration claim. */
 
 import { STORYWORLD_CLUSTERS } from './content/storyworld-encounters.generated.mjs';
 
 export const STORYWORLD_PACING_ASSUMPTIONS = Object.freeze({
-  canonicalReferenceMinutes: 312.481,
+  fullCanonicalCatalogReferenceMinutes: 314.253,
   readingWordsPerMinute: 200,
   decisionDwellSeconds: 20,
   narrativeTargetMinimumMinutes: 300,
@@ -41,7 +41,7 @@ const maximumDecisionCount = perCluster.reduce((sum, cluster) => sum + cluster.m
 const readingMinutes = maximumVisibleWords / STORYWORLD_PACING_ASSUMPTIONS.readingWordsPerMinute;
 const decisionMinutes = (maximumDecisionCount * STORYWORLD_PACING_ASSUMPTIONS.decisionDwellSeconds) / 60;
 const storyworldReferenceMinutes = readingMinutes + decisionMinutes;
-const completeNarrativeReferenceMinutes = STORYWORLD_PACING_ASSUMPTIONS.canonicalReferenceMinutes
+const fullCatalogReferenceMinutes = STORYWORLD_PACING_ASSUMPTIONS.fullCanonicalCatalogReferenceMinutes
   + storyworldReferenceMinutes;
 
 export const STORYWORLD_PACING_REPORT = Object.freeze({
@@ -51,12 +51,13 @@ export const STORYWORLD_PACING_REPORT = Object.freeze({
   readingMinutes,
   decisionMinutes,
   storyworldReferenceMinutes,
-  completeNarrativeReferenceMinutes,
-  completeNarrativeReferenceHours: completeNarrativeReferenceMinutes / 60,
-  withinFiveToSixHourTarget: completeNarrativeReferenceMinutes
+  fullCatalogReferenceMinutes,
+  fullCatalogReferenceHours: fullCatalogReferenceMinutes / 60,
+  fullCatalogWithinFiveToSixHourTarget: fullCatalogReferenceMinutes
     >= STORYWORLD_PACING_ASSUMPTIONS.narrativeTargetMinimumMinutes
-    && completeNarrativeReferenceMinutes
+    && fullCatalogReferenceMinutes
       <= STORYWORLD_PACING_ASSUMPTIONS.narrativeTargetMaximumMinutes,
+  selectedRouteDurationClaim: false,
   diagnosticOnly: true,
   observedPlaytimeProof: false,
 });

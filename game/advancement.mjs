@@ -9,7 +9,7 @@
 import { CAMPAIGN } from './content/campaign.mjs';
 import { ENCOUNTERS } from './content/encounters.mjs';
 
-export const ADVANCEMENT_SCHEMA_VERSION = 1;
+export const ADVANCEMENT_SCHEMA_VERSION = 2;
 export const DEFAULT_ADVANCEMENT_SAVE_KEY = `${CAMPAIGN.id}.advancement.v${ADVANCEMENT_SCHEMA_VERSION}`;
 export const LEVEL_CAP = 50;
 export const SPEED_MULTIPLIERS = Object.freeze([1, 2, 4]);
@@ -59,6 +59,7 @@ const PARTY_DEFINITIONS = deepFreeze([
   { id: 'mateus', name: 'Father Mateus Avelar', base: { hp: 98, mp: 48, power: 12, guard: 12, arcana: 18, speed: 11 }, growth: { hp: 8, mp: 4, power: 2, guard: 2, arcana: 3, speed: 2 } },
   { id: 'genta', name: 'Genta Mononobe', base: { hp: 128, mp: 18, power: 17, guard: 18, arcana: 6, speed: 8 }, growth: { hp: 11, mp: 1, power: 3, guard: 3, arcana: 1, speed: 1 } },
   { id: 'kiku', name: 'Kiku Nawa', base: { hp: 86, mp: 45, power: 9, guard: 10, arcana: 17, speed: 13 }, growth: { hp: 7, mp: 4, power: 1, guard: 2, arcana: 3, speed: 2 } },
+  { id: 'miyo', name: 'Miyo Senda', base: { hp: 84, mp: 58, power: 8, guard: 9, arcana: 21, speed: 14 }, growth: { hp: 7, mp: 5, power: 1, guard: 2, arcana: 4, speed: 2 } },
 ]);
 
 export const PARTY_MEMBER_IDS = Object.freeze(PARTY_DEFINITIONS.map(({ id }) => id));

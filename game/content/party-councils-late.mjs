@@ -61,6 +61,13 @@ const VOICES = deepFreeze({
     offer: 'I can provide care without testimony, name medical limits, and place the patient above the council schedule',
     commitment: 'I will ask before touching, separate treatment from disclosure, and keep care available after refusal',
   },
+  miyo: {
+    lens: 'weather records, inherited names, and the difference between a useful pattern and a person forced into one',
+    risk: 'precise prediction can become command when I make other people live inside the model that helped me survive',
+    reflex: 'I measure the changing current before asking who has already learned its danger without instruments',
+    offer: 'I can mark a weather lane, teach the reading, and leave the route decision with the people who must travel it',
+    commitment: 'I will let evidence revise my forecast and will not let either branch of my family become authority over another person',
+  },
 });
 
 const SCENE_SPECS = deepFreeze([
@@ -70,9 +77,9 @@ const SCENE_SPECS = deepFreeze([
     anchor: 'the opened Black Gate road',
     setting: 'the lantern safehouse while released soldiers settle under care chosen outside the party',
     evidence: 'road keepers held the passage voluntarily, and released soldiers asked not to be treated as a captured unit',
-    affected: 'released soldiers, tent healers, and the road keepers remaining outside the six-person entry party',
+    affected: 'released soldiers, tent healers, and the road keepers remaining outside the seven-person entry party',
     tension: 'entry urgency can quietly turn voluntary support into an order that nobody feels free to refuse',
-    boundary: 'the six may enter while outside allies retain control of care, departure, and access to the gate',
+    boundary: 'the seven may enter while outside allies retain control of care, departure, and access to the gate',
     proposal: 'publish a roster separating voluntary road work, medical authority, and the interior party',
     objection: 'a public roster may expose frightened workers unless each person controls the name or mark attached to a role',
     alternative: 'delay entry until every outside group has named its own stop condition and private contact route',

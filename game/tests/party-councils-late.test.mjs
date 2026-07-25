@@ -114,7 +114,7 @@ test('strict late validation accepts the complete authored volume and metrics', 
     responseLineCount: 60,
     choiceCount: 10,
     choiceOptionCount: 20,
-    wordCount: 13_540,
+    wordCount: 13_545,
     byGroup: { early: 0, middle: 0, late: 10 },
   });
   assert.ok(validation.metrics.wordCount >= 5_000);

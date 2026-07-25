@@ -5,13 +5,13 @@
   "authorship": "original-code-native-pixel-primitives",
   "geometry": {
     "columns": 8,
-    "rows": 6,
+    "rows": 7,
     "cellWidth": 64,
     "cellHeight": 64,
     "contentWidth": 512,
-    "contentHeight": 384,
+    "contentHeight": 448,
     "sheetWidth": 512,
-    "sheetHeight": 384,
+    "sheetHeight": 448,
     "transparentRightPadding": 0,
     "minimumTransparentGutter": 4
   },
@@ -21,7 +21,8 @@
     "lise",
     "mateus",
     "genta",
-    "kiku"
+    "kiku",
+    "miyo"
   ],
   "columnOrder": [
     "neutral",
@@ -157,6 +158,17 @@
         "hair": "#24201f"
       },
       "silhouette": "short cloak, medicine box, bottles and packets"
+    },
+    "miyo": {
+      "paletteId": "party-miyo-storm-indigo-v1",
+      "colors": {
+        "primary": "#355b78",
+        "secondary": "#c8bd91",
+        "light": "#6f91a6",
+        "accent": "#d9b45f",
+        "hair": "#171b22"
+      },
+      "silhouette": "storm-blue Japanese travel coat, split working sleeves, folding bamboo weather ruler, brass pressure joints"
     }
   },
   "characterIdentity": {
@@ -176,7 +188,16 @@
     },
     "mateus": {},
     "genta": {},
-    "kiku": {}
+    "kiku": {},
+    "miyo": {
+      "name": "Miyo Senda",
+      "lineage": {
+        "relation": "literal granddaughter of Mateus Avelar",
+        "ancestry": "three-quarters Japanese",
+        "publicName": "Miyo Senda",
+        "baptismalRecord": "Inês Avelar is archival context only"
+      }
+    }
   },
   "frames": [
     {
@@ -2050,23 +2071,335 @@
         60
       ],
       "rgbaSha256": "c215703962d8cd990e6311cad9707c10d996ac00a8b43164a964bfd6fb52fb80"
+    },
+    {
+      "id": "miyo:neutral",
+      "characterId": "miyo",
+      "expression": "neutral",
+      "rect": [
+        0,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "attentive restraint",
+        "brow": "level",
+        "eyes": "open",
+        "mouth": "closed",
+        "semantic": "listening or awaiting a command"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "7497cde09226f4784eb9a667b32081923e7e6baa2a8b20f1e5af12435f748700"
+    },
+    {
+      "id": "miyo:resolve",
+      "characterId": "miyo",
+      "expression": "resolve",
+      "rect": [
+        64,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "deliberate commitment",
+        "brow": "inward-down",
+        "eyes": "focused",
+        "mouth": "firm",
+        "semantic": "decision made without triumphal posing"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "fae3f0d8a13c4cced80ea5b1d8b1b301cdb0e6785d0bbf415fd2aa764ad7720d"
+    },
+    {
+      "id": "miyo:strain",
+      "characterId": "miyo",
+      "expression": "strain",
+      "rect": [
+        128,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "cost or pressure",
+        "brow": "uneven-raised",
+        "eyes": "tight",
+        "mouth": "parted",
+        "semantic": "pain, fatigue, or difficult admission without caricature"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "8dabb4d7bcfc7744e7a426ae7eee1b846bfc3aa56b44386b47808f89c7216260"
+    },
+    {
+      "id": "miyo:soften",
+      "characterId": "miyo",
+      "expression": "soften",
+      "rect": [
+        192,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded warmth",
+        "brow": "relaxed",
+        "eyes": "gentle",
+        "mouth": "small-upturn",
+        "semantic": "relief or care without glamour pose"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "e22c4c8080954c561a1d569d6ce8f1204a0640ef4b4e9802083086b7b5dbe1a9"
+    },
+    {
+      "id": "miyo:concern",
+      "characterId": "miyo",
+      "expression": "concern",
+      "rect": [
+        256,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "guarded worry",
+        "brow": "inward-raised",
+        "eyes": "searching",
+        "mouth": "small-downturn",
+        "semantic": "careful alarm or concern for another person"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "be6ac30c57030d049a3208d336180fa89dbab54cc569a2af0c004f3216ec6d7f"
+    },
+    {
+      "id": "miyo:anger",
+      "characterId": "miyo",
+      "expression": "anger",
+      "rect": [
+        320,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "controlled outrage",
+        "brow": "sharply-inward-down",
+        "eyes": "narrowed",
+        "mouth": "compressed",
+        "semantic": "anger held under discipline rather than a caricatured snarl"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "cab39aeee35729f35881dea6263441c1ccfb00d553a33a6b26c8af874d6f9418"
+    },
+    {
+      "id": "miyo:surprise",
+      "characterId": "miyo",
+      "expression": "surprise",
+      "rect": [
+        384,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "immediate alarm",
+        "brow": "high-raised",
+        "eyes": "wide",
+        "mouth": "small-open",
+        "semantic": "unexpected revelation or sudden threat"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "d3693c4abd3a334933ec099d9d774a144d20da33420597b080c0b404daba7a82"
+    },
+    {
+      "id": "miyo:quiet",
+      "characterId": "miyo",
+      "expression": "quiet",
+      "rect": [
+        448,
+        384,
+        64,
+        64
+      ],
+      "eyeLine": [
+        20,
+        27,
+        43,
+        27
+      ],
+      "mouthAnchor": [
+        35,
+        37
+      ],
+      "focusAnchor": [
+        35,
+        27
+      ],
+      "expressionSemantic": {
+        "affect": "inward composure",
+        "brow": "softened-low",
+        "eyes": "lowered",
+        "mouth": "closed-soft",
+        "semantic": "silence, reflection, prayer, or a restrained pause"
+      },
+      "localAlphaBounds": [
+        7,
+        5,
+        59,
+        60
+      ],
+      "rgbaSha256": "734db1eb050c1fb1e18bcd6ee7d8460cae0ee58cf0a30e22ee651bc5aa5f59f8"
     }
   ],
   "sources": [
     {
       "path": "party-portrait-suite.source.json",
       "role": "editable-portrait-contract",
-      "sha256": "85d97d392cfd0734fc52b6771e596c9b9dd327372b78487a9550ae9c1f2baf7d"
+      "sha256": "43ce5a02a74ac436e9ee05f4973aeaf3f944cd9e63d062727f01bb0af5d46abc"
     },
     {
       "path": "../party-field-suite/party-field-suite.source.json",
       "role": "canonical-palette-costume-contract",
-      "sha256": "31dffb9e86453a1f188581a5ebbca91e06b6442adbb5a2e445a80824c8eff50a"
+      "sha256": "d6bb3642702be7bb43fa021a30be494219d2e42590b0a36408414a9c15d17e87"
     },
     {
       "path": "build_party_portrait_suite.py",
       "role": "deterministic-builder",
-      "sha256": "217734c78ff98f2ec67ded0952d9a95b0b7d3dc475bcfe8a1630197256fc8a86"
+      "sha256": "3eb613611559ee9222dc30db8dee07ef0c67a0cc8bcb87f9dd00036f6e30f877"
     }
   ],
   "exports": [
@@ -2074,22 +2407,22 @@
       "path": "party-portrait-expressions.png",
       "role": "transparent-runtime-candidate",
       "width": 512,
-      "height": 384,
+      "height": 448,
       "mode": "RGBA",
-      "sha256": "869650b5da7e21f38285a40f10bfac421866bdeaa1339b11b3695f01dcfc162e"
+      "sha256": "d496cb3d6575210f4da2286c3197405563225896efe90449ed7d26aaeec633f4"
     },
     {
       "path": "party-portrait-expressions-contact-sheet.png",
       "role": "labeled-review-only-not-runtime",
       "width": 1648,
-      "height": 1220,
+      "height": 1412,
       "mode": "RGBA",
-      "sha256": "7350611834e3408644ddad1c1c3f205b868e181c0865bf0a691b286130a8faa6"
+      "sha256": "2fa71bfa35a6021d0d0e1a0f62bae5843d86b9e23666f3c857a92b883c7002b7"
     }
   ],
   "validation": {
-    "frameCount": 48,
-    "distinctRgbaFrameHashes": 48,
+    "frameCount": 56,
+    "distinctRgbaFrameHashes": 56,
     "binaryTransparency": true,
     "minimumObservedGutter": 4,
     "deterministicCommand": "python build_party_portrait_suite.py --check"

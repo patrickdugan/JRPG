@@ -9,6 +9,7 @@
  */
 
 import { CAMPAIGN } from './campaign.mjs';
+import { getActSequenceContextForBeat } from './act-route-sequences.mjs';
 
 function deepFreeze(value) {
   if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
@@ -18,9 +19,11 @@ function deepFreeze(value) {
 
 function scene(chapterId, beatId, cues) {
   const [speaker, action] = cues.gestureCue;
+  const actContext = getActSequenceContextForBeat(beatId);
   return {
     chapterId,
     beatId,
+    ...(actContext ?? {}),
     atmosphere: cues.atmosphere,
     musicCue: cues.musicCue,
     cameraCue: cues.cameraCue,
@@ -412,9 +415,9 @@ export const SCENE_DIRECTIONS = deepFreeze([
     atmosphere: 'A camp map shows the short castle route beside prisoner movements marked by fresh lantern reports.',
     musicCue: 'The key motif starts toward a march, then yields to a steadier rescue pulse when the human routes are named.',
     cameraCue: 'Look down on both paths without highlighting the castle shortcut, then lower to the party’s shared eye line.',
-    entranceCue: 'Genta opens the map with all three keys; Ren adds the newest prisoner report before anyone reaches for them.',
-    gestureCue: ['AYA', 'Move the prisoner markers out of the map margin and into the center of the route calculation.'],
-    blockingCue: 'Keep the keys together but outside any one character’s reach, with the rescue road facing the camp exit.',
+    entranceCue: 'Genta opens the map with all three keys; Miyo enters beside the invited runner and lays her corrected relay table where everyone can inspect it.',
+    gestureCue: ['MIYO', 'Set the folding weather ruler across the obsolete castle route, name herself as Miyo Senda, and leave Mateus no physical claim on her space.'],
+    blockingCue: 'Keep Miyo beside the camp runner rather than Mateus, the keys outside any one character’s reach, and the rescue road facing the exit.',
     transitionCue: 'Aya’s rescue line extends past the map edge into the abandoned post-town road.',
   }),
   scene('chapter-7', 'c7-02-former-retainer', {
@@ -678,6 +681,12 @@ export function validateSceneDirections(directions = SCENE_DIRECTIONS, campaign 
     }
     if (seen.has(key)) addError(errors, 'duplicate-beat', `${key} has more than one direction.`, index);
     seen.add(key);
+    const expectedActContext = getActSequenceContextForBeat(direction.beatId);
+    for (const field of ['actId', 'actLabel', 'majorSequenceId', 'majorSequenceLabel', 'routeTheater', 'operationId']) {
+      if (direction[field] !== (expectedActContext ? expectedActContext[field] : undefined)) {
+        addError(errors, 'act-sequence-mismatch', `${direction.beatId} ${field} does not match its act-sequence mapping.`, index);
+      }
+    }
 
     for (const field of REQUIRED_SCENE_CUE_FIELDS) {
       validateAuthoredCue(errors, direction[field], field, direction, index);

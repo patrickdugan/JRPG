@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { getCampaignRouteSchedule } from '../campaign-route-scheduler.mjs';
 import { STORYWORLD_CLUSTERS } from '../content/storyworld-encounters.generated.mjs';
 import {
   advanceStoryworldEncounter,
@@ -12,8 +13,10 @@ import {
   deriveStoryworldProjection,
   getCompletedStoryworldClusterIds,
   getLadyEnmaResolution,
+  getRequiredStoryworldClusterIds,
   getStoryworldGateForBeat,
   getStoryworldProgress,
+  getStoryworldRouteTheater,
   getVisibleStoryworldOptions,
   isStoryworldNarrativeComplete,
   LEGACY_STORYWORLD_CATALOG_IDENTITIES,
@@ -85,23 +88,48 @@ test('reaction ties deterministically favor the later-authored reaction', () => 
   assert.equal(selected.score, 0.51);
 });
 
-test('all eleven required clusters produce one eighty-two-scene narrative route and exact replay-derived state', () => {
+test('the Paper route requires all eleven clusters in route order and replays exact derived state', () => {
   let state = createStoryworldState({ runId: 'storyworld-runtime-complete' });
   STORYWORLD_CLUSTERS.forEach((cluster, index) => {
     state = resolveCluster(state, cluster, index % 3);
   });
   assert.equal(isStoryworldNarrativeComplete(state), true);
+  assert.equal(getStoryworldRouteTheater(state), 'paper');
+  assert.deepEqual(
+    getRequiredStoryworldClusterIds(state),
+    getCampaignRouteSchedule('paper').storyworldDecisionIds,
+  );
   assert.equal(getCompletedStoryworldClusterIds(state).length, 11);
   assert.equal(state.records.length, 11);
   assert.equal(state.revision, 54);
   const projection = deriveStoryworldProjection(state);
-  assert.equal(Object.keys(projection).length, 21);
+  assert.equal(Object.keys(projection).length, 32);
   assert.equal(Object.values(projection).every((value) => value >= 0 && value <= 1), true);
   const serialized = serializeStoryworldState(state);
   const loaded = loadStoryworldState(serialized);
   assert.equal(loaded.ok, true, loaded.errors?.join(' '));
   assert.deepEqual(loaded.state, state);
   assert.deepEqual(deriveStoryworldProjection(loaded.state), projection);
+});
+
+test('Salt and Ash skip the Storyworld cluster owned by their omitted operation', () => {
+  const warTable = STORYWORLD_CLUSTERS.find(({ id }) => id === 'sw3-sayos-warehouse-conditions');
+  for (const [theater, optionIndex, omittedClusterId] of [
+    ['salt', 0, 'sw6-tribunal-afterword'],
+    ['ash', 1, 'sw4-margin-varga-journal'],
+  ]) {
+    let state = createStoryworldState({ runId: `storyworld-route-skip-${theater}` });
+    for (const cluster of STORYWORLD_CLUSTERS.slice(0, 2)) state = resolveCluster(state, cluster);
+    state = resolveCluster(state, warTable, optionIndex);
+    assert.equal(getStoryworldRouteTheater(state), theater);
+    assert.equal(getRequiredStoryworldClusterIds(state).includes(omittedClusterId), false);
+    const omitted = STORYWORLD_CLUSTERS.find(({ id }) => id === omittedClusterId);
+    assert.equal(
+      getStoryworldGateForBeat(state, omitted.anchorBeatId, omitted.placement).phase,
+      'route-skipped',
+    );
+    assert.equal(beginStoryworldEncounter(state, omittedClusterId).code, 'route-skipped');
+  }
 });
 
 test('legacy coverage exempts past anchors but cannot claim narrative proof', () => {
@@ -163,11 +191,11 @@ test('the exact pre-Nikola Storyworld identity migrates once without changing br
   assert.equal(Object.hasOwn(secondLoad, 'migrated'), false, 'migration is not repeated after rewrite');
 });
 
-test('the exact pre-Severed-Dragon identity migrates only an early prefix before the revised ending', () => {
+test('the exact pre-Severed-Dragon identity migrates only the two records before the Act III route decision', () => {
   const storage = new MemoryStorage();
   const adapter = createStoryworldStorageAdapter(storage);
   let current = createStoryworldState({ runId: 'storyworld-severed-dragon-migration-0001' });
-  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 8)) current = resolveCluster(current, cluster, 0);
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 2)) current = resolveCluster(current, cluster, 0);
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[1];
   const legacy = {
     ...current,
@@ -186,11 +214,11 @@ test('the exact pre-Severed-Dragon identity migrates only an early prefix before
   assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
 });
 
-test('the pre-English-heiress identity migrates only the prefix before Enma\'s inserted hearing', () => {
+test('the pre-English-heiress identity migrates only the two records before the Act III route decision', () => {
   const storage = new MemoryStorage();
   const adapter = createStoryworldStorageAdapter(storage);
   let current = createStoryworldState({ runId: 'storyworld-english-heiress-migration-0001' });
-  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 8)) current = resolveCluster(current, cluster, 0);
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 2)) current = resolveCluster(current, cluster, 0);
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[2];
   const legacy = {
     ...current,
@@ -209,11 +237,11 @@ test('the pre-English-heiress identity migrates only the prefix before Enma\'s i
   assert.equal(storage.getItem(adapter.key), serializeStoryworldState(current));
 });
 
-test('the exact pre-Enma identity migrates only eight compatible records', () => {
+test('the exact pre-Enma identity migrates only the two records before the Act III route decision', () => {
   const storage = new MemoryStorage();
   const adapter = createStoryworldStorageAdapter(storage);
   let current = createStoryworldState({ runId: 'storyworld-enma-migration-0001' });
-  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 8)) current = resolveCluster(current, cluster, 0);
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 2)) current = resolveCluster(current, cluster, 0);
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[3];
   const legacy = {
     ...current,
@@ -230,6 +258,27 @@ test('the exact pre-Enma identity migrates only eight compatible records', () =>
   assert.deepEqual(loaded.state.records, current.records);
 });
 
+test('the immediately previous catalog migrates only the two records before the new war table', () => {
+  const storage = new MemoryStorage();
+  const adapter = createStoryworldStorageAdapter(storage);
+  let current = createStoryworldState({ runId: 'storyworld-war-table-migration-0001' });
+  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 2)) current = resolveCluster(current, cluster, 1);
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[4];
+  const legacy = {
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  };
+  storage.setItem(adapter.key, JSON.stringify(legacy));
+
+  const loaded = adapter.load();
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'act-three-war-table-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+});
+
 test('Lady Enma resolution is categorical and remains unavailable until her spool completes', () => {
   const cluster = STORYWORLD_CLUSTERS.find(({ id }) => id === 'sw-enma-three-terms');
   let state = createStoryworldState({ runId: 'storyworld-enma-resolution-0001' });
@@ -239,48 +288,24 @@ test('Lady Enma resolution is categorical and remains unavailable until her spoo
   assert.equal(deriveStoryworldProjection(state).enma_custody > 0, true);
 });
 
-test('historical Corrections Desk outcomes fail closed instead of becoming surrender or execution', () => {
-  for (const [identityIndex, legacyIdentity] of LEGACY_STORYWORLD_CATALOG_IDENTITIES
-    .map((identity, index) => [index, identity])
-    .filter(([, identity]) => identity.maximumCompatibleRecordCount === 8)) {
-    for (const outcome of [
-      {
-        suffix: 'accord',
-        outcomeEncounterId: 'page_end_corrections_visible',
-      },
-      {
-        suffix: 'revision',
-        outcomeEncounterId: 'page_end_limits_posted',
-      },
-    ]) {
-      let prefix = createStoryworldState({ runId: `storyworld-old-corrections-${identityIndex}-${outcome.suffix}` });
-      for (const cluster of STORYWORLD_CLUSTERS.slice(0, 9)) prefix = resolveCluster(prefix, cluster, 0);
-      const historicalRecord = {
-        clusterId: 'sw10-corrections-desk',
-        phase: 'complete',
-        entryOptionId: 'page_sw10_decision_opt_annotate-errors',
-        entryReactionId: `page_sw10_decision_opt_annotate-errors_r_${outcome.suffix}`,
-        outcomeEncounterId: outcome.outcomeEncounterId,
-        outcomeOptionId: null,
-        outcomeReactionId: null,
-      };
-      const legacy = {
-        ...prefix,
-        sourceIFID: legacyIdentity.sourceIFID,
-        sourceHash: legacyIdentity.sourceHash,
-        catalogSignature: legacyIdentity.catalogSignature,
-        records: [...prefix.records, historicalRecord],
-        revision: prefix.revision + 4,
-      };
-      const serialized = JSON.stringify(legacy);
-      const storage = new MemoryStorage();
-      const adapter = createStoryworldStorageAdapter(storage);
-      storage.setItem(adapter.key, serialized);
+test('every legacy identity fails closed at the old third record instead of inventing an Act III road choice', () => {
+  for (const [identityIndex, legacyIdentity] of LEGACY_STORYWORLD_CATALOG_IDENTITIES.entries()) {
+    let prefix = createStoryworldState({ runId: `storyworld-old-third-record-${identityIndex}` });
+    for (const cluster of STORYWORLD_CLUSTERS.slice(0, 3)) prefix = resolveCluster(prefix, cluster, 0);
+    const legacy = {
+      ...prefix,
+      sourceIFID: legacyIdentity.sourceIFID,
+      sourceHash: legacyIdentity.sourceHash,
+      catalogSignature: legacyIdentity.catalogSignature,
+    };
+    const serialized = JSON.stringify(legacy);
+    const storage = new MemoryStorage();
+    const adapter = createStoryworldStorageAdapter(storage);
+    storage.setItem(adapter.key, serialized);
 
-      const loaded = adapter.load();
-      assert.equal(loaded.ok, false);
-      assert.match(loaded.errors.join(' '), /cannot be migrated without inventing a political choice/u);
-      assert.equal(storage.getItem(adapter.key), serialized, 'rejected history must not be rewritten');
-    }
+    const loaded = adapter.load();
+    assert.equal(loaded.ok, false);
+    assert.match(loaded.errors.join(' '), /cannot be migrated without inventing a political choice/u);
+    assert.equal(storage.getItem(adapter.key), serialized, 'rejected history must not be rewritten');
   }
 });

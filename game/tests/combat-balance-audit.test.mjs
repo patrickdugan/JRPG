@@ -19,16 +19,16 @@ test('all 23 chronological first clears and first replays stay inside bounded ba
   assert.deepEqual(audit.violations, []);
   assert.deepEqual(audit.summary, {
     firstClearVictories: 23,
-    firstClearPlayerCommands: 231,
-    firstClearEnemyActivations: 98,
+    firstClearPlayerCommands: 224,
+    firstClearEnemyActivations: 95,
     firstClearPartyKnockouts: 0,
     minimumSurvivorHpRatio: 0.154545,
     minimumSurvivorEncounterId: 'fp1-cedar-path',
-    maximumPlayerCommands: 55,
+    maximumPlayerCommands: 50,
     maximumPlayerCommandEncounterId: 'c9-kurozane',
-    repeatPolicySteps: 608,
-    repeatBasePresentationMs: 353_880,
-    maximumRepeatBasePresentationMs: 53_800,
+    repeatPolicySteps: 579,
+    repeatBasePresentationMs: 337_880,
+    maximumRepeatBasePresentationMs: 42_760,
     maximumRepeatEncounterId: 'c9-kurozane',
     speedInvariantEncounterCount: 23,
     kurozaneObservedSkillIds: [
@@ -66,11 +66,11 @@ test('Kurozane exercises every authored phase skill and exact 1/2/3-pulse recove
     'yearless-thrust',
   ]);
   assert.deepEqual(encounter.firstClear.observedEnemyRecoveryPulses, [1, 2, 3]);
-  assert.equal(encounter.firstClear.playerCommands, 55);
-  assert.equal(encounter.firstClear.guardCommands, 37);
-  assert.equal(encounter.firstClear.guardShare, 0.672727);
-  assert.equal(encounter.firstClear.enemyActivations, 9);
-  assert.equal(encounter.firstClear.partyDamageTaken, 141);
+  assert.equal(encounter.firstClear.playerCommands, 50);
+  assert.equal(encounter.firstClear.guardCommands, 31);
+  assert.equal(encounter.firstClear.guardShare, 0.62);
+  assert.equal(encounter.firstClear.enemyActivations, 7);
+  assert.equal(encounter.firstClear.partyDamageTaken, 118);
   assert.equal(encounter.firstClear.partyKnockouts, 0);
 });
 

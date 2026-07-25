@@ -30,14 +30,15 @@ function contrast(foreground, background) {
 }
 
 const SURFACES = [
-  ['index.html', 'style.css'],
+  ['index.html', 'title.css'],
   ['campaign.html', 'campaign.css'],
   ['battle.html', 'battle.css'],
   ['camp.html', 'camp.css'],
   ['credits.html', 'credits.css'],
+  ['training.html', 'style.css'],
 ];
 
-test('all five browser surfaces retain bypass, focus, and reduced-motion source contracts', () => {
+test('all browser surfaces retain bypass, focus, and reduced-motion source contracts', () => {
   for (const [page, stylesheet] of SURFACES) {
     const html = source(page);
     const css = source(stylesheet);
@@ -54,11 +55,11 @@ test('all five browser surfaces retain bypass, focus, and reduced-motion source 
 });
 
 test('canvas gameplay surfaces retain text alternatives outside their pixels', () => {
-  const index = source('index.html');
-  const fp0Canvas = tagWithId(index, 'gameCanvas');
+  const training = source('training.html');
+  const fp0Canvas = tagWithId(training, 'gameCanvas');
   assert.match(fp0Canvas, /aria-label="Bell Court tactical stage"/);
   assert.match(fp0Canvas, /aria-describedby="boardSummary feedback access-log"/);
-  assert.match(index, /id="boardSummary"/);
+  assert.match(training, /id="boardSummary"/);
 
   const campaign = source('campaign.html');
   const fieldCanvas = tagWithId(campaign, 'mapCanvas');
@@ -147,6 +148,7 @@ test('victory focus is placed once and programmatic focus targets have visible i
 test('critical explicit text/background pairs clear the WCAG AA normal-text ratio', () => {
   const samples = [
     ['audio-controls.css', '#090b17', '#fff1bd'],
+    ['title.css', '#fff1bd', '#090b17'],
     ['style.css', '#e8dfc9', '#171a31'],
     ['campaign.css', '#e2f1e7', '#142524'],
     ['battle.css', '#eee7d5', '#171e35'],

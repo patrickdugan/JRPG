@@ -8,7 +8,7 @@
   },
   "sheet": {
     "columns": 5,
-    "rows": 5
+    "rows": 6
   },
   "restrictions": [
     "No real-world sacred, devotional, heraldic, or military insignia.",
@@ -21,6 +21,7 @@
     {"id":"salt-etched-rapier","motif":"rapier","palette":{"outline":"#111827","shadow":"#526375","body":"#c8d2da","light":"#f3f4e8","accent":"#71a5b8"}},
     {"id":"dusk-censer","motif":"censer","palette":{"outline":"#111827","shadow":"#4b3e5c","body":"#806b8f","light":"#c7b7d5","accent":"#a45f72"}},
     {"id":"cedar-maul","motif":"maul","palette":{"outline":"#111827","shadow":"#4a3325","body":"#80583a","light":"#bd8651","accent":"#5d6b53"}},
+    {"id":"weather-ruler","motif":"weather-ruler","palette":{"outline":"#111827","shadow":"#355b78","body":"#c8bd91","light":"#f0dfae","accent":"#d9b45f"}},
     {"id":"pilgrim-knife","motif":"knife","palette":{"outline":"#111827","shadow":"#505b65","body":"#aeb5b8","light":"#e4e4d5","accent":"#6f4b32"}},
     {"id":"dawnsteel-blade","motif":"greatsword","palette":{"outline":"#111827","shadow":"#6c5b38","body":"#d9b85c","light":"#fff1a0","accent":"#76b5b8"}},
     {"id":"bellglass-focus","motif":"focus","palette":{"outline":"#111827","shadow":"#44547c","body":"#6f88b8","light":"#c5e8ed","accent":"#d4a758"}},

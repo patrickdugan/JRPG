@@ -2852,7 +2852,7 @@ partyPanel.addEventListener('click', (event) => {
   if (!feedback) {
     addMessage(actor.instanceId === snapshot.activeActorId
       ? `${actor.name} is active and ready; choose a command.`
-      : `${actor.name} is ready in the Tempo queue; ${snapshot.actors.find((entry) => entry.instanceId === snapshot.activeActorId)?.name ?? 'the active actor'} keeps command authority.`);
+      : `${actor.name} is ready in the Tempo queue; ${snapshot.actors.find((entry) => entry.instanceId === snapshot.activeActorId)?.name ?? 'the active actor'} keeps the turn.`);
   }
   render();
   partyPanel.querySelector(`[data-actor-id="${CSS.escape(actorId)}"]`)?.focus({ preventScroll: true });

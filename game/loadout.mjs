@@ -9,7 +9,7 @@ import { PARTY_MEMBER_IDS } from './advancement.mjs';
 import { CAMPAIGN } from './content/campaign.mjs';
 import { getDefaultBrowserStorage } from './browser-storage.mjs';
 
-export const LOADOUT_SCHEMA_VERSION = 1;
+export const LOADOUT_SCHEMA_VERSION = 2;
 export const DEFAULT_LOADOUT_SAVE_KEY = `${CAMPAIGN.id}.loadout.v${LOADOUT_SCHEMA_VERSION}`;
 export const EQUIPMENT_SLOTS = Object.freeze(['weapon', 'armor', 'accessory']);
 export const VOW_SLOTS = 2;
@@ -41,14 +41,15 @@ export const ITEM_CATALOGUE = deepFreeze({
   'salt-etched-rapier': gear('salt-etched-rapier', 'Salt-Etched Rapier', 'weapon', 110, ['lise'], { stats: { power: 5, speed: 3 }, essence: { radiance: 0.95 } }, 'A foreign hunter blade reworked by a Hoshigawa smith.', { power: 2, speed: 1 }),
   'dusk-censer': gear('dusk-censer', 'Dusk Censer', 'weapon', 105, ['mateus'], { stats: { arcana: 5, spirit: 10 }, essence: { umbral: 0.9 } }, 'A sealed censer whose chain doubles as a measured weapon.', { arcana: 2, spirit: 3 }),
   'cedar-maul': gear('cedar-maul', 'Cedar-Heart Maul', 'weapon', 100, ['genta'], { stats: { power: 5, guard: 2 } }, 'A shrine-repair mallet reinforced for the road.', { power: 2, guard: 1 }),
+  'weather-ruler': gear('weather-ruler', 'Fourfold Weather Ruler', 'weapon', 145, ['miyo'], { stats: { arcana: 7, mp: 10, speed: 2 }, essence: { ember: 0.95, frost: 0.95, storm: 0.9 } }, 'A folding bamboo measure whose brass joints mark pressure, current, temperature, and charge.', { arcana: 3, mp: 3, speed: 1 }),
   'pilgrim-knife': gear('pilgrim-knife', 'Pilgrim Utility Knife', 'weapon', 55, [...PARTY_MEMBER_IDS], { stats: { power: 2, speed: 1 } }, 'A plain tool that remains useful when fine weapons draw attention.', { power: 1 }),
   'dawnsteel-blade': gear('dawnsteel-blade', 'Dawnsteel Blade', 'weapon', 340, ['ren', 'lise'], { stats: { power: 10, speed: 4 }, essence: { radiance: 0.85 }, skillIds: ['dawn-bolt'] }, 'Bell metal folded with bright river iron.', { power: 3, speed: 1 }),
-  'bellglass-focus': gear('bellglass-focus', 'Bellglass Focus', 'weapon', 360, ['aya', 'mateus', 'kiku'], { stats: { arcana: 11, mp: 14, spirit: 12 }, skillIds: ['warding-script'] }, 'A harmless fragment set behind layered paper and glass.', { arcana: 3, mp: 3 }),
+  'bellglass-focus': gear('bellglass-focus', 'Bellglass Focus', 'weapon', 360, ['aya', 'mateus', 'kiku', 'miyo'], { stats: { arcana: 11, mp: 14, spirit: 12 }, skillIds: ['warding-script'] }, 'A harmless fragment set behind layered paper and glass.', { arcana: 3, mp: 3 }),
   'quilted-haori': gear('quilted-haori', 'Quilted Road Haori', 'armor', 70, [...PARTY_MEMBER_IDS], { stats: { hp: 18, guard: 3 } }, 'Quiet, repairable protection for long journeys.', { hp: 5, guard: 1 }),
-  'river-silk-robe': gear('river-silk-robe', 'River-Silk Robe', 'armor', 85, ['aya', 'lise', 'mateus', 'kiku'], { stats: { mp: 10, arcana: 2 }, essence: { ember: 0.9 } }, 'Closely woven silk treated to shed sparks.', { mp: 3, arcana: 1 }),
+  'river-silk-robe': gear('river-silk-robe', 'River-Silk Robe', 'armor', 85, ['aya', 'lise', 'mateus', 'kiku', 'miyo'], { stats: { mp: 10, arcana: 2 }, essence: { ember: 0.9 } }, 'Closely woven silk treated to shed sparks.', { mp: 3, arcana: 1 }),
   'bell-iron-lamellar': gear('bell-iron-lamellar', 'Bell-Iron Lamellar', 'armor', 135, ['ren', 'genta'], { stats: { hp: 28, guard: 7, speed: -2 }, delivery: { cut: 0.85, pierce: 0.9 } }, 'Recovered plates relaced so no court crest remains.', { hp: 8, guard: 2 }),
   'ash-lacquer-coat': gear('ash-lacquer-coat', 'Ash-Lacquer Coat', 'armor', 210, [...PARTY_MEMBER_IDS], { stats: { hp: 24, guard: 5 }, essence: { ember: 0.8, umbral: 0.9 }, statusResistance: { burn: 0.3 } }, 'Layered lacquer marks heat before it reaches the wearer.', { hp: 7, guard: 2 }),
-  'dawn-thread-mantle': gear('dawn-thread-mantle', 'Dawn-Thread Mantle', 'armor', 320, ['aya', 'lise', 'mateus', 'kiku'], { stats: { hp: 20, mp: 16, arcana: 5 }, essence: { radiance: 0.8, umbral: 0.75 }, statusResistance: { dread: 0.35 } }, 'Lantern thread catches violet light and makes it readable.', { hp: 6, mp: 4, arcana: 2 }),
+  'dawn-thread-mantle': gear('dawn-thread-mantle', 'Dawn-Thread Mantle', 'armor', 320, ['aya', 'lise', 'mateus', 'kiku', 'miyo'], { stats: { hp: 20, mp: 16, arcana: 5 }, essence: { radiance: 0.8, umbral: 0.75 }, statusResistance: { dread: 0.35 } }, 'Lantern thread catches violet light and makes it readable.', { hp: 6, mp: 4, arcana: 2 }),
   'road-sandals': gear('road-sandals', 'Measured-Step Sandals', 'accessory', 60, [...PARTY_MEMBER_IDS], { stats: { speed: 3 }, paceDelta: 1 }, 'Knotted soles make each Pace step easy to count.', { speed: 1 }),
   'lantern-bead-cord': gear('lantern-bead-cord', 'Lantern Bead Cord', 'accessory', 75, [...PARTY_MEMBER_IDS], { stats: { spirit: 8 }, statusResistance: { dread: 0.25, bound: 0.15 } }, 'A civic signal cord: one bead for every safe house.', { spirit: 3 }),
   'frostglass-pin': gear('frostglass-pin', 'Frostglass Pin', 'accessory', 105, [...PARTY_MEMBER_IDS], { essence: { frost: 0.75, ember: 1.1 }, statusResistance: { burn: 0.2 } }, 'Cold glass that warns of a sudden change in temperature.', {}),
@@ -97,6 +98,7 @@ const BASE_VITALS = deepFreeze({
   ren: { hp: 104, mp: 24, spirit: 30 }, aya: { hp: 82, mp: 42, spirit: 42 },
   lise: { hp: 91, mp: 29, spirit: 34 }, mateus: { hp: 98, mp: 48, spirit: 48 },
   genta: { hp: 128, mp: 18, spirit: 24 }, kiku: { hp: 86, mp: 45, spirit: 44 },
+  miyo: { hp: 84, mp: 58, spirit: 46 },
 });
 
 const STARTING_EQUIPMENT = deepFreeze({
@@ -106,11 +108,13 @@ const STARTING_EQUIPMENT = deepFreeze({
   mateus: { weapon: 'dusk-censer', armor: 'river-silk-robe', accessory: 'lantern-bead-cord' },
   genta: { weapon: 'cedar-maul', armor: 'bell-iron-lamellar', accessory: 'iron-knot' },
   kiku: { weapon: 'warding-brush', armor: 'river-silk-robe', accessory: 'frostglass-pin' },
+  miyo: { weapon: 'weather-ruler', armor: 'river-silk-robe', accessory: 'storm-kite-toggle' },
 });
 
 const STARTING_VOWS = deepFreeze({
   ren: ['unbroken-route'], aya: ['witnessing-ink'], lise: ['hunter-dawn'],
   mateus: ['returned-name'], genta: ['standing-bridge'], kiku: ['cold-remedy'],
+  miyo: ['measured-breath'],
 });
 
 const STARTING_UNLOCKED_VOWS = Object.freeze(VOW_IDS.filter((id) => VOW_CATALOGUE[id].cost === 0));

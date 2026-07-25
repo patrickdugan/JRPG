@@ -10,8 +10,12 @@
 
 import { getChapterLevelTarget, getParty } from './advancement.mjs';
 import { PARTY_PROFILES, PARTY_SKILLS } from './campaign-combat.mjs';
-import { ActionCombatKernel, ACTION_FIXED_STEP_MS } from './action-combat.mjs';
-import { ENCOUNTERS, getEncounter, RECOVERY_PULSE_MS } from './content/encounters.mjs';
+import {
+  ACTION_FIXED_STEP_MS,
+  ACTION_MOVEMENT_PROFILE_BY_ACTOR_ID,
+  ActionCombatKernel,
+} from './action-combat.mjs';
+import { ENCOUNTERS, getEncounter } from './content/encounters.mjs';
 import { getLevel, parseTileKey } from './content/levels.mjs';
 import { BATTLE_ITEM_IDS } from './loadout.mjs';
 
@@ -19,8 +23,13 @@ export const ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION = 2;
 export const ACTION_ENCOUNTER_IDS = Object.freeze(ENCOUNTERS.map(({ id }) => id));
 export const ACTION_TILE_PX = 64;
 export const ACTION_STAGE_GROUND_Y = 320;
-export const ZERO_RECOVERY_COOLDOWN_FLOOR_MS = 420;
+export const ACTION_RECOVERY_PULSE_MS = 600;
+export const ZERO_RECOVERY_COOLDOWN_FLOOR_MS = 360;
 export const MINIMUM_SHARED_OFFENSIVE_COOLDOWN_MS = 260;
+export const ACTION_ENEMY_HP_COMPRESSION_THRESHOLD = 400;
+export const ACTION_ENEMY_HP_EXCESS_RATIO = 0.65;
+export const ACTION_ENEMY_POWER_PER_LEVEL = 0.025;
+export const ACTION_ENEMY_POWER_MULTIPLIER_CAP = 1.9;
 
 const PARTY_ATTACK_PREFIX = 'party';
 const ENEMY_ATTACK_PREFIX = 'enemy';
@@ -95,11 +104,32 @@ export function sharedOffensiveCooldownMs(sourceSpeed) {
 
 /**
  * Convert turn Recovery into a visible move-specific timer. Recovery 0 never
- * means no cooldown: it receives an explicit 420 ms floor.
+ * means no cooldown: it receives an explicit 360 ms floor.
  */
 export function actionCooldownForRecovery(recoveryPulses = 0) {
   const pulses = Number.isInteger(recoveryPulses) && recoveryPulses > 0 ? recoveryPulses : 0;
-  return Math.max(ZERO_RECOVERY_COOLDOWN_FLOOR_MS, pulses * RECOVERY_PULSE_MS);
+  return Math.max(ZERO_RECOVERY_COOLDOWN_FLOOR_MS, pulses * ACTION_RECOVERY_PULSE_MS);
+}
+
+/** Preserve ordinary foes while compressing only the action boss-health tail. */
+export function actionEnemyHp(sourceHp) {
+  const hp = Math.max(1, Math.round(Number(sourceHp) || 1));
+  if (hp <= ACTION_ENEMY_HP_COMPRESSION_THRESHOLD) return hp;
+  return Math.round(
+    ACTION_ENEMY_HP_COMPRESSION_THRESHOLD
+      + ((hp - ACTION_ENEMY_HP_COMPRESSION_THRESHOLD) * ACTION_ENEMY_HP_EXCESS_RATIO),
+  );
+}
+
+/** Keep late-game enemy contact relevant as party HP and guard grow. */
+export function actionEnemyPower(sourcePower, level) {
+  const power = Math.max(0, Number(sourcePower) || 0);
+  const normalizedLevel = Math.max(1, Math.round(Number(level) || 1));
+  const multiplier = Math.min(
+    ACTION_ENEMY_POWER_MULTIPLIER_CAP,
+    1 + ((normalizedLevel - 1) * ACTION_ENEMY_POWER_PER_LEVEL),
+  );
+  return Math.round(power * multiplier);
 }
 
 function attackTiming(skill, sourceKind) {
@@ -222,6 +252,7 @@ function partyActor(deployment, index, context) {
     name: profile.name,
     faction: 'player',
     ai: 'deterministic-companion',
+    movementProfileId: ACTION_MOVEMENT_PROFILE_BY_ACTOR_ID[actorId] ?? 'standard',
     level: partyLevel(actorId, context.chapterTarget, context.progress, context.options.partyLevels),
     hp: currentHpFor(actorId, stats.hp, context.options.partyVitals),
     maxHp: stats.hp,
@@ -251,6 +282,42 @@ function partyActor(deployment, index, context) {
   };
 }
 
+function partyDeploymentsWithSupport(encounter, supportActorId, fighterActorIds = null) {
+  if (fighterActorIds != null) {
+    if (!Array.isArray(fighterActorIds) || fighterActorIds.length < 1 || fighterActorIds.length > 2) {
+      throw new RangeError('Action fighterActorIds must contain one or two canonical party actor IDs.');
+    }
+    const normalizedIds = fighterActorIds.map((actorId) => String(actorId).trim());
+    if (new Set(normalizedIds).size !== normalizedIds.length) {
+      throw new RangeError('Action fighterActorIds must be unique.');
+    }
+    for (const actorId of normalizedIds) {
+      if (!PARTY_PROFILES[actorId]) throw new RangeError(`Unknown action fighter ${actorId || '(empty)'}.`);
+    }
+    const deployments = normalizedIds.map((actorId, index) => {
+      const authored = encounter.party.deployment.find((deployment) => deployment.actorId === actorId);
+      return {
+        actorId,
+        at: authored?.at ?? encounter.party.deployment[index]?.at ?? encounter.party.deployment[0]?.at ?? '1,5',
+      };
+    });
+    return { deployments, supportActorId: normalizedIds[1] ?? null };
+  }
+  const deployments = encounter.party.deployment.map((deployment) => ({ ...deployment }));
+  if (supportActorId == null) return { deployments, supportActorId: null };
+  const normalizedSupportActorId = String(supportActorId).trim();
+  if (!PARTY_PROFILES[normalizedSupportActorId]) {
+    throw new RangeError(`Unknown action support actor ${normalizedSupportActorId || '(empty)'}.`);
+  }
+  if (!deployments.some(({ actorId }) => actorId === normalizedSupportActorId)) {
+    deployments.push({
+      actorId: normalizedSupportActorId,
+      at: deployments[0]?.at ?? '1,5',
+    });
+  }
+  return { deployments, supportActorId: normalizedSupportActorId };
+}
+
 function summonedTemplate(template) {
   return !(template.positions ?? []).length
     || (template.ai ?? []).some((line) => /^Spawn only\b/u.test(line));
@@ -259,15 +326,17 @@ function summonedTemplate(template) {
 function enemyActor(template, instanceIndex, position, context, attackIds) {
   const instanceId = `${template.id}-${instanceIndex + 1}`;
   const nonHostile = context.encounter.format === 'noncombat-resolution';
+  const hp = actionEnemyHp(template.stats.hp);
+  const level = positiveLevel(context.options.enemyLevel ?? context.chapterTarget, 'enemyLevel');
   return {
     id: instanceId,
     name: (template.count ?? 1) > 1 ? `${template.name} ${instanceIndex + 1}` : template.name,
     faction: nonHostile ? 'neutral' : 'enemy',
     ai: nonHostile || attackIds.length === 0 ? null : 'deterministic-chase',
-    level: positiveLevel(context.options.enemyLevel ?? context.chapterTarget, 'enemyLevel'),
-    hp: template.stats.hp,
-    maxHp: template.stats.hp,
-    power: template.stats.power ?? 0,
+    level,
+    hp,
+    maxHp: hp,
+    power: actionEnemyPower(template.stats.power, level),
     guard: template.stats.guard ?? 0,
     moveSpeed: movementSpeed(template.stats.speed),
     offensiveCooldownMs: sharedOffensiveCooldownMs(template.stats.speed),
@@ -342,12 +411,17 @@ export function adaptActionEncounter(encounterId, options = {}) {
   const progress = partyProgressById(options.advancementState);
   const stage = actionStageForLevel(level);
   const context = { encounter, level, stage, chapterTarget, progress, options };
+  const partyDeployment = partyDeploymentsWithSupport(
+    encounter,
+    options.supportActorId,
+    options.fighterActorIds,
+  );
 
   const attacks = {};
   const attackManifest = [];
   const partyActors = [];
   const partyProfiles = [];
-  for (const [index, deployment] of encounter.party.deployment.entries()) {
+  for (const [index, deployment] of partyDeployment.deployments.entries()) {
     const adapted = partyActor(deployment, index, context);
     partyActors.push(adapted.actor);
     partyProfiles.push(adapted.profile);
@@ -380,6 +454,7 @@ export function adaptActionEncounter(encounterId, options = {}) {
     chapterId: encounter.chapterId,
     levelId: level.id,
     format: encounter.format,
+    supportActorId: partyDeployment.supportActorId,
     chapterLevelTarget: chapterTarget,
     objectiveMigration: objectiveMigration(encounter),
     effectMigration: {

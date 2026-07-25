@@ -32,7 +32,7 @@ test('complete party-council catalogue passes strict validation in canonical ord
     responseLineCount: 180,
     choiceCount: 30,
     choiceOptionCount: 60,
-    wordCount: 27_506,
+    wordCount: 27_511,
     byGroup: { early: 10, middle: 10, late: 10 },
   });
   assert.equal(recursivelyFrozen(PARTY_COUNCILS), true);
@@ -48,7 +48,7 @@ test('playable metrics count only the selected first response while catalogue me
   assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.selectedResponseLineCount, expectedSelectedResponses);
   assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.dialogueLineCount, PARTY_COUNCIL_METRICS.mainLineCount + expectedSelectedResponses);
   assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.choiceCount, 30);
-  assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount, 25_072);
+  assert.equal(PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount, 25_077);
   assert.ok(PARTY_COUNCIL_PLAYABLE_METRICS.visibleWordCount <= PARTY_COUNCIL_METRICS.wordCount);
 });
 

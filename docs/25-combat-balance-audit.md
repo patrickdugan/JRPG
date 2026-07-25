@@ -8,7 +8,7 @@ This is a bounded simulation audit, not a human timing run. It uses the shipped 
 
 ## Result
 
-- First clears: 23/23 victories, 231 player commands, 98 enemy activations, zero party knockouts.
+- First clears: 23/23 victories, 224 player commands, 95 enemy activations, zero party knockouts.
 - Lowest surviving actor: 15.4545% HP in `fp1-cedar-path`; the checked lower bound is 10%.
 - Highest command load: 55 in `c9-kurozane`; its 37 Guard commands are a 67.2727% Spirit-recovery share under the deliberately aggressive policy, below the 75% audit ceiling.
 - Replays: all 23 victories, 608 policy steps total, 353,880 ms of schedule-only 1× presentation, and exact decision/reward identity at 1×/2×/4×.
@@ -63,4 +63,4 @@ node --test tests/combat-balance-audit.test.mjs tests/battle-solvability.test.mj
 npm run check
 ```
 
-The canonical receipt changes are intentional: 98 enemy activations and signature `fnv1a32:462b7ff8`. Updated low/reference/high projections are 188.936/312.481/504.237 canonical-only minutes, 225.645/396.929/697.827 canonical-plus-quest/chronicle minutes, and 779.587/1,236.311/1,924.351 all-finite minutes. The narrative-plus-Storyworld reference is 330.726 minutes after the Lady Enma spool. None is observed duration evidence.
+The canonical receipt changes are intentional: 95 enemy activations and signature `fnv1a32:2e7f5885`. Updated low/reference/high projections are 190.129/314.253/507.008 canonical-only minutes, 226.838/398.701/700.598 canonical-plus-quest/chronicle minutes, and 780.934/1,238.306/1,927.430 all-finite minutes. The narrative-plus-Storyworld reference is 332.738 minutes after the Act III war table and Lady Enma spools. None is observed duration evidence.

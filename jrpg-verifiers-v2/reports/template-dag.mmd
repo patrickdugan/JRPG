@@ -1,0 +1,103 @@
+flowchart TD
+  n_source_template["Project-plan template"]
+  n_design_vision["Vision document"]
+  n_design_technical_gdd["Technical GDD"]
+  n_narrative_beats["Beats outline"]
+  n_narrative_detailed_outline["Detailed outline"]
+  n_production_asset_list["Master asset list"]
+  n_presentation_battle_shot["One true battle shot"]
+  n_presentation_world_shot["One true world/story shot"]
+  n_presentation_menu_shot["One true menu shot"]
+  n_presentation_video_teaser["Internal video teaser (optional)"]
+  n_production_staffing["Staffing and contractor plan"]
+  n_engine_asset_management["Asset-management pipeline"]
+  n_engine_field["World and field interaction"]
+  n_engine_battle["Battle mechanics"]
+  n_engine_stats_gear["Stat and gear system"]
+  n_engine_data["Data management"]
+  n_engine_fx["FX engine"]
+  n_pipeline_content["Content pipeline"]
+  n_tooling_scene["Scene tooling"]
+  n_tooling_battle["Battle tooling"]
+  n_milestone_first_playable["First playable plan"]
+  n_fp_script["First-playable script"]
+  n_fp_assets["First-playable assets"]
+  n_fp_entities["First-playable entities"]
+  n_fp_battles["First-playable battles"]
+  n_fp_maps["First-playable maps"]
+  n_fp_scenes["First-playable scenes"]
+  n_fp_playtest["First-playable playtest"]
+  n_chapter_template["Repeatable chapter-production contract"]
+  n_chapter_content["All chapter content"]
+  n_qa_final_playtests["Final playtests"]
+  n_qa_release_readiness["Release-readiness synthesis"]
+  n_source_template --> n_design_vision
+  n_design_vision --> n_design_technical_gdd
+  n_design_vision --> n_narrative_beats
+  n_narrative_beats --> n_narrative_detailed_outline
+  n_design_vision --> n_production_asset_list
+  n_narrative_detailed_outline --> n_production_asset_list
+  n_design_vision --> n_presentation_battle_shot
+  n_design_technical_gdd --> n_presentation_battle_shot
+  n_production_asset_list --> n_presentation_battle_shot
+  n_design_vision --> n_presentation_world_shot
+  n_narrative_detailed_outline --> n_presentation_world_shot
+  n_production_asset_list --> n_presentation_world_shot
+  n_design_vision --> n_presentation_menu_shot
+  n_design_technical_gdd --> n_presentation_menu_shot
+  n_production_asset_list --> n_presentation_menu_shot
+  n_presentation_battle_shot --> n_presentation_video_teaser
+  n_presentation_world_shot --> n_presentation_video_teaser
+  n_presentation_menu_shot --> n_presentation_video_teaser
+  n_design_vision --> n_production_staffing
+  n_design_technical_gdd --> n_production_staffing
+  n_production_asset_list --> n_production_staffing
+  n_production_asset_list --> n_engine_asset_management
+  n_design_technical_gdd --> n_engine_field
+  n_engine_asset_management --> n_engine_field
+  n_design_technical_gdd --> n_engine_battle
+  n_design_technical_gdd --> n_engine_stats_gear
+  n_engine_battle --> n_engine_stats_gear
+  n_design_technical_gdd --> n_engine_data
+  n_engine_battle --> n_engine_fx
+  n_engine_asset_management --> n_engine_fx
+  n_engine_field --> n_pipeline_content
+  n_engine_battle --> n_pipeline_content
+  n_engine_stats_gear --> n_pipeline_content
+  n_engine_data --> n_pipeline_content
+  n_engine_fx --> n_pipeline_content
+  n_pipeline_content --> n_tooling_scene
+  n_engine_field --> n_tooling_scene
+  n_engine_data --> n_tooling_scene
+  n_pipeline_content --> n_tooling_battle
+  n_engine_battle --> n_tooling_battle
+  n_engine_data --> n_tooling_battle
+  n_narrative_detailed_outline --> n_milestone_first_playable
+  n_production_asset_list --> n_milestone_first_playable
+  n_tooling_scene --> n_milestone_first_playable
+  n_tooling_battle --> n_milestone_first_playable
+  n_milestone_first_playable --> n_fp_script
+  n_narrative_detailed_outline --> n_fp_script
+  n_milestone_first_playable --> n_fp_assets
+  n_production_asset_list --> n_fp_assets
+  n_fp_script --> n_fp_entities
+  n_fp_assets --> n_fp_entities
+  n_engine_stats_gear --> n_fp_entities
+  n_fp_entities --> n_fp_battles
+  n_tooling_battle --> n_fp_battles
+  n_fp_assets --> n_fp_maps
+  n_engine_field --> n_fp_maps
+  n_fp_script --> n_fp_scenes
+  n_fp_assets --> n_fp_scenes
+  n_tooling_scene --> n_fp_scenes
+  n_fp_battles --> n_fp_playtest
+  n_fp_maps --> n_fp_playtest
+  n_fp_scenes --> n_fp_playtest
+  n_fp_playtest --> n_chapter_template
+  n_pipeline_content --> n_chapter_template
+  n_chapter_template --> n_chapter_content
+  n_narrative_detailed_outline --> n_chapter_content
+  n_production_asset_list --> n_chapter_content
+  n_chapter_content --> n_qa_final_playtests
+  n_qa_final_playtests --> n_qa_release_readiness
+  n_production_staffing --> n_qa_release_readiness

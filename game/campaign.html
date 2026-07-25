@@ -14,7 +14,7 @@
     <main id="mainContent" class="campaign-shell" tabindex="-1">
       <header class="campaign-masthead">
         <div>
-          <p class="eyebrow">FULL CAMPAIGN · ACTIVE BUILD</p>
+          <p class="eyebrow">CAMPAIGN</p>
           <h1>Bells of the Black Chrysanthemum</h1>
           <p class="subtitle">Carry the names through eleven chapters of rain, bells, and witness</p>
         </div>
@@ -24,14 +24,14 @@
             <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
             <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
           </div>
-          <span id="runProofStatus" class="run-proof-status" role="status" aria-live="polite" aria-atomic="true">Unverified save</span>
-          <span id="recoveryStatus" class="recovery-status" role="status" aria-live="polite" aria-atomic="true">Recovery checkpoints are separate from playtest proof.</span>
-          <a class="subtle-button" href="camp.html">Camp &amp; Loadout</a>
-          <a class="battle-link" href="index.html">Training Court</a>
-          <button id="exportRecovery" class="subtle-button" type="button">Export recovery checkpoint</button>
-          <button id="importRecovery" class="subtle-button" type="button">Restore checkpoint…</button>
+          <span id="runProofStatus" class="run-proof-status" role="status" aria-live="polite" aria-atomic="true" data-developer-only hidden>Save unavailable</span>
+          <span id="recoveryStatus" class="recovery-status" role="status" aria-live="polite" aria-atomic="true" data-developer-only hidden>Autosave tools are available.</span>
+          <a class="subtle-button" href="camp.html">Camp</a>
+          <a class="battle-link" href="training.html?dev=1" data-developer-only hidden>Training Court</a>
+          <button id="exportRecovery" class="subtle-button" type="button" data-developer-only hidden>Export autosave</button>
+          <button id="importRecovery" class="subtle-button" type="button" data-developer-only hidden>Restore autosave…</button>
           <input id="recoveryFile" type="file" accept="application/json,.json" hidden>
-          <button id="resetCampaign" class="subtle-button" type="button">New Game / clear all saves</button>
+          <button id="resetCampaign" class="subtle-button" type="button">New Game</button>
         </div>
       </header>
 
@@ -56,7 +56,7 @@
             <div class="map-overlay">
               <span id="mapName"></span>
               <span id="mapLegend"></span>
-              <span id="fieldPlaytime">00:00:00</span>
+              <span id="fieldPlaytime" data-developer-only hidden>00:00:00</span>
             </div>
           </div>
           <p id="fieldFeedback" class="field-feedback" role="status" aria-live="polite" aria-atomic="true">Field movement: W/A/S/D orthogonal · Q/E/Z/C diagonal. Movement is one exact map space per key press.</p>
@@ -100,7 +100,7 @@
               <span id="dialogueProgress">Dialogue 1/1</span>
               <button id="continueDialogue" class="subtle-button" type="button" aria-keyshortcuts="N">Continue dialogue</button>
             </div>
-            <details class="presentation-transcript">
+            <details class="presentation-transcript" data-developer-only hidden>
               <summary>Presentation transcript</summary>
               <dl>
                 <div><dt>Score</dt><dd id="sceneMusicCue"></dd></div>
@@ -149,9 +149,9 @@
             <h2 id="encounterName"></h2>
             <p id="encounterObjective"></p>
             <dl class="briefing-list">
-              <div><dt>Lesson</dt><dd id="encounterLesson"></dd></div>
+              <div><dt>Tactic</dt><dd id="encounterLesson"></dd></div>
               <div><dt>Threats</dt><dd id="encounterEnemies"></dd></div>
-              <div><dt>Boss rule</dt><dd id="bossMechanic"></dd></div>
+              <div><dt>Special condition</dt><dd id="bossMechanic"></dd></div>
               <div><dt>Reward</dt><dd id="chapterReward"></dd></div>
             </dl>
             <div class="encounter-actions">
@@ -169,15 +169,17 @@
             <p id="fieldLeaderHint" class="field-leader-hint">Changes the visible explorer and who receives field-hazard effects; battle formation is unchanged.</p>
             <p class="party-note">Field: <kbd>WASD</kbd>/<kbd>QEZC</kbd> move · <kbd>X</kbd>/<kbd>Enter</kbd> interact. Battle: <kbd>WASD</kbd>/<kbd>Arrows</kbd> move · <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> arts.</p>
           </section>
+          <details class="journal-drawer">
+            <summary>Journals <span>Side stories, testimony, and optional routes</span></summary>
           <section class="journal-card route-ledger-card" aria-labelledby="routeLedgerHeading">
             <div class="journal-heading">
               <div>
-                <p class="eyebrow">Optional 20-hour route</p>
-                <h2 id="routeLedgerHeading">Completionist ledger</h2>
+                <p class="eyebrow">Optional discoveries</p>
+                <h2 id="routeLedgerHeading">Route journal</h2>
               </div>
               <span id="routeSummary">0 / 215 complete</span>
             </div>
-            <p id="routeStatus" class="route-status" role="status">Optional finite activities remain available as the story advances.</p>
+              <p id="routeStatus" class="route-status" role="status">Optional exploration never blocks story progress; new discoveries appear as the story advances.</p>
             <ul id="routeDueList" class="route-due-list" aria-label="Optional completionist entries available now"></ul>
             <a class="subtle-button route-camp-link" href="camp.html">Open camp talks, councils &amp; archive</a>
           </section>
@@ -195,7 +197,7 @@
           <section class="journal-card witness-journal-card">
             <div class="journal-heading">
               <div>
-                <p class="eyebrow">Finite testimony routes</p>
+                <p class="eyebrow">Testimony</p>
                 <h2>Witness chronicles</h2>
               </div>
               <span id="witnessSummary">0 / 18 complete</span>
@@ -210,10 +212,11 @@
               <p id="witnessStageHint" class="witness-stage-hint" role="status" aria-live="polite" aria-atomic="true"></p>
             </div>
           </section>
+          </details>
         </aside>
       </section>
 
-      <p class="footer-note">Narrative credits require 60 canonical scenes, 22 played Storyworld scenes, and five active hours. The 215-activity, 20-hour completionist route is optional and never blocks story progress.</p>
+      <p class="footer-note" data-developer-only hidden>Narrative and completion-route verification details are available in developer mode.</p>
     </main>
     <script type="module" src="campaign.js"></script>
   </body>

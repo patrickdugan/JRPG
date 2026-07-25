@@ -3,87 +3,51 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0b0d1b">
+    <meta name="theme-color" content="#0a0c18">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <title>Bells of the Black Chrysanthemum — Bell Court Prototype</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bells of the Black Chrysanthemum</title>
+    <link rel="stylesheet" href="title.css">
     <link rel="stylesheet" href="audio-controls.css">
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Skip to main content</a>
-    <main id="mainContent" class="game-shell" tabindex="-1">
-      <header class="masthead">
-        <div>
-          <p class="eyebrow">FP-0 COMBAT PROOF</p>
-          <h1>Bells of the Black Chrysanthemum</h1>
-          <p class="subtitle">Bell Court at Takamine · a measured battle-stage prototype</p>
-        </div>
-        <div class="scope-note">Original prototype art<br>Turn-based · 12 × 7 stage<br><a class="campaign-link" href="campaign.html">Open Campaign Atlas →</a></div>
-        <div class="audio-controls" role="group" aria-label="Sound controls">
-          <button id="audioToggle" type="button" aria-pressed="false">Sound: Off</button>
-          <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
-          <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
-        </div>
-      </header>
+    <main id="mainContent" class="title-shell" tabindex="-1">
+      <div class="title-art" aria-hidden="true"></div>
+      <section class="title-card" aria-labelledby="gameTitle">
+        <p class="title-kicker">A tale of bells, vows, and borrowed roads</p>
+        <h1 id="gameTitle"><span>Bells of the</span> Black Chrysanthemum</h1>
+        <p class="title-subtitle">Carry the sealed letter. Listen when the mountains answer.</p>
 
-      <section class="game-frame" aria-label="Bell Court combat encounter">
-        <canvas id="gameCanvas" width="960" height="540" tabindex="0" aria-label="Bell Court tactical stage" aria-describedby="boardSummary feedback access-log">
-          This prototype needs a browser with Canvas and JavaScript enabled.
-        </canvas>
+        <nav class="title-actions" aria-label="Main menu">
+          <a id="continueGame" class="title-button primary" href="campaign.html">Continue</a>
+          <button id="newGame" class="title-button" type="button" aria-expanded="false" aria-controls="newGameConfirm">New Game</button>
+          <a id="combatSliceLink" class="title-button" href="action-slice.html">Combat Slice</a>
+          <button id="toggleOptions" class="title-button" type="button" aria-expanded="false" aria-controls="optionsPanel">Options</button>
+        </nav>
+
+        <section id="newGameConfirm" class="title-drawer confirmation" aria-labelledby="newGameHeading" hidden>
+          <h2 id="newGameHeading">Begin a new journey?</h2>
+          <p>This clears campaign progress on this device. Sound preferences will stay as they are.</p>
+          <div class="drawer-actions">
+            <button id="confirmNewGame" class="title-button danger" type="button">Begin New Game</button>
+            <button id="cancelNewGame" class="text-button" type="button">Cancel</button>
+          </div>
+          <p id="newGameStatus" class="drawer-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="optionsPanel" class="title-drawer" aria-labelledby="optionsHeading" hidden>
+          <h2 id="optionsHeading">Options</h2>
+          <div class="audio-controls" role="group" aria-label="Sound controls">
+            <button id="audioToggle" type="button" aria-pressed="false">Sound: Off</button>
+            <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
+            <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
+          </div>
+        </section>
+
+        <a class="developer-link" href="training.html?dev=1" data-developer-only hidden>Open Training Court</a>
       </section>
-
-      <section class="movement-panel" aria-labelledby="movementHeading">
-        <div>
-          <p class="eyebrow">Touch movement</p>
-          <h2 id="movementHeading">Eight-way pace</h2>
-          <p id="boardSummary" class="board-summary">Board state loading.</p>
-        </div>
-        <div class="movement-pad" role="group" aria-label="Move Ren one space">
-          <button type="button" data-move="-1,-1" aria-label="Move northwest">↖</button>
-          <button type="button" data-move="0,-1" aria-label="Move north">↑</button>
-          <button type="button" data-move="1,-1" aria-label="Move northeast">↗</button>
-          <button type="button" data-move="-1,0" aria-label="Move west">←</button>
-          <span class="movement-center" aria-hidden="true">REN</span>
-          <button type="button" data-move="1,0" aria-label="Move east">→</button>
-          <button type="button" data-move="-1,1" aria-label="Move southwest">↙</button>
-          <button type="button" data-move="0,1" aria-label="Move south">↓</button>
-          <button type="button" data-move="1,1" aria-label="Move southeast">↘</button>
-        </div>
-      </section>
-
-      <section class="command-deck" aria-label="Combat commands">
-        <button class="command-button cut" type="button" data-action="skill:courier-cut" aria-keyshortcuts="1">
-          <span class="keycap">1</span>
-          <span><strong>Courier’s Cut</strong><small>Cut · Range 1 · Recovery 2P</small></span>
-        </button>
-        <button class="command-button ember" type="button" data-action="skill:cinder-route" aria-keyshortcuts="2">
-          <span class="keycap">2</span>
-          <span><strong>Cinder Route</strong><small>Arcane + Ember · Range 4 · Recovery 3P</small></span>
-        </button>
-        <button class="command-button radiance" type="button" data-action="skill:dawn-signal" aria-keyshortcuts="3">
-          <span class="keycap">3</span>
-          <span><strong>Dawn Signal</strong><small>Arcane + Radiance · Range 3 · Recovery 2P</small></span>
-        </button>
-        <button class="command-button guard" type="button" data-action="stance:guard" aria-keyshortcuts="G">
-          <span class="keycap">G</span>
-          <span><strong>Guard</strong><small>Next hit −45% · Recovery 1P</small></span>
-        </button>
-        <button class="command-button dodge" type="button" data-action="stance:dodge" aria-keyshortcuts="F">
-          <span class="keycap">F</span>
-          <span><strong>Dodge</strong><small>Next physical hit 65% miss · 1P</small></span>
-        </button>
-      </section>
-
-      <section class="control-row" aria-label="Controls and encounter feedback">
-        <p><strong>Move:</strong> Arrow keys / WASD · <strong>Diagonal:</strong> Q E Z C · <strong>Commands:</strong> 1/2/3, G, F</p>
-        <p id="feedback" role="status" aria-live="polite"></p>
-        <button class="restart-button" type="button" data-action="restart" aria-keyshortcuts="R"><span class="keycap">R</span> Restart encounter</button>
-      </section>
-
-      <p id="access-log" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
-
-      <noscript><p class="noscript">Enable JavaScript to run the first-playable combat prototype.</p></noscript>
+      <noscript><p class="noscript">Enable JavaScript to manage options or begin a new game. Continue remains available.</p></noscript>
     </main>
-    <script type="module" src="game.js"></script>
+    <script type="module" src="title.js"></script>
   </body>
 </html>
