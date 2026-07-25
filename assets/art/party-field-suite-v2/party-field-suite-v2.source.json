@@ -1,0 +1,122 @@
+{
+  "assetId": "party-field-suite-v2",
+  "formatVersion": 2,
+  "classification": "pixel-authored-production-asset",
+  "authorship": "original-code-native-pixel-primitives",
+  "canonicalIdentitySource": "../party-field-suite/party-field-suite.source.json",
+  "sideViewQualityReference": "../roster-animation-runtime-v1/party-combat-animation-atlas-v1.png",
+  "referencePolicy": "The side-view atlas is a visual quality and identity reference only. Its raster pixels are not sampled, scaled, traced, or composited by this builder.",
+  "frame": {
+    "width": 40,
+    "height": 56,
+    "pivot": [20, 52],
+    "footPoint": [20, 52],
+    "transparentGutter": 1,
+    "alphaPolicy": "binary"
+  },
+  "directions": ["north", "east", "south", "west"],
+  "walkPhases": ["contact", "compression", "passing", "extension"],
+  "columns": [
+    "north-idle",
+    "north-contact",
+    "north-compression",
+    "north-passing",
+    "north-extension",
+    "east-idle",
+    "east-contact",
+    "east-compression",
+    "east-passing",
+    "east-extension",
+    "south-idle",
+    "south-contact",
+    "south-compression",
+    "south-passing",
+    "south-extension",
+    "west-idle",
+    "west-contact",
+    "west-compression",
+    "west-passing",
+    "west-extension",
+    "south-interact",
+    "south-hurt"
+  ],
+  "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku", "miyo"],
+  "animation": {
+    "walkFrameDurationMs": [80, 80, 80, 80],
+    "idleFrameDurationMs": 240,
+    "interactFrameDurationMs": 180,
+    "hurtFrameDurationMs": 180,
+    "rootMotion": "runtime-owned",
+    "reducedMotionFrame": "directional-idle"
+  },
+  "qualityContract": {
+    "perspective": "three-quarter top-down with visible crown and shoulder planes",
+    "maximumVisibleColorsPerFrame": 20,
+    "identityChecks": [
+      "silhouette remains readable without labels",
+      "side-view palette and costume cues remain recognizable",
+      "left and right foot contact alternate around one stable pivot",
+      "props retain stable length and attachment",
+      "no neighboring-cell bleed"
+    ]
+  },
+  "characters": [
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "build": "lean",
+      "costume": "cedar rain coat, indigo scarf, courier satchel",
+      "prop": "short field spear",
+      "detail": "diagonal satchel strap and brass clasp"
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "build": "slender",
+      "costume": "layered teal travel kimono, cream sleeves, red obi",
+      "prop": "folded record fan and archive case",
+      "detail": "paper fan edge and square case silhouette"
+    },
+    {
+      "id": "lise",
+      "name": "Nikola Dražanić",
+      "compatibilityId": "lise",
+      "build": "upright",
+      "costume": "navy rain cloak, oxblood doublet, white falling band",
+      "prop": "long rapier and field lance",
+      "detail": "gold belt fittings and proud square shoulders"
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "build": "thin",
+      "costume": "charcoal Japanese travel coat with wine lining",
+      "prop": "concealed cross and ring of keys",
+      "detail": "high collar, narrow silhouette, cross remains concealed"
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "build": "broad",
+      "costume": "earth-tone lamellar mantle and plated shoulders",
+      "prop": "heavy shield and tetsubo",
+      "detail": "asymmetric shield mass and metal shoulder plates"
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "build": "compact",
+      "costume": "herb-green cloak and cream work layers",
+      "prop": "medicine box, bottles, and herb packets",
+      "detail": "cyan bottle glints and leaf-shaped cloak edge"
+    },
+    {
+      "id": "miyo",
+      "name": "Miyo Senda",
+      "build": "slender",
+      "costume": "storm-indigo travel coat with split working sleeves",
+      "prop": "folding bamboo weather ruler",
+      "detail": "brass pressure joints and pale storm-blue hems"
+    }
+  ]
+}

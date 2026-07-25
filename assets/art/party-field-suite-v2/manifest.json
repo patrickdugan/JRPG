@@ -1,0 +1,7251 @@
+{
+  "assetId": "party-field-suite-v2",
+  "formatVersion": 2,
+  "classification": "pixel-authored-production-asset",
+  "authorship": "original-code-native-pixel-primitives",
+  "tool": {
+    "builder": "build_party_field_suite_v2.py",
+    "pillow": "11.3.0",
+    "resampling": "none-runtime-nearest-review-only"
+  },
+  "geometry": {
+    "frameWidth": 40,
+    "frameHeight": 56,
+    "columns": 22,
+    "rows": 7,
+    "sheetWidth": 880,
+    "sheetHeight": 392,
+    "pivot": [
+      20,
+      52
+    ],
+    "footPoint": [
+      20,
+      52
+    ],
+    "transparentGutter": 1,
+    "alphaBounds": [
+      5,
+      4,
+      878,
+      388
+    ]
+  },
+  "rowOrder": [
+    "ren",
+    "aya",
+    "lise",
+    "mateus",
+    "genta",
+    "kiku",
+    "miyo"
+  ],
+  "columnOrder": [
+    "north-idle",
+    "north-contact",
+    "north-compression",
+    "north-passing",
+    "north-extension",
+    "east-idle",
+    "east-contact",
+    "east-compression",
+    "east-passing",
+    "east-extension",
+    "south-idle",
+    "south-contact",
+    "south-compression",
+    "south-passing",
+    "south-extension",
+    "west-idle",
+    "west-contact",
+    "west-compression",
+    "west-passing",
+    "west-extension",
+    "south-interact",
+    "south-hurt"
+  ],
+  "directions": [
+    "north",
+    "east",
+    "south",
+    "west"
+  ],
+  "walkPhases": [
+    "contact",
+    "compression",
+    "passing",
+    "extension"
+  ],
+  "clips": {
+    "north": {
+      "idle": [
+        "north-idle"
+      ],
+      "walk": [
+        "north-contact",
+        "north-compression",
+        "north-passing",
+        "north-extension"
+      ],
+      "frameDurationMs": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true
+    },
+    "east": {
+      "idle": [
+        "east-idle"
+      ],
+      "walk": [
+        "east-contact",
+        "east-compression",
+        "east-passing",
+        "east-extension"
+      ],
+      "frameDurationMs": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true
+    },
+    "south": {
+      "idle": [
+        "south-idle"
+      ],
+      "walk": [
+        "south-contact",
+        "south-compression",
+        "south-passing",
+        "south-extension"
+      ],
+      "frameDurationMs": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true
+    },
+    "west": {
+      "idle": [
+        "west-idle"
+      ],
+      "walk": [
+        "west-contact",
+        "west-compression",
+        "west-passing",
+        "west-extension"
+      ],
+      "frameDurationMs": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true
+    },
+    "interact": {
+      "frames": [
+        "south-interact"
+      ],
+      "frameDurationMs": [
+        180
+      ],
+      "loop": false
+    },
+    "hurt": {
+      "frames": [
+        "south-hurt"
+      ],
+      "frameDurationMs": [
+        180
+      ],
+      "loop": false
+    }
+  },
+  "paletteIds": {
+    "ren": "party-ren-cedar-rain-v1",
+    "aya": "party-aya-paper-teal-v1",
+    "lise": "party-nikola-oxblood-dusk-v2",
+    "mateus": "party-mateus-charcoal-wine-v1",
+    "genta": "party-genta-earth-metal-v1",
+    "kiku": "party-kiku-herb-candle-v1",
+    "miyo": "party-miyo-storm-indigo-v1"
+  },
+  "frames": [
+    {
+      "id": "ren:north-idle",
+      "characterId": "ren",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        5,
+        35,
+        52
+      ],
+      "opaquePixelCount": 857,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58"
+      ],
+      "rgbaSha256": "43559678701639eed4bcb78fe47edf9a406810d11fbf9512f886b32d55d2371c"
+    },
+    {
+      "id": "ren:north-contact",
+      "characterId": "ren",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        5,
+        35,
+        52
+      ],
+      "opaquePixelCount": 845,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58"
+      ],
+      "rgbaSha256": "4f7832ad272a4fd18503316a28bb96abf733a50d601f2a6a4911c742bbd04092"
+    },
+    {
+      "id": "ren:north-compression",
+      "characterId": "ren",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        6,
+        35,
+        52
+      ],
+      "opaquePixelCount": 839,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58"
+      ],
+      "rgbaSha256": "400e4871bf1e705b0678dc79df3795b2d7c83edb05c6e5a74aaed901be4508a4"
+    },
+    {
+      "id": "ren:north-passing",
+      "characterId": "ren",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        5,
+        35,
+        52
+      ],
+      "opaquePixelCount": 845,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58"
+      ],
+      "rgbaSha256": "2f13f5c62927bae32696f8c6315d6203299351480789d356dfc3d25d9b5f3f9e"
+    },
+    {
+      "id": "ren:north-extension",
+      "characterId": "ren",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        4,
+        35,
+        52
+      ],
+      "opaquePixelCount": 850,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58"
+      ],
+      "rgbaSha256": "f1f3a61199baeb4244956f74f2375393bf08d9d795e4391e071681ebea567854"
+    },
+    {
+      "id": "ren:east-idle",
+      "characterId": "ren",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        7,
+        35,
+        51
+      ],
+      "opaquePixelCount": 726,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "04c452937fc11f7a8e5c1064c97887cf4ed7d212df85189fe2b2d77d9d301863"
+    },
+    {
+      "id": "ren:east-contact",
+      "characterId": "ren",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        7,
+        35,
+        51
+      ],
+      "opaquePixelCount": 733,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "d7243e2756ad2bb88ae9e9e7e011bbe03e56eb6b79ac1889a7656f9ad6a64ee5"
+    },
+    {
+      "id": "ren:east-compression",
+      "characterId": "ren",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        35,
+        52
+      ],
+      "opaquePixelCount": 724,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "a0ac0e3e40dc328a83e1e1f4f4aa607318bf49627558fced4ea9972289ca8a14"
+    },
+    {
+      "id": "ren:east-passing",
+      "characterId": "ren",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        7,
+        35,
+        51
+      ],
+      "opaquePixelCount": 705,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "13550826ac5f627f660795a65e42e0c3d2bf8f5211e5f17ae098561198142f6a"
+    },
+    {
+      "id": "ren:east-extension",
+      "characterId": "ren",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        6,
+        35,
+        50
+      ],
+      "opaquePixelCount": 722,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "5c729a0568034f55a69361482ea73a39f3b79fbb36fab423e4e9f414c94f4dce"
+    },
+    {
+      "id": "ren:south-idle",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        31,
+        52
+      ],
+      "opaquePixelCount": 860,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "0ed61fada973c097e48ac24828b9559b414fb89ab02a74d1cedbd8cc92617286"
+    },
+    {
+      "id": "ren:south-contact",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        31,
+        52
+      ],
+      "opaquePixelCount": 848,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "c02b20bb8335146dba13e8c00d8086202e25db5296a8a336c62d2b269d6a41a4"
+    },
+    {
+      "id": "ren:south-compression",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        6,
+        31,
+        52
+      ],
+      "opaquePixelCount": 842,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "8fd5edbb53f7dee29e9055aeffb1acd1823935ed95e6b3aade186886c23814fa"
+    },
+    {
+      "id": "ren:south-passing",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        31,
+        52
+      ],
+      "opaquePixelCount": 848,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "614dd2cd8d6732d244ac5868cf247ab93dd69eac2ec24c645f40d0b49fef238d"
+    },
+    {
+      "id": "ren:south-extension",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        4,
+        31,
+        52
+      ],
+      "opaquePixelCount": 854,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "f33a6719223544debe8d835d5327f8facfbad9dd243136baea97f6def6d47630"
+    },
+    {
+      "id": "ren:west-idle",
+      "characterId": "ren",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        34,
+        51
+      ],
+      "opaquePixelCount": 726,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "de3479e7f080900a706780ae7aac8b175e3515094692322e0f3e8c359ccf9d93"
+    },
+    {
+      "id": "ren:west-contact",
+      "characterId": "ren",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        34,
+        51
+      ],
+      "opaquePixelCount": 733,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "8ff3ad92145d66a6996cb0dc8d782b403250ee141c2664b1abb65a646e92442e"
+    },
+    {
+      "id": "ren:west-compression",
+      "characterId": "ren",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 724,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "ef1932a16973c5e53009bd136f8f1c7d658998be1f3c127f943ced05792f3174"
+    },
+    {
+      "id": "ren:west-passing",
+      "characterId": "ren",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        34,
+        51
+      ],
+      "opaquePixelCount": 705,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "153246e4c78d0e2050f2e8720f269c4850803cb2501c1a619f96464461320022"
+    },
+    {
+      "id": "ren:west-extension",
+      "characterId": "ren",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        6,
+        34,
+        50
+      ],
+      "opaquePixelCount": 722,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "6565c4d1f8afcd204d3c244ac7bd297223693eb86bfe34bdd351423ad03e7dcc"
+    },
+    {
+      "id": "ren:south-interact",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        39,
+        52
+      ],
+      "opaquePixelCount": 904,
+      "visibleColorCount": 15,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "5702921b4a6837923f06495f6999e2978f9397887e46a782f86a93e72e22490a"
+    },
+    {
+      "id": "ren:south-hurt",
+      "characterId": "ren",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        0,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        4,
+        37,
+        51
+      ],
+      "opaquePixelCount": 914,
+      "visibleColorCount": 15,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#17202a",
+        "#1a2e47",
+        "#27466b",
+        "#38241b",
+        "#394b59",
+        "#5a3a2c",
+        "#637462",
+        "#787e83",
+        "#887167",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "d4a3b1560d90061d07b6b44d46b508d4772153d085422b28c460c343f269f86f"
+    },
+    {
+      "id": "aya:north-idle",
+      "characterId": "aya",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        38,
+        52
+      ],
+      "opaquePixelCount": 814,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "1b895a38d4d00fa40106156174b625cf10622e5deb14f2349d74ac173bac9ce4"
+    },
+    {
+      "id": "aya:north-contact",
+      "characterId": "aya",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        38,
+        52
+      ],
+      "opaquePixelCount": 802,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "9c97128c1fdc6f37381de07ec895dba226254f96e1f99815c75a5ca1f625f85d"
+    },
+    {
+      "id": "aya:north-compression",
+      "characterId": "aya",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        9,
+        38,
+        52
+      ],
+      "opaquePixelCount": 799,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "b73f49fee5bb324a5f61b43446e8ebfc6b703a4270078ecf84bc43dcd3c960e6"
+    },
+    {
+      "id": "aya:north-passing",
+      "characterId": "aya",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        38,
+        52
+      ],
+      "opaquePixelCount": 802,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "41da73a38ee134986ef598d2ea0e00d64a7768d3a2fbc457e6b16ea27b9d8205"
+    },
+    {
+      "id": "aya:north-extension",
+      "characterId": "aya",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        7,
+        38,
+        52
+      ],
+      "opaquePixelCount": 804,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "f66760853817042820352174c16c807e9715cc25571fe9e2c391c3a63c705b15"
+    },
+    {
+      "id": "aya:east-idle",
+      "characterId": "aya",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        38,
+        51
+      ],
+      "opaquePixelCount": 718,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "c8b7c5b4f34fa55abcd7ed0904aea213d10f08e551fab43c93dd6760f532b889"
+    },
+    {
+      "id": "aya:east-contact",
+      "characterId": "aya",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        38,
+        51
+      ],
+      "opaquePixelCount": 725,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "9db43ebca12a8ed9b6eb1ac240e488debea5045b875c0f844cdc710718bd3022"
+    },
+    {
+      "id": "aya:east-compression",
+      "characterId": "aya",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        9,
+        38,
+        52
+      ],
+      "opaquePixelCount": 719,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "d801e73d4f53278f4a658d0ca441bf9b1f973a92627c5d947a49bbcbac7bb7d4"
+    },
+    {
+      "id": "aya:east-passing",
+      "characterId": "aya",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        38,
+        51
+      ],
+      "opaquePixelCount": 697,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "4db37f1921580a5fd773aca9a498c6a6a55a9692e0ccae85df0ef9a73776ad58"
+    },
+    {
+      "id": "aya:east-extension",
+      "characterId": "aya",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        7,
+        38,
+        50
+      ],
+      "opaquePixelCount": 712,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "f57fbf8f57b08355932fd052b9a23338748592a78ebcd2df8951954806ba551d"
+    },
+    {
+      "id": "aya:south-idle",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        38,
+        52
+      ],
+      "opaquePixelCount": 826,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "7ec8f13c5cf94dd525a0acb4a17ba399e3d8018cd0fd88e70466ba86d3b06ee9"
+    },
+    {
+      "id": "aya:south-contact",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        38,
+        52
+      ],
+      "opaquePixelCount": 814,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "1f22f9b9129a3455dea0dbe797116150463d2a3931035534718538a95738d29a"
+    },
+    {
+      "id": "aya:south-compression",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        9,
+        38,
+        52
+      ],
+      "opaquePixelCount": 811,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "3b1f0030abff86372006028171516ba7095d2432f7a612a6c664bb4904bf9636"
+    },
+    {
+      "id": "aya:south-passing",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        38,
+        52
+      ],
+      "opaquePixelCount": 814,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "ff4b014f32e01600c275c1b6a1c4b80e705ad6edc44fa258f986615955e9d48d"
+    },
+    {
+      "id": "aya:south-extension",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        7,
+        38,
+        52
+      ],
+      "opaquePixelCount": 817,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "630b92efb81d766a190046ed3ca6d084c32f90024eebeac5dfb82ef628dea94d"
+    },
+    {
+      "id": "aya:west-idle",
+      "characterId": "aya",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        2,
+        8,
+        30,
+        51
+      ],
+      "opaquePixelCount": 725,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "0091df881df03bfa33ffebd739846eb25ab0ae8aa9471c94734be503f96e52a3"
+    },
+    {
+      "id": "aya:west-contact",
+      "characterId": "aya",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        2,
+        8,
+        30,
+        51
+      ],
+      "opaquePixelCount": 732,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "ada36b42873f795e67a1edc060bbf9b8b0c790e2ed48324df8d8fe18b2d82bf8"
+    },
+    {
+      "id": "aya:west-compression",
+      "characterId": "aya",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        2,
+        9,
+        30,
+        52
+      ],
+      "opaquePixelCount": 726,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "40b31b15c9af5149ffc38c848f54a153d7a0ec8d29328a9822c5786fe5de8ac3"
+    },
+    {
+      "id": "aya:west-passing",
+      "characterId": "aya",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        2,
+        8,
+        30,
+        51
+      ],
+      "opaquePixelCount": 704,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "100adce78aeec29a3f5f08ef614942c1236a6506a8eb716c2d4303e658bce95e"
+    },
+    {
+      "id": "aya:west-extension",
+      "characterId": "aya",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        2,
+        7,
+        30,
+        50
+      ],
+      "opaquePixelCount": 719,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "43157eea5515febd35de9f93696dfdbbae6f1fe376ff37a47ce4fa8bed54cb0b"
+    },
+    {
+      "id": "aya:south-interact",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        39,
+        52
+      ],
+      "opaquePixelCount": 855,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "ae6b65775ae85daf3e6c241b17d68d1803a606e1b2db0c95e9e191f43714595d"
+    },
+    {
+      "id": "aya:south-hurt",
+      "characterId": "aya",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        56,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        5,
+        38,
+        51
+      ],
+      "opaquePixelCount": 886,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b24",
+        "#344949",
+        "#547675",
+        "#787b80",
+        "#849c9c",
+        "#8e8566",
+        "#b34a3e",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "137c05d335d66f3b9d998dd231e651e822216f940e623b6abb8fcd0618caefad"
+    },
+    {
+      "id": "lise:north-idle",
+      "characterId": "lise",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 775,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "e18d0519ab9bde3e28e01669f5164b27e3155fee94a241c4b50e0fabf88dfe02"
+    },
+    {
+      "id": "lise:north-contact",
+      "characterId": "lise",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 763,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "cb87cb586e621792f2199ed26399003f0e149359b69583bb062e77ca35e4be42"
+    },
+    {
+      "id": "lise:north-compression",
+      "characterId": "lise",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 759,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "72bc25cf9e7aa79de3bb8c48c52b081aa9356509dc5e98529a7fc87bb5843af1"
+    },
+    {
+      "id": "lise:north-passing",
+      "characterId": "lise",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 763,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "99964a0c9cd1d046ae8697b167644e32f3b086b04a5e9f21434be4e2e9c1c411"
+    },
+    {
+      "id": "lise:north-extension",
+      "characterId": "lise",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        52
+      ],
+      "opaquePixelCount": 769,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "3f40b5c8c65049fce4c4442d701c0c43f0b8cde55fa6183211067b2d11ce40a9"
+    },
+    {
+      "id": "lise:east-idle",
+      "characterId": "lise",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        34,
+        51
+      ],
+      "opaquePixelCount": 721,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "84f12affe675f7022f0d1f214e36ab33264cd6451f7835202325e698f80dd44f"
+    },
+    {
+      "id": "lise:east-contact",
+      "characterId": "lise",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        34,
+        51
+      ],
+      "opaquePixelCount": 728,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "aaffdd7ffb2e2737ae959af71351c7e5043f953127b9dbc1f093badcb0eb56cc"
+    },
+    {
+      "id": "lise:east-compression",
+      "characterId": "lise",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        9,
+        34,
+        52
+      ],
+      "opaquePixelCount": 718,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "1988eb65f0e522862e0f780948517defa0977ebeb0b98b85ca27a36224a30bc3"
+    },
+    {
+      "id": "lise:east-passing",
+      "characterId": "lise",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        34,
+        51
+      ],
+      "opaquePixelCount": 700,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "3142ed74b71d24ece2803d30abc54b2e19d096c0e746f5c90d8fad9e79b16491"
+    },
+    {
+      "id": "lise:east-extension",
+      "characterId": "lise",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        7,
+        34,
+        51
+      ],
+      "opaquePixelCount": 718,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "662440f30813728d2abc830b1b070efa458f9921d9ae251e96251753a1321f5b"
+    },
+    {
+      "id": "lise:south-idle",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 769,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "616f109598e81b9bb128a97d893b7b562e39d54775b097d7841ca5757d9cf7a1"
+    },
+    {
+      "id": "lise:south-contact",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 757,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "455a01e3fdcafa168711e7cfb2c3c6ffe9f05216371981ffec9b2fd796c6a28c"
+    },
+    {
+      "id": "lise:south-compression",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 752,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "4ad1cd25b252cda4c5f501565892e2f8d6544395d360f7af6a022e8e2f479262"
+    },
+    {
+      "id": "lise:south-passing",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 757,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "6ca3815579fbe8e7fd384d14e9245321c85e6d5910b52e5a5750343e4f6a9d52"
+    },
+    {
+      "id": "lise:south-extension",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        52
+      ],
+      "opaquePixelCount": 763,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "cfd97778c0b610b70ca4e20ede98d17173883cd135ff9690cfe896dd8c71f8a4"
+    },
+    {
+      "id": "lise:west-idle",
+      "characterId": "lise",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        51
+      ],
+      "opaquePixelCount": 703,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "c66ab6bfec5b86db385c09d4d7a43b20c0b164185514fc9febe4abb402eb34d5"
+    },
+    {
+      "id": "lise:west-contact",
+      "characterId": "lise",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        51
+      ],
+      "opaquePixelCount": 709,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "c7857c6b541143d4a0a94aabe74b4b2adbc18402b1801289da6a3663477e4446"
+    },
+    {
+      "id": "lise:west-compression",
+      "characterId": "lise",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 701,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "51de9b7e58c6b370b85985da508332333ff212a270277ce48c763fddc07f8aa8"
+    },
+    {
+      "id": "lise:west-passing",
+      "characterId": "lise",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        51
+      ],
+      "opaquePixelCount": 682,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "270efb05dd2c42e6d8872ff784fc1d15cdd60d3cc7021e16387d892a5b1aa7a9"
+    },
+    {
+      "id": "lise:west-extension",
+      "characterId": "lise",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        50
+      ],
+      "opaquePixelCount": 702,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "e8a5ff1c23f45ddc9e7b5688aceaa3c814339fa80e97862fce8f403d33f0edc0"
+    },
+    {
+      "id": "lise:south-interact",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        39,
+        52
+      ],
+      "opaquePixelCount": 812,
+      "visibleColorCount": 15,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#b09155",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "4b47e1feeee488896291045c01c6eeead3e96374c1a474859c088eb44ba38fcf"
+    },
+    {
+      "id": "lise:south-hurt",
+      "characterId": "lise",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        112,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        5,
+        37,
+        51
+      ],
+      "opaquePixelCount": 822,
+      "visibleColorCount": 16,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#1e2d40",
+        "#281c1b",
+        "#304967",
+        "#394b59",
+        "#3c1e25",
+        "#5b2d38",
+        "#6a7c92",
+        "#827b7b",
+        "#a08b58",
+        "#b09155",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "d263689143316adf63a6b11fde058b7097090337cbba46e282dd7b6712658ae6"
+    },
+    {
+      "id": "mateus:north-idle",
+      "characterId": "mateus",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        52
+      ],
+      "opaquePixelCount": 803,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58"
+      ],
+      "rgbaSha256": "5a06f4f958b74c4c8dfae00e8d571e2331ffb7d898fd8d21c3d7355d0e643c73"
+    },
+    {
+      "id": "mateus:north-contact",
+      "characterId": "mateus",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        52
+      ],
+      "opaquePixelCount": 790,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58"
+      ],
+      "rgbaSha256": "4549590b5712429b1e0faef7452191c36015f6a22bc5e688e9913089d91568e7"
+    },
+    {
+      "id": "mateus:north-compression",
+      "characterId": "mateus",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        9,
+        32,
+        52
+      ],
+      "opaquePixelCount": 780,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58"
+      ],
+      "rgbaSha256": "d3243dd4d5cfadcec0e157b90159424fc9bdd63f8bc2473b7fd9812526ca0d25"
+    },
+    {
+      "id": "mateus:north-passing",
+      "characterId": "mateus",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        52
+      ],
+      "opaquePixelCount": 792,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58"
+      ],
+      "rgbaSha256": "49c32a140bdc5f3c4bf925ee3a2825f798c689f27f3cd90e6f0416ad80ffa41f"
+    },
+    {
+      "id": "mateus:north-extension",
+      "characterId": "mateus",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        7,
+        32,
+        52
+      ],
+      "opaquePixelCount": 813,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58"
+      ],
+      "rgbaSha256": "9bb1d8730a6d576a5a582c133decaafb9bdf37dd6aebc5a9e11a369769997ef3"
+    },
+    {
+      "id": "mateus:east-idle",
+      "characterId": "mateus",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        51
+      ],
+      "opaquePixelCount": 740,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "14515c9535e44a5da511f69bccdcce9a10bc25240e5efa81a2a5272cb141e6c1"
+    },
+    {
+      "id": "mateus:east-contact",
+      "characterId": "mateus",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        51
+      ],
+      "opaquePixelCount": 747,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "46d1fd856eadc1abfafadde30809feffa5cb791da581017adeef00ec5b0cd8db"
+    },
+    {
+      "id": "mateus:east-compression",
+      "characterId": "mateus",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        9,
+        32,
+        52
+      ],
+      "opaquePixelCount": 737,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "ad2437ebe0c19293bf5b6b1855c75064d0a1cfbb123fde3233cf997162f06df1"
+    },
+    {
+      "id": "mateus:east-passing",
+      "characterId": "mateus",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        51
+      ],
+      "opaquePixelCount": 724,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "70036c95135b96a6fdbdc8f8f763072bb620160422852a71133b4bba5cfe51bd"
+    },
+    {
+      "id": "mateus:east-extension",
+      "characterId": "mateus",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        7,
+        32,
+        51
+      ],
+      "opaquePixelCount": 749,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "cfb6f9d082d82236d0ca05e513ae0a496e19729a8a928c02dde0766dd66efa14"
+    },
+    {
+      "id": "mateus:south-idle",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        52
+      ],
+      "opaquePixelCount": 799,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "bbdbe21f5a48497c07cd222088beda3d36f6a3cff354b7537a29df5573b53c55"
+    },
+    {
+      "id": "mateus:south-contact",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        52
+      ],
+      "opaquePixelCount": 786,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "d17c10aa4765b5ab3385badd8ce0017fb02178263c916102c4eee627a6c94b46"
+    },
+    {
+      "id": "mateus:south-compression",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        9,
+        32,
+        52
+      ],
+      "opaquePixelCount": 776,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "368e38c214ca331db35ed48282f184d0477cfc28a31254cb91a00dc2bb69d0db"
+    },
+    {
+      "id": "mateus:south-passing",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        32,
+        52
+      ],
+      "opaquePixelCount": 788,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "d94d7b315fb66a6757b75ac9a72d1084540abee3e57859cd4cb3feee7ff7020a"
+    },
+    {
+      "id": "mateus:south-extension",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        7,
+        32,
+        52
+      ],
+      "opaquePixelCount": 809,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "6773570555960f2a95a581cda6adfbcc3ed3b1d85a63489b24970702ac40e252"
+    },
+    {
+      "id": "mateus:west-idle",
+      "characterId": "mateus",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        31,
+        51
+      ],
+      "opaquePixelCount": 740,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "3c45ada396537d794f8119a2abaaf95aafd2201c12fc16c29efa47c8942463cf"
+    },
+    {
+      "id": "mateus:west-contact",
+      "characterId": "mateus",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        31,
+        51
+      ],
+      "opaquePixelCount": 747,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "7814676e228e6899eefacf88cd44beeda30689bf4ea300948f0c3eae50a7b0d9"
+    },
+    {
+      "id": "mateus:west-compression",
+      "characterId": "mateus",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        9,
+        31,
+        52
+      ],
+      "opaquePixelCount": 737,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "1b0935262ebb3dc0647754254ace061074fd38770a262404553ad44367d6629d"
+    },
+    {
+      "id": "mateus:west-passing",
+      "characterId": "mateus",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        8,
+        31,
+        51
+      ],
+      "opaquePixelCount": 724,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "34d8d2a502fb06d1c9188efa6ffb9f13678f03e531bb3973b2544388fbc82c65"
+    },
+    {
+      "id": "mateus:west-extension",
+      "characterId": "mateus",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        8,
+        7,
+        31,
+        51
+      ],
+      "opaquePixelCount": 749,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "f47650d79548bba7aece8557ee91caa9ddb3e9091e8636fbc9575dffa623d057"
+    },
+    {
+      "id": "mateus:south-interact",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        8,
+        39,
+        52
+      ],
+      "opaquePixelCount": 849,
+      "visibleColorCount": 15,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#252a35",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#762b32",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "cfe596d939a5b57f71a53edad2a61d0242e7ad86ea31d5331139849b16544fcc"
+    },
+    {
+      "id": "mateus:south-hurt",
+      "characterId": "mateus",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        168,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        9,
+        5,
+        37,
+        51
+      ],
+      "opaquePixelCount": 860,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171a21",
+        "#21181b",
+        "#271a21",
+        "#3b2732",
+        "#62666e",
+        "#637462",
+        "#762b32",
+        "#7e797b",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "f649bd78ede857eec1989c422949d416838e65871300bb236013c6e733ad8ea8"
+    },
+    {
+      "id": "genta:north-idle",
+      "characterId": "genta",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 946,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58"
+      ],
+      "rgbaSha256": "52cda1c1aeac296b8c804314dcff299f6d995ccfb831523e3c06c0a7d87b84cc"
+    },
+    {
+      "id": "genta:north-contact",
+      "characterId": "genta",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 931,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58"
+      ],
+      "rgbaSha256": "dd060d1b090dafee1782a1bc7ea433be49ac635c0b34bc078f5589b9b6e6d19d"
+    },
+    {
+      "id": "genta:north-compression",
+      "characterId": "genta",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        9,
+        34,
+        52
+      ],
+      "opaquePixelCount": 925,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58"
+      ],
+      "rgbaSha256": "d40d539524d7e11d3ec857231383af37187c410f0263a64a66a1d7908f2c8aaf"
+    },
+    {
+      "id": "genta:north-passing",
+      "characterId": "genta",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 932,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58"
+      ],
+      "rgbaSha256": "bc1543fb0689093225faf6ee97cdc5b610123ba8574a81eea8e425fc07ffca30"
+    },
+    {
+      "id": "genta:north-extension",
+      "characterId": "genta",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        34,
+        52
+      ],
+      "opaquePixelCount": 938,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58"
+      ],
+      "rgbaSha256": "4d91d9c7fecaa1c9f6836e1c91ee29cde1763f115a55c937decae1453e4764c9"
+    },
+    {
+      "id": "genta:east-idle",
+      "characterId": "genta",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        36,
+        51
+      ],
+      "opaquePixelCount": 853,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "e6962b17163c52261fcc7a96631458413c90183baad6f06f2cf5907ad1a5d92f"
+    },
+    {
+      "id": "genta:east-contact",
+      "characterId": "genta",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        36,
+        51
+      ],
+      "opaquePixelCount": 859,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "3ffdbe4c1da7f4648d52b7173c5b05f1545c1606d2d8772688fc28b7cada9166"
+    },
+    {
+      "id": "genta:east-compression",
+      "characterId": "genta",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        9,
+        36,
+        52
+      ],
+      "opaquePixelCount": 850,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "3233a75c6fa238e7a2fa0e0398cc6af2eeb9a8ebf02b2641217865dd74b97544"
+    },
+    {
+      "id": "genta:east-passing",
+      "characterId": "genta",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        36,
+        51
+      ],
+      "opaquePixelCount": 829,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "c3bc1913f3d78e2586196ddc896e1ba59bbba21ec5df9679165318bffef02192"
+    },
+    {
+      "id": "genta:east-extension",
+      "characterId": "genta",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        36,
+        50
+      ],
+      "opaquePixelCount": 848,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "0b1da279b7eb632b34e66032ef731ed21c43235af5ba12a49cbbfd4ff0f1bcce"
+    },
+    {
+      "id": "genta:south-idle",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 941,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "fcb3f2b17e5bb8ddade58d7742aca8c5b4b213658baaccb4b8e948cea06e02eb"
+    },
+    {
+      "id": "genta:south-contact",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 926,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "e152637165f54c4db122d538a9a28e2df72afd0b2ebb832a7df526273b99ed40"
+    },
+    {
+      "id": "genta:south-compression",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        9,
+        34,
+        52
+      ],
+      "opaquePixelCount": 920,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "e5f08ff1eb36d6c1c8ce9b43727a9cd493a76c73281cedf586bff26a536f37b7"
+    },
+    {
+      "id": "genta:south-passing",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        34,
+        52
+      ],
+      "opaquePixelCount": 927,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "19c0b23952907a26da204f191e3f57966becb75412b364df1498633146528edf"
+    },
+    {
+      "id": "genta:south-extension",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        34,
+        52
+      ],
+      "opaquePixelCount": 934,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "8c427c0aef3e952a95105beb2ac083fcc8c73b6693583854e0def85d1bb7caae"
+    },
+    {
+      "id": "genta:west-idle",
+      "characterId": "genta",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 895,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "21b1da7a5ce3ff515e11af09a39c150c5ab1f0626f9a447fdd6ec6e8898bb502"
+    },
+    {
+      "id": "genta:west-contact",
+      "characterId": "genta",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 896,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "14fea0e4ea6db412807f9c5d70ee53f4ae3b80e4dbdb4cd6a46a84dc5580a6c9"
+    },
+    {
+      "id": "genta:west-compression",
+      "characterId": "genta",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        9,
+        35,
+        52
+      ],
+      "opaquePixelCount": 893,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "754c3d171e3e4dfabd4df3428b9eabc0363f6b9d54c348a94712d755b6a4ddfc"
+    },
+    {
+      "id": "genta:west-passing",
+      "characterId": "genta",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 873,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "c1caf3feb4994bc9c32c576e21cfe7679e5a0f64f45a9a589f0ceb09faa90e24"
+    },
+    {
+      "id": "genta:west-extension",
+      "characterId": "genta",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        7,
+        35,
+        50
+      ],
+      "opaquePixelCount": 889,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080"
+      ],
+      "rgbaSha256": "c07c110574f776c007056b5fa9deef3ab8df160f10c4808fe59b67b0361eed0c"
+    },
+    {
+      "id": "genta:south-interact",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        39,
+        52
+      ],
+      "opaquePixelCount": 947,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "c8e213be9c9b5e8850cd7a7ceb335fa458fa0a7808f64f831b47f72680a965ff"
+    },
+    {
+      "id": "genta:south-hurt",
+      "characterId": "genta",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        224,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        37,
+        51
+      ],
+      "opaquePixelCount": 994,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#20232a",
+        "#2e2e2a",
+        "#394b59",
+        "#4b4b43",
+        "#5a3a2c",
+        "#637462",
+        "#7d7d78",
+        "#7e7f83",
+        "#a08b58",
+        "#c58b63",
+        "#d7b080",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "bffee87260bac42419e3217daaa4a992e10bf75970e31ddc6664e285f3b71c71"
+    },
+    {
+      "id": "kiku:north-idle",
+      "characterId": "kiku",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 833,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "0a27032a84ddb8fe838a09c7d202fab5e31890f7dd7dfd7dc63e9e55af76eece"
+    },
+    {
+      "id": "kiku:north-contact",
+      "characterId": "kiku",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 821,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "39f9aa234a652806630570d7f71817651ec7750fce5b58e0f67f10a69e989a86"
+    },
+    {
+      "id": "kiku:north-compression",
+      "characterId": "kiku",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 818,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "2cd76c22240252aa68201ea1f8597c41a5f4c87f8df35613589c248ee7ec7bf2"
+    },
+    {
+      "id": "kiku:north-passing",
+      "characterId": "kiku",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 821,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "e7d5deaba46744ea7ae844f024b877913be29863b99f36b559570ce2a69d5cd9"
+    },
+    {
+      "id": "kiku:north-extension",
+      "characterId": "kiku",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        52
+      ],
+      "opaquePixelCount": 823,
+      "visibleColorCount": 10,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "ea2497689714fabb4dba48bf7baffc48a177383cafe59fd2bd44ab8b21184cde"
+    },
+    {
+      "id": "kiku:east-idle",
+      "characterId": "kiku",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 745,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "8cb5243a33c53f4aea84a3010968fd2d467bee25d1d44e5b4d98976d9bac5b3c"
+    },
+    {
+      "id": "kiku:east-contact",
+      "characterId": "kiku",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 752,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "c22d03ccb2eb5467124c4ef73a2aa7b6321d6dfd7ff8645d03e32a7b4c246693"
+    },
+    {
+      "id": "kiku:east-compression",
+      "characterId": "kiku",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        9,
+        35,
+        52
+      ],
+      "opaquePixelCount": 746,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "76c8f5aa853814df8f680c649e8b3b607510ea2d0404ef355529a27554ea3da5"
+    },
+    {
+      "id": "kiku:east-passing",
+      "characterId": "kiku",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 724,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "14e20d7cf3c9cf6f6149be1aed2f486ef1274ddda74a3e85462ea2e478d24740"
+    },
+    {
+      "id": "kiku:east-extension",
+      "characterId": "kiku",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        7,
+        35,
+        50
+      ],
+      "opaquePixelCount": 739,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "7f8c9dac629b28b307f05d04207ce164fca9912d9698882a411e7a61a781cb70"
+    },
+    {
+      "id": "kiku:south-idle",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        35,
+        52
+      ],
+      "opaquePixelCount": 833,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "0ab534ba57bb704c9dcef9a5283924d46e0346ac1374a4bac0e3dc393b1128c2"
+    },
+    {
+      "id": "kiku:south-contact",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        35,
+        52
+      ],
+      "opaquePixelCount": 821,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "5f4229222b1e3368f7da7d4e0381c416bb279bbfb7126309992a2d4066a38894"
+    },
+    {
+      "id": "kiku:south-compression",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        9,
+        35,
+        52
+      ],
+      "opaquePixelCount": 818,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "d1a4726445bcb2e24c0f6f579ef9a6762312a3b6ab8772ae6db8d39a37a16ce4"
+    },
+    {
+      "id": "kiku:south-passing",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        35,
+        52
+      ],
+      "opaquePixelCount": 821,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "8525780e42b519729e480185969ea0845eb2598f8598a04c89dfabb2e30e0f43"
+    },
+    {
+      "id": "kiku:south-extension",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        7,
+        35,
+        52
+      ],
+      "opaquePixelCount": 824,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "da62ff6160c894097c964e162744e75149ecd896ad65393bcbd14ba6b5234854"
+    },
+    {
+      "id": "kiku:west-idle",
+      "characterId": "kiku",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        30,
+        51
+      ],
+      "opaquePixelCount": 745,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "224e782477b5fef5747825f49a16f0b35c99770ab7ca34aa5d07e2ce67f8b460"
+    },
+    {
+      "id": "kiku:west-contact",
+      "characterId": "kiku",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        30,
+        51
+      ],
+      "opaquePixelCount": 752,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "a05e1bea2fc4b581b36969fb50e709b58ce1d837599367b5da94a515af62396b"
+    },
+    {
+      "id": "kiku:west-compression",
+      "characterId": "kiku",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        9,
+        30,
+        52
+      ],
+      "opaquePixelCount": 746,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "b73746aed8c5c7dfbf5bb2a452b42090f66f232e4fe9b91928bb1b0423d95d1e"
+    },
+    {
+      "id": "kiku:west-passing",
+      "characterId": "kiku",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        8,
+        30,
+        51
+      ],
+      "opaquePixelCount": 724,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "93c2c72ee1bcd4ad7d503bd1dc12bd885c9d31d911784e1b5cd2b3b104e8db87"
+    },
+    {
+      "id": "kiku:west-extension",
+      "characterId": "kiku",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        5,
+        7,
+        30,
+        50
+      ],
+      "opaquePixelCount": 739,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a"
+      ],
+      "rgbaSha256": "5eb8f916ad66b9c589f2cb6dd38be834f2290c8b4b8ea2326bd546a07c8ec1eb"
+    },
+    {
+      "id": "kiku:south-interact",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        8,
+        39,
+        52
+      ],
+      "opaquePixelCount": 869,
+      "visibleColorCount": 12,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "44e31d57111459813f79012e6a0d96f6d8fb15340e31a95aff32c09b9ab9ba99"
+    },
+    {
+      "id": "kiku:south-hurt",
+      "characterId": "kiku",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        280,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        10,
+        5,
+        37,
+        51
+      ],
+      "opaquePixelCount": 893,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#24201f",
+        "#2d4235",
+        "#496b55",
+        "#7c9485",
+        "#807e7d",
+        "#88c8c5",
+        "#8e8566",
+        "#c58b63",
+        "#d7b080",
+        "#d7c99a",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "e47bb322d8fd30f576bcc6450cd9a7a1aacf72b5205c65f71ab3c8e72eca67a0"
+    },
+    {
+      "id": "miyo:north-idle",
+      "characterId": "miyo",
+      "direction": "north",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        0,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 774,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c8bd91",
+        "#d3caa7",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "9a46b4fdce88a9136b5a29ea5f017b1ae148e2519c49185bcc4aedc39ab517f8"
+    },
+    {
+      "id": "miyo:north-contact",
+      "characterId": "miyo",
+      "direction": "north",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        40,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 762,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c8bd91",
+        "#d3caa7",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "ad1ff199787b9a8958785d86f5af9bd0aa66b22b0c65570bb8380e514f0c08b6"
+    },
+    {
+      "id": "miyo:north-compression",
+      "characterId": "miyo",
+      "direction": "north",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        80,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 758,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c8bd91",
+        "#d3caa7",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "b3f49c2eb2c8296211fd42d377a868e6d74d5c9bcf1a48d84dbeeefcfce39299"
+    },
+    {
+      "id": "miyo:north-passing",
+      "characterId": "miyo",
+      "direction": "north",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        120,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 762,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c8bd91",
+        "#d3caa7",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "722b3eef65acee69f27e32a507268f68a37de15e20993ae19682cb462836df1d"
+    },
+    {
+      "id": "miyo:north-extension",
+      "characterId": "miyo",
+      "direction": "north",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        160,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        52
+      ],
+      "opaquePixelCount": 765,
+      "visibleColorCount": 11,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c8bd91",
+        "#d3caa7",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "5d76a15fbf52cb5836a26d2f904a4b9a4f7112f67cb3e92542f9806ea3fe8c25"
+    },
+    {
+      "id": "miyo:east-idle",
+      "characterId": "miyo",
+      "direction": "east",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        200,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 699,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "e4ab8c31a6dacaefd6a0cd713128e58354c4f8cffc61006446747ea8e5f2a63f"
+    },
+    {
+      "id": "miyo:east-contact",
+      "characterId": "miyo",
+      "direction": "east",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        240,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 706,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "b8e736761e3097449661a8c15ae7f9c69084d7afbaf5328c36ae2b8d52f96832"
+    },
+    {
+      "id": "miyo:east-compression",
+      "characterId": "miyo",
+      "direction": "east",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        280,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        35,
+        52
+      ],
+      "opaquePixelCount": 697,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "a1a78323f604434421e4f4d8e5855260dd79a928d994345db4bf13c6b1d186dd"
+    },
+    {
+      "id": "miyo:east-passing",
+      "characterId": "miyo",
+      "direction": "east",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        320,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        35,
+        51
+      ],
+      "opaquePixelCount": 678,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "18e104e84adc7a0a1e594cfc5c9c428721cd06ddc22eb95b57ef90b1369b42d2"
+    },
+    {
+      "id": "miyo:east-extension",
+      "characterId": "miyo",
+      "direction": "east",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        360,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        6,
+        7,
+        35,
+        50
+      ],
+      "opaquePixelCount": 705,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "8a2c261aa44c3cf8c9831682bdbe8201454d2044eb3c35f0bb9dfd9823c75e9c"
+    },
+    {
+      "id": "miyo:south-idle",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        400,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 773,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "e67b4e5ee69439e6f7bbd085731de95ebeac597ee2c51342be45a2073181e7b3"
+    },
+    {
+      "id": "miyo:south-contact",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        440,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 761,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "a18990acf06d169745a624b7fa9e928bcc15d88424c483419582d388fa2c5c96"
+    },
+    {
+      "id": "miyo:south-compression",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        480,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 757,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "a97e062219ebfb1f780b7b070b4b78764b1587437285b5c13f56ff87c94c79e9"
+    },
+    {
+      "id": "miyo:south-passing",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        520,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        52
+      ],
+      "opaquePixelCount": 761,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "233948d9419959cc722733df0f6bda28022c6f236b2ae95ac25570a0882a669a"
+    },
+    {
+      "id": "miyo:south-extension",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        560,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        52
+      ],
+      "opaquePixelCount": 765,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "00b165c7c320e25e9d38ce1842b2bd8011354e832105e79fa96b8bfcf595c042"
+    },
+    {
+      "id": "miyo:west-idle",
+      "characterId": "miyo",
+      "direction": "west",
+      "state": "idle",
+      "phase": "hold",
+      "durationMs": 240,
+      "rect": [
+        600,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        51
+      ],
+      "opaquePixelCount": 685,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "a4aeda6b56dee07712f9909a799e10f3650fa937a2d80eef92f428b56cea0c6b"
+    },
+    {
+      "id": "miyo:west-contact",
+      "characterId": "miyo",
+      "direction": "west",
+      "state": "contact",
+      "phase": "contact",
+      "durationMs": 80,
+      "rect": [
+        640,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        51
+      ],
+      "opaquePixelCount": 692,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "1e8c9d6a67ba549f414c83e72d83bd78c940aa97e533737daa8f23a7e583b55d"
+    },
+    {
+      "id": "miyo:west-compression",
+      "characterId": "miyo",
+      "direction": "west",
+      "state": "compression",
+      "phase": "compression",
+      "durationMs": 80,
+      "rect": [
+        680,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        9,
+        33,
+        52
+      ],
+      "opaquePixelCount": 686,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "233796c7190cad9f3cea665e2c3101899aa211e78709e1d16cf91b36c8cd4e12"
+    },
+    {
+      "id": "miyo:west-passing",
+      "characterId": "miyo",
+      "direction": "west",
+      "state": "passing",
+      "phase": "passing",
+      "durationMs": 80,
+      "rect": [
+        720,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        33,
+        51
+      ],
+      "opaquePixelCount": 664,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "6939b55668b5d41bb410a63817851148eb0ff12042638a3b50231bd7779104b9"
+    },
+    {
+      "id": "miyo:west-extension",
+      "characterId": "miyo",
+      "direction": "west",
+      "state": "extension",
+      "phase": "extension",
+      "durationMs": 80,
+      "rect": [
+        760,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        7,
+        33,
+        50
+      ],
+      "opaquePixelCount": 681,
+      "visibleColorCount": 13,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f"
+      ],
+      "rgbaSha256": "ba9349e21a3567dfb7dfa4f581c548a949752dc8b1489fa0613eafa681b0b02c"
+    },
+    {
+      "id": "miyo:south-interact",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "interact",
+      "phase": "interact",
+      "durationMs": 180,
+      "rect": [
+        800,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        8,
+        39,
+        52
+      ],
+      "opaquePixelCount": 823,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "60375b80f5d0e8967743b4a9b6f8e20e14068cf478ea3097319f16c9a56b3506"
+    },
+    {
+      "id": "miyo:south-hurt",
+      "characterId": "miyo",
+      "direction": "south",
+      "state": "hurt",
+      "phase": "hurt",
+      "durationMs": 180,
+      "rect": [
+        840,
+        336,
+        40,
+        56
+      ],
+      "pivot": [
+        20,
+        52
+      ],
+      "footPoint": [
+        20,
+        52
+      ],
+      "alphaBounds": [
+        7,
+        5,
+        37,
+        51
+      ],
+      "opaquePixelCount": 834,
+      "visibleColorCount": 14,
+      "visibleColors": [
+        "#0b1020",
+        "#16233a",
+        "#171b22",
+        "#21384a",
+        "#355b78",
+        "#6e899e",
+        "#787b7f",
+        "#a08b58",
+        "#c58b63",
+        "#c8bd91",
+        "#d3caa7",
+        "#d7b080",
+        "#d9b45f",
+        "#f6e8b9"
+      ],
+      "rgbaSha256": "21642a59e4fd03b96b5ec2e50ac0fbe0b72a7d87270f93dea52ada04ddbb8834"
+    }
+  ],
+  "sources": [
+    {
+      "path": "party-field-suite-v2.source.json",
+      "role": "editable-geometry-timing-quality-contract",
+      "sha256": "ddab0f17b4d5cd9b18db4665ad0de4ab836d9650fb72e0edc038bdfbcbcbb7b9"
+    },
+    {
+      "path": "../party-field-suite/party-field-suite.source.json",
+      "role": "canonical-party-palette-and-identity-contract",
+      "sha256": "d6bb3642702be7bb43fa021a30be494219d2e42590b0a36408414a9c15d17e87"
+    },
+    {
+      "path": "../roster-animation-runtime-v1/party-combat-animation-atlas-v1.png",
+      "role": "visual-quality-reference-not-raster-input",
+      "rasterSampled": false
+    }
+  ],
+  "exports": [
+    {
+      "path": "party-field-atlas-v2.png",
+      "purpose": "transparent-runtime-atlas",
+      "width": 880,
+      "height": 392,
+      "mode": "RGBA",
+      "sha256": "66c5d72ce4ca3a34f4e0ce8cc4de518bee8a05c7f941ac23f807a450e1a625e0"
+    },
+    {
+      "path": "party-field-contact-sheet-v2.png",
+      "purpose": "opaque-review-contact-sheet",
+      "width": 2032,
+      "height": 1218,
+      "mode": "RGBA",
+      "previewScale": 3,
+      "sha256": "8634c482dbada2e546a0cbd32f4671340c6f2df1fd29b53e59045a0fab8bf5ab"
+    },
+    {
+      "path": "party-field-motion-preview-v2.gif",
+      "purpose": "nearest-neighbor-motion-review",
+      "width": 736,
+      "height": 524,
+      "frames": 16,
+      "previewScale": 4,
+      "sha256": "4c68f22e7d8580b6f3b2cc007b938e0d6f29b9492975d763f351871c3e8b92e6"
+    }
+  ],
+  "validation": {
+    "frameCount": 154,
+    "expectedFrameCount": 154,
+    "binaryAlpha": true,
+    "maximumVisibleColorsPerFrame": 20,
+    "actualMaximumVisibleColorsPerFrame": 16,
+    "uniqueFrameHashes": 154,
+    "allFramesUnique": true,
+    "runtimeCopy": "game\\assets\\art\\party-field-suite-v2\\party-field-atlas-v2.png"
+  },
+  "review": {
+    "topDownPerspective": "three-quarter top-down with visible crown and shoulder planes",
+    "runtimeIntegration": "campaign-field-leader-and-followers-four-phase-directional-walk",
+    "remaining": "human in-game scale review and external cultural review remain advisable"
+  }
+}

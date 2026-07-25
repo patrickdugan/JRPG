@@ -1,32 +1,35 @@
-/** DOM-free frame addressing for the authored seven-by-fourteen party field atlas. */
+/** DOM-free frame addressing for the authored seven-by-twenty-two party field atlas. */
 
 const PARTY_SOURCE_INSET = 0;
-const PARTY_CELL_WIDTH = 32;
-const PARTY_CELL_HEIGHT = 48;
+const PARTY_CELL_WIDTH = 40;
+const PARTY_CELL_HEIGHT = 56;
 const PARTY_SOURCE_WIDTH = PARTY_CELL_WIDTH - PARTY_SOURCE_INSET * 2;
 const PARTY_SOURCE_HEIGHT = PARTY_CELL_HEIGHT - PARTY_SOURCE_INSET * 2;
 
-const PARTY_ROW_CELLS = Object.freeze([
-  Object.freeze({ y: 0, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 48, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 96, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 144, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 192, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 240, height: PARTY_CELL_HEIGHT }),
-  Object.freeze({ y: 288, height: PARTY_CELL_HEIGHT }),
-]);
+const PARTY_ROW_CELLS = Object.freeze(
+  Array.from({ length: 7 }, (_, row) => Object.freeze({
+    y: row * PARTY_CELL_HEIGHT,
+    height: PARTY_CELL_HEIGHT,
+  })),
+);
 
 export const PARTY_ATLAS = Object.freeze({
-  url: './assets/art/party-field-suite/party-field-foundation.png',
-  width: 448,
-  height: 336,
-  columns: 14,
+  url: './assets/art/party-field-suite-v2/party-field-atlas-v2.png',
+  width: 880,
+  height: 392,
+  columns: 22,
   rows: 7,
   cellWidth: PARTY_CELL_WIDTH,
   cellHeight: PARTY_CELL_HEIGHT,
   sourceInset: PARTY_SOURCE_INSET,
   sourceWidth: PARTY_SOURCE_WIDTH,
   sourceHeight: PARTY_SOURCE_HEIGHT,
+  pivotX: 20,
+  pivotY: 52,
+  footPointX: 20,
+  footPointY: 52,
+  walkFrameDurationMs: 80,
+  walkFrameCount: 4,
   rowCells: PARTY_ROW_CELLS,
 });
 
@@ -43,16 +46,17 @@ export const PARTY_ATLAS_MEMBERS = Object.freeze([
 export const PARTY_ATLAS_DIRECTIONS = Object.freeze(['north', 'east', 'south', 'west']);
 export const PARTY_ATLAS_FIELD_POSES = Object.freeze(['interact', 'hurt']);
 
-const DIRECTION_COLUMN = Object.freeze({ north: 0, east: 2, south: 4, west: 6 });
+const DIRECTION_COLUMN = Object.freeze({ north: 0, east: 5, south: 10, west: 15 });
 const WALK_COLUMN = Object.freeze({
-  north: Object.freeze([1, 10]),
-  east: Object.freeze([3, 11]),
-  south: Object.freeze([5, 12]),
-  west: Object.freeze([7, 13]),
+  north: Object.freeze([1, 2, 3, 4]),
+  east: Object.freeze([6, 7, 8, 9]),
+  south: Object.freeze([11, 12, 13, 14]),
+  west: Object.freeze([16, 17, 18, 19]),
 });
-const FIELD_POSE_COLUMN = Object.freeze({ interact: 8, hurt: 9 });
+const WALK_PHASE = Object.freeze(['contact', 'compression', 'passing', 'extension']);
+const FIELD_POSE_COLUMN = Object.freeze({ interact: 20, hurt: 21 });
 
-/** Resolve one stable source rectangle. Walking phase alternates idle/walk cells. */
+/** Resolve a directional idle or the first authored walk contact for compatibility. */
 export function getPartyAtlasFrame(memberId, direction = 'south', walkingPhase = 0) {
   const row = PARTY_ATLAS_MEMBERS.indexOf(memberId);
   if (row < 0) throw new RangeError(`Unknown party atlas member: ${memberId}`);
@@ -60,13 +64,14 @@ export function getPartyAtlasFrame(memberId, direction = 'south', walkingPhase =
   if (!Number.isSafeInteger(walkingPhase) || walkingPhase < 0) {
     throw new RangeError('Walking phase must be a non-negative safe integer.');
   }
-  const column = DIRECTION_COLUMN[direction] + (walkingPhase % 2);
+  const resolvedPhase = walkingPhase % 2;
+  const column = resolvedPhase === 0 ? DIRECTION_COLUMN[direction] : WALK_COLUMN[direction][0];
   const cellX = column * PARTY_ATLAS.cellWidth;
   const cell = PARTY_ATLAS.rowCells[row];
   return Object.freeze({
     memberId,
     direction,
-    walkingPhase: walkingPhase % 2,
+    walkingPhase: resolvedPhase,
     row,
     column,
     cellX,
@@ -81,7 +86,7 @@ export function getPartyAtlasFrame(memberId, direction = 'south', walkingPhase =
   });
 }
 
-/** Resolve the two authored walk keys without using the standing idle cell. */
+/** Resolve the four authored walk phases without using the standing idle cell. */
 export function getPartyAtlasWalkFrame(memberId, direction = 'south', walkingPhase = 0) {
   const row = PARTY_ATLAS_MEMBERS.indexOf(memberId);
   if (row < 0) throw new RangeError(`Unknown party atlas member: ${memberId}`);
@@ -89,7 +94,7 @@ export function getPartyAtlasWalkFrame(memberId, direction = 'south', walkingPha
   if (!Number.isSafeInteger(walkingPhase) || walkingPhase < 0) {
     throw new RangeError('Walking phase must be a non-negative safe integer.');
   }
-  const resolvedPhase = walkingPhase % 2;
+  const resolvedPhase = walkingPhase % PARTY_ATLAS.walkFrameCount;
   const column = WALK_COLUMN[direction][resolvedPhase];
   const cellX = column * PARTY_ATLAS.cellWidth;
   const cell = PARTY_ATLAS.rowCells[row];
@@ -97,6 +102,7 @@ export function getPartyAtlasWalkFrame(memberId, direction = 'south', walkingPha
     memberId,
     direction,
     walkingPhase: resolvedPhase,
+    walkPhase: WALK_PHASE[resolvedPhase],
     row,
     column,
     cellX,

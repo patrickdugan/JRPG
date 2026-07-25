@@ -1275,7 +1275,7 @@ function drawPartyFieldCharacterMarker({ memberId, facing }, px, py, cell) {
     frame.width,
     frame.height,
     px - drawWidth / 2,
-    footY - drawHeight * (44 / frame.height),
+    footY - drawHeight * (PARTY_ATLAS.pivotY / frame.height),
     drawWidth,
     drawHeight,
   );
@@ -1315,7 +1315,7 @@ function drawLevelFieldCharacters(level, originX, originY, cell) {
 function drawPartyFieldFollowerMarker({ memberId, facing }, px, py, cell, now) {
   if (partyAtlasState !== 'ready' || !partyAtlasImageHasExpectedSize(partyAtlasImage)) return false;
   const moving = !reducedMotion.matches && now < fieldWalkUntil;
-  const phase = moving ? Math.floor(now / 110) % 2 : 0;
+  const phase = moving ? Math.floor(now / PARTY_ATLAS.walkFrameDurationMs) % PARTY_ATLAS.walkFrameCount : 0;
   let frame;
   try {
     frame = moving
@@ -1339,7 +1339,7 @@ function drawPartyFieldFollowerMarker({ memberId, facing }, px, py, cell, now) {
     frame.width,
     frame.height,
     px - drawWidth / 2,
-    footY - drawHeight * (44 / frame.height),
+    footY - drawHeight * (PARTY_ATLAS.pivotY / frame.height),
     drawWidth,
     drawHeight,
   );
@@ -1559,7 +1559,7 @@ function drawMap(level, encounter, now) {
       fieldPoseUntil = 0;
     }
     const moving = !reducedMotion.matches && now < fieldWalkUntil;
-    const phase = moving ? Math.floor(now / 110) % 2 : 0;
+    const phase = moving ? Math.floor(now / PARTY_ATLAS.walkFrameDurationMs) % PARTY_ATLAS.walkFrameCount : 0;
     const frame = heldPose
       ? getPartyAtlasFieldPoseFrame(fieldLeaderId, heldPose)
       : moving
@@ -1567,6 +1567,7 @@ function drawMap(level, encounter, now) {
         : getPartyAtlasFrame(fieldLeaderId, fieldFacing, 0);
     const drawHeight = cell * 1.38;
     const drawWidth = drawHeight * (frame.width / frame.height);
+    const footY = partyY + cell * 0.27;
     mapCtx.drawImage(
       partyAtlasImage,
       frame.x,
@@ -1574,7 +1575,7 @@ function drawMap(level, encounter, now) {
       frame.width,
       frame.height,
       partyX - drawWidth / 2,
-      partyY - drawHeight * 0.68,
+      footY - drawHeight * (PARTY_ATLAS.pivotY / frame.height),
       drawWidth,
       drawHeight,
     );
