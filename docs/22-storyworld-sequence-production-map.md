@@ -14,11 +14,13 @@ This is the production map for the eleven implemented Storyworld clusters. The a
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,440 visible words and at most 21 explicit decisions across all eleven clusters. Its 338.710-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,476 visible words and at most 21 explicit decisions across all eleven clusters. Its 338.890-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
 
 ## Carry-forward contract
 
 Every cluster scheduled on the selected route is required for narrative credits. Salt omits `sw6-tribunal-afterword`, Ash omits `sw4-margin-varga-journal`, and Paper retains all eleven clusters while omitting the Sodegaura operation, which owns no separate cluster. The `act-route-decision` resolves before Act III's first campaign beat; a `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions, the Act IV approach, and Act V political parameters.
+
+Late reactions are not single-stat morality checks. The Enma hearing, Kiku's tribunal capacity, and all three Last Command options use weighted combinations of already-authored properties. The final options read six to eight prior threads apiece, including proof, consent, witness safety, Mateus's accountability, Nikola's severed-command discipline, succession preparation, garrison defection, bell intelligence, and Enma's categorical fate.
 
 The `sw3-sayos-warehouse-conditions` and `sw10-corrections-desk` strings remain opaque internal compatibility IDs, not claims that their new scenes have their old meanings. Exact legacy identities migrate only through the first two Storyworld records. A prior save that reached the old third record fails closed: the runtime will not reinterpret a warehouse-custody choice as a Salt, Ash, or Paper strategic priority. The same rule also prevents historical Enma and Corrections Desk outcomes from becoming political choices the player did not make.
 
@@ -78,7 +80,7 @@ For a related battle, the presentation card carries the selected decision text, 
    - Anchor: `c8-05-gate-opened`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
    - Related encounter ID: `c8-lady-enma`.
    - Consequences: **Custody Without a Trophy** / **The Cinder Fan Ends** / **A Defection Under Witness**.
-   - Carry-forward: exact categorical Enma fate (`captured`, `killed`, or `negotiated`), bounded custody/testimony effects, and retrospective **Recorded aftermath** context for the third boss fight.
+   - Carry-forward: exact categorical Enma fate (`captured`, `killed`, or `negotiated`), bounded custody/testimony effects, and retrospective **Recorded aftermath** context for the third boss fight. Custody or compact can produce bounded Enma cooperation in Act V; death cannot. That cooperation modifies verified cipher reach, effective Oni disruption, garrison stand-down readiness, surrender leverage, and civil-war risk without granting pardon or authority.
 
 10. **Mateus at the Living Archive** (`sw9-mateus-living-archive`)
    - Anchor: `c9-04-yearless-bell`; placement: **before boss** (`before-beat`, `before-boss-decision`).
@@ -90,7 +92,17 @@ For a related battle, the presentation card carries the selected decision text, 
     - Anchor: `c9-05-dawn-at-observatory`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
     - Related encounter ID: `c9-kurozane`.
     - Consequences: **The Seals Returned** / **The Empty Throne Mobilizes**.
-    - Carry-forward: final witnessed-transfer or execution/civil-war state, retrospective **Recorded aftermath** context for `c9-kurozane`, and the route-ending political record.
+    - Carry-forward: final witnessed-transfer or execution/civil-war state, retrospective **Recorded aftermath** context for `c9-kurozane`, and the route-ending political record. Witnessed return, provisional binding, and execution demand each resolve from a distinct multi-thread score, so the selected tactic and the accumulated campaign history both matter.
+
+## Whole-route balance rehearsal
+
+[`game/storyworld-balance-audit.mjs`](../game/storyworld-balance-audit.mjs) runs the shipped deterministic reaction engine against the exact Salt, Ash, and Paper schedules. The locked audit command is:
+
+```text
+node game/storyworld-balance-audit.mjs --runs 5000 --seed 42
+```
+
+The 15,000-run result is 55.16% **The Seals Returned** and 44.84% **The Empty Throne Mobilizes** overall. Salt resolves 47.14% / 52.86%, Ash 44.40% / 55.60%, and Paper 73.94% / 26.06%. Paper's better political position is earned but not automatic: clean succession appears in 40.22%, witnessed dawn seppuku in 42.66%, and civil-war-safe execution in 37.22% of Paper rehearsals. All three Enma outcomes and both endings remain reachable. The full findings and thread ledger are recorded in [`storyworlds/bells-black-chrysanthemum_long_range_authoring.md`](../storyworlds/bells-black-chrysanthemum_long_range_authoring.md).
 
 ## Act III and IV major-sequence integration
 

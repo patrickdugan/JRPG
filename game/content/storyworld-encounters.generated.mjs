@@ -8,13 +8,13 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:06a7d80aa0a5152ab365fd0820ed4678527836f73be1c6192513e5019a3eff76";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:f6cacae2c8bbee321c6e56bf0129f6b1acb7821d185d889102f8cc681aff2af5";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 3,
+  "sourceVersion": 4,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:856936e39ed677207d0b83ab93783272c6bf476ee43dbf9bcc8ef21f2a71f78b",
-  "bindingHash": "sha256:fab206454eb58fcbdcd02cda9ad67baec9bf000f14a0f32eb7b69efbe4e5cef6",
+  "sourceHash": "sha256:6e05cf56e673b023093084c559972b360b92f2cd9efe05169854a150625fd3a1",
+  "bindingHash": "sha256:e12d3192d213b626dee2d3a53b1252575907a985b84064a80c93d9bbcb6cd991",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
     {
@@ -2251,8 +2251,23 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Kiku coordinates a second room and the account resumes under safer conditions. The delay becomes part of the public timeline.",
                 "consequenceId": "page_sw06_accord",
                 "score": {
-                  "propertyId": "kiku_capacity",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "kiku_capacity",
+                      "coefficient": 0.55,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2280,8 +2295,23 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "No safe continuation is possible. Mateus accepts that urgency does not entitle him to an audience, and the printers release only supported records.",
                 "consequenceId": "page_sw06_revision",
                 "score": {
-                  "propertyId": "kiku_capacity",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "kiku_capacity",
+                      "coefficient": 0.5,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": true
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3297,8 +3327,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Enma names three hidden audiences and opens her cinder seals while separate route delegates retain the right to halt, narrow, or end the compact. Her assistance becomes monitored defection, not pardon or membership in the party.",
                 "consequenceId": "page_sw09_negotiated",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.25,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3322,8 +3372,33 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Enma withholds the servant ledger and calls the omission privacy. Aya identifies two missing routes; the compact fails before it starts, and the released soldiers establish rotating custody under a Severed Dragon boundary.",
                 "consequenceId": "page_sw09_accord",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3355,8 +3430,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Nikola sets only the anti-vampire boundary, then gives its keys to three unrelated custodians. Enma survives to testify, while no hunter, priest, party member, or single village can turn custody into inherited authority.",
                 "consequenceId": "page_sw09_accord",
                 "score": {
-                  "propertyId": "lise_oath_revision",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3380,8 +3475,33 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Enma drives a hidden blood filament through the incomplete boundary toward the patient lane. Nikola severs it, Ren gives the witnessed fatal stop, and her death enters the record beside the failed restraint.",
                 "consequenceId": "page_sw09_revision",
                 "score": {
-                  "propertyId": "lise_oath_revision",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3413,8 +3533,33 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Enma uses the duel to reach the road behind Ren. Nikola and Mateus close the two exits without claiming the finishing stroke; the witnessed counterblow kills her before the Cinder Fan can reopen.",
                 "consequenceId": "page_sw09_revision",
                 "score": {
-                  "propertyId": "court_pressure",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.6,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3438,8 +3583,33 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The protected lanes deny Enma the theatrical death she expected. She drops the fan, gives Aya the first verifiable cipher, and accepts a compact whose witnesses may revoke every privilege she negotiates.",
                 "consequenceId": "page_sw09_negotiated",
                 "score": {
-                  "propertyId": "court_pressure",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": true
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3680,7 +3850,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "actIntegration": {
         "actId": "act-v",
-        "majorSequenceId": "act5-living-archive",
+        "majorSequenceId": "act5-sequence-03",
         "role": "inner-castle-decision",
         "routeTheater": null
       },
@@ -4032,7 +4202,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       ],
       "actIntegration": {
         "actId": "act-v",
-        "majorSequenceId": "act5-last-command",
+        "majorSequenceId": "act5-sequence-04",
         "role": "final-political-consequence",
         "routeTheater": null
       },
@@ -4054,7 +4224,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entry": {
         "id": "page_sw11_decision",
         "title": "The Last Command",
-        "text": "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept.",
+        "text": "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Aya's margin states whether the Cinder Fan route ciphers came from Enma under rotating custody, from her revocable compact, or from reconstruction after her death; that result changes which outer commands can be checked in time. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept.",
         "prompt": "",
         "terminal": false,
         "options": [
@@ -4069,8 +4239,48 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Salt, Ash, and Paper delegates enter by separate stairs and name the powers Kurozane must surrender. Nikola holds only the severing line. Mateus reads each blood command as it dies and accepts no title in exchange. When Kurozane calls this government by committee, Nikola answers, 'No. Government without you. I understand the distinction is painful.'",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.6,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "coefficient": 0.5,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -4094,8 +4304,43 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Kurozane returns the ceremonial seals and conceals the granary command inside his left hand. Aya catches the missing office. He reaches through it to starve the routes; Ren calls the fatal stop before the binding tears. The lance falls as rival riders are already racing to claim the orphaned stores.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.1,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.1,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_killed",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -4127,8 +4372,38 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The binding receives a public expiration at the next dawn and no private hunter custody. Local delegates inventory every office before accepting it. Kurozane asks which of them is shogun now. 'That impatience is the disease,' Mateus says. No one accepts the throne in order to answer him faster.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "party_cohesion",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -4152,9 +4427,39 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The first draft makes Nikola sole keeper of the bond. He tears out his own authority clause. During the delay Kurozane ruptures the provisional line and reaches for an outer bell. Route witnesses authorize the fatal stop rather than cure one immortal office by placing it in a foreign nobleman's hands.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": true,
-                  "offset": 0.01
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "party_cohesion",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.1,
+                      "invert": true
+                    }
+                  ],
+                  "offset": 0.15
                 },
                 "effects": [
                   {
@@ -4185,8 +4490,43 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Nikola lowers the Longinus point until Kurozane feels his immortality fail around it. The shogun looks past the blade and sees route messengers already carrying orders that did not come from him. He chooses witnessed surrender, not remorse. Mateus warns Nikola not to call fear conversion. 'I was going to call it excellent reach,' Nikola says.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
-                  "propertyId": "court_pressure",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.7,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "coefficient": 0.6,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.5,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -4210,8 +4550,38 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The demand becomes the act before every command can be inventoried. Kurozane dies. The central Bell stops; distant bells answer competing hands. Before the blood has cooled, messengers report governors claiming emergency authority over roads, rice, and the surviving Oni.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
-                  "propertyId": "court_pressure",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.15,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_killed",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [

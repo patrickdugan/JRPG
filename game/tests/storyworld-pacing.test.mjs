@@ -8,11 +8,11 @@ import {
 
 test('full-catalog pacing remains a diagnostic ceiling rather than a selected-route claim', () => {
   assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 11);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2440);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2476);
   assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 21);
-  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 19.2);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 338.71);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.645166666666666);
+  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 19.380000000000003);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 338.89);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.648166666666667);
   assert.equal(STORYWORLD_PACING_REPORT.fullCatalogWithinFiveToSixHourTarget, true);
   assert.equal(STORYWORLD_PACING_REPORT.selectedRouteDurationClaim, false);
 });

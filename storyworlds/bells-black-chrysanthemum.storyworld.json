@@ -820,7 +820,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -835,7 +835,7 @@
                         "keyring": [
                           "ren_noncoercion"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -1101,7 +1101,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -1116,7 +1116,7 @@
                         "keyring": [
                           "kiku_capacity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -1382,7 +1382,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -1397,7 +1397,7 @@
                         "keyring": [
                           "aya_archive_openness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -1699,7 +1699,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -1714,7 +1714,7 @@
                         "keyring": [
                           "truth_completeness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -2016,7 +2016,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -2031,7 +2031,7 @@
                         "keyring": [
                           "witness_safety"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -2328,7 +2328,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -2343,7 +2343,7 @@
                         "keyring": [
                           "mateus_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -2609,7 +2609,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -2624,7 +2624,7 @@
                         "keyring": [
                           "p_mateus_truthfulness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -2890,7 +2890,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -2905,7 +2905,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -3207,7 +3207,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -3222,7 +3222,7 @@
                         "keyring": [
                           "mateus_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -3524,7 +3524,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -3539,7 +3539,7 @@
                         "keyring": [
                           "ren_noncoercion"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -3836,7 +3836,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -3851,7 +3851,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -4117,7 +4117,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -4132,7 +4132,7 @@
                         "keyring": [
                           "court_pressure"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -4398,7 +4398,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -4413,7 +4413,7 @@
                         "keyring": [
                           "proof_integrity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -4715,7 +4715,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -4730,7 +4730,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -5032,7 +5032,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -5047,7 +5047,7 @@
                         "keyring": [
                           "witness_safety"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -5349,7 +5349,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -5364,7 +5364,7 @@
                         "keyring": [
                           "succession_readiness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -5693,7 +5693,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -5708,7 +5708,7 @@
                         "keyring": [
                           "lise_oath_revision"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -6038,7 +6038,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -6053,7 +6053,7 @@
                         "keyring": [
                           "proof_integrity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -6383,7 +6383,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -6398,7 +6398,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -6764,7 +6764,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -6779,7 +6779,7 @@
                         "keyring": [
                           "lise_oath_revision"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -7145,7 +7145,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -7160,7 +7160,7 @@
                         "keyring": [
                           "aya_archive_openness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -7521,7 +7521,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -7536,7 +7536,7 @@
                         "keyring": [
                           "mateus_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -7866,7 +7866,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -7881,7 +7881,7 @@
                         "keyring": [
                           "proof_integrity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -8211,7 +8211,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -8226,7 +8226,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -8592,7 +8592,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -8607,7 +8607,7 @@
                         "keyring": [
                           "truth_completeness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -8973,7 +8973,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -8988,7 +8988,7 @@
                         "keyring": [
                           "proof_integrity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -9349,7 +9349,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -9364,7 +9364,7 @@
                         "keyring": [
                           "proof_integrity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -9694,7 +9694,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -9709,7 +9709,7 @@
                         "keyring": [
                           "mateus_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -9886,7 +9886,25 @@
                     "keyring": [
                       "kiku_capacity"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.55
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "care_capacity"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 0.2
                   }
                 ]
               },
@@ -10039,13 +10057,13 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.5
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
@@ -10054,7 +10072,47 @@
                         "keyring": [
                           "kiku_capacity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.5
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.25
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "care_capacity"
+                        ],
+                        "coefficient": -0.25
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.25
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": -0.25
                       }
                     ]
                   }
@@ -10420,7 +10478,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -10435,7 +10493,7 @@
                         "keyring": [
                           "public_reach"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -10801,7 +10859,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -10816,7 +10874,7 @@
                         "keyring": [
                           "witness_safety"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -11177,7 +11235,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -11192,7 +11250,7 @@
                         "keyring": [
                           "genta_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -11522,7 +11580,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -11537,7 +11595,7 @@
                         "keyring": [
                           "p_party_respects_limits"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -11867,7 +11925,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -11882,7 +11940,7 @@
                         "keyring": [
                           "ren_noncoercion"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -12248,7 +12306,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -12263,7 +12321,7 @@
                         "keyring": [
                           "genta_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -12629,7 +12687,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -12644,7 +12702,7 @@
                         "keyring": [
                           "truth_completeness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -13005,7 +13063,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -13020,7 +13078,7 @@
                         "keyring": [
                           "p_party_respects_limits"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -13350,7 +13408,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -13365,7 +13423,7 @@
                         "keyring": [
                           "route_safety"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -13695,7 +13753,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -13710,7 +13768,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -14076,7 +14134,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -14091,7 +14149,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -14457,7 +14515,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -14472,7 +14530,7 @@
                         "keyring": [
                           "ren_noncoercion"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -14680,7 +14738,34 @@
                     "keyring": [
                       "network_consent"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.3
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 0.25
                   }
                 ]
               },
@@ -14801,13 +14886,22 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.25
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
@@ -14816,9 +14910,47 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.25
                       }
                     ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 0.15
                   }
                 ]
               },
@@ -14961,7 +15093,34 @@
                     "keyring": [
                       "lise_oath_revision"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.35
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.2
                   }
                 ]
               },
@@ -15082,13 +15241,22 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.3
+                  },
+                  {
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.25
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
@@ -15097,9 +15265,58 @@
                         "keyring": [
                           "lise_oath_revision"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.25
                       }
                     ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 0.1
                   }
                 ]
               },
@@ -15242,7 +15459,76 @@
                     "keyring": [
                       "court_pressure"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.6
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 0.2
                   }
                 ]
               },
@@ -15363,13 +15649,49 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.2
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
@@ -15378,7 +15700,7 @@
                         "keyring": [
                           "court_pressure"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.2
                       }
                     ]
                   }
@@ -15680,7 +16002,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -15695,7 +16017,7 @@
                         "keyring": [
                           "witness_safety"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -15997,7 +16319,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -16012,7 +16334,7 @@
                         "keyring": [
                           "truth_completeness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -16314,7 +16636,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -16329,7 +16651,7 @@
                         "keyring": [
                           "enma_testimony"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -16626,7 +16948,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -16641,7 +16963,7 @@
                         "keyring": [
                           "mateus_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -16907,7 +17229,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -16922,7 +17244,7 @@
                         "keyring": [
                           "witness_safety"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -17188,7 +17510,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -17203,7 +17525,7 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -17505,7 +17827,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -17520,7 +17842,7 @@
                         "keyring": [
                           "mateus_accountability"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -17822,7 +18144,7 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
@@ -17837,7 +18159,7 @@
                         "keyring": [
                           "aya_archive_openness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -1
                       }
                     ]
                   }
@@ -17956,7 +18278,7 @@
       "text_script": {
         "pointer_type": "String Constant",
         "script_element_type": "Pointer",
-        "value": "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept."
+        "value": "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Aya's margin states whether the Cinder Fan route ciphers came from Enma under rotating custody, from her revocable compact, or from reconstruction after her death; that result changes which outer commands can be checked in time. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept."
       },
       "acceptability_script": true,
       "desirability_script": {
@@ -18013,7 +18335,70 @@
                     "keyring": [
                       "network_consent"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 0.6
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 0.5
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 0.4
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "mateus_accountability"
+                    ],
+                    "coefficient": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 0.1
                   }
                 ]
               },
@@ -18134,13 +18519,42 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "proof_integrity"
+                        ],
+                        "coefficient": -0.1
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
@@ -18149,9 +18563,78 @@
                         "keyring": [
                           "network_consent"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.1
                       }
                     ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": -0.1
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 0.2
                   }
                 ]
               },
@@ -18294,7 +18777,52 @@
                     "keyring": [
                       "proof_integrity"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "lise_oath_revision"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "witness_safety"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "ren_noncoercion"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "party_cohesion"
+                    ],
+                    "coefficient": 0.1
                   }
                 ]
               },
@@ -18412,16 +18940,45 @@
                   {
                     "pointer_type": "Bounded Number Constant",
                     "script_element_type": "Pointer",
-                    "value": 0.01
+                    "value": 0.15
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.3
+                  },
+                  {
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "lise_oath_revision"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
@@ -18430,7 +18987,67 @@
                         "keyring": [
                           "proof_integrity"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "party_cohesion"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": -0.1
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "witness_safety"
+                        ],
+                        "coefficient": -0.1
                       }
                     ]
                   }
@@ -18575,7 +19192,61 @@
                     "keyring": [
                       "court_pressure"
                     ],
-                    "coefficient": 1
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 0.7
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "garrison_defection"
+                    ],
+                    "coefficient": 0.6
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 0.5
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_testimony"
+                    ],
+                    "coefficient": 0.1
                   }
                 ]
               },
@@ -18696,24 +19367,102 @@
                     "value": 0.01
                   },
                   {
-                    "operator_type": "Subtraction",
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "operator_type": "Addition",
                     "script_element_type": "Operator",
                     "operands": [
                       {
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
-                        "value": 1
+                        "value": 0.25
                       },
                       {
                         "pointer_type": "Bounded Number Pointer",
                         "script_element_type": "Pointer",
                         "character": "char_lantern_network",
                         "keyring": [
-                          "court_pressure"
+                          "succession_readiness"
                         ],
-                        "coefficient": 1
+                        "coefficient": -0.25
                       }
                     ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "garrison_defection"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.15
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "bell_intelligence"
+                        ],
+                        "coefficient": -0.15
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "network_consent"
+                        ],
+                        "coefficient": -0.1
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 0.2
                   }
                 ]
               },
@@ -18896,7 +19645,7 @@
     }
   ],
   "meta": {
-    "source_version": 3,
+    "source_version": 4,
     "canonical_scene_count": 60,
     "storyworld_authored_scene_count": 35,
     "complete_run_storyworld_scene_count": 22,

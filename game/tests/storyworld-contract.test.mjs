@@ -103,7 +103,16 @@ test('every decision and reaction meets the authored density, bounded-effect, an
           reactionIds.add(reaction.id);
           assert.ok(wordCount(reaction.text) >= 20, `${reaction.id} has ${wordCount(reaction.text)} words`);
           assert.ok(wordCount(reaction.text) <= 150, reaction.id);
-          assert.ok(propertyIds.has(reaction.score.propertyId));
+          const scoreTerms = reaction.score.terms ?? [{
+            propertyId: reaction.score.propertyId,
+            coefficient: 1,
+          }];
+          assert.ok(scoreTerms.length >= 1);
+          for (const term of scoreTerms) {
+            assert.ok(propertyIds.has(term.propertyId));
+            assert.ok(Number.isFinite(term.coefficient));
+            assert.ok(term.coefficient > 0);
+          }
           assert.ok(reaction.effects.length >= 3, reaction.id);
           for (const effect of reaction.effects) {
             assert.ok(propertyIds.has(effect.propertyId));
@@ -150,4 +159,6 @@ test('authored JSON, binding sidecar, and browser registry remain deterministic 
     true,
   );
   assert.equal(bindings.clusters.find(({ id }) => id === 'sw3-sayos-warehouse-conditions').actIntegration.majorSequenceId, 'act3-sequence-01');
+  assert.equal(bindings.clusters.find(({ id }) => id === 'sw9-mateus-living-archive').actIntegration.majorSequenceId, 'act5-sequence-03');
+  assert.equal(bindings.clusters.find(({ id }) => id === 'sw10-corrections-desk').actIntegration.majorSequenceId, 'act5-sequence-04');
 });

@@ -280,7 +280,7 @@
       ],
       "actIntegration": {
         "actId": "act-v",
-        "majorSequenceId": "act5-living-archive",
+        "majorSequenceId": "act5-sequence-03",
         "role": "inner-castle-decision",
         "routeTheater": null
       },
@@ -311,7 +311,7 @@
       ],
       "actIntegration": {
         "actId": "act-v",
-        "majorSequenceId": "act5-last-command",
+        "majorSequenceId": "act5-sequence-04",
         "role": "final-political-consequence",
         "routeTheater": null
       },

@@ -47,3 +47,34 @@ test('operation consequences expose explicit Act V surrender and civil-war param
   assert.equal(unprepared.act5Parameters.massOniReinforcement, true);
   assert.ok(unprepared.act5Parameters.civilWarRisk > prepared.act5Parameters.civilWarRisk);
 });
+
+test('Enma living under terms carries useful but non-absolving testimony into Act V logistics', () => {
+  const common = {
+    act3_salt_priority: 0.10,
+    succession_readiness: 0.15,
+    paper_commitment: 0.35,
+    garrison_defection: 0.15,
+    genta_accountability: 0.50,
+    bell_intelligence: 0.15,
+    network_consent: 0.70,
+    proof_integrity: 0.65,
+    public_reach: 0.55,
+    oni_supply_disruption: 0.15,
+  };
+  const killed = deriveActRouteProfile({
+    ...common,
+    enma_killed: 0.10,
+    enma_testimony: 0.35,
+  });
+  const compact = deriveActRouteProfile({
+    ...common,
+    enma_compact: 0.10,
+    enma_testimony: 0.40,
+  });
+  assert.equal(killed.act5Parameters.enmaCooperation, 0);
+  assert.equal(compact.act5Parameters.enmaCooperation, 0.40);
+  assert.equal(killed.act5Parameters.massOniReinforcement, true);
+  assert.equal(compact.act5Parameters.massOniReinforcement, false);
+  assert.ok(compact.act5Parameters.surrenderLeverage > killed.act5Parameters.surrenderLeverage);
+  assert.ok(compact.act5Parameters.civilWarRisk < killed.act5Parameters.civilWarRisk);
+});

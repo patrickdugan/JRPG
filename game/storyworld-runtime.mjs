@@ -75,6 +75,16 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     migrationId: 'act-five-climax-writing-v1',
     maximumCompatibleRecordCount: 11,
   }),
+  // Reaction desirability now reads several established campaign threads at
+  // the Enma and Kurozane decisions. Opaque choices, effects, and recorded
+  // outcomes are unchanged, so completed records remain valid.
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:856936e39ed677207d0b83ab93783272c6bf476ee43dbf9bcc8ef21f2a71f78b',
+    catalogSignature: 'sha256:06a7d80aa0a5152ab365fd0820ed4678527836f73be1c6192513e5019a3eff76',
+    migrationId: 'long-range-reaction-balance-v1',
+    maximumCompatibleRecordCount: 11,
+  }),
 ]);
 
 const CAMPAIGN_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
@@ -360,8 +370,15 @@ export function deriveStoryworldProjection(state) {
 }
 
 function reactionScore(reaction, projection) {
-  const value = projection[reaction.score.propertyId];
-  return reaction.score.offset + (reaction.score.invert ? 1 - value : value);
+  const terms = reaction.score.terms ?? [{
+    propertyId: reaction.score.propertyId,
+    coefficient: 1,
+    invert: reaction.score.invert,
+  }];
+  return terms.reduce((total, term) => {
+    const value = projection[term.propertyId];
+    return total + term.coefficient * (term.invert ? 1 - value : value);
+  }, reaction.score.offset);
 }
 
 export function selectStoryworldReaction(option, projection) {

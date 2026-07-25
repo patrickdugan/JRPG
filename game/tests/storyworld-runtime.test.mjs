@@ -331,3 +331,23 @@ test('the Act V prose rewrite preserves a complete compatible Storyworld history
   assert.equal(loaded.migrationId, 'act-five-climax-writing-v1');
   assert.deepEqual(loaded.state.records, current.records);
 });
+
+test('the long-range balance model preserves already selected opaque outcomes', () => {
+  let current = createStoryworldState({ runId: 'storyworld-long-range-balance-migration-0001' });
+  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
+    current = resolveCluster(current, cluster, index % 3);
+  });
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .find(({ migrationId }) => migrationId === 'long-range-reaction-balance-v1');
+  assert.ok(legacyIdentity);
+  const loaded = loadStoryworldState({
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  });
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'long-range-reaction-balance-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+});

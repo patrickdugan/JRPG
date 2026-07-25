@@ -51,11 +51,21 @@ function operator(operatorType, operands, operatorSubtype = undefined) {
   };
 }
 
-function reactionDesirability(propertyId, invert) {
-  const score = invert
-    ? operator('Subtraction', [numberConstant(1), propertyPointer(propertyId)])
-    : propertyPointer(propertyId);
-  return operator('Addition', [numberConstant(0.01), score]);
+function reactionDesirability(propertyId, invert, authored = undefined) {
+  const profile = authored ?? {
+    offset: 0.01,
+    terms: [{ propertyId, coefficient: 1, invert }],
+  };
+  const operands = [numberConstant(profile.offset)];
+  for (const term of profile.terms) {
+    operands.push(term.invert
+      ? operator('Addition', [
+        numberConstant(term.coefficient),
+        propertyPointer(term.propertyId, -term.coefficient),
+      ])
+      : propertyPointer(term.propertyId, term.coefficient));
+  }
+  return operator('Addition', operands);
 }
 
 function effect(propertyId, delta) {
@@ -105,12 +115,20 @@ function spoolIdForCluster(cluster, index) {
   return 'spool_endings';
 }
 
-function buildReaction({ id, text, propertyId, invert, consequenceId, effects }) {
+function buildReaction({
+  id,
+  text,
+  propertyId,
+  invert,
+  consequenceId,
+  effects,
+  desirability,
+}) {
   return {
     id,
     text_script: stringConstant(text),
     consequence_id: consequenceId,
-    desirability_script: reactionDesirability(propertyId, invert),
+    desirability_script: reactionDesirability(propertyId, invert, desirability),
     after_effects: afterEffects(effects),
   };
 }
@@ -145,6 +163,7 @@ function buildEntryEncounter(cluster, index, ids, creationIndex) {
             invert: false,
             consequenceId: ids[sourceOption.accord.outcomeKey ?? 'accord'],
             effects: mergeEffects(sourceOption.accord.effects, cluster.entryRouteEffects),
+            desirability: sourceOption.accord.desirability,
           }),
           buildReaction({
             id: `${optionId}_r_revision`,
@@ -153,6 +172,7 @@ function buildEntryEncounter(cluster, index, ids, creationIndex) {
             invert: true,
             consequenceId: ids[sourceOption.revision.outcomeKey ?? 'revision'],
             effects: mergeEffects(sourceOption.revision.effects, cluster.entryRouteEffects),
+            desirability: sourceOption.revision.desirability,
           }),
         ],
         benchmark_tags: [`slot:${cluster.id}`, `option:${optionIndex + 1}`],
@@ -317,14 +337,37 @@ function compileEffect(sourceEffect) {
 }
 
 function compileReaction(sourceReaction, index) {
-  const score = sourceReaction.desirability_script.operands[1];
-  const invert = score.operator_type === 'Subtraction';
-  const pointer = invert ? score.operands[1] : score;
+  const [offsetOperand, ...scoreOperands] = sourceReaction.desirability_script.operands;
+  const terms = scoreOperands.map((scoreOperand) => {
+    if (scoreOperand.pointer_type === 'Bounded Number Pointer') {
+      return {
+        propertyId: scoreOperand.keyring[0],
+        coefficient: scoreOperand.coefficient,
+        invert: false,
+      };
+    }
+    const [constant, pointer] = scoreOperand.operands;
+    return {
+      propertyId: pointer.keyring[0],
+      coefficient: constant.value,
+      invert: true,
+    };
+  });
+  const score = terms.length === 1 && terms[0].coefficient === 1
+    ? {
+      propertyId: terms[0].propertyId,
+      invert: terms[0].invert,
+      offset: offsetOperand.value,
+    }
+    : {
+      terms,
+      offset: offsetOperand.value,
+    };
   return {
     id: sourceReaction.id,
     text: textValue(sourceReaction.text_script),
     consequenceId: sourceReaction.consequence_id,
-    score: { propertyId: pointer.keyring[0], invert, offset: 0.01 },
+    score,
     effects: sourceReaction.after_effects.map(compileEffect),
     authoredIndex: index,
   };

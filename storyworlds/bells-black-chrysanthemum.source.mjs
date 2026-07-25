@@ -8,7 +8,7 @@
  * narrative run.
  */
 
-export const STORYWORLD_SOURCE_VERSION = 3;
+export const STORYWORLD_SOURCE_VERSION = 4;
 export const STORYWORLD_IFID = '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4';
 export const STORYWORLD_CHARACTER_ID = 'char_lantern_network';
 
@@ -51,17 +51,26 @@ export const STORYWORLD_PROPERTIES = Object.freeze([
   property('garrison_defection', 'Garrison defection readiness', 0.10),
 ]);
 
-const reaction = (text, effects, outcomeKey = undefined) => Object.freeze({
+const score = (terms, offset = 0.01) => Object.freeze({
+  offset,
+  terms: Object.freeze(terms.map(([propertyId, coefficient, invert = false]) => Object.freeze({
+    propertyId,
+    coefficient,
+    invert,
+  }))),
+});
+const reaction = (text, effects, outcomeKey = undefined, desirability = undefined) => Object.freeze({
   text,
   effects: Object.freeze({ ...effects }),
   ...(outcomeKey ? { outcomeKey } : {}),
+  ...(desirability ? { desirability } : {}),
 });
-const option = (id, text, gateProperty, accord, revision) => Object.freeze({
+const option = (id, text, gateProperty, accord, revision, desirability = {}) => Object.freeze({
   id,
   text,
   gateProperty,
-  accord: reaction(accord.text, accord.effects, accord.outcomeKey),
-  revision: reaction(revision.text, revision.effects, revision.outcomeKey),
+  accord: reaction(accord.text, accord.effects, accord.outcomeKey, desirability.accord),
+  revision: reaction(revision.text, revision.effects, revision.outcomeKey, desirability.revision),
 });
 const outcome = (title, text, prompt, gateProperty, accord, revision) => Object.freeze({
   title,
@@ -97,8 +106,8 @@ export const STORYWORLD_ACT_INTEGRATION = Object.freeze({
   'sw7-soldier-will-not-follow': actIntegration('act-iii', 'act3-sequence-07', 'fixed-emergency', 'ash'),
   'sw8-boats-with-conditions': actIntegration('act-iv', 'act4-sequence-04', 'approach-consequence', 'salt'),
   'sw-enma-three-terms': actIntegration('act-iv', 'act4-sequence-07', 'gate-boss-consequence'),
-  'sw9-mateus-living-archive': actIntegration('act-v', 'act5-living-archive', 'inner-castle-decision'),
-  'sw10-corrections-desk': actIntegration('act-v', 'act5-last-command', 'final-political-consequence'),
+  'sw9-mateus-living-archive': actIntegration('act-v', 'act5-sequence-03', 'inner-castle-decision'),
+  'sw10-corrections-desk': actIntegration('act-v', 'act5-sequence-04', 'final-political-consequence'),
 });
 
 export const STORYWORLD_CLUSTERS = Object.freeze([
@@ -322,7 +331,19 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
         { text: 'He cannot answer one question without exposing living witnesses. The tribunal records the limit rather than treating silence as proof of innocence.', effects: { witness_safety: 0.10, mateus_accountability: 0.05, public_reach: -0.05 } }),
       option('move-listeners', 'Move threatened listeners before testimony continues.', 'kiku_capacity',
         { text: 'Kiku coordinates a second room and the account resumes under safer conditions. The delay becomes part of the public timeline.', effects: { witness_safety: 0.10, care_capacity: 0.10, mateus_accountability: 0.05 } },
-        { text: 'No safe continuation is possible. Mateus accepts that urgency does not entitle him to an audience, and the printers release only supported records.', effects: { ren_noncoercion: 0.10, mateus_accountability: 0.05, party_cohesion: 0.05 } }),
+        { text: 'No safe continuation is possible. Mateus accepts that urgency does not entitle him to an audience, and the printers release only supported records.', effects: { ren_noncoercion: 0.10, mateus_accountability: 0.05, party_cohesion: 0.05 } },
+        {
+          accord: score([
+            ['kiku_capacity', 0.55],
+            ['care_capacity', 0.25],
+            ['witness_safety', 0.20],
+          ]),
+          revision: score([
+            ['kiku_capacity', 0.50, true],
+            ['care_capacity', 0.25, true],
+            ['witness_safety', 0.25, true],
+          ]),
+        }),
     ],
     accordOutcome: [
       'Admission Under Corroboration',
@@ -432,13 +453,59 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     options: [
       option('bounded-defection', 'Offer a witnessed defection compact: release every thrall, surrender every route cipher, testify, and accept revocable movement limits.', 'network_consent',
         { text: 'Enma names three hidden audiences and opens her cinder seals while separate route delegates retain the right to halt, narrow, or end the compact. Her assistance becomes monitored defection, not pardon or membership in the party.', outcomeKey: 'negotiated', effects: { enma_compact: 0.10, enma_testimony: 0.10, network_consent: 0.10 } },
-        { text: 'Enma withholds the servant ledger and calls the omission privacy. Aya identifies two missing routes; the compact fails before it starts, and the released soldiers establish rotating custody under a Severed Dragon boundary.', outcomeKey: 'accord', effects: { enma_custody: 0.10, proof_integrity: 0.10, witness_safety: 0.10 } }),
+        { text: 'Enma withholds the servant ledger and calls the omission privacy. Aya identifies two missing routes; the compact fails before it starts, and the released soldiers establish rotating custody under a Severed Dragon boundary.', outcomeKey: 'accord', effects: { enma_custody: 0.10, proof_integrity: 0.10, witness_safety: 0.10 } },
+        {
+          accord: score([
+            ['network_consent', 0.30],
+            ['proof_integrity', 0.25],
+            ['witness_safety', 0.20],
+            ['enma_testimony', 0.25],
+          ]),
+          revision: score([
+            ['court_pressure', 0.20],
+            ['network_consent', 0.25, true],
+            ['proof_integrity', 0.20, true],
+            ['lise_oath_revision', 0.20],
+            ['witness_safety', 0.15],
+          ]),
+        }),
       option('rotating-custody', 'Set the Severed Dragon restraint and transfer her to rotating civilian custody for testimony without a promise of release.', 'lise_oath_revision',
         { text: 'Nikola sets only the anti-vampire boundary, then gives its keys to three unrelated custodians. Enma survives to testify, while no hunter, priest, party member, or single village can turn custody into inherited authority.', outcomeKey: 'accord', effects: { enma_custody: 0.10, lise_oath_revision: 0.10, enma_testimony: 0.05 } },
-        { text: 'Enma drives a hidden blood filament through the incomplete boundary toward the patient lane. Nikola severs it, Ren gives the witnessed fatal stop, and her death enters the record beside the failed restraint.', outcomeKey: 'revision', effects: { enma_killed: 0.10, witness_safety: 0.10, court_pressure: -0.05 } }),
+        { text: 'Enma drives a hidden blood filament through the incomplete boundary toward the patient lane. Nikola severs it, Ren gives the witnessed fatal stop, and her death enters the record beside the failed restraint.', outcomeKey: 'revision', effects: { enma_killed: 0.10, witness_safety: 0.10, court_pressure: -0.05 } },
+        {
+          accord: score([
+            ['lise_oath_revision', 0.35],
+            ['witness_safety', 0.25],
+            ['network_consent', 0.20],
+            ['proof_integrity', 0.20],
+          ]),
+          revision: score([
+            ['court_pressure', 0.30],
+            ['lise_oath_revision', 0.25, true],
+            ['witness_safety', 0.20, true],
+            ['proof_integrity', 0.15, true],
+            ['enma_testimony', 0.10],
+          ]),
+        }),
       option('final-blood-duel', 'Accept her demand for a final blood duel only inside the witnessed ward, with the patient and evidence lanes protected.', 'court_pressure',
         { text: 'Enma uses the duel to reach the road behind Ren. Nikola and Mateus close the two exits without claiming the finishing stroke; the witnessed counterblow kills her before the Cinder Fan can reopen.', outcomeKey: 'revision', effects: { enma_killed: 0.10, court_pressure: -0.10, party_cohesion: 0.05 } },
-        { text: 'The protected lanes deny Enma the theatrical death she expected. She drops the fan, gives Aya the first verifiable cipher, and accepts a compact whose witnesses may revoke every privilege she negotiates.', outcomeKey: 'negotiated', effects: { enma_compact: 0.10, enma_testimony: 0.10, truth_completeness: 0.05 } }),
+        { text: 'The protected lanes deny Enma the theatrical death she expected. She drops the fan, gives Aya the first verifiable cipher, and accepts a compact whose witnesses may revoke every privilege she negotiates.', outcomeKey: 'negotiated', effects: { enma_compact: 0.10, enma_testimony: 0.10, truth_completeness: 0.05 } },
+        {
+          accord: score([
+            ['court_pressure', 0.60],
+            ['network_consent', 0.20, true],
+            ['proof_integrity', 0.15, true],
+            ['witness_safety', 0.15, true],
+            ['enma_testimony', 0.20],
+          ]),
+          revision: score([
+            ['network_consent', 0.25],
+            ['proof_integrity', 0.20],
+            ['witness_safety', 0.20],
+            ['lise_oath_revision', 0.15],
+            ['court_pressure', 0.20, true],
+          ]),
+        }),
     ],
     accordOutcome: [
       'Custody Without a Trophy',
@@ -512,17 +579,75 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
     sequenceRole: 'after-boss-consequence',
     relatedEncounterIds: ['c9-kurozane'],
     title: 'The Last Command',
-    text: "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept.",
+    text: "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Aya's margin states whether the Cinder Fan route ciphers came from Enma under rotating custody, from her revocable compact, or from reconstruction after her death; that result changes which outer commands can be checked in time. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept.",
     options: [
       option('witnessed-return', 'Order the seals returned one by one before independent route witnesses.', 'network_consent',
         { text: "Salt, Ash, and Paper delegates enter by separate stairs and name the powers Kurozane must surrender. Nikola holds only the severing line. Mateus reads each blood command as it dies and accepts no title in exchange. When Kurozane calls this government by committee, Nikola answers, 'No. Government without you. I understand the distinction is painful.'", effects: { network_consent: 0.10, lise_oath_revision: 0.10, mateus_accountability: 0.05 } },
-        { text: "Kurozane returns the ceremonial seals and conceals the granary command inside his left hand. Aya catches the missing office. He reaches through it to starve the routes; Ren calls the fatal stop before the binding tears. The lance falls as rival riders are already racing to claim the orphaned stores.", effects: { proof_integrity: 0.10, court_pressure: 0.10, truth_completeness: 0.05 } }),
+        { text: "Kurozane returns the ceremonial seals and conceals the granary command inside his left hand. Aya catches the missing office. He reaches through it to starve the routes; Ren calls the fatal stop before the binding tears. The lance falls as rival riders are already racing to claim the orphaned stores.", effects: { proof_integrity: 0.10, court_pressure: 0.10, truth_completeness: 0.05 } },
+        {
+          accord: score([
+            ['network_consent', 0.20],
+            ['proof_integrity', 0.15],
+            ['succession_readiness', 0.60],
+            ['garrison_defection', 0.50],
+            ['bell_intelligence', 0.40],
+            ['mateus_accountability', 0.10],
+            ['lise_oath_revision', 0.10],
+            ['enma_testimony', 0.10],
+          ]),
+          revision: score([
+            ['court_pressure', 0.20],
+            ['proof_integrity', 0.10, true],
+            ['network_consent', 0.10, true],
+            ['succession_readiness', 0.20, true],
+            ['garrison_defection', 0.15, true],
+            ['bell_intelligence', 0.10, true],
+            ['enma_killed', 0.20],
+          ]),
+        }),
       option('provisional-binding', 'Hold Kurozane until the route councils can define a transfer no victor owns.', 'proof_integrity',
         { text: "The binding receives a public expiration at the next dawn and no private hunter custody. Local delegates inventory every office before accepting it. Kurozane asks which of them is shogun now. 'That impatience is the disease,' Mateus says. No one accepts the throne in order to answer him faster.", effects: { proof_integrity: 0.10, ren_noncoercion: 0.10, network_consent: 0.05 } },
-        { text: "The first draft makes Nikola sole keeper of the bond. He tears out his own authority clause. During the delay Kurozane ruptures the provisional line and reaches for an outer bell. Route witnesses authorize the fatal stop rather than cure one immortal office by placing it in a foreign nobleman's hands.", effects: { lise_oath_revision: 0.10, court_pressure: 0.05, party_cohesion: 0.05 } }),
+        { text: "The first draft makes Nikola sole keeper of the bond. He tears out his own authority clause. During the delay Kurozane ruptures the provisional line and reaches for an outer bell. Route witnesses authorize the fatal stop rather than cure one immortal office by placing it in a foreign nobleman's hands.", effects: { lise_oath_revision: 0.10, court_pressure: 0.05, party_cohesion: 0.05 } },
+        {
+          accord: score([
+            ['proof_integrity', 0.20],
+            ['lise_oath_revision', 0.20],
+            ['network_consent', 0.20],
+            ['witness_safety', 0.15],
+            ['ren_noncoercion', 0.15],
+            ['party_cohesion', 0.10],
+          ]),
+          revision: score([
+            ['court_pressure', 0.30],
+            ['lise_oath_revision', 0.20, true],
+            ['proof_integrity', 0.15, true],
+            ['party_cohesion', 0.15, true],
+            ['network_consent', 0.10, true],
+            ['witness_safety', 0.10, true],
+          ], 0.15),
+        }),
       option('execution-demand', 'Demand execution now, before the blood court can regroup.', 'court_pressure',
         { text: "Nikola lowers the Longinus point until Kurozane feels his immortality fail around it. The shogun looks past the blade and sees route messengers already carrying orders that did not come from him. He chooses witnessed surrender, not remorse. Mateus warns Nikola not to call fear conversion. 'I was going to call it excellent reach,' Nikola says.", effects: { court_pressure: -0.10, truth_completeness: 0.10, network_consent: 0.05 } },
-        { text: "The demand becomes the act before every command can be inventoried. Kurozane dies. The central Bell stops; distant bells answer competing hands. Before the blood has cooled, messengers report governors claiming emergency authority over roads, rice, and the surviving Oni.", effects: { court_pressure: 0.10, route_safety: -0.10, witness_safety: -0.05 } }),
+        { text: "The demand becomes the act before every command can be inventoried. Kurozane dies. The central Bell stops; distant bells answer competing hands. Before the blood has cooled, messengers report governors claiming emergency authority over roads, rice, and the surviving Oni.", effects: { court_pressure: 0.10, route_safety: -0.10, witness_safety: -0.05 } },
+        {
+          accord: score([
+            ['court_pressure', 0.20],
+            ['succession_readiness', 0.70],
+            ['garrison_defection', 0.60],
+            ['bell_intelligence', 0.50],
+            ['network_consent', 0.15],
+            ['proof_integrity', 0.15],
+            ['enma_testimony', 0.10],
+          ]),
+          revision: score([
+            ['court_pressure', 0.25],
+            ['succession_readiness', 0.25, true],
+            ['garrison_defection', 0.20, true],
+            ['bell_intelligence', 0.15, true],
+            ['network_consent', 0.10, true],
+            ['enma_killed', 0.20],
+          ]),
+        }),
     ],
     accordOutcome: [
       'The Seals Returned',
