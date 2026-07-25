@@ -55,7 +55,7 @@ test('party atlas addresses every member directional idle/contact pair and live 
       assert.equal(frame.row, PARTY_ATLAS_MEMBERS.indexOf(memberId));
       assert.equal(frame.direction, 'south');
       assert.equal(frame.pose, pose);
-      assert.equal(frame.column, pose === 'interact' ? 20 : 21);
+      assert.equal(frame.column, pose === 'interact' ? 36 : 37);
       assert.equal(Object.isFrozen(frame), true);
       keys.add(`${frame.row}:${frame.column}`);
       rectangles.add(`${frame.x}:${frame.y}:${frame.width}:${frame.height}`);
@@ -65,18 +65,21 @@ test('party atlas addresses every member directional idle/contact pair and live 
   assert.equal(rectangles.size, PARTY_ATLAS.rows * 10);
   assert.equal(PARTY_ATLAS.width, PARTY_ATLAS.cellWidth * PARTY_ATLAS.columns);
   assert.equal(PARTY_ATLAS.rowCells.length, PARTY_ATLAS.rows);
-  assert.deepEqual(PARTY_ATLAS.rowCells.map(({ y }) => y), [0, 56, 112, 168, 224, 280, 336]);
+  assert.deepEqual(PARTY_ATLAS.rowCells.map(({ y }) => y), [0, 80, 160, 240, 320, 400, 480]);
   assert.equal(Object.isFrozen(PARTY_ATLAS.rowCells), true);
 });
 
-test('every party member has a distinct four-phase directional walk cycle', () => {
+test('every party member has a distinct eight-phase directional walk cycle', () => {
   const expectedWalkColumns = {
-    north: [1, 2, 3, 4],
-    east: [6, 7, 8, 9],
-    south: [11, 12, 13, 14],
-    west: [16, 17, 18, 19],
+    north: [1, 2, 3, 4, 5, 6, 7, 8],
+    east: [10, 11, 12, 13, 14, 15, 16, 17],
+    south: [19, 20, 21, 22, 23, 24, 25, 26],
+    west: [28, 29, 30, 31, 32, 33, 34, 35],
   };
-  const expectedPhases = ['contact', 'compression', 'passing', 'extension'];
+  const expectedPhases = [
+    'contact-a', 'compression-a', 'passing-a', 'extension-a',
+    'contact-b', 'compression-b', 'passing-b', 'extension-b',
+  ];
   const rectangles = new Set();
   for (const memberId of PARTY_ATLAS_MEMBERS) {
     for (const direction of PARTY_ATLAS_DIRECTIONS) {
@@ -92,21 +95,21 @@ test('every party member has a distinct four-phase directional walk cycle', () =
         assert.equal(frame.walkingPhase, phase);
         assert.equal(frame.row, PARTY_ATLAS_MEMBERS.indexOf(memberId));
         assert.equal(Object.isFrozen(frame), true);
-        assert.deepEqual(frame, getPartyAtlasWalkFrame(memberId, direction, phase + 4));
+        assert.deepEqual(frame, getPartyAtlasWalkFrame(memberId, direction, phase + 8));
         rectangles.add(`${frame.row}:${frame.column}`);
       });
     }
   }
-  assert.equal(rectangles.size, PARTY_ATLAS_MEMBERS.length * PARTY_ATLAS_DIRECTIONS.length * 4);
+  assert.equal(rectangles.size, PARTY_ATLAS_MEMBERS.length * PARTY_ATLAS_DIRECTIONS.length * 8);
   assert.throws(() => getPartyAtlasWalkFrame('ren', 'south', -1), /non-negative/);
 });
 
 test('field event pose addressing is exact and rejects unsupported authored states', () => {
   assert.deepEqual(PARTY_ATLAS_FIELD_POSES, ['interact', 'hurt']);
   assert.equal(Object.isFrozen(PARTY_ATLAS_FIELD_POSES), true);
-  assert.equal(getPartyAtlasFieldPoseFrame('ren', 'interact').x, 800);
-  assert.equal(getPartyAtlasFieldPoseFrame('ren', 'hurt').x, 840);
-  assert.equal(getPartyAtlasFieldPoseFrame('kiku', 'hurt').y, 280);
+  assert.equal(getPartyAtlasFieldPoseFrame('ren', 'interact').x, 2304);
+  assert.equal(getPartyAtlasFieldPoseFrame('ren', 'hurt').x, 2368);
+  assert.equal(getPartyAtlasFieldPoseFrame('kiku', 'hurt').y, 400);
   assert.throws(() => getPartyAtlasFieldPoseFrame('ren', 'emote'), /Unknown party atlas field pose/);
   assert.throws(() => getPartyAtlasFieldPoseFrame('unknown', 'hurt'), /Unknown party atlas member/);
 });
@@ -126,8 +129,8 @@ test('campaign wires authored event poses only to live interaction input and haz
 });
 
 test('party frame identity, authored pose mapping, and source scale stay stable', () => {
-  const expectedColumns = { north: 0, east: 5, south: 10, west: 15 };
-  const expectedContactColumns = { north: 1, east: 6, south: 11, west: 16 };
+  const expectedColumns = { north: 0, east: 9, south: 18, west: 27 };
+  const expectedContactColumns = { north: 1, east: 10, south: 19, west: 28 };
   const widths = new Set();
   const heights = new Set();
   for (const [row, memberId] of PARTY_ATLAS_MEMBERS.entries()) {
@@ -145,8 +148,8 @@ test('party frame identity, authored pose mapping, and source scale stay stable'
       }
     }
   }
-  assert.deepEqual([...widths], [40]);
-  assert.deepEqual([...heights], [56]);
+  assert.deepEqual([...widths], [64]);
+  assert.deepEqual([...heights], [80]);
 });
 
 test('eight-way movement resolves deterministically to four authored facings', () => {
@@ -161,8 +164,8 @@ test('eight-way movement resolves deterministically to four authored facings', (
 });
 
 test('party atlas image validation rejects decodable wrong-size rasters', () => {
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 880, naturalHeight: 392 }), true);
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 879, naturalHeight: 392 }), false);
-  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 880, naturalHeight: 391 }), false);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 2432, naturalHeight: 560 }), true);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 2431, naturalHeight: 560 }), false);
+  assert.equal(partyAtlasImageHasExpectedSize({ naturalWidth: 2432, naturalHeight: 559 }), false);
   assert.equal(partyAtlasImageHasExpectedSize(null), false);
 });

@@ -92,11 +92,8 @@ test('v2 runtime atlas is byte-identical to the production export and matches ma
   assert.deepEqual([production.readUInt32BE(16), production.readUInt32BE(20)], [880, 392]);
 });
 
-test('browser atlas module exposes the four-phase v2 runtime geometry', async () => {
+test('v2 remains a reproducible archived package after the browser moves to v3', async () => {
   const source = await readFile(resolve(GAME_ROOT, 'sprite-atlas.mjs'), 'utf8');
-  assert.match(source, /party-field-suite-v2\/party-field-atlas-v2\.png/u);
-  assert.match(source, /width: 880,[\s\S]*height: 392,[\s\S]*columns: 22/u);
-  assert.match(source, /walkFrameDurationMs: 80,[\s\S]*walkFrameCount: 4/u);
-  assert.match(source, /north: Object\.freeze\(\[1, 2, 3, 4\]\)/u);
-  assert.match(source, /const FIELD_POSE_COLUMN = Object\.freeze\(\{ interact: 20, hurt: 21 \}\)/u);
+  assert.doesNotMatch(source, /url: '\.\/assets\/art\/party-field-suite-v2\//u);
+  assert.match(source, /url: '\.\/assets\/art\/party-field-suite-v3\/party-field-atlas-v3\.png'/u);
 });

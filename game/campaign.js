@@ -1221,7 +1221,7 @@ function drawNpcFieldMarker(role, px, py, cell, { badge = null } = {}) {
     ? 'south-idle'
     : 'south-gesture';
   const frame = getNpcFieldFrame(role, pose);
-  const drawHeight = cell * 1.22;
+  const drawHeight = cell * 1.32;
   const drawWidth = drawHeight * (frame.width / frame.height);
   const footY = py + cell * 0.34;
   mapCtx.fillStyle = 'rgba(0, 0, 0, 0.36)';
@@ -1324,7 +1324,7 @@ function drawPartyFieldFollowerMarker({ memberId, facing }, px, py, cell, now) {
   } catch {
     return false;
   }
-  const drawHeight = cell * 1.18;
+  const drawHeight = cell * 1.28;
   const drawWidth = drawHeight * (frame.width / frame.height);
   const footY = py + cell * 0.34;
   mapCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
@@ -1565,7 +1565,7 @@ function drawMap(level, encounter, now) {
       : moving
         ? getPartyAtlasWalkFrame(fieldLeaderId, fieldFacing, phase)
         : getPartyAtlasFrame(fieldLeaderId, fieldFacing, 0);
-    const drawHeight = cell * 1.38;
+    const drawHeight = cell * 1.5;
     const drawWidth = drawHeight * (frame.width / frame.height);
     const footY = partyY + cell * 0.27;
     mapCtx.drawImage(

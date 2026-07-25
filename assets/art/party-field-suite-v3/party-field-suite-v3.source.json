@@ -1,0 +1,95 @@
+{
+  "assetId": "party-field-suite-v3",
+  "formatVersion": 3,
+  "classification": "deterministically-pixelified",
+  "sourceClassification": "AI-generated pixel-styled concept",
+  "qualityTarget": "original premium late-1990s PlayStation JRPG field-sprite density",
+  "frame": {
+    "width": 64,
+    "height": 80,
+    "pivot": [32, 77],
+    "footPoint": [32, 77],
+    "transparentGutter": 2,
+    "alphaPolicy": "binary"
+  },
+  "conversion": {
+    "chromaKey": "#ff00ff",
+    "chromaRemoval": "thresholded flat-key removal with transparent RGB clearing",
+    "resampling": "BOX",
+    "paletteMethod": "per-character shared median-cut palette",
+    "paletteCeilingPerCharacter": 48,
+    "dither": "none",
+    "maximumContentBox": [60, 72],
+    "previewResampling": "nearest-neighbor"
+  },
+  "sourceColumnOrder": ["south", "east", "north", "west"],
+  "runtimeDirectionOrder": ["north", "east", "south", "west"],
+  "walkPhases": [
+    "contact-a",
+    "compression-a",
+    "passing-a",
+    "extension-a",
+    "contact-b",
+    "compression-b",
+    "passing-b",
+    "extension-b"
+  ],
+  "animation": {
+    "walkFrameDurationMs": [40, 40, 40, 40, 40, 40, 40, 40],
+    "rootMotion": "runtime-owned",
+    "derivedMotion": "integer row-shear, vertical compression, cloth sway, and alternating lower-body stride",
+    "interactFrameDurationMs": 180,
+    "hurtFrameDurationMs": 180
+  },
+  "rows": ["ren", "aya", "lise", "mateus", "genta", "kiku", "miyo"],
+  "characters": [
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "master": "sources/ren-direction-master-generated-v1.png",
+      "identity": "cedar rain coat, indigo scarf, short spear, courier satchel"
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "master": "sources/aya-direction-master-generated-v1.png",
+      "identity": "teal travel kimono, cream sleeves, red obi, record fan, archive case"
+    },
+    {
+      "id": "lise",
+      "name": "Nikola Dražanić",
+      "compatibilityId": "lise",
+      "master": "sources/lise-direction-master-generated-v1.png",
+      "identity": "navy rain cloak, oxblood doublet, white falling band, rapier, field lance"
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "master": "sources/mateus-direction-master-generated-v1.png",
+      "identity": "charcoal Japanese travel coat, wine lining, keys, concealed cross"
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "master": "sources/genta-direction-master-generated-v1.png",
+      "identity": "Japanese lamellar mantle, plated shoulders, heavy shield, tetsubo"
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "master": "sources/kiku-direction-master-generated-v1.png",
+      "identity": "herb-green cloak, medicine box, packets, cyan-glint bottles"
+    },
+    {
+      "id": "miyo",
+      "name": "Miyo Senda",
+      "master": "sources/miyo-direction-master-generated-v1.png",
+      "identity": "storm-indigo travel coat, brass joints, folding bamboo weather ruler"
+    }
+  ],
+  "reviewReference": {
+    "path": "sources/party-visual-direction-board-generated-v1.png",
+    "role": "AI-generated visual direction reference only",
+    "runtimeInput": false
+  }
+}
