@@ -39,9 +39,9 @@ function signed(value) {
 }
 
 function drawFallback() {
-  context.fillStyle = '#245269';
+  context.fillStyle = '#948868';
   context.fillRect(0, 0, elements.canvas.width, elements.canvas.height);
-  context.fillStyle = '#fff1b8';
+  context.fillStyle = '#24180f';
   context.font = '12px monospace';
   context.fillText('NAGASAKI — KYOTO / MIYAKO', 16, 24);
 }

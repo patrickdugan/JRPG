@@ -4,13 +4,13 @@
   "status": "runtime-candidate",
   "provenance": {
     "classification": "pixel-authored-production-asset",
-    "sourceMethod": "original code-native pixel primitives at 480x270 with 24x24 icons",
+    "sourceMethod": "original code-native pixel primitives at 480x270 with 24x24 icons; deterministic vellum grain, stains, fold wear, hachures, tide lines, and illuminated cartographic ornament",
     "generatorUsed": false,
-    "originalityPolicy": "Original late-32-bit tactical-atlas artwork, route topology, icons, labels, relief treatment, and interface composition. Geographic silhouettes are simplified from general map references; no Final Fantasy Tactics assets, UI, map geometry, sprites, or proprietary motifs are copied."
+    "originalityPolicy": "Original late-32-bit tactical-atlas artwork, route topology, icons, labels, parchment treatment, relief rendering, and interface composition. Geographic silhouettes are simplified from general map references; no Final Fantasy Tactics assets, UI, map geometry, sprites, or proprietary motifs are copied."
   },
   "source": {
     "path": "southern-japan-route-map.source.json",
-    "sha256": "b85068fe6db82880f022094f38c06c4be30a8cf60007826e13d6061142773981"
+    "sha256": "05ca8b2a5c60934d0c9f366ad968e4045448a76c021e2cebb57c68955aa8f42a"
   },
   "geometry": {
     "nativeWidth": 480,
@@ -26,41 +26,46 @@
     "rootCoordinates": "integer native pixels"
   },
   "palette": {
-    "ceiling": 33,
+    "ceiling": 38,
     "colors": {
-      "ink": "#17151B",
-      "inkSoft": "#2A2630",
-      "frameDark": "#302733",
-      "frameMid": "#57434A",
-      "frameLight": "#9B755C",
-      "paperDark": "#8D704E",
-      "paper": "#C6A66A",
-      "paperLight": "#E8D38D",
-      "white": "#FFF1B8",
-      "oceanDeep": "#18354B",
-      "ocean": "#245269",
-      "water": "#34738A",
-      "waterLight": "#58A0A6",
-      "foam": "#98C7B6",
-      "landShadow": "#3E4139",
-      "landDark": "#4D5A43",
-      "land": "#69704B",
-      "landLight": "#8C8455",
-      "grass": "#77835A",
-      "forestDark": "#29493F",
-      "forest": "#3F684E",
-      "forestLight": "#6F8B54",
-      "mountainDark": "#5C4B45",
-      "mountain": "#846A55",
-      "mountainLight": "#BA976C",
-      "snow": "#E9D9A2",
-      "road": "#B68C59",
-      "routeMuted": "#655D57",
-      "seaRoute": "#62C4D0",
-      "northRoute": "#F0C35B",
-      "southRoute": "#E36B55",
-      "jewel": "#C93F55",
-      "holy": "#F4E58A"
+      "ink": "#24180F",
+      "inkSoft": "#3A281B",
+      "frameDark": "#24170F",
+      "frameMid": "#4A3020",
+      "frameLight": "#9A7445",
+      "paperDark": "#8A693C",
+      "paper": "#C5A66B",
+      "paperLight": "#E4C986",
+      "white": "#F6E7B0",
+      "oceanDeep": "#665C47",
+      "ocean": "#948868",
+      "water": "#706E60",
+      "waterLight": "#AAA17C",
+      "foam": "#D5C88F",
+      "landShadow": "#6C4C2E",
+      "landDark": "#A47D48",
+      "land": "#B89154",
+      "landLight": "#D2AF6F",
+      "grass": "#B79B5F",
+      "forestDark": "#49462B",
+      "forest": "#6D6640",
+      "forestLight": "#97865A",
+      "mountainDark": "#5A3F2A",
+      "mountain": "#815B38",
+      "mountainLight": "#B18455",
+      "snow": "#E4CA8B",
+      "road": "#7C5632",
+      "routeMuted": "#685845",
+      "seaRoute": "#4F9399",
+      "northRoute": "#E1B34B",
+      "southRoute": "#B94D3C",
+      "jewel": "#A82F3C",
+      "holy": "#F0D981",
+      "vellumDark": "#765534",
+      "vellumMid": "#AD8550",
+      "vellumLight": "#E7CC89",
+      "stain": "#7C5B37",
+      "inkBlue": "#3B5F62"
     }
   },
   "iconOrder": [
@@ -166,12 +171,12 @@
   "outputs": [
     {
       "path": "southern-japan-route-map-base-v2.png",
-      "sha256": "cf6f4fa74a2f598ba5033e9b73e7826c283cc1f2a56b14f2609f8e403d0bd297",
+      "sha256": "8dff06d2c3146fafa6a33cdd32158a05767de4251c821c35dfaf865656a0f99b",
       "dimensions": [
         480,
         270
       ],
-      "actualColors": 30,
+      "actualColors": 38,
       "alphaValues": [
         255
       ],
@@ -179,12 +184,12 @@
     },
     {
       "path": "southern-japan-route-map-all-routes-v2.png",
-      "sha256": "5e96ff2bdee7ca1fec20c3580d821867bd3f01e4a6dec311ae04f475d8d33a78",
+      "sha256": "967bd229d394ec36478f14b656bd755ec7d56fbf6a148e75f6c111e3368ecd9f",
       "dimensions": [
         480,
         270
       ],
-      "actualColors": 29,
+      "actualColors": 37,
       "alphaValues": [
         255
       ],
@@ -192,12 +197,12 @@
     },
     {
       "path": "southern-japan-route-map-preview-v2.png",
-      "sha256": "2ff01248ed33455dd343739387f06b4483e3e083b2453b46a499462824dae27b",
+      "sha256": "1f47004bfbc7cf62cf3b44d5a15889704cb96f08f0b4fc7633ba23643a98de7f",
       "dimensions": [
         1440,
         810
       ],
-      "actualColors": 29,
+      "actualColors": 37,
       "alphaValues": [
         255
       ],
@@ -205,7 +210,7 @@
     },
     {
       "path": "southern-japan-route-icon-atlas-v2.png",
-      "sha256": "92dc63be4fc940e3509f5675787e5ef6d0db719deddc84791cf57a30c0711e35",
+      "sha256": "83ae1e6b99ca76de94034799b3b353862c4693fd20768e93b86951e2c32f8a8f",
       "dimensions": [
         240,
         24
@@ -224,7 +229,7 @@
   },
   "builder": {
     "path": "build_southern_japan_route_map.py",
-    "sha256": "c3bdf8b51f3e1a4780123bfd210a4c9f17d07aac76d3bbcb52646e0614474447",
+    "sha256": "e33bd2058ac883f4f272431b48e30cd4077c8687e337873a59ef556bd7fd0581",
     "pillowVersion": "11.3.0",
     "deterministic": true,
     "integerAligned": true,

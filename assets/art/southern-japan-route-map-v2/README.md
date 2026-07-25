@@ -2,7 +2,10 @@
 
 An original late-32-bit tactical-atlas route selector for the journey from
 Nagasaki to Kyoto (Miyako). The simplified geography distinguishes Kyushu,
-western Honshu, Shikoku, Awaji, the Seto Inland Sea, and Osaka Bay.
+western Honshu, Shikoku, Awaji, the Seto Inland Sea, and Osaka Bay. Its revised
+material pass uses aged vellum, sepia cartographic ink, restrained mineral
+pigments, relief hachures, tide lines, fold wear, stains, and illuminated border
+ornament.
 
 The route graph exposes three materially different passages:
 
@@ -25,11 +28,11 @@ The route graph exposes three materially different passages:
   campaign or browser storage
 
 This is classified as a **pixel-authored production asset**: the landforms,
-relief, water pattern, route ribbons, iconography, and labels are built from
-editable code-native pixel primitives at final resolution. No generative image
-model was used. The work invokes a general late-32-bit tactical-atlas mood; it
-does not copy Final Fantasy Tactics artwork, interface assets, map geometry, or
-proprietary motifs.
+vellum grain, relief, hachures, water pattern, route ribbons, iconography, and
+labels are built from editable code-native pixel primitives at final
+resolution. No generative image model was used. The work invokes a general
+late-32-bit tactical-atlas mood; it does not copy Final Fantasy Tactics artwork,
+interface assets, map geometry, or proprietary motifs.
 
 ## Rebuild and verify
 

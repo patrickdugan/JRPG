@@ -251,12 +251,69 @@ def draw_route(
 
 
 def draw_coast(draw: ImageDraw.ImageDraw, points: tuple[tuple[int, int], ...], palette: dict) -> None:
-    shadow = tuple((x + 2, y + 3) for x, y in points)
+    shadow = tuple((x + 3, y + 4) for x, y in points)
     draw.polygon(shadow, fill=palette["oceanDeep"])
-    draw.polygon(points, fill=palette["landDark"])
+    draw.line(shadow + (shadow[0],), fill=palette["water"], width=2, joint="curve")
+    draw.polygon(points, fill=palette["land"])
     draw.line(points + (points[0],), fill=palette["ink"], width=2, joint="curve")
     inner = tuple((x, y - 1) for x, y in points)
     draw.line(inner + (inner[0],), fill=palette["landLight"], width=1, joint="curve")
+    for index, (start, end) in enumerate(zip(points, points[1:] + points[:1])):
+        if index % 2:
+            continue
+        x0, y0 = start
+        x1, y1 = end
+        midpoint = ((x0 + x1) // 2 + 2, (y0 + y1) // 2 + 3)
+        draw.point(midpoint, fill=palette["foam"])
+
+
+def draw_parchment_texture(draw: ImageDraw.ImageDraw, width: int, height: int, palette: dict) -> None:
+    """Deterministic vellum grain, tide staining, folds, and worn sheet edges."""
+    for y in range(12, height - 11, 3):
+        for x in range(12, width - 11, 3):
+            grain = (x * 37 + y * 61 + x * y * 3) % 173
+            if grain == 0:
+                draw.point((x, y), fill=palette["vellumDark"])
+            elif grain in {7, 19}:
+                draw.point((x, y), fill=palette["vellumMid"])
+            elif grain == 41:
+                draw.line((x, y, min(width - 12, x + 2), y), fill=palette["vellumLight"])
+
+    # Old water and wax stains are hard-edged by design at native resolution.
+    for bounds in ((22, 46, 86, 94), (370, 174, 457, 244), (173, 194, 247, 252)):
+        draw.ellipse(bounds, outline=palette["vellumDark"], width=1)
+        inset = tuple(value + (3 if index < 2 else -3) for index, value in enumerate(bounds))
+        draw.arc(inset, 18, 205, fill=palette["stain"], width=1)
+    draw.arc((31, 55, 77, 85), 190, 345, fill=palette["paperDark"])
+    draw.arc((386, 190, 444, 232), 15, 174, fill=palette["paperDark"])
+
+    # Fold wear crosses the sheet but never introduces subpixel softness.
+    draw.line((239, 10, 239, height - 11), fill=palette["vellumDark"])
+    draw.line((240, 10, 240, height - 11), fill=palette["vellumLight"])
+    draw.line((10, 134, width - 11, 134), fill=palette["vellumDark"])
+    draw.line((10, 135, width - 11, 135), fill=palette["vellumLight"])
+
+    for x in range(15, width - 15, 18):
+        if (x // 18) % 3:
+            draw.line((x, 9, x + 8, 9), fill=palette["vellumLight"])
+        else:
+            draw.line((x, height - 10, x + 8, height - 10), fill=palette["vellumDark"])
+
+
+def draw_cartographic_hachures(draw: ImageDraw.ImageDraw, palette: dict) -> None:
+    groups = (
+        (61, 183, 1), (91, 150, -1), (150, 93, 1), (183, 84, -1),
+        (242, 82, 1), (286, 81, -1), (333, 78, 1), (381, 77, -1),
+        (218, 177, 1), (269, 177, -1), (303, 173, 1),
+    )
+    for x, y, direction in groups:
+        for offset in range(0, 14, 4):
+            draw.line(
+                (x + offset, y + 12, x + offset + 5 * direction, y + 18),
+                fill=palette["mountainDark"],
+            )
+            if offset % 8 == 0:
+                draw.point((x + offset + 2 * direction, y + 19), fill=palette["paperLight"])
 
 
 def draw_region_texture(draw: ImageDraw.ImageDraw, palette: dict) -> None:
@@ -282,16 +339,34 @@ def draw_region_texture(draw: ImageDraw.ImageDraw, palette: dict) -> None:
         draw_tree(draw, x + 7, y + 3, palette, index + 1)
         if index % 2 == 0:
             draw_tree(draw, x + 13, y, palette, index + 2)
+    draw_cartographic_hachures(draw, palette)
+
+    # Sparse survey marks and farmland strokes add scale without noisy labels.
+    for x, y in (
+        (72, 157), (105, 139), (137, 113), (171, 111), (203, 105),
+        (254, 110), (299, 105), (349, 102), (393, 93),
+        (231, 187), (281, 184), (315, 177),
+    ):
+        draw.line((x, y, x + 7, y - 2), fill=palette["road"])
+        draw.line((x + 2, y + 3, x + 9, y + 1), fill=palette["paperDark"])
 
 
 def draw_frame(draw: ImageDraw.ImageDraw, width: int, height: int, palette: dict) -> None:
     draw.rectangle((0, 0, width - 1, height - 1), fill=palette["ink"])
     draw.rectangle((2, 2, width - 3, height - 3), fill=palette["frameDark"])
-    draw.rectangle((4, 4, width - 5, height - 5), outline=palette["frameLight"], width=2)
-    draw.rectangle((7, 7, width - 8, height - 8), outline=palette["paperDark"], width=1)
+    draw.rectangle((3, 3, width - 4, height - 4), outline=palette["frameMid"], width=2)
+    draw.rectangle((5, 5, width - 6, height - 6), outline=palette["frameLight"], width=1)
+    draw.rectangle((7, 7, width - 8, height - 8), outline=palette["paperDark"], width=2)
+    for x in range(14, width - 14, 12):
+        draw.point((x, 5), fill=palette["holy"])
+        draw.point((x, height - 6), fill=palette["paper"])
+    for y in range(14, height - 14, 12):
+        draw.point((5, y), fill=palette["holy"])
+        draw.point((width - 6, y), fill=palette["paper"])
     for x, y in ((5, 5), (width - 12, 5), (5, height - 12), (width - 12, height - 12)):
-        draw.rectangle((x, y, x + 6, y + 6), fill=palette["paper"])
-        draw.rectangle((x + 2, y + 2, x + 4, y + 4), fill=palette["jewel"])
+        draw.rectangle((x, y, x + 7, y + 7), fill=palette["paper"])
+        draw.polygon(((x + 4, y + 1), (x + 7, y + 4), (x + 4, y + 7), (x + 1, y + 4)), fill=palette["jewel"])
+        draw.point((x + 4, y + 4), fill=palette["holy"])
 
 
 def map_background(spec: dict, palette: dict) -> Image.Image:
@@ -301,14 +376,15 @@ def map_background(spec: dict, palette: dict) -> Image.Image:
     draw = ImageDraw.Draw(image)
     draw_frame(draw, width, height, palette)
     draw.rectangle((9, 9, width - 10, height - 10), fill=palette["ocean"])
+    draw_parchment_texture(draw, width, height, palette)
 
-    for y in range(18, height - 14, 8):
+    for y in range(18, height - 14, 9):
         offset = 5 if (y // 8) % 2 else 0
-        for x in range(15 + offset, width - 16, 20):
+        for x in range(15 + offset, width - 16, 22):
             if (x * 3 + y * 5) % 7:
-                draw.line((x, y, x + 7, y), fill=palette["water"])
+                draw.line((x, y, x + 8, y), fill=palette["water"])
                 if (x + y) % 3 == 0:
-                    draw.point((x + 2, y - 1), fill=palette["waterLight"])
+                    draw.point((x + 2, y - 1), fill=palette["foam"])
 
     kyushu = (
         (20, 145), (27, 129), (39, 121), (43, 108), (55, 105), (61, 93),
@@ -344,35 +420,49 @@ def map_background(spec: dict, palette: dict) -> Image.Image:
         ((301, 128), (306, 125), (311, 128), (308, 132), (303, 132)),
     )
     for island in islands:
+        shadow = tuple((x + 2, y + 3) for x, y in island)
+        draw.polygon(shadow, fill=palette["oceanDeep"])
         draw.polygon(island, fill=palette["land"])
-        draw.line(island + (island[0],), fill=palette["ink"])
+        draw.line(island + (island[0],), fill=palette["ink"], width=1)
 
     # Inland rivers and bays.
-    draw.line(((402, 107), (409, 98), (413, 89), (423, 82)), fill=palette["waterLight"], width=2)
-    draw.line(((87, 145), (93, 133), (102, 126), (109, 116)), fill=palette["water"], width=1)
-    draw.line(((284, 117), (290, 109), (299, 103)), fill=palette["water"], width=1)
+    draw.line(((402, 107), (409, 98), (413, 89), (423, 82)), fill=palette["inkBlue"], width=2)
+    draw.line(((87, 145), (93, 133), (102, 126), (109, 116)), fill=palette["inkBlue"], width=1)
+    draw.line(((284, 117), (290, 109), (299, 103)), fill=palette["inkBlue"], width=1)
     draw_region_texture(draw, palette)
 
     # Regional labels are subordinate to route information.
-    draw_text(draw, (52, 213), "KYUSHU", palette["paperLight"], 1)
-    draw_text(draw, (254, 58), "WESTERN HONSHU", palette["paperLight"], 1)
-    draw_text(draw, (243, 188), "SHIKOKU", palette["paperLight"], 1)
-    draw_text(draw, (205, 139), "SETO INLAND SEA", palette["foam"], 1)
-    draw_text(draw, (360, 129), "OSAKA BAY", palette["foam"], 1)
+    draw_text(draw, (52, 213), "KYUSHU", palette["inkSoft"], 1)
+    draw_text(draw, (254, 58), "WESTERN HONSHU", palette["inkSoft"], 1)
+    draw_text(draw, (243, 188), "SHIKOKU", palette["inkSoft"], 1)
+    draw_text(draw, (205, 139), "SETO INLAND SEA", palette["inkBlue"], 1)
+    draw_text(draw, (360, 129), "OSAKA BAY", palette["inkBlue"], 1)
 
-    # Title cartouche and map furniture.
-    draw.rectangle((14, 14, 202, 42), fill=palette["inkSoft"])
-    draw.rectangle((16, 16, 200, 40), outline=palette["frameLight"])
+    # Illuminated title cartouche and map furniture.
+    draw.rectangle((13, 13, 207, 45), fill=palette["vellumDark"])
+    draw.rectangle((15, 15, 205, 43), fill=palette["inkSoft"])
+    draw.rectangle((17, 17, 203, 41), outline=palette["frameLight"])
+    draw.polygon(((13, 13), (21, 13), (13, 21)), fill=palette["holy"])
+    draw.polygon(((207, 45), (199, 45), (207, 37)), fill=palette["jewel"])
     draw_text(draw, (23, 20), "THREE PASSAGES TO MIYAKO", palette["white"], 1)
     draw_text(draw, (23, 31), "NAGASAKI - KYOTO", palette["northRoute"], 1)
 
-    draw.line((449, 20, 449, 39), fill=palette["paperLight"], width=2)
-    draw.polygon(((449, 14), (444, 24), (454, 24)), fill=palette["southRoute"])
-    draw_text(draw, (446, 43), "N", palette["white"], 1)
-    draw.line((402, 246, 452, 246), fill=palette["paperLight"], width=2)
+    # Eight-point compass rose, inked as a discrete cartographic ornament.
+    draw.ellipse((435, 14, 463, 42), outline=palette["inkSoft"], width=1)
+    draw.line((449, 12, 449, 45), fill=palette["inkSoft"], width=1)
+    draw.line((432, 28, 466, 28), fill=palette["inkSoft"], width=1)
+    draw.polygon(((449, 12), (444, 29), (449, 25), (454, 29)), fill=palette["southRoute"])
+    draw.polygon(((449, 44), (445, 28), (449, 31), (453, 28)), fill=palette["paperLight"])
+    draw.polygon(((432, 28), (449, 24), (445, 28), (449, 32)), fill=palette["frameLight"])
+    draw.polygon(((466, 28), (449, 24), (453, 28), (449, 32)), fill=palette["holy"])
+    draw_text(draw, (446, 48), "N", palette["inkSoft"], 1)
+
+    draw.rectangle((395, 238, 459, 263), fill=palette["vellumMid"])
+    draw.rectangle((397, 240, 457, 261), outline=palette["inkSoft"])
+    draw.line((402, 247, 452, 247), fill=palette["inkSoft"], width=2)
     for x in range(402, 453, 10):
-        draw.line((x, 243, x, 249), fill=palette["paperLight"])
-    draw_text(draw, (402, 252), "100 RI", palette["paperLight"], 1)
+        draw.line((x, 244, x, 251), fill=palette["inkSoft"])
+    draw_text(draw, (402, 253), "100 RI", palette["inkSoft"], 1)
     return image
 
 
@@ -532,7 +622,11 @@ def build(output_root: Path) -> list[Path]:
         "status": spec["status"],
         "provenance": {
             "classification": spec["classification"],
-            "sourceMethod": "original code-native pixel primitives at 480x270 with 24x24 icons",
+            "sourceMethod": (
+                "original code-native pixel primitives at 480x270 with 24x24 icons; "
+                "deterministic vellum grain, stains, fold wear, hachures, tide lines, "
+                "and illuminated cartographic ornament"
+            ),
             "generatorUsed": False,
             "originalityPolicy": spec["originalityPolicy"],
         },

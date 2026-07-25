@@ -41,6 +41,7 @@ test('sea, northern, and southern routes begin at Nagasaki and converge at Kyoto
     const authored = source.routes.find(({ id }) => id === route.id);
     assert.equal(route.campaignFlag, authored.campaignFlag);
     assert.equal(route.pathKind, authored.pathKind);
+    assert.equal(route.color, source.palette[authored.color].toLowerCase());
     assert.deepEqual(route.effects, authored.effects);
     const authoredNodes = authored.nodes.map((node) => (
       node.shared

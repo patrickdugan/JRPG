@@ -7,9 +7,9 @@
   --paper: #c6a66a;
   --paper-bright: #fff1b8;
   --muted: #b8a783;
-  --sea: #62c4d0;
-  --north: #f0c35b;
-  --south: #e36b55;
+  --sea: #4f9399;
+  --north: #e1b34b;
+  --south: #b94d3c;
   --focus: #fff1b8;
 }
 
@@ -129,7 +129,7 @@ h1 {
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 2px solid #09070b;
-  background: #245269;
+  background: #948868;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
