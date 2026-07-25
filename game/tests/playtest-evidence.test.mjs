@@ -135,8 +135,8 @@ test('partial playtest exports publish separate, explicit profile verdicts', () 
   assert.equal(report.playtime.unattributedMs, 0);
   assert.equal(report.pacing.diagnosticOnly, true);
   assert.equal(report.pacing.observedPlaytimeProof, false);
-  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:4de159bc');
-  assert.equal(report.pacing.aggregateReferenceTargetMs, 74_298_333);
+  assert.equal(report.pacing.checkpointSignature, 'fnv1a32:7b3c538b');
+  assert.equal(report.pacing.aggregateReferenceTargetMs, 74_602_000);
   assert.equal(report.pacing.chapters.length, 11);
   assert.equal(report.narrativeRoute.applicable, false);
   assert.equal(report.narrativeRoute.releaseTargetProven, false);

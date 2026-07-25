@@ -14,7 +14,7 @@ This is the production map for the eleven implemented Storyworld clusters. The a
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) still measures the full catalog ceiling: 2,297 visible words and at most 21 explicit decisions across all eleven clusters. Its former 332.738-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,440 visible words and at most 21 explicit decisions across all eleven clusters. Its 338.514-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
 
 ## Carry-forward contract
 

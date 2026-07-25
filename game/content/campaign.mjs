@@ -1713,16 +1713,17 @@ export const CAMPAIGN = deepFreeze({
           encounterIds: ['c9-kurozane'],
           trigger: 'final_phase_start',
           text: [
-            { speaker: 'MATEUS', line: 'My blood can enter the sovereign ward. It cannot decide who owns the opening.' },
-            { speaker: 'NIKOLA', line: 'Then my Radiance severs access from command. We leave the door open for those behind us.' },
-            { speaker: 'REN', line: 'Now. Before he rings again.' },
+            { speaker: 'KUROZANE', line: 'Keep me and inherit my necessity. Kill me and inherit my war.' },
+            { speaker: 'MATEUS', line: 'You made cowardice sound like a father’s duty. I will not translate that lie again.' },
+            { speaker: 'NIKOLA', line: 'My Radiance severs ruler from command. Your blood opens the boundary. Try not to make it sound like a committee.' },
+            { speaker: 'REN', line: 'Strike together. Move during recovery. Conversation comes after the weapon defeats him.' },
           ],
           choices: [
             {
               id: 'c9-mateus-cracks-ward',
               label: 'Join Mateus\'s blood access to Nikola\'s Severed Dragon Radiance.',
               flag: 'c9_final_ward_exposed',
-              result: 'Black Sun Concord strips Kurozane\'s sovereign ward without granting either participant control; Mateus permanently loses his destructive rite.',
+              result: 'Black Sun Concord strips Kurozane\'s sovereign ward, opens a three-pulse dawn recovery window, and defeats him alive; Mateus permanently loses his destructive rite.',
             },
           ],
         },

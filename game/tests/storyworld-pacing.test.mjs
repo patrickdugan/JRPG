@@ -8,17 +8,17 @@ import {
 
 test('full-catalog pacing remains a diagnostic ceiling rather than a selected-route claim', () => {
   assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 11);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2297);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2440);
   assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 21);
-  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 18.485);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 332.738);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.545633333333333);
+  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 19.2);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 338.514);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.641900000000001);
   assert.equal(STORYWORLD_PACING_REPORT.fullCatalogWithinFiveToSixHourTarget, true);
   assert.equal(STORYWORLD_PACING_REPORT.selectedRouteDurationClaim, false);
 });
 
 test('pacing remains an explicit diagnostic and never claims observed playtime', () => {
-  assert.equal(STORYWORLD_PACING_ASSUMPTIONS.fullCanonicalCatalogReferenceMinutes, 314.253);
+  assert.equal(STORYWORLD_PACING_ASSUMPTIONS.fullCanonicalCatalogReferenceMinutes, 319.314);
   assert.equal(STORYWORLD_PACING_ASSUMPTIONS.readingWordsPerMinute, 200);
   assert.equal(STORYWORLD_PACING_ASSUMPTIONS.decisionDwellSeconds, 20);
   assert.equal(STORYWORLD_PACING_REPORT.diagnosticOnly, true);

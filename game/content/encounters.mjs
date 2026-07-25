@@ -790,7 +790,7 @@ export const ENCOUNTERS = [
     name: 'Shogun Kurozane, the Black Chrysanthemum',
     format: 'final-boss',
     objective: { type: 'defeatBossAndEvacuate', text: 'Defeat Kurozane, protect the surviving archive evidence, and leave through the evacuation exit.', failure: 'all-active-party-defeated-or-archive-core-destroyed' },
-    lesson: { primary: 'The final exam recombines every taught system without a new hidden rule.', playerRead: 'Every phase repeats a known grammar: command clone, node position, then recovery window and Radiance dawn lane.', successSignal: 'The player explains why each phase has a positional, elemental, or recovery answer.' },
+    lesson: { primary: 'The final exam recombines every taught system without a new hidden rule.', playerRead: 'Every phase repeats a known grammar: command clone, node position, then Black Sun Concord opens a three-pulse Radiance recovery lane.', successSignal: 'The player explains why each phase has a positional, elemental, or recovery answer and why defeating Kurozane does not choose his political fate.' },
     party: { roster: ['ren', 'aya', 'lise', 'mateus', 'genta', 'kiku', 'miyo'], deployment: partyDeployment([['ren', '2,3'], ['aya', '2,2'], ['lise', '3,3'], ['mateus', '3,2'], ['genta', '2,4'], ['kiku', '3,4'], ['miyo', '4,2']]) },
     enemies: [
       {
@@ -820,9 +820,9 @@ export const ENCOUNTERS = [
         { id: 'bell', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.66 }, when: 'hp-66-to-34-percent', rule: 'Bell-node positioning and ring telegraphs test hazard lanes.' },
         { id: 'dawn', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.33 }, when: 'hp-at-or-below-33-percent', rule: 'Mateus gives up his strongest Umbral rite; Black Chrysanthemum has Recovery 3 and daylight grants Radiance 125%.' },
       ],
-      counterplay: 'Never use Umbral on Kurozane, protect the archive core, use Pace against marked shapes, then spend the final Recovery window in the dawn lane.',
+      counterplay: 'Never use Umbral on Kurozane before the combo, protect the archive core, use Pace against marked shapes, then tag Nikola and Mateus through the final Recovery window in the dawn lane.',
     },
-    reward: { story: 'The bell network breaks, evidence survives, and the seven heroes leave repair choices to living communities.' },
+    reward: { story: 'The bell network breaks and Kurozane falls alive; The Last Command then resolves witnessed surrender or execution and civil war without crowning a party member.' },
   },
 
   {

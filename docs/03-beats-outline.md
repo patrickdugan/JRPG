@@ -2,8 +2,8 @@
 
 ## Beats outline
 
-**Campaign structure:** 60 authored story beats; Salt/Ash/Paper schedules play 55/54/55 of them. The v8 quantity audit's 190.129/314.253/507.008-minute range covers the full authored catalog, not one selected route.<br>
-**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 780.934/1,238.306/1,927.430 minutes (about 13.02/20.64/32.12 hours), not measured playtime<br>
+**Campaign structure:** 60 authored story beats; Salt/Ash/Paper schedules play 55/54/55 of them. The v8 quantity audit's 193.429/319.314/514.408-minute range covers the full authored catalog, not one selected route.<br>
+**Intended first-play route:** the story plus 215 entered-at-unlock activities; its quantity estimate is 784.234/1,243.367/1,934.830 minutes (about 13.07/20.72/32.25 hours), not measured playtime<br>
 **Structure:** Prologue + 9 chapters + epilogue<br>
 **Story theme:** Power makes people disappear twice: first from public record, then from one another. Repair begins when people insist on naming what happened and accept responsibility for what they did.
 

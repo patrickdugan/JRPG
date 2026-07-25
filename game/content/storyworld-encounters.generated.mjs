@@ -8,12 +8,12 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:65e7f9ca2458c213a54d260636ec86caa2d7abc237e4bb28ecdcb2257b3cc12d";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:06a7d80aa0a5152ab365fd0820ed4678527836f73be1c6192513e5019a3eff76";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
   "sourceVersion": 3,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:d7f7e5c040c90ddd02afcb4ffa73e45be0e897639683e7490d1a6ad0fba3ce8f",
+  "sourceHash": "sha256:856936e39ed677207d0b83ab93783272c6bf476ee43dbf9bcc8ef21f2a71f78b",
   "bindingHash": "sha256:fab206454eb58fcbdcd02cda9ad67baec9bf000f14a0f32eb7b69efbe4e5cef6",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
@@ -4054,19 +4054,19 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "entry": {
         "id": "page_sw11_decision",
         "title": "The Last Command",
-        "text": "Kurozane lies alive inside the broken command circle, surrounded by the castle's final ring of crucified and impaled Kirishitan victims. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not scenery to be erased with the throne. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still carry instructions tied to his blood. Killing him may rupture those bindings and invite rival governors to seize the empty machinery. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but it cannot make surrender sincere. Ren asks what terms can transfer power without making the hunter, the vampire priest, or the victorious party his successor.",
+        "text": "Kurozane lies alive in the broken command circle with Nikola's lance beneath his jaw. Around them, the observatory's last ring of crucified and impaled Kirishitan victims catches the same dawn as the throne. Two rescued prisoners are already moving toward Kiku's evacuation line; the dead remain named evidence, not decoration for a victor's portrait. The Yearless Bell is silent, but garrisons, granaries, Oni collars, and registry offices still wait for instructions tied to the shogun's blood. Three outer bells are already demanding a succession command. Killing Kurozane may rupture those bindings and hand every rival governor an emergency. The Severed Dragon pattern can hold him mortal and commandless long enough to return the seals, but no ward can manufacture repentance. 'Keep me and inherit my necessity,' Kurozane says. 'Kill me and inherit my war.' Ren answers that those are the choices his regime built, not the only terms the living must accept.",
         "prompt": "",
         "terminal": false,
         "options": [
           {
             "id": "page_sw11_decision_opt_witnessed-return",
-            "text": "Offer a witnessed return of the military, registry, and bell seals under binding.",
+            "text": "Order the seals returned one by one before independent route witnesses.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
                 "id": "page_sw11_decision_opt_witnessed-return_r_accord",
-                "text": "Route delegates enter the observatory separately and name the powers being returned. Nikola holds only the severing boundary; Mateus confirms each blood command has stopped without receiving a new office.",
+                "text": "Salt, Ash, and Paper delegates enter by separate stairs and name the powers Kurozane must surrender. Nikola holds only the severing line. Mateus reads each blood command as it dies and accepts no title in exchange. When Kurozane calls this government by committee, Nikola answers, 'No. Government without you. I understand the distinction is painful.'",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
                   "propertyId": "network_consent",
@@ -4091,7 +4091,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw11_decision_opt_witnessed-return_r_revision",
-                "text": "Kurozane returns one ceremonial seal while retaining the granary commands. Aya reads the omission aloud. When he reaches through the hidden command to starve the routes, Ren gives the fatal stop before the binding tears; rival riders are already moving.",
+                "text": "Kurozane returns the ceremonial seals and conceals the granary command inside his left hand. Aya catches the missing office. He reaches through it to starve the routes; Ren calls the fatal stop before the binding tears. The lance falls as rival riders are already racing to claim the orphaned stores.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
                   "propertyId": "network_consent",
@@ -4118,13 +4118,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
           },
           {
             "id": "page_sw11_decision_opt_provisional-binding",
-            "text": "Bind Kurozane provisionally while route councils define the transfer.",
+            "text": "Hold Kurozane until the route councils can define a transfer no victor owns.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
                 "id": "page_sw11_decision_opt_provisional-binding_r_accord",
-                "text": "The binding receives a public expiration and no hunter custody. Local delegates inventory every office before accepting it, preventing victory from becoming an unexamined succession.",
+                "text": "The binding receives a public expiration at the next dawn and no private hunter custody. Local delegates inventory every office before accepting it. Kurozane asks which of them is shogun now. 'That impatience is the disease,' Mateus says. No one accepts the throne in order to answer him faster.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
                   "propertyId": "proof_integrity",
@@ -4149,7 +4149,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw11_decision_opt_provisional-binding_r_revision",
-                "text": "The first draft leaves Nikola as sole keeper of the binding. He tears out his own authority clause. During the delay Kurozane ruptures the provisional bond to reclaim an outer bell; route witnesses authorize the fatal stop rather than grant Nikola permanent custody.",
+                "text": "The first draft makes Nikola sole keeper of the bond. He tears out his own authority clause. During the delay Kurozane ruptures the provisional line and reaches for an outer bell. Route witnesses authorize the fatal stop rather than cure one immortal office by placing it in a foreign nobleman's hands.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
                   "propertyId": "proof_integrity",
@@ -4176,13 +4176,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
           },
           {
             "id": "page_sw11_decision_opt_execution-demand",
-            "text": "Demand immediate execution before the blood court can regroup.",
+            "text": "Demand execution now, before the blood court can regroup.",
             "visible": true,
             "performable": true,
             "reactions": [
               {
                 "id": "page_sw11_decision_opt_execution-demand_r_accord",
-                "text": "The naked blade makes Kurozane understand that immortality no longer protects his office. He chooses witnessed surrender, not remorse, and the party refuses to call fear a change of heart.",
+                "text": "Nikola lowers the Longinus point until Kurozane feels his immortality fail around it. The shogun looks past the blade and sees route messengers already carrying orders that did not come from him. He chooses witnessed surrender, not remorse. Mateus warns Nikola not to call fear conversion. 'I was going to call it excellent reach,' Nikola says.",
                 "consequenceId": "page_end_corrections_visible",
                 "score": {
                   "propertyId": "court_pressure",
@@ -4207,7 +4207,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
               },
               {
                 "id": "page_sw11_decision_opt_execution-demand_r_revision",
-                "text": "The blade falls before every command can be inventoried. Kurozane dies, distant bells answer competing hands, and messengers report governors claiming emergency authority over roads and rice.",
+                "text": "The demand becomes the act before every command can be inventoried. Kurozane dies. The central Bell stops; distant bells answer competing hands. Before the blood has cooled, messengers report governors claiming emergency authority over roads, rice, and the surviving Oni.",
                 "consequenceId": "page_end_limits_posted",
                 "score": {
                   "propertyId": "court_pressure",
@@ -4238,7 +4238,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_end_corrections_visible",
           "title": "The Seals Returned",
-          "text": "Kurozane hears the independent route confirmations and sees that the country can act without his blood. He asks Ren what will hold it together when no immortal body commands the center. Ren answers: routes that can hold one another provisionally, refuse one another publicly, and survive the death of any one keeper. Kurozane returns the military, registry, granary, and bell seals one by one while the Severed Dragon boundary separates each office from his body. He is taken alive under rotating guard. The living prisoners leave first; witnesses catalogue the execution rows before any beam is dismantled. The transfer is not absolution, restoration, or proof that his self-justifying history was true; it is the first public act in which his survival no longer requires everyone else's obedience.",
+          "text": "Independent confirmations arrive from roads Kurozane believed would collapse without him. Salt runners have opened the rice stores. Ash defectors hold the outer garrison without a purge. Paper witnesses are copying the registry faster than his clerks can hide it. Kurozane asks what will hold the country together when no immortal body commands the center. Ren answers, 'People who can refuse one another and still share a road.' Mateus tells his former master that a mortal peace is allowed to be unfinished. Nikola tells him surrender is not a sacrament and therefore requires no miracle. Kurozane looks toward the capital, hears orders moving without his blood, and at last concedes the fact his reign could never permit: the country has survived his absence for one full hour. He returns the military seal, the registry seal, the granary seal, and finally the black bell seal. The Severed Dragon boundary strips each office from his body. He is taken alive under rotating guard, defeated and without title. The living prisoners leave first. Witnesses catalogue the execution rows before any beam is dismantled. No one calls the transfer forgiveness or voluntary reform. It is Kurozane's first public act in which his survival no longer requires everyone else's obedience—and the first dawn he must endure as only a man.",
           "prompt": "Record what the former shogun does not retain.",
           "terminal": true,
           "options": [],
@@ -4247,7 +4247,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
         {
           "id": "page_end_limits_posted",
           "title": "The Empty Throne Mobilizes",
-          "text": "Kurozane dies after immediate execution or a failed transfer forces the fatal stop, before the blood offices can be separated from him. The central Bell stops, but outer governors seize stores, patrol seals, and surviving Oni commands in the name of temporary order. No explosion erases the evidence and no narrator declares execution uniquely wicked; the consequence is a civil war created by a regime designed to make one immortal body its only transfer mechanism. The party can preserve routes and records, not retroactively make the vacuum safe.",
+          "text": "The Longinus point enters beneath Kurozane's jaw after immediate execution or a failed transfer forces the fatal stop. For one breath, every black bell in the observatory answers. Then the central Bell goes silent. The silence does not travel. East of Kurohana, a governor seizes three rice stores in the name of continuity. North, a court cousin claims the patrol seals. Along the old road, surviving Oni kneel to whichever officer can reproduce the loudest fragment of Kurozane's command. Red dawn riders pass the first evacuation column before the party reaches the outer archive. No explosion erases the evidence, and no voice declares execution uniquely wicked. The consequence is the civil war Kurozane built into a regime with one immortal transfer mechanism. The party can keep roads open, evacuate witnesses, and carry proof into the fighting. It cannot make the vacuum safe after the blade has fallen.",
           "prompt": "Carry the execution record into the emergency route plan.",
           "terminal": true,
           "options": [],

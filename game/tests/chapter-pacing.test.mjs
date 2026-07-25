@@ -10,7 +10,7 @@ const audit = createChapterPacingAudit();
 
 test('checked-in chapter checkpoints exactly match the quantity-derived audit', () => {
   assert.deepEqual(CHAPTER_PACING_CHECKPOINTS, audit.checkpoints);
-  assert.equal(CHAPTER_PACING_CHECKPOINTS.signature, 'fnv1a32:4de159bc');
+  assert.equal(CHAPTER_PACING_CHECKPOINTS.signature, 'fnv1a32:7b3c538b');
   assert.equal(Object.isFrozen(CHAPTER_PACING_CHECKPOINTS), true);
   assert.equal(Object.isFrozen(CHAPTER_PACING_CHECKPOINTS.chapters[0]), true);
   assert.equal(serializeChapterPacingCheckpoints(audit.checkpoints), `${JSON.stringify(audit.checkpoints, null, 2)}\n`);
@@ -26,9 +26,9 @@ test('chapter checkpoints cover the canonical campaign and reconcile to the refe
     CHAPTER_PACING_CHECKPOINTS.chapters.reduce((total, chapter) => total + chapter.targetMs, 0),
     CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs,
   );
-  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs, 74_298_333);
-  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMinutes, 1_238.306);
-  assert.equal(audit.reconciliation.durationAuditEstimatedMinutes, 1_238.306);
+  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs, 74_602_000);
+  assert.equal(CHAPTER_PACING_CHECKPOINTS.aggregateTargetMinutes, 1_243.367);
+  assert.equal(audit.reconciliation.durationAuditEstimatedMinutes, 1_243.367);
   assert.equal(audit.reconciliation.chapterTargetMs, CHAPTER_PACING_CHECKPOINTS.aggregateTargetMs);
   assert.equal(audit.reconciliation.requiredRepeatPresentationMs, 37_600);
   for (const chapter of CAMPAIGN.chapters) {
@@ -49,7 +49,7 @@ test('pacing checkpoints remain diagnostics built without authored minutes or fa
   assert.equal(CHAPTER_PACING_CHECKPOINTS.observedPlaytimeProof, false);
   assert.equal(audit.reconciliation.authoredMinutesUsed, false);
   assert.equal(audit.reconciliation.elapsedTimeClaimed, false);
-  assert.equal(audit.reconciliation.canonicalSignature, 'fnv1a32:2e7f5885');
+  assert.equal(audit.reconciliation.canonicalSignature, 'fnv1a32:6ae3636e');
   assert.equal(audit.reconciliation.witnessFieldworkSignature, 'fnv1a32:03290d06');
   assert.equal(audit.reconciliation.requiredRouteSignature, 'fnv1a32:a9ae88b8');
 });

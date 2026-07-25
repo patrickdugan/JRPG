@@ -22,7 +22,7 @@ function recursivelyFrozen(value, seen = new Set()) {
 test('all finite camp conversations complete deterministically at exact hard bounds', () => {
   const replay = runCampConversationCompletion(EXACT_BOUNDS);
   assert.equal(RUN.ok, true);
-  assert.equal(RUN.signature, 'fnv1a32:49b4930d');
+  assert.equal(RUN.signature, 'fnv1a32:a1a62b19');
   assert.equal(RUN.catalogueSignature, 'fnv1a32:a3a22f12');
   assert.equal(replay.signature, RUN.signature);
   assert.deepEqual(replay.summary, RUN.summary);

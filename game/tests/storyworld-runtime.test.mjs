@@ -289,7 +289,9 @@ test('Lady Enma resolution is categorical and remains unavailable until her spoo
 });
 
 test('every legacy identity fails closed at the old third record instead of inventing an Act III road choice', () => {
-  for (const [identityIndex, legacyIdentity] of LEGACY_STORYWORLD_CATALOG_IDENTITIES.entries()) {
+  const structuralIdentities = LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .filter(({ maximumCompatibleRecordCount }) => maximumCompatibleRecordCount < 3);
+  for (const [identityIndex, legacyIdentity] of structuralIdentities.entries()) {
     let prefix = createStoryworldState({ runId: `storyworld-old-third-record-${identityIndex}` });
     for (const cluster of STORYWORLD_CLUSTERS.slice(0, 3)) prefix = resolveCluster(prefix, cluster, 0);
     const legacy = {
@@ -308,4 +310,24 @@ test('every legacy identity fails closed at the old third record instead of inve
     assert.match(loaded.errors.join(' '), /cannot be migrated without inventing a political choice/u);
     assert.equal(storage.getItem(adapter.key), serialized, 'rejected history must not be rewritten');
   }
+});
+
+test('the Act V prose rewrite preserves a complete compatible Storyworld history', () => {
+  let current = createStoryworldState({ runId: 'storyworld-act-five-prose-migration-0001' });
+  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
+    current = resolveCluster(current, cluster, index % 3);
+  });
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .find(({ migrationId }) => migrationId === 'act-five-climax-writing-v1');
+  assert.ok(legacyIdentity);
+  const loaded = loadStoryworldState({
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  });
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'act-five-climax-writing-v1');
+  assert.deepEqual(loaded.state.records, current.records);
 });

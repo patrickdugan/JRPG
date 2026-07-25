@@ -16,13 +16,12 @@ export const STORYWORLD_SCHEMA_VERSION = 1;
 export const DEFAULT_STORYWORLD_SAVE_KEY = `${CAMPAIGN.id}.storyworld.v${STORYWORLD_SCHEMA_VERSION}`;
 
 // Exact former identities migrate only across revisions whose choice structure
-// remains compatible. The two pre-Severed-Dragon identities stop before the
-// structurally revised Chapter 9 sequence so the old Corrections Desk can never
-// become a surrender or execution the player did not choose. Act III now begins
-// with a three-road strategic choice in the former third cluster slot. No legacy
-// identity may cross the first two compatible records and have its old Sayo
-// warehouse choice reinterpreted as a Salt, Ash, or Paper campaign priority.
-// Accepted prefixes are validated and immediately re-frozen with current hashes.
+// remains compatible. Structural revisions stop before the third record so an
+// old warehouse choice can never become a strategic priority or political
+// ending the player did not choose. Presentation-only revisions may explicitly
+// preserve the complete record sequence when every opaque identity and effect
+// remains unchanged. Accepted saves are validated and immediately re-frozen
+// with current hashes.
 export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
   Object.freeze({
     sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
@@ -65,6 +64,16 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     catalogSignature: 'sha256:6add624a6c0495c10a8c2d5de9573fbfd275d29da853b22635385cafa854fb7e',
     migrationId: 'nonlinear-route-scheduler-v1',
     maximumCompatibleRecordCount: 2,
+  }),
+  // Act V's confrontation rewrite changes presentation prose only. Cluster,
+  // option, reaction, outcome, and effect identities are unchanged, so every
+  // previously completed record remains semantically compatible.
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:d7f7e5c040c90ddd02afcb4ffa73e45be0e897639683e7490d1a6ad0fba3ce8f',
+    catalogSignature: 'sha256:65e7f9ca2458c213a54d260636ec86caa2d7abc237e4bb28ecdcb2257b3cc12d',
+    migrationId: 'act-five-climax-writing-v1',
+    maximumCompatibleRecordCount: 11,
   }),
 ]);
 
