@@ -108,6 +108,17 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     migrationId: 'act-five-pride-reversal-v1',
     maximumCompatibleRecordCount: 11,
   }),
+  // Source version 7 preserves every opaque choice, reaction, and ending while
+  // enriching the existing Act III-IV reactions with multi-thread formulas and
+  // causal capacity effects. Completed source-version-6 histories retain their
+  // exact branch record and replay it through the fuller projection.
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:029bf628921029cf3f8d618af033107f97fc07473ba882622a95f99c72485769',
+    catalogSignature: 'sha256:a9bb2f3a077e15e2d89654bb55d40cad55458b3f7b123d619b2d94fe53ee7a4f',
+    migrationId: 'act-three-four-causal-effects-v1',
+    maximumCompatibleRecordCount: 11,
+  }),
 ]);
 
 const CAMPAIGN_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));

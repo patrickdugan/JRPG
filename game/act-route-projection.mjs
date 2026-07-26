@@ -75,12 +75,12 @@ export function deriveActRouteProfile(projection = {}) {
       + proofIntegrity * 0.14
       + enmaCooperation * 0.14,
   );
-  const cleanSuccessionPrepared = effectiveSuccessionReadiness >= 0.25
+  const cleanSuccessionPrepared = effectiveSuccessionReadiness >= 0.30
     && proofIntegrity >= 0.60;
-  const outerGarrisonCanStandDown = garrisonStandDownReadiness >= 0.30;
+  const outerGarrisonCanStandDown = garrisonStandDownReadiness >= 0.38;
   const ashExecutionContinuity = commitments.ash >= 0.30
-    && effectiveOniSupplyDisruption >= 0.25
-    && garrisonStandDownReadiness >= 0.32
+    && effectiveOniSupplyDisruption >= 0.35
+    && garrisonStandDownReadiness >= 0.40
     && proofIntegrity >= 0.55;
 
   return Object.freeze({
@@ -114,10 +114,10 @@ export function deriveActRouteProfile(projection = {}) {
           (cleanSuccessionPrepared && bellIntelligence >= 0.15)
           || ashExecutionContinuity
         ),
-      witnessedSeppukuAtDawnAvailable: effectiveSuccessionReadiness >= 0.25
-        && bellIntelligence >= 0.15
-        && proofIntegrity >= 0.55,
-      negotiatedSealReturnAvailable: surrenderLeverage >= 0.30,
+      witnessedSeppukuAtDawnAvailable: effectiveSuccessionReadiness >= 0.30
+        && bellIntelligence >= 0.20
+        && proofIntegrity >= 0.60,
+      negotiatedSealReturnAvailable: surrenderLeverage >= 0.40,
     }),
   });
 }

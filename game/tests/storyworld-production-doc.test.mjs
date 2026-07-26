@@ -10,6 +10,10 @@ const DOC = readFileSync(
   new URL('../../docs/22-storyworld-sequence-production-map.md', import.meta.url),
   'utf8',
 );
+const MASTER_PLAN = readFileSync(
+  new URL('../../docs/38-five-act-master-storyworld-plan.md', import.meta.url),
+  'utf8',
+);
 
 const placementLabel = Object.freeze({
   'act-route-decision': 'act route',
@@ -59,4 +63,24 @@ test('production map locks authored-versus-played arithmetic and core guardrails
   assert.match(DOC, /Japanese organizers, witnesses, crews, and custodians retain authority/);
   assert.match(DOC, /not absolution, command authority, private access, restored office/);
   assert.match(DOC, /no celebrity or actor likeness is permitted/);
+});
+
+test('five-act master plan locks dramatic authority and the Act III-IV conversion contract', () => {
+  for (const act of [
+    'Act I — The Hidden Shore',
+    'Act II — The Bishop Beneath the Bell',
+    'Act III — The Three-Road War',
+    'Act IV — The Black Gate',
+    'Act V — The Living Castle',
+  ]) {
+    assert.ok(MASTER_PLAN.includes(act), act);
+  }
+  assert.match(MASTER_PLAN, /compatibility seams, not instructions to restore superseded characterization/u);
+  assert.match(MASTER_PLAN, /five player tactics, thirteen deterministic confrontation flows, and four political endings/u);
+  assert.match(MASTER_PLAN, /No Act III–IV revision in this plan adds another state property/u);
+  assert.match(MASTER_PLAN, /inherited anti-vampire authority becomes publicly limited technique/u);
+  assert.match(MASTER_PLAN, /a confession about machinery becomes an actionable release map/u);
+  assert.match(MASTER_PLAN, /a public accusation becomes a distributed inventory of offices/u);
+  assert.match(MASTER_PLAN, /rescue and refusal become a garrison stand-down/u);
+  assert.match(MASTER_PLAN, /all thirteen final confrontation flows remain reachable/u);
 });

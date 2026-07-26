@@ -145,6 +145,48 @@ test('every decision and reaction meets the authored density, bounded-effect, an
   assert.equal(terminalCount, 4);
 });
 
+test('Acts III and IV convert multiple prior threads into concrete route capacity', () => {
+  const conversionClusterIds = new Set([
+    'sw3-sayos-warehouse-conditions',
+    'sw4-margin-varga-journal',
+    'sw5-cipher-handoff',
+    'sw6-tribunal-afterword',
+    'sw7-soldier-will-not-follow',
+    'sw8-boats-with-conditions',
+    'sw-enma-three-terms',
+  ]);
+  for (const cluster of STORYWORLD_CLUSTERS.filter(({ id }) => conversionClusterIds.has(id))) {
+    for (const option of cluster.entry.options) {
+      for (const reaction of option.reactions) {
+        assert.ok(reaction.score.terms.length >= 4, `${reaction.id} collapses to a single-thread inclination`);
+        assert.ok(reaction.effects.length >= 4, `${reaction.id} does not carry a conversion-layer effect set`);
+      }
+    }
+  }
+
+  const expectedCapacityThreads = {
+    'sw4-margin-varga-journal': ['salt_commitment', 'evacuation_capacity', 'bell_intelligence', 'route_safety'],
+    'sw5-cipher-handoff': ['ash_commitment', 'oni_supply_disruption', 'garrison_defection'],
+    'sw6-tribunal-afterword': ['paper_commitment', 'public_reach', 'succession_readiness', 'bell_intelligence'],
+    'sw7-soldier-will-not-follow': ['evacuation_capacity', 'oni_supply_disruption', 'garrison_defection', 'kurozane_indispensability'],
+    'sw8-boats-with-conditions': ['evacuation_capacity', 'route_safety', 'network_consent', 'kurozane_indispensability'],
+    'sw-enma-three-terms': ['bell_intelligence', 'garrison_defection', 'kurozane_pride', 'kurozane_indispensability'],
+  };
+  for (const [clusterId, propertyIds] of Object.entries(expectedCapacityThreads)) {
+    const cluster = STORYWORLD_CLUSTERS.find(({ id }) => id === clusterId);
+    const touched = new Set(
+      [cluster.entry, ...cluster.outcomes]
+        .flatMap(({ options }) => options)
+        .flatMap(({ reactions }) => reactions)
+        .flatMap(({ effects }) => effects)
+        .map(({ propertyId }) => propertyId),
+    );
+    for (const propertyId of propertyIds) {
+      assert.equal(touched.has(propertyId), true, `${clusterId} does not thread ${propertyId}`);
+    }
+  }
+});
+
 test('authored JSON, binding sidecar, and browser registry remain deterministic generated artifacts', () => {
   const run = spawnSync(process.execPath, ['tools/build-storyworld.mjs', '--check'], {
     cwd: GAME,

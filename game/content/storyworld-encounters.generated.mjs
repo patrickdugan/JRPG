@@ -8,12 +8,12 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:a9bb2f3a077e15e2d89654bb55d40cad55458b3f7b123d619b2d94fe53ee7a4f";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:99e9fdb88518de76e0196038b9570697db2c4dc84afaba1166329d7550f8465f";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 6,
+  "sourceVersion": 7,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:029bf628921029cf3f8d618af033107f97fc07473ba882622a95f99c72485769",
+  "sourceHash": "sha256:a0baf4afa6e4d44bacab296870fc22ad2e9833014f57fa82f223599248d6f7e5",
   "bindingHash": "sha256:32d66611627db532d7d459e0b3652db8fa067edf8544305a6082a33bc7c77320",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
@@ -950,8 +950,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Sayo accepts the first signal because her boat leads keep cancellation authority. The coalition commits escorts and stores without taking command of either civilian route.",
                 "consequenceId": "page_sw03_accord",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -966,6 +986,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "evacuation_capacity",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -975,8 +999,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Sayo rejects a single coalition timetable, then accepts a narrower promise of supplies. Her refusal changes the plan without changing the chosen Salt Road priority.",
                 "consequenceId": "page_sw03_accord",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -991,6 +1035,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "ren_noncoercion",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1008,8 +1056,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The coalition assigns saboteurs to the ash fields and rescue crews to the locks. Destroying production, not conscripted bodies, becomes the first military objective.",
                 "consequenceId": "page_sw03_revision",
                 "score": {
-                  "propertyId": "court_pressure",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "party_cohesion",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1024,6 +1092,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "oni_supply_disruption",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1033,8 +1105,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Kagura cannot promise a clean strike, but the table accepts her warning and funds prisoner routes beside sabotage. The Ash Road remains first without pretending its cost is solved.",
                 "consequenceId": "page_sw03_revision",
                 "score": {
-                  "propertyId": "court_pressure",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1049,6 +1141,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "witness_safety",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "ren_noncoercion",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1066,8 +1162,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Aya divides the blocks among independent printers while Kozui delegates prepare provisional offices. The first victory sought is a country able to receive surrendered seals.",
                 "consequenceId": "page_sw03_negotiated",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1082,6 +1198,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "succession_readiness",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1091,8 +1211,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Several delegates refuse a manifesto written by the party. Aya accepts their revisions, and the Paper Road begins as a distributed argument rather than a foreign proclamation.",
                 "consequenceId": "page_sw03_negotiated",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1107,6 +1247,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "public_reach",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1150,6 +1294,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "network_consent",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1174,6 +1322,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "witness_safety",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
                       "delta": 0.05
                     }
                   ],
@@ -1218,6 +1370,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "witness_safety",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1242,6 +1398,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "ren_noncoercion",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "care_capacity",
                       "delta": 0.05
                     }
                   ],
@@ -1286,6 +1446,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "aya_archive_openness",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1310,6 +1474,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "network_consent",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "proof_integrity",
                       "delta": 0.05
                     }
                   ],
@@ -1367,8 +1535,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Nikola supplies context without asking the record to rescue his house. The passage travels with a note naming each woman as an actor and distinguishing inherited liability from his present choices.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
-                  "propertyId": "lise_oath_revision",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1387,6 +1575,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "salt_commitment",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -1396,8 +1588,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Nikola invokes the authority of a count he never legally was and calls the women links in his line. Aya makes him retract both claims, preserving the passage and his attempted use of rank.",
                 "consequenceId": "page_sw04_revision",
                 "score": {
-                  "propertyId": "lise_oath_revision",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.35,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1414,7 +1626,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.1
                   },
                   {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -1433,8 +1653,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The surrounding pages expose the sale route and prevent one line from carrying more certainty than it can bear. Nikola accepts the slower publication despite the injury to his house name.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "party_cohesion",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1451,7 +1691,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -1462,8 +1710,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Delay begins to resemble noble concealment. Nikola accepts a public deadline, and Aya releases an index that names what remains under review.",
                 "consequenceId": "page_sw04_revision",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.35,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1482,6 +1750,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "salt_commitment",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1499,8 +1771,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The survivors authorize an excerpt and retain the original. Their custody terms travel with every copy, limiting Dražanić, mercantile, and party claims alike.",
                 "consequenceId": "page_sw04_accord",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1517,6 +1809,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.1
                   },
                   {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
                     "propertyId": "salt_commitment",
                     "delta": 0.05
                   }
@@ -1528,8 +1824,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "They refuse involvement beyond preserving the page. Aya records that boundary, and the party takes only an independent description of the find.",
                 "consequenceId": "page_sw04_revision",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.35,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1546,7 +1862,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -1595,6 +1919,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "bell_intelligence",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1623,6 +1951,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "bell_intelligence",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
                       "delta": 0.05
                     }
                   ],
@@ -1671,6 +2003,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "bell_intelligence",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -1699,6 +2035,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "bell_intelligence",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
                       "delta": 0.05
                     }
                   ],
@@ -1759,8 +2099,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Mateus names each harmful handoff and the office that approved it. He does not hide people behind technical language or ask usefulness to settle his debt.",
                 "consequenceId": "page_sw05_accord",
                 "score": {
-                  "propertyId": "mateus_accountability",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_mateus_truthfulness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1777,7 +2137,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
                     "delta": 0.05
                   }
                 ],
@@ -1788,8 +2156,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "He retreats into mechanism and passive voice. Genta identifies the people hidden by the grammar, and Aya records the correction beside his account.",
                 "consequenceId": "page_sw05_revision",
                 "score": {
-                  "propertyId": "mateus_accountability",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.25,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1808,6 +2196,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "ash_commitment",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -1825,8 +2217,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Aya builds a complete enough chain to act on and labels every inference. Mateus answers only the narrow gaps she cannot resolve independently.",
                 "consequenceId": "page_sw05_accord",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1843,7 +2255,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
                     "delta": 0.05
                   }
                 ],
@@ -1854,8 +2274,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Missing links stop the reconstruction. Aya asks Mateus bounded questions and marks each answer as testimony awaiting another independent source.",
                 "consequenceId": "page_sw05_revision",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.35,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1873,6 +2313,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
                     "delta": 0.05
                   }
                 ],
@@ -1891,8 +2335,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The clerk agrees to separate statements that can be compared later. The handoff chain becomes legible without forcing proximity or shared authority.",
                 "consequenceId": "page_sw05_accord",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1909,7 +2373,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
                     "delta": 0.05
                   }
                 ],
@@ -1920,8 +2392,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The clerk refuses any shared session with Mateus. Aya preserves the accounts separately and records the refusal as part of the method.",
                 "consequenceId": "page_sw05_revision",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -1938,7 +2430,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "oni_supply_disruption",
                     "delta": 0.05
                   }
                 ],
@@ -1987,6 +2487,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "oni_supply_disruption",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2015,6 +2519,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
                       "delta": 0.05
                     }
                   ],
@@ -2063,6 +2571,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "oni_supply_disruption",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2091,6 +2603,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "garrison_defection",
                       "delta": 0.05
                     }
                   ],
@@ -2150,8 +2666,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Aya separates fact from confession and publishes the supported sequence. Mateus signs the limits, including one claim that remains explicitly unproven.",
                 "consequenceId": "page_sw06_accord",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2168,6 +2704,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.1
                   },
                   {
+                    "propertyId": "succession_readiness",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "paper_commitment",
                     "delta": 0.05
                   }
@@ -2179,8 +2719,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "One claim outruns the documents. Aya marks it unproven in public, and Mateus loses the chance to use urgency as a substitute for support.",
                 "consequenceId": "page_sw06_revision",
                 "score": {
-                  "propertyId": "proof_integrity",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.35,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_mateus_truthfulness",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2197,7 +2757,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": -0.05
                   },
                   {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "paper_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
                     "delta": 0.05
                   }
                 ],
@@ -2216,8 +2784,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Mateus names the offices omitted from his first account without exposing victims. The added detail makes the institutional chain harder to deny.",
                 "consequenceId": "page_sw06_accord",
                 "score": {
-                  "propertyId": "mateus_accountability",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2234,7 +2822,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "paper_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
                     "delta": 0.05
                   }
                 ],
@@ -2245,8 +2841,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "He cannot answer one question without exposing living witnesses. The tribunal records the limit rather than treating silence as proof of innocence.",
                 "consequenceId": "page_sw06_revision",
                 "score": {
-                  "propertyId": "mateus_accountability",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2260,7 +2876,11 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "public_reach",
-                    "delta": -0.05
+                    "delta": 0
+                  },
+                  {
+                    "propertyId": "ren_noncoercion",
+                    "delta": 0.05
                   },
                   {
                     "propertyId": "paper_commitment",
@@ -2285,7 +2905,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "terms": [
                     {
                       "propertyId": "kiku_capacity",
-                      "coefficient": 0.55,
+                      "coefficient": 0.4,
                       "invert": false
                     },
                     {
@@ -2296,6 +2916,11 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "witness_safety",
                       "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.15,
                       "invert": false
                     }
                   ],
@@ -2315,7 +2940,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "kiku_capacity",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "paper_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
                     "delta": 0.05
                   }
                 ],
@@ -2329,7 +2962,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "terms": [
                     {
                       "propertyId": "kiku_capacity",
-                      "coefficient": 0.5,
+                      "coefficient": 0.4,
                       "invert": true
                     },
                     {
@@ -2339,8 +2972,13 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "witness_safety",
-                      "coefficient": 0.25,
+                      "coefficient": 0.2,
                       "invert": true
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
                     }
                   ],
                   "offset": 0.01
@@ -2359,7 +2997,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "care_capacity",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "paper_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
                     "delta": 0.05
                   }
                 ],
@@ -2410,6 +3056,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "delta": 0.05
                     },
                     {
+                      "propertyId": "bell_intelligence",
+                      "delta": 0.05
+                    },
+                    {
                       "propertyId": "kurozane_guilt_pressure",
                       "delta": 0.05
                     }
@@ -2440,6 +3090,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "succession_readiness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
                       "delta": 0.05
                     },
                     {
@@ -2494,6 +3148,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "delta": 0.05
                     },
                     {
+                      "propertyId": "bell_intelligence",
+                      "delta": 0.05
+                    },
+                    {
                       "propertyId": "kurozane_guilt_pressure",
                       "delta": 0.05
                     }
@@ -2524,6 +3182,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "succession_readiness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
                       "delta": 0.05
                     },
                     {
@@ -2588,8 +3250,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Genta makes the handoff without rank language. The soldiers accept ordinary supplies and preserve their refusal to serve either command.",
                 "consequenceId": "page_sw07_accord",
                 "score": {
-                  "propertyId": "genta_accountability",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.4,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2606,7 +3288,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2617,8 +3307,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "They reject a handoff from Genta himself. Ren leaves the supplies at a neutral marker, and no one calls the refusal ingratitude.",
                 "consequenceId": "page_sw07_revision",
                 "score": {
-                  "propertyId": "genta_accountability",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2635,7 +3345,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "witness_safety",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2654,8 +3372,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "One soldier identifies a closed ferry and nothing more. Genta repeats the fact without turning the speaker into a scout.",
                 "consequenceId": "page_sw07_accord",
                 "score": {
-                  "propertyId": "p_party_respects_limits",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2672,7 +3410,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2683,8 +3429,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The question still sounds like command. Genta withdraws it, and the party chooses a slower route without treating silence as betrayal.",
                 "consequenceId": "page_sw07_revision",
                 "score": {
-                  "propertyId": "p_party_respects_limits",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": true
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2701,7 +3467,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": -0.05
                   },
                   {
+                    "propertyId": "p_party_respects_limits",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2720,8 +3494,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The soldier later sends an unsolicited warning through a civilian courier. Because no obligation was claimed, the warning remains a choice.",
                 "consequenceId": "page_sw07_accord",
                 "score": {
-                  "propertyId": "ren_noncoercion",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2738,7 +3532,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2749,8 +3551,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "No warning follows. The party does not reinterpret the silence, and Genta plans for uncertainty instead of demanding proof of loyalty.",
                 "consequenceId": "page_sw07_revision",
                 "score": {
-                  "propertyId": "ren_noncoercion",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -2767,7 +3589,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": -0.05
                   },
                   {
+                    "propertyId": "p_party_respects_limits",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
                 ],
@@ -2818,6 +3648,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "delta": 0.05
                     },
                     {
+                      "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
+                    },
+                    {
                       "propertyId": "kurozane_indispensability",
                       "delta": -0.05
                     }
@@ -2848,6 +3682,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "garrison_defection",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
                       "delta": 0.05
                     },
                     {
@@ -2902,6 +3740,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "delta": 0.05
                     },
                     {
+                      "propertyId": "oni_supply_disruption",
+                      "delta": 0.05
+                    },
+                    {
                       "propertyId": "kurozane_indispensability",
                       "delta": -0.05
                     }
@@ -2932,6 +3774,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "garrison_defection",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "oni_supply_disruption",
                       "delta": 0.05
                     },
                     {
@@ -2996,8 +3842,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The crews accept the clear boundary and refuse evidence cargo. Their boats remain under local leads, with the party supplying guards only when asked.",
                 "consequenceId": "page_sw08_accord",
                 "score": {
-                  "propertyId": "p_party_respects_limits",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3015,7 +3881,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "evacuation_capacity",
-                    "delta": 0.05
+                    "delta": 0.1
                   }
                 ],
                 "authoredIndex": 0
@@ -3025,8 +3891,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Ren keeps asking operational questions after the limit is stated. The lead repeats it, and he records the correction without seeking another opening.",
                 "consequenceId": "page_sw08_revision",
                 "score": {
-                  "propertyId": "p_party_respects_limits",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3044,6 +3930,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
                     "delta": 0.05
                   }
                 ],
@@ -3062,8 +3952,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Crews accept one finite addition because its custody and destination are independent of passenger lists. Aya removes every identity from the seal.",
                 "consequenceId": "page_sw08_accord",
                 "score": {
-                  "propertyId": "route_safety",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3080,6 +3990,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "succession_readiness",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "evacuation_capacity",
                     "delta": 0.05
                   }
@@ -3091,8 +4005,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The bundle changes inspection risk too sharply. Aya removes it, and no one treats evacuation as a lesser use of the boats.",
                 "consequenceId": "page_sw08_revision",
                 "score": {
-                  "propertyId": "route_safety",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.35,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3110,6 +4044,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
                     "delta": 0.05
                   }
                 ],
@@ -3128,8 +4066,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "The reserve responds to actual need without waiting for party approval. Its lead can choose evacuation, care, or withdrawal as conditions change.",
                 "consequenceId": "page_sw08_accord",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": false,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "kiku_capacity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3143,6 +4101,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "route_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "kiku_capacity",
                     "delta": 0.05
                   },
                   {
@@ -3157,8 +4119,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "text": "Ambiguous responsibility makes reserve status unsafe. The lead commits the boat to evacuation now and removes it from every later plan.",
                 "consequenceId": "page_sw08_revision",
                 "score": {
-                  "propertyId": "network_consent",
-                  "invert": true,
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.3,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
                   "offset": 0.01
                 },
                 "effects": [
@@ -3172,11 +4154,11 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "route_safety",
-                    "delta": 0.05
+                    "delta": 0.1
                   },
                   {
                     "propertyId": "evacuation_capacity",
-                    "delta": 0.05
+                    "delta": 0.1
                   }
                 ],
                 "authoredIndex": 1
@@ -3211,7 +4193,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "effects": [
                     {
                       "propertyId": "network_consent",
-                      "delta": 0.05
+                      "delta": 0.1
                     },
                     {
                       "propertyId": "route_safety",
@@ -3259,6 +4241,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "delta": 0.05
                     },
                     {
+                      "propertyId": "network_consent",
+                      "delta": 0.05
+                    },
+                    {
                       "propertyId": "kurozane_indispensability",
                       "delta": -0.05
                     }
@@ -3303,7 +4289,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "network_consent",
-                      "delta": 0.05
+                      "delta": 0.1
                     },
                     {
                       "propertyId": "salt_commitment",
@@ -3340,6 +4326,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "salt_commitment",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
                       "delta": 0.05
                     },
                     {
@@ -3444,6 +4434,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.1
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "kurozane_pride",
                     "delta": -0.05
                   },
@@ -3500,6 +4498,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "witness_safety",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
                   },
                   {
                     "propertyId": "kurozane_pride",
@@ -3563,6 +4565,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
                     "propertyId": "kurozane_pride",
                     "delta": -0.05
                   },
@@ -3618,6 +4624,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "court_pressure",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "garrison_defection",
                     "delta": -0.05
                   },
                   {
@@ -3687,6 +4701,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     "delta": 0.05
                   },
                   {
+                    "propertyId": "bell_intelligence",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": -0.05
+                  },
+                  {
                     "propertyId": "kurozane_pride",
                     "delta": 0.05
                   },
@@ -3742,6 +4764,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "garrison_defection",
                     "delta": 0.05
                   },
                   {
@@ -4630,7 +5660,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": true
                     }
                   ],
-                  "offset": 0.15
+                  "offset": 0.22
                 },
                 "effects": [
                   {
@@ -4698,7 +5728,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": false
                     }
                   ],
-                  "offset": 0.05
+                  "offset": -0.08
                 },
                 "effects": [
                   {
@@ -5184,7 +6214,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": false
                     }
                   ],
-                  "offset": -0.08
+                  "offset": -0.15
                 },
                 "effects": [
                   {

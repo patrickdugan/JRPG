@@ -47,7 +47,7 @@ test('seeded whole-route rehearsal keeps four endings live and late gates earned
   assert.ok(enmaOutcomes.accord > 0);
   assert.ok(enmaOutcomes.revision > 0);
   assert.ok(enmaOutcomes.negotiated > 0);
-  assert.ok(audit.historySensitiveEntryOptionCount >= 10);
+  assert.ok(audit.historySensitiveEntryOptionCount >= 20);
 });
 
 test('static thread coverage reaches the tribunal, Enma hearing, and last command', () => {
@@ -67,4 +67,15 @@ test('static thread coverage reaches the tribunal, Enma hearing, and last comman
   assert.ok(coverage.kurozane_indispensability.effectClusters.includes('sw8-boats-with-conditions'));
   assert.ok(coverage.kurozane_guilt_pressure.effectClusters.includes('sw2-witness-not-family'));
   assert.ok(coverage.kurozane_guilt_pressure.effectClusters.includes('sw9-mateus-living-archive'));
+  assert.ok(coverage.evacuation_capacity.effectClusters.includes('sw4-margin-varga-journal'));
+  assert.ok(coverage.evacuation_capacity.effectClusters.includes('sw7-soldier-will-not-follow'));
+  assert.ok(coverage.evacuation_capacity.effectClusters.includes('sw8-boats-with-conditions'));
+  assert.ok(coverage.bell_intelligence.effectClusters.includes('sw5-cipher-handoff'));
+  assert.ok(coverage.bell_intelligence.effectClusters.includes('sw6-tribunal-afterword'));
+  assert.ok(coverage.bell_intelligence.effectClusters.includes('sw-enma-three-terms'));
+  assert.ok(coverage.garrison_defection.effectClusters.includes('sw5-cipher-handoff'));
+  assert.ok(coverage.garrison_defection.effectClusters.includes('sw7-soldier-will-not-follow'));
+  assert.ok(coverage.garrison_defection.effectClusters.includes('sw-enma-three-terms'));
+  assert.ok(coverage.kiku_capacity.effectClusters.includes('sw6-tribunal-afterword'));
+  assert.ok(coverage.kiku_capacity.effectClusters.includes('sw8-boats-with-conditions'));
 });
