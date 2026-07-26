@@ -31,9 +31,10 @@ test('generated Storyworld catalog supplies ninety-seven authored scenes and exa
     completeRunStoryworldSceneCountRange: { minimum: 20, maximum: 22 },
     completeRunSceneCountRange: { minimum: 74, maximum: 77 },
     clusterCount: 11,
-    entryOptionCount: 34,
+    entryOptionCount: 35,
   });
   assert.equal(STORYWORLD_CLUSTERS.length, 11);
+  assert.equal(STORYWORLD_PROPERTIES.length, 35);
   assert.equal(Object.isFrozen(STORYWORLD_CATALOG), true);
   assert.equal(Object.isFrozen(STORYWORLD_CLUSTERS[0].entry.options[0].reactions[0].effects), true);
 });
@@ -72,9 +73,10 @@ test('every decision and reaction meets the authored density, bounded-effect, an
   const optionIds = new Set();
   const reactionIds = new Set();
   let terminalCount = 0;
+  let inversionEffectCount = 0;
   for (const cluster of STORYWORLD_CLUSTERS) {
     const encounters = [cluster.entry, ...cluster.outcomes];
-    assert.equal(cluster.entry.options.length, cluster.id === 'sw10-corrections-desk' ? 4 : 3, cluster.id);
+    assert.equal(cluster.entry.options.length, cluster.id === 'sw10-corrections-desk' ? 5 : 3, cluster.id);
     assert.equal(
       cluster.outcomes.length,
       cluster.id === 'sw10-corrections-desk'
@@ -122,16 +124,24 @@ test('every decision and reaction meets the authored density, bounded-effect, an
           assert.ok(reaction.effects.length >= 3, reaction.id);
           for (const effect of reaction.effects) {
             assert.ok(propertyIds.has(effect.propertyId));
-            assert.ok(Number.isFinite(effect.delta));
-            assert.ok(Math.abs(effect.delta) <= 0.1);
+            if (effect.operation === 'invert') {
+              inversionEffectCount += 1;
+              assert.equal(effect.propertyId, 'kurozane_pride');
+              assert.equal(reaction.id.endsWith('_r_confession-reversal'), true);
+              assert.equal(Object.hasOwn(effect, 'delta'), false);
+            } else {
+              assert.ok(Number.isFinite(effect.delta));
+              assert.ok(Math.abs(effect.delta) <= 0.1);
+            }
           }
         }
       }
     }
   }
   assert.equal(encounterIds.size, 37);
-  assert.equal(optionIds.size, 56);
-  assert.equal(reactionIds.size, 114);
+  assert.equal(optionIds.size, 57);
+  assert.equal(reactionIds.size, 117);
+  assert.equal(inversionEffectCount, 1);
   assert.equal(terminalCount, 4);
 });
 
@@ -183,4 +193,15 @@ test('authored JSON, binding sidecar, and browser registry remain deterministic 
       .every(({ acceptability_script: acceptability }) => acceptability === true),
     true,
   );
+  const confession = world.encounters
+    .find(({ id }) => id === 'page_sw11_decision')
+    .options
+    .find(({ id }) => id.endsWith('_opt_name-the-crime'))
+    .reactions
+    .find(({ id }) => id.endsWith('_r_confession-reversal'));
+  const prideEffect = confession.after_effects
+    .find(({ Set: target }) => target.keyring[0] === 'kurozane_pride');
+  assert.equal(prideEffect.to.operator_type, 'Addition');
+  assert.equal(prideEffect.to.operands[0].value, 1);
+  assert.equal(prideEffect.to.operands[1].coefficient, -1);
 });

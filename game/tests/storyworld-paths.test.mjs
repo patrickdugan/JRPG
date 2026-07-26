@@ -76,6 +76,7 @@ test('bounded selected-route path union reaches every consequence scene and hist
   const reachedOutcomes = new Map(STORYWORLD_CLUSTERS.map(({ id }) => [id, new Set()]));
   const reactionsByOption = new Map();
   const finalProjections = new Set();
+  let prideReversalTransitions = 0;
   const clusterById = new Map(STORYWORLD_CLUSTERS.map((cluster) => [cluster.id, cluster]));
   const warTableOptionIndex = { salt: 0, ash: 1, paper: 2 };
   for (const schedule of getNarrativeRouteSchedules()) {
@@ -88,7 +89,16 @@ test('bounded selected-route path union reaches every consequence scene and hist
       const nextByProjection = new Map();
       for (const state of frontier) {
         for (const option of options) {
+          const projectionBefore = deriveStoryworldProjection(state);
           const resolved = resolveOne(state, cluster, option);
+          if (resolved.entryReactionId.endsWith('_r_confession-reversal')) {
+            const projectionAfter = deriveStoryworldProjection(resolved.state);
+            assert.equal(
+              projectionAfter.kurozane_pride,
+              Math.round((1 - projectionBefore.kurozane_pride) * 10_000) / 10_000,
+            );
+            prideReversalTransitions += 1;
+          }
           reachedOutcomes.get(cluster.id).add(resolved.outcomeId);
           const reactionKey = `${cluster.id}:${option.id}`;
           const reactions = reactionsByOption.get(reactionKey) ?? new Set();
@@ -112,5 +122,6 @@ test('bounded selected-route path union reaches every consequence scene and hist
   }
   const historySensitive = [...reactionsByOption.values()].filter((reactions) => reactions.size > 1);
   assert.ok(historySensitive.length >= 3, `Only ${historySensitive.length} options changed reaction across histories.`);
+  assert.ok(prideReversalTransitions > 0, 'The bounded route union never reached Kurozane’s pride reversal.');
   assert.ok(finalProjections.size >= 3, `Only ${finalProjections.size} materially distinct final projections survived.`);
 });

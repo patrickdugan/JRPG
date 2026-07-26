@@ -8,12 +8,12 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:508298b149d1b96acce198871a1466dde4af98b6f66e37c64044dc6dd8e12905";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:a9bb2f3a077e15e2d89654bb55d40cad55458b3f7b123d619b2d94fe53ee7a4f";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 5,
+  "sourceVersion": 6,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:78e45445845dbaeb2d265694a34e1d02dd9018247ce5168500cd257d9ff33108",
+  "sourceHash": "sha256:029bf628921029cf3f8d618af033107f97fc07473ba882622a95f99c72485769",
   "bindingHash": "sha256:32d66611627db532d7d459e0b3652db8fa067edf8544305a6082a33bc7c77320",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
@@ -175,6 +175,21 @@ export const STORYWORLD_CATALOG = deepFreeze({
     {
       "id": "garrison_defection",
       "label": "Garrison defection readiness",
+      "defaultValue": 0.1
+    },
+    {
+      "id": "kurozane_pride",
+      "label": "Kurozane pride",
+      "defaultValue": 0.85
+    },
+    {
+      "id": "kurozane_indispensability",
+      "label": "Kurozane indispensability claim",
+      "defaultValue": 0.8
+    },
+    {
+      "id": "kurozane_guilt_pressure",
+      "label": "Kurozane guilt pressure",
       "defaultValue": 0.1
     }
   ],
@@ -767,6 +782,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "mateus_accountability",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -792,6 +811,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "p_mateus_truthfulness",
                       "delta": -0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -835,6 +858,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "p_party_respects_limits",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -859,6 +886,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "aya_archive_openness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
                       "delta": 0.05
                     }
                   ],
@@ -2377,6 +2408,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "succession_readiness",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2405,6 +2440,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "succession_readiness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
                       "delta": 0.05
                     }
                   ],
@@ -2453,6 +2492,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "succession_readiness",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "delta": 0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2481,6 +2524,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "succession_readiness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
                       "delta": 0.05
                     }
                   ],
@@ -2769,6 +2816,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "garrison_defection",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2798,6 +2849,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "garrison_defection",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -2845,6 +2900,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "garrison_defection",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -2874,6 +2933,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "garrison_defection",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -3161,6 +3224,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "salt_commitment",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -3190,6 +3257,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "salt_commitment",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -3237,6 +3308,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "salt_commitment",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -3266,6 +3341,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "salt_commitment",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -3363,6 +3442,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "network_consent",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.1
                   }
                 ],
                 "authoredIndex": 0
@@ -3413,6 +3500,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "witness_safety",
                     "delta": 0.1
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -3466,6 +3561,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "enma_testimony",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -3515,6 +3618,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   },
                   {
                     "propertyId": "court_pressure",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
                     "delta": -0.05
                   }
                 ],
@@ -3574,6 +3685,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "party_cohesion",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": -0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -3624,6 +3743,14 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "truth_completeness",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.1
                   }
                 ],
                 "authoredIndex": 1
@@ -3903,6 +4030,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "proof_integrity",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -3928,6 +4059,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "p_mateus_truthfulness",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -3961,6 +4096,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "mateus_accountability",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -3986,6 +4125,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "public_reach",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -4019,6 +4162,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "party_cohesion",
                     "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 0
@@ -4044,6 +4191,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   {
                     "propertyId": "p_mateus_truthfulness",
                     "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.05
                   }
                 ],
                 "authoredIndex": 1
@@ -4087,6 +4238,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "truth_completeness",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -4112,6 +4267,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "party_cohesion",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 1
@@ -4155,6 +4314,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     {
                       "propertyId": "witness_safety",
                       "delta": 0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "delta": -0.05
                     }
                   ],
                   "authoredIndex": 0
@@ -4179,6 +4342,10 @@ export const STORYWORLD_CATALOG = deepFreeze({
                     },
                     {
                       "propertyId": "p_mateus_truthfulness",
+                      "delta": -0.05
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
                       "delta": -0.05
                     }
                   ],
@@ -4531,7 +4698,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": false
                     }
                   ],
-                  "offset": 0.01
+                  "offset": 0.05
                 },
                 "effects": [
                   {
@@ -4853,6 +5020,197 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 1
               }
             ]
+          },
+          {
+            "id": "page_sw11_decision_opt_name-the-crime",
+            "text": "Make Kurozane answer Mateus before anyone names the sentence.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw11_decision_opt_name-the-crime_r_accord",
+                "text": "Mateus names his son. Kurozane first calls the execution a price of peace, then fails to repeat the word after Mateus asks who actually paid it. He cannot yet call the killing sin, but he stops calling his own sorrow payment. Hearing the outer orders continue without him, he returns the seals and accepts living custody. The concession is morally incomplete and politically real.",
+                "consequenceId": "page_end_corrections_visible",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "coefficient": 0.45,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "kurozane_pride",
+                      "coefficient": 0.1,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.05
+                },
+                "effects": [
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.1
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw11_decision_opt_name-the-crime_r_revision",
+                "text": "Kurozane calls Mateus's son traitor once more and demands the right to define every death he ordered. Mateus lunges; Kurozane reaches through the argument for the unverified barracks seal. Nikola makes the fatal stop before the confession can become another hostage ritual. The central bell dies while rival commands are already moving.",
+                "consequenceId": "page_end_limits_posted",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "kurozane_pride",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_killed",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0
+                },
+                "effects": [
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": 0.1
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw11_decision_opt_name-the-crime_r_confession-reversal",
+                "text": "「お前は私の息子を殺した」 Mateus says. Kurozane answers that every death was a price paid for peace. 「代価と言うな。罪と言え」—Do not call it a price. Call it sin. Nikola asks, “Credis in Deum, Shogun?” Mateus translates. Kurozane answers only 「……はい」. His pride does not soften; it turns against the sovereign fiction that protected it. He names the killing, forced apostasy, blood rule, and execution rows as crimes, returns every seal, and publicly accepts seppuku at dawn under the authority of those who must live after him.",
+                "consequenceId": "page_end_last_seal_at_dawn",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "kurozane_pride",
+                      "coefficient": 0.1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "kurozane_guilt_pressure",
+                      "coefficient": 0.35,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "mateus_accountability",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.45,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "kurozane_indispensability",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.08
+                },
+                "effects": [
+                  {
+                    "propertyId": "kurozane_pride",
+                    "operation": "invert"
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "succession_readiness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "mateus_accountability",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
           }
         ]
       },
@@ -4926,7 +5284,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
       "maximum": 77
     },
     "clusterCount": 11,
-    "entryOptionCount": 34
+    "entryOptionCount": 35
   }
 });
 export const STORYWORLD_PROPERTIES = STORYWORLD_CATALOG.properties;

@@ -108,7 +108,16 @@ function staticThreadCoverage() {
   ]));
 }
 
-function summarizeRoute(route, runs, endingCounts, enmaCounts, finalOptionOutcomes, gateCounts, sums) {
+function summarizeRoute(
+  route,
+  runs,
+  endingCounts,
+  enmaCounts,
+  finalOptionOutcomes,
+  finalFlowCounts,
+  gateCounts,
+  sums,
+) {
   const fractionRecord = (record) => Object.fromEntries(Object.entries(record)
     .map(([key, count]) => [key, Number((count / runs).toFixed(4))]));
   return Object.freeze({
@@ -122,6 +131,7 @@ function summarizeRoute(route, runs, endingCounts, enmaCounts, finalOptionOutcom
         Object.freeze(fractionRecord(counts)),
       ]),
     )),
+    finalFlows: Object.freeze(fractionRecord(finalFlowCounts)),
     act5GateAvailability: Object.freeze(fractionRecord(gateCounts)),
     meanCivilWarRisk: Number((sums.civilWarRisk / runs).toFixed(4)),
     meanSurrenderLeverage: Number((sums.surrenderLeverage / runs).toFixed(4)),
@@ -129,6 +139,9 @@ function summarizeRoute(route, runs, endingCounts, enmaCounts, finalOptionOutcom
     meanGarrisonStandDownReadiness: Number((sums.garrisonStandDownReadiness / runs).toFixed(4)),
     meanEnmaCooperation: Number((sums.enmaCooperation / runs).toFixed(4)),
     meanEffectiveOniSupplyDisruption: Number((sums.effectiveOniSupplyDisruption / runs).toFixed(4)),
+    meanKurozanePride: Number((sums.kurozanePride / runs).toFixed(4)),
+    meanKurozaneIndispensability: Number((sums.kurozaneIndispensability / runs).toFixed(4)),
+    meanKurozaneGuiltPressure: Number((sums.kurozaneGuiltPressure / runs).toFixed(4)),
   });
 }
 
@@ -143,12 +156,14 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
   const globalEndings = {};
   const globalClusterOutcomes = {};
   const globalEntryReactions = new Map();
+  const globalFinalFlows = {};
 
   for (const [routeIndex, schedule] of getNarrativeRouteSchedules().entries()) {
     const random = seededRandom(seed + routeIndex * 10_007);
     const endingCounts = {};
     const enmaCounts = {};
     const finalOptionOutcomes = {};
+    const finalFlowCounts = {};
     const gateCounts = {};
     const sums = {
       civilWarRisk: 0,
@@ -157,6 +172,9 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
       garrisonStandDownReadiness: 0,
       enmaCooperation: 0,
       effectiveOniSupplyDisruption: 0,
+      kurozanePride: 0,
+      kurozaneIndispensability: 0,
+      kurozaneGuiltPressure: 0,
     };
 
     for (let run = 0; run < runsPerRoute; run += 1) {
@@ -170,7 +188,8 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
           : selectOption(cluster.entry.options, random);
 
         if (clusterId === FINAL_CLUSTER_ID) {
-          const profile = deriveActRouteProfile(deriveStoryworldProjection(state));
+          const projection = deriveStoryworldProjection(state);
+          const profile = deriveActRouteProfile(projection);
           const { act5Parameters } = profile;
           for (const gate of [
             'cleanSuccessionPrepared',
@@ -188,6 +207,9 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
           sums.garrisonStandDownReadiness += act5Parameters.garrisonStandDownReadiness;
           sums.enmaCooperation += act5Parameters.enmaCooperation;
           sums.effectiveOniSupplyDisruption += act5Parameters.effectiveOniSupplyDisruption;
+          sums.kurozanePride += projection.kurozane_pride;
+          sums.kurozaneIndispensability += projection.kurozane_indispensability;
+          sums.kurozaneGuiltPressure += projection.kurozane_guilt_pressure;
         }
 
         const resolution = resolveCluster(state, cluster, option);
@@ -202,6 +224,8 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
         if (clusterId === FINAL_CLUSTER_ID) {
           increment(endingCounts, resolution.outcomeKey);
           increment(globalEndings, resolution.outcomeKey);
+          increment(finalFlowCounts, resolution.entryReactionId);
+          increment(globalFinalFlows, resolution.entryReactionId);
           const optionCounts = finalOptionOutcomes[option.id] ?? {};
           increment(optionCounts, resolution.outcomeKey);
           finalOptionOutcomes[option.id] = optionCounts;
@@ -214,6 +238,7 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
       endingCounts,
       enmaCounts,
       finalOptionOutcomes,
+      finalFlowCounts,
       gateCounts,
       sums,
     ));
@@ -225,6 +250,8 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
     runsPerRoute,
     totalRuns,
     globalEndings: Object.freeze(Object.fromEntries(Object.entries(globalEndings)
+      .map(([key, count]) => [key, Number((count / totalRuns).toFixed(4))]))),
+    globalFinalFlows: Object.freeze(Object.fromEntries(Object.entries(globalFinalFlows)
       .map(([key, count]) => [key, Number((count / totalRuns).toFixed(4))]))),
     clusterOutcomeCounts: Object.freeze(globalClusterOutcomes),
     routes: Object.freeze(routes),

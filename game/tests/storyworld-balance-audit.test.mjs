@@ -18,6 +18,22 @@ test('seeded whole-route rehearsal keeps four endings live and late gates earned
   assert.ok(paper.endings['prepared-execution'] > 0.10);
   assert.ok(salt.endings.revision > 0.30);
   assert.ok(ash.endings.revision > 0.30);
+  const confessionFlowId = 'page_sw11_decision_opt_name-the-crime_r_confession-reversal';
+  const fearSurrenderFlowId = 'page_sw11_decision_opt_execution-demand_r_accord';
+  assert.equal(Object.keys(audit.globalFinalFlows).length, 13);
+  assert.ok(audit.globalFinalFlows[fearSurrenderFlowId] > 0.001);
+  assert.ok(audit.globalFinalFlows[fearSurrenderFlowId] < 0.03);
+  assert.ok(audit.globalFinalFlows[confessionFlowId] > 0.005);
+  assert.ok(audit.globalFinalFlows[confessionFlowId] < 0.05);
+  assert.ok(paper.finalFlows[confessionFlowId] > 0.02);
+  assert.ok(paper.finalFlows[confessionFlowId] < 0.10);
+  for (const route of audit.routes) {
+    assert.ok(route.meanKurozanePride > 0.70 && route.meanKurozanePride < 0.90);
+    assert.ok(route.meanKurozaneIndispensability > 0.40);
+    assert.ok(route.meanKurozaneIndispensability < 0.70);
+    assert.ok(route.meanKurozaneGuiltPressure > 0.15);
+    assert.ok(route.meanKurozaneGuiltPressure < 0.40);
+  }
   for (const gate of [
     'cleanSuccessionPrepared',
     'executionAvoidsImmediateCivilWar',
@@ -44,4 +60,11 @@ test('static thread coverage reaches the tribunal, Enma hearing, and last comman
   assert.ok(coverage.enma_testimony.gateClusters.includes('sw10-corrections-desk'));
   assert.ok(coverage.bell_intelligence.gateClusters.includes('sw10-corrections-desk'));
   assert.ok(coverage.garrison_defection.gateClusters.includes('sw10-corrections-desk'));
+  assert.ok(coverage.kurozane_pride.gateClusters.includes('sw10-corrections-desk'));
+  assert.ok(coverage.kurozane_pride.effectClusters.includes('sw-enma-three-terms'));
+  assert.ok(coverage.kurozane_pride.effectClusters.includes('sw10-corrections-desk'));
+  assert.ok(coverage.kurozane_indispensability.effectClusters.includes('sw7-soldier-will-not-follow'));
+  assert.ok(coverage.kurozane_indispensability.effectClusters.includes('sw8-boats-with-conditions'));
+  assert.ok(coverage.kurozane_guilt_pressure.effectClusters.includes('sw2-witness-not-family'));
+  assert.ok(coverage.kurozane_guilt_pressure.effectClusters.includes('sw9-mateus-living-archive'));
 });

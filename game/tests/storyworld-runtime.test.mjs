@@ -103,7 +103,7 @@ test('the Paper route requires all eleven clusters in route order and replays ex
   assert.equal(state.records.length, 11);
   assert.equal(state.revision, 54);
   const projection = deriveStoryworldProjection(state);
-  assert.equal(Object.keys(projection).length, 32);
+  assert.equal(Object.keys(projection).length, 35);
   assert.equal(Object.values(projection).every((value) => value >= 0 && value <= 1), true);
   const serialized = serializeStoryworldState(state);
   const loaded = loadStoryworldState(serialized);
@@ -369,5 +369,25 @@ test('the four-ending expansion preserves previously completed two-ending histor
   assert.equal(loaded.ok, true, loaded.errors?.join(' '));
   assert.equal(loaded.migrated, true);
   assert.equal(loaded.migrationId, 'talk-no-jutsu-endings-v1');
+  assert.deepEqual(loaded.state.records, current.records);
+});
+
+test('the inclination expansion preserves complete four-ending histories before adding the pride reversal', () => {
+  let current = createStoryworldState({ runId: 'storyworld-pride-reversal-migration-0001' });
+  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
+    current = resolveCluster(current, cluster, index % 3);
+  });
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .find(({ migrationId }) => migrationId === 'act-five-pride-reversal-v1');
+  assert.ok(legacyIdentity);
+  const loaded = loadStoryworldState({
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  });
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'act-five-pride-reversal-v1');
   assert.deepEqual(loaded.state.records, current.records);
 });

@@ -52,6 +52,18 @@ His strongest formulation is:
 
 This is not a false threat. It is the trap he has spent centuries constructing. The hopeful ending defeats the trap; the civil-war ending springs it.
 
+## Inclination model
+
+The final confrontation reads three explicit Kurozane inclinations in addition to the coalition’s existing political state. These are not morality points and do not replace succession, garrison, bell, proof, or witness preparation.
+
+| Inclination | Initial value | Ordinary movement | Dramatic use |
+| --- | ---: | --- | --- |
+| `kurozane_pride` | 0.85 | Enma’s custody or defection nudges it down 0.05; Enma’s death nudges it up 0.05; incomplete concession moves it down 0.10; renewed sovereign defiance moves it up 0.10. | Pride normally remains high even when Kurozane loses. The rare confession sets it to its exact complement, `1 − pride`, so a value near 0.80 becomes near 0.20. |
+| `kurozane_indispensability` | 0.80 | The independent soldier, locally controlled boats, and bounded use of Mateus each nudge the claim down 0.05. Enma’s custody lowers it another 0.05; her witnessed defection lowers it 0.10. | Measures how much evidence exists against “without me, the country collapses.” It strengthens or weakens several final reactions without deciding an ending alone. |
+| `kurozane_guilt_pressure` | 0.10 | Mateus’s first bounded testimony, the tribunal where present, and the Living Archive each add 0.05. Enma’s death subtracts 0.05. Final confrontation reactions move it at most 0.10. | Measures how much supported, speakable accusation reaches the room. It is not remorse: high pressure can produce confession, partial concession, or rage. |
+
+The inversion is deliberately unique. Every other authored psychological effect is a bounded ±0.05 or ±0.10 nudge. The confession therefore records a reversal rather than pretending that five ordinary persuasion points add up to spiritual transformation.
+
 ## Scene sequence
 
 ### V.1 — The Archive Breathes (`c9-01-archive-breathes`)
@@ -156,7 +168,15 @@ Ren ends the duel:
 
 ### V.6 — The Last Command (Storyworld consequence)
 
-The post-boss decision is mandatory and carries the route’s accumulated reactions.
+The post-boss decision is mandatory and carries the route’s accumulated reactions. Five player tactics resolve through thirteen deterministic dramatic flows. The player chooses what kind of pressure to apply; the accumulated history determines how Kurozane answers.
+
+| Player tactic | Possible flows |
+| --- | --- |
+| Witnessed return | complete bureaucratic capitulation; concealed office and fatal stop |
+| Provisional binding | finite public custody; rupture of a victor-owned bond |
+| Execution demand | surrender from fear; premature execution and civil war; Ash-prepared execution; Paper-prepared execution |
+| Dawn seppuku demand | cold acceptance after verified transfer; failed ceremony and rival mobilization |
+| Name the crime | incomplete but real concession; defensive rage; rare public confession and pride reversal |
 
 #### Witnessed return
 
@@ -172,6 +192,44 @@ The councils set a public expiration and inventory the offices before accepting 
 
 The naked blade may force Kurozane to surrender because he finally believes death is possible. If the supporting network is strong enough, fear opens the same witnessed transfer; the party does not rename fear as repentance. If the transfer fails or the player follows through immediately, the Longinus point kills him.
 
+Ash and Paper can separately make execution survivable. Ash does it by breaking Oni supply and moving the outer garrison under civilian orders. Paper does it by verifying the civil writ, registry, and bell transfer. Both reach **The Necessary Blade**, but the recorded reaction preserves which causal path existed.
+
+#### Dawn seppuku demand
+
+The party can demand public abdication, complete seal transfer, and witnessed seppuku after the prepared successor’s commands reach the outer stairs. Kurozane may accept this as a cold sentence without confessing. If the writ is incomplete, he uses the ceremony’s delay to reclaim the barracks seal, forcing a fatal stop before lawful succession is shared.
+
+#### Name the crime
+
+This option makes Kurozane answer Mateus before anyone announces a sentence. It is the most emotionally volatile tactic and does not automatically produce the most merciful or stable result.
+
+- **Incomplete concession:** Kurozane stops calling his own sorrow payment but cannot call the killing sin. He nevertheless returns the seals and enters living custody.
+- **Defensive rage:** he calls Mateus’s son a traitor again, reclaims the sovereign right to define every death, and reaches for an unverified command. Nikola’s fatal stop opens the civil-war ending.
+- **Confession reversal:** supported accusation, accountable testimony, low indispensability, and prepared succession barely overcome defensive pride. Kurozane names the crimes, returns every seal, and accepts the dawn sentence.
+
+The rare reversal carries the scene’s longest dramatic exchange:
+
+> **MATEUS:** 「お前は私の息子を殺した！」 — You killed my son!
+>
+> **KUROZANE:** 「ほかに道はなかった、マテウス！　あれは謀反人だった！」 — There was no other way, Mateus! He was a rebel!
+>
+> **MATEUS:** 「お前は私に、あの子の処刑を見届けさせた。」 — You made me watch his execution.
+>
+> **KUROZANE:** 「見届ける権利を求めたのは、お前だ！」 — You demanded the right!
+>
+> **MATEUS:** 「“重荷”を語るな。お前は私に、神を裏切らせた！」 — Do not speak to me of burden. You made me betray my God!
+>
+> **NIKOLA:** *Credis in Deum, Shogun?*
+>
+> **MATEUS:** 「将軍。神を信じるか、と聞いている。」
+>
+> **KUROZANE:** 「……はい。」
+> **MATEUS:** 「ならば、“代価”と言うな。“罪”と言え。」 — Then do not call it a price. Call it sin.
+
+The plain **はい** is mandatory. Kurozane briefly stops performing the immortal sovereign and answers as an ordinary frightened man. He then names the killing, forced apostasy, blood rule, and execution rows as crimes. When he begins his sentence with the sovereign **余**, he corrects himself to **私**:
+
+> 「余の――……私の権威ではない。私の後を生きる者たちの権威によって。」
+> *Not by my authority. By the authority of those who must live after me.*
+
 ## Outcome A — The Seals Returned
 
 Salt runners open rice stores. Ash defectors hold the outer garrison without a purge. Paper witnesses copy the registry. Kurozane asks what holds a country together when no immortal commands it.
@@ -184,7 +242,19 @@ Kurozane returns the seals one by one. The final black Bell seal becomes inert a
 
 The desired feeling is not mercy. It is the severe satisfaction of making Dracula sign the transfer documents after beating his Oni form into the floor.
 
-## Outcome B — The Empty Throne Mobilizes
+## Outcome B — The Last Seal at Dawn
+
+Every office passes to a prepared mortal successor before Kurozane dies. The outer bells repeat the civil writ rather than his blood command. A Japanese retainer selected by the civil witnesses serves as second; Nikola is neither executioner-priest nor inheritor of the surrendered state.
+
+The sentence has two emotional variants. Kurozane can accept it coldly as the final duty of a defeated ruler, or the rare pride reversal can make him publicly announce his guilt before accepting it. Neither version purchases absolution. His death prevents his own body from becoming a permanent emergency custody problem only because the coalition already solved the succession problem.
+
+## Outcome C — The Necessary Blade
+
+Kurozane refuses surrender after the offices no longer depend on his body. Ash or Paper groundwork establishes separate continuity before Nikola delivers the fatal stroke. The central bell dies; the outer orders continue under mortal authority.
+
+The scene must credit the state that survived the blade, not claim the blade created the state. Ash’s version foregrounds broken Oni supply and garrison stand-down. Paper’s version foregrounds the civil writ, registry copy, and verified bell transfer. The same ending title does not erase those different causes.
+
+## Outcome D — The Empty Throne Mobilizes
 
 The lance falls. The central Bell dies. The outer bells do not.
 
@@ -208,6 +278,7 @@ No route should be described as the moral route. Each has blind spots, omitted o
 
 - Nikola and Mateus may interrupt one another. Other characters interrupt them when the duel loses contact with the room.
 - Kurozane never shouts every line. His calm is most threatening when the Bell or garrison obeys before he raises his voice.
+- On the confession flow, let the plain **はい** land without score, Bell noise, or camera movement. The next sound is Mateus telling him to say **罪**.
 - The theological joke receives one clean laugh window, then the Bell shadow moves and combat resumes.
 - Recovery callouts remain short enough to read during play: **three counts**, **dawn lane**, **move now**, **tag**.
 - The execution rows remain visible but never receive lingering gore shots. Living captives, names, routes, and later testimony keep the victims from becoming set dressing.
@@ -215,14 +286,14 @@ No route should be described as the moral route. Each has blind spots, omitted o
 
 ## Continuity exits
 
-Both outcomes enter `c9-06-leave-evidence-alive` with:
+All four outcomes enter `c9-06-leave-evidence-alive` with:
 
 - Mateus alive and permanently without his destructive rite;
 - the archive core damaged but portable;
 - two living observatory prisoners evacuated first;
 - Kurozane defeated and the Yearless Bell silent;
-- a separate political record stating either **witnessed surrender** or **execution / failed transfer**;
+- a separate political record stating **living abdication**, **dawn sentence**, **prepared execution**, or **execution / failed transfer**;
 - Nikola’s lance treated as evidence and inherited responsibility, not a trophy;
 - the public archive epilogue still reachable.
 
-The epilogue tone differs by branch. The transfer route rebuilds institutions after surrender. The execution route performs the same repair work behind guarded roads while civil war begins. Neither ending closes the archive, forgives Mateus, crowns Nikola, or lets the party own Japan’s future.
+The epilogue tone differs by branch. Living abdication rebuilds institutions while Kurozane enters custody. Dawn seppuku rebuilds after a compelled public sentence. Prepared execution preserves the state while keeping the killing morally contestable. Empty Throne performs the same repair behind guarded roads while civil war begins. No ending closes the archive, forgives Mateus, crowns Nikola, or lets the party own Japan’s future.

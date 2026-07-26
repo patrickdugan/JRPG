@@ -96,6 +96,18 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     migrationId: 'talk-no-jutsu-endings-v1',
     maximumCompatibleRecordCount: 11,
   }),
+  // The four ending identities remain exact. Source version 6 adds a fifth
+  // confrontation tactic, new reactions, and three Kurozane inclination
+  // properties. Completed source-version-5 histories retain their selected
+  // outcomes; earlier records only supply bounded evidence for the new
+  // inclination projection.
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:78e45445845dbaeb2d265694a34e1d02dd9018247ce5168500cd257d9ff33108',
+    catalogSignature: 'sha256:508298b149d1b96acce198871a1466dde4af98b6f66e37c64044dc6dd8e12905',
+    migrationId: 'act-five-pride-reversal-v1',
+    maximumCompatibleRecordCount: 11,
+  }),
 ]);
 
 const CAMPAIGN_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
@@ -352,9 +364,15 @@ function replaceRecord(state, replacement) {
 }
 
 function applyEffects(projection, effects) {
-  for (const { propertyId, delta } of effects) {
+  for (const { propertyId, delta, operation = 'nudge' } of effects) {
     if (!Object.hasOwn(projection, propertyId)) throw new RangeError(`Unknown Storyworld property ${propertyId}.`);
-    projection[propertyId] = clampProperty(projection[propertyId] + delta);
+    if (operation === 'invert') {
+      projection[propertyId] = clampProperty(1 - projection[propertyId]);
+    } else if (operation === 'nudge' && Number.isFinite(delta)) {
+      projection[propertyId] = clampProperty(projection[propertyId] + delta);
+    } else {
+      throw new TypeError(`Unsupported Storyworld effect operation ${operation}.`);
+    }
   }
 }
 

@@ -49,7 +49,10 @@
         "oni_supply_disruption": 0.1,
         "succession_readiness": 0.1,
         "bell_intelligence": 0.1,
-        "garrison_defection": 0.1
+        "garrison_defection": 0.1,
+        "kurozane_pride": 0.85,
+        "kurozane_indispensability": 0.8,
+        "kurozane_guilt_pressure": 0.1
       },
       "creation_index": 0,
       "creation_time": 1784577000,
@@ -534,6 +537,51 @@
         "char_lantern_network"
       ],
       "creation_index": 31,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "kurozane_pride",
+      "property_name": "kurozane_pride",
+      "property_label": "Kurozane pride",
+      "property_type": "bounded number",
+      "default_value": 0.85,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 32,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "kurozane_indispensability",
+      "property_name": "kurozane_indispensability",
+      "property_label": "Kurozane indispensability claim",
+      "property_type": "bounded number",
+      "default_value": 0.8,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 33,
+      "creation_time": 1784577000,
+      "modified_time": 1784577000
+    },
+    {
+      "id": "kurozane_guilt_pressure",
+      "property_name": "kurozane_guilt_pressure",
+      "property_label": "Kurozane guilt pressure",
+      "property_type": "bounded number",
+      "default_value": 0.1,
+      "depth": 0,
+      "attribution_target": "all cast members",
+      "affected_characters": [
+        "char_lantern_network"
+      ],
+      "creation_index": 34,
       "creation_time": 1784577000,
       "modified_time": 1784577000
     }
@@ -3188,6 +3236,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -3323,6 +3403,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
                       }
                     ]
                   }
@@ -3505,6 +3617,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -3633,6 +3777,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "aya_archive_openness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -10459,6 +10635,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -10619,6 +10827,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -10840,6 +11080,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -11000,6 +11272,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -12287,6 +12591,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -12454,6 +12790,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -12668,6 +13036,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -12835,6 +13235,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -14115,6 +14547,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -14282,6 +14746,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -14496,6 +14992,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -14663,6 +15191,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -14867,6 +15427,70 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.1
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -15052,6 +15676,70 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -15219,6 +15907,70 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -15408,6 +16160,70 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -15630,6 +16446,70 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -15801,6 +16681,70 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.1
                       }
                     ]
                   }
@@ -16929,6 +17873,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -17067,6 +18043,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -17200,6 +18208,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "mateus_accountability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -17348,6 +18388,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -17481,6 +18553,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "party_cohesion"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
                         ],
                         "coefficient": 1
                       },
@@ -17626,6 +18730,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
                       }
                     ]
                   }
@@ -17808,6 +18944,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -17943,6 +19111,38 @@
                         "pointer_type": "Bounded Number Constant",
                         "script_element_type": "Pointer",
                         "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
                       }
                     ]
                   }
@@ -18125,6 +19325,38 @@
                       }
                     ]
                   }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -18253,6 +19485,38 @@
                         "character": "char_lantern_network",
                         "keyring": [
                           "p_mateus_truthfulness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
                         ],
                         "coefficient": 1
                       },
@@ -19185,7 +20449,7 @@
                   {
                     "pointer_type": "Bounded Number Constant",
                     "script_element_type": "Pointer",
-                    "value": 0.01
+                    "value": 0.05
                   },
                   {
                     "pointer_type": "Bounded Number Pointer",
@@ -20356,6 +21620,664 @@
             "slot:sw10-corrections-desk",
             "option:4"
           ]
+        },
+        {
+          "id": "page_sw11_decision_opt_name-the-crime",
+          "text_script": {
+            "pointer_type": "String Constant",
+            "script_element_type": "Pointer",
+            "value": "Make Kurozane answer Mateus before anyone names the sentence."
+          },
+          "visibility_script": true,
+          "performability_script": true,
+          "reactions": [
+            {
+              "id": "page_sw11_decision_opt_name-the-crime_r_accord",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Mateus names his son. Kurozane first calls the execution a price of peace, then fails to repeat the word after Mateus asks who actually paid it. He cannot yet call the killing sin, but he stops calling his own sorrow payment. Hearing the outer orders continue without him, he returns the seals and accepts living custody. The concession is morally incomplete and politically real."
+              },
+              "consequence_id": "page_end_corrections_visible",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0.05
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 0.45
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "mateus_accountability"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.25
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": -0.25
+                      }
+                    ]
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": -0.1
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw11_decision_opt_name-the-crime_r_revision",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "Kurozane calls Mateus's son traitor once more and demands the right to define every death he ordered. Mateus lunges; Kurozane reaches through the argument for the unverified barracks seal. Nikola makes the fatal stop before the confession can become another hostage ritual. The central bell dies while rival commands are already moving."
+              },
+              "consequence_id": "page_end_limits_posted",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": 0
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_indispensability"
+                    ],
+                    "coefficient": 0.25
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.25
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": -0.25
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "enma_killed"
+                    ],
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": -0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "court_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "court_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "page_sw11_decision_opt_name-the-crime_r_confession-reversal",
+              "text_script": {
+                "pointer_type": "String Constant",
+                "script_element_type": "Pointer",
+                "value": "「お前は私の息子を殺した」 Mateus says. Kurozane answers that every death was a price paid for peace. 「代価と言うな。罪と言え」—Do not call it a price. Call it sin. Nikola asks, “Credis in Deum, Shogun?” Mateus translates. Kurozane answers only 「……はい」. His pride does not soften; it turns against the sovereign fiction that protected it. He names the killing, forced apostasy, blood rule, and execution rows as crimes, returns every seal, and publicly accepts seppuku at dawn under the authority of those who must live after him."
+              },
+              "consequence_id": "page_end_last_seal_at_dawn",
+              "desirability_script": {
+                "operator_type": "Addition",
+                "script_element_type": "Operator",
+                "operands": [
+                  {
+                    "pointer_type": "Bounded Number Constant",
+                    "script_element_type": "Pointer",
+                    "value": -0.08
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 0.35
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "mateus_accountability"
+                    ],
+                    "coefficient": 0.2
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 0.15
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 0.45
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "bell_intelligence"
+                    ],
+                    "coefficient": 0.3
+                  },
+                  {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.2
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_indispensability"
+                        ],
+                        "coefficient": -0.2
+                      }
+                    ]
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "network_consent"
+                    ],
+                    "coefficient": 0.1
+                  },
+                  {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "proof_integrity"
+                    ],
+                    "coefficient": 0.1
+                  }
+                ]
+              },
+              "after_effects": [
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_pride"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Addition",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_pride"
+                        ],
+                        "coefficient": -1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "kurozane_guilt_pressure"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "kurozane_guilt_pressure"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "truth_completeness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "truth_completeness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "succession_readiness"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "succession_readiness"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                },
+                {
+                  "effect_type": "Bounded Number Effect",
+                  "Set": {
+                    "pointer_type": "Bounded Number Pointer",
+                    "script_element_type": "Pointer",
+                    "character": "char_lantern_network",
+                    "keyring": [
+                      "mateus_accountability"
+                    ],
+                    "coefficient": 1
+                  },
+                  "to": {
+                    "operator_type": "Nudge",
+                    "script_element_type": "Operator",
+                    "operands": [
+                      {
+                        "pointer_type": "Bounded Number Pointer",
+                        "script_element_type": "Pointer",
+                        "character": "char_lantern_network",
+                        "keyring": [
+                          "mateus_accountability"
+                        ],
+                        "coefficient": 1
+                      },
+                      {
+                        "pointer_type": "Bounded Number Constant",
+                        "script_element_type": "Pointer",
+                        "value": 0.05
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "benchmark_tags": [
+            "slot:sw10-corrections-desk",
+            "option:5"
+          ]
         }
       ]
     },
@@ -20501,7 +22423,7 @@
     }
   ],
   "meta": {
-    "source_version": 5,
+    "source_version": 6,
     "canonical_scene_count": 60,
     "storyworld_authored_scene_count": 37,
     "complete_run_storyworld_scene_count": 22,

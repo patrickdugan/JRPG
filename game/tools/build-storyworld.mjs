@@ -68,23 +68,41 @@ function reactionDesirability(propertyId, invert, authored = undefined) {
   return operator('Addition', operands);
 }
 
-function effect(propertyId, delta) {
+function effect(propertyId, authoredEffect) {
+  const target = propertyPointer(propertyId);
+  let value;
+  if (Number.isFinite(authoredEffect)) {
+    value = operator('Nudge', [propertyPointer(propertyId), numberConstant(authoredEffect)]);
+  } else if (authoredEffect?.operation === 'invert') {
+    value = operator('Addition', [
+      numberConstant(1),
+      propertyPointer(propertyId, -1),
+    ]);
+  } else {
+    throw new TypeError(`Unsupported effect for ${propertyId}.`);
+  }
   return {
     effect_type: 'Bounded Number Effect',
-    Set: propertyPointer(propertyId),
-    to: operator('Nudge', [propertyPointer(propertyId), numberConstant(delta)]),
+    Set: target,
+    to: value,
   };
 }
 
 function afterEffects(effects) {
-  return Object.entries(effects).map(([propertyId, delta]) => effect(propertyId, delta));
+  return Object.entries(effects).map(([propertyId, authoredEffect]) => effect(propertyId, authoredEffect));
 }
 
 function mergeEffects(...sources) {
   const merged = {};
   for (const source of sources) {
-    for (const [propertyId, delta] of Object.entries(source ?? {})) {
-      merged[propertyId] = Math.max(-0.1, Math.min(0.1, (merged[propertyId] ?? 0) + delta));
+    for (const [propertyId, authoredEffect] of Object.entries(source ?? {})) {
+      if (!Object.hasOwn(merged, propertyId)) {
+        merged[propertyId] = authoredEffect;
+      } else if (Number.isFinite(merged[propertyId]) && Number.isFinite(authoredEffect)) {
+        merged[propertyId] = Math.max(-0.1, Math.min(0.1, merged[propertyId] + authoredEffect));
+      } else {
+        throw new TypeError(`Cannot merge non-nudge effects for ${propertyId}.`);
+      }
     }
   }
   return merged;
@@ -346,10 +364,22 @@ function textValue(script) {
 }
 
 function compileEffect(sourceEffect) {
-  return Object.freeze({
-    propertyId: sourceEffect.Set.keyring[0],
-    delta: sourceEffect.to.operands[1].value,
-  });
+  const propertyId = sourceEffect.Set.keyring[0];
+  if (sourceEffect.to.operator_type === 'Nudge') {
+    return Object.freeze({
+      propertyId,
+      delta: sourceEffect.to.operands[1].value,
+    });
+  }
+  const [constant, pointer] = sourceEffect.to.operands ?? [];
+  if (sourceEffect.to.operator_type === 'Addition'
+    && constant?.value === 1
+    && pointer?.pointer_type === 'Bounded Number Pointer'
+    && pointer?.keyring?.[0] === propertyId
+    && pointer?.coefficient === -1) {
+    return Object.freeze({ propertyId, operation: 'invert' });
+  }
+  throw new TypeError(`Unsupported generated effect for ${propertyId}.`);
 }
 
 function compileReaction(sourceReaction, index) {

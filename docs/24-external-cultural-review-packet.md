@@ -26,6 +26,7 @@ Each reviewer should mark every question `accept`, `revise`, `outside scope`, or
 8. Does Kurohana’s explicitly fictional mass processional of crucified and impaled Kirishitan victims remain attached to Kurozane’s state violence, two living rescues, chosen names, and evidence custody without recreating identifiable historical martyrs or presenting Japanese Christianity itself as macabre? Are the content warning and planned reduced-horror empty-structure variants sufficient?
 9. Is the Black Chrysanthemum clearly Kurozane's theft and defacement rather than an authentic shogunal or imperial emblem?
 10. Do visual silhouettes for the twelve community roles read as distinct people with practical local authority rather than interchangeable exotic background figures?
+11. In **The Last Seal at Dawn**, does Kurozane’s public confession, transfer, and penal seppuku read as this alternate regime’s compelled sentence rather than an assertion that Amaterasu, Shinto practice, or Japanese tradition endorses the act? Does the script preserve the intended dramatic echo with Christian self-sacrifice without treating Kurozane’s guilty death as equivalent to Christ’s atonement, and is the Japanese dialogue register credible?
 
 ## Mandatory asset checks
 
