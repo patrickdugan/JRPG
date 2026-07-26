@@ -608,6 +608,7 @@ function phaseFor(activeAttack, attack) {
  * - modifyMovement({ actor, intent, speed, stepMs, nowMs, kernel })
  * - modifyDamage({ attacker, target, attack, resolution, nowMs, kernel })
  * - afterHit({ attacker, target, attack, resolution, event, kernel })
+ * - afterAttackComplete({ actor, attack, active, event, kernel })
  * - onFixedStep({ nowMs, stepMs, kernel })
  *
  * Actor status payloads are copied into `actor.statuses` and left opaque to the
@@ -1436,12 +1437,19 @@ export class ActionCombatKernel {
     actor.offensiveCooldownRemainingMs = sharedCooldownMs;
     actor.attackCooldowns[attack.id] = individualCooldownMs;
     actor.activeAttack = null;
-    this._emit('attack-complete', {
+    const event = this._emit('attack-complete', {
       actorId: actor.id,
       attackId: attack.id,
       ...(active.comboId == null ? {} : { comboId: active.comboId }),
       sharedCooldownMs,
       individualCooldownMs,
+    });
+    this.statusHooks.afterAttackComplete?.({
+      actor,
+      attack,
+      active: { ...active },
+      event,
+      kernel: this,
     });
   }
 

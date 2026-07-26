@@ -19,7 +19,8 @@ test('title New Game delegates to the campaign atomic reset and does not write s
   const campaign = source('campaign.js');
   assert.match(title, /window\.location\.href = 'campaign\.html\?new=1'/);
   assert.doesNotMatch(title, /localStorage|\.setItem\(|\.removeItem\(/);
-  assert.match(campaign, /let requestedNewGame = new URLSearchParams\(window\.location\.search\)\.get\('new'\) === '1'/);
+  assert.match(campaign, /const campaignQuery = new URLSearchParams\(window\.location\.search\)/);
+  assert.match(campaign, /let requestedNewGame = campaignQuery\.get\('new'\) === '1'/);
   assert.match(campaign, /if \(!requestedNewGame && !window\.confirm/);
   assert.match(campaign, /window\.history\.replaceState\(null, '', 'campaign\.html'\);\s+requestedNewGame = false;/);
   assert.match(campaign, /if \(requestedNewGame\) \{\s+resetCampaign\.click\(\);\s+if \(requestedNewGame\) render\(\);/);

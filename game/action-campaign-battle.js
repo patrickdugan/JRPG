@@ -10,7 +10,9 @@ import {
   switchActionCampaignActor,
 } from './action-campaign-battle-model.mjs';
 import {
+  createAdvancementStorageAdapter,
   createAdvancementState,
+  getEncounterWinCount,
   getParty,
   preparePartyForEncounter,
 } from './advancement.mjs';
@@ -35,9 +37,25 @@ import {
 } from './enemy-combat-animation-atlas.mjs';
 import { ENEMY_ATLAS, getEnemyAtlasFrame } from './enemy-atlas.mjs';
 import {
+  createLoadoutStorageAdapter,
   createLoadoutState,
   syncPartyVitals,
 } from './loadout.mjs';
+import {
+  createPlaytimeState,
+  createPlaytimeStorageAdapter,
+  getBattlePlaytimeCategory,
+  isPlaytimeInactive,
+  recordPlaytime,
+} from './playtime.mjs';
+import { createQuestStorageAdapter } from './quest-runtime.mjs';
+import { createFieldStorageAdapter } from './field-runtime.mjs';
+import {
+  createRunReceiptStorageAdapter,
+  recordRunPlaytime,
+} from './run-receipt.mjs';
+import { createWitnessChronicleStorageAdapter } from './witness-chronicle-runtime.mjs';
+import { settleBattleVictory } from './battle-settlement.mjs';
 import { PARTY_COMBAT_ATLAS, getPartyCombatFrame } from './party-combat-atlas.mjs';
 import {
   PARTY_ANIMATION_GEOMETRY,
@@ -71,6 +89,7 @@ if (sliceRequested) {
   else window.location.replace('action-slice.html?checkpoint=invalid');
 }
 const sliceMode = sliceRun != null;
+const canonicalMode = query.canonical && !sliceMode;
 const requestedLeadId = publicFighterIds[String(laboratoryQuery.get('lead') ?? '').toLowerCase()] ?? 'lise';
 let requestedSupportId = publicFighterIds[String(laboratoryQuery.get('support') ?? '').toLowerCase()] ?? 'mateus';
 if (requestedSupportId === requestedLeadId) requestedSupportId = requestedLeadId === 'mateus' ? 'lise' : 'mateus';
@@ -80,9 +99,26 @@ const ACTION_LAB_FIGHTER_ACTOR_IDS = Object.freeze(sliceMode
 const sliceBattleVitals = sliceMode ? structuredClone(sliceRun.vitals) : null;
 const canonicalStorage = getDefaultBrowserStorage();
 const canonicalStorageAtEntry = captureCanonicalStorageSnapshot(canonicalStorage);
+const advancementAdapter = createAdvancementStorageAdapter(canonicalStorage);
+const loadoutAdapter = createLoadoutStorageAdapter(canonicalStorage);
+const runReceiptAdapter = createRunReceiptStorageAdapter(canonicalStorage);
+const playtimeAdapter = createPlaytimeStorageAdapter(canonicalStorage);
+const questAdapter = createQuestStorageAdapter(canonicalStorage);
+const witnessAdapter = createWitnessChronicleStorageAdapter(canonicalStorage);
+const fieldAdapter = createFieldStorageAdapter(canonicalStorage);
+const advancementLoad = canonicalMode ? advancementAdapter.load() : null;
+const loadoutLoad = canonicalMode ? loadoutAdapter.load() : null;
+const receiptLoad = canonicalMode ? runReceiptAdapter.load() : null;
+const playtimeLoad = canonicalMode ? playtimeAdapter.load() : null;
 const laboratorySeed = sliceMode
   ? { advancement: createAdvancementState(), loadout: createLoadoutState(), runReceipt: null }
-  : loadActionLaboratorySeed(canonicalStorage);
+  : canonicalMode
+    ? {
+        advancement: advancementLoad?.ok ? advancementLoad.state : createAdvancementState(),
+        loadout: loadoutLoad?.ok ? loadoutLoad.value : createLoadoutState(),
+        runReceipt: receiptLoad?.ok && receiptLoad.found ? receiptLoad.state : null,
+      }
+    : loadActionLaboratorySeed(canonicalStorage);
 let advancementState = preparePartyForEncounter(
   laboratorySeed.advancement,
   query.encounterId,
@@ -90,7 +126,18 @@ let advancementState = preparePartyForEncounter(
 let loadoutState = laboratorySeed.loadout;
 const syncedLoadout = syncPartyVitals(loadoutState, getParty(advancementState));
 if (syncedLoadout.ok) loadoutState = syncedLoadout.state;
-const runReceiptState = laboratorySeed.runReceipt;
+let runReceiptState = laboratorySeed.runReceipt;
+let playtimeState = canonicalMode && playtimeLoad?.ok ? playtimeLoad.state : createPlaytimeState();
+let battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, query.encounterId));
+let playtimeLastSample = performance.now();
+let playtimeLastActivity = playtimeLastSample;
+let playtimeUnsavedMs = 0;
+let runReceiptPendingMs = 0;
+let runReceiptPendingCategory = null;
+if (canonicalMode) {
+  advancementAdapter.save(advancementState);
+  loadoutAdapter.save(loadoutState);
+}
 
 let session = createActionCampaignBattleSession({
   encounterId: query.encounterId,
@@ -155,6 +202,7 @@ let lastTimestamp = performance.now();
 let hidden = document.hidden;
 let laboratoryComplete = false;
 let laboratoryResult = null;
+let settlementRetryAt = 0;
 const recentMessages = [];
 const flyouts = [];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -170,10 +218,15 @@ elements.continueCampaign.href = query.returnTarget;
 elements.canvas.dataset.encounterId = session.encounter.id;
 elements.canvas.dataset.stageId = session.stage.id;
 elements.canvas.dataset.sliceMode = String(sliceMode);
+elements.canvas.dataset.canonicalMode = String(canonicalMode);
 if (sliceMode) {
   elements.campaignLink.textContent = 'Leave slice';
   elements.continueCampaign.textContent = 'Continue slice';
   elements.settlementStatus.textContent = 'Victory preserves duo HP only in this session-local slice checkpoint.';
+} else if (canonicalMode) {
+  elements.campaignLink.textContent = 'Leave battle';
+  elements.continueCampaign.textContent = 'Continue campaign';
+  elements.settlementStatus.textContent = 'Victory will atomically save rewards, surviving HP, route evidence, and first-clear telemetry.';
 }
 
 const storyworld = loadStoryworldBattlePresentation({
@@ -313,6 +366,22 @@ function describeEvent(event, snapshot) {
   if (event.type === 'attack-complete') return event.comboId
     ? `${actor?.name ?? event.actorId} completes ${attackName(event.attackId)} and can move again.`
     : `${actor?.name ?? event.actorId} can move again; attack ready in ${event.sharedCooldownMs} ms.`;
+  if (event.type === 'boss-phase-warning') {
+    return `Boss phase warning: ${String(event.toPhaseId).replaceAll('-', ' ')} is next.`;
+  }
+  if (event.type === 'boss-phase-entered') {
+    return `Boss phase: ${String(event.toPhaseId).replaceAll('-', ' ')}.`;
+  }
+  if (event.type === 'summon-activated') {
+    const summoned = snapshot.kernel.actors.find(({ id }) => id === event.summonedActorId);
+    return `${actor?.name ?? event.actorId} summons ${summoned?.name ?? event.templateId}.`;
+  }
+  if (event.type === 'status-applied') {
+    return `${actor?.name ?? event.actorId}: ${String(event.statusId).replaceAll('-', ' ')}.`;
+  }
+  if (event.type === 'effect-displacement') {
+    return `${target?.name ?? event.targetId} is ${event.kind === 'pull' ? 'pulled' : 'driven'} ${event.spaces} space${event.spaces === 1 ? '' : 's'}.`;
+  }
   if (event.type === 'maneuver-start') return `${actor?.name ?? event.actorId}: ${event.name}.`;
   if (event.type === 'maneuver-complete' && event.reason === 'cancelled') {
     return `${actor?.name ?? event.actorId} cancels ${event.name} into ${String(event.nextAction).replaceAll('-', ' ')}.`;
@@ -385,10 +454,78 @@ function formatComboReason(reason) {
   return String(reason.code).replaceAll('-', ' ');
 }
 
+function clearPendingRunReceiptPlaytime() {
+  runReceiptPendingMs = 0;
+  runReceiptPendingCategory = null;
+}
+
+function flushRunReceiptPlaytime() {
+  if (!canonicalMode || !runReceiptState || runReceiptState.status !== 'active') {
+    clearPendingRunReceiptPlaytime();
+    return true;
+  }
+  if (runReceiptPendingMs === 0) return true;
+  const result = recordRunPlaytime(
+    runReceiptState,
+    runReceiptState.runId,
+    runReceiptPendingCategory,
+    runReceiptPendingMs,
+    { chapterId: session.encounter.chapterId },
+  );
+  if (!result.ok) return false;
+  const saved = runReceiptAdapter.save(result.state);
+  if (!saved.ok) return false;
+  runReceiptState = result.state;
+  clearPendingRunReceiptPlaytime();
+  return true;
+}
+
+function queueRunReceiptPlaytime(category, elapsedMs) {
+  if (!canonicalMode || !runReceiptState || runReceiptState.status !== 'active') {
+    clearPendingRunReceiptPlaytime();
+    return;
+  }
+  if (runReceiptPendingMs > 0 && category !== runReceiptPendingCategory) flushRunReceiptPlaytime();
+  if (runReceiptPendingMs === 0) runReceiptPendingCategory = category;
+  runReceiptPendingMs += elapsedMs;
+  if (runReceiptPendingMs >= 1000) flushRunReceiptPlaytime();
+}
+
+function sampleCanonicalPlaytime(now, elapsedMs) {
+  if (!canonicalMode || laboratoryComplete || session.outcome != null) return;
+  const sample = Math.max(0, Math.min(1000, Math.floor(elapsedMs)));
+  if (sample === 0 || isPlaytimeInactive({
+    nowMs: now,
+    lastActivityMs: playtimeLastActivity,
+    visible: document.visibilityState === 'visible',
+  })) return;
+  playtimeState = recordPlaytime(
+    playtimeState,
+    battlePlaytimeCategory,
+    sample,
+    { chapterId: session.encounter.chapterId },
+  );
+  queueRunReceiptPlaytime(battlePlaytimeCategory, sample);
+  playtimeUnsavedMs += sample;
+  if (playtimeUnsavedMs >= 10_000) {
+    playtimeAdapter.save(playtimeState);
+    playtimeUnsavedMs = 0;
+  }
+}
+
+function flushCanonicalPlaytime() {
+  if (!canonicalMode) return true;
+  const receiptSaved = flushRunReceiptPlaytime();
+  const playtimeSaved = playtimeAdapter.save(playtimeState);
+  if (playtimeSaved.ok) playtimeUnsavedMs = 0;
+  return receiptSaved && playtimeSaved.ok;
+}
+
 function completeLaboratoryResult() {
   if (laboratoryComplete || session.outcome !== 'victory') return;
+  if (canonicalMode && performance.now() < settlementRetryAt) return;
   try {
-    laboratoryResult = createActionCampaignBattleResult(session);
+    laboratoryResult ??= createActionCampaignBattleResult(session);
     if (sliceMode) {
       sliceRun = recordActionSliceBattleReceipt(sliceRun, laboratoryResult);
       sessionStorage.setItem(ACTION_SLICE_STORAGE_KEY, serializeActionSliceRun(sliceRun));
@@ -399,15 +536,58 @@ function completeLaboratoryResult() {
     announce(message);
     return;
   }
+  if (canonicalMode) {
+    const settlement = settleBattleVictory({
+      resultRecord: laboratoryResult,
+      encounter: session.encounter,
+      states: {
+        advancement: advancementState,
+        loadout: loadoutState,
+        runReceipt: runReceiptState,
+      },
+      adapters: {
+        advancement: advancementAdapter,
+        loadout: loadoutAdapter,
+        quest: questAdapter,
+        witness: witnessAdapter,
+        field: fieldAdapter,
+        runReceipt: runReceiptAdapter,
+      },
+      handoff: query.handoff,
+      flushPlaytime: () => ({
+        ok: flushCanonicalPlaytime(),
+        state: runReceiptState,
+      }),
+    });
+    if (!settlement.ok) {
+      settlementRetryAt = performance.now() + 1000;
+      elements.canvas.dataset.settlementState = 'retrying';
+      elements.settlementStatus.textContent = settlement.message;
+      announce(settlement.message);
+      return;
+    }
+    advancementState = settlement.states.advancement;
+    loadoutState = settlement.states.loadout;
+    runReceiptState = settlement.states.runReceipt;
+    settlementRetryAt = 0;
+    elements.canvas.dataset.settlementState = 'committed';
+    settlement.messages.forEach(announce);
+  }
   laboratoryComplete = true;
   elements.canvas.dataset.laboratoryResult = 'complete';
-  elements.settlementStatus.textContent = sliceMode
+  elements.settlementStatus.textContent = canonicalMode
+    ? 'Victory committed atomically: rewards, party vitals, route evidence, and clean-run first-clear proof are saved.'
+    : sliceMode
     ? 'Victory and surviving duo HP were saved to the session-only slice checkpoint. Campaign progress, inventory, and rewards are unchanged.'
     : 'Training victory recorded for this session only. Campaign progress, party health, inventory, and rewards are unchanged.';
   elements.continueCampaign.hidden = false;
   elements.continueCampaign.setAttribute('aria-disabled', 'false');
   elements.continueCampaign.focus();
-  announce(sliceMode ? 'Encounter complete. Continue the combat slice when ready.' : 'Training complete. Return to the campaign when ready.');
+  announce(canonicalMode
+    ? 'Victory saved. Continue the campaign when ready.'
+    : sliceMode
+      ? 'Encounter complete. Continue the combat slice when ready.'
+      : 'Training complete. Return to the campaign when ready.');
 }
 
 function actorPhase(actor) {
@@ -487,6 +667,60 @@ function drawStage() {
     context.font = '700 9px ui-monospace, monospace';
     context.textAlign = 'center';
     context.fillText(anchor.id.toUpperCase(), anchor.x, anchor.y - anchor.height - 6);
+  }
+}
+
+function drawObjectiveEntities(snapshot) {
+  const entities = snapshot.objective.entities;
+  if (!entities) return;
+  for (const object of entities.objects) {
+    const left = object.position.x - object.bounds.width / 2;
+    const top = object.position.y - object.bounds.height;
+    context.save();
+    context.globalAlpha = object.destroyed ? 0.38 : 1;
+    context.fillStyle = object.attackable ? '#6f4f86' : '#7e6849';
+    context.strokeStyle = object.attackable ? '#dfb4ff' : '#f1d386';
+    context.lineWidth = object.attackable ? 3 : 2;
+    context.fillRect(left, top, object.bounds.width, object.bounds.height);
+    context.strokeRect(left, top, object.bounds.width, object.bounds.height);
+    context.fillStyle = '#fff4c8';
+    context.font = '800 9px ui-monospace, monospace';
+    context.textAlign = 'center';
+    context.fillText(
+      `${object.id.toUpperCase()} ${object.hp}/${object.maxHp}`,
+      object.position.x,
+      top - 7,
+    );
+    context.restore();
+  }
+  for (const token of entities.tokens) {
+    context.save();
+    context.translate(token.position.x, token.position.y);
+    context.globalAlpha = token.hp <= 0 ? 0.4 : 1;
+    context.fillStyle = token.released ? '#d7cab2' : '#8d7897';
+    context.strokeStyle = token.secured ? '#8be0a4' : '#f1d386';
+    context.lineWidth = token.secured ? 4 : 2;
+    context.fillRect(
+      -token.bounds.width / 2,
+      -token.bounds.height,
+      token.bounds.width,
+      token.bounds.height,
+    );
+    context.strokeRect(
+      -token.bounds.width / 2,
+      -token.bounds.height,
+      token.bounds.width,
+      token.bounds.height,
+    );
+    context.fillStyle = '#fff4c8';
+    context.font = '800 9px ui-monospace, monospace';
+    context.textAlign = 'center';
+    context.fillText(
+      `${token.id.toUpperCase()} ${token.hp}/${token.maxHp}`,
+      0,
+      -token.bounds.height - 7,
+    );
+    context.restore();
   }
 }
 
@@ -669,6 +903,7 @@ function drawActors(snapshot) {
   const nowMs = snapshot.kernel.nowMs;
   const ordered = [...snapshot.kernel.actors].sort((a, b) => a.position.y - b.position.y || a.id.localeCompare(b.id));
   for (const actor of ordered) {
+    if (actor.hp <= 0 && actor.statuses.some(({ id }) => id === 'dormant-summon')) continue;
     context.fillStyle = 'rgba(0,0,0,.42)';
     context.beginPath();
     context.ellipse(actor.position.x, actor.position.y + 2, actor.faction === 'player' ? 26 : 34, 7, 0, 0, Math.PI * 2);
@@ -728,6 +963,7 @@ function drawFlyouts(elapsedMs) {
 
 function draw(snapshot, elapsedMs) {
   drawStage();
+  drawObjectiveEntities(snapshot);
   drawActors(snapshot);
   drawFlyouts(elapsedMs);
   if (snapshot.outcome) {
@@ -736,10 +972,22 @@ function draw(snapshot, elapsedMs) {
     context.fillStyle = snapshot.outcome === 'victory' ? '#e8cf7b' : '#e26772';
     context.font = '500 48px Georgia, serif';
     context.textAlign = 'center';
-    context.fillText(snapshot.outcome === 'victory' ? 'Training Complete' : 'Party Defeated', 480, 250);
+    context.fillText(
+      snapshot.outcome === 'victory' ? (canonicalMode ? 'Victory' : 'Training Complete') : 'Party Defeated',
+      480,
+      250,
+    );
     context.fillStyle = '#d2c7b5';
     context.font = '700 12px ui-monospace, monospace';
-    context.fillText(snapshot.outcome === 'victory' ? (laboratoryComplete ? 'TRAINING COMPLETE' : 'RECORDING RESULT…') : 'PRESS R TO RESTART', 480, 278);
+    context.fillText(
+      snapshot.outcome === 'victory'
+        ? laboratoryComplete
+          ? (canonicalMode ? 'CAMPAIGN SAVED' : 'TRAINING COMPLETE')
+          : (canonicalMode ? 'COMMITTING VICTORY…' : 'RECORDING RESULT…')
+        : 'PRESS R TO RESTART',
+      480,
+      278,
+    );
   }
 }
 
@@ -759,15 +1007,18 @@ function actorListItem(actor, controlledActorId) {
     ? 'Radiance neutral'
     : `Radiance ${Math.round(radianceMultiplier * 100)}% · ${radianceMultiplier > 1 ? 'WEAK' : 'RESIST'}`;
   const state = document.createElement('small');
+  const statuses = actor.statuses
+    .filter(({ id }) => id !== 'dormant-summon')
+    .map(({ id }) => String(id).replaceAll('-', ' ').toUpperCase());
   state.textContent = actor.hp <= 0
-    ? 'DEFEATED'
+    ? actor.statuses.some(({ id }) => id === 'dormant-summon') ? 'DORMANT SUMMON' : 'DEFEATED'
     : actor.hitStunRemainingMs > 0
       ? `HIT STUN · ${actor.hitStunRemainingMs} ms`
       : actor.activeAttack
       ? `${attackName(actor.activeAttack.attackId)} · ${actor.activeAttack.phase}`
       : actor.activeManeuver
         ? maneuverName(actor.activeManeuver.id, actor.id).toUpperCase()
-        : 'FREE MOVEMENT';
+        : `FREE MOVEMENT${statuses.length ? ` · ${statuses.join(' / ')}` : ''}`;
   item.append(name, hp, radiance, state);
   return item;
 }
@@ -785,18 +1036,38 @@ function renderDom(snapshot) {
   const enemies = snapshot.kernel.actors.filter(({ faction }) => faction === 'enemy');
   elements.partyReadout.replaceChildren(...party.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));
   elements.enemyReadout.replaceChildren(...enemies.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));
+  elements.encounterSubtitle.textContent = snapshot.bossPhase
+    ? `${displayedObjectiveText} · ${snapshot.bossPhase.name} phase`
+    : displayedObjectiveText;
 
   elements.objectiveText.textContent = displayedObjectiveText;
   elements.objectiveRuntimeStatus.dataset.supported = String(snapshot.objective.supported);
   elements.objectiveRuntimeStatus.textContent = snapshot.objective.supported
     ? (snapshot.objective.complete ? 'Completed' : 'In progress')
     : 'This scenario is not available in Action Lab yet.';
-  elements.objectiveRequirements.replaceChildren(...snapshot.objective.requirements.map((requirement) => {
+  const requirementItems = snapshot.objective.requirements.map((requirement) => {
     const item = document.createElement('li');
     item.dataset.complete = String(requirement.complete);
     item.textContent = `${requirement.complete ? '✓' : '○'} ${requirement.id.replaceAll('-', ' ')}`;
     return item;
-  }));
+  });
+  const entityItems = [
+    ...(snapshot.objective.entities?.tokens ?? []).map((token) => {
+      const item = document.createElement('li');
+      item.dataset.complete = String(token.secured);
+      item.textContent = `${token.secured ? '✓' : token.released ? '→' : '○'} ${token.id.replaceAll('-', ' ')} · ${token.hp}/${token.maxHp} HP · ${
+        token.secured ? 'secured' : token.released ? token.recruited ? 'following' : 'awaiting escort' : 'chained'
+      }`;
+      return item;
+    }),
+    ...(snapshot.objective.entities?.objects ?? []).map((object) => {
+      const item = document.createElement('li');
+      item.dataset.complete = String(object.attackable ? object.destroyed : !object.destroyed);
+      item.textContent = `${object.destroyed ? '×' : object.attackable ? '◇' : '◆'} ${object.id.replaceAll('-', ' ')} · ${object.hp}/${object.maxHp} HP`;
+      return item;
+    }),
+  ];
+  elements.objectiveRequirements.replaceChildren(...requirementItems, ...entityItems);
 
   elements.comboTitle.textContent = snapshot.combo.name;
   elements.comboAvailability.dataset.available = String(snapshot.combo.available || snapshot.combo.active);
@@ -885,6 +1156,11 @@ function renderDom(snapshot) {
   elements.canvas.dataset.outcome = snapshot.outcome ?? 'active';
   elements.canvas.dataset.objectiveSupported = String(snapshot.objective.supported);
   elements.canvas.dataset.objectiveComplete = String(snapshot.objective.complete);
+  elements.canvas.dataset.objectiveTokenCount = String(snapshot.objective.entities?.tokens.length ?? 0);
+  elements.canvas.dataset.objectiveObjectCount = String(snapshot.objective.entities?.objects.length ?? 0);
+  elements.canvas.dataset.objectiveBellCount = String(snapshot.objective.entities?.bellCount ?? 0);
+  elements.canvas.dataset.bossPhaseId = snapshot.bossPhase?.phaseId ?? '';
+  elements.canvas.dataset.bossPhaseRevision = String(snapshot.bossPhase?.revision ?? 0);
   elements.canvas.dataset.combatSatisfied = String(snapshot.combatSatisfied);
   elements.canvas.dataset.controlledActorId = snapshot.kernel.controlledActorId ?? '';
   elements.canvas.dataset.duoEnabled = String(snapshot.duo.enabled);
@@ -922,13 +1198,19 @@ function restart() {
 });
   laboratoryComplete = false;
   laboratoryResult = null;
+  settlementRetryAt = 0;
+  battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, query.encounterId));
+  playtimeLastSample = performance.now();
+  playtimeLastActivity = playtimeLastSample;
   recentMessages.length = 0;
   flyouts.length = 0;
   elements.canvas.dataset.laboratoryResult = 'active';
   delete elements.canvas.dataset.lastManeuverId;
   delete elements.canvas.dataset.lastManeuverInputLatencyMs;
   delete elements.canvas.dataset.lastManeuverStartedAtMs;
-  elements.settlementStatus.textContent = sliceMode
+  elements.settlementStatus.textContent = canonicalMode
+    ? 'Battle restarted from the last committed campaign state; no unfinished victory was saved.'
+    : sliceMode
     ? 'Encounter restored from the session-only slice checkpoint.'
     : 'This training session never changes campaign progress or party state.';
   elements.continueCampaign.hidden = true;
@@ -1042,11 +1324,21 @@ document.addEventListener('visibilitychange', () => {
   clearHeld();
   elements.pauseCurtain.hidden = !hidden;
   elements.canvas.dataset.paused = String(hidden);
+  playtimeLastSample = performance.now();
+  if (hidden) flushCanonicalPlaytime();
   if (!hidden) {
     lastTimestamp = performance.now();
     announce('Battle resumed. Hidden-tab time was not simulated.');
   }
 });
+
+function markPlaytimeActivity() {
+  playtimeLastActivity = performance.now();
+}
+
+window.addEventListener('pointerdown', markPlaytimeActivity, { capture: true, passive: true });
+window.addEventListener('keydown', markPlaytimeActivity, { capture: true });
+window.addEventListener('pagehide', flushCanonicalPlaytime);
 
 for (const button of document.querySelectorAll('[data-held-control]')) {
   const control = button.dataset.heldControl;
@@ -1084,6 +1376,8 @@ elements.restartBattle.addEventListener('click', restart);
 function frame(timestamp) {
   const elapsedMs = Math.max(0, Math.min(100, timestamp - lastTimestamp));
   lastTimestamp = timestamp;
+  sampleCanonicalPlaytime(timestamp, timestamp - playtimeLastSample);
+  playtimeLastSample = timestamp;
   pollBattleGamepad();
   let snapshot;
   if (!hidden && !session.outcome) {
@@ -1118,7 +1412,9 @@ function frame(timestamp) {
 
 const initial = snapshotActionCampaignBattle(session);
 announce(initial.objective.supported
-  ? `${session.encounter.name} loaded. This is an isolated training session.`
+  ? canonicalMode
+    ? `${session.encounter.name} loaded. Victory will commit to the campaign.`
+    : `${session.encounter.name} loaded. This is an isolated training session.`
   : initial.objective.message);
 renderDom(initial);
 requestAnimationFrame(frame);
@@ -1127,6 +1423,7 @@ globalThis.__ACTION_CAMPAIGN_BATTLE__ = Object.freeze({
   getSnapshot: () => snapshotActionCampaignBattle(session),
   getResult: () => laboratoryResult,
   get laboratoryComplete() { return laboratoryComplete; },
+  get canonicalComplete() { return canonicalMode && laboratoryComplete; },
   canonicalStorageUnchanged: () => canonicalStorageSnapshotsMatch(
     canonicalStorageAtEntry,
     captureCanonicalStorageSnapshot(canonicalStorage),

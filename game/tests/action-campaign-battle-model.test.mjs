@@ -31,6 +31,7 @@ test('query parser preserves canonical battle handoffs and rejects unsafe return
   ), {
     requestedEncounterId: 'c1-cinder-hounds',
     encounterId: 'c1-cinder-hounds',
+    canonical: false,
     returnTarget: 'campaign.html?beat=c1',
     handoff: {
       questId: 'sq-a',
@@ -44,6 +45,9 @@ test('query parser preserves canonical battle handoffs and rejects unsafe return
   assert.equal(parseActionCampaignBattleQuery('?encounter=missing&return=https://evil.invalid').encounterId, 'prologue-ashen-bailiff');
   assert.equal(parseActionCampaignBattleQuery('?return=javascript:alert(1)').returnTarget, 'campaign.html');
   assert.equal(parseActionCampaignBattleQuery('?return=%2F%2Fevil.invalid').returnTarget, 'campaign.html');
+  assert.equal(parseActionCampaignBattleQuery('?mode=campaign').canonical, true);
+  assert.equal(parseActionCampaignBattleQuery('?canonical=1').canonical, true);
+  assert.equal(parseActionCampaignBattleQuery('?mode=lab&canonical=0').canonical, false);
 });
 
 test('session composes the real encounter, authored action stage, loadout vitals, party control, and objective runtime', () => {
@@ -377,7 +381,7 @@ test('post-boss objectives stay live until the required interaction or evacuatio
   assert.equal(snapshot.outcome, 'victory');
 });
 
-test('carried-item overlap is connected while token and destructible-scenery families fail closed', () => {
+test('carried items plus all token, protection, countdown, and phase-object families are authoritative', () => {
   const states = coreStates();
   const returnItem = createActionCampaignBattleSession({
     encounterId: 'c7-name-slip-release',
@@ -389,11 +393,101 @@ test('carried-item overlap is connected while token and destructible-scenery fam
   returnItem.kernel.getActor(returnItem.kernel.snapshot().controlledActorId).position = { x: water.x, y: water.y };
   assert.equal(advanceActionCampaignBattle(returnItem, 20).outcome, 'victory');
 
-  for (const encounterId of ['c3-dock-patrol', 'c6-masked-clerks', 'c9-yearless-bell']) {
+  for (const encounterId of [
+    'c3-dock-patrol',
+    'c3-captain-kaji',
+    'c6-masked-clerks',
+    'c6-ujiro',
+    'c7-bell-warden-chiyo',
+    'c9-yearless-bell',
+  ]) {
     const session = createActionCampaignBattleSession({ encounterId, advancementState: states.advancement, loadoutState: states.loadout });
     const snapshot = snapshotActionCampaignBattle(session);
-    assert.equal(snapshot.objective.supported, false, encounterId);
-    assert.equal(snapshot.objective.status, 'runtime-pending', encounterId);
-    assert.throws(() => createActionCampaignBattleResult(session), /objective completion/u);
+    assert.equal(snapshot.objective.supported, true, encounterId);
+    assert.notEqual(snapshot.objective.status, 'runtime-pending', encounterId);
   }
+
+  const dock = createActionCampaignBattleSession({
+    encounterId: 'c3-dock-patrol',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  for (const [index, token] of dock.objectiveEntities.tokens.entries()) {
+    token.position = { x: 870 + index * 8, y: dock.stage.groundY };
+  }
+  advanceActionCampaignBattle(dock, 20);
+  const dockEnma = [...dock.kernel.actors.values()]
+    .find(({ id }) => dock.actorTemplates[id] === 'lady-enma');
+  dockEnma.hp = Math.floor(dockEnma.maxHp * 0.55);
+  assert.equal(advanceActionCampaignBattle(dock, 20).outcome, 'victory');
+
+  const kaji = createActionCampaignBattleSession({
+    encounterId: 'c3-captain-kaji',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  assert.equal(forceEnemyDefeat(kaji).outcome, 'victory');
+
+  const archive = createActionCampaignBattleSession({
+    encounterId: 'c6-masked-clerks',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  archive.objectiveRuntime.advance({
+    kernelSnapshot: archive.kernel.snapshot(),
+    events: Array.from({ length: 4 }, (_, index) => ({
+      type: 'enemy-action-completed',
+      sequence: 10_000 + index,
+      faction: 'enemy',
+    })),
+  });
+  archive.objectiveEntities.enemyActionCount = 4;
+  advanceActionCampaignBattle(archive, 20);
+  const archiveEnma = [...archive.kernel.actors.values()]
+    .find(({ id }) => archive.actorTemplates[id] === 'lady-enma');
+  archiveEnma.hp = Math.floor(archiveEnma.maxHp * 0.3);
+  assert.equal(advanceActionCampaignBattle(archive, 20).outcome, 'victory');
+
+  const ujiro = createActionCampaignBattleSession({
+    encounterId: 'c6-ujiro',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  ujiro.kernel.getActor(ujiro.kernel.snapshot().controlledActorId).position = { x: 760, y: 300 };
+  for (let index = 0; index < 12; index += 1) {
+    advanceActionCampaignBattle(ujiro, 100, { interactHeld: true });
+  }
+  assert.equal(snapshotActionCampaignBattle(ujiro).outcome, 'victory');
+
+  const chiyo = createActionCampaignBattleSession({
+    encounterId: 'c7-bell-warden-chiyo',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const rescuer = chiyo.kernel.getActor(chiyo.kernel.snapshot().controlledActorId);
+  for (const token of chiyo.objectiveEntities.tokens) {
+    rescuer.position = { ...token.position };
+    advanceActionCampaignBattle(chiyo, 20, { interactPressed: true });
+    assert.equal(token.released, true, token.id);
+    token.position = { x: 84, y: chiyo.stage.groundY };
+  }
+  assert.equal(advanceActionCampaignBattle(chiyo, 20).outcome, 'victory');
+
+  const bell = createActionCampaignBattleSession({
+    encounterId: 'c9-yearless-bell',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const striker = bell.kernel.getActor(bell.kernel.snapshot().controlledActorId);
+  striker.position = { x: 300, y: bell.stage.groundY };
+  striker.facing = 1;
+  striker.grounded = true;
+  for (const object of bell.objectiveEntities.objects.filter(({ attackable }) => attackable)) {
+    object.position = { x: 340, y: bell.stage.groundY };
+  }
+  for (let index = 0; index < 20 && !bell.outcome; index += 1) {
+    advanceActionCampaignBattle(bell, 20, index === 0 ? { attackIndex: 0 } : {});
+  }
+  assert.equal(snapshotActionCampaignBattle(bell).outcome, 'victory');
+  assert.doesNotThrow(() => createActionCampaignBattleResult(bell));
 });

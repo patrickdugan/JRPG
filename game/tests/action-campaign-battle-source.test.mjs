@@ -8,7 +8,7 @@ const browser = readFileSync(new URL('../action-campaign-battle.js', import.meta
 const inputGrammar = readFileSync(new URL('../action-input-grammar.mjs', import.meta.url), 'utf8');
 const model = readFileSync(new URL('../action-campaign-battle-model.mjs', import.meta.url), 'utf8');
 
-test('isolated action laboratory uses shared action, objective, and result seams without settlement', () => {
+test('action page preserves an isolated laboratory lane and adds explicit canonical settlement', () => {
   assert.match(html, /action-campaign-battle\.css/u);
   assert.match(html, /action-campaign-battle\.js/u);
   assert.match(browser, /from '\.\/action-campaign-battle-model\.mjs'/u);
@@ -19,7 +19,14 @@ test('isolated action laboratory uses shared action, objective, and result seams
   assert.doesNotMatch(model, /from '\.\/battle-settlement\.mjs'|settleActionCampaignBattleVictory/u);
   assert.match(browser, /loadActionLaboratorySeed/u);
   assert.match(browser, /canonicalStorageUnchanged/u);
-  assert.doesNotMatch(browser, /createAdvancementStorageAdapter|createLoadoutStorageAdapter|createRunReceiptStorageAdapter|recordRunPlaytime/u);
+  assert.match(browser, /const canonicalMode = query\.canonical && !sliceMode/u);
+  assert.match(browser, /settleBattleVictory/u);
+  assert.match(browser, /createAdvancementStorageAdapter/u);
+  assert.match(browser, /createLoadoutStorageAdapter/u);
+  assert.match(browser, /createRunReceiptStorageAdapter/u);
+  assert.match(browser, /recordRunPlaytime/u);
+  assert.match(browser, /flushCanonicalPlaytime/u);
+  assert.match(browser, /handoff: query\.handoff/u);
   assert.doesNotMatch(browser, /from '\.\/battle\.js'|from '\.\/engine\.mjs'/u);
 });
 

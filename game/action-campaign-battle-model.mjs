@@ -2,8 +2,9 @@
  * DOM-free composition root for the non-canonical campaign action battle.
  *
  * The model deliberately keeps the authored-objective runtime injectable. The
- * fallback below authorizes only objectives that the current combat snapshot
- * can prove without tokens, destructible scenery, casts, or interactions.
+ * The objective entity director below owns side-view tokens and destructible
+ * scenery while the combat kernel remains the sole authority for actors,
+ * attacks, movement, damage, and cooldowns.
  */
 
 import { ACTION_MANEUVER_IDS, ActionCombatKernel } from './action-combat.mjs';
@@ -43,12 +44,18 @@ const CONNECTED_OBJECTIVE_TYPES = new Set([
   'defeatAll',
   'defeatBoss',
   'thresholdOrObjects',
+  'escortTokens',
+  'defeatBossWithProtection',
   'clearRoute',
   'releaseTarget',
+  'protectObjects',
+  'disableOrdersAndProtect',
   'returnItemToTile',
+  'extractAllBeforeCountdown',
   'activateRelays',
   'defeatBossAndRelease',
   'breakObjects',
+  'breakPhaseObjects',
   'defeatBossAndEvacuate',
   'completeInteractions',
 ]);
@@ -58,6 +65,12 @@ const BOSS_COMBAT_TYPES = new Set([
   'defeatBossAndRelease',
   'defeatBossAndEvacuate',
 ]);
+const OBJECTIVE_TOKEN_SPEED_PX_PER_SECOND = 160;
+const OBJECTIVE_TOKEN_RECRUIT_DISTANCE_PX = 132;
+const OBJECTIVE_TOKEN_TRAIL_DISTANCE_PX = 34;
+const OBJECTIVE_TOKEN_BOUNDS = Object.freeze({ width: 28, height: 54 });
+const OBJECTIVE_OBJECT_DEFAULT_HP = 3;
+const OBJECTIVE_CORE_HP = 6;
 
 function deepFreeze(value) {
   if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
@@ -75,15 +88,17 @@ function readableId(value) {
 
 function actorTemplateMap(spec) {
   const result = {};
-  for (const profile of [...spec.profiles.party, ...spec.profiles.enemies]) {
-    for (const actorId of profile.instanceIds) result[actorId] = profile.templateId;
+  for (const profile of [...spec.profiles.party, ...spec.profiles.enemies, ...(spec.profiles.summons ?? [])]) {
+    for (const actorId of [...profile.instanceIds, ...(profile.dormantInstanceIds ?? [])]) {
+      result[actorId] = profile.templateId;
+    }
   }
   return result;
 }
 
 function applySpawnSlots(actors, stage) {
-  const party = actors.filter(({ faction }) => faction === 'player');
-  const enemies = actors.filter(({ faction }) => faction === 'enemy');
+  const party = actors.filter(({ faction, hp }) => faction === 'player' && hp > 0);
+  const enemies = actors.filter(({ faction, hp }) => faction === 'enemy' && hp > 0);
   if (party.length > stage.spawns.party.length || enemies.length > stage.spawns.enemy.length) {
     throw new RangeError(
       `Action stage ${stage.id} lacks spawn capacity for ${party.length} party and ${enemies.length} enemy actors.`,
@@ -184,6 +199,427 @@ function bossActor(session, snapshot) {
   return snapshot.actors.find((actor) => session.actorTemplates[actor.id] === bossTemplateId) ?? null;
 }
 
+function createBossPhaseDirector(encounter, spec, kernel, actorTemplates) {
+  const phases = encounter.bossMechanic?.phases;
+  if (!Array.isArray(phases) || phases.length === 0) return null;
+  const bossTemplateId = encounter.objective?.bossId ?? spec.profiles.enemies[0]?.templateId;
+  const bossActorId = kernel.actorOrder.find((actorId) => actorTemplates[actorId] === bossTemplateId);
+  const boss = bossActorId ? kernel.getActor(bossActorId) : null;
+  if (!boss) return null;
+  const director = {
+    bossActorId,
+    bossTemplateId,
+    phases: clone(phases),
+    phaseIndex: 0,
+    history: [phases[0].id],
+    revision: 0,
+    completedBossActivations: 0,
+    warnedForActivation: null,
+    lastTransition: null,
+    allAttackIds: [...boss.attackIds],
+  };
+  applyBossPhaseMoves(director, kernel, spec);
+  return director;
+}
+
+function phaseMoveAttackIds(director, phase, spec) {
+  if (!Array.isArray(phase.moves)) return director.allAttackIds;
+  const sourceSkills = new Set(phase.moves);
+  return spec.attackManifest
+    .filter(({ ownerTemplateId, sourceSkillId }) => (
+      ownerTemplateId === director.bossTemplateId && sourceSkills.has(sourceSkillId)
+    ))
+    .map(({ adapterAttackId }) => adapterAttackId);
+}
+
+function applyBossPhaseMoves(director, kernel, spec = null) {
+  const boss = kernel.getActor(director.bossActorId);
+  const phase = director.phases[director.phaseIndex];
+  if (!boss || !phase || !spec) return;
+  boss.attackIds = phaseMoveAttackIds(director, phase, spec);
+  if (boss.attackIds.length === 0 && Array.isArray(phase.moves)) boss.movementIntent = { x: 0, y: 0 };
+}
+
+function bossHpPhaseSatisfied(phase, boss, director) {
+  const enter = phase.enter;
+  if (!enter) return false;
+  const hpRatio = boss.maxHp > 0 ? boss.hp / boss.maxHp : 0;
+  if (enter.kind === 'boss-hp-ratio-at-or-below') return hpRatio <= enter.value;
+  if (enter.kind !== 'any') return false;
+  if (enter.requiresPhaseId && !director.history.includes(enter.requiresPhaseId)) return false;
+  return (enter.conditions ?? []).some((condition) => (
+    condition.kind === 'boss-hp-ratio-at-or-below' && hpRatio <= condition.value
+  ));
+}
+
+function bossPhaseEvent(type, director, kernel, payload = {}) {
+  return {
+    type,
+    nowMs: kernel.nowMs,
+    bossActorId: director.bossActorId,
+    phaseId: director.phases[director.phaseIndex].id,
+    revision: director.revision,
+    ...payload,
+  };
+}
+
+function updateBossPhaseDirector(session, kernelEvents) {
+  const director = session.bossPhaseDirector;
+  if (!director) return [];
+  const boss = session.kernel.getActor(director.bossActorId);
+  if (!boss) return [];
+  const emitted = [];
+  const completed = kernelEvents.filter(({ type, actorId }) => (
+    type === 'attack-complete' && actorId === director.bossActorId
+  )).length;
+  director.completedBossActivations += completed;
+
+  const cadence = session.encounter.bossMechanic?.phaseCycle;
+  if (cadence && completed > 0) {
+    const phaseLength = cadence.completedBossActivationsPerPhase;
+    const nextTransitionAt = (Math.floor(director.completedBossActivations / phaseLength) + 1) * phaseLength;
+    const warningAt = nextTransitionAt - cadence.warningActivations;
+    if (director.completedBossActivations === warningAt
+        && director.warnedForActivation !== nextTransitionAt) {
+      director.warnedForActivation = nextTransitionAt;
+      const toIndex = (director.phaseIndex + 1) % director.phases.length;
+      emitted.push(bossPhaseEvent('boss-phase-warning', director, session.kernel, {
+        toPhaseId: director.phases[toIndex].id,
+        transitionAtActivation: nextTransitionAt,
+      }));
+    }
+    if (director.completedBossActivations > 0
+        && director.completedBossActivations % phaseLength === 0) {
+      const fromPhaseId = director.phases[director.phaseIndex].id;
+      director.phaseIndex = (director.phaseIndex + 1) % director.phases.length;
+      director.revision += 1;
+      director.history.push(director.phases[director.phaseIndex].id);
+      director.lastTransition = {
+        fromPhaseId,
+        toPhaseId: director.phases[director.phaseIndex].id,
+        atMs: session.kernel.nowMs,
+        reason: 'boss-activation-cadence',
+      };
+      applyBossPhaseMoves(director, session.kernel, session.spec);
+      emitted.push(bossPhaseEvent('boss-phase-entered', director, session.kernel, director.lastTransition));
+    }
+  } else {
+    while (director.phaseIndex + 1 < director.phases.length
+        && bossHpPhaseSatisfied(director.phases[director.phaseIndex + 1], boss, director)) {
+      const fromPhaseId = director.phases[director.phaseIndex].id;
+      director.phaseIndex += 1;
+      director.revision += 1;
+      director.history.push(director.phases[director.phaseIndex].id);
+      director.lastTransition = {
+        fromPhaseId,
+        toPhaseId: director.phases[director.phaseIndex].id,
+        atMs: session.kernel.nowMs,
+        reason: 'boss-hp-threshold',
+      };
+      applyBossPhaseMoves(director, session.kernel, session.spec);
+      emitted.push(bossPhaseEvent('boss-phase-entered', director, session.kernel, director.lastTransition));
+    }
+  }
+  return emitted;
+}
+
+function bossPhaseSnapshot(session, kernelSnapshot) {
+  const director = session.bossPhaseDirector;
+  if (!director) return null;
+  const phase = director.phases[director.phaseIndex];
+  const boss = kernelSnapshot.actors.find(({ id }) => id === director.bossActorId);
+  return deepFreeze({
+    bossActorId: director.bossActorId,
+    phaseId: phase.id,
+    name: readableId(phase.id),
+    rule: phase.rule ?? null,
+    revision: director.revision,
+    history: [...director.history],
+    completedBossActivations: director.completedBossActivations,
+    hpRatio: boss?.maxHp > 0 ? Math.round((boss.hp / boss.maxHp) * 10_000) / 10_000 : 0,
+    lastTransition: clone(director.lastTransition),
+  });
+}
+
+function anchorById(stage, id) {
+  return stage.objectiveAnchors.find((anchor) => anchor.id === id) ?? null;
+}
+
+function rectsOverlap(left, right) {
+  return left.left <= right.right
+    && left.right >= right.left
+    && left.top <= right.bottom
+    && left.bottom >= right.top;
+}
+
+function anchorRect(anchor) {
+  return {
+    left: anchor.x - anchor.width / 2,
+    right: anchor.x + anchor.width / 2,
+    top: anchor.y - anchor.height,
+    bottom: anchor.y,
+  };
+}
+
+function tokenRect(token) {
+  return {
+    left: token.position.x - token.bounds.width / 2,
+    right: token.position.x + token.bounds.width / 2,
+    top: token.position.y - token.bounds.height,
+    bottom: token.position.y,
+  };
+}
+
+function eventHitboxRect(event) {
+  const hitbox = event?.hitbox;
+  if (!hitbox || ![hitbox.left, hitbox.right, hitbox.top, hitbox.bottom].every(Number.isFinite)) return null;
+  return hitbox;
+}
+
+function requirementDestination(session, tokenId) {
+  const requirement = session.objectiveContract.requirements.find((entry) => (
+    entry.semantics === 'overlap'
+      && entry.subject?.kind === 'objective-token'
+      && entry.subject.tokenId === tokenId
+  ));
+  return (requirement?.anchorIds ?? []).map((id) => anchorById(session.stage, id)).find(Boolean) ?? null;
+}
+
+function createObjectiveEntityDirector(encounter, stage, contract) {
+  const tokenIds = new Set([
+    ...(encounter.party?.objectiveTokens ?? []).map(({ id }) => id),
+    ...contract.requirements
+      .filter((entry) => entry.subject?.kind === 'objective-token')
+      .map((entry) => entry.subject.tokenId),
+  ]);
+  const prisonerIds = new Set(encounter.objective?.targets ?? []);
+  const tokens = [...tokenIds].map((id, index) => {
+    const anchor = anchorById(stage, id);
+    if (!anchor) throw new RangeError(`${encounter.id} objective token ${id} has no side-view anchor.`);
+    return {
+      id,
+      position: { x: anchor.x, y: anchor.y },
+      bounds: { ...OBJECTIVE_TOKEN_BOUNDS },
+      hp: 3,
+      maxHp: 3,
+      tag: id.startsWith('witness-') ? 'witness' : id.startsWith('prisoner-') ? 'prisoner' : 'objective',
+      released: !prisonerIds.has(id),
+      recruited: !prisonerIds.has(id),
+      secured: false,
+      order: index,
+    };
+  });
+
+  const protectedIds = new Set(encounter.objective?.protectedObjects ?? []);
+  const attackableIds = new Set([
+    ...(encounter.objective?.objectIds ?? []),
+    ...(encounter.objective?.objectCondition?.objectIds ?? []),
+  ]);
+  const objectIds = new Set([...protectedIds, ...attackableIds]);
+  if ((contract.failures ?? []).some(({ match }) => match?.objectId === 'archive-core')) {
+    objectIds.add('archive-core');
+    protectedIds.add('archive-core');
+  }
+  const objects = [...objectIds].map((id) => {
+    const anchor = anchorById(stage, id);
+    if (!anchor) throw new RangeError(`${encounter.id} objective object ${id} has no side-view anchor.`);
+    const maxHp = id === 'archive-core'
+      ? OBJECTIVE_CORE_HP
+      : attackableIds.has(id) ? 1 : OBJECTIVE_OBJECT_DEFAULT_HP;
+    return {
+      id,
+      position: { x: anchor.x, y: anchor.y },
+      bounds: { width: anchor.width, height: anchor.height },
+      hp: maxHp,
+      maxHp,
+      protected: protectedIds.has(id),
+      attackable: attackableIds.has(id),
+      destroyed: false,
+    };
+  });
+  return {
+    tokens,
+    objects,
+    enemyActionCount: 0,
+    intactCheckpointEmitted: false,
+    bellCount: 0,
+  };
+}
+
+function objectiveEntitySnapshot(session) {
+  const director = session.objectiveEntities;
+  return deepFreeze({
+    tokens: director.tokens.map((token) => ({
+      id: token.id,
+      position: { ...token.position },
+      bounds: { ...token.bounds },
+      hp: token.hp,
+      maxHp: token.maxHp,
+      tag: token.tag,
+      released: token.released,
+      recruited: token.recruited,
+      secured: token.secured,
+    })),
+    objects: director.objects.map((object) => ({
+      id: object.id,
+      position: { ...object.position },
+      bounds: { ...object.bounds },
+      hp: object.hp,
+      maxHp: object.maxHp,
+      protected: object.protected,
+      attackable: object.attackable,
+      destroyed: object.destroyed,
+    })),
+    enemyActionCount: director.enemyActionCount,
+    bellCount: director.bellCount,
+  });
+}
+
+function entityEventsFromCombat(session, events) {
+  const result = [];
+  const director = session.objectiveEntities;
+  const sourceSkillByAttackId = new Map(
+    session.spec.attackManifest.map(({ adapterAttackId, sourceSkillId }) => [adapterAttackId, sourceSkillId]),
+  );
+  for (const event of events) {
+    if (event.type === 'attack-complete') {
+      const actor = session.kernel.getActor(event.actorId);
+      if (actor?.faction === 'enemy') {
+        director.enemyActionCount += 1;
+        if (sourceSkillByAttackId.get(event.attackId) === 'ringing-count') {
+          director.bellCount += 1;
+          result.push({
+            type: 'boss-cast-completed',
+            castId: 'bell-count',
+            actorId: event.actorId,
+            count: director.bellCount,
+          });
+        }
+      }
+    }
+    if (event.type !== 'hitbox-resolved') continue;
+    const hitbox = eventHitboxRect(event);
+    const attacker = session.kernel.getActor(event.actorId);
+    if (!hitbox || !attacker) continue;
+    if (attacker.faction === 'player') {
+      for (const object of director.objects) {
+        if (!object.attackable || object.destroyed || !rectsOverlap(hitbox, {
+          left: object.position.x - object.bounds.width / 2,
+          right: object.position.x + object.bounds.width / 2,
+          top: object.position.y - object.bounds.height,
+          bottom: object.position.y,
+        })) continue;
+        object.hp = Math.max(0, object.hp - 1);
+        result.push({ type: 'objective-object-hit', objectId: object.id, actorId: attacker.id, hp: object.hp });
+        if (object.hp === 0) {
+          object.destroyed = true;
+          result.push({ type: 'objective-object-destroyed', objectId: object.id, actorId: attacker.id });
+        }
+      }
+    } else if (attacker.faction === 'enemy') {
+      for (const object of director.objects) {
+        if (!object.protected || object.destroyed || !rectsOverlap(hitbox, {
+          left: object.position.x - object.bounds.width / 2,
+          right: object.position.x + object.bounds.width / 2,
+          top: object.position.y - object.bounds.height,
+          bottom: object.position.y,
+        })) continue;
+        object.hp = Math.max(0, object.hp - 1);
+        if (object.hp === 0) {
+          object.destroyed = true;
+          result.push({ type: 'objective-object-destroyed', objectId: object.id, actorId: attacker.id });
+        }
+      }
+      for (const token of director.tokens) {
+        if (token.hp <= 0 || !token.released || !rectsOverlap(hitbox, tokenRect(token))) continue;
+        token.hp = Math.max(0, token.hp - 1);
+        if (token.hp === 0) {
+          result.push({
+            type: 'tagged-actor-incapacitated',
+            actorId: token.id,
+            actorIds: [token.id],
+            tag: token.tag,
+          });
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function moveObjectiveTokens(session, elapsedMs, kernelSnapshot, input) {
+  const actor = kernelSnapshot.actors.find(({ id }) => id === kernelSnapshot.controlledActorId && id) ?? null;
+  if (!actor || actor.hp <= 0) return;
+  for (const token of session.objectiveEntities.tokens) {
+    if (!token.released || token.secured || token.hp <= 0) continue;
+    const distance = Math.hypot(token.position.x - actor.position.x, token.position.y - actor.position.y);
+    if (distance <= OBJECTIVE_TOKEN_RECRUIT_DISTANCE_PX
+        && (input.interactPressed || session.objectiveContract.objectiveType === 'escortTokens')) {
+      token.recruited = true;
+    }
+    if (!token.recruited) continue;
+    const destination = requirementDestination(session, token.id);
+    const actorAtDestination = destination && actorOverlapsAnchor(actor, destination);
+    const trailOffset = OBJECTIVE_TOKEN_TRAIL_DISTANCE_PX + token.order * 12;
+    const target = actorAtDestination
+      ? {
+          x: destination.x + (token.order - (session.objectiveEntities.tokens.length - 1) / 2) * 18,
+          y: destination.y,
+        }
+      : {
+          x: actor.position.x - actor.facing * trailOffset,
+          y: actor.position.y,
+        };
+    const deltaX = target.x - token.position.x;
+    const deltaY = target.y - token.position.y;
+    const length = Math.hypot(deltaX, deltaY);
+    const maximum = OBJECTIVE_TOKEN_SPEED_PX_PER_SECOND * elapsedMs / 1000;
+    if (length > 0) {
+      const scale = Math.min(1, maximum / length);
+      token.position.x = Math.max(
+        session.stage.bounds.minX,
+        Math.min(session.stage.bounds.maxX, token.position.x + deltaX * scale),
+      );
+      token.position.y = Math.max(
+        session.stage.bounds.minY,
+        Math.min(session.stage.bounds.maxY, token.position.y + deltaY * scale),
+      );
+    }
+    if (destination && rectsOverlap(tokenRect(token), anchorRect(destination))) token.secured = true;
+  }
+}
+
+function intactCheckpointEvents(session) {
+  if (session.objectiveEntities.intactCheckpointEmitted) return [];
+  const type = session.objectiveContract.objectiveType;
+  const runtime = session.objectiveRuntime?.snapshot?.();
+  const ready = type === 'protectObjects'
+    ? session.objectiveEntities.enemyActionCount >= (session.encounter.objective.turns ?? 0)
+    : type === 'disableOrdersAndProtect'
+      ? runtime?.requirements.some(({ id, completed }) => id === 'disable-orders' && completed)
+      : false;
+  if (!ready) return [];
+  session.objectiveEntities.intactCheckpointEmitted = true;
+  return session.objectiveEntities.objects
+    .filter((object) => object.protected && !object.destroyed)
+    .map((object) => ({ type: 'objective-object-intact-at-checkpoint', objectId: object.id }));
+}
+
+function syncObjectiveEntityDependencies(session) {
+  const runtime = session.objectiveRuntime?.snapshot?.();
+  if (!runtime) return;
+  for (const token of session.objectiveEntities.tokens) {
+    if (runtime.requirements.some(({ id, completed }) => id === `release:${token.id}` && completed)) {
+      token.released = true;
+      token.recruited = true;
+    }
+    if (runtime.requirements.some(({ id, completed }) => (
+      (id === `escort:${token.id}` || id === `secure:${token.id}` || id === `extract:${token.id}`)
+        && completed
+    ))) token.secured = true;
+  }
+}
+
 function fallbackObjectiveSnapshot(session, kernelSnapshot) {
   const type = session.objectiveContract.objectiveType;
   const supported = FALLBACK_OBJECTIVE_TYPES.has(type);
@@ -256,6 +692,7 @@ function objectiveSnapshot(session, kernelSnapshot = session.kernel.snapshot()) 
     })),
     failures: snapshot.failures,
     runtime: snapshot,
+    entities: objectiveEntitySnapshot(session),
   });
 }
 
@@ -269,13 +706,23 @@ function actorOverlapsAnchor(actor, anchor) {
 function objectiveSignals(session, snapshot, input) {
   const actor = snapshot.actors.find(({ id }) => id === snapshot.controlledActorId && id) ?? null;
   if (!actor || actor.hp <= 0) return { subjects: [], interactions: [], casts: [] };
-  const subjects = session.objectiveContract.requirements
+  const subjects = [
+    ...session.objectiveEntities.tokens
+      .filter((token) => token.released && token.hp > 0)
+      .map((token) => ({
+        kind: 'objective-token',
+        tokenId: token.id,
+        position: { ...token.position },
+        bounds: { ...token.bounds },
+      })),
+    ...session.objectiveContract.requirements
     .filter((requirement) => requirement.semantics === 'overlap' && requirement.subject?.kind === 'carried-item')
     .map((requirement) => ({
       kind: 'carried-item',
       itemId: requirement.subject.itemId,
       position: { ...actor.position },
-    }));
+    })),
+  ];
   const interactions = [];
   const casts = [];
   for (const requirement of session.objectiveContract.requirements) {
@@ -305,6 +752,21 @@ function combatSatisfied(session, snapshot) {
     const boss = bossActor(session, snapshot);
     return !boss || boss.hp <= 0;
   }
+  if (session.encounter.objective?.bossId) {
+    const boss = bossActor(session, snapshot);
+    if (session.encounter.objective.bossResolution === 'force-retreat') {
+      const phases = session.encounter.bossMechanic?.phases ?? [];
+      const retreatRatio = [...phases].reverse()
+        .find(({ enter }) => enter?.kind === 'boss-hp-ratio-at-or-below')
+        ?.enter.value;
+      return !boss || boss.hp <= 0 || (
+        Number.isFinite(retreatRatio)
+        && boss.maxHp > 0
+        && boss.hp / boss.maxHp <= retreatRatio
+      );
+    }
+    return !boss || boss.hp <= 0;
+  }
   return true;
 }
 
@@ -316,6 +778,7 @@ export function parseActionCampaignBattleQuery(search = '', fallbackEncounterId 
   return deepFreeze({
     requestedEncounterId,
     encounterId,
+    canonical: query.get('mode') === 'campaign' || query.get('canonical') === '1',
     returnTarget: requestedReturn && SAFE_RETURN_TARGET.test(requestedReturn) ? requestedReturn : 'campaign.html',
     handoff: {
       questId: query.get('quest'),
@@ -362,33 +825,47 @@ export function createActionCampaignBattleSession({
           ...actor.attackIds,
           ...ACTION_SUBWEAPON_IDS.map((id) => ACTION_SUBWEAPONS[id].attackId),
         ],
-      }
+    }
     : actor);
+  const {
+    kernelConfig: sourceKernelConfig,
+    ...sourceSpecMetadata
+  } = sourceSpec;
+  const {
+    statusHooks,
+    ...cloneableKernelConfig
+  } = sourceKernelConfig;
   const spec = deepFreeze({
-    ...clone(sourceSpec),
+    ...clone(sourceSpecMetadata),
     kernelConfig: {
-      ...clone(sourceSpec.kernelConfig),
+      ...clone(cloneableKernelConfig),
       stage: toActionKernelStage(stage),
       attacks,
       actors,
+      statusHooks,
       physicsHooks: createActionStagePhysicsHooks(encounter.levelId),
       automaticVictory: false,
       controlledActorId: actors.find(({ faction }) => faction === 'player')?.id,
     },
   });
+  const actorTemplates = actorTemplateMap(spec);
+  const kernel = new ActionCombatKernel(spec.kernelConfig);
   const session = {
     schemaVersion: ACTION_CAMPAIGN_BATTLE_SCHEMA_VERSION,
     encounter,
     stage,
     objectiveContract,
     spec,
-    actorTemplates: actorTemplateMap(spec),
-    kernel: new ActionCombatKernel(spec.kernelConfig),
+    actorTemplates,
+    kernel,
+    bossPhaseDirector: createBossPhaseDirector(encounter, spec, kernel, actorTemplates),
     objectiveRuntime: null,
+    objectiveEntities: null,
     outcome: null,
     recentEvents: [],
     subweaponStock: createActionSubweaponStock(),
   };
+  session.objectiveEntities = createObjectiveEntityDirector(encounter, stage, objectiveContract);
   session.objectiveRuntime = createObjectiveBridge(session, objectiveRuntimeFactory);
   return session;
 }
@@ -573,16 +1050,30 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
       });
     }
   }
-  session.kernel.advance(Math.max(0, Math.min(100, Math.round(Number(elapsedMs) || 0))));
-  const events = [...controllerEvents, ...session.kernel.drainEvents()];
+  const elapsed = Math.max(0, Math.min(100, Math.round(Number(elapsedMs) || 0)));
+  session.kernel.advance(elapsed);
+  const kernelEvents = session.kernel.drainEvents();
+  const bossPhaseEvents = updateBossPhaseDirector(session, kernelEvents);
   const kernelSnapshot = session.kernel.snapshot();
-  session.recentEvents = events;
+  moveObjectiveTokens(session, elapsed, kernelSnapshot, input);
+  const entityEvents = entityEventsFromCombat(session, kernelEvents);
+  const events = [...controllerEvents, ...kernelEvents, ...bossPhaseEvents, ...entityEvents];
   const signals = objectiveSignals(session, kernelSnapshot, input);
   session.objectiveRuntime?.advance?.({
     kernelSnapshot,
     events,
     ...signals,
   });
+  syncObjectiveEntityDependencies(session);
+  const checkpointEvents = intactCheckpointEvents(session);
+  if (checkpointEvents.length) {
+    session.objectiveRuntime?.advance?.({
+      kernelSnapshot,
+      events: checkpointEvents,
+      ...objectiveSignals(session, kernelSnapshot, input),
+    });
+  }
+  session.recentEvents = [...events, ...checkpointEvents];
   const objective = objectiveSnapshot(session, session.kernel.snapshot());
   const currentSnapshot = session.kernel.snapshot();
   if (objective.failed || living(currentSnapshot, 'player').length === 0) {
@@ -613,6 +1104,7 @@ export function snapshotActionCampaignBattle(session) {
       aiControlledActorIds,
     },
     objective: objectiveSnapshot(session, kernelSnapshot),
+    bossPhase: bossPhaseSnapshot(session, kernelSnapshot),
     combo: getActionCampaignComboState(session, kernelSnapshot.controlledActorId),
     subweapons: getActionCampaignSubweaponChoices(session, kernelSnapshot.controlledActorId),
     combatSatisfied: combatSatisfied(session, kernelSnapshot),

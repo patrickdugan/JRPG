@@ -117,7 +117,7 @@ test('campaign interaction requires the selected on-map marker and hands exact c
   const markerLookup = interaction.indexOf('const witnessMarker = getActiveWitnessMarker(level)');
   const exactGate = interaction.search(/if\s*\(\s*witnessMarker\s*&&\s*onExactFieldPosition\(\s*fieldPosition\(\),\s*witnessMarker\.position\s*\)\s*\)/);
   const acknowledgement = interaction.indexOf('acknowledgeWitnessChronicleLine(');
-  const battleNavigation = interaction.indexOf('window.location.href = `battle.html?', exactGate);
+  const battleNavigation = interaction.indexOf('window.location.href = campaignBattleHref(parameters)', exactGate);
   assert.ok(markerLookup >= 0 && exactGate > markerLookup, 'witness work must be gated by its exact current map marker');
   assert.ok(acknowledgement > exactGate, 'testimony acknowledgement must occur inside the exact marker gate');
   assert.ok(battleNavigation > exactGate, 'battle navigation must occur inside the exact marker gate');

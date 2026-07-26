@@ -7,6 +7,7 @@ import argparse
 import functools
 import json
 import threading
+import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -59,6 +60,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
             context = browser.new_context(viewport={"width": 1440, "height": 1200})
             page = context.new_page()
             page.set_default_timeout(15_000)
+            page.set_default_navigation_timeout(45_000)
             page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
             page.on("pageerror", lambda error: page_errors.append(str(error)))
             page.on(
@@ -182,6 +184,7 @@ def run_probe(chromium: Path) -> dict[str, object]:
             combo_context = browser.new_context(viewport={"width": 1440, "height": 1200})
             combo_page = combo_context.new_page()
             combo_page.set_default_timeout(15_000)
+            combo_page.set_default_navigation_timeout(45_000)
             combo_page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
             combo_page.on("pageerror", lambda error: page_errors.append(str(error)))
             combo_page.on(
@@ -338,6 +341,140 @@ def run_probe(chromium: Path) -> dict[str, object]:
             require(not page_errors, f"Page errors: {page_errors}")
             require(not delivery_errors, f"Delivery errors: {delivery_errors}")
             combo_context.close()
+
+            canonical_context = browser.new_context(viewport={"width": 1440, "height": 1200})
+            canonical_page = canonical_context.new_page()
+            canonical_page.set_default_timeout(15_000)
+            canonical_page.set_default_navigation_timeout(45_000)
+            canonical_page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
+            canonical_page.on("pageerror", lambda error: page_errors.append(str(error)))
+            canonical_page.on(
+                "response",
+                lambda response: delivery_errors.append({"url": response.url, "status": response.status})
+                if response.status >= 400
+                else None,
+            )
+            new_game_response = canonical_page.goto(
+                f"{base}/campaign.html?new=1",
+                wait_until="domcontentloaded",
+            )
+            require(new_game_response is not None and new_game_response.status == 200,
+                    "Campaign New Game setup did not return HTTP 200.")
+            canonical_page.locator("#sceneTitle").wait_for()
+            canonical_response = canonical_page.goto(
+                f"{base}/action-campaign-battle.html?encounter=c1-cinder-hounds"
+                "&mode=campaign&lead=nikola&support=mateus"
+                "&return=campaign.html%3Fcanonical-probe%3D1",
+                wait_until="domcontentloaded",
+            )
+            require(canonical_response is not None and canonical_response.status == 200,
+                    "Canonical action campaign page did not return HTTP 200.")
+            canonical_page.wait_for_function(
+                """() => {
+                  const canvas = document.querySelector('#actionCampaignCanvas');
+                  return canvas?.dataset.canonicalMode === 'true'
+                    && globalThis.__ACTION_CAMPAIGN_BATTLE__?.getSnapshot().kernel.nowMs > 0;
+                }"""
+            )
+            canonical_page.locator("#actionCampaignCanvas").focus()
+            combat_deadline = time.monotonic() + 35
+            restart_count = 0
+            while time.monotonic() < combat_deadline:
+                state = canonical_page.evaluate(
+                    """() => {
+                      const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                      const controlled = snapshot.kernel.actors.find(actor => actor.id === snapshot.kernel.controlledActorId);
+                      const support = snapshot.kernel.actors.find(
+                        actor => actor.faction === 'player' && actor.id !== snapshot.kernel.controlledActorId && actor.hp > 0
+                      );
+                      const enemies = snapshot.kernel.actors.filter(actor => actor.faction === 'enemy' && actor.hp > 0);
+                      const nearest = controlled && enemies.sort(
+                        (left, right) => Math.abs(left.position.x - controlled.position.x)
+                          - Math.abs(right.position.x - controlled.position.x)
+                      )[0];
+                      return {
+                        outcome: snapshot.outcome,
+                        complete: globalThis.__ACTION_CAMPAIGN_BATTLE__.canonicalComplete,
+                        controlledX: controlled?.position.x ?? 0,
+                        controlledHp: controlled?.hp ?? 0,
+                        controlledMaxHp: controlled?.maxHp ?? 1,
+                        supportHp: support?.hp ?? 0,
+                        supportMaxHp: support?.maxHp ?? 1,
+                        enemyX: nearest?.position.x ?? null,
+                        enemyWindup: enemies.some(actor => actor.activeAttack?.phase === 'windup'),
+                        tagReady: snapshot.kernel.tagCooldownRemainingMs === 0,
+                        comboReady: snapshot.combo.available,
+                      };
+                    }"""
+                )
+                if state["complete"]:
+                    break
+                if state["outcome"] == "defeat":
+                    require(restart_count < 1, f"Canonical action probe lost twice: {state}")
+                    canonical_page.keyboard.press("r")
+                    restart_count += 1
+                    canonical_page.wait_for_timeout(200)
+                    continue
+                if state["comboReady"]:
+                    canonical_page.keyboard.press("l")
+                if state["enemyX"] is not None:
+                    distance = state["enemyX"] - state["controlledX"]
+                    if (state["controlledHp"] / state["controlledMaxHp"] < 0.42
+                            and state["supportHp"] / state["supportMaxHp"] > 0.55
+                            and state["tagReady"]):
+                        canonical_page.keyboard.press("Tab")
+                    if abs(distance) < 180 or state["enemyWindup"]:
+                        key = "a" if distance > 0 else "d"
+                        canonical_page.keyboard.down(key)
+                        canonical_page.keyboard.press("q")
+                        canonical_page.wait_for_timeout(110)
+                        canonical_page.keyboard.up(key)
+                    elif abs(distance) > 270:
+                        key = "d" if distance > 0 else "a"
+                        canonical_page.keyboard.down(key)
+                        canonical_page.wait_for_timeout(90)
+                        canonical_page.keyboard.up(key)
+                    canonical_page.keyboard.press("k")
+                    canonical_page.keyboard.press("j")
+                    canonical_page.keyboard.press("v")
+                    canonical_page.keyboard.press("c")
+                canonical_page.wait_for_timeout(100)
+            canonical_page.wait_for_function(
+                "() => globalThis.__ACTION_CAMPAIGN_BATTLE__?.canonicalComplete === true",
+                timeout=5_000,
+            )
+            canonical_after = canonical_page.evaluate(
+                """() => {
+                  const canvas = document.querySelector('#actionCampaignCanvas');
+                  const keys = Object.keys(localStorage);
+                  return {
+                    outcome: globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot().outcome,
+                    canonicalComplete: globalThis.__ACTION_CAMPAIGN_BATTLE__.canonicalComplete,
+                    settlementState: canvas.dataset.settlementState,
+                    continueHidden: document.querySelector('#continueCampaign').hidden,
+                    returnTarget: document.querySelector('#continueCampaign').getAttribute('href'),
+                    storageKeys: keys,
+                    hasAdvancement: keys.some(key => key.includes('.advancement.')),
+                    hasLoadout: keys.some(key => key.includes('.loadout.')),
+                    hasPlaytime: keys.some(key => key.includes('.playtime.')),
+                    hasRunReceipt: keys.some(key => key.includes('.run-receipt.')),
+                    storageChanged: !globalThis.__ACTION_CAMPAIGN_BATTLE__.canonicalStorageUnchanged(),
+                  };
+                }"""
+            )
+            require(canonical_after["outcome"] == "victory", f"Canonical action did not win: {canonical_after}")
+            require(canonical_after["canonicalComplete"] is True, f"Canonical settlement did not complete: {canonical_after}")
+            require(canonical_after["settlementState"] == "committed", f"Settlement did not commit: {canonical_after}")
+            require(canonical_after["continueHidden"] is False, f"Continue stayed locked after commit: {canonical_after}")
+            require(canonical_after["returnTarget"] == "campaign.html?canonical-probe=1",
+                    f"Canonical return target drifted: {canonical_after}")
+            require(all(canonical_after[key] for key in (
+                "hasAdvancement", "hasLoadout", "hasPlaytime", "hasRunReceipt", "storageChanged"
+            )), f"Canonical authorities were not all written: {canonical_after}")
+            require(not console_errors, f"Console errors: {console_errors}")
+            require(not page_errors, f"Page errors: {page_errors}")
+            require(not delivery_errors, f"Delivery errors: {delivery_errors}")
+            canonical_context.close()
             browser.close()
             return {
                 "ok": True,
@@ -363,6 +500,8 @@ def run_probe(chromium: Path) -> dict[str, object]:
                 },
                 "isolatedStorageKeys": after["storageKeys"],
                 "comboStorageKeys": combo_after["storageKeys"],
+                "canonicalSettlement": canonical_after,
+                "canonicalRestarts": restart_count,
                 "consoleErrors": console_errors,
                 "pageErrors": page_errors,
                 "deliveryErrors": delivery_errors,

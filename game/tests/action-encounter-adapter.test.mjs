@@ -56,13 +56,15 @@ test('every canonical encounter, profile, and skill record has an explicit actio
     assert.equal(spec.profiles.party.length, source.party.deployment.length);
     assert.equal(spec.profiles.enemies.length, source.enemies.length);
     assert.equal(spec.objectiveMigration.actionAuthority, false);
-    assert.equal(spec.effectMigration.actionAuthority, false);
+    assert.equal(spec.effectMigration.actionAuthority, true);
     assert.equal(Object.isFrozen(spec), true);
     assert.equal(Object.isFrozen(spec.kernelConfig.attacks), true);
 
     const expectedManifestCount = sourceEnemySkillCount(source) + sourcePartySkillCount(source);
-    assert.equal(spec.attackManifest.length, expectedManifestCount, source.id);
-    assert.equal(Object.keys(spec.kernelConfig.attacks).length, expectedManifestCount, source.id);
+    assert.equal(spec.attackManifest.length >= expectedManifestCount, true, source.id);
+    assert.equal(Object.keys(spec.kernelConfig.attacks).length, spec.attackManifest.length, source.id);
+    assert.equal(typeof spec.kernelConfig.statusHooks.afterHit, 'function');
+    assert.equal(typeof spec.kernelConfig.statusHooks.afterAttackComplete, 'function');
     enemySkillCount += sourceEnemySkillCount(source);
     partySkillCount += sourcePartySkillCount(source);
     enemyProfileCount += source.enemies.length;
@@ -203,14 +205,20 @@ test('an explicit action fighter pair produces a strict duo in authored order', 
   );
 });
 
-test('dormant summons and weak points are templates, never initial hostile actors', () => {
+test('dormant summons and weak points are zero-HP kernel slots until authored activation', () => {
   const mateus = adaptActionEncounter('fp1-mateus');
   assert.deepEqual(mateus.dormantActors.map(({ id }) => id), ['blood-ward-west-1', 'blood-ward-east-1']);
-  assert.equal(mateus.kernelConfig.actors.some(({ id }) => id.startsWith('blood-ward')), false);
+  assert.equal(mateus.kernelConfig.actors
+    .filter(({ id }) => id.startsWith('blood-ward'))
+    .every(({ hp }) => hp === 0), true);
 
   const kurozane = adaptActionEncounter('c9-kurozane');
   assert.deepEqual(kurozane.dormantActors.map(({ id }) => id), ['court-clone-1', 'court-clone-2']);
   assert.equal(kurozane.attackManifest.some(({ ownerTemplateId, sourceSkillId }) => ownerTemplateId === 'court-clone' && sourceSkillId === 'clone-order'), true);
+  const ujiro = adaptActionEncounter('c6-ujiro');
+  assert.deepEqual(ujiro.profiles.summons.map(({ templateId }) => templateId), ['masked-clerk']);
+  assert.equal(ujiro.kernelConfig.actors.filter(({ id }) => id.startsWith('masked-clerk')).length, 2);
+  assert.equal(ujiro.kernelConfig.actors.filter(({ id }) => id.startsWith('masked-clerk')).every(({ hp }) => hp === 0), true);
 });
 
 test('all specs are structurally accepted by ActionCombatKernel; representative constructors preserve rosters', () => {
@@ -227,7 +235,10 @@ test('all specs are structurally accepted by ActionCombatKernel; representative 
     .every(({ ai }) => ai === 'deterministic-companion'), true);
 
   const boss = createActionEncounterKernel('fp1-mateus');
-  assert.deepEqual(boss.kernel.snapshot().actors.map(({ id }) => id), ['ren', 'aya', 'lise', 'mateus-1']);
+  assert.deepEqual(
+    boss.kernel.snapshot().actors.filter(({ hp }) => hp > 0).map(({ id }) => id),
+    ['ren', 'aya', 'lise', 'mateus-1'],
+  );
 
   const finalBoss = createActionEncounterKernel('c9-kurozane');
   assert.equal(finalBoss.kernel.snapshot().actors.some(({ id }) => id === 'kurozane-1'), true);

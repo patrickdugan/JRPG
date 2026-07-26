@@ -2,10 +2,9 @@
  * Migration adapter from the canonical authored encounter kit to the isolated
  * side-view ActionCombatKernel configuration.
  *
- * This module converts actors and attacks only. Source objectives, boss phases,
- * summons, displacements, and statuses are retained as migration metadata but
- * are not claimed as action-kernel behavior. Campaign Battle remains their
- * authority until dedicated action objective/effect adapters exist.
+ * This module converts actors, attacks, authored status/effect hooks, and
+ * dormant summon slots. Objective authority is composed by the campaign action
+ * model so the kernel stays reusable.
  */
 
 import { getChapterLevelTarget, getParty } from './advancement.mjs';
@@ -15,6 +14,7 @@ import {
   ACTION_MOVEMENT_PROFILE_BY_ACTOR_ID,
   ActionCombatKernel,
 } from './action-combat.mjs';
+import { createActionEffectHooks } from './action-effects.mjs';
 import { ENCOUNTERS, getEncounter } from './content/encounters.mjs';
 import { getLevel, parseTileKey } from './content/levels.mjs';
 import { BATTLE_ITEM_IDS } from './loadout.mjs';
@@ -205,7 +205,7 @@ function adaptAttack(skill, { sourceKind, ownerTemplateId }) {
       sourceEssence: skill.essence ?? null,
       sourceShape: clone(skill.shape ?? null),
       sourceEffect: clone(skill.effect ?? null),
-      effectCompatibility: skill.effect ? 'source-retained-not-executed' : 'none',
+      effectCompatibility: skill.effect ? 'action-effect-hooks' : 'none',
     },
   };
 }
@@ -323,6 +323,58 @@ function summonedTemplate(template) {
     || (template.ai ?? []).some((line) => /^Spawn only\b/u.test(line));
 }
 
+function requestedEffectSpawns(encounter) {
+  const requested = new Map();
+  for (const enemy of encounter.enemies) {
+    for (const skill of enemy.skills ?? []) {
+      const ids = [
+        ...(skill.effect?.summons ?? []),
+        ...(skill.effect?.exposes ? [skill.effect.exposes] : []),
+        ...(skill.effect?.createsWeakPoint ? [skill.effect.createsWeakPoint] : []),
+      ];
+      const counts = new Map();
+      for (const id of ids) counts.set(id, (counts.get(id) ?? 0) + 1);
+      for (const [id, count] of counts) requested.set(id, Math.max(requested.get(id) ?? 0, count));
+    }
+  }
+  return requested;
+}
+
+function canonicalEnemyTemplate(templateId) {
+  for (const encounter of ENCOUNTERS) {
+    const template = encounter.enemies.find(({ id }) => id === templateId);
+    if (template) return template;
+  }
+  return null;
+}
+
+function effectSpawnTemplate(templateId, count) {
+  const canonical = canonicalEnemyTemplate(templateId);
+  if (canonical) {
+    return {
+      ...clone(canonical),
+      count,
+      positions: [],
+      ai: [...(canonical.ai ?? []), 'Spawn only through an authored action effect.'],
+    };
+  }
+  return {
+    id: templateId,
+    name: readableEffectName(templateId),
+    count,
+    positions: [],
+    role: 'temporary action weak point',
+    stats: { hp: 72, power: 0, guard: 2, speed: 0 },
+    resistances: NEUTRAL_RESISTANCES,
+    skills: [],
+    ai: ['Spawn only through an authored action effect.'],
+  };
+}
+
+function readableEffectName(id) {
+  return String(id).split('-').map((part) => `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`).join(' ');
+}
+
 function enemyActor(template, instanceIndex, position, context, attackIds) {
   const instanceId = `${template.id}-${instanceIndex + 1}`;
   const nonHostile = context.encounter.format === 'noncombat-resolution';
@@ -437,6 +489,7 @@ export function adaptActionEncounter(encounterId, options = {}) {
   const enemyActors = [];
   const dormantActors = [];
   const enemyProfiles = [];
+  const summonProfiles = [];
   for (const [index, template] of encounter.enemies.entries()) {
     const adapted = adaptEnemyTemplate(template, index, context);
     enemyActors.push(...adapted.actors);
@@ -447,6 +500,30 @@ export function adaptActionEncounter(encounterId, options = {}) {
       attackManifest.push(record.manifest);
     }
   }
+  const authoredTemplateIds = new Set(encounter.enemies.map(({ id }) => id));
+  for (const [templateId, count] of requestedEffectSpawns(encounter)) {
+    if (authoredTemplateIds.has(templateId)) continue;
+    const adapted = adaptEnemyTemplate(
+      effectSpawnTemplate(templateId, count),
+      encounter.enemies.length + summonProfiles.length,
+      context,
+    );
+    dormantActors.push(...adapted.dormantActors, ...adapted.actors);
+    summonProfiles.push(adapted.profile);
+    for (const record of adapted.attackRecords) {
+      if (!attacks[record.id]) {
+        attacks[record.id] = record.config;
+        attackManifest.push(record.manifest);
+      }
+    }
+  }
+  const instanceIdsByTemplate = Object.fromEntries(
+    [...enemyProfiles, ...summonProfiles].map((profile) => [
+      profile.templateId,
+      [...profile.instanceIds, ...profile.dormantInstanceIds],
+    ]),
+  );
+  const statusHooks = createActionEffectHooks({ attackManifest, instanceIdsByTemplate });
 
   return deepFreeze({
     schemaVersion: ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION,
@@ -458,20 +535,31 @@ export function adaptActionEncounter(encounterId, options = {}) {
     chapterLevelTarget: chapterTarget,
     objectiveMigration: objectiveMigration(encounter),
     effectMigration: {
-      actionAuthority: false,
-      compatibility: 'source-effects-retained-in-attack-manifest-not-executed',
+      actionAuthority: true,
+      compatibility: 'status-hooks-displacement-summons-defense-and-objective-effect-bridge',
+      instanceIdsByTemplate,
     },
     kernelConfig: {
       stage,
       attacks,
-      actors: [...partyActors, ...enemyActors],
+      actors: [
+        ...partyActors,
+        ...enemyActors,
+        ...dormantActors.map((actor) => ({
+          ...actor,
+          hp: 0,
+          statuses: [{ id: 'dormant-summon' }],
+        })),
+      ],
       controlledActorId: options.controlledActorId ?? partyActors.find(({ hp }) => hp > 0)?.id ?? null,
       automaticVictory: options.automaticVictory !== false,
+      statusHooks,
     },
     dormantActors,
     profiles: {
       party: partyProfiles,
       enemies: enemyProfiles,
+      summons: summonProfiles,
     },
     attackManifest,
   });

@@ -1158,7 +1158,10 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
             )
             driver = PlayerDriver(page, budget, completionist=args.completionist)
             try:
-                response = page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+                response = page.goto(
+                    f"{base}/campaign.html?legacyBattle=1",
+                    wait_until="domcontentloaded",
+                )
                 if response is None or response.status != 200:
                     raise RouteBlocked("delivery", "Campaign did not return HTTP 200.")
                 if args.recovery_in:

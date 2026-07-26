@@ -4,7 +4,7 @@ import test from 'node:test';
 
 const probe = readFileSync(new URL('../tools/action-campaign-browser-probe.py', import.meta.url), 'utf8');
 
-test('installed-Chrome probe covers movement, the locked gate, and the live two-actor combo lifecycle', () => {
+test('installed-Chrome probe covers isolation, movement, combo lifecycle, and canonical settlement', () => {
   assert.match(probe, /action-campaign-battle\.html\?encounter=c1-cinder-hounds/u);
   assert.match(probe, /lead=ren&support=miyo/u);
   assert.match(probe, /controlledMovementProfileId.*infiltrator/su);
@@ -31,6 +31,13 @@ test('installed-Chrome probe covers movement, the locked gate, and the live two-
   assert.match(probe, /party:lise:hunter-thrust/u);
   assert.match(probe, /combo_context = browser\.new_context/u);
   assert.match(probe, /storageKeys.*== \[\]/u);
+  assert.match(probe, /canonical_context = browser\.new_context/u);
+  assert.match(probe, /campaign\.html\?new=1/u);
+  assert.match(probe, /mode=campaign&lead=nikola&support=mateus/u);
+  assert.match(probe, /canonicalComplete === true/u);
+  assert.match(probe, /settlementState.*committed/su);
+  assert.match(probe, /hasAdvancement.*hasLoadout.*hasPlaytime.*hasRunReceipt/su);
+  assert.match(probe, /continueHidden.*False/u);
   assert.match(probe, /require\(not console_errors/u);
   assert.match(probe, /require\(not page_errors/u);
   assert.match(probe, /require\(not delivery_errors/u);

@@ -205,7 +205,22 @@ import {
   createArchiveRecordStorageAdapter,
 } from './archive-record-runtime.mjs';
 
-let requestedNewGame = new URLSearchParams(window.location.search).get('new') === '1';
+const campaignQuery = new URLSearchParams(window.location.search);
+let requestedNewGame = campaignQuery.get('new') === '1';
+if (campaignQuery.get('legacyBattle') === '1') sessionStorage.setItem('bells.legacyBattle', '1');
+if (campaignQuery.get('legacyBattle') === '0') sessionStorage.removeItem('bells.legacyBattle');
+const legacyBattleRequested = campaignQuery.get('legacyBattle') === '1'
+  || (campaignQuery.get('legacyBattle') !== '0' && sessionStorage.getItem('bells.legacyBattle') === '1');
+
+function campaignBattleHref(parameters) {
+  if (!(parameters instanceof URLSearchParams)) throw new TypeError('Battle parameters must be URLSearchParams.');
+  if (legacyBattleRequested) {
+    parameters.set('return', 'campaign.html?legacyBattle=1');
+    return `battle.html?${parameters.toString()}`;
+  }
+  parameters.set('mode', 'campaign');
+  return `action-campaign-battle.html?${parameters.toString()}`;
+}
 const presentationMode = applyPresentationMode();
 const developerMode = presentationMode === PRESENTATION_MODES.DEVELOPER;
 const chapterList = document.querySelector('#chapterList');
@@ -1181,7 +1196,7 @@ function launchPlacedEncounter(event, beat) {
     beat: beat.id,
     fieldTrigger: event.triggerId,
   });
-  window.location.href = `battle.html?${parameters.toString()}`;
+  window.location.href = campaignBattleHref(parameters);
 }
 
 function attemptFieldMove(dx, dy) {
@@ -2376,7 +2391,7 @@ function renderBattleLaunch(beat, beatBattleState) {
 
   launchBattle.removeAttribute('aria-disabled');
   const parameters = new URLSearchParams({ encounter: selected.id, return: 'campaign.html', beat: beat.id });
-  launchBattle.href = `battle.html?${parameters.toString()}`;
+  launchBattle.href = campaignBattleHref(parameters);
   const winCount = getEncounterWinCount(advancementState, selected.id);
   launchBattle.textContent = pending ? `Enter encounter: ${selected.name}` : `Replay for grind XP: ${selected.name}`;
   const clearedHere = encounters.filter((encounter) => getEncounterWinCount(advancementState, encounter.id) > 0).length;
@@ -2994,7 +3009,7 @@ interactFieldButton.addEventListener('click', () => {
         { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: fieldRuntimeState },
         { id: 'scene-operation', adapter: sceneOperationAdapter, previousState: sceneOperationState, nextState: sceneOperationState },
       ]).ok) return;
-      window.location.href = `battle.html?${parameters.toString()}`;
+      window.location.href = campaignBattleHref(parameters);
       return;
     }
     if (!result.ok) {
@@ -3066,7 +3081,7 @@ interactFieldButton.addEventListener('click', () => {
         { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: fieldRuntimeState },
         { id: 'witness', adapter: witnessAdapter, previousState: witnessChronicleState, nextState: witnessChronicleState },
       ]).ok) return;
-      window.location.href = `battle.html?${parameters.toString()}`;
+      window.location.href = campaignBattleHref(parameters);
       return;
     }
     const evidence = isChoiceStage ? { choiceId: selectedWitnessChoiceId } : {};
@@ -3100,7 +3115,7 @@ interactFieldButton.addEventListener('click', () => {
         { id: 'field', adapter: fieldAdapter, previousState: fieldRuntimeState, nextState: fieldRuntimeState },
         { id: 'quest', adapter: questAdapter, previousState: questState, nextState: questState },
       ]).ok) return;
-      window.location.href = `battle.html?${parameters.toString()}`;
+      window.location.href = campaignBattleHref(parameters);
       return;
     }
     const result = advanceQuestObjective(questState, marker.quest.id, marker.objective.id);
