@@ -125,7 +125,21 @@ function outcomeSource(cluster, branch) {
 }
 
 function clusterNodeIds(index, cluster = STORYWORLD_CLUSTERS[index]) {
-  const prefix = `page_sw${String(index + 1).padStart(2, '0')}`;
+  const stableNodeNumber = new Map([
+    ['sw1-clerks-second-copy', 1],
+    ['sw2-witness-not-family', 2],
+    ['sw3-sayos-warehouse-conditions', 3],
+    ['sw4-margin-varga-journal', 4],
+    ['sw5-cipher-handoff', 5],
+    ['sw6-tribunal-afterword', 6],
+    ['sw7-soldier-will-not-follow', 7],
+    ['sw8-boats-with-conditions', 8],
+    ['sw-enma-three-terms', 9],
+    ['sw9-mateus-living-archive', 10],
+    ['sw10-corrections-desk', 11],
+    ['sw-sodegaura-lantern-manifests', 12],
+  ]).get(cluster.id) ?? index + 1;
+  const prefix = `page_sw${String(stableNodeNumber).padStart(2, '0')}`;
   const ids = {
     entry: index === 0 ? 'page_0000' : `${prefix}_decision`,
     accord: index === STORYWORLD_CLUSTERS.length - 1 ? 'page_end_corrections_visible' : `${prefix}_accord`,
@@ -252,6 +266,7 @@ function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId, creatio
           invert: false,
           consequenceId: nextEntryId,
           effects: mergeEffects(source.accord.effects, cluster.outcomeRouteEffects),
+          desirability: source.accord.desirability,
         }),
         buildReaction({
           id: `${optionId}_r_revision`,
@@ -260,6 +275,7 @@ function buildOutcomeEncounter(cluster, index, ids, branch, nextEntryId, creatio
           invert: true,
           consequenceId: nextEntryId,
           effects: mergeEffects(source.revision.effects, cluster.outcomeRouteEffects),
+          desirability: source.revision.desirability,
         }),
       ],
       benchmark_tags: [`slot:${cluster.id}`, `outcome:${branch}`],
@@ -323,7 +339,7 @@ function buildStoryworld() {
     font_size: 16,
     language: 'en',
     rating: 'Teen',
-    about_text: 'Thirty-seven reaction-driven interstitial scene nodes anchored to a sixty-scene authored JRPG catalog. A complete Salt or Ash route experiences ten decisions and consequences; Paper experiences eleven. The Act III war table and Lady Enma hearing each have three outcomes; the Last Command has four distinct political endings.',
+    about_text: 'Forty reaction-driven interstitial scene nodes anchor a sixty-scene authored JRPG catalog. Every selected route experiences eleven decisions and consequences while omitting one of four regional-operation clusters. The Act III war table and Lady Enma hearing each have three outcomes; the Last Command has four distinct political endings.',
     characters: [{
       id: STORYWORLD_CHARACTER_ID,
       name: 'The Lantern Network',
@@ -352,8 +368,12 @@ function buildStoryworld() {
       source_version: STORYWORLD_SOURCE_VERSION,
       canonical_scene_count: 60,
       storyworld_authored_scene_count: encounters.length,
-      complete_run_storyworld_scene_count: STORYWORLD_CLUSTERS.length * 2,
-      complete_run_total_scene_count: 60 + STORYWORLD_CLUSTERS.length * 2,
+      complete_run_storyworld_scene_count: Math.max(
+        ...getNarrativeRouteSchedules().map(({ playedStoryworldSceneCount }) => playedStoryworldSceneCount),
+      ),
+      complete_run_total_scene_count: 60 + Math.max(
+        ...getNarrativeRouteSchedules().map(({ playedStoryworldSceneCount }) => playedStoryworldSceneCount),
+      ),
       reaction_tie_break: 'later-authored-wins',
     },
   };

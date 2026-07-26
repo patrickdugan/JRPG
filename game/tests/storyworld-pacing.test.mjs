@@ -7,12 +7,12 @@ import {
 } from '../storyworld-pacing.mjs';
 
 test('full-catalog pacing remains a diagnostic ceiling rather than a selected-route claim', () => {
-  assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 11);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2483);
-  assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 21);
-  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 19.415);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 338.925);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.648750000000001);
+  assert.equal(STORYWORLD_PACING_REPORT.perCluster.length, 12);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2750);
+  assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 23);
+  assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 21.416666666666668);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 340.9266666666667);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.682111111111111);
   assert.equal(STORYWORLD_PACING_REPORT.fullCatalogWithinFiveToSixHourTarget, true);
   assert.equal(STORYWORLD_PACING_REPORT.selectedRouteDurationClaim, false);
 });

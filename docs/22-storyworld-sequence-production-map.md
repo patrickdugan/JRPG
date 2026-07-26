@@ -1,28 +1,28 @@
 # Storyworld sequence production map
 
-This is the production map for the eleven implemented Storyworld clusters. The authored source is [`storyworlds/bells-black-chrysanthemum.source.mjs`](../storyworlds/bells-black-chrysanthemum.source.mjs); exact campaign placement and related encounter IDs are generated in [`storyworlds/bells-black-chrysanthemum.bindings.json`](../storyworlds/bells-black-chrysanthemum.bindings.json). The dramatic authority, causal strands, effect vocabulary, and Act III–IV conversion contract are locked in [`38-five-act-master-storyworld-plan.md`](38-five-act-master-storyworld-plan.md). Generated files are not hand-edited.
+This is the production map for the twelve implemented Storyworld clusters. The authored source is [`storyworlds/bells-black-chrysanthemum.source.mjs`](../storyworlds/bells-black-chrysanthemum.source.mjs); exact campaign placement and related encounter IDs are generated in [`storyworlds/bells-black-chrysanthemum.bindings.json`](../storyworlds/bells-black-chrysanthemum.bindings.json). The dramatic authority, causal strands, effect vocabulary, and Act III–IV conversion contract are locked in [`38-five-act-master-storyworld-plan.md`](38-five-act-master-storyworld-plan.md). Generated files are not hand-edited.
 
 ## Scene arithmetic
 
 - Canonical campaign: 60 scenes.
-- Storyworld: 11 decision scenes plus 26 mutually exclusive consequence scenes = 37 authored scenes. The Act III war table and Lady Enma's dedicated spool each have three outcomes, the Last Command has four, and the other eight decisions have two each.
-- Total authored catalog: 60 + 37 = **97 scenes**.
-- Salt route: 55 campaign scenes + 10 decisions + 10 consequences = **75 played scenes**.
-- Ash route: 54 campaign scenes + 10 decisions + 10 consequences = **74 played scenes**.
+- Storyworld: 12 decision scenes plus 28 mutually exclusive consequence scenes = 40 authored scenes. The Act III war table and Lady Enma's dedicated spool each have three outcomes, the Last Command has four, and the other nine decisions have two each.
+- Total authored catalog: 60 + 40 = **100 scenes**.
+- Salt route: 55 campaign scenes + 11 decisions + 11 consequences = **77 played scenes**.
+- Ash route: 54 campaign scenes + 11 decisions + 11 consequences = **76 played scenes**.
 - Paper route: 55 campaign scenes + 11 decisions + 11 consequences = **77 played scenes**.
-- The route scheduler omits one regional operation and its owned Storyworld cluster. The authored 97-scene catalog remains available across routes; it is not a single-playthrough count.
+- The route scheduler omits one regional operation and its owned Storyworld cluster. The authored 100-scene catalog remains available across routes; it is not a single-playthrough count.
 
 Reactions occur inside those Storyworld scene nodes and do not add to the scene count.
 
-The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,483 visible words and at most 21 explicit decisions across all eleven clusters. Its 338.925-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
+The checked-in diagnostic in [`game/storyworld-pacing.mjs`](../game/storyworld-pacing.mjs) measures the full catalog ceiling: 2,750 visible words and at most 23 explicit decisions across all twelve clusters. Its 340.927-minute result combines that ceiling with all 60 authored campaign beats, so it is not a selected-route duration claim. Route receipts separately require at least 300 observed active minutes; fresh human route timing remains required.
 
 ## Carry-forward contract
 
-Every cluster scheduled on the selected route is required for narrative credits. Salt omits `sw6-tribunal-afterword`, Ash omits `sw4-margin-varga-journal`, and Paper retains all eleven clusters while omitting the Sodegaura operation, which owns no separate cluster. The `act-route-decision` resolves before Act III's first campaign beat; a `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions, the Act IV approach, and Act V political parameters.
+Every selected route requires eleven clusters for narrative credits. Salt omits `sw6-tribunal-afterword`, Ash omits `sw4-margin-varga-journal`, and Paper omits `sw-sodegaura-lantern-manifests`; the other operation clusters and the convergent spine remain required. The `act-route-decision` resolves before Act III's first campaign beat; a `before-boss-decision` resolves before its anchor beat can proceed; an `after-boss-consequence` or `after-level-consequence` resolves after its anchor beat. Each completed record preserves the selected decision, deterministic decision reaction, selected consequence, and consequence reaction. Their bounded effects update the projection used to select later reactions, the Act IV approach, and Act V political parameters.
 
-Late reactions are not single-stat morality checks. Every Act III–IV decision reaction now reads at least four already-authored threads. Regional completion effects convert personal disciplines into evacuation capacity, Oni-supply disruption, bell intelligence, garrison defection, and succession readiness rather than merely raising a route label. The Enma hearing and all five Last Command options retain weighted multi-property formulas. The final options read six to nine prior threads apiece, including proof, consent, witness safety, Mateus's accountability, Nikola's severed-command discipline, succession preparation, garrison defection, bell intelligence, Oni-supply disruption, Enma's categorical fate, and Kurozane's accumulated pride, indispensability claim, and guilt pressure.
+Late reactions are not single-stat morality checks. Every Act III–IV decision reaction reads at least four already-authored threads, and every consequence reaction reads four. Regional completion effects convert personal disciplines into evacuation capacity, Oni-supply disruption, bell intelligence, garrison defection, and succession readiness rather than merely raising a route label. The Enma hearing and all five Last Command options retain weighted multi-property formulas. The final options read six to nine prior threads apiece, including proof, consent, witness safety, Mateus's accountability, Nikola's severed-command discipline, succession preparation, garrison defection, bell intelligence, Oni-supply disruption, Enma's categorical fate, and Kurozane's accumulated pride, indispensability claim, and guilt pressure.
 
-The `sw3-sayos-warehouse-conditions` and `sw10-corrections-desk` strings remain opaque internal compatibility IDs, not claims that their new scenes have their old meanings. Exact legacy identities migrate only through the first two Storyworld records. A prior save that reached the old third record fails closed: the runtime will not reinterpret a warehouse-custody choice as a Salt, Ash, or Paper strategic priority. The same rule also prevents historical Enma and Corrections Desk outcomes from becoming political choices the player did not make.
+The `sw3-sayos-warehouse-conditions` and `sw10-corrections-desk` strings remain opaque internal compatibility IDs, not claims that their new scenes have their old meanings. Structural identities from before the route decision migrate only through the first two Storyworld records; the runtime will not reinterpret an old warehouse-custody choice as a Salt, Ash, or Paper priority. Source-version-seven Salt and Ash histories that already crossed Sodegaura receive the canonical local-stop-signal receipt already established by that shipped chapter, while every prior opaque record and final outcome remains unchanged.
 
 For a related battle, the presentation card carries the selected decision text, the consequence-scene title, and the resolved consequence reaction (falling back to consequence text). Pre-boss cards read **Decision carried into encounter**. After-boss records read **Recorded aftermath** when that encounter is subsequently presented. Clusters without a related encounter ID still carry their state and narrative context into later Storyworld selection, but do not create a battle card.
 
@@ -46,49 +46,55 @@ For a related battle, the presentation card carries the selected decision text, 
    - Consequences: **Salt Before Steel** / **Ash Before the Muster** / **Paper Before the Throne**.
    - Carry-forward: exact Salt, Ash, or Paper priority; initial theater commitment; Act IV approach-map selection; and history-sensitive consent, safety, proof, and public-reach texture. The chosen priority remains categorical even when the coalition revises the party's first framing.
 
-4. **A Margin in the Severed Dragon Testament** (`sw4-margin-varga-journal`, save-stable legacy ID)
+4. **Three Lantern Manifests** (`sw-sodegaura-lantern-manifests`, new node prefix `page_sw12`)
+   - Anchor: `c3-06-first-key`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
+   - Related encounter ID: `c3-captain-kaji`.
+   - Consequences: **Three Ledgers, No Master List** / **The Narrower Tide**.
+   - Carry-forward: Salt commitment, evacuation capacity, network consent, route safety, distributed custody, and accountable patrol deception. Its four options and three reactions per option separate households, testimony, stores, stop signals, and inspection orders without rebuilding a master persecution list.
+
+5. **A Margin in the Severed Dragon Testament** (`sw4-margin-varga-journal`, save-stable legacy ID)
    - Anchor: `c4-03-varga-journal`; placement: **after level** (`after-beat`, `after-level-consequence`).
    - Related encounter IDs: none.
    - Consequences: **A Covenant Entered as Evidence** / **The Deadline Beside the Gap**.
    - Carry-forward: Salt commitment, evacuation capacity, bell intelligence, route safety, and durable inheritance/custody limits for later Storyworld reactions; no battle card.
 
-5. **The Cipher Handoff** (`sw5-cipher-handoff`)
+6. **The Cipher Handoff** (`sw5-cipher-handoff`)
    - Anchor: `c5-05-sigil-burned`; placement: **before boss** (`before-beat`, `before-boss-decision`).
    - Related encounter ID: `c5-furnace-abbot`.
    - Consequences: **A Chain With Human Verbs** / **Separate Accounts, Shared Test**.
    - Carry-forward: Ash commitment, Oni-supply disruption, garrison-defection groundwork, bounded bell intelligence, and **Decision carried into encounter** context for `c5-furnace-abbot`.
 
-6. **Tribunal Afterword** (`sw6-tribunal-afterword`)
+7. **Tribunal Afterword** (`sw6-tribunal-afterword`)
    - Anchor: `c6-03-tribunal`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
    - Related encounter ID: `c6-ujiro`.
    - Consequences: **Admission Under Corroboration** / **An Audience Is Not Owed**.
    - Carry-forward: Paper commitment, public reach, succession readiness, bell intelligence, Kurozane guilt pressure, and retrospective **Recorded aftermath** context for `c6-ujiro`.
 
-7. **The Soldier Who Will Not Follow** (`sw7-soldier-will-not-follow`)
+8. **The Soldier Who Will Not Follow** (`sw7-soldier-will-not-follow`)
    - Anchor: `c7-03-aqueduct-names`; placement: **before boss** (`before-beat`, `before-boss-decision`).
    - Related encounter ID: `c7-name-slip-release`.
    - Consequences: **Help Without a Banner** / **Silence Is Not Betrayal**.
    - Carry-forward: shared evacuation capacity, Oni release, garrison defection, reduced Kurozane indispensability, and **Decision carried into encounter** context for `c7-name-slip-release`.
 
-8. **Boats With Conditions** (`sw8-boats-with-conditions`)
+9. **Boats With Conditions** (`sw8-boats-with-conditions`)
    - Anchor: `c8-04-lantern-breach`; placement: **before boss** (`before-beat`, `before-boss-decision`).
    - Related encounter ID: `c8-outer-court`.
    - Consequences: **A Fleet With Many Owners** / **Evacuation Is Enough**.
    - Carry-forward: evacuation capacity, route safety, Salt continuity, network consent, reduced Kurozane indispensability, and **Decision carried into encounter** context for `c8-outer-court`.
 
-9. **Three Terms for the Cinder Fan** (`sw-enma-three-terms`; dedicated `spool_enma`)
+10. **Three Terms for the Cinder Fan** (`sw-enma-three-terms`; dedicated `spool_enma`)
    - Anchor: `c8-05-gate-opened`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
    - Related encounter ID: `c8-lady-enma`.
    - Consequences: **Custody Without a Trophy** / **The Cinder Fan Ends** / **A Defection Under Witness**.
    - Carry-forward: exact categorical Enma fate (`captured`, `killed`, or `negotiated`), bounded custody/testimony effects, and retrospective **Recorded aftermath** context for the third boss fight. Custody or compact adds bounded bell intelligence; compact can also advance garrison defection. Death explicitly loses both kinds of reach and hardens Kurozane's pride. Only custody or compact can produce Enma cooperation in Act V, modifying effective Oni disruption, garrison stand-down readiness, surrender leverage, and civil-war risk without granting pardon or authority.
 
-10. **Mateus at the Living Archive** (`sw9-mateus-living-archive`)
+11. **Mateus at the Living Archive** (`sw9-mateus-living-archive`)
    - Anchor: `c9-04-yearless-bell`; placement: **before boss** (`before-beat`, `before-boss-decision`).
    - Related encounter ID: `c9-yearless-bell`.
    - Consequences: **Knowledge Under Revocable Terms** / **The Translation Stops**.
    - Carry-forward: **Decision carried into encounter** context for `c9-yearless-bell`, including the selected limit on Mateus and its resolved consequence.
 
-11. **The Last Command** (`sw10-corrections-desk`, opaque legacy internal ID)
+12. **The Last Command** (`sw10-corrections-desk`, opaque legacy internal ID)
     - Anchor: `c9-05-dawn-at-observatory`; placement: **after boss** (`after-beat`, `after-boss-consequence`).
     - Related encounter ID: `c9-kurozane`.
     - Consequences: **The Seals Returned** / **The Last Seal at Dawn** / **The Necessary Blade** / **The Empty Throne Mobilizes**.
@@ -102,7 +108,9 @@ For a related battle, the presentation card carries the selected decision text, 
 node game/storyworld-balance-audit.mjs --runs 5000 --seed 42
 ```
 
-The locked 15,000-run result is 44.09% **The Seals Returned**, 11.97% **The Last Seal at Dawn**, 16.46% **The Necessary Blade**, and 27.48% **The Empty Throne Mobilizes** overall. Every route expresses all four endings. Salt resolves 40.48% living abdication / 3.74% dawn seppuku / 9.72% prepared execution / 46.06% civil war. Ash resolves 43.36% / 4.94% / 19.46% / 32.24%; Paper resolves 48.42% / 27.24% / 20.20% / 4.14%. The confession-and-pride-reversal flow remains rare at 2.50% globally and 7.48% on Paper; execution pressure forces fearful surrender in a separate 0.36% tail. Paper's stronger political position remains earned rather than automatic: clean succession and witnessed dawn seppuku each appear in 54.26%, and civil-war-safe execution in 51.38%. Ash separately earns civil-war-safe execution in 60.60% through Oni-supply disruption and garrison stand-down. Rotating custody resolves 34.00% of Enma hearings, witnessed compact 62.82%, and death 3.18%. All three Enma outcomes, all thirteen final dramatic flows, and all four endings remain reachable in the locked rehearsal. The full findings and thread ledger are recorded in [`storyworlds/bells-black-chrysanthemum_long_range_authoring.md`](../storyworlds/bells-black-chrysanthemum_long_range_authoring.md).
+The locked 15,000-run result is 44.55% **The Seals Returned**, 13.37% **The Last Seal at Dawn**, 16.53% **The Necessary Blade**, and 25.55% **The Empty Throne Mobilizes** overall. Every route expresses all four endings. Salt resolves 42.32% living abdication / 4.90% dawn seppuku / 8.82% prepared execution / 43.96% civil war. Ash resolves 42.56% / 8.98% / 20.56% / 27.90%; Paper resolves 48.78% / 26.22% / 20.20% / 4.80%. The confession-and-pride-reversal flow remains rare at 2.22% globally; execution pressure forces fearful surrender in a separate 0.80% tail. Paper's stronger political position remains earned rather than automatic: clean succession appears in 48.98%, witnessed dawn seppuku in 48.94%, and civil-war-safe execution in 43.60%. Ash separately earns civil-war-safe execution in 70.34% through Oni-supply disruption and garrison stand-down. Rotating custody resolves 49.61% of Enma hearings, witnessed compact 49.05%, and death 1.35%. All three Enma outcomes, all thirteen final dramatic flows, and all four endings remain reachable in the locked rehearsal.
+
+Frequency is not the only balance gate. Mean cumulative path travel stays within 45.19–46.73 ordinary-nudge units across routes, while prefinal route centroids remain 7.28–7.97 nudges apart. Alternate reactions separate by 3.97 nudges and option centroids by 2.50 nudges on average. Thirty entry options are history-sensitive. The full thread ledger is recorded in [`storyworlds/bells-black-chrysanthemum_long_range_authoring.md`](../storyworlds/bells-black-chrysanthemum_long_range_authoring.md), and metric definitions, cluster geometry, inclination margins, and regression bounds are locked in [`39-storyworld-path-and-effect-balance.md`](39-storyworld-path-and-effect-balance.md).
 
 ## Act III and IV major-sequence integration
 

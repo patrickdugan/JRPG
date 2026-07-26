@@ -18,27 +18,27 @@ const GAME = path.resolve(HERE, '..');
 const ROOT = path.resolve(GAME, '..');
 const wordCount = (value) => value.trim().split(/\s+/u).length;
 
-test('generated Storyworld catalog supplies ninety-seven authored scenes and exact nonlinear route totals', () => {
+test('generated Storyworld catalog supplies one hundred authored scenes and equal Storyworld route depth', () => {
   assert.deepEqual(STORYWORLD_METRICS, {
     canonicalSceneCount: 60,
-    storyworldAuthoredSceneCount: 37,
-    authoredSceneCount: 97,
+    storyworldAuthoredSceneCount: 40,
+    authoredSceneCount: 100,
     narrativeRoutes: {
-      salt: { canonicalSceneCount: 55, storyworldSceneCount: 20, playedSceneCount: 75 },
-      ash: { canonicalSceneCount: 54, storyworldSceneCount: 20, playedSceneCount: 74 },
+      salt: { canonicalSceneCount: 55, storyworldSceneCount: 22, playedSceneCount: 77 },
+      ash: { canonicalSceneCount: 54, storyworldSceneCount: 22, playedSceneCount: 76 },
       paper: { canonicalSceneCount: 55, storyworldSceneCount: 22, playedSceneCount: 77 },
     },
-    completeRunStoryworldSceneCountRange: { minimum: 20, maximum: 22 },
-    completeRunSceneCountRange: { minimum: 74, maximum: 77 },
-    clusterCount: 11,
-    entryOptionCount: 35,
+    completeRunStoryworldSceneCountRange: { minimum: 22, maximum: 22 },
+    completeRunSceneCountRange: { minimum: 76, maximum: 77 },
+    clusterCount: 12,
+    entryOptionCount: 42,
   });
-  assert.equal(STORYWORLD_CLUSTERS.length, 11);
+  assert.equal(STORYWORLD_CLUSTERS.length, 12);
   assert.equal(STORYWORLD_PROPERTIES.length, 35);
   assert.equal(Object.isFrozen(STORYWORLD_CATALOG), true);
   assert.equal(Object.isFrozen(STORYWORLD_CLUSTERS[0].entry.options[0].reactions[0].effects), true);
 });
-test('eleven exact anchors cover the Act III route decision plus post-level, pre-boss, and post-boss sequencing', () => {
+test('twelve exact anchors cover the Act III route decision plus post-level, pre-boss, and post-boss sequencing', () => {
   const canonical = new Map(CAMPAIGN.chapters.flatMap((chapter) => (
     chapter.beats.map((beat) => [beat.id, { chapterId: chapter.id, encounterIds: beat.encounterIds ?? [] }])
   )));
@@ -60,7 +60,7 @@ test('eleven exact anchors cover the Act III route decision plus post-level, pre
   }
   assert.deepEqual(Object.fromEntries(roleCounts), {
     'after-level-consequence': 2,
-    'after-boss-consequence': 4,
+    'after-boss-consequence': 5,
     'act-route-decision': 1,
     'before-boss-decision': 4,
   });
@@ -76,7 +76,15 @@ test('every decision and reaction meets the authored density, bounded-effect, an
   let inversionEffectCount = 0;
   for (const cluster of STORYWORLD_CLUSTERS) {
     const encounters = [cluster.entry, ...cluster.outcomes];
-    assert.equal(cluster.entry.options.length, cluster.id === 'sw10-corrections-desk' ? 5 : 3, cluster.id);
+    const expectedEntryOptionCount = cluster.id === 'sw10-corrections-desk'
+      ? 5
+      : [
+        'sw-sodegaura-lantern-manifests',
+        'sw7-soldier-will-not-follow',
+        'sw8-boats-with-conditions',
+        'sw-enma-three-terms',
+      ].includes(cluster.id) ? 4 : 3;
+    assert.equal(cluster.entry.options.length, expectedEntryOptionCount, cluster.id);
     assert.equal(
       cluster.outcomes.length,
       cluster.id === 'sw10-corrections-desk'
@@ -138,9 +146,9 @@ test('every decision and reaction meets the authored density, bounded-effect, an
       }
     }
   }
-  assert.equal(encounterIds.size, 37);
-  assert.equal(optionIds.size, 57);
-  assert.equal(reactionIds.size, 117);
+  assert.equal(encounterIds.size, 40);
+  assert.equal(optionIds.size, 66);
+  assert.equal(reactionIds.size, 142);
   assert.equal(inversionEffectCount, 1);
   assert.equal(terminalCount, 4);
 });
@@ -148,6 +156,7 @@ test('every decision and reaction meets the authored density, bounded-effect, an
 test('Acts III and IV convert multiple prior threads into concrete route capacity', () => {
   const conversionClusterIds = new Set([
     'sw3-sayos-warehouse-conditions',
+    'sw-sodegaura-lantern-manifests',
     'sw4-margin-varga-journal',
     'sw5-cipher-handoff',
     'sw6-tribunal-afterword',
@@ -162,9 +171,15 @@ test('Acts III and IV convert multiple prior threads into concrete route capacit
         assert.ok(reaction.effects.length >= 4, `${reaction.id} does not carry a conversion-layer effect set`);
       }
     }
+    for (const outcomeOption of cluster.outcomes.flatMap(({ options }) => options)) {
+      for (const reaction of outcomeOption.reactions) {
+        assert.ok(reaction.score.terms.length >= 4, `${reaction.id} lacks consequence-layer inclination`);
+      }
+    }
   }
 
   const expectedCapacityThreads = {
+    'sw-sodegaura-lantern-manifests': ['salt_commitment', 'evacuation_capacity', 'network_consent', 'route_safety'],
     'sw4-margin-varga-journal': ['salt_commitment', 'evacuation_capacity', 'bell_intelligence', 'route_safety'],
     'sw5-cipher-handoff': ['ash_commitment', 'oni_supply_disruption', 'garrison_defection'],
     'sw6-tribunal-afterword': ['paper_commitment', 'public_reach', 'succession_readiness', 'bell_intelligence'],
@@ -196,18 +211,19 @@ test('authored JSON, binding sidecar, and browser registry remain deterministic 
   assert.match(run.stdout, /generated artifacts are current/u);
   const world = JSON.parse(fs.readFileSync(path.join(ROOT, 'storyworlds', 'bells-black-chrysanthemum.storyworld.json'), 'utf8'));
   const bindings = JSON.parse(fs.readFileSync(path.join(ROOT, 'storyworlds', 'bells-black-chrysanthemum.bindings.json'), 'utf8'));
-  assert.equal(world.encounters.length, 37);
+  assert.equal(world.encounters.length, 40);
   assert.equal(world.meta.complete_run_total_scene_count, 82);
   assert.equal(world.spools.length, 6);
   assert.equal(world.spools.filter(({ starts_active: startsActive }) => startsActive).length, 1);
   assert.equal(world.spools.some(({ id }) => id === 'spool_enma'), true);
   assert.equal(world.spools.some((spool) => Object.hasOwn(spool, 'spool_type')), false);
-  assert.equal(bindings.authoredSceneCount, 37);
-  assert.equal(bindings.clusters.length, 11);
+  assert.equal(bindings.authoredSceneCount, 40);
+  assert.equal(bindings.clusters.length, 12);
   const routeRequirements = Object.fromEntries(
     bindings.clusters.map(({ id, requiredOnRoutes }) => [id, requiredOnRoutes]),
   );
   assert.deepEqual(routeRequirements['sw4-margin-varga-journal'], ['salt', 'paper']);
+  assert.deepEqual(routeRequirements['sw-sodegaura-lantern-manifests'], ['salt', 'ash']);
   assert.deepEqual(routeRequirements['sw5-cipher-handoff'], ['salt', 'ash', 'paper']);
   assert.deepEqual(routeRequirements['sw6-tribunal-afterword'], ['ash', 'paper']);
   assert.equal(

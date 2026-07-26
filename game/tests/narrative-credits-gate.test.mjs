@@ -69,8 +69,8 @@ function completeAuthorities(activeMinutes = 300, theater = 'salt') {
 
 test('narrative gate reconciles each selected route at five active hours', () => {
   const expected = {
-    salt: { beats: 55, storyworldScenes: 20, clusters: 10 },
-    ash: { beats: 54, storyworldScenes: 20, clusters: 10 },
+    salt: { beats: 55, storyworldScenes: 22, clusters: 11 },
+    ash: { beats: 54, storyworldScenes: 22, clusters: 11 },
     paper: { beats: 55, storyworldScenes: 22, clusters: 11 },
   };
   for (const theater of Object.keys(expected)) {

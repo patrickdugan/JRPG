@@ -99,7 +99,18 @@ The route decision must always preserve the selected priority, regardless of whe
 
 The consequence scene adds one secondary legitimacy effect. It does not grant the full regional payoff before the operation is played.
 
-### III.2 — Nagi and the Severed Dragon testament
+### III.2 — Sodegaura and the three lantern manifests
+
+Completing Sodegaura separates the coast's people, evidence, and stores before the coalition can inherit Kurozane's master-list logic:
+
+- entry reactions add Salt commitment and evacuation capacity;
+- consequence reactions add network consent and route safety;
+- distributed ledgers, local stop signals, accountable patrol deception, and witnessed destruction of the master list are four materially different procedures;
+- every route still omits one regional operation, so Salt and Ash play Sodegaura while Paper pays the explicit cost of leaving it out.
+
+The conversion is: **a victorious warehouse raid becomes evacuation infrastructure that no single commander can reconstruct into a persecution list.**
+
+### III.3 — Nagi and the Severed Dragon testament
 
 Completing Nagi writes Salt infrastructure and bell knowledge:
 
@@ -111,7 +122,7 @@ Completing Nagi writes Salt infrastructure and bell knowledge:
 
 The scene's central conversion is: **inherited anti-vampire authority becomes publicly limited technique, and the wreck route becomes a verifiable palace signal.**
 
-### III.3 — Kagura and the cipher handoff
+### III.4 — Kagura and the cipher handoff
 
 Completing Kagura writes Ash infrastructure:
 
@@ -123,7 +134,7 @@ Completing Kagura writes Ash infrastructure:
 
 The conversion is: **a confession about machinery becomes an actionable release map that soldiers and bound Oni can refuse.**
 
-### III.4 — Kozui and the tribunal afterword
+### III.5 — Kozui and the tribunal afterword
 
 Completing Kozui writes Paper infrastructure:
 
@@ -135,7 +146,7 @@ Completing Kozui writes Paper infrastructure:
 
 The conversion is: **a public accusation becomes a distributed inventory of offices that can receive finite authority.**
 
-### III.5 — Hushroad and the soldier who will not follow
+### III.6 — Hushroad and the soldier who will not follow
 
 Hushroad is common to every route because rescue before the palace is the coalition's shared constitutional act.
 
@@ -192,7 +203,7 @@ The four endings remain political consequences, not moral grades:
 
 ## Production topology
 
-The authored catalog remains ninety-seven scenes: sixty campaign beats plus eleven Storyworld decisions and twenty-six mutually exclusive consequences. This pass changes effects and formulas, not scene arithmetic.
+The authored catalog contains one hundred scenes: sixty campaign beats plus twelve Storyworld decisions and twenty-eight mutually exclusive consequences. Every selected route plays eleven decisions and eleven consequences; one of the four regional-operation clusters is omitted with its operation.
 
 Act III keeps eight major sequences:
 
@@ -224,7 +235,10 @@ The implementation is ready only when all of the following hold:
 
 - generated Storyworld artifacts are deterministic and validator-clean;
 - every Act III–IV decision reaction uses a multi-thread inclination formula, except the route outcome itself remains categorically fixed by the selected priority;
+- every Act III–IV consequence reaction also uses a four-thread inclination formula;
 - every completed regional operation writes at least one route capacity and one cross-route legitimacy or safety property;
+- every selected route plays twenty-two Storyworld scenes, and cumulative L2 effect travel remains within four texture-nudge units across routes;
+- immediate reaction branches remain at least 3.5 texture-nudge units apart on average, option centroids at least 2.2 units apart, and route centroids at least six units apart at the Act V threshold;
 - all thirty-five properties remain bounded and every nudge is at most 0.10;
 - the only inversion effect remains Kurozane's Act V pride reversal;
 - all three Enma fates remain reachable;

@@ -198,8 +198,8 @@ test('narrative credits require every scene in the selected route and 300 active
 
 test('each Act III choice seals against its own playable scene and Storyworld totals', () => {
   const expected = {
-    salt: { beats: 55, decisions: 10, played: 75 },
-    ash: { beats: 54, decisions: 10, played: 74 },
+    salt: { beats: 55, decisions: 11, played: 77 },
+    ash: { beats: 54, decisions: 11, played: 76 },
     paper: { beats: 55, decisions: 11, played: 77 },
   };
   for (const schedule of getNarrativeRouteSchedules()) {

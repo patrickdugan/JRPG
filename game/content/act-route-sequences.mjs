@@ -54,7 +54,7 @@ export const ACT3_OPERATION_POOL = deepFreeze([
     ],
     mapIds: ['sdg-market-lane', 'sdg-customs-house', 'sdg-rain-docks', 'sdg-salt-warehouse'],
     encounterIds: ['c3-dock-patrol', 'c3-captain-kaji'],
-    storyworldClusterIds: [],
+    storyworldClusterIds: ['sw-sodegaura-lantern-manifests'],
     finalConsequence: 'Evacuation boats and separated testimony custody become available at the Black Gate.',
   },
   {

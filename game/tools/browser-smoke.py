@@ -1053,8 +1053,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(
                 credits_seed["profileId"] == "narrative-5-6h-v1"
                 and credits_seed["storyComplete"] is True
-                and credits_seed["playedScenes"] == 75
-                and credits_seed["storyworldScenes"] == 20
+                and credits_seed["playedScenes"] == 77
+                and credits_seed["storyworldScenes"] == 22
                 and credits_seed["creditsComplete"] is False
                 and credits_seed["durationProven"] is False
                 and credits_seed["gateReady"] is False
@@ -1115,7 +1115,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 and credits_final["storyComplete"] is True
                 and credits_final["creditsComplete"] is False
                 and credits_final["durationProven"] is False
-                and credits_final["playedScenes"] == 75,
+                and credits_final["playedScenes"] == 77,
                 f"Blocked narrative credits mutated or upgraded the receipt: {credits_final}.",
             )
             page.locator("#exportEvidence").wait_for()
@@ -1128,8 +1128,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             exported_report = json.loads(Path(download_path).read_text(encoding="utf-8"))
             require(exported_report.get("schemaVersion") == 3, "Evidence export schema drifted.")
             require(exported_report.get("story", {}).get("creditsComplete") is False, "Blocked credits were exported as complete.")
-            require(exported_report.get("story", {}).get("playedSceneCount") == 75, "Evidence export omitted the 75-scene Salt route.")
-            require(exported_report.get("story", {}).get("completedStoryworldPlayedSceneCount") == 20,
+            require(exported_report.get("story", {}).get("playedSceneCount") == 77, "Evidence export omitted the 77-scene Salt route.")
+            require(exported_report.get("story", {}).get("completedStoryworldPlayedSceneCount") == 22,
                     "Evidence export omitted Storyworld completion.")
             require(exported_report.get("requiredRoute", {}).get("complete") is False,
                     "Evidence export promoted optional completionist work to complete.")
@@ -1146,8 +1146,8 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             pacing_export = exported_report.get("pacing", {})
             require(pacing_export.get("diagnosticOnly") is True, "Evidence export pacing is not diagnostic-only.")
             require(pacing_export.get("observedPlaytimeProof") is False, "Evidence export pacing fabricated observed proof.")
-            require(pacing_export.get("checkpointSignature") == "fnv1a32:c0e61174", "Evidence checkpoint signature drifted.")
-            require(pacing_export.get("aggregateReferenceTargetMs") == 73937967, "Evidence pacing total drifted.")
+            require(pacing_export.get("checkpointSignature") == "fnv1a32:a67d166b", "Evidence checkpoint signature drifted.")
+            require(pacing_export.get("aggregateReferenceTargetMs") == 74613750, "Evidence pacing total drifted.")
             require(len(pacing_export.get("chapters", [])) == 11, "Evidence export chapter pacing is incomplete.")
             signature = exported_report.get("signature", "")
             require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")

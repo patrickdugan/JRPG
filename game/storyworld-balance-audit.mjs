@@ -28,6 +28,21 @@ import {
 const ROUTE_OPTION_INDEX = Object.freeze({ salt: 0, ash: 1, paper: 2 });
 const FINAL_CLUSTER_ID = 'sw10-corrections-desk';
 const ENMA_CLUSTER_ID = 'sw-enma-three-terms';
+const TEXTURE_NUDGE_UNIT = 0.05;
+const ACT_III_IV_CLUSTER_IDS = Object.freeze(new Set([
+  'sw3-sayos-warehouse-conditions',
+  'sw-sodegaura-lantern-manifests',
+  'sw4-margin-varga-journal',
+  'sw5-cipher-handoff',
+  'sw6-tribunal-afterword',
+  'sw7-soldier-will-not-follow',
+  'sw8-boats-with-conditions',
+  ENMA_CLUSTER_ID,
+]));
+const PROPERTY_IDS = Object.freeze(STORYWORLD_PROPERTIES.map(({ id }) => id));
+const PROPERTY_DEFAULTS = Object.freeze(Object.fromEntries(
+  STORYWORLD_PROPERTIES.map(({ id, defaultValue }) => [id, defaultValue]),
+));
 
 function seededRandom(seed) {
   let state = seed >>> 0;
@@ -45,9 +60,207 @@ function selectOption(options, random) {
   return options[Math.floor(random() * options.length)];
 }
 
+function roundMetric(value) {
+  return Number(value.toFixed(4));
+}
+
+function projectionDistance(left, right) {
+  let l1 = 0;
+  let l2Squared = 0;
+  let activePropertyCount = 0;
+  for (const propertyId of PROPERTY_IDS) {
+    const delta = (right[propertyId] ?? 0) - (left[propertyId] ?? 0);
+    const magnitude = Math.abs(delta);
+    l1 += magnitude;
+    l2Squared += delta ** 2;
+    if (magnitude >= TEXTURE_NUDGE_UNIT - Number.EPSILON) activePropertyCount += 1;
+  }
+  return Object.freeze({
+    l1,
+    l2: Math.sqrt(l2Squared),
+    activePropertyCount,
+  });
+}
+
+function createProjectionAccumulator() {
+  return {
+    count: 0,
+    sums: Object.fromEntries(PROPERTY_IDS.map((propertyId) => [propertyId, 0])),
+  };
+}
+
+function accumulateProjection(accumulator, projection) {
+  accumulator.count += 1;
+  for (const propertyId of PROPERTY_IDS) accumulator.sums[propertyId] += projection[propertyId];
+}
+
+function projectionCentroid(accumulator) {
+  return Object.freeze(Object.fromEntries(PROPERTY_IDS.map((propertyId) => [
+    propertyId,
+    accumulator.count ? accumulator.sums[propertyId] / accumulator.count : 0,
+  ])));
+}
+
+function pairwiseCentroidDistances(centroids) {
+  const distances = {};
+  for (let leftIndex = 0; leftIndex < centroids.length; leftIndex += 1) {
+    for (let rightIndex = leftIndex + 1; rightIndex < centroids.length; rightIndex += 1) {
+      const left = centroids[leftIndex];
+      const right = centroids[rightIndex];
+      const distance = projectionDistance(left.projection, right.projection).l2;
+      distances[`${left.id}::${right.id}`] = Object.freeze({
+        propertyPoints: roundMetric(distance),
+        textureNudgeUnits: roundMetric(distance / TEXTURE_NUDGE_UNIT),
+      });
+    }
+  }
+  return Object.freeze(distances);
+}
+
+function meanPairwiseVectorDistance(vectors) {
+  let total = 0;
+  let pairs = 0;
+  for (let leftIndex = 0; leftIndex < vectors.length; leftIndex += 1) {
+    for (let rightIndex = leftIndex + 1; rightIndex < vectors.length; rightIndex += 1) {
+      total += projectionDistance(vectors[leftIndex], vectors[rightIndex]).l2;
+      pairs += 1;
+    }
+  }
+  return pairs ? total / pairs : 0;
+}
+
+function reactionVector(reaction) {
+  const vector = Object.fromEntries(PROPERTY_IDS.map((propertyId) => [propertyId, 0]));
+  for (const effect of reaction.effects) {
+    if (effect.operation === 'invert') continue;
+    vector[effect.propertyId] += effect.delta;
+  }
+  return vector;
+}
+
+function reactionScore(reaction, projection) {
+  const terms = reaction.score.terms ?? [{
+    propertyId: reaction.score.propertyId,
+    coefficient: 1,
+    invert: reaction.score.invert,
+  }];
+  return terms.reduce((total, term) => (
+    total + term.coefficient * (
+      term.invert ? 1 - projection[term.propertyId] : projection[term.propertyId]
+    )
+  ), reaction.score.offset);
+}
+
+function optionScoreMargin(option, projection) {
+  const scores = option.reactions
+    .map((reaction) => reactionScore(reaction, projection))
+    .sort((left, right) => right - left);
+  return scores.length > 1 ? scores[0] - scores[1] : scores[0];
+}
+
+function accumulateMargin(record, margin) {
+  record.count += 1;
+  record.total += margin;
+  if (margin < 0.05) record.close += 1;
+}
+
+function summarizeMargins(records) {
+  return Object.freeze(Object.fromEntries([...records.entries()].map(([clusterId, record]) => [
+    clusterId,
+    Object.freeze({
+      meanWinningMargin: roundMetric(record.total / record.count),
+      closeDecisionRate: roundMetric(record.close / record.count),
+    }),
+  ])));
+}
+
+function staticEffectGeometry() {
+  const clusters = [];
+  let branchDistanceTotal = 0;
+  let branchOptionCount = 0;
+  let optionCentroidDistanceTotal = 0;
+  let optionCentroidClusterCount = 0;
+  let entryFormulaTermTotal = 0;
+  let entryReactionCount = 0;
+  let outcomeFormulaTermTotal = 0;
+  let outcomeReactionCount = 0;
+
+  for (const cluster of STORYWORLD_CLUSTERS.filter(({ id }) => ACT_III_IV_CLUSTER_IDS.has(id))) {
+    const effectPropertyIds = new Set();
+    const optionCentroids = [];
+    const branchDistances = [];
+    for (const option of cluster.entry.options) {
+      const vectors = option.reactions.map((reaction) => {
+        for (const effect of reaction.effects) effectPropertyIds.add(effect.propertyId);
+        entryFormulaTermTotal += (reaction.score.terms ?? [reaction.score]).length;
+        entryReactionCount += 1;
+        return reactionVector(reaction);
+      });
+      const branchDistance = meanPairwiseVectorDistance(vectors);
+      branchDistances.push(branchDistance);
+      branchDistanceTotal += branchDistance;
+      branchOptionCount += 1;
+      optionCentroids.push(Object.fromEntries(PROPERTY_IDS.map((propertyId) => [
+        propertyId,
+        vectors.reduce((sum, vector) => sum + vector[propertyId], 0) / vectors.length,
+      ])));
+    }
+    for (const outcome of cluster.outcomes) {
+      for (const option of outcome.options) {
+        for (const reaction of option.reactions) {
+          for (const effect of reaction.effects) effectPropertyIds.add(effect.propertyId);
+          outcomeFormulaTermTotal += (reaction.score.terms ?? [reaction.score]).length;
+          outcomeReactionCount += 1;
+        }
+      }
+    }
+    const optionCentroidDistance = meanPairwiseVectorDistance(optionCentroids);
+    optionCentroidDistanceTotal += optionCentroidDistance;
+    optionCentroidClusterCount += 1;
+    clusters.push(Object.freeze({
+      clusterId: cluster.id,
+      entryOptionCount: cluster.entry.options.length,
+      meanEntryReactionCount: roundMetric(
+        cluster.entry.options.reduce((sum, option) => sum + option.reactions.length, 0)
+          / cluster.entry.options.length,
+      ),
+      meanEntryFormulaTermCount: roundMetric(
+        cluster.entry.options.reduce(
+          (sum, option) => sum + option.reactions.reduce(
+            (reactionSum, reaction) => reactionSum + (reaction.score.terms ?? [reaction.score]).length,
+            0,
+          ),
+          0,
+        ) / cluster.entry.options.reduce((sum, option) => sum + option.reactions.length, 0),
+      ),
+      meanReactionBranchDistance: roundMetric(
+        branchDistances.reduce((sum, value) => sum + value, 0) / branchDistances.length,
+      ),
+      optionCentroidDistance: roundMetric(optionCentroidDistance),
+      effectPropertyCount: effectPropertyIds.size,
+    }));
+  }
+
+  return Object.freeze({
+    textureNudgeUnit: TEXTURE_NUDGE_UNIT,
+    meanReactionBranchDistance: roundMetric(branchDistanceTotal / branchOptionCount),
+    meanReactionBranchDistanceInNudgeUnits: roundMetric(
+      branchDistanceTotal / branchOptionCount / TEXTURE_NUDGE_UNIT,
+    ),
+    meanOptionCentroidDistance: roundMetric(optionCentroidDistanceTotal / optionCentroidClusterCount),
+    meanOptionCentroidDistanceInNudgeUnits: roundMetric(
+      optionCentroidDistanceTotal / optionCentroidClusterCount / TEXTURE_NUDGE_UNIT,
+    ),
+    meanEntryFormulaTermCount: roundMetric(entryFormulaTermTotal / entryReactionCount),
+    meanOutcomeFormulaTermCount: roundMetric(outcomeFormulaTermTotal / outcomeReactionCount),
+    clusters: Object.freeze(clusters),
+  });
+}
+
 function resolveCluster(state, cluster, option) {
   const begun = beginStoryworldEncounter(state, cluster.id);
   if (!begun.ok) throw new Error(`${cluster.id}: ${begun.code}`);
+  const entryScoreMargin = optionScoreMargin(option, deriveStoryworldProjection(begun.state));
   const entry = chooseStoryworldOption(begun.state, cluster.id, option.id);
   if (!entry.ok) throw new Error(`${cluster.id}: ${entry.code}`);
   const entryReactionId = entry.reaction.id;
@@ -56,7 +269,12 @@ function resolveCluster(state, cluster, option) {
   const outcome = getStoryworldProgress(next.state, cluster.id).outcome;
   const outcomeOptions = getVisibleStoryworldOptions(next.state, cluster.id);
   let outcomeReactionId = null;
+  let outcomeScoreMargin = null;
   if (outcomeOptions.length) {
+    outcomeScoreMargin = optionScoreMargin(
+      outcomeOptions[0],
+      deriveStoryworldProjection(next.state),
+    );
     const carried = chooseStoryworldOption(next.state, cluster.id, outcomeOptions[0].id);
     if (!carried.ok) throw new Error(`${cluster.id}: ${carried.code}`);
     outcomeReactionId = carried.reaction.id;
@@ -71,6 +289,8 @@ function resolveCluster(state, cluster, option) {
     entryReactionId,
     outcomeReactionId,
     outcomeKey: outcome.resolutionKey,
+    entryScoreMargin,
+    outcomeScoreMargin,
   });
 }
 
@@ -142,6 +362,24 @@ function summarizeRoute(
     meanKurozanePride: Number((sums.kurozanePride / runs).toFixed(4)),
     meanKurozaneIndispensability: Number((sums.kurozaneIndispensability / runs).toFixed(4)),
     meanKurozaneGuiltPressure: Number((sums.kurozaneGuiltPressure / runs).toFixed(4)),
+    metricDistance: Object.freeze({
+      textureNudgeUnit: TEXTURE_NUDGE_UNIT,
+      meanCumulativeL1PropertyPoints: roundMetric(sums.cumulativeL1 / runs),
+      meanCumulativeL1NudgeUnits: roundMetric(sums.cumulativeL1 / runs / TEXTURE_NUDGE_UNIT),
+      meanCumulativeL2PropertyPoints: roundMetric(sums.cumulativeL2 / runs),
+      meanCumulativeL2NudgeUnits: roundMetric(sums.cumulativeL2 / runs / TEXTURE_NUDGE_UNIT),
+      meanPrefinalDisplacementL2PropertyPoints: roundMetric(sums.prefinalDisplacementL2 / runs),
+      meanPrefinalDisplacementL2NudgeUnits: roundMetric(
+        sums.prefinalDisplacementL2 / runs / TEXTURE_NUDGE_UNIT,
+      ),
+      meanFinalDisplacementL2PropertyPoints: roundMetric(sums.finalDisplacementL2 / runs),
+      meanFinalDisplacementL2NudgeUnits: roundMetric(
+        sums.finalDisplacementL2 / runs / TEXTURE_NUDGE_UNIT,
+      ),
+      meanPrefinalActivePropertyCount: roundMetric(sums.prefinalActivePropertyCount / runs),
+      meanFinalActivePropertyCount: roundMetric(sums.finalActivePropertyCount / runs),
+      meanDisplacementEfficiency: roundMetric(sums.displacementEfficiency / runs),
+    }),
   });
 }
 
@@ -157,6 +395,10 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
   const globalClusterOutcomes = {};
   const globalEntryReactions = new Map();
   const globalFinalFlows = {};
+  const entryScoreMargins = new Map();
+  const outcomeScoreMargins = new Map();
+  const routePrefinalProjectionAccumulators = new Map();
+  const endingProjectionAccumulators = new Map();
 
   for (const [routeIndex, schedule] of getNarrativeRouteSchedules().entries()) {
     const random = seededRandom(seed + routeIndex * 10_007);
@@ -175,12 +417,24 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
       kurozanePride: 0,
       kurozaneIndispensability: 0,
       kurozaneGuiltPressure: 0,
+      cumulativeL1: 0,
+      cumulativeL2: 0,
+      prefinalDisplacementL2: 0,
+      finalDisplacementL2: 0,
+      prefinalActivePropertyCount: 0,
+      finalActivePropertyCount: 0,
+      displacementEfficiency: 0,
     };
+    const routePrefinalAccumulator = createProjectionAccumulator();
+    routePrefinalProjectionAccumulators.set(schedule.priorityTheater, routePrefinalAccumulator);
 
     for (let run = 0; run < runsPerRoute; run += 1) {
       let state = createStoryworldState({
         runId: `balance-${schedule.priorityTheater}-${seed}-${run}`,
       });
+      let cumulativeL1 = 0;
+      let cumulativeL2 = 0;
+      let prefinalProjection = null;
       for (const clusterId of schedule.storyworldDecisionIds) {
         const cluster = clusterById.get(clusterId);
         const option = clusterId === 'sw3-sayos-warehouse-conditions'
@@ -189,6 +443,8 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
 
         if (clusterId === FINAL_CLUSTER_ID) {
           const projection = deriveStoryworldProjection(state);
+          prefinalProjection = projection;
+          accumulateProjection(routePrefinalAccumulator, projection);
           const profile = deriveActRouteProfile(projection);
           const { act5Parameters } = profile;
           for (const gate of [
@@ -212,8 +468,21 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
           sums.kurozaneGuiltPressure += projection.kurozane_guilt_pressure;
         }
 
+        const projectionBeforeCluster = deriveStoryworldProjection(state);
         const resolution = resolveCluster(state, cluster, option);
         state = resolution.state;
+        const entryMarginRecord = entryScoreMargins.get(cluster.id) ?? { count: 0, total: 0, close: 0 };
+        accumulateMargin(entryMarginRecord, resolution.entryScoreMargin);
+        entryScoreMargins.set(cluster.id, entryMarginRecord);
+        if (resolution.outcomeScoreMargin != null) {
+          const outcomeMarginRecord = outcomeScoreMargins.get(cluster.id) ?? { count: 0, total: 0, close: 0 };
+          accumulateMargin(outcomeMarginRecord, resolution.outcomeScoreMargin);
+          outcomeScoreMargins.set(cluster.id, outcomeMarginRecord);
+        }
+        const projectionAfterCluster = deriveStoryworldProjection(state);
+        const clusterDistance = projectionDistance(projectionBeforeCluster, projectionAfterCluster);
+        cumulativeL1 += clusterDistance.l1;
+        cumulativeL2 += clusterDistance.l2;
         const optionReactions = globalEntryReactions.get(option.id) ?? new Set();
         optionReactions.add(resolution.entryReactionId);
         globalEntryReactions.set(option.id, optionReactions);
@@ -229,8 +498,22 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
           const optionCounts = finalOptionOutcomes[option.id] ?? {};
           increment(optionCounts, resolution.outcomeKey);
           finalOptionOutcomes[option.id] = optionCounts;
+          const endingAccumulator = endingProjectionAccumulators.get(resolution.outcomeKey)
+            ?? createProjectionAccumulator();
+          accumulateProjection(endingAccumulator, projectionAfterCluster);
+          endingProjectionAccumulators.set(resolution.outcomeKey, endingAccumulator);
         }
       }
+      const finalProjection = deriveStoryworldProjection(state);
+      const prefinalDistance = projectionDistance(PROPERTY_DEFAULTS, prefinalProjection);
+      const finalDistance = projectionDistance(PROPERTY_DEFAULTS, finalProjection);
+      sums.cumulativeL1 += cumulativeL1;
+      sums.cumulativeL2 += cumulativeL2;
+      sums.prefinalDisplacementL2 += prefinalDistance.l2;
+      sums.finalDisplacementL2 += finalDistance.l2;
+      sums.prefinalActivePropertyCount += prefinalDistance.activePropertyCount;
+      sums.finalActivePropertyCount += finalDistance.activePropertyCount;
+      sums.displacementEfficiency += cumulativeL2 ? finalDistance.l2 / cumulativeL2 : 0;
     }
     routes.push(summarizeRoute(
       schedule.priorityTheater,
@@ -245,6 +528,14 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
   }
 
   const totalRuns = runsPerRoute * routes.length;
+  const routeCentroids = [...routePrefinalProjectionAccumulators.entries()].map(([id, accumulator]) => ({
+    id,
+    projection: projectionCentroid(accumulator),
+  }));
+  const endingCentroids = [...endingProjectionAccumulators.entries()].map(([id, accumulator]) => ({
+    id,
+    projection: projectionCentroid(accumulator),
+  }));
   return Object.freeze({
     seed,
     runsPerRoute,
@@ -258,6 +549,13 @@ export function runStoryworldBalanceAudit({ runsPerRoute = 5_000, seed = 42 } = 
     historySensitiveEntryOptionCount: [...globalEntryReactions.values()]
       .filter((reactions) => reactions.size > 1).length,
     propertyThreadCoverage: Object.freeze(staticThreadCoverage()),
+    effectGeometry: staticEffectGeometry(),
+    inclinationDynamics: Object.freeze({
+      entry: summarizeMargins(entryScoreMargins),
+      outcome: summarizeMargins(outcomeScoreMargins),
+    }),
+    routePrefinalCentroidDistances: pairwiseCentroidDistances(routeCentroids),
+    endingFinalCentroidDistances: pairwiseCentroidDistances(endingCentroids),
   });
 }
 

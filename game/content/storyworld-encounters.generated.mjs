@@ -8,13 +8,13 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:99e9fdb88518de76e0196038b9570697db2c4dc84afaba1166329d7550f8465f";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:fb11f250c92adf3ec98fdad4e9e360d3974c326a182671a904cc07e7eebc0b39";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
-  "sourceVersion": 7,
+  "sourceVersion": 8,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:a0baf4afa6e4d44bacab296870fc22ad2e9833014f57fa82f223599248d6f7e5",
-  "bindingHash": "sha256:32d66611627db532d7d459e0b3652db8fa067edf8544305a6082a33bc7c77320",
+  "sourceHash": "sha256:ec38da9f3e7f726b8db4e0a763c35bd14eb87ca76d32cb2c70f609fdd6e2509d",
+  "bindingHash": "sha256:736a7541828449a0384cc62d7664ded20be25d8b90587a728d05b899b236a994",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
     {
@@ -1276,10 +1276,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 {
                   "id": "page_sw03_accord_opt_carry_r_accord",
                   "text": "Every boat lead retains an immediate stop signal, even if delay costs the coalition its preferred operation. Ren writes the rule onto the military route card.",
-                  "consequenceId": "page_sw04_decision",
+                  "consequenceId": "page_sw12_decision",
                   "score": {
-                    "propertyId": "network_consent",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "evacuation_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_party_respects_limits",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1305,10 +1325,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 {
                   "id": "page_sw03_accord_opt_carry_r_revision",
                   "text": "Nikola asks for an emergency exception and withdraws it when Sayo names who would bear the risk. The corrected order leaves cancellation local and visible.",
-                  "consequenceId": "page_sw04_decision",
+                  "consequenceId": "page_sw12_decision",
                   "score": {
-                    "propertyId": "network_consent",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1352,10 +1392,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 {
                   "id": "page_sw03_revision_opt_carry_r_accord",
                   "text": "The order protects prison locks, name slips, water routes, and every worker who can be separated from a collar. Only production nodes receive demolition marks.",
-                  "consequenceId": "page_sw04_decision",
+                  "consequenceId": "page_sw12_decision",
                   "score": {
-                    "propertyId": "witness_safety",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "oni_supply_disruption",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "genta_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1381,10 +1441,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 {
                   "id": "page_sw03_revision_opt_carry_r_revision",
                   "text": "A broad furnace symbol would also burn the prisoner passage. Ren splits the target, accepting a harder attack that preserves the release route.",
-                  "consequenceId": "page_sw04_decision",
+                  "consequenceId": "page_sw12_decision",
                   "score": {
-                    "propertyId": "witness_safety",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "care_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "party_cohesion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1428,10 +1508,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 {
                   "id": "page_sw03_negotiated_opt_carry_r_accord",
                   "text": "The blocks can publish procedures and evidence, but only participating towns and offices can confer provisional authority. Aya prints that limit beside every proposed transfer.",
-                  "consequenceId": "page_sw04_decision",
+                  "consequenceId": "page_sw12_decision",
                   "score": {
-                    "propertyId": "succession_readiness",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "succession_readiness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "public_reach",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "paper_commitment",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1457,10 +1557,30 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 {
                   "id": "page_sw03_negotiated_opt_carry_r_revision",
                   "text": "Nikola asks whether his covenant can guarantee the transfer. The printers answer that it can restrain a vampire, not appoint a government, and he accepts the distinction.",
-                  "consequenceId": "page_sw04_decision",
+                  "consequenceId": "page_sw12_decision",
                   "score": {
-                    "propertyId": "succession_readiness",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_party_respects_limits",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1487,6 +1607,1063 @@ export const STORYWORLD_CATALOG = deepFreeze({
             }
           ],
           "resolutionKey": "negotiated"
+        }
+      ]
+    },
+    {
+      "id": "sw-sodegaura-lantern-manifests",
+      "chapterId": "chapter-3",
+      "anchorBeatId": "c3-06-first-key",
+      "placement": "after-beat",
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c3-captain-kaji"
+      ],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-sodegaura",
+        "role": "route-operation",
+        "routeTheater": "salt"
+      },
+      "requiredForNarrativeCredits": false,
+      "requiredOnRoutes": [
+        "salt",
+        "ash"
+      ],
+      "entryEncounterId": "page_sw12_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
+      "outcomeEncounterIds": [
+        "page_sw12_accord",
+        "page_sw12_revision"
+      ],
+      "entry": {
+        "id": "page_sw12_decision",
+        "title": "Three Lantern Manifests",
+        "text": "Captain Kaji's inspection seal is broken, but the salt warehouse still contains one dangerous convenience: a master manifest linking households, prayer sheets, testimony copies, medicine crates, and every lantern boat. Sayo refuses to let victory turn that list into a rebel command ledger. The party must divide custody before the next inspection patrol arrives. Genta can falsify an order he once would have obeyed, Aya can issue distributed receipts, and each boat lead retains a local stop signal.",
+        "prompt": "",
+        "terminal": false,
+        "options": [
+          {
+            "id": "page_sw12_decision_opt_split-three-ledgers",
+            "text": "Split households, testimony, and stores into three ledgers held on different routes.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw12_decision_opt_split-three-ledgers_r_accord",
+                "text": "Aya gives every ledger a shared count but no shared names. A seizure can expose one function without exposing the people, testimony, and food attached to the other two.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw12_decision_opt_split-three-ledgers_r_revision",
+                "text": "The first split leaves a matching mark that reconstructs the master list. Sayo removes it; the safer ledgers travel more slowly and the public copy records that deliberate gap.",
+                "consequenceId": "page_sw12_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "aya_archive_openness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw12_decision_opt_split-three-ledgers_r_distributed-receipts",
+                "text": "Kiku numbers stores by need, Aya numbers copies by custody, and Sayo alone keeps the changing correspondence for one tide. The temporary key expires after departure, leaving verification without a permanent master list.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.04
+                },
+                "effects": [
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "care_capacity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
+          },
+          {
+            "id": "page_sw12_decision_opt_local-stop-signals",
+            "text": "Stagger departures and let each boat lead cancel by lantern without central permission.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw12_decision_opt_local-stop-signals_r_accord",
+                "text": "The boats leave on different tides under signals their own leads can cancel. The coalition gains no perfect convoy, but one compromised departure cannot halt every evacuation lane.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "evacuation_capacity",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "ren_noncoercion",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw12_decision_opt_local-stop-signals_r_revision",
+                "text": "Two signals can be confused in the rain. Sayo cancels the crowded departure, records the lost time, and sends the remaining boats without pretending the route is complete.",
+                "consequenceId": "page_sw12_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.25,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "ren_noncoercion",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw12_decision_opt_local-stop-signals_r_cross-tide-relay",
+                "text": "A shore watcher repeats only cancellations, never destinations. Local leads keep authority while the relay makes one route failure legible to the others without revealing their passenger lists.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.04
+                },
+                "effects": [
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "p_party_respects_limits",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
+          },
+          {
+            "id": "page_sw12_decision_opt_forged-inspection-order",
+            "text": "Have Genta issue one false inspection order, then publish exactly how his former authority was used.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw12_decision_opt_forged-inspection-order_r_accord",
+                "text": "Genta sends the patrol toward an empty warehouse and signs the later record with his former unit and rank. The deception opens a route without converting past obedience into private virtue.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "party_cohesion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "genta_accountability",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw12_decision_opt_forged-inspection-order_r_revision",
+                "text": "The patrol captain recognizes Genta’s phrasing. Sayo abandons the shortest dock while Genta records that his old command habits, not civilian hesitation, closed it.",
+                "consequenceId": "page_sw12_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "genta_accountability",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw12_decision_opt_forged-inspection-order_r_published-counterorder",
+                "text": "Genta writes a second order revoking the first and gives both to Aya. Soldiers farther north later recognize the paired signatures as proof that commands can be refused, exposed, and terminated.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.05
+                },
+                "effects": [
+                  {
+                    "propertyId": "genta_accountability",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
+          },
+          {
+            "id": "page_sw12_decision_opt_burn-master-manifest",
+            "text": "Destroy the master manifest after independent custodians verify their separate receipts.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw12_decision_opt_burn-master-manifest_r_accord",
+                "text": "Three custodians compare totals, sign only their own receipts, and watch the linking sheet burn. The evidence can prove what moved without preserving a map of everyone who moved it.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.3,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.1,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "aya_archive_openness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw12_decision_opt_burn-master-manifest_r_revision",
+                "text": "One total cannot be reconciled before the patrol bell. Aya records the discrepancy and burns the linking names anyway, choosing a visible uncertainty over a recoverable persecution list.",
+                "consequenceId": "page_sw12_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "ren_noncoercion",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw12_decision_opt_burn-master-manifest_r_witnessed-ash-copy",
+                "text": "Aya preserves the ledger structure, missing total, and destruction signatures without preserving the names. The ash copy proves what was deliberately made irrecoverable and by whose bounded authority.",
+                "consequenceId": "page_sw12_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.05
+                },
+                "effects": [
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "aya_archive_openness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "salt_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "id": "page_sw12_accord",
+          "title": "Three Ledgers, No Master List",
+          "text": "Households, testimony, stores, and patrol deception leave Sodegaura through separable routes. Shared counts allow later verification, but no commander receives a document that can reconstruct every person and purpose. Sayo’s boat leads retain cancellation authority. Genta’s false order is filed beside its revocation. The first bell key travels north as one protected object among many living obligations, not as permission to turn the coast into a military supply line.",
+          "prompt": "Record how the routes can verify one another without merging.",
+          "terminal": false,
+          "options": [
+            {
+              "id": "page_sw12_accord_opt_carry",
+              "text": "Record how the routes can verify one another without merging.",
+              "visible": true,
+              "performable": true,
+              "reactions": [
+                {
+                  "id": "page_sw12_accord_opt_carry_r_accord",
+                  "text": "Aya records shared totals, separate custodians, expiration times, and the exact questions one route may ask another. Verification becomes a protocol rather than a merged archive.",
+                  "consequenceId": "page_sw04_decision",
+                  "score": {
+                    "terms": [
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.1
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 0
+                },
+                {
+                  "id": "page_sw12_accord_opt_carry_r_revision",
+                  "text": "The first receipt still names the boat attached to each testimony copy. Sayo removes the link, while Aya records why the public account is intentionally less complete.",
+                  "consequenceId": "page_sw04_decision",
+                  "score": {
+                    "terms": [
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "witness_safety",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "aya_archive_openness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 1
+                }
+              ]
+            }
+          ],
+          "resolutionKey": "accord"
+        },
+        {
+          "id": "page_sw12_revision",
+          "title": "The Narrower Tide",
+          "text": "Inspection pressure closes one departure or makes a complete ledger impossible. Sayo preserves the routes that can still move without merging custody, and the party records the missing capacity instead of requisitioning another boat. Fewer people and copies leave on this tide, but every remaining contribution keeps a named local owner and an honest stop condition.",
+          "prompt": "Carry the lost capacity into the coalition ledger.",
+          "terminal": false,
+          "options": [
+            {
+              "id": "page_sw12_revision_opt_carry",
+              "text": "Carry the lost capacity into the coalition ledger.",
+              "visible": true,
+              "performable": true,
+              "reactions": [
+                {
+                  "id": "page_sw12_revision_opt_carry_r_accord",
+                  "text": "The ledger names the canceled departure, the capacity lost, and the route still open without assigning blame to the crew that stopped it.",
+                  "consequenceId": "page_sw04_decision",
+                  "score": {
+                    "terms": [
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "truth_completeness",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.1
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.1
+                    }
+                  ],
+                  "authoredIndex": 0
+                },
+                {
+                  "id": "page_sw12_revision_opt_carry_r_revision",
+                  "text": "A copied order silently restores the canceled boat. Ren strikes it out, and Kiku reallocates medicine within the smaller capacity instead of borrowing authority from urgency.",
+                  "consequenceId": "page_sw04_decision",
+                  "score": {
+                    "terms": [
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "care_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
+                    "offset": 0.01
+                  },
+                  "effects": [
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "care_capacity",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "delta": 0.05
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "delta": 0.05
+                    }
+                  ],
+                  "authoredIndex": 1
+                }
+              ]
+            }
+          ],
+          "resolutionKey": "revision"
         }
       ]
     },
@@ -1899,8 +3076,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Nikola writes that wardcraft and noble birth grant no right to command their use; the pattern may divide blood from office, never appoint the hunter as successor. The survivors approve the sentence and retain the original.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
-                    "propertyId": "lise_oath_revision",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1932,8 +3129,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "His first sentence still centers restoration of the Dražanić name. Aya removes it, and Nikola replaces it with the concrete custody limit the survivors requested.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
-                    "propertyId": "lise_oath_revision",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "party_cohesion",
+                        "coefficient": 0.25,
+                        "invert": true
+                      },
+                      {
+                        "propertyId": "public_reach",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -1983,8 +3200,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Aya distinguishes absent context from concealed guilt and assigns the next review to a mixed custody group. The gap remains public and bounded.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
-                    "propertyId": "aya_archive_openness",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -2016,8 +3253,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The first notice implies the survivors caused the delay. Ren corrects the wording, and Nikola signs the change without defending his family claim or styling himself Count.",
                   "consequenceId": "page_sw05_decision",
                   "score": {
-                    "propertyId": "aya_archive_openness",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_party_respects_limits",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -2467,8 +3724,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Aya requires an action, an office, and a corroboration mark for every link. The rule exposes two weak points without pretending the chain is complete.",
                   "consequenceId": "page_sw06_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_mateus_truthfulness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -2500,8 +3777,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "One link still uses passive language that hides a guard unit. Genta supplies the missing verb and accepts that his own former unit belongs in the record.",
                   "consequenceId": "page_sw06_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "genta_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "mateus_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -2551,8 +3848,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Aya compares transfer counts and time marks rather than motives. Both accounts can be checked without forcing either witness to endorse the other.",
                   "consequenceId": "page_sw06_decision",
                   "score": {
-                    "propertyId": "proof_integrity",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_mateus_truthfulness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -2584,8 +3901,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The first test depends on a memory only Mateus controls. Nikola distrusts the priest's word; Aya rejects Nikola's honor test as equally private, and the party substitutes a physical count from the lock mechanism.",
                   "consequenceId": "page_sw06_decision",
                   "score": {
-                    "propertyId": "proof_integrity",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "mateus_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3034,8 +4371,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The printers place the corroborated chain beside its gaps and safety limits. Readers can distinguish what is known, claimed, and intentionally withheld.",
                   "consequenceId": "page_sw07_decision",
                   "score": {
-                    "propertyId": "public_reach",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "public_reach",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3071,8 +4428,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The first layout centers Mateus because his account is dramatic. Aya and the printers reorganize it around actions, offices, and independent sources.",
                   "consequenceId": "page_sw07_decision",
                   "score": {
-                    "propertyId": "public_reach",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "mateus_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_mateus_truthfulness",
+                        "coefficient": 0.25,
+                        "invert": true
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3126,8 +4503,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The public note names the safety condition without identifying those at risk. Ending the session becomes an accountable decision rather than a mysterious omission.",
                   "consequenceId": "page_sw07_decision",
                   "score": {
-                    "propertyId": "witness_safety",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "public_reach",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3163,8 +4560,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The first note blames disorder in the room. Kiku replaces it with the actual capacity limit and leaves no implication that listeners failed the tribunal.",
                   "consequenceId": "page_sw07_decision",
                   "score": {
-                    "propertyId": "witness_safety",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "care_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "kiku_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3604,6 +5021,204 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 1
               }
             ]
+          },
+          {
+            "id": "page_sw07_decision_opt_civilian-safe-conduct",
+            "text": "Publish a civilian safe-conduct that promises supplies and passage without recruitment or restored rank.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw07_decision_opt_civilian-safe-conduct_r_accord",
+                "text": "The former soldiers compare the printed promise with the food marker and find no hidden service clause. Some carry the pass without joining Genta, teaching nearby companies that refusal need not mean outlawry.",
+                "consequenceId": "page_sw07_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "p_party_respects_limits",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw07_decision_opt_civilian-safe-conduct_r_revision",
+                "text": "A court copy alters passage into pardon and names Genta as guarantor. Aya publishes the forgery; the group takes a slower route while the soldiers keep their distance from both commands.",
+                "consequenceId": "page_sw07_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "genta_accountability",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw07_decision_opt_civilian-safe-conduct_r_self-issued-passage",
+                "text": "The soldiers rewrite the pass in their own names and remove Genta’s signature entirely. Neighboring companies accept the civilian route because nobody must receive pardon from a commander they no longer recognize.",
+                "consequenceId": "page_sw07_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "genta_accountability",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "ren_noncoercion",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.2,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.04
+                },
+                "effects": [
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "ren_noncoercion",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "genta_accountability",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "ash_commitment",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
           }
         ]
       },
@@ -3626,8 +5241,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Genta states that need creates no command authority. He writes the rule on the route map where his old rank marks used to appear.",
                   "consequenceId": "page_sw08_decision",
                   "score": {
-                    "propertyId": "genta_accountability",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "genta_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "party_cohesion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3663,8 +5298,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "His first rule still praises voluntary service. Ren removes the praise, and Genta replaces it with a plain record of supplies and boundaries.",
                   "consequenceId": "page_sw08_decision",
                   "score": {
-                    "propertyId": "genta_accountability",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_party_respects_limits",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "genta_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3718,8 +5373,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The map shows an unverified ferry and no accusation. A slower path remains available, preserving movement without inventing a hostile motive.",
                   "consequenceId": "page_sw08_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -3755,8 +5430,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "One note still labels the soldiers unreliable. Genta crosses it out, accepts the added risk, and records only that no information was offered.",
                   "consequenceId": "page_sw08_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "genta_accountability",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": true
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4164,6 +5859,192 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 1
               }
             ]
+          },
+          {
+            "id": "page_sw08_decision_opt_two-wave-signal",
+            "text": "Send passengers first; release the archive wave only if local boat leads confirm the evacuation lane is clear.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw08_decision_opt_two-wave-signal_r_accord",
+                "text": "The first wave clears before the blue archive lantern appears. Separate manifests and a local confirmation let the second wave carry records without turning passengers into cover.",
+                "consequenceId": "page_sw08_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "evacuation_capacity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.15,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "public_reach",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw08_decision_opt_two-wave-signal_r_revision",
+                "text": "The evacuation lane never clears enough for a second wave. Sayo cancels the records without asking passengers or crews to absorb the added risk, and Aya records which proof remains behind.",
+                "consequenceId": "page_sw08_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "evacuation_capacity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "truth_completeness",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "public_reach",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw08_decision_opt_two-wave-signal_r_reverse-land-relay",
+                "text": "The crews cancel the archive wave but hand its destination cipher to an inland runner after the passengers clear. Evidence and evacuation remain separate while the receiving office still learns what must be inventoried.",
+                "consequenceId": "page_sw08_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "evacuation_capacity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "succession_readiness",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "route_safety",
+                      "coefficient": 0.2,
+                      "invert": true
+                    }
+                  ],
+                  "offset": -0.03
+                },
+                "effects": [
+                  {
+                    "propertyId": "evacuation_capacity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "succession_readiness",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "route_safety",
+                    "delta": 0.05
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
           }
         ]
       },
@@ -4186,8 +6067,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Every local lead retains unilateral cancellation authority. Ren repeats the rule over the signal line before the first boat moves.",
                   "consequenceId": "page_sw09_decision",
                   "score": {
-                    "propertyId": "network_consent",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "p_party_respects_limits",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "evacuation_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4219,8 +6120,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The first signal plan requires central confirmation. A boat lead rejects it, and the party rewrites the signal so local cancellation is immediate.",
                   "consequenceId": "page_sw09_decision",
                   "score": {
-                    "propertyId": "network_consent",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4274,8 +6195,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Ren strikes the cargo language from the route cards and names evacuation as the boats' complete mission. No later commander may silently restore it.",
                   "consequenceId": "page_sw09_decision",
                   "score": {
-                    "propertyId": "ren_noncoercion",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "evacuation_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4307,8 +6248,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "A reserve note survives on one copied map. Aya recalls it, publishes the correction, and assigns the archive bundle to an independent land route.",
                   "consequenceId": "page_sw09_decision",
                   "score": {
-                    "propertyId": "ren_noncoercion",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "route_safety",
+                        "coefficient": 0.25,
+                        "invert": true
+                      },
+                      {
+                        "propertyId": "public_reach",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4786,6 +6747,208 @@ export const STORYWORLD_CATALOG = deepFreeze({
                 "authoredIndex": 1
               }
             ]
+          },
+          {
+            "id": "page_sw09_decision_opt_test-cipher-before-sentence",
+            "text": "Hold the sentence long enough for Aya and the released attendants to test one route cipher under the ward.",
+            "visible": true,
+            "performable": true,
+            "reactions": [
+              {
+                "id": "page_sw09_decision_opt_test-cipher-before-sentence_r_accord",
+                "text": "The cipher proves incomplete but not weaponized. Aya preserves the verified segment while released attendants reject immediate trust; Enma enters rotating custody for further testimony.",
+                "consequenceId": "page_sw09_accord",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "lise_oath_revision",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_custody",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "proof_integrity",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "witness_safety",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.05
+                  }
+                ],
+                "authoredIndex": 0
+              },
+              {
+                "id": "page_sw09_decision_opt_test-cipher-before-sentence_r_revision",
+                "text": "The cipher conceals a live blood command aimed at the patient lane. The attendants expose it, Ren authorizes the fatal stop, and Aya records both the immediate threat and every answer lost with Enma.",
+                "consequenceId": "page_sw09_revision",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "court_pressure",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.2,
+                      "invert": true
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.15,
+                      "invert": true
+                    }
+                  ],
+                  "offset": 0.01
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_killed",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "truth_completeness",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "court_pressure",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_guilt_pressure",
+                    "delta": -0.05
+                  }
+                ],
+                "authoredIndex": 1
+              },
+              {
+                "id": "page_sw09_decision_opt_test-cipher-before-sentence_r_verified-compact",
+                "text": "Aya verifies the cipher from an independent archive mark while attendants identify every person it affects. Enma releases the linked thralls and accepts a compact whose movement privileges end the instant a later claim fails.",
+                "consequenceId": "page_sw09_negotiated",
+                "score": {
+                  "terms": [
+                    {
+                      "propertyId": "proof_integrity",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "enma_testimony",
+                      "coefficient": 0.25,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "network_consent",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "witness_safety",
+                      "coefficient": 0.2,
+                      "invert": false
+                    },
+                    {
+                      "propertyId": "bell_intelligence",
+                      "coefficient": 0.15,
+                      "invert": false
+                    }
+                  ],
+                  "offset": -0.04
+                },
+                "effects": [
+                  {
+                    "propertyId": "enma_compact",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "enma_testimony",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "bell_intelligence",
+                    "delta": 0.1
+                  },
+                  {
+                    "propertyId": "garrison_defection",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "network_consent",
+                    "delta": 0.05
+                  },
+                  {
+                    "propertyId": "kurozane_pride",
+                    "delta": -0.05
+                  },
+                  {
+                    "propertyId": "kurozane_indispensability",
+                    "delta": -0.1
+                  }
+                ],
+                "authoredIndex": 2
+              }
+            ]
           }
         ]
       },
@@ -4808,8 +6971,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "The record forbids solitary custody, private questioning, blood access, and transport without a published destination. Enma signs beneath the restrictions while the three key holders sign beside, not above, one another.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
-                    "propertyId": "witness_safety",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4833,8 +7016,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Nikola initially writes his house as guarantor. He strikes the title and replaces it with an expiring technical duty, leaving civilian custodians authority to end his access.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
-                    "propertyId": "witness_safety",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "enma_testimony",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4876,8 +7079,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Aya preserves the immediate threat, the failed alternatives, and the testimony lost with Enma. The death is neither hidden nor made into proof that every captive enemy must die.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "truth_completeness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "aya_archive_openness",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4901,8 +7124,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "A route copy calls the killing purification. Nikola removes the inherited hunter language and replaces it with the exact witnessed necessity and its unresolved cost.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
-                    "propertyId": "truth_completeness",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "lise_oath_revision",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "ren_noncoercion",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "court_pressure",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4944,8 +7187,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Enma identifies a false inner-gate order, then waits while Aya confirms it from an independent record. The useful answer earns only the next bounded question, not trust or restored status.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
-                    "propertyId": "enma_testimony",
-                    "invert": false,
+                    "terms": [
+                      {
+                        "propertyId": "enma_testimony",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "proof_integrity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "bell_intelligence",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -4969,8 +7232,28 @@ export const STORYWORLD_CATALOG = deepFreeze({
                   "text": "Her first route claim omits two endangered attendants. Kiku suspends movement privileges until they are found, demonstrating that the compact can contract as well as reward cooperation.",
                   "consequenceId": "page_sw10_decision",
                   "score": {
-                    "propertyId": "enma_testimony",
-                    "invert": true,
+                    "terms": [
+                      {
+                        "propertyId": "witness_safety",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "enma_testimony",
+                        "coefficient": 0.25,
+                        "invert": true
+                      },
+                      {
+                        "propertyId": "network_consent",
+                        "coefficient": 0.25,
+                        "invert": false
+                      },
+                      {
+                        "propertyId": "kiku_capacity",
+                        "coefficient": 0.25,
+                        "invert": false
+                      }
+                    ],
                     "offset": 0.01
                   },
                   "effects": [
@@ -5542,7 +7825,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": false
                     }
                   ],
-                  "offset": 0.01
+                  "offset": 0.09
                 },
                 "effects": [
                   {
@@ -5660,7 +7943,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": true
                     }
                   ],
-                  "offset": 0.22
+                  "offset": 0.25
                 },
                 "effects": [
                   {
@@ -6286,18 +8569,18 @@ export const STORYWORLD_CATALOG = deepFreeze({
   ],
   "metrics": {
     "canonicalSceneCount": 60,
-    "storyworldAuthoredSceneCount": 37,
-    "authoredSceneCount": 97,
+    "storyworldAuthoredSceneCount": 40,
+    "authoredSceneCount": 100,
     "narrativeRoutes": {
       "salt": {
         "canonicalSceneCount": 55,
-        "storyworldSceneCount": 20,
-        "playedSceneCount": 75
+        "storyworldSceneCount": 22,
+        "playedSceneCount": 77
       },
       "ash": {
         "canonicalSceneCount": 54,
-        "storyworldSceneCount": 20,
-        "playedSceneCount": 74
+        "storyworldSceneCount": 22,
+        "playedSceneCount": 76
       },
       "paper": {
         "canonicalSceneCount": 55,
@@ -6306,15 +8589,15 @@ export const STORYWORLD_CATALOG = deepFreeze({
       }
     },
     "completeRunStoryworldSceneCountRange": {
-      "minimum": 20,
+      "minimum": 22,
       "maximum": 22
     },
     "completeRunSceneCountRange": {
-      "minimum": 74,
+      "minimum": 76,
       "maximum": 77
     },
-    "clusterCount": 11,
-    "entryOptionCount": 35
+    "clusterCount": 12,
+    "entryOptionCount": 42
   }
 });
 export const STORYWORLD_PROPERTIES = STORYWORLD_CATALOG.properties;

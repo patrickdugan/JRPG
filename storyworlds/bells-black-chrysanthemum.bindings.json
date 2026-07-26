@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "campaignId": "bells-black-chrysanthemum",
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "authoredSceneCount": 37,
+  "authoredSceneCount": 40,
   "clusters": [
     {
       "id": "sw1-clerks-second-copy",
@@ -83,6 +83,36 @@
         "page_sw03_accord",
         "page_sw03_revision",
         "page_sw03_negotiated"
+      ]
+    },
+    {
+      "id": "sw-sodegaura-lantern-manifests",
+      "chapterId": "chapter-3",
+      "anchorBeatId": "c3-06-first-key",
+      "placement": "after-beat",
+      "sequenceRole": "after-boss-consequence",
+      "relatedEncounterIds": [
+        "c3-captain-kaji"
+      ],
+      "actIntegration": {
+        "actId": "act-iii",
+        "majorSequenceId": "act3-operation-sodegaura",
+        "role": "route-operation",
+        "routeTheater": "salt"
+      },
+      "requiredForNarrativeCredits": false,
+      "requiredOnRoutes": [
+        "salt",
+        "ash"
+      ],
+      "entryEncounterId": "page_sw12_decision",
+      "outcomeKeys": [
+        "accord",
+        "revision"
+      ],
+      "outcomeEncounterIds": [
+        "page_sw12_accord",
+        "page_sw12_revision"
       ]
     },
     {

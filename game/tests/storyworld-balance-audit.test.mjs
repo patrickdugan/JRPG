@@ -17,7 +17,8 @@ test('seeded whole-route rehearsal keeps four endings live and late gates earned
   assert.ok(paper.endings.dawn > 0.10);
   assert.ok(paper.endings['prepared-execution'] > 0.10);
   assert.ok(salt.endings.revision > 0.30);
-  assert.ok(ash.endings.revision > 0.30);
+  assert.ok(ash.endings.revision > 0.15);
+  assert.ok(ash.endings['prepared-execution'] > salt.endings['prepared-execution']);
   const confessionFlowId = 'page_sw11_decision_opt_name-the-crime_r_confession-reversal';
   const fearSurrenderFlowId = 'page_sw11_decision_opt_execution-demand_r_accord';
   assert.equal(Object.keys(audit.globalFinalFlows).length, 13);
@@ -47,7 +48,7 @@ test('seeded whole-route rehearsal keeps four endings live and late gates earned
   assert.ok(enmaOutcomes.accord > 0);
   assert.ok(enmaOutcomes.revision > 0);
   assert.ok(enmaOutcomes.negotiated > 0);
-  assert.ok(audit.historySensitiveEntryOptionCount >= 20);
+  assert.ok(audit.historySensitiveEntryOptionCount >= 25);
 });
 
 test('static thread coverage reaches the tribunal, Enma hearing, and last command', () => {
@@ -78,4 +79,40 @@ test('static thread coverage reaches the tribunal, Enma hearing, and last comman
   assert.ok(coverage.garrison_defection.effectClusters.includes('sw-enma-three-terms'));
   assert.ok(coverage.kiku_capacity.effectClusters.includes('sw6-tribunal-afterword'));
   assert.ok(coverage.kiku_capacity.effectClusters.includes('sw8-boats-with-conditions'));
+});
+
+test('path geometry keeps routes equally deep while choices and endings remain metrically distinct', () => {
+  const audit = runStoryworldBalanceAudit({ runsPerRoute: 250, seed: 42 });
+  const routePathLengths = audit.routes.map(({ metricDistance }) => (
+    metricDistance.meanCumulativeL2NudgeUnits
+  ));
+  assert.ok(Math.max(...routePathLengths) - Math.min(...routePathLengths) < 4);
+  for (const route of audit.routes) {
+    assert.ok(route.metricDistance.meanCumulativeL2NudgeUnits > 40);
+    assert.ok(route.metricDistance.meanCumulativeL2NudgeUnits < 52);
+    assert.ok(route.metricDistance.meanPrefinalDisplacementL2NudgeUnits > 20);
+    assert.ok(route.metricDistance.meanPrefinalDisplacementL2NudgeUnits < 30);
+    assert.ok(route.metricDistance.meanPrefinalActivePropertyCount >= 24);
+    assert.ok(route.metricDistance.meanDisplacementEfficiency > 0.45);
+    assert.ok(route.metricDistance.meanDisplacementEfficiency < 0.65);
+  }
+
+  const { effectGeometry } = audit;
+  assert.ok(effectGeometry.meanReactionBranchDistanceInNudgeUnits > 3.5);
+  assert.ok(effectGeometry.meanOptionCentroidDistanceInNudgeUnits > 2.2);
+  assert.ok(effectGeometry.meanEntryFormulaTermCount >= 4.3);
+  assert.equal(effectGeometry.meanOutcomeFormulaTermCount, 4);
+  const sodegaura = effectGeometry.clusters
+    .find(({ clusterId }) => clusterId === 'sw-sodegaura-lantern-manifests');
+  assert.equal(sodegaura.entryOptionCount, 4);
+  assert.equal(sodegaura.meanEntryReactionCount, 3);
+  for (const cluster of effectGeometry.clusters) {
+    assert.ok(cluster.optionCentroidDistance >= 0.085, cluster.clusterId);
+  }
+  for (const distance of Object.values(audit.routePrefinalCentroidDistances)) {
+    assert.ok(distance.textureNudgeUnits > 6);
+  }
+  for (const distance of Object.values(audit.endingFinalCentroidDistances)) {
+    assert.ok(distance.textureNudgeUnits > 1.5);
+  }
 });

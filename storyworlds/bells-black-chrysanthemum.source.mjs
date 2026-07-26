@@ -3,12 +3,12 @@
  *
  * The generated SweepWeave JSON and browser registry are derived from this
  * file by game/tools/build-storyworld.mjs.  The 60 canonical Campaign beats
- * remain save-stable; these eleven clusters add thirty-seven authored
- * interstitial scene nodes, twenty-two of which are experienced in a complete
+ * remain save-stable; these twelve clusters add forty authored interstitial
+ * scene nodes, twenty-two of which are experienced in a complete
  * narrative run.
  */
 
-export const STORYWORLD_SOURCE_VERSION = 7;
+export const STORYWORLD_SOURCE_VERSION = 8;
 export const STORYWORLD_IFID = '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4';
 export const STORYWORLD_CHARACTER_ID = 'char_lantern_network';
 
@@ -63,6 +63,14 @@ const score = (terms, offset = 0.01) => Object.freeze({
     invert,
   }))),
 });
+const balancedScore = (terms, offset = 0.01) => score(
+  terms.map(([propertyId, invert = false]) => [propertyId, 1 / terms.length, invert]),
+  offset,
+);
+const outcomeChoiceScores = (accordTerms, revisionTerms, offsets = {}) => Object.freeze({
+  accord: balancedScore(accordTerms, offsets.accord),
+  revision: balancedScore(revisionTerms, offsets.revision),
+});
 const reaction = (text, effects, outcomeKey = undefined, desirability = undefined) => Object.freeze({
   text,
   effects: Object.freeze({ ...effects }),
@@ -81,13 +89,13 @@ const option = (id, text, gateProperty, accord, revision, desirability = {}) => 
   revision: reaction(revision.text, revision.effects, revision.outcomeKey, desirability.revision),
   additionalReactions: Object.freeze(desirability.additionalReactions ?? []),
 });
-const outcome = (title, text, prompt, gateProperty, accord, revision) => Object.freeze({
+const outcome = (title, text, prompt, gateProperty, accord, revision, desirability = {}) => Object.freeze({
   title,
   text,
   prompt,
   gateProperty,
-  accord: reaction(accord.text, accord.effects),
-  revision: reaction(revision.text, revision.effects),
+  accord: reaction(accord.text, accord.effects, undefined, desirability.accord),
+  revision: reaction(revision.text, revision.effects, undefined, desirability.revision),
 });
 const additionalOutcome = (key, encounterId, ...definition) => Object.freeze({
   key,
@@ -115,6 +123,7 @@ const actIntegration = (actId, majorSequenceId, role, routeTheater = null) => Ob
 
 export const STORYWORLD_ACT_INTEGRATION = Object.freeze({
   'sw3-sayos-warehouse-conditions': actIntegration('act-iii', 'act3-sequence-01', 'route-decision'),
+  'sw-sodegaura-lantern-manifests': actIntegration('act-iii', 'act3-operation-sodegaura', 'route-operation', 'salt'),
   'sw4-margin-varga-journal': actIntegration('act-iii', 'act3-operation-nagi', 'route-operation', 'salt'),
   'sw5-cipher-handoff': actIntegration('act-iii', 'act3-operation-kagura', 'route-operation', 'ash'),
   'sw6-tribunal-afterword': actIntegration('act-iii', 'act3-operation-kozui', 'route-operation', 'paper'),
@@ -270,6 +279,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'network_consent',
       { text: 'Every boat lead retains an immediate stop signal, even if delay costs the coalition its preferred operation. Ren writes the rule onto the military route card.', effects: { salt_commitment: 0.05, evacuation_capacity: 0.05, network_consent: 0.05, route_safety: 0.05 } },
       { text: 'Nikola asks for an emergency exception and withdraws it when Sayo names who would bear the risk. The corrected order leaves cancellation local and visible.', effects: { salt_commitment: 0.05, lise_oath_revision: 0.05, witness_safety: 0.05, p_party_respects_limits: 0.05 } },
+      outcomeChoiceScores(
+        [['network_consent'], ['route_safety'], ['evacuation_capacity'], ['p_party_respects_limits']],
+        [['lise_oath_revision'], ['witness_safety'], ['ren_noncoercion'], ['court_pressure']],
+      ),
     ],
     revisionOutcome: [
       'Ash Before the Muster',
@@ -278,6 +291,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'witness_safety',
       { text: 'The order protects prison locks, name slips, water routes, and every worker who can be separated from a collar. Only production nodes receive demolition marks.', effects: { ash_commitment: 0.05, oni_supply_disruption: 0.05, witness_safety: 0.05, route_safety: 0.05 } },
       { text: 'A broad furnace symbol would also burn the prisoner passage. Ren splits the target, accepting a harder attack that preserves the release route.', effects: { ash_commitment: 0.05, party_cohesion: 0.05, ren_noncoercion: 0.05, care_capacity: 0.05 } },
+      outcomeChoiceScores(
+        [['witness_safety'], ['route_safety'], ['oni_supply_disruption'], ['genta_accountability']],
+        [['ren_noncoercion'], ['care_capacity'], ['party_cohesion'], ['court_pressure']],
+      ),
     ],
     thirdOutcome: [
       'Paper Before the Throne',
@@ -286,6 +303,208 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'succession_readiness',
       { text: 'The blocks can publish procedures and evidence, but only participating towns and offices can confer provisional authority. Aya prints that limit beside every proposed transfer.', effects: { paper_commitment: 0.05, succession_readiness: 0.05, aya_archive_openness: 0.05, public_reach: 0.05 } },
       { text: 'Nikola asks whether his covenant can guarantee the transfer. The printers answer that it can restrain a vampire, not appoint a government, and he accepts the distinction.', effects: { paper_commitment: 0.05, lise_oath_revision: 0.05, network_consent: 0.05, proof_integrity: 0.05 } },
+      outcomeChoiceScores(
+        [['succession_readiness'], ['public_reach'], ['aya_archive_openness'], ['paper_commitment']],
+        [['lise_oath_revision'], ['network_consent'], ['proof_integrity'], ['p_party_respects_limits']],
+      ),
+    ],
+  }),
+  cluster({
+    id: 'sw-sodegaura-lantern-manifests',
+    chapterId: 'chapter-3',
+    anchorBeatId: 'c3-06-first-key',
+    placement: 'after-beat',
+    sequenceRole: 'after-boss-consequence',
+    relatedEncounterIds: ['c3-captain-kaji'],
+    entryRouteEffects: { salt_commitment: 0.05, evacuation_capacity: 0.05 },
+    outcomeRouteEffects: { network_consent: 0.05, route_safety: 0.05 },
+    title: 'Three Lantern Manifests',
+    text: "Captain Kaji's inspection seal is broken, but the salt warehouse still contains one dangerous convenience: a master manifest linking households, prayer sheets, testimony copies, medicine crates, and every lantern boat. Sayo refuses to let victory turn that list into a rebel command ledger. The party must divide custody before the next inspection patrol arrives. Genta can falsify an order he once would have obeyed, Aya can issue distributed receipts, and each boat lead retains a local stop signal.",
+    options: [
+      option('split-three-ledgers', 'Split households, testimony, and stores into three ledgers held on different routes.', 'proof_integrity',
+        { text: 'Aya gives every ledger a shared count but no shared names. A seizure can expose one function without exposing the people, testimony, and food attached to the other two.', effects: { proof_integrity: 0.10, witness_safety: 0.10, truth_completeness: 0.05, evacuation_capacity: 0.05 } },
+        { text: 'The first split leaves a matching mark that reconstructs the master list. Sayo removes it; the safer ledgers travel more slowly and the public copy records that deliberate gap.', effects: { witness_safety: 0.10, network_consent: 0.10, public_reach: -0.05, aya_archive_openness: 0.05 } },
+        {
+          accord: score([
+            ['proof_integrity', 0.30],
+            ['truth_completeness', 0.20],
+            ['witness_safety', 0.20],
+            ['aya_archive_openness', 0.15],
+            ['network_consent', 0.15],
+          ]),
+          revision: score([
+            ['proof_integrity', 0.25, true],
+            ['witness_safety', 0.25],
+            ['network_consent', 0.20],
+            ['court_pressure', 0.15],
+            ['ren_noncoercion', 0.15],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'distributed-receipts',
+              'accord',
+              'Kiku numbers stores by need, Aya numbers copies by custody, and Sayo alone keeps the changing correspondence for one tide. The temporary key expires after departure, leaving verification without a permanent master list.',
+              {
+                proof_integrity: 0.05,
+                network_consent: 0.10,
+                evacuation_capacity: 0.05,
+                care_capacity: 0.05,
+                public_reach: 0.05,
+              },
+              score([
+                ['proof_integrity', 0.20],
+                ['network_consent', 0.20],
+                ['care_capacity', 0.20],
+                ['aya_archive_openness', 0.20],
+                ['witness_safety', 0.20],
+              ], -0.04),
+            ),
+          ],
+        }),
+      option('local-stop-signals', 'Stagger departures and let each boat lead cancel by lantern without central permission.', 'network_consent',
+        { text: 'The boats leave on different tides under signals their own leads can cancel. The coalition gains no perfect convoy, but one compromised departure cannot halt every evacuation lane.', effects: { network_consent: 0.10, route_safety: 0.10, ren_noncoercion: 0.05, evacuation_capacity: 0.05 } },
+        { text: 'Two signals can be confused in the rain. Sayo cancels the crowded departure, records the lost time, and sends the remaining boats without pretending the route is complete.', effects: { truth_completeness: 0.10, witness_safety: 0.10, route_safety: -0.05, ren_noncoercion: 0.10 } },
+        {
+          accord: score([
+            ['network_consent', 0.30],
+            ['route_safety', 0.25],
+            ['ren_noncoercion', 0.20],
+            ['p_party_respects_limits', 0.15],
+            ['evacuation_capacity', 0.10],
+          ]),
+          revision: score([
+            ['network_consent', 0.25, true],
+            ['court_pressure', 0.20],
+            ['witness_safety', 0.20],
+            ['truth_completeness', 0.20],
+            ['ren_noncoercion', 0.15],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'cross-tide-relay',
+              'accord',
+              'A shore watcher repeats only cancellations, never destinations. Local leads keep authority while the relay makes one route failure legible to the others without revealing their passenger lists.',
+              {
+                route_safety: 0.10,
+                network_consent: 0.05,
+                bell_intelligence: 0.05,
+                witness_safety: 0.05,
+                p_party_respects_limits: 0.05,
+              },
+              score([
+                ['route_safety', 0.25],
+                ['network_consent', 0.20],
+                ['bell_intelligence', 0.15],
+                ['witness_safety', 0.20],
+                ['p_party_respects_limits', 0.20],
+              ], -0.04),
+            ),
+          ],
+        }),
+      option('forged-inspection-order', 'Have Genta issue one false inspection order, then publish exactly how his former authority was used.', 'genta_accountability',
+        { text: 'Genta sends the patrol toward an empty warehouse and signs the later record with his former unit and rank. The deception opens a route without converting past obedience into private virtue.', effects: { genta_accountability: 0.10, garrison_defection: 0.05, bell_intelligence: 0.05, truth_completeness: 0.05 } },
+        { text: 'The patrol captain recognizes Genta’s phrasing. Sayo abandons the shortest dock while Genta records that his old command habits, not civilian hesitation, closed it.', effects: { genta_accountability: 0.10, court_pressure: 0.10, route_safety: -0.05, truth_completeness: 0.05 } },
+        {
+          accord: score([
+            ['genta_accountability', 0.30],
+            ['truth_completeness', 0.20],
+            ['bell_intelligence', 0.15],
+            ['party_cohesion', 0.15],
+            ['route_safety', 0.20],
+          ]),
+          revision: score([
+            ['genta_accountability', 0.20, true],
+            ['court_pressure', 0.30],
+            ['route_safety', 0.20, true],
+            ['truth_completeness', 0.15],
+            ['witness_safety', 0.15],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'published-counterorder',
+              'accord',
+              'Genta writes a second order revoking the first and gives both to Aya. Soldiers farther north later recognize the paired signatures as proof that commands can be refused, exposed, and terminated.',
+              {
+                genta_accountability: 0.10,
+                garrison_defection: 0.10,
+                proof_integrity: 0.05,
+                public_reach: 0.05,
+                kurozane_indispensability: -0.05,
+              },
+              score([
+                ['genta_accountability', 0.25],
+                ['proof_integrity', 0.20],
+                ['public_reach', 0.20],
+                ['truth_completeness', 0.20],
+                ['court_pressure', 0.15],
+              ], -0.05),
+            ),
+          ],
+        }),
+      option('burn-master-manifest', 'Destroy the master manifest after independent custodians verify their separate receipts.', 'witness_safety',
+        { text: 'Three custodians compare totals, sign only their own receipts, and watch the linking sheet burn. The evidence can prove what moved without preserving a map of everyone who moved it.', effects: { witness_safety: 0.10, proof_integrity: 0.10, aya_archive_openness: 0.05, public_reach: 0.05 } },
+        { text: 'One total cannot be reconciled before the patrol bell. Aya records the discrepancy and burns the linking names anyway, choosing a visible uncertainty over a recoverable persecution list.', effects: { truth_completeness: 0.10, witness_safety: 0.10, public_reach: -0.05, ren_noncoercion: 0.05 } },
+        {
+          accord: score([
+            ['witness_safety', 0.30],
+            ['proof_integrity', 0.25],
+            ['aya_archive_openness', 0.20],
+            ['truth_completeness', 0.15],
+            ['network_consent', 0.10],
+          ]),
+          revision: score([
+            ['witness_safety', 0.25],
+            ['proof_integrity', 0.20, true],
+            ['truth_completeness', 0.20],
+            ['court_pressure', 0.20],
+            ['ren_noncoercion', 0.15],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'witnessed-ash-copy',
+              'accord',
+              'Aya preserves the ledger structure, missing total, and destruction signatures without preserving the names. The ash copy proves what was deliberately made irrecoverable and by whose bounded authority.',
+              {
+                proof_integrity: 0.10,
+                truth_completeness: 0.10,
+                witness_safety: 0.05,
+                aya_archive_openness: 0.05,
+                network_consent: 0.05,
+              },
+              score([
+                ['proof_integrity', 0.25],
+                ['truth_completeness', 0.25],
+                ['witness_safety', 0.20],
+                ['aya_archive_openness', 0.15],
+                ['network_consent', 0.15],
+              ], -0.05),
+            ),
+          ],
+        }),
+    ],
+    accordOutcome: [
+      'Three Ledgers, No Master List',
+      'Households, testimony, stores, and patrol deception leave Sodegaura through separable routes. Shared counts allow later verification, but no commander receives a document that can reconstruct every person and purpose. Sayo’s boat leads retain cancellation authority. Genta’s false order is filed beside its revocation. The first bell key travels north as one protected object among many living obligations, not as permission to turn the coast into a military supply line.',
+      'Record how the routes can verify one another without merging.',
+      'proof_integrity',
+      { text: 'Aya records shared totals, separate custodians, expiration times, and the exact questions one route may ask another. Verification becomes a protocol rather than a merged archive.', effects: { proof_integrity: 0.05, truth_completeness: 0.05, network_consent: 0.05 } },
+      { text: 'The first receipt still names the boat attached to each testimony copy. Sayo removes the link, while Aya records why the public account is intentionally less complete.', effects: { witness_safety: 0.05, aya_archive_openness: 0.05, ren_noncoercion: 0.05 } },
+      outcomeChoiceScores(
+        [['proof_integrity'], ['truth_completeness'], ['network_consent'], ['witness_safety']],
+        [['witness_safety'], ['aya_archive_openness'], ['ren_noncoercion'], ['court_pressure']],
+      ),
+    ],
+    revisionOutcome: [
+      'The Narrower Tide',
+      'Inspection pressure closes one departure or makes a complete ledger impossible. Sayo preserves the routes that can still move without merging custody, and the party records the missing capacity instead of requisitioning another boat. Fewer people and copies leave on this tide, but every remaining contribution keeps a named local owner and an honest stop condition.',
+      'Carry the lost capacity into the coalition ledger.',
+      'truth_completeness',
+      { text: 'The ledger names the canceled departure, the capacity lost, and the route still open without assigning blame to the crew that stopped it.', effects: { truth_completeness: 0.05, route_safety: 0.05, network_consent: 0.05 } },
+      { text: 'A copied order silently restores the canceled boat. Ren strikes it out, and Kiku reallocates medicine within the smaller capacity instead of borrowing authority from urgency.', effects: { ren_noncoercion: 0.05, care_capacity: 0.05, witness_safety: 0.05 } },
+      outcomeChoiceScores(
+        [['truth_completeness'], ['route_safety'], ['network_consent'], ['aya_archive_openness']],
+        [['ren_noncoercion'], ['care_capacity'], ['witness_safety'], ['court_pressure']],
+      ),
     ],
   }),
   cluster({
@@ -362,6 +581,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'lise_oath_revision',
       { text: 'Nikola writes that wardcraft and noble birth grant no right to command their use; the pattern may divide blood from office, never appoint the hunter as successor. The survivors approve the sentence and retain the original.', effects: { lise_oath_revision: 0.05, network_consent: 0.05, truth_completeness: 0.05 } },
       { text: 'His first sentence still centers restoration of the Dra\u017eani\u0107 name. Aya removes it, and Nikola replaces it with the concrete custody limit the survivors requested.', effects: { aya_archive_openness: 0.05, lise_oath_revision: 0.05, party_cohesion: -0.05 } },
+      outcomeChoiceScores(
+        [['lise_oath_revision'], ['network_consent'], ['truth_completeness'], ['witness_safety']],
+        [['aya_archive_openness'], ['lise_oath_revision'], ['party_cohesion', true], ['public_reach']],
+      ),
     ],
     revisionOutcome: [
       'The Deadline Beside the Gap',
@@ -370,6 +593,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'aya_archive_openness',
       { text: 'Aya distinguishes absent context from concealed guilt and assigns the next review to a mixed custody group. The gap remains public and bounded.', effects: { aya_archive_openness: 0.05, proof_integrity: 0.05, network_consent: 0.05 } },
       { text: 'The first notice implies the survivors caused the delay. Ren corrects the wording, and Nikola signs the change without defending his family claim or styling himself Count.', effects: { ren_noncoercion: 0.05, lise_oath_revision: 0.05, p_party_respects_limits: 0.05 } },
+      outcomeChoiceScores(
+        [['aya_archive_openness'], ['proof_integrity'], ['network_consent'], ['truth_completeness']],
+        [['ren_noncoercion'], ['lise_oath_revision'], ['p_party_respects_limits'], ['court_pressure']],
+      ),
     ],
   }),
   cluster({
@@ -443,6 +670,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'truth_completeness',
       { text: 'Aya requires an action, an office, and a corroboration mark for every link. The rule exposes two weak points without pretending the chain is complete.', effects: { proof_integrity: 0.05, truth_completeness: 0.05, route_safety: 0.05 } },
       { text: 'One link still uses passive language that hides a guard unit. Genta supplies the missing verb and accepts that his own former unit belongs in the record.', effects: { genta_accountability: 0.05, aya_archive_openness: 0.05, mateus_accountability: 0.05 } },
+      outcomeChoiceScores(
+        [['truth_completeness'], ['proof_integrity'], ['route_safety'], ['p_mateus_truthfulness']],
+        [['genta_accountability'], ['aya_archive_openness'], ['mateus_accountability'], ['court_pressure']],
+      ),
     ],
     revisionOutcome: [
       'Separate Accounts, Shared Test',
@@ -451,6 +682,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'proof_integrity',
       { text: 'Aya compares transfer counts and time marks rather than motives. Both accounts can be checked without forcing either witness to endorse the other.', effects: { proof_integrity: 0.05, witness_safety: 0.05, p_mateus_truthfulness: 0.05 } },
       { text: 'The first test depends on a memory only Mateus controls. Nikola distrusts the priest\'s word; Aya rejects Nikola\'s honor test as equally private, and the party substitutes a physical count from the lock mechanism.', effects: { lise_oath_revision: 0.05, truth_completeness: 0.05, route_safety: 0.05 } },
+      outcomeChoiceScores(
+        [['proof_integrity'], ['witness_safety'], ['p_mateus_truthfulness'], ['network_consent']],
+        [['lise_oath_revision'], ['truth_completeness'], ['route_safety'], ['mateus_accountability']],
+      ),
     ],
   }),
   cluster({
@@ -524,6 +759,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'public_reach',
       { text: 'The printers place the corroborated chain beside its gaps and safety limits. Readers can distinguish what is known, claimed, and intentionally withheld.', effects: { public_reach: 0.05, proof_integrity: 0.05, witness_safety: 0.05 } },
       { text: 'The first layout centers Mateus because his account is dramatic. Aya and the printers reorganize it around actions, offices, and independent sources.', effects: { aya_archive_openness: 0.05, network_consent: 0.05, mateus_accountability: 0.05 } },
+      outcomeChoiceScores(
+        [['public_reach'], ['proof_integrity'], ['witness_safety'], ['truth_completeness']],
+        [['aya_archive_openness'], ['network_consent'], ['mateus_accountability'], ['p_mateus_truthfulness', true]],
+      ),
     ],
     revisionOutcome: [
       'An Audience Is Not Owed',
@@ -532,6 +771,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'witness_safety',
       { text: 'The public note names the safety condition without identifying those at risk. Ending the session becomes an accountable decision rather than a mysterious omission.', effects: { witness_safety: 0.05, truth_completeness: 0.05, public_reach: 0.05 } },
       { text: 'The first note blames disorder in the room. Kiku replaces it with the actual capacity limit and leaves no implication that listeners failed the tribunal.', effects: { care_capacity: 0.05, aya_archive_openness: 0.05, ren_noncoercion: 0.05 } },
+      outcomeChoiceScores(
+        [['witness_safety'], ['truth_completeness'], ['public_reach'], ['proof_integrity']],
+        [['care_capacity'], ['aya_archive_openness'], ['ren_noncoercion'], ['kiku_capacity']],
+      ),
     ],
   }),
   cluster({
@@ -597,6 +840,46 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
             ['court_pressure', 0.20],
           ]),
         }),
+      option('civilian-safe-conduct', 'Publish a civilian safe-conduct that promises supplies and passage without recruitment or restored rank.', 'proof_integrity',
+        { text: 'The former soldiers compare the printed promise with the food marker and find no hidden service clause. Some carry the pass without joining Genta, teaching nearby companies that refusal need not mean outlawry.', effects: { proof_integrity: 0.10, public_reach: 0.10, garrison_defection: 0.10, route_safety: 0.05 } },
+        { text: 'A court copy alters passage into pardon and names Genta as guarantor. Aya publishes the forgery; the group takes a slower route while the soldiers keep their distance from both commands.', effects: { truth_completeness: 0.10, witness_safety: 0.10, public_reach: -0.05, genta_accountability: 0.05 } },
+        {
+          accord: score([
+            ['proof_integrity', 0.25],
+            ['public_reach', 0.20],
+            ['genta_accountability', 0.20],
+            ['p_party_respects_limits', 0.20],
+            ['route_safety', 0.15],
+          ]),
+          revision: score([
+            ['proof_integrity', 0.20, true],
+            ['court_pressure', 0.25],
+            ['witness_safety', 0.20],
+            ['truth_completeness', 0.20],
+            ['ren_noncoercion', 0.15],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'self-issued-passage',
+              'accord',
+              'The soldiers rewrite the pass in their own names and remove Genta’s signature entirely. Neighboring companies accept the civilian route because nobody must receive pardon from a commander they no longer recognize.',
+              {
+                garrison_defection: 0.10,
+                network_consent: 0.05,
+                ren_noncoercion: 0.05,
+                genta_accountability: 0.05,
+                kurozane_indispensability: -0.05,
+              },
+              score([
+                ['genta_accountability', 0.20],
+                ['network_consent', 0.20],
+                ['ren_noncoercion', 0.20],
+                ['proof_integrity', 0.20],
+                ['public_reach', 0.20],
+              ], -0.04),
+            ),
+          ],
+        }),
     ],
     accordOutcome: [
       'Help Without a Banner',
@@ -605,6 +888,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'genta_accountability',
       { text: 'Genta states that need creates no command authority. He writes the rule on the route map where his old rank marks used to appear.', effects: { genta_accountability: 0.05, ren_noncoercion: 0.05, party_cohesion: 0.05 } },
       { text: 'His first rule still praises voluntary service. Ren removes the praise, and Genta replaces it with a plain record of supplies and boundaries.', effects: { truth_completeness: 0.05, genta_accountability: 0.05, p_party_respects_limits: 0.05 } },
+      outcomeChoiceScores(
+        [['genta_accountability'], ['ren_noncoercion'], ['party_cohesion'], ['network_consent']],
+        [['truth_completeness'], ['p_party_respects_limits'], ['genta_accountability'], ['court_pressure']],
+      ),
     ],
     revisionOutcome: [
       'Silence Is Not Betrayal',
@@ -613,6 +900,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'truth_completeness',
       { text: 'The map shows an unverified ferry and no accusation. A slower path remains available, preserving movement without inventing a hostile motive.', effects: { truth_completeness: 0.05, route_safety: 0.05, ren_noncoercion: 0.05 } },
       { text: 'One note still labels the soldiers unreliable. Genta crosses it out, accepts the added risk, and records only that no information was offered.', effects: { genta_accountability: 0.05, aya_archive_openness: 0.05, route_safety: -0.05 } },
+      outcomeChoiceScores(
+        [['truth_completeness'], ['route_safety'], ['ren_noncoercion'], ['witness_safety']],
+        [['genta_accountability'], ['aya_archive_openness'], ['route_safety', true], ['court_pressure']],
+      ),
     ],
   }),
   cluster({
@@ -678,6 +969,46 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
             ['route_safety', 0.20],
           ]),
         }),
+      option('two-wave-signal', 'Send passengers first; release the archive wave only if local boat leads confirm the evacuation lane is clear.', 'evacuation_capacity',
+        { text: 'The first wave clears before the blue archive lantern appears. Separate manifests and a local confirmation let the second wave carry records without turning passengers into cover.', effects: { evacuation_capacity: 0.10, route_safety: 0.10, public_reach: 0.05, bell_intelligence: 0.05 } },
+        { text: 'The evacuation lane never clears enough for a second wave. Sayo cancels the records without asking passengers or crews to absorb the added risk, and Aya records which proof remains behind.', effects: { witness_safety: 0.10, network_consent: 0.10, public_reach: -0.05, truth_completeness: 0.05 } },
+        {
+          accord: score([
+            ['evacuation_capacity', 0.25],
+            ['route_safety', 0.25],
+            ['network_consent', 0.20],
+            ['bell_intelligence', 0.15],
+            ['public_reach', 0.15],
+          ]),
+          revision: score([
+            ['evacuation_capacity', 0.20, true],
+            ['court_pressure', 0.25],
+            ['witness_safety', 0.20],
+            ['network_consent', 0.20],
+            ['truth_completeness', 0.15],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'reverse-land-relay',
+              'accord',
+              'The crews cancel the archive wave but hand its destination cipher to an inland runner after the passengers clear. Evidence and evacuation remain separate while the receiving office still learns what must be inventoried.',
+              {
+                evacuation_capacity: 0.05,
+                succession_readiness: 0.05,
+                bell_intelligence: 0.05,
+                proof_integrity: 0.05,
+                network_consent: 0.05,
+              },
+              score([
+                ['evacuation_capacity', 0.20],
+                ['network_consent', 0.20],
+                ['proof_integrity', 0.20],
+                ['succession_readiness', 0.20],
+                ['route_safety', 0.20, true],
+              ], -0.03),
+            ),
+          ],
+        }),
     ],
     accordOutcome: [
       'A Fleet With Many Owners',
@@ -686,6 +1017,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'network_consent',
       { text: 'Every local lead retains unilateral cancellation authority. Ren repeats the rule over the signal line before the first boat moves.', effects: { network_consent: 0.05, route_safety: 0.05, p_party_respects_limits: 0.05 } },
       { text: 'The first signal plan requires central confirmation. A boat lead rejects it, and the party rewrites the signal so local cancellation is immediate.', effects: { ren_noncoercion: 0.05, witness_safety: 0.05, truth_completeness: 0.05 } },
+      outcomeChoiceScores(
+        [['network_consent'], ['route_safety'], ['p_party_respects_limits'], ['evacuation_capacity']],
+        [['ren_noncoercion'], ['witness_safety'], ['truth_completeness'], ['court_pressure']],
+      ),
     ],
     revisionOutcome: [
       'Evacuation Is Enough',
@@ -694,6 +1029,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'ren_noncoercion',
       { text: 'Ren strikes the cargo language from the route cards and names evacuation as the boats\' complete mission. No later commander may silently restore it.', effects: { ren_noncoercion: 0.05, witness_safety: 0.05, network_consent: 0.05 } },
       { text: 'A reserve note survives on one copied map. Aya recalls it, publishes the correction, and assigns the archive bundle to an independent land route.', effects: { aya_archive_openness: 0.05, proof_integrity: 0.05, route_safety: -0.05 } },
+      outcomeChoiceScores(
+        [['ren_noncoercion'], ['witness_safety'], ['network_consent'], ['evacuation_capacity']],
+        [['aya_archive_openness'], ['proof_integrity'], ['route_safety', true], ['public_reach']],
+      ),
     ],
   }),
   cluster({
@@ -762,6 +1101,48 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
             ['court_pressure', 0.20, true],
           ]),
         }),
+      option('test-cipher-before-sentence', 'Hold the sentence long enough for Aya and the released attendants to test one route cipher under the ward.', 'proof_integrity',
+        { text: 'The cipher proves incomplete but not weaponized. Aya preserves the verified segment while released attendants reject immediate trust; Enma enters rotating custody for further testimony.', outcomeKey: 'accord', effects: { enma_custody: 0.10, proof_integrity: 0.10, witness_safety: 0.10, bell_intelligence: 0.05, kurozane_pride: -0.05, kurozane_indispensability: -0.05 } },
+        { text: 'The cipher conceals a live blood command aimed at the patient lane. The attendants expose it, Ren authorizes the fatal stop, and Aya records both the immediate threat and every answer lost with Enma.', outcomeKey: 'revision', effects: { enma_killed: 0.10, truth_completeness: 0.10, court_pressure: -0.05, bell_intelligence: -0.05, garrison_defection: -0.05, kurozane_pride: 0.05, kurozane_guilt_pressure: -0.05 } },
+        {
+          accord: score([
+            ['proof_integrity', 0.25],
+            ['witness_safety', 0.20],
+            ['network_consent', 0.20],
+            ['enma_testimony', 0.20],
+            ['lise_oath_revision', 0.15],
+          ]),
+          revision: score([
+            ['court_pressure', 0.25],
+            ['proof_integrity', 0.20, true],
+            ['witness_safety', 0.20, true],
+            ['enma_testimony', 0.20, true],
+            ['network_consent', 0.15, true],
+          ]),
+          additionalReactions: [
+            additionalReaction(
+              'verified-compact',
+              'negotiated',
+              'Aya verifies the cipher from an independent archive mark while attendants identify every person it affects. Enma releases the linked thralls and accepts a compact whose movement privileges end the instant a later claim fails.',
+              {
+                enma_compact: 0.10,
+                enma_testimony: 0.10,
+                bell_intelligence: 0.10,
+                garrison_defection: 0.05,
+                network_consent: 0.05,
+                kurozane_pride: -0.05,
+                kurozane_indispensability: -0.10,
+              },
+              score([
+                ['proof_integrity', 0.20],
+                ['enma_testimony', 0.25],
+                ['network_consent', 0.20],
+                ['witness_safety', 0.20],
+                ['bell_intelligence', 0.15],
+              ], -0.04),
+            ),
+          ],
+        }),
     ],
     accordOutcome: [
       'Custody Without a Trophy',
@@ -770,6 +1151,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'witness_safety',
       { text: 'The record forbids solitary custody, private questioning, blood access, and transport without a published destination. Enma signs beneath the restrictions while the three key holders sign beside, not above, one another.', effects: { enma_custody: 0.05, witness_safety: 0.05, proof_integrity: 0.05 } },
       { text: 'Nikola initially writes his house as guarantor. He strikes the title and replaces it with an expiring technical duty, leaving civilian custodians authority to end his access.', effects: { lise_oath_revision: 0.05, network_consent: 0.05, enma_testimony: 0.05 } },
+      outcomeChoiceScores(
+        [['witness_safety'], ['proof_integrity'], ['network_consent'], ['lise_oath_revision']],
+        [['lise_oath_revision'], ['network_consent'], ['enma_testimony'], ['court_pressure']],
+      ),
     ],
     revisionOutcome: [
       'The Cinder Fan Ends',
@@ -778,6 +1163,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'truth_completeness',
       { text: 'Aya preserves the immediate threat, the failed alternatives, and the testimony lost with Enma. The death is neither hidden nor made into proof that every captive enemy must die.', effects: { enma_killed: 0.05, truth_completeness: 0.05, aya_archive_openness: 0.05 } },
       { text: 'A route copy calls the killing purification. Nikola removes the inherited hunter language and replaces it with the exact witnessed necessity and its unresolved cost.', effects: { lise_oath_revision: 0.05, proof_integrity: 0.05, ren_noncoercion: 0.05 } },
+      outcomeChoiceScores(
+        [['truth_completeness'], ['aya_archive_openness'], ['witness_safety'], ['proof_integrity']],
+        [['lise_oath_revision'], ['proof_integrity'], ['ren_noncoercion'], ['court_pressure']],
+      ),
     ],
     thirdOutcome: [
       'A Defection Under Witness',
@@ -786,6 +1175,10 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
       'enma_testimony',
       { text: 'Enma identifies a false inner-gate order, then waits while Aya confirms it from an independent record. The useful answer earns only the next bounded question, not trust or restored status.', effects: { enma_compact: 0.05, enma_testimony: 0.05, proof_integrity: 0.05 } },
       { text: 'Her first route claim omits two endangered attendants. Kiku suspends movement privileges until they are found, demonstrating that the compact can contract as well as reward cooperation.', effects: { witness_safety: 0.05, enma_testimony: -0.05, network_consent: 0.05 } },
+      outcomeChoiceScores(
+        [['enma_testimony'], ['proof_integrity'], ['network_consent'], ['bell_intelligence']],
+        [['witness_safety'], ['enma_testimony', true], ['network_consent'], ['kiku_capacity']],
+      ),
     ],
   }),
   cluster({
@@ -861,7 +1254,7 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
             ['garrison_defection', 0.15, true],
             ['bell_intelligence', 0.10, true],
             ['enma_killed', 0.20],
-          ]),
+          ], 0.09),
         }),
       option('provisional-binding', 'Hold Kurozane until the route councils can define a transfer no victor owns.', 'proof_integrity',
         { text: "The binding receives a public expiration at the next dawn and no private hunter custody. Local delegates inventory every office before accepting it. Kurozane asks which of them is shogun now. 'That impatience is the disease,' Mateus says. No one accepts the throne in order to answer him faster.", effects: { proof_integrity: 0.10, ren_noncoercion: 0.10, network_consent: 0.05 } },
@@ -882,7 +1275,7 @@ export const STORYWORLD_CLUSTERS = Object.freeze([
             ['party_cohesion', 0.15, true],
             ['network_consent', 0.10, true],
             ['witness_safety', 0.10, true],
-          ], 0.22),
+          ], 0.25),
         }),
       option('execution-demand', 'Demand execution now, before the blood court can regroup.', 'court_pressure',
         { text: "Nikola lowers the Longinus point until Kurozane feels his immortality fail around it. The shogun looks past the blade and sees route messengers already carrying orders that did not come from him. He chooses witnessed surrender, not remorse. Mateus warns Nikola not to call fear conversion. 'I was going to call it excellent reach,' Nikola says.", effects: { court_pressure: -0.10, truth_completeness: 0.10, network_consent: 0.05 } },

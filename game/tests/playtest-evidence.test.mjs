@@ -147,7 +147,7 @@ test('partial playtest exports publish separate, explicit profile verdicts', () 
   assert.deepEqual(JSON.parse(serializePlaytestEvidenceReport(report)), report);
 });
 
-test('narrative evidence proves the reconciled 75-scene Salt route and five attributed hours', () => {
+test('narrative evidence proves the reconciled 77-scene Salt route and five attributed hours', () => {
   const { receipt, storyworld } = completeNarrativeRun();
   const report = createPlaytestEvidenceReport(
     receipt,
@@ -156,15 +156,15 @@ test('narrative evidence proves the reconciled 75-scene Salt route and five attr
   );
   assert.equal(report.profileId, RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H);
   assert.equal(report.story.completedBeatCount, 55);
-  assert.equal(report.story.completedStoryworldPlayedSceneCount, 20);
-  assert.equal(report.story.playedSceneCount, 75);
+  assert.equal(report.story.completedStoryworldPlayedSceneCount, 22);
+  assert.equal(report.story.playedSceneCount, 77);
   assert.equal(report.requiredRoute.complete, false);
   assert.equal(report.narrativeRoute.applicable, true);
   assert.equal(report.narrativeRoute.strictCreditsGateReady, true);
   assert.deepEqual(report.narrativeRoute.strictCreditsGateReasons, []);
   assert.equal(report.narrativeRoute.completedCanonicalSceneCount, 55);
-  assert.equal(report.narrativeRoute.completedStoryworldSceneCount, 20);
-  assert.equal(report.narrativeRoute.completedStoryworldClusterIds.length, 10);
+  assert.equal(report.narrativeRoute.completedStoryworldSceneCount, 22);
+  assert.equal(report.narrativeRoute.completedStoryworldClusterIds.length, 11);
   assert.equal(report.narrativeRoute.minimumPlaytimeMet, true);
   assert.equal(report.narrativeRoute.chapterTimingComplete, true);
   assert.equal(report.narrativeRoute.releaseTargetProven, true);

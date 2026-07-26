@@ -24,7 +24,7 @@ const placementLabel = Object.freeze({
 
 test('production map covers every authored sequence binding and consequence title', () => {
   const roleCounts = {};
-  assert.equal(STORYWORLD_SOURCE_CLUSTERS.length, 11);
+  assert.equal(STORYWORLD_SOURCE_CLUSTERS.length, 12);
   for (const cluster of STORYWORLD_SOURCE_CLUSTERS) {
     roleCounts[cluster.sequenceRole] = (roleCounts[cluster.sequenceRole] ?? 0) + 1;
     assert.match(DOC, new RegExp(`\\b${cluster.id}\\b`));
@@ -39,18 +39,17 @@ test('production map covers every authored sequence binding and consequence titl
   }
   assert.deepEqual(roleCounts, {
     'after-level-consequence': 2,
-    'after-boss-consequence': 4,
+    'after-boss-consequence': 5,
     'act-route-decision': 1,
     'before-boss-decision': 4,
   });
 });
 
 test('production map locks authored-versus-played arithmetic and core guardrails', () => {
-  assert.equal(STORYWORLD_METRICS.authoredSceneCount, 97);
-  assert.deepEqual(STORYWORLD_METRICS.completeRunSceneCountRange, { minimum: 74, maximum: 77 });
-  assert.match(DOC, /\*\*97 scenes\*\*/);
-  assert.match(DOC, /\*\*74 played scenes\*\*/);
-  assert.match(DOC, /\*\*75 played scenes\*\*/);
+  assert.equal(STORYWORLD_METRICS.authoredSceneCount, 100);
+  assert.deepEqual(STORYWORLD_METRICS.completeRunSceneCountRange, { minimum: 76, maximum: 77 });
+  assert.match(DOC, /\*\*100 scenes\*\*/);
+  assert.match(DOC, /\*\*76 played scenes\*\*/);
   assert.match(DOC, /\*\*77 played scenes\*\*/);
   assert.equal(STORYWORLD_PACING_REPORT.diagnosticOnly, true);
   assert.match(DOC, /\*\*The Last Command\*\*/u);

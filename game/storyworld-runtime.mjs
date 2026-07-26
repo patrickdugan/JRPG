@@ -119,6 +119,27 @@ export const LEGACY_STORYWORLD_CATALOG_IDENTITIES = Object.freeze([
     migrationId: 'act-three-four-causal-effects-v1',
     maximumCompatibleRecordCount: 11,
   }),
+  // Source version 8 inserts the previously missing Sodegaura operation
+  // consequence. Old Salt and Ash histories that have already crossed that
+  // operation receive the canonical local-stop-signal receipt established by
+  // the shipped chapter; no final outcome or prior opaque choice is changed.
+  Object.freeze({
+    sourceIFID: '7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4',
+    sourceHash: 'sha256:a0baf4afa6e4d44bacab296870fc22ad2e9833014f57fa82f223599248d6f7e5',
+    catalogSignature: 'sha256:99e9fdb88518de76e0196038b9570697db2c4dc84afaba1166329d7550f8465f',
+    migrationId: 'sodegaura-operation-bridge-v1',
+    maximumCompatibleRecordCount: 11,
+    insertedClusterId: 'sw-sodegaura-lantern-manifests',
+    canonicalInsertedRecord: Object.freeze({
+      clusterId: 'sw-sodegaura-lantern-manifests',
+      phase: 'complete',
+      entryOptionId: 'page_sw12_decision_opt_local-stop-signals',
+      entryReactionId: 'page_sw12_decision_opt_local-stop-signals_r_accord',
+      outcomeEncounterId: 'page_sw12_accord',
+      outcomeOptionId: 'page_sw12_accord_opt_carry',
+      outcomeReactionId: 'page_sw12_accord_opt_carry_r_accord',
+    }),
+  }),
 ]);
 
 const CAMPAIGN_BEAT_IDS = Object.freeze(CAMPAIGN.chapters.flatMap((chapter) => chapter.beats.map((beat) => beat.id)));
@@ -618,12 +639,29 @@ export function loadStoryworldState(serializedOrPayload) {
       ]),
     });
   }
-  const migrated = validateStoryworldPayload({
+  const migratedPayload = {
     ...payload,
     sourceIFID: STORYWORLD_CATALOG.sourceIFID,
     sourceHash: STORYWORLD_CATALOG.sourceHash,
     catalogSignature: STORYWORLD_CATALOG_SIGNATURE,
-  });
+  };
+  if (legacyIdentity.canonicalInsertedRecord
+    && !migratedPayload.records.some(({ clusterId }) => clusterId === legacyIdentity.insertedClusterId)) {
+    const selectedOrder = orderedClusterIdsForRecords(migratedPayload.records);
+    const insertedIndex = selectedOrder.indexOf(legacyIdentity.insertedClusterId);
+    const crossedInsertedCluster = insertedIndex >= 0 && migratedPayload.records.some(({ clusterId }) => (
+      selectedOrder.indexOf(clusterId) > insertedIndex
+    ));
+    if (crossedInsertedCluster) {
+      migratedPayload.records = [...migratedPayload.records, legacyIdentity.canonicalInsertedRecord]
+        .sort((left, right) => selectedOrder.indexOf(left.clusterId) - selectedOrder.indexOf(right.clusterId));
+      migratedPayload.revision += expectedRecordRevision(
+        legacyIdentity.canonicalInsertedRecord,
+        STORYWORLD_CLUSTER_BY_ID.get(legacyIdentity.insertedClusterId),
+      );
+    }
+  }
+  const migrated = validateStoryworldPayload(migratedPayload);
   if (!migrated.ok) return migrated;
   return Object.freeze({
     ...migrated,

@@ -33,6 +33,9 @@ class MemoryStorage {
   removeItem(key) { this.values.delete(key); }
 }
 
+const CLUSTER_BY_ID = new Map(STORYWORLD_CLUSTERS.map((cluster) => [cluster.id, cluster]));
+const WAR_TABLE_OPTION_INDEX = Object.freeze({ salt: 0, ash: 1, paper: 2 });
+
 function resolveCluster(state, cluster, entryOptionIndex = 0) {
   let result = beginStoryworldEncounter(state, cluster.id);
   assert.equal(result.ok, true, result.code);
@@ -54,6 +57,17 @@ function resolveCluster(state, cluster, entryOptionIndex = 0) {
   result = advanceStoryworldEncounter(state, cluster.id);
   assert.equal(result.ok, true, result.code);
   return result.state;
+}
+
+function resolveScheduledRoute(state, theater = 'paper') {
+  for (const [index, clusterId] of getCampaignRouteSchedule(theater).storyworldDecisionIds.entries()) {
+    const cluster = CLUSTER_BY_ID.get(clusterId);
+    const entryOptionIndex = clusterId === 'sw3-sayos-warehouse-conditions'
+      ? WAR_TABLE_OPTION_INDEX[theater]
+      : index % Math.min(3, cluster.entry.options.length);
+    state = resolveCluster(state, cluster, entryOptionIndex);
+  }
+  return state;
 }
 
 test('one cluster runs entry choice, deterministic reaction, consequence scene, response, and completion', () => {
@@ -89,10 +103,10 @@ test('reaction ties deterministically favor the later-authored reaction', () => 
 });
 
 test('the Paper route requires all eleven clusters in route order and replays exact derived state', () => {
-  let state = createStoryworldState({ runId: 'storyworld-runtime-complete' });
-  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
-    state = resolveCluster(state, cluster, index % 3);
-  });
+  const state = resolveScheduledRoute(
+    createStoryworldState({ runId: 'storyworld-runtime-complete' }),
+    'paper',
+  );
   assert.equal(isStoryworldNarrativeComplete(state), true);
   assert.equal(getStoryworldRouteTheater(state), 'paper');
   assert.deepEqual(
@@ -313,10 +327,10 @@ test('every legacy identity fails closed at the old third record instead of inve
 });
 
 test('the Act V prose rewrite preserves a complete compatible Storyworld history', () => {
-  let current = createStoryworldState({ runId: 'storyworld-act-five-prose-migration-0001' });
-  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
-    current = resolveCluster(current, cluster, index % 3);
-  });
+  const current = resolveScheduledRoute(
+    createStoryworldState({ runId: 'storyworld-act-five-prose-migration-0001' }),
+    'paper',
+  );
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
     .find(({ migrationId }) => migrationId === 'act-five-climax-writing-v1');
   assert.ok(legacyIdentity);
@@ -333,10 +347,10 @@ test('the Act V prose rewrite preserves a complete compatible Storyworld history
 });
 
 test('the long-range balance model preserves already selected opaque outcomes', () => {
-  let current = createStoryworldState({ runId: 'storyworld-long-range-balance-migration-0001' });
-  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
-    current = resolveCluster(current, cluster, index % 3);
-  });
+  const current = resolveScheduledRoute(
+    createStoryworldState({ runId: 'storyworld-long-range-balance-migration-0001' }),
+    'paper',
+  );
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
     .find(({ migrationId }) => migrationId === 'long-range-reaction-balance-v1');
   assert.ok(legacyIdentity);
@@ -353,10 +367,10 @@ test('the long-range balance model preserves already selected opaque outcomes', 
 });
 
 test('the four-ending expansion preserves previously completed two-ending histories', () => {
-  let current = createStoryworldState({ runId: 'storyworld-talk-ending-migration-0001' });
-  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
-    current = resolveCluster(current, cluster, index % 3);
-  });
+  const current = resolveScheduledRoute(
+    createStoryworldState({ runId: 'storyworld-talk-ending-migration-0001' }),
+    'paper',
+  );
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
     .find(({ migrationId }) => migrationId === 'talk-no-jutsu-endings-v1');
   assert.ok(legacyIdentity);
@@ -373,10 +387,10 @@ test('the four-ending expansion preserves previously completed two-ending histor
 });
 
 test('the inclination expansion preserves complete four-ending histories before adding the pride reversal', () => {
-  let current = createStoryworldState({ runId: 'storyworld-pride-reversal-migration-0001' });
-  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
-    current = resolveCluster(current, cluster, index % 3);
-  });
+  const current = resolveScheduledRoute(
+    createStoryworldState({ runId: 'storyworld-pride-reversal-migration-0001' }),
+    'paper',
+  );
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
     .find(({ migrationId }) => migrationId === 'act-five-pride-reversal-v1');
   assert.ok(legacyIdentity);
@@ -393,10 +407,10 @@ test('the inclination expansion preserves complete four-ending histories before 
 });
 
 test('the Act III-IV causal expansion preserves complete source-version-six histories', () => {
-  let current = createStoryworldState({ runId: 'storyworld-act-three-four-effects-migration-0001' });
-  STORYWORLD_CLUSTERS.forEach((cluster, index) => {
-    current = resolveCluster(current, cluster, index % 3);
-  });
+  const current = resolveScheduledRoute(
+    createStoryworldState({ runId: 'storyworld-act-three-four-effects-migration-0001' }),
+    'paper',
+  );
   const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
     .find(({ migrationId }) => migrationId === 'act-three-four-causal-effects-v1');
   assert.ok(legacyIdentity);
@@ -410,4 +424,43 @@ test('the Act III-IV causal expansion preserves complete source-version-six hist
   assert.equal(loaded.migrated, true);
   assert.equal(loaded.migrationId, 'act-three-four-causal-effects-v1');
   assert.deepEqual(loaded.state.records, current.records);
+});
+
+test('source-version-seven Salt histories receive the canonical Sodegaura operation receipt', () => {
+  let current = createStoryworldState({ runId: 'storyworld-sodegaura-bridge-migration-0001' });
+  const oldRouteIds = getCampaignRouteSchedule('salt').storyworldDecisionIds
+    .filter((clusterId) => clusterId !== 'sw-sodegaura-lantern-manifests');
+  for (const [index, clusterId] of oldRouteIds.entries()) {
+    const optionIndex = clusterId === 'sw3-sayos-warehouse-conditions'
+      ? WAR_TABLE_OPTION_INDEX.salt
+      : index % Math.min(3, CLUSTER_BY_ID.get(clusterId).entry.options.length);
+    current = resolveCluster(current, CLUSTER_BY_ID.get(clusterId), optionIndex);
+  }
+  assert.equal(isStoryworldNarrativeComplete(current), false);
+
+  const legacyIdentity = LEGACY_STORYWORLD_CATALOG_IDENTITIES
+    .find(({ migrationId }) => migrationId === 'sodegaura-operation-bridge-v1');
+  assert.ok(legacyIdentity);
+  const loaded = loadStoryworldState({
+    ...current,
+    sourceIFID: legacyIdentity.sourceIFID,
+    sourceHash: legacyIdentity.sourceHash,
+    catalogSignature: legacyIdentity.catalogSignature,
+  });
+  assert.equal(loaded.ok, true, loaded.errors?.join(' '));
+  assert.equal(loaded.migrated, true);
+  assert.equal(loaded.migrationId, 'sodegaura-operation-bridge-v1');
+  assert.equal(isStoryworldNarrativeComplete(loaded.state), true);
+  assert.equal(loaded.state.records.length, current.records.length + 1);
+  assert.equal(loaded.state.revision, current.revision + 5);
+  const inserted = loaded.state.records
+    .find(({ clusterId }) => clusterId === 'sw-sodegaura-lantern-manifests');
+  assert.equal(inserted.entryOptionId, 'page_sw12_decision_opt_local-stop-signals');
+  assert.equal(inserted.outcomeEncounterId, 'page_sw12_accord');
+  for (const record of current.records) {
+    assert.deepEqual(
+      loaded.state.records.find(({ clusterId }) => clusterId === record.clusterId),
+      record,
+    );
+  }
 });

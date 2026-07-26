@@ -200,7 +200,20 @@ function resolveStoryworldCluster(state, cluster, entryOptionIndex = 0) {
 function incompatibleCorrectionsDeskCheckpoint(currentCheckpoint, suffix, outcomeEncounterId) {
   const identity = LEGACY_STORYWORLD_CATALOG_IDENTITIES[1];
   let state = createStoryworldState({ runId: RUN_ID });
-  for (const cluster of STORYWORLD_CLUSTERS.slice(0, 9)) {
+  const historicalPrefixIds = [
+    'sw1-clerks-second-copy',
+    'sw2-witness-not-family',
+    'sw3-sayos-warehouse-conditions',
+    'sw4-margin-varga-journal',
+    'sw5-cipher-handoff',
+    'sw6-tribunal-afterword',
+    'sw7-soldier-will-not-follow',
+    'sw8-boats-with-conditions',
+    'sw-enma-three-terms',
+  ];
+  for (const clusterId of historicalPrefixIds) {
+    const cluster = STORYWORLD_CLUSTERS.find(({ id }) => id === clusterId);
+    assert.ok(cluster, `Historical checkpoint fixture lost ${clusterId}.`);
     state = resolveStoryworldCluster(
       state,
       cluster,
@@ -258,7 +271,7 @@ test('recovery checkpoint round-trips all fourteen exact authorities with a reco
   assert.equal(created.checkpoint.summary.routeRequiredActivityCount, 215);
   assert.equal(created.checkpoint.summary.routeCreditsReady, true);
   assert.equal(created.checkpoint.summary.storyworldCompletedClusterCount, 0);
-  assert.equal(created.checkpoint.summary.storyworldRequiredClusterCount, 11);
+  assert.equal(created.checkpoint.summary.storyworldRequiredClusterCount, 12);
   assert.equal(created.checkpoint.summary.storyworldNarrativeComplete, false);
   assert.equal(created.checkpoint.summary.storyworldProofEligible, true);
   assert.match(created.checkpoint.summary.storyworldCatalogSignature, /^sha256:[0-9a-f]{64}$/u);
