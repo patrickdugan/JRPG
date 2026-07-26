@@ -1,0 +1,583 @@
+{
+  "schemaVersion": 1,
+  "assetId": "enemy-combat-animation-runtime-v1",
+  "status": "runtime-integrated-candidate",
+  "provenance": {
+    "classification": "deterministically pixelified runtime repack",
+    "notPixelAuthored": true,
+    "source": "Reviewed V2/V3 deterministically pixelified enemy atlases derived from AI-generated stylized animation concepts.",
+    "operation": "Lossless integer-aligned cel repacking only; no resampling, recoloring, interpolation, or generated pixels."
+  },
+  "geometry": {
+    "frameWidth": 160,
+    "frameHeight": 160,
+    "columns": 24,
+    "rows": 28,
+    "atlasWidth": 3840,
+    "atlasHeight": 4480,
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "alphaPolicy": "binary",
+    "alphaValues": [
+      0,
+      255
+    ],
+    "visibleColorCountAcrossRoster": 1678
+  },
+  "clips": [
+    {
+      "id": "locomotion",
+      "row": 0,
+      "frameDurationsMs": [
+        120,
+        100,
+        90,
+        100,
+        90,
+        120
+      ],
+      "phases": [
+        "contact",
+        "compression",
+        "passing",
+        "extension",
+        "second-contact",
+        "ready"
+      ],
+      "events": [],
+      "startColumn": 0
+    },
+    {
+      "id": "basic-attack",
+      "row": 1,
+      "frameDurationsMs": [
+        180,
+        150,
+        100,
+        80,
+        130,
+        240
+      ],
+      "phases": [
+        "ready",
+        "anticipation",
+        "commitment",
+        "active",
+        "follow-through",
+        "recovery"
+      ],
+      "events": [
+        {
+          "name": "damage",
+          "frameIndex": 3
+        }
+      ],
+      "startColumn": 6
+    },
+    {
+      "id": "signature-attack",
+      "row": 2,
+      "frameDurationsMs": [
+        220,
+        180,
+        140,
+        100,
+        180,
+        300
+      ],
+      "phases": [
+        "ready",
+        "anticipation",
+        "charge",
+        "active",
+        "recoil",
+        "recovery"
+      ],
+      "events": [
+        {
+          "name": "enemy-signature",
+          "frameIndex": 3
+        }
+      ],
+      "startColumn": 12
+    },
+    {
+      "id": "hurt-defeat",
+      "row": 3,
+      "frameDurationsMs": [
+        100,
+        100,
+        120,
+        160,
+        300,
+        600
+      ],
+      "phases": [
+        "hurt-contact",
+        "compression",
+        "stagger",
+        "collapse",
+        "defeated",
+        "defeated-hold"
+      ],
+      "events": [
+        {
+          "name": "hurt",
+          "frameIndex": 0
+        },
+        {
+          "name": "defeatedHold",
+          "frameIndex": 5
+        }
+      ],
+      "startColumn": 18
+    }
+  ],
+  "rows": [
+    {
+      "row": 0,
+      "id": "cinder-hound",
+      "name": "Cinder Hound",
+      "profile": "quadruped",
+      "signatureId": "cinder-overload",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 1,
+      "id": "ash-wisp",
+      "name": "Ash Wisp",
+      "profile": "flyer",
+      "signatureId": "ash-nova",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 2,
+      "id": "bell-moth",
+      "name": "Bell Moth",
+      "profile": "flyer",
+      "signatureId": "bell-resonance",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 3,
+      "id": "tithe-enforcer",
+      "name": "Tithe Enforcer",
+      "profile": "broad-humanoid",
+      "signatureId": "tithe-seal",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 4,
+      "id": "registry-hound",
+      "name": "Registry Hound",
+      "profile": "lean-humanoid",
+      "signatureId": "registry-mark",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 5,
+      "id": "drowned-retainer",
+      "name": "Drowned Retainer",
+      "profile": "lean-humanoid",
+      "signatureId": "undertow-bind",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 6,
+      "id": "lantern-leech",
+      "name": "Lantern Leech",
+      "profile": "crawler",
+      "signatureId": "lantern-drain",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 7,
+      "id": "salt-warden",
+      "name": "Salt Warden",
+      "profile": "broad-humanoid",
+      "signatureId": "salt-rampart",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 8,
+      "id": "ashen-spearman",
+      "name": "Ashen Spearman",
+      "profile": "lean-humanoid",
+      "signatureId": "ash-lane-charge",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 9,
+      "id": "ashen-banner-guard",
+      "name": "Ashen Banner Guard",
+      "profile": "broad-humanoid",
+      "signatureId": "banner-wall",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 10,
+      "id": "forge-thrall",
+      "name": "Forge Thrall",
+      "profile": "broad-humanoid",
+      "signatureId": "ember-vent",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 11,
+      "id": "bell-scribe",
+      "name": "Bell Scribe",
+      "profile": "lean-humanoid",
+      "signatureId": "docket-mark",
+      "sourcePackage": "enemy-animation-suite-v2",
+      "sourceVersion": "v2"
+    },
+    {
+      "row": 12,
+      "id": "mourning-ronin",
+      "name": "Mourning Ronin",
+      "profile": "human",
+      "signatureId": "last-vow-draw",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 13,
+      "id": "court-arquebusier",
+      "name": "Court Arquebusier",
+      "profile": "armored-human",
+      "signatureId": "ash-match-volley",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 14,
+      "id": "veil-courier",
+      "name": "Veil Courier",
+      "profile": "human",
+      "signatureId": "smoke-relay",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 15,
+      "id": "provincial-banner-guard",
+      "name": "Provincial Banner Guard",
+      "profile": "armored-human",
+      "signatureId": "banner-wall",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 16,
+      "id": "storm-nue",
+      "name": "Storm Nue",
+      "profile": "quadruped",
+      "signatureId": "storm-tail",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 17,
+      "id": "dream-baku",
+      "name": "Dream Baku",
+      "profile": "broad-beast",
+      "signatureId": "dream-vacuum",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 18,
+      "id": "twin-tail-nekomata",
+      "name": "Twin-Tail Nekomata",
+      "profile": "quadruped",
+      "signatureId": "twin-flame-lash",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 19,
+      "id": "silk-jorogumo",
+      "name": "Silk Jorogumo",
+      "profile": "arachnid",
+      "signatureId": "silk-prison",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 20,
+      "id": "sickle-weasel",
+      "name": "Sickle Weasel",
+      "profile": "quadruped",
+      "signatureId": "crosswind-dash",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 21,
+      "id": "drum-tanuki",
+      "name": "Drum Tanuki",
+      "profile": "broad-beast",
+      "signatureId": "belly-drum-quake",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 22,
+      "id": "marsh-kappa-beast",
+      "name": "Marsh Kappa-Beast",
+      "profile": "broad-beast",
+      "signatureId": "shell-surge",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 23,
+      "id": "ushi-oni-behemoth",
+      "name": "Ushi-Oni Behemoth",
+      "profile": "broad-beast",
+      "signatureId": "earth-gore-charge",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 24,
+      "id": "black-chrysanthemum-nest-woman",
+      "name": "Black Chrysanthemum Nest-Woman",
+      "profile": "serpent-plant",
+      "signatureId": "black-bloom-devour",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 25,
+      "id": "razor-bamboo-stalker",
+      "name": "Razor Bamboo Stalker",
+      "profile": "rooted-plant",
+      "signatureId": "razor-canopy",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 26,
+      "id": "spider-lily-ambusher",
+      "name": "Spider-Lily Ambusher",
+      "profile": "rooted-plant",
+      "signatureId": "crimson-pollen-ambush",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    },
+    {
+      "row": 27,
+      "id": "lantern-vine-maw",
+      "name": "Lantern-Vine Maw",
+      "profile": "rooted-plant",
+      "signatureId": "false-lantern-lure",
+      "sourcePackage": "enemy-animation-suite-v3",
+      "sourceVersion": "v3"
+    }
+  ],
+  "sources": [
+    {
+      "package": "enemy-animation-suite-v2",
+      "contract": "../enemy-animation-suite-v2/enemy-animation-suite-v2.source.json",
+      "contractSha256": "8eb878349f8731df60681514f0c536a300001b2987d80a22c971eef9f1225613"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "cinder-hound",
+      "path": "../enemy-animation-suite-v2/cinder-hound-atlas-v2.png",
+      "sha256": "9655cd9a9fdbf2361c10e5bfccdf260d46c990040a97c6f0f6da9e9a5814a166"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "ash-wisp",
+      "path": "../enemy-animation-suite-v2/ash-wisp-atlas-v2.png",
+      "sha256": "5e0f26998540cd8c0515985bc60c3402fe5c4310b4c19299316821b570a25f24"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "bell-moth",
+      "path": "../enemy-animation-suite-v2/bell-moth-atlas-v2.png",
+      "sha256": "c8a6612503b9601091e611c64a2e57333bf862ccdfea3b81f96a6b27cd9ef5ce"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "tithe-enforcer",
+      "path": "../enemy-animation-suite-v2/tithe-enforcer-atlas-v2.png",
+      "sha256": "9b2132bced9c296409b037a3798c412575d8eb63f8c8b724050e648c82201c98"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "registry-hound",
+      "path": "../enemy-animation-suite-v2/registry-hound-atlas-v2.png",
+      "sha256": "cdf01d3f268a4060847bd017c136abc1f107962d6c2cd974411997a6d898619b"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "drowned-retainer",
+      "path": "../enemy-animation-suite-v2/drowned-retainer-atlas-v2.png",
+      "sha256": "c14cbbc3278bf12129a731ac73697696f0d64fc17a7ec00121f0befa6dbc3d03"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "lantern-leech",
+      "path": "../enemy-animation-suite-v2/lantern-leech-atlas-v2.png",
+      "sha256": "0b02a3d7bd3236e3cd5277d491c11af63073a0db56d64f77fe9db39153a85479"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "salt-warden",
+      "path": "../enemy-animation-suite-v2/salt-warden-atlas-v2.png",
+      "sha256": "9f5d23c3b8274afb29f0e1f2be8b07fa25f5edad6e8ec7c0ed0ae8055ca108b1"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "ashen-spearman",
+      "path": "../enemy-animation-suite-v2/ashen-spearman-atlas-v2.png",
+      "sha256": "f341fc2642d57b91878c9a6039466cb0c1ac96c1fb84c29e2e667e450b7e87c0"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "ashen-banner-guard",
+      "path": "../enemy-animation-suite-v2/ashen-banner-guard-atlas-v2.png",
+      "sha256": "523f145a77c26ad5919e2ca2da82a245c72e0d262982723b401b318d5cf11f56"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "forge-thrall",
+      "path": "../enemy-animation-suite-v2/forge-thrall-atlas-v2.png",
+      "sha256": "48bfa6d42fbdd4cfee35317d90f617b1ecd01cab68a708b228d8abb8f5995272"
+    },
+    {
+      "package": "enemy-animation-suite-v2",
+      "enemyId": "bell-scribe",
+      "path": "../enemy-animation-suite-v2/bell-scribe-atlas-v2.png",
+      "sha256": "ac01ea6f8dbea531b578c97fc439ea054315d7182b720b7ac93206fe05390659"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "contract": "../enemy-animation-suite-v3/enemy-animation-suite-v3.source.json",
+      "contractSha256": "7b46fe57562031a5e42c193259d0bae4a705d3df42e3bdef5939d99fa999d521"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "mourning-ronin",
+      "path": "../enemy-animation-suite-v3/mourning-ronin-atlas-v3.png",
+      "sha256": "10193064b26899593dd186d2b49e77a997ab324d859ab1227f91c1e6256e0ad6"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "court-arquebusier",
+      "path": "../enemy-animation-suite-v3/court-arquebusier-atlas-v3.png",
+      "sha256": "570e09f151fa32d692f8e8682a477dc0925ca1575b2bb135ef40a42a0de5011a"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "veil-courier",
+      "path": "../enemy-animation-suite-v3/veil-courier-atlas-v3.png",
+      "sha256": "b83315706b3bf7b7a694de4535be3214780ae66c0a6e5f66d151f689be44bd0f"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "provincial-banner-guard",
+      "path": "../enemy-animation-suite-v3/provincial-banner-guard-atlas-v3.png",
+      "sha256": "e33daf63588ab0514f5f92f85ffc2a43e825c6aff116d9b68e11980326d0ef03"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "storm-nue",
+      "path": "../enemy-animation-suite-v3/storm-nue-atlas-v3.png",
+      "sha256": "82d912dbd4109b8edbb5157544f92c6e1b2cbfa403b3111d31005082c4e9b359"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "dream-baku",
+      "path": "../enemy-animation-suite-v3/dream-baku-atlas-v3.png",
+      "sha256": "83fba30aa8751bbab810b9d8700ade4fdcedcc270328be49eb88c235663d359b"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "twin-tail-nekomata",
+      "path": "../enemy-animation-suite-v3/twin-tail-nekomata-atlas-v3.png",
+      "sha256": "d442bba1528efdf7f757ec86f8e2a7a4764bf660e3feda962c16771daeae40d0"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "silk-jorogumo",
+      "path": "../enemy-animation-suite-v3/silk-jorogumo-atlas-v3.png",
+      "sha256": "67c01e143dc76e5626a24278d8f41f38aaf9ce70eb528bb4acc6e672cb06969b"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "sickle-weasel",
+      "path": "../enemy-animation-suite-v3/sickle-weasel-atlas-v3.png",
+      "sha256": "02b4fd5dc3db739c7ae779252fb976f3648dfecdc3ee0be558618484684dd72b"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "drum-tanuki",
+      "path": "../enemy-animation-suite-v3/drum-tanuki-atlas-v3.png",
+      "sha256": "2629b86ee5dccf3843785151e7be1e9212077b24901e2464d031125940dacf3e"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "marsh-kappa-beast",
+      "path": "../enemy-animation-suite-v3/marsh-kappa-beast-atlas-v3.png",
+      "sha256": "79dfa3f117d5fefe6d4ab0c5cbca865ce59fc9815dd3ea1e7b3d47579d882217"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "ushi-oni-behemoth",
+      "path": "../enemy-animation-suite-v3/ushi-oni-behemoth-atlas-v3.png",
+      "sha256": "6bb97f3bde1a02e134c16da5fa69001020baba15ec3d384e44d15b3bca20d2b4"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "black-chrysanthemum-nest-woman",
+      "path": "../enemy-animation-suite-v3/black-chrysanthemum-nest-woman-atlas-v3.png",
+      "sha256": "83a3fb4dceb170e00d8c6d0209303b4c29b3cde759a14329bd85cae67e10179c"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "razor-bamboo-stalker",
+      "path": "../enemy-animation-suite-v3/razor-bamboo-stalker-atlas-v3.png",
+      "sha256": "5cb62f92a90e11b40ce46bbaf29107adfb6645e500fb56c7ef2e36da5fd21865"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "spider-lily-ambusher",
+      "path": "../enemy-animation-suite-v3/spider-lily-ambusher-atlas-v3.png",
+      "sha256": "de13ba1176a95b4be2e8c9e7bb223a79408d6610464c0d688f41421461ad054d"
+    },
+    {
+      "package": "enemy-animation-suite-v3",
+      "enemyId": "lantern-vine-maw",
+      "path": "../enemy-animation-suite-v3/lantern-vine-maw-atlas-v3.png",
+      "sha256": "5e67381d64a47a61061a01676101fe3968d14496ce83918beb46bc52823e7750"
+    }
+  ],
+  "output": {
+    "path": "enemy-combat-animation-atlas-v1.png",
+    "runtimePath": "game/assets/art/enemy-combat-animation-runtime-v1/enemy-combat-animation-atlas-v1.png",
+    "sha256": "878e05d1f2d1665cc07dd6793bf2d09f961b26e1b4ef7ad9ff2e5c1a96cd637b",
+    "width": 3840,
+    "height": 4480,
+    "mode": "RGBA"
+  },
+  "builder": {
+    "path": "build_enemy_combat_animation_runtime_v1.py",
+    "sha256": "ce54fddd8126898048e5f1252398828c04ad90082b92e9d95cf67f26a825d60b",
+    "pillowVersion": "11.3.0"
+  }
+}

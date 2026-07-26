@@ -26,12 +26,24 @@ import {
 import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import { getBattleStageArt } from './battle-stage-art.mjs';
 import { BOSS_COMBAT_ATLAS, getBossCombatDrawPlacement, getBossCombatFrame, hasBossCombatTemplate } from './boss-combat-atlas.mjs';
+import {
+  ENEMY_COMBAT_ANIMATION_ATLAS,
+  getEnemyCombatAnimationFrame,
+  hasEnemyCombatAnimation,
+  sampleEnemyCombatAnimation,
+  sampleEnemyCombatAnimationPhase,
+} from './enemy-combat-animation-atlas.mjs';
 import { ENEMY_ATLAS, getEnemyAtlasFrame } from './enemy-atlas.mjs';
 import {
   createLoadoutState,
   syncPartyVitals,
 } from './loadout.mjs';
 import { PARTY_COMBAT_ATLAS, getPartyCombatFrame } from './party-combat-atlas.mjs';
+import {
+  PARTY_ANIMATION_GEOMETRY,
+  samplePartyAnimation,
+  samplePartyAnimationPhase,
+} from './roster-animation-atlas.mjs';
 import { loadStoryworldBattlePresentation } from './storyworld-battle-bridge.mjs';
 import {
   ACTION_SLICE_STORAGE_KEY,
@@ -178,7 +190,9 @@ if (storyworld) {
 
 const art = {
   party: { image: new Image(), ready: false, source: PARTY_COMBAT_ATLAS },
+  partyAnimation: { image: new Image(), ready: false, source: PARTY_ANIMATION_GEOMETRY },
   enemy: { image: new Image(), ready: false, source: ENEMY_ATLAS },
+  enemyAnimation: { image: new Image(), ready: false, source: ENEMY_COMBAT_ANIMATION_ATLAS },
   boss: { image: new Image(), ready: false, source: BOSS_COMBAT_ATLAS },
   stage: { image: new Image(), ready: false, source: getBattleStageArt(session.encounter.levelId) },
 };
@@ -200,7 +214,7 @@ function loadArt(key) {
   record.image.src = record.source.url;
 }
 
-for (const key of ['party', 'enemy', 'boss', 'stage']) loadArt(key);
+for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage']) loadArt(key);
 
 function clearHeld() {
   held.left = false;
@@ -483,10 +497,68 @@ function drawFallback(actor, color) {
   context.fillRect(actor.position.x - 18, actor.position.y - height, 36, height);
 }
 
-function drawParty(actor) {
-  const frame = getPartyCombatFrame(templateId(actor.id), partyPose(actor));
+function attackPhaseProgress(actor) {
+  const active = actor.activeAttack;
+  const attack = active ? session.spec.kernelConfig.attacks[active.attackId] : null;
+  if (!active || !attack) return 0;
+  if (active.phase === 'windup') return attack.windupMs ? active.elapsedMs / attack.windupMs : 1;
+  if (active.phase === 'active') {
+    return attack.activeMs ? (active.elapsedMs - attack.windupMs) / attack.activeMs : 1;
+  }
+  const recoveryElapsed = active.elapsedMs - attack.windupMs - attack.activeMs;
+  return attack.recoveryMs ? recoveryElapsed / attack.recoveryMs : 1;
+}
+
+function partyActionClip(actor) {
+  const attackId = actor.activeAttack?.attackId;
+  if (!attackId) return null;
+  if (actor.activeAttack.comboId || attackId.startsWith('subweapon:')) return 'signature-b';
+  const index = Object.keys(actor.attackStates ?? {}).indexOf(attackId);
+  return index <= 0 ? 'basic-strike' : index === 1 ? 'signature-a' : 'signature-b';
+}
+
+function richPartyFrame(actor, nowMs) {
+  const memberId = templateId(actor.id);
+  if (actor.hp <= 0) return samplePartyAnimation(memberId, 'defeat', Number.MAX_SAFE_INTEGER);
+  if (actor.hitStunRemainingMs > 0) {
+    return samplePartyAnimation(memberId, 'hurt', (100 - actor.hitStunRemainingMs) * 4.4);
+  }
+  if (actor.activeAttack) {
+    return samplePartyAnimationPhase(
+      memberId,
+      partyActionClip(actor),
+      actor.activeAttack.phase,
+      attackPhaseProgress(actor),
+    );
+  }
+  if (actor.activeManeuver?.id === 'uppercut') {
+    return samplePartyAnimation(memberId, 'signature-a', actor.activeManeuver.elapsedMs * 3);
+  }
+  if (actor.activeManeuver?.id === 'thunder-kick') {
+    return samplePartyAnimation(memberId, 'signature-b', actor.activeManeuver.elapsedMs * 2);
+  }
+  if (!actor.grounded || actor.activeManeuver || Math.abs(actor.movementIntent.x) > 0) {
+    return samplePartyAnimation(memberId, 'move', reducedMotion.matches ? 0 : nowMs);
+  }
+  return samplePartyAnimation(memberId, 'idle', reducedMotion.matches ? 0 : nowMs);
+}
+
+function drawParty(actor, nowMs) {
+  const fallbackFrame = getPartyCombatFrame(templateId(actor.id), partyPose(actor));
+  const richFrame = art.partyAnimation.ready ? richPartyFrame(actor, nowMs) : null;
+  const frame = richFrame
+    ? {
+        x: richFrame.rect[0],
+        y: richFrame.rect[1],
+        width: richFrame.rect[2],
+        height: richFrame.rect[3],
+        pivotX: richFrame.pivot[0],
+        pivotY: richFrame.pivot[1],
+      }
+    : fallbackFrame;
+  const image = richFrame ? art.partyAnimation.image : art.party.image;
   const scale = 1.75;
-  if (!art.party.ready) return drawFallback(actor, '#78c4c1');
+  if (!richFrame && !art.party.ready) return drawFallback(actor, '#78c4c1');
   const maneuver = actor.activeManeuver;
   if (maneuver && ['dash', 'slide'].includes(maneuver.id) && !reducedMotion.matches) {
     for (const [index, distance] of [18, 34].entries()) {
@@ -494,7 +566,7 @@ function drawParty(actor) {
       context.globalAlpha = index === 0 ? 0.2 : 0.09;
       context.translate(actor.position.x - maneuver.direction * distance, actor.position.y);
       if (actor.facing < 0) context.scale(-1, 1);
-      context.drawImage(art.party.image, frame.x, frame.y, frame.width, frame.height,
+      context.drawImage(image, frame.x, frame.y, frame.width, frame.height,
         -frame.pivotX * scale, -frame.pivotY * scale, frame.width * scale, frame.height * scale);
       context.restore();
     }
@@ -508,12 +580,41 @@ function drawParty(actor) {
   } else if (maneuver?.id === 'thunder-kick') {
     context.rotate(actor.facing * 0.34);
   }
-  context.drawImage(art.party.image, frame.x, frame.y, frame.width, frame.height,
+  context.drawImage(image, frame.x, frame.y, frame.width, frame.height,
     -frame.pivotX * scale, -frame.pivotY * scale, frame.width * scale, frame.height * scale);
   context.restore();
 }
 
-function drawEnemy(actor) {
+function richEnemyFrame(actor, nowMs) {
+  const template = templateId(actor.id);
+  if (!hasEnemyCombatAnimation(template)) return null;
+  if (actor.hp <= 0) {
+    return sampleEnemyCombatAnimationPhase(template, 'hurt-defeat', 'defeat', 1);
+  }
+  if (actor.hitStunRemainingMs > 0) {
+    return sampleEnemyCombatAnimationPhase(
+      template,
+      'hurt-defeat',
+      'hurt',
+      1 - (actor.hitStunRemainingMs / 100),
+    );
+  }
+  if (actor.activeAttack) {
+    const attackIndex = Object.keys(actor.attackStates ?? {}).indexOf(actor.activeAttack.attackId);
+    return sampleEnemyCombatAnimationPhase(
+      template,
+      attackIndex <= 0 ? 'basic-attack' : 'signature-attack',
+      actor.activeAttack.phase,
+      attackPhaseProgress(actor),
+    );
+  }
+  if (!actor.grounded || Math.abs(actor.movementIntent.x) > 0) {
+    return sampleEnemyCombatAnimation(template, 'locomotion', reducedMotion.matches ? 0 : nowMs);
+  }
+  return getEnemyCombatAnimationFrame(template, 'locomotion', 5);
+}
+
+function drawEnemy(actor, nowMs) {
   const template = templateId(actor.id);
   if (hasBossCombatTemplate(template)) {
     const frame = getBossCombatFrame(template, bossPose(actor));
@@ -533,6 +634,26 @@ function drawEnemy(actor) {
     context.restore();
     return;
   }
+  const richFrame = art.enemyAnimation.ready ? richEnemyFrame(actor, nowMs) : null;
+  if (richFrame) {
+    context.save();
+    context.translate(actor.position.x, actor.position.y);
+    if (actor.facing > 0) context.scale(-1, 1);
+    const scale = richFrame.presentationScale;
+    context.drawImage(
+      art.enemyAnimation.image,
+      richFrame.x,
+      richFrame.y,
+      richFrame.width,
+      richFrame.height,
+      -richFrame.pivotX * scale,
+      -richFrame.pivotY * scale,
+      richFrame.width * scale,
+      richFrame.height * scale,
+    );
+    context.restore();
+    return;
+  }
   const frame = getEnemyAtlasFrame(template, enemyPose(actor));
   const scale = 1.45;
   if (!art.enemy.ready) return drawFallback(actor, '#cb4652');
@@ -545,6 +666,7 @@ function drawEnemy(actor) {
 }
 
 function drawActors(snapshot) {
+  const nowMs = snapshot.kernel.nowMs;
   const ordered = [...snapshot.kernel.actors].sort((a, b) => a.position.y - b.position.y || a.id.localeCompare(b.id));
   for (const actor of ordered) {
     context.fillStyle = 'rgba(0,0,0,.42)';
@@ -552,8 +674,8 @@ function drawActors(snapshot) {
     context.ellipse(actor.position.x, actor.position.y + 2, actor.faction === 'player' ? 26 : 34, 7, 0, 0, Math.PI * 2);
     context.fill();
     const drawActorBody = () => {
-      if (actor.faction === 'player') drawParty(actor);
-      else if (actor.faction === 'enemy') drawEnemy(actor);
+      if (actor.faction === 'player') drawParty(actor, nowMs);
+      else if (actor.faction === 'enemy') drawEnemy(actor, nowMs);
     };
     drawActorBody();
     if (actor.hitFlashRemainingMs > 0) {

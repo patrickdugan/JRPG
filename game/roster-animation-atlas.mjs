@@ -11,8 +11,11 @@ export const PARTY_ANIMATION_GEOMETRY = deepFreeze({
   frameHeight: 64,
   columns: 40,
   rows: 7,
+  width: 1920,
+  height: 448,
   pivot: [24, 58],
   footPoint: [24, 58],
+  url: './assets/art/roster-animation-runtime-v1/party-combat-animation-atlas-v1.png',
   atlasPath: './assets/art/roster-animation-runtime-v1/party-combat-animation-atlas-v1.png',
 });
 
@@ -141,6 +144,61 @@ export function samplePartyAnimation(characterId, clipId, elapsedMs = 0) {
     ...sample,
     rect: [
       sample.atlasFrame * PARTY_ANIMATION_GEOMETRY.frameWidth,
+      character.row * PARTY_ANIMATION_GEOMETRY.frameHeight,
+      PARTY_ANIMATION_GEOMETRY.frameWidth,
+      PARTY_ANIMATION_GEOMETRY.frameHeight,
+    ],
+    pivot: [...PARTY_ANIMATION_GEOMETRY.pivot],
+  });
+}
+
+function partyAttackSegment(phase) {
+  if (phase === 'windup') return [0, 2];
+  if (phase === 'active') return [3, 3];
+  if (phase === 'recovery') return [4, 5];
+  return [0, 5];
+}
+
+/**
+ * Phase-lock an attack clip to simulation-owned timing. This keeps the authored
+ * contact cel on the gameplay active phase even when a move has custom timing.
+ */
+export function samplePartyAnimationPhase(
+  characterId,
+  clipId,
+  phase,
+  phaseProgress = 0,
+) {
+  const character = PARTY_BY_ID.get(characterId);
+  const clip = PARTY_CLIP_BY_ID.get(clipId);
+  if (!character) throw new RangeError(`Unknown party animation character: ${characterId}`);
+  if (!clip) throw new RangeError(`Unknown party animation clip: ${clipId}`);
+  const [start, end] = ['basic-strike', 'signature-a', 'signature-b'].includes(clipId)
+    ? partyAttackSegment(phase)
+    : [0, clip.frames - 1];
+  const progress = Math.max(0, Math.min(1, Number.isFinite(phaseProgress) ? phaseProgress : 0));
+  const segmentDurations = clip.durationsMs.slice(start, end + 1);
+  const segmentTotal = segmentDurations.reduce((sum, duration) => sum + duration, 0);
+  let cursor = Math.min(Math.max(0, segmentTotal - 1), Math.floor(segmentTotal * progress));
+  let localFrame = end;
+  for (let index = start; index <= end; index += 1) {
+    if (cursor < clip.durationsMs[index]) {
+      localFrame = index;
+      break;
+    }
+    cursor -= clip.durationsMs[index];
+  }
+  const atlasFrame = clip.start + localFrame;
+  const event = clip.event?.frame === localFrame ? clip.event.name : null;
+  return deepFreeze({
+    characterId,
+    clipId,
+    localFrame,
+    atlasFrame,
+    phaseProgress: progress,
+    event,
+    rect: [
+      atlasFrame * PARTY_ANIMATION_GEOMETRY.frameWidth,
       character.row * PARTY_ANIMATION_GEOMETRY.frameHeight,
       PARTY_ANIMATION_GEOMETRY.frameWidth,
       PARTY_ANIMATION_GEOMETRY.frameHeight,

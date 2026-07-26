@@ -12,6 +12,7 @@ import {
   createEnemyEncounterTriggerState,
   sampleEnemyTriggerAnimation,
   samplePartyAnimation,
+  samplePartyAnimationPhase,
   transitionEnemyEncounterTrigger,
 } from '../roster-animation-atlas.mjs';
 
@@ -63,6 +64,18 @@ test('party sampling exposes exact attack events and stable atlas rectangles', (
   assert.equal(samplePartyAnimation('ren', 'idle', 720).cycle, 1);
   assert.throws(() => samplePartyAnimation('unknown', 'idle', 0), RangeError);
   assert.throws(() => samplePartyAnimation('ren', 'unknown', 0), RangeError);
+});
+
+test('party attack frames phase-lock contact to simulation-owned active timing', () => {
+  const windup = samplePartyAnimationPhase('ren', 'basic-strike', 'windup', 1);
+  const active = samplePartyAnimationPhase('ren', 'basic-strike', 'active', 0);
+  const recovery = samplePartyAnimationPhase('ren', 'basic-strike', 'recovery', 1);
+  assert.deepEqual(
+    [windup.localFrame, active.localFrame, recovery.localFrame],
+    [2, 3, 5],
+  );
+  assert.equal(active.event, 'damage');
+  assert.deepEqual(active.rect, [21 * 48, 0, 48, 64]);
 });
 
 test('enemy trigger sampling exposes alert and contact only on active frames', () => {

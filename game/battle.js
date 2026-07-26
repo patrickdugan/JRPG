@@ -62,6 +62,7 @@ import {
 } from './sprite-atlas.mjs';
 import {
   PARTY_COMBAT_ATLAS,
+  PARTY_COMBAT_SKILL_POSES,
   PARTY_DEFEAT_HOLD_MS,
   getPartyCombatFrame,
   getPartyCombatPresentationPose,
@@ -69,6 +70,11 @@ import {
   mergePartyTerminalPresentationActors,
   partyCombatImageHasExpectedSize,
 } from './party-combat-atlas.mjs';
+import {
+  PARTY_ANIMATION_GEOMETRY,
+  samplePartyAnimation,
+  samplePartyAnimationPhase,
+} from './roster-animation-atlas.mjs';
 import {
   ENEMY_ATLAS,
   ENEMY_DEFEAT_HOLD_MS,
@@ -78,6 +84,14 @@ import {
   getNewlyTerminalEnemyCombatActors,
   mergeEnemyTerminalPresentationActors,
 } from './enemy-atlas.mjs';
+import {
+  ENEMY_COMBAT_ANIMATION_ATLAS,
+  enemyCombatAnimationImageHasExpectedSize,
+  getEnemyCombatAnimationFrame,
+  hasEnemyCombatAnimation,
+  sampleEnemyCombatAnimation,
+  sampleEnemyCombatAnimationPhase,
+} from './enemy-combat-animation-atlas.mjs';
 import {
   BOSS_COMBAT_ATLAS,
   BOSS_DEFEAT_HOLD_MS,
@@ -214,7 +228,9 @@ const storyworldContextConsequence = document.querySelector('#storyworldContextC
 
 context.imageSmoothingEnabled = false;
 const battlePartyAtlasImage = new Image();
+const battlePartyAnimationAtlasImage = new Image();
 const battleEnemyAtlasImage = new Image();
+const battleEnemyAnimationAtlasImage = new Image();
 const battleBossAtlasImage = new Image();
 const battleItemAtlasImage = new Image();
 function loadCombatAtlas(image, { url, width, height, datasetKey }) {
@@ -231,7 +247,15 @@ function loadCombatAtlas(image, { url, width, height, datasetKey }) {
   image.src = url;
 }
 loadCombatAtlas(battlePartyAtlasImage, { ...PARTY_COMBAT_ATLAS, datasetKey: 'partyArtState' });
+loadCombatAtlas(battlePartyAnimationAtlasImage, {
+  ...PARTY_ANIMATION_GEOMETRY,
+  datasetKey: 'partyAnimationArtState',
+});
 loadCombatAtlas(battleEnemyAtlasImage, { ...ENEMY_ATLAS, datasetKey: 'enemyArtState' });
+loadCombatAtlas(battleEnemyAnimationAtlasImage, {
+  ...ENEMY_COMBAT_ANIMATION_ATLAS,
+  datasetKey: 'enemyAnimationArtState',
+});
 loadCombatAtlas(battleBossAtlasImage, { ...BOSS_COMBAT_ATLAS, datasetKey: 'bossArtState' });
 let battleItemAtlasState = 'loading';
 function setBattleItemArtState(state) {
@@ -1590,6 +1614,78 @@ function drawPersistentDodgeStances(snapshot, geometry, visualNow) {
   context.restore();
 }
 
+function partyRichAnimationClip(pose, actionId = null) {
+  if (pose === 'defeat') return 'defeat';
+  if (pose === 'hit') return 'hurt';
+  if (pose === 'move') return 'move';
+  if (pose === 'guard') return 'guard';
+  if (pose === 'signature-a') return 'signature-a';
+  if (pose === 'signature-b') return 'signature-b';
+  const skillPose = PARTY_COMBAT_SKILL_POSES[actionId];
+  if (skillPose === 'signature-a' || skillPose === 'signature-b') return skillPose;
+  return 'basic-strike';
+}
+
+function sampleTacticalPartyFrame(actor, pose, animation, animatedActor, animatedTarget, now) {
+  const clipId = partyRichAnimationClip(pose, animation?.timeline.actionId);
+  if (['basic-strike', 'signature-a', 'signature-b'].includes(clipId) && animatedActor) {
+    const simulationPhase = animation.frame.phase === 'windup'
+      ? 'windup'
+      : animation.frame.phase === 'recovery'
+        ? 'recovery'
+        : 'active';
+    return samplePartyAnimationPhase(
+      actor.templateId,
+      clipId,
+      simulationPhase,
+      animation.frame.phaseProgress,
+    );
+  }
+  if (clipId === 'hurt' && animatedTarget) {
+    return samplePartyAnimation(
+      actor.templateId,
+      clipId,
+      (animation.frame.phaseProgress ?? 0) * 440,
+    );
+  }
+  if (clipId === 'defeat') {
+    return samplePartyAnimation(actor.templateId, clipId, Number.MAX_SAFE_INTEGER);
+  }
+  return samplePartyAnimation(actor.templateId, clipId, reducedMotion.matches ? 0 : now);
+}
+
+function sampleTacticalEnemyFrame(actor, pose, animation, animatedActor, animatedTarget, now) {
+  if (pose === 'defeat') {
+    return sampleEnemyCombatAnimationPhase(actor.templateId, 'hurt-defeat', 'defeat', 1);
+  }
+  if (pose === 'hurt' || pose === 'stagger') {
+    return sampleEnemyCombatAnimationPhase(
+      actor.templateId,
+      'hurt-defeat',
+      'hurt',
+      animatedTarget ? animation.frame.phaseProgress : 0.65,
+    );
+  }
+  if (['windup', 'attack', 'recovery'].includes(pose)) {
+    const phase = pose === 'windup' ? 'windup' : pose === 'attack' ? 'active' : 'recovery';
+    const clipId = animation?.timeline.action.essence ? 'signature-attack' : 'basic-attack';
+    return sampleEnemyCombatAnimationPhase(
+      actor.templateId,
+      clipId,
+      phase,
+      animatedActor ? animation.frame.phaseProgress : 0.35,
+    );
+  }
+  if (animatedActor?.pose === 'move' || animation?.frame.phase === 'movement') {
+    return sampleEnemyCombatAnimation(
+      actor.templateId,
+      'locomotion',
+      reducedMotion.matches ? 0 : now - animation.startedAt,
+    );
+  }
+  return getEnemyCombatAnimationFrame(actor.templateId, 'locomotion', 5);
+}
+
 function drawBattle(now = performance.now()) {
   const snapshot = engine.snapshot();
   const level = engine.level;
@@ -1735,7 +1831,10 @@ function drawBattle(now = performance.now()) {
       context.lineWidth = 2;
       context.strokeRect(centerX - cell * 0.3, centerY - cell * 0.34, cell * 0.6, cell * 0.68);
     }
-    if (party && canvas.dataset.partyArtState === 'ready' && partyCombatImageHasExpectedSize(battlePartyAtlasImage)) {
+    if (party && (
+      canvas.dataset.partyAnimationArtState === 'ready'
+      || (canvas.dataset.partyArtState === 'ready' && partyCombatImageHasExpectedSize(battlePartyAtlasImage))
+    )) {
       const nearestEnemy = snapshot.actors
         .filter((candidate) => candidate.faction === 'enemy' && candidate.hp > 0 && candidate.active !== false)
         .sort((left, right) => Math.max(Math.abs(left.pos.x - actor.pos.x), Math.abs(left.pos.y - actor.pos.y))
@@ -1759,7 +1858,19 @@ function drawBattle(now = performance.now()) {
         stance: actor.stance,
         moving,
       });
-      const frame = getPartyCombatFrame(actor.templateId, pose);
+      const richPartyReady = canvas.dataset.partyAnimationArtState === 'ready';
+      const richSample = richPartyReady
+        ? sampleTacticalPartyFrame(actor, pose, animation, animatedActor, animatedTarget, visualNow)
+        : null;
+      const frame = richSample
+        ? {
+            x: richSample.rect[0],
+            y: richSample.rect[1],
+            width: richSample.rect[2],
+            height: richSample.rect[3],
+          }
+        : getPartyCombatFrame(actor.templateId, pose);
+      const partyImage = richSample ? battlePartyAnimationAtlasImage : battlePartyAtlasImage;
       const drawHeight = cell * 1.28 * animationScale;
       const drawWidth = drawHeight * (frame.width / frame.height);
       const faceLeft = facing === 'west';
@@ -1767,7 +1878,7 @@ function drawBattle(now = performance.now()) {
       context.translate(centerX, 0);
       context.scale(faceLeft ? -1 : 1, 1);
       context.drawImage(
-        battlePartyAtlasImage,
+        partyImage,
         frame.x,
         frame.y,
         frame.width,
@@ -1819,7 +1930,12 @@ function drawBattle(now = performance.now()) {
         placement.height,
       );
       context.restore();
-    } else if (!party && canvas.dataset.enemyArtState === 'ready' && enemyAtlasImageHasExpectedSize(battleEnemyAtlasImage)) {
+    } else if (!party && (
+      (canvas.dataset.enemyAnimationArtState === 'ready'
+        && enemyCombatAnimationImageHasExpectedSize(battleEnemyAnimationAtlasImage)
+        && hasEnemyCombatAnimation(actor.templateId))
+      || (canvas.dataset.enemyArtState === 'ready' && enemyAtlasImageHasExpectedSize(battleEnemyAtlasImage))
+    )) {
       const animationPose = animatedActor?.pose ?? animatedTarget?.pose;
       const transientPose = !reducedMotion.matches && now < (battleEnemyPoseUntil.get(actor.instanceId) ?? 0)
         ? battleEnemyPoseByActor.get(actor.instanceId)
@@ -1833,7 +1949,14 @@ function drawBattle(now = performance.now()) {
         windingUp: snapshot.phase === CAMPAIGN_COMBAT_PHASES.ENEMY_COMMAND
           && actor.instanceId === snapshot.activeActorId,
       });
-      const frame = getEnemyAtlasFrame(actor.templateId, pose);
+      const richEnemyReady = canvas.dataset.enemyAnimationArtState === 'ready'
+        && enemyCombatAnimationImageHasExpectedSize(battleEnemyAnimationAtlasImage)
+        && hasEnemyCombatAnimation(actor.templateId);
+      const richFrame = richEnemyReady
+        ? sampleTacticalEnemyFrame(actor, pose, animation, animatedActor, animatedTarget, visualNow)
+        : null;
+      const frame = richFrame ?? getEnemyAtlasFrame(actor.templateId, pose);
+      const enemyImage = richFrame ? battleEnemyAnimationAtlasImage : battleEnemyAtlasImage;
       const scaleByFamily = {
         hound: 0.98,
         wisp: 0.9,
@@ -1844,7 +1967,11 @@ function drawBattle(now = performance.now()) {
         'bell-warden': 1.38,
         'black-court': 1.4,
       };
-      const drawHeight = cell * (scaleByFamily[frame.familyId] ?? 1.2) * animationScale;
+      const drawHeight = cell * (
+        richFrame
+          ? Math.max(1.05, richFrame.presentationScale * 1.32)
+          : (scaleByFamily[frame.familyId] ?? 1.2)
+      ) * animationScale;
       const drawWidth = drawHeight * (frame.width / frame.height);
       const nearestParty = snapshot.actors
         .filter((candidate) => candidate.faction === 'party' && candidate.hp > 0 && candidate.active !== false)
@@ -1858,7 +1985,7 @@ function drawBattle(now = performance.now()) {
       context.translate(centerX, 0);
       context.scale(faceLeft ? -1 : 1, 1);
       context.drawImage(
-        battleEnemyAtlasImage,
+        enemyImage,
         frame.x,
         frame.y,
         frame.width,
