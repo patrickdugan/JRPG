@@ -75,7 +75,7 @@ test('the rendered map publishes the next incomplete field interaction or ready 
   assert.match(campaignSource, /nextRequiredInteractable = publishedRequiredInteractable \?\? exitBlockingInteractable/);
   assert.match(campaignSource, /readyExit = scopedExit\?\.ready \? scopedExit : null/);
   assert.match(campaignSource, /type: 'interaction'/);
-  assert.match(campaignSource, /type: 'route-exit', id: readyExit\.id, at: readyExit\.at, range: 1/);
+  assert.match(campaignSource, /type: 'route-exit', id: readyExit\.id, at: readyExit\.at, range: 0/);
   for (const field of ['Type', 'Id', 'X', 'Y', 'Range']) {
     assert.match(campaignSource, new RegExp(`mapCanvas\\.dataset\\.fieldObjectiveTarget${field}`));
     assert.match(campaignSource, new RegExp(`delete mapCanvas\\.dataset\\.fieldObjectiveTarget${field}`));

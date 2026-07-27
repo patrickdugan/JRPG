@@ -39,9 +39,8 @@ All seven objectives completed. Mateus resolved nonlethally in phase two. The ve
 
 1. The campaign battle page padded Ren’s solo Bailiff deployment with an undefined support fighter. Canonical mode now uses the exact authored fighter list, including a one-person deployment.
 2. The new Tithe Hound post-fight dialogue gate referenced a nonexistent encounter ID. All opening battle gates now validate against the encounter catalogue.
-3. A ready field exit published zero interaction range even though gameplay permits use from one space away. The public route target now matches the real interaction rule.
-4. Chapter 2’s terminal route attempted to complete the beat before its required after-beat Storyworld consequence could appear. The exit now commits the route flag, reveals the consequence, and advances only after that scene resolves.
-5. Post-fight dialogue could previously be acknowledged before its corresponding fight. Tithe Hound, Flooded Archive, and Mateus aftermath lines now wait for exact encounter-win evidence.
+3. Chapter 2’s terminal route attempted to complete the beat before its required after-beat Storyworld consequence could appear. The exit now commits the route flag, reveals the consequence, and advances only after that scene resolves.
+4. Post-fight dialogue could previously be acknowledged before its corresponding fight. Tithe Hound, Flooded Archive, and Mateus aftermath lines now wait for exact encounter-win evidence.
 
 ## Proof boundary
 

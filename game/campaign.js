@@ -2320,7 +2320,7 @@ function updateFieldDashboard(level) {
   const nextRequiredInteractable = publishedRequiredInteractable ?? exitBlockingInteractable;
   const fieldTarget = nextRequiredInteractable?.at
     ? { type: 'interaction', id: nextRequiredInteractable.id, at: nextRequiredInteractable.at, range: 1 }
-    : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 1 } : null;
+    : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 0 } : null;
   const [fieldTargetX, fieldTargetY] = fieldTarget?.at?.split(',').map(Number) ?? [];
   if (fieldTarget && Number.isSafeInteger(fieldTargetX) && Number.isSafeInteger(fieldTargetY)) {
     mapCanvas.dataset.fieldObjectiveTargetType = fieldTarget.type;
