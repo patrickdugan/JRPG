@@ -116,13 +116,19 @@ export function actionCooldownForRecovery(recoveryPulses = 0) {
 }
 
 /** Preserve ordinary foes while compressing only the action boss-health tail. */
-export function actionEnemyHp(sourceHp) {
+export function actionEnemyHp(sourceHp, multiplier = 1) {
   const hp = Math.max(1, Math.round(Number(sourceHp) || 1));
-  if (hp <= ACTION_ENEMY_HP_COMPRESSION_THRESHOLD) return hp;
-  return Math.round(
-    ACTION_ENEMY_HP_COMPRESSION_THRESHOLD
-      + ((hp - ACTION_ENEMY_HP_COMPRESSION_THRESHOLD) * ACTION_ENEMY_HP_EXCESS_RATIO),
-  );
+  const scalar = Number(multiplier);
+  if (!Number.isFinite(scalar) || scalar <= 0) {
+    throw new RangeError('Action enemy HP multiplier must be a positive finite number.');
+  }
+  const adapted = hp <= ACTION_ENEMY_HP_COMPRESSION_THRESHOLD
+    ? hp
+    : Math.round(
+      ACTION_ENEMY_HP_COMPRESSION_THRESHOLD
+        + ((hp - ACTION_ENEMY_HP_COMPRESSION_THRESHOLD) * ACTION_ENEMY_HP_EXCESS_RATIO),
+    );
+  return Math.max(1, Math.round(adapted * scalar));
 }
 
 /** Keep late-game enemy contact relevant as party HP and guard grow. */
@@ -410,7 +416,7 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
   const tutorialSentry = String(template.role ?? '').includes('immovable');
   const primaryBoss = ['boss', 'boss-rescue', 'boss-phase', 'final-boss'].includes(context.encounter.format)
     && template.id === context.encounter.enemies[0]?.id;
-  const hp = actionEnemyHp(template.stats.hp);
+  const hp = actionEnemyHp(template.stats.hp, template.actionHpMultiplier ?? 1);
   const level = positiveLevel(context.options.enemyLevel ?? context.chapterTarget, 'enemyLevel');
   const adaptedPower = actionEnemyPower(template.stats.power, level);
   return {

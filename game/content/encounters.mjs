@@ -328,6 +328,7 @@ export const ENCOUNTERS = [
     enemies: [
       {
         id: 'mateus', name: 'Father Mateus Avelar', count: 1, positions: ['9,3'], role: 'mobile vampire duelist',
+        actionHpMultiplier: 2,
         stats: { hp: 760, spirit: 120, power: 21, guard: 16, speed: 108 },
         resistances: {
           delivery: { cut: 1, pierce: 1, crush: 1, arcane: 0.75 },
@@ -364,7 +365,7 @@ export const ENCOUNTERS = [
       type: 'three-phase-recovery-boss',
       telegraphs: ['pale-cut', 'sanguine-step', 'blood-ward', 'crimson-litany'],
       phases: [
-        { id: 'phase-1', initial: true, when: 'hp-above-55-percent', moves: ['pale-cut', 'sanguine-step', 'blood-ward'], rule: 'No Litany until the player has a Ledger teaching opportunity.' },
+        { id: 'phase-1', initial: true, when: 'hp-above-55-percent', moves: ['pale-cut', 'sanguine-step'], rule: 'No wards or Litany until the player has read his close-range movement.' },
         { id: 'phase-2', enter: { kind: 'boss-hp-ratio-at-or-below', value: 0.55 }, when: 'hp-at-or-below-55-percent', moves: ['blood-ward', 'crimson-litany'], rule: 'First Litany pauses only the HUD for 0.75 seconds to call out Recovery 3.' },
         {
           id: 'phase-3',
@@ -373,7 +374,7 @@ export const ENCOUNTERS = [
             requiresPhaseId: 'phase-2',
             conditions: [
               { kind: 'boss-hp-ratio-at-or-below', value: 0.2 },
-              { kind: 'objective-keys-complete', keys: ['broken:blood-ward-west', 'broken:blood-ward-east'] },
+              { kind: 'objective-keys-complete', keys: ['break:blood-ward-west', 'break:blood-ward-east'] },
             ],
           },
           when: 'hp-at-or-below-20-percent OR both-wards-broken-after-phase-2', moves: [], rule: 'Mateus takes 20% nonlethal self-damage and orders guards away.',

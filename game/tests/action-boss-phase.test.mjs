@@ -48,6 +48,7 @@ test('Mateus phase move lists gate Litany, open the ward phase, then halt hostil
   const mateus = boss(runtime);
   assert.equal(snapshotActionCampaignBattle(runtime).bossPhase.phaseId, 'phase-1');
   assert.equal(mateus.attackIds.includes('enemy:mateus:crimson-litany'), false);
+  assert.equal(mateus.attackIds.includes('enemy:mateus:blood-ward'), false);
   assert.equal(mateus.attackIds.includes('enemy:mateus:pale-cut'), true);
 
   mateus.hp = Math.floor(mateus.maxHp * 0.55);
@@ -62,4 +63,27 @@ test('Mateus phase move lists gate Litany, open the ward phase, then halt hostil
   snapshot = advanceActionCampaignBattle(runtime, 20);
   assert.equal(snapshot.bossPhase.phaseId, 'phase-3');
   assert.deepEqual(mateus.attackIds, []);
+});
+
+test('breaking both living Blood Wards enters the authored surrender phase', () => {
+  const runtime = session('fp1-mateus');
+  const mateus = boss(runtime);
+  mateus.hp = Math.floor(mateus.maxHp * 0.55);
+  let snapshot = advanceActionCampaignBattle(runtime, 20);
+  assert.equal(snapshot.bossPhase.phaseId, 'phase-2');
+
+  const wards = ['blood-ward-west-1', 'blood-ward-east-1']
+    .map((actorId) => runtime.kernel.getActor(actorId));
+  for (const ward of wards) ward.hp = ward.maxHp;
+  advanceActionCampaignBattle(runtime, 20);
+  for (const ward of wards) ward.hp = 0;
+
+  snapshot = advanceActionCampaignBattle(runtime, 20);
+  assert.equal(snapshot.objective.complete, true);
+  assert.equal(snapshot.outcome, 'victory');
+  assert.equal(snapshot.bossPhase.phaseId, 'phase-3');
+  assert.deepEqual(mateus.attackIds, []);
+  assert.equal(snapshot.recentEvents.some(({ type, toPhaseId }) => (
+    type === 'boss-phase-entered' && toPhaseId === 'phase-3'
+  )), true);
 });

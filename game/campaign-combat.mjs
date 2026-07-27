@@ -1125,7 +1125,7 @@ export class CampaignCombatEngine {
     if (!this.mateusMechanic || !ward) return;
     ward.hp = 0;
     ward.active = false;
-    const progressKey = `broken:${ward.templateId}`;
+    const progressKey = `break:${ward.templateId}`;
     this.objectiveProgress[progressKey] = 1;
     this.log.push({ type: 'ward-broken', targetId: ward.instanceId, sourceActorId, source, pulse: this.nowPulse });
     this._updateBossPhase('objective-progress');
@@ -1136,7 +1136,7 @@ export class CampaignCombatEngine {
     if (!this.mateusMechanic || this.mateusMechanic.resolution) return false;
     const mateus = this.getActor('mateus-1');
     const threshold = this._mateusNonlethalFloor(mateus);
-    const bothWardsBroken = ['blood-ward-west', 'blood-ward-east'].every((id) => (this.objectiveProgress[`broken:${id}`] ?? 0) >= 1);
+    const bothWardsBroken = ['blood-ward-west', 'blood-ward-east'].every((id) => (this.objectiveProgress[`break:${id}`] ?? 0) >= 1);
     if (mateus.hp > threshold && !bothWardsBroken) return false;
     if (bothWardsBroken) mateus.hp = Math.min(mateus.hp, threshold);
     mateus.active = false;

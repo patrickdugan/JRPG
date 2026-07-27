@@ -240,15 +240,25 @@ function applyBossPhaseMoves(director, kernel, spec = null) {
   if (boss.attackIds.length === 0 && Array.isArray(phase.moves)) boss.movementIntent = { x: 0, y: 0 };
 }
 
-function bossHpPhaseSatisfied(phase, boss, director) {
+function bossHpPhaseSatisfied(phase, boss, director, objective = null) {
   const enter = phase.enter;
   if (!enter) return false;
   const hpRatio = boss.maxHp > 0 ? boss.hp / boss.maxHp : 0;
   if (enter.kind === 'boss-hp-ratio-at-or-below') return hpRatio <= enter.value;
   if (enter.kind !== 'any') return false;
   if (enter.requiresPhaseId && !director.history.includes(enter.requiresPhaseId)) return false;
+  const completedObjectiveIds = new Set(
+    (objective?.requirements ?? [])
+      .filter(({ complete }) => complete)
+      .map(({ id }) => id),
+  );
   return (enter.conditions ?? []).some((condition) => (
-    condition.kind === 'boss-hp-ratio-at-or-below' && hpRatio <= condition.value
+    (condition.kind === 'boss-hp-ratio-at-or-below' && hpRatio <= condition.value)
+      || (
+        condition.kind === 'objective-keys-complete'
+          && (condition.keys ?? []).length > 0
+          && condition.keys.every((key) => completedObjectiveIds.has(key))
+      )
   ));
 }
 
@@ -263,7 +273,7 @@ function bossPhaseEvent(type, director, kernel, payload = {}) {
   };
 }
 
-function updateBossPhaseDirector(session, kernelEvents) {
+function updateBossPhaseDirector(session, kernelEvents, objective = null) {
   const director = session.bossPhaseDirector;
   if (!director) return [];
   const boss = session.kernel.getActor(director.bossActorId);
@@ -305,7 +315,7 @@ function updateBossPhaseDirector(session, kernelEvents) {
     }
   } else {
     while (director.phaseIndex + 1 < director.phases.length
-        && bossHpPhaseSatisfied(director.phases[director.phaseIndex + 1], boss, director)) {
+        && bossHpPhaseSatisfied(director.phases[director.phaseIndex + 1], boss, director, objective)) {
       const fromPhaseId = director.phases[director.phaseIndex].id;
       director.phaseIndex += 1;
       director.revision += 1;
@@ -1088,7 +1098,7 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
   const kernelSnapshot = session.kernel.snapshot();
   moveObjectiveTokens(session, elapsed, kernelSnapshot, input);
   const entityEvents = entityEventsFromCombat(session, kernelEvents);
-  const events = [...controllerEvents, ...kernelEvents, ...bossPhaseEvents, ...entityEvents];
+  let events = [...controllerEvents, ...kernelEvents, ...bossPhaseEvents, ...entityEvents];
   const signals = objectiveSignals(session, kernelSnapshot, input);
   session.objectiveRuntime?.advance?.({
     kernelSnapshot,
@@ -1096,6 +1106,12 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
     ...signals,
   });
   syncObjectiveEntityDependencies(session);
+  const objectiveBossPhaseEvents = updateBossPhaseDirector(
+    session,
+    [],
+    objectiveSnapshot(session, kernelSnapshot),
+  );
+  if (objectiveBossPhaseEvents.length) events = [...events, ...objectiveBossPhaseEvents];
   const checkpointEvents = intactCheckpointEvents(session);
   if (checkpointEvents.length) {
     session.objectiveRuntime?.advance?.({

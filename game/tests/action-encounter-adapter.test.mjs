@@ -140,6 +140,13 @@ test('Action Lab preserves ordinary enemy HP and compresses only the boss-health
   assert.equal(actionEnemyHp(1480), 1102);
 });
 
+test('Mateus action tuning lengthens the duel without changing generic HP adaptation', () => {
+  const mateus = adaptActionEncounter('fp1-mateus');
+  const boss = mateus.kernelConfig.actors.find(({ id }) => id === 'mateus-1');
+  assert.equal(boss.maxHp, actionEnemyHp(760) * 2);
+  assert.throws(() => actionEnemyHp(100, 0), /positive finite/u);
+});
+
 test('Action Lab enemy Power follows party progression without an unbounded late-game spike', () => {
   assert.equal(actionEnemyPower(20, 1), 20);
   assert.equal(actionEnemyPower(20, 21), 30);
