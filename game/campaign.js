@@ -14,6 +14,13 @@ import {
 import { getSceneDirection } from './content/scene-direction.mjs';
 import { getActSequenceContextForBeat } from './content/act-route-sequences.mjs';
 import { getFullDialogue } from './content/full-dialogue.mjs';
+import {
+  OPENING_SLICE_BEAT_IDS,
+  OPENING_SLICE_TARGET_MINUTES,
+  getOpeningSliceDialogue,
+  getOpeningSliceProgress,
+  isOpeningSliceBeat,
+} from './content/opening-slice-dialogue.mjs';
 import { getSceneOperation } from './content/scene-operations.mjs';
 import { getCampConversation } from './content/camp-conversations.mjs';
 import { getPartyCouncil } from './content/party-councils.mjs';
@@ -207,6 +214,7 @@ import {
 
 const campaignQuery = new URLSearchParams(window.location.search);
 let requestedNewGame = campaignQuery.get('new') === '1';
+const extendedOpeningDialogue = campaignQuery.get('extendedOpening') === '1';
 if (campaignQuery.get('legacyBattle') === '1') sessionStorage.setItem('bells.legacyBattle', '1');
 if (campaignQuery.get('legacyBattle') === '0') sessionStorage.removeItem('bells.legacyBattle');
 const legacyBattleRequested = campaignQuery.get('legacyBattle') === '1'
@@ -225,6 +233,11 @@ const presentationMode = applyPresentationMode();
 const developerMode = presentationMode === PRESENTATION_MODES.DEVELOPER;
 const chapterList = document.querySelector('#chapterList');
 const completionLabel = document.querySelector('#completionLabel');
+const openingSlicePanel = document.querySelector('#openingSlicePanel');
+const openingSliceProgress = document.querySelector('#openingSliceProgress');
+const openingSliceTime = document.querySelector('#openingSliceTime');
+const openingSliceGuidance = document.querySelector('#openingSliceGuidance');
+const openingSliceProgressFill = document.querySelector('#openingSliceProgressFill');
 const chapterKicker = document.querySelector('#chapterKicker');
 const chapterTitle = document.querySelector('#chapterTitle');
 const chapterObjective = document.querySelector('#chapterObjective');
@@ -1695,6 +1708,8 @@ function formatEnemies(enemies = []) {
 }
 
 function dialogueLinesForBeat(beat = getBeat()) {
+  const openingCut = extendedOpeningDialogue ? null : getOpeningSliceDialogue(beat.id);
+  if (openingCut) return openingCut;
   const compiled = getFullDialogue(beat.id);
   if (compiled) return compiled;
   const source = Array.isArray(beat.text) && beat.text.length
@@ -1706,6 +1721,35 @@ function dialogueLinesForBeat(beat = getBeat()) {
   })));
 }
 
+function renderOpeningSlicePanel(beat, currentBeatReady = false) {
+  const openingBeat = isOpeningSliceBeat(beat.id);
+  const openingCompleted = OPENING_SLICE_BEAT_IDS.every((beatId) => (
+    isBeatCompleted(campaignState, beatId)
+      || (currentBeatReady && beatId === beat.id)
+  ));
+  openingSlicePanel.hidden = !openingBeat;
+  if (openingSlicePanel.hidden) return;
+
+  const completedBeatIds = [
+    ...campaignState.completedBeatIds,
+    ...(currentBeatReady && openingBeat ? [beat.id] : []),
+  ];
+  const progress = getOpeningSliceProgress(completedBeatIds, beat.id);
+  const elapsedMs = ['prologue', 'chapter-1', 'chapter-2']
+    .reduce((sum, chapterId) => sum + (playtimeState.chapterMs[chapterId] ?? 0), 0);
+  const percent = Math.round((progress.completedSceneCount / progress.requiredSceneCount) * 100);
+  openingSlicePanel.dataset.complete = String(openingCompleted);
+  openingSlicePanel.dataset.currentSceneNumber = String(progress.currentSceneNumber ?? '');
+  openingSliceProgress.textContent = openingCompleted
+    ? `Opening complete · ${progress.requiredSceneCount}/${progress.requiredSceneCount} scenes`
+    : `Opening · ${progress.completedSceneCount}/${progress.requiredSceneCount} scenes`;
+  openingSliceTime.textContent = `${formatPlaytime(elapsedMs)} active · ${OPENING_SLICE_TARGET_MINUTES.minimum}–${OPENING_SLICE_TARGET_MINUTES.maximum} minute playtest target`;
+  openingSliceProgressFill.style.width = `${percent}%`;
+  openingSliceGuidance.textContent = openingCompleted
+    ? 'You have reached the first playable ending: the cells are open, Mateus has yielded, and the larger campaign can begin. Before continuing, note whether the goal, controls, boss wards, and character motives were clear without outside explanation.'
+    : 'Follow the gold field objective, complete the three scene actions, and enter a displayed encounter when it appears. Optional journals never block this opening.';
+}
+
 function narrativeProgressForBeat(beat = getBeat()) {
   return getNarrativeProgress(narrativeState, beat.id, dialogueLinesForBeat(beat).length);
 }
@@ -1715,6 +1759,9 @@ function currentDialogueInteractionGate(beat = getBeat(), progress = narrativePr
     beatId: beat.id,
     acknowledgedLines: progress.acknowledgedLines,
     completedNodeCount: currentSceneOperationProgress(beat)?.completedNodeCount ?? 0,
+    clearedEncounterIds: Object.entries(advancementState.encounterWins ?? {})
+      .filter(([, wins]) => wins > 0)
+      .map(([encounterId]) => encounterId),
   });
 }
 
@@ -2273,7 +2320,7 @@ function updateFieldDashboard(level) {
   const nextRequiredInteractable = publishedRequiredInteractable ?? exitBlockingInteractable;
   const fieldTarget = nextRequiredInteractable?.at
     ? { type: 'interaction', id: nextRequiredInteractable.id, at: nextRequiredInteractable.at, range: 1 }
-    : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 0 } : null;
+    : readyExit?.at ? { type: 'route-exit', id: readyExit.id, at: readyExit.at, range: 1 } : null;
   const [fieldTargetX, fieldTargetY] = fieldTarget?.at?.split(',').map(Number) ?? [];
   if (fieldTarget && Number.isSafeInteger(fieldTargetX) && Number.isSafeInteger(fieldTargetY)) {
     mapCanvas.dataset.fieldObjectiveTargetType = fieldTarget.type;
@@ -2320,7 +2367,19 @@ function moveCampaignThroughExit(transition, enteredFieldState) {
     && getLevelForBeat(chapters.find((chapter) => chapter.id === record.chapterId), record.beat).id === transition.destinationLevelId);
   if (targetIndex === currentIndex + 1 && currentBeatBattlesCleared()) {
     const routedFieldState = grantFieldFlags(enteredFieldState, fieldRouteFlag());
-    if (currentSceneOperationComplete() && currentNarrativeComplete() && currentChoicesComplete()) {
+    const storyworldCluster = getStoryworldClusterForBeat(getBeat().id);
+    const afterBeatStoryworldGate = storyworldCluster?.placement === 'after-beat'
+      ? getStoryworldGateForBeat(storyworldState, getBeat().id, 'after-beat')
+      : null;
+    const afterBeatStoryworldPending = Boolean(
+      afterBeatStoryworldGate?.required && !afterBeatStoryworldGate.complete,
+    );
+    if (
+      !afterBeatStoryworldPending
+      && currentSceneOperationComplete()
+      && currentNarrativeComplete()
+      && currentChoicesComplete()
+    ) {
       const storyAdvanced = persistCurrentBeatCompletion({ nextFieldState: routedFieldState, action: 'Route and scene completion' });
       return Object.freeze({
         ok: storyAdvanced,
@@ -2332,7 +2391,9 @@ function moveCampaignThroughExit(transition, enteredFieldState) {
     ]).ok) return Object.freeze({ ok: false, storyAdvanced: false });
     fieldRuntimeState = routedFieldState;
     render();
-    fieldFeedback.textContent = 'Route exit recorded. Finish the remaining dialogue or decision before advancing the scene.';
+    fieldFeedback.textContent = afterBeatStoryworldPending
+      ? 'Route exit recorded. Resolve the visible consequence scene before advancing.'
+      : 'Route exit recorded. Finish the remaining dialogue or decision before advancing the scene.';
     return Object.freeze({ ok: true, storyAdvanced: false });
   }
   const target = targetIndex >= 0 ? routeRecords[targetIndex] : null;
@@ -2568,6 +2629,7 @@ function render() {
   progressLabel.textContent = `${beatIndex + 1} of ${chapter.beats.length} scenes`;
   progressFill.style.width = `${Math.round(progress * 100)}%`;
   fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
+  renderOpeningSlicePanel(beat, baseBeatReady && storyworldCleared);
   renderRunProofStatus();
   updateFieldDashboard(level);
   setKeyArt(chapter);

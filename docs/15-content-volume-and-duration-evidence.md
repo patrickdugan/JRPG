@@ -22,6 +22,7 @@ The DOM-free canonical runner starts every save authority from its pristine cons
 | --- | ---: |
 | Chapters / canonical beats | 11 / 60 |
 | Full dialogue | 2,849 lines / 39,294 counted words |
+| Default opening-through-Mateus cut | 18 scenes / 199 lines / 1,809 counted words |
 | Canonical selected decisions | 59 |
 | Story operations | 60 / 60 complete |
 | Once-per-save operation nodes | 183 / 183 complete |

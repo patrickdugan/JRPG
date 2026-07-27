@@ -54,6 +54,30 @@ test('Aya passively restores the most wounded living ally on a deterministic war
   assert.equal(aya.statuses.some(({ id }) => id === 'passive-healer'), true);
 });
 
+test('Aya supports the Nikola–Ren duel from reserve without becoming a third controllable fighter', () => {
+  const { spec, kernel } = createActionEncounterKernel('fp1-mateus', {
+    fighterActorIds: ['lise', 'ren'],
+    automaticVictory: false,
+  });
+  for (const actorId of kernel.actorOrder) kernel.getActor(actorId).ai = null;
+  assert.deepEqual(spec.passiveSupportActorIds, ['aya']);
+  assert.deepEqual(
+    kernel.snapshot().actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
+    ['lise', 'ren'],
+  );
+  const nikola = kernel.getActor('lise');
+  nikola.hp = 20;
+  kernel.advance(2_180);
+  assert.equal(nikola.hp, 20);
+  kernel.advance(20);
+  const event = kernel.drainEvents().find(({ type, statusId }) => (
+    type === 'status-heal' && statusId === 'reserve-healer'
+  ));
+  assert.equal(event.actorId, 'aya');
+  assert.equal(event.targetId, 'lise');
+  assert.equal(event.restoredHp, Math.max(10, Math.ceil(nikola.maxHp * 0.1)));
+});
+
 test('Blood Ward completion activates both dormant seals and enforces 25% mitigation until they break', () => {
   const { kernel } = createActionEncounterKernel('fp1-mateus', { automaticVictory: false });
   silenceAi(kernel);

@@ -411,10 +411,11 @@ function createObjectiveEntityDirector(encounter, stage, contract) {
   });
 
   const protectedIds = new Set(encounter.objective?.protectedObjects ?? []);
+  const enemyTemplateIds = new Set(encounter.enemies.map(({ id }) => id));
   const attackableIds = new Set([
     ...(encounter.objective?.objectIds ?? []),
     ...(encounter.objective?.objectCondition?.objectIds ?? []),
-  ]);
+  ].filter((id) => !enemyTemplateIds.has(id)));
   const objectIds = new Set([...protectedIds, ...attackableIds]);
   if ((contract.failures ?? []).some(({ match }) => match?.objectId === 'archive-core')) {
     objectIds.add('archive-core');

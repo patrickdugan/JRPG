@@ -68,6 +68,13 @@ test('Mateus nonlethal objective keeps threshold OR both wards as explicit logic
     ],
   });
   assert.equal(contract.requirements[0].match.ratio, 0.2);
+  assert.deepEqual(
+    contract.requirements.slice(1).map(({ eventType, match }) => ({ eventType, match })),
+    [
+      { eventType: 'actor-defeated', match: { actorTemplateId: 'blood-ward-west' } },
+      { eventType: 'actor-defeated', match: { actorTemplateId: 'blood-ward-east' } },
+    ],
+  );
 });
 
 test('prisoner objective requires deterministic interact then overlap chains', () => {

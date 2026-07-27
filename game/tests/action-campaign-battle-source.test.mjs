@@ -62,8 +62,8 @@ test('page carries text authority, keyboard and touch controls, and a session-lo
   assert.match(html, /data-action-control="uppercut"/u);
   assert.match(html, /data-action-control="thunder-kick"/u);
   assert.match(html, /data-action-control="switch"/u);
-  assert.match(browser, /ACTION_LAB_FIGHTER_ACTOR_IDS/u);
-  assert.match(browser, /fighterActorIds: ACTION_LAB_FIGHTER_ACTOR_IDS/u);
+  assert.match(browser, /const BATTLE_FIGHTER_ACTOR_IDS = Object\.freeze\(canonicalMode[\s\S]*\[\.\.\.canonicalFighterIds\]/u);
+  assert.match(browser, /fighterActorIds: BATTLE_FIGHTER_ACTOR_IDS/u);
   assert.doesNotMatch(browser, /ACTION_LAB_SUPPORT_ACTOR_ID = 'aya'/u);
   assert.match(browser, /AI SUPPORT/u);
   assert.match(browser, /dataset\.duoEnabled/u);

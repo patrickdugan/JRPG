@@ -184,11 +184,18 @@ function adaptRequirements(encounter, stageContract) {
       });
       const objectIds = objective.objectCondition?.objectIds ?? [];
       if (!objectIds.length) throw new RangeError('thresholdOrObjects needs objectCondition.objectIds.');
+      const enemyTemplateIds = new Set(encounter.enemies.map(({ id }) => id));
       const objects = objectIds.map((objectId) => {
         anchorById(stageContract, objectId);
-        return requirement(`break:${objectId}`, 'event-count', {
-          eventType: 'objective-object-destroyed', match: { objectId },
-        });
+        return enemyTemplateIds.has(objectId)
+          ? requirement(`break:${objectId}`, 'event-count', {
+              eventType: 'actor-defeated',
+              match: { actorTemplateId: objectId },
+            })
+          : requirement(`break:${objectId}`, 'event-count', {
+              eventType: 'objective-object-destroyed',
+              match: { objectId },
+            });
       });
       return {
         requirements: [hp, ...objects],

@@ -147,7 +147,48 @@ function livingWardCount(kernel, wardIds) {
   return wardIds.filter((actorId) => kernel.getActor(actorId)?.hp > 0).length;
 }
 
-function tickStatuses(nowMs, kernel) {
+function mostWoundedAlly(kernel, {
+  faction = 'player',
+  triggerRatio = 0.8,
+} = {}) {
+  return kernel.actorOrder
+    .map((candidateId) => kernel.getActor(candidateId))
+    .filter((candidate) => (
+      candidate.faction === faction
+      && candidate.hp > 0
+      && candidate.hp < candidate.maxHp
+      && candidate.hp / candidate.maxHp < triggerRatio
+    ))
+    .sort((first, second) => (
+      (first.hp / first.maxHp) - (second.hp / second.maxHp)
+      || kernel.actorOrder.indexOf(first.id) - kernel.actorOrder.indexOf(second.id)
+    ))[0] ?? null;
+}
+
+function tickReserveSupport(nowMs, kernel, support) {
+  if (!support?.actorIds?.includes('aya') || nowMs < support.nextTickAtMs) return;
+  support.nextTickAtMs += support.intervalMs;
+  const target = mostWoundedAlly(kernel, { triggerRatio: support.triggerRatio });
+  if (!target) return;
+  const restore = Math.max(
+    support.minimumRestore,
+    Math.ceil(target.maxHp * support.restoreFraction),
+  );
+  const hpBefore = target.hp;
+  target.hp = Math.min(target.maxHp, target.hp + restore);
+  kernel._emit('status-heal', {
+    actorId: 'aya',
+    actorName: 'Aya Shinohara',
+    targetId: target.id,
+    statusId: 'reserve-healer',
+    restoredHp: target.hp - hpBefore,
+    hpBefore,
+    hpAfter: target.hp,
+  });
+}
+
+function tickStatuses(nowMs, kernel, reserveSupport = null) {
+  tickReserveSupport(nowMs, kernel, reserveSupport);
   for (const actorId of kernel.actorOrder) {
     const actor = kernel.getActor(actorId);
     for (const status of [...actor.statuses]) {
@@ -165,18 +206,10 @@ function tickStatuses(nowMs, kernel) {
         const intervalMs = Math.max(1, Math.trunc(status.intervalMs ?? 1_600));
         status.nextTickAtMs = nextTickAtMs + intervalMs;
         const triggerRatio = clamp(Number(status.triggerRatio ?? 0.72), 0, 1);
-        const target = kernel.actorOrder
-          .map((candidateId) => kernel.getActor(candidateId))
-          .filter((candidate) => (
-            candidate.faction === actor.faction
-            && candidate.hp > 0
-            && candidate.hp < candidate.maxHp
-            && candidate.hp / candidate.maxHp < triggerRatio
-          ))
-          .sort((first, second) => (
-            (first.hp / first.maxHp) - (second.hp / second.maxHp)
-            || kernel.actorOrder.indexOf(first.id) - kernel.actorOrder.indexOf(second.id)
-          ))[0];
+        const target = mostWoundedAlly(kernel, {
+          faction: actor.faction,
+          triggerRatio,
+        });
         if (!target) continue;
         const restore = Math.max(
           Math.trunc(status.minimumRestore ?? 1),
@@ -218,8 +251,17 @@ function tickStatuses(nowMs, kernel) {
 export function createActionEffectHooks({
   attackManifest = [],
   instanceIdsByTemplate = {},
+  passiveSupportActorIds = [],
 } = {}) {
   const effects = effectMap(attackManifest);
+  const reserveSupport = {
+    actorIds: [...new Set(passiveSupportActorIds)],
+    nextTickAtMs: 2_200,
+    intervalMs: 2_200,
+    restoreFraction: 0.1,
+    minimumRestore: 10,
+    triggerRatio: 0.8,
+  };
   return Object.freeze({
     modifyMovement({ actor, speed }) {
       const multiplier = actor.statuses.reduce(
@@ -313,7 +355,7 @@ export function createActionEffectHooks({
     },
 
     onFixedStep({ nowMs, kernel }) {
-      tickStatuses(nowMs, kernel);
+      tickStatuses(nowMs, kernel, reserveSupport);
     },
   });
 }

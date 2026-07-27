@@ -145,6 +145,19 @@ test('before-beat decisions lock direct play while after-beat consequences block
   assert.match(completion, /getStoryworldGateForBeat\(\s*storyworldState\s*,/);
   assert.match(completion, /!\w+\.complete/,
     'completion must refuse an unfinished Storyworld authority, not depend only on disabled UI');
+
+  const routedCompletion = sourceSection(
+    campaignSource,
+    'function moveCampaignThroughExit',
+    'function setKeyArt',
+  );
+  assert.match(routedCompletion, /storyworldCluster\?\.placement === 'after-beat'/);
+  assert.match(routedCompletion, /afterBeatStoryworldGate\?\.required && !afterBeatStoryworldGate\.complete/);
+  assert.match(
+    routedCompletion,
+    /if \(\s*!afterBeatStoryworldPending[\s\S]*?persistCurrentBeatCompletion[\s\S]*?commitStateChanges\('Route completion'/,
+    'a terminal route must commit its field flag and reveal an unfinished after-beat consequence instead of deadlocking completion',
+  );
 });
 
 test('Storyworld keyboard precedence follows the visible panel instead of canonical choices', () => {

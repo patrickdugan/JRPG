@@ -522,6 +522,9 @@ export function adaptActionEncounter(encounterId, options = {}) {
     options.supportActorId,
     options.fighterActorIds,
   );
+  const deployedPartyIds = new Set(partyDeployment.deployments.map(({ actorId }) => actorId));
+  const passiveSupportActorIds = (encounter.party?.roster ?? [])
+    .filter((actorId) => actorId === 'aya' && !deployedPartyIds.has(actorId));
 
   const attacks = {};
   const attackManifest = [];
@@ -577,7 +580,11 @@ export function adaptActionEncounter(encounterId, options = {}) {
       [...profile.instanceIds, ...profile.dormantInstanceIds],
     ]),
   );
-  const statusHooks = createActionEffectHooks({ attackManifest, instanceIdsByTemplate });
+  const statusHooks = createActionEffectHooks({
+    attackManifest,
+    instanceIdsByTemplate,
+    passiveSupportActorIds,
+  });
 
   return deepFreeze({
     schemaVersion: ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION,
@@ -586,6 +593,7 @@ export function adaptActionEncounter(encounterId, options = {}) {
     levelId: level.id,
     format: encounter.format,
     supportActorId: partyDeployment.supportActorId,
+    passiveSupportActorIds,
     chapterLevelTarget: chapterTarget,
     objectiveMigration: objectiveMigration(encounter),
     effectMigration: {

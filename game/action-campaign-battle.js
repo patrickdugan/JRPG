@@ -10,6 +10,7 @@ import {
   snapshotActionCampaignBattle,
   switchActionCampaignActor,
 } from './action-campaign-battle-model.mjs';
+import { getActionBattleCoaching } from './action-battle-coaching.mjs';
 import {
   createAdvancementStorageAdapter,
   createAdvancementState,
@@ -96,10 +97,14 @@ const defaultLeadId = canonicalMode ? canonicalFighterIds[0] : 'lise';
 const defaultSupportId = canonicalMode ? canonicalFighterIds[1] : 'mateus';
 const requestedLeadId = publicFighterIds[String(laboratoryQuery.get('lead') ?? '').toLowerCase()] ?? defaultLeadId;
 let requestedSupportId = publicFighterIds[String(laboratoryQuery.get('support') ?? '').toLowerCase()] ?? defaultSupportId;
-if (requestedSupportId === requestedLeadId) requestedSupportId = requestedLeadId === 'mateus' ? 'lise' : 'mateus';
-const ACTION_LAB_FIGHTER_ACTOR_IDS = Object.freeze(sliceMode
-  ? [...sliceRun.fighters]
-  : [requestedLeadId, requestedSupportId]);
+if (requestedSupportId != null && requestedSupportId === requestedLeadId) {
+  requestedSupportId = requestedLeadId === 'mateus' ? 'lise' : 'mateus';
+}
+const BATTLE_FIGHTER_ACTOR_IDS = Object.freeze(canonicalMode
+  ? [...canonicalFighterIds]
+  : sliceMode
+    ? [...sliceRun.fighters]
+    : [requestedLeadId, requestedSupportId]);
 const sliceBattleVitals = sliceMode ? structuredClone(sliceRun.vitals) : null;
 const canonicalStorage = getDefaultBrowserStorage();
 const canonicalStorageAtEntry = captureCanonicalStorageSnapshot(canonicalStorage);
@@ -147,7 +152,7 @@ let session = createActionCampaignBattleSession({
   encounterId: query.encounterId,
   advancementState,
   loadoutState,
-  fighterActorIds: ACTION_LAB_FIGHTER_ACTOR_IDS,
+  fighterActorIds: BATTLE_FIGHTER_ACTOR_IDS,
   partyVitals: sliceBattleVitals,
 });
 
@@ -162,6 +167,7 @@ const elements = {
   stageName: document.querySelector('#stageName'),
   stateBadge: document.querySelector('#battleStateBadge'),
   controlledActor: document.querySelector('#controlledActor'),
+  reserveSupport: document.querySelector('#reserveSupport'),
   partyReadout: document.querySelector('#partyReadout'),
   enemyReadout: document.querySelector('#enemyReadout'),
   objectiveText: document.querySelector('#objectiveText'),
@@ -187,6 +193,9 @@ const elements = {
   storyworldTitle: document.querySelector('#storyworldTitle'),
   storyworldDecision: document.querySelector('#storyworldDecision'),
   storyworldConsequence: document.querySelector('#storyworldConsequence'),
+  battleCoachTitle: document.querySelector('#battleCoachTitle'),
+  battleCoachSummary: document.querySelector('#battleCoachSummary'),
+  battleCoachSteps: document.querySelector('#battleCoachSteps'),
 };
 
 const context = elements.canvas.getContext('2d');
@@ -1050,12 +1059,30 @@ function renderDom(snapshot) {
   elements.controlledActor.textContent = controlled
     ? `${controlled.name} · Level ${controlled.level} · ${movementState} · ${Math.round(Math.abs(controlled.velocity.x))} px/s · Support: ${support?.name ?? 'none'}`
     : 'No living controlled fighter';
+  const reserveSupportIds = session.spec.passiveSupportActorIds ?? [];
+  elements.reserveSupport.hidden = reserveSupportIds.length === 0;
+  elements.reserveSupport.textContent = reserveSupportIds.includes('aya')
+    ? 'Reserve support · Aya heals the most wounded living fighter below 80% HP every 2.2 seconds.'
+    : '';
   const enemies = snapshot.kernel.actors.filter(({ faction }) => faction === 'enemy');
   elements.partyReadout.replaceChildren(...party.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));
   elements.enemyReadout.replaceChildren(...enemies.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));
+  const phaseLabel = snapshot.bossPhase
+    ? /\bphase\b/iu.test(snapshot.bossPhase.name)
+      ? snapshot.bossPhase.name
+      : `${snapshot.bossPhase.name} phase`
+    : '';
   elements.encounterSubtitle.textContent = snapshot.bossPhase
-    ? `${displayedObjectiveText} · ${snapshot.bossPhase.name} phase`
+    ? `${displayedObjectiveText} · ${phaseLabel}`
     : displayedObjectiveText;
+  const coaching = getActionBattleCoaching(session.encounter.id, snapshot);
+  elements.battleCoachTitle.textContent = coaching.title;
+  elements.battleCoachSummary.textContent = coaching.summary;
+  elements.battleCoachSteps.replaceChildren(...coaching.steps.map((step) => {
+    const item = document.createElement('li');
+    item.textContent = step;
+    return item;
+  }));
 
   elements.objectiveText.textContent = displayedObjectiveText;
   elements.objectiveRuntimeStatus.dataset.supported = String(snapshot.objective.supported);
@@ -1242,7 +1269,7 @@ function restart() {
     encounterId: query.encounterId,
   advancementState,
   loadoutState,
-  fighterActorIds: ACTION_LAB_FIGHTER_ACTOR_IDS,
+    fighterActorIds: BATTLE_FIGHTER_ACTOR_IDS,
   partyVitals: sliceBattleVitals,
 });
   laboratoryComplete = false;

@@ -103,11 +103,13 @@ test('surviveThenExit derives enemy completed actions and only latches the exit 
   assert.equal(Object.isFrozen(objective.result()), true);
 });
 
-test('Mateus threshold-or-wards completes through either live HP projection or both explicit objects', () => {
+test('Mateus threshold-or-wards completes through either live HP projection or both living ward actors', () => {
   const stage = getActionStage('tkm-bell-chamber');
-  const rosterAt = (hp) => [
+  const rosterAt = (hp, westHp = 0, eastHp = 0) => [
     actor('ren', 'player', 100, 100, 150, stage.groundY),
     actor('mateus-1', 'enemy', hp, 100, 760, stage.groundY),
+    actor('blood-ward-west-1', 'enemy', westHp, 96, 186, 304),
+    actor('blood-ward-east-1', 'enemy', eastHp, 96, 774, 304),
   ];
 
   const threshold = runtime('fp1-mateus');
@@ -118,13 +120,11 @@ test('Mateus threshold-or-wards completes through either live HP projection or b
   assert.equal(snapshot.status, 'completed');
 
   const wards = runtime('fp1-mateus');
-  snapshot = wards.advance({
-    kernelSnapshot: kernelSnapshot(20, rosterAt(100)),
-    events: [
-      { type: 'objective-object-destroyed', objectId: 'blood-ward-west' },
-      { type: 'objective-object-destroyed', objectId: 'blood-ward-east' },
-    ],
-  });
+  snapshot = wards.advance({ kernelSnapshot: kernelSnapshot(0, rosterAt(100)) });
+  assert.equal(requirement(snapshot, 'break:blood-ward-west').completed, false);
+  snapshot = wards.advance({ kernelSnapshot: kernelSnapshot(20, rosterAt(100, 96, 96)) });
+  assert.equal(requirement(snapshot, 'break:blood-ward-west').completed, false);
+  snapshot = wards.advance({ kernelSnapshot: kernelSnapshot(40, rosterAt(100, 0, 0)) });
   assert.equal(requirement(snapshot, 'boss-hp-threshold').completed, false);
   assert.equal(requirement(snapshot, 'break:blood-ward-west').completed, true);
   assert.equal(requirement(snapshot, 'break:blood-ward-east').completed, true);

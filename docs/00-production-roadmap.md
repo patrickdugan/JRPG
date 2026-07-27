@@ -67,18 +67,18 @@ Build only the systems the slice needs:
 
 **Exit criterion:** a player can understand the hook, make a meaningful defensive response, and finish the encounter without developer intervention. This is **FP-0 Combat Proof**: a systems-validation build, not yet the plan-template's 20–40 minute first playable.
 
-### 4. FP-1 first playable — implemented; timed external gate pending
+### 4. FP-1 first playable — integrated; blind human gate pending
 
-Target the documented 28–34 minute Takamine vertical slice comprising:
+The first-play target is now the complete 30–45-minute opening from the Night Census through Mateus opening the Takamine cells:
 
-1. A short oppressive approach or shrine scene.
-2. An introduction to positioning and recovery.
-3. A multi-enemy learning encounter.
-4. A dialogue turn that reveals the apostate priest’s allegiance.
-5. A boss encounter that tests elemental preparation and interruption.
-6. A clean end card / restart loop plus a feedback prompt.
+1. Ren discovers the census fraud and commits to active resistance.
+2. Aya joins as archivist, witness, and reserve healer.
+3. The route teaches free movement, attack commitment, recovery timers, elemental counterplay, and tagging through escalating encounters.
+4. Nikola enters as a hostile-looking European vampire hunter whose goal overlaps with Ren’s.
+5. Takamine moves from exterior infiltration to flooded archive and undercrypt.
+6. Mateus tests the complete combat vocabulary, yields through HP or Blood Ward resolution, confesses his compromise, and opens the cells.
 
-Test with a small group once FP-1 is reliable. Record completion, wipe, and unclear-rule observations before changing mechanics.
+The compact first-play cut contains 18 scenes and roughly 1,800 words; the longer compiled dialogue remains available as an extended production/archive version. Automated rendered-route evidence can prove reachability and state integrity, but it cannot prove comprehension, enjoyment, or the 30–45-minute human duration. Use the dedicated [opening blind-playtest gate](28-opening-slice-blind-playtest.md) before calling FP-1 polished.
 
 ### 5. Full production — active
 

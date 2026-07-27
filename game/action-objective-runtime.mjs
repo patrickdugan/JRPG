@@ -389,7 +389,9 @@ export class ActionObjectiveRuntime {
     const previousActors = new Map((previousSnapshot?.actors ?? []).map((actor) => [actor.id, actor]));
     for (const actor of snapshot.actors) {
       const previous = previousActors.get(actor.id);
-      if (actor.hp <= 0 && (!previous || previous.hp > 0)) {
+      // A zero-HP authored summon slot is dormant, not defeated. Only a
+      // transition from living to zero can satisfy defeat authority.
+      if (actor.hp <= 0 && previous?.hp > 0) {
         const defeated = {
           type: 'actor-defeated',
           nowMs: snapshot.nowMs,

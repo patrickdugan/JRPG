@@ -97,6 +97,72 @@ h1 {
   align-items: start;
 }
 
+.opening-slice-panel {
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  border: 1px solid #665733;
+  border-left: 4px solid var(--gold);
+  background:
+    linear-gradient(90deg, rgba(192, 153, 70, .12), transparent 58%),
+    rgba(14, 13, 20, .94);
+}
+
+.opening-slice-panel[hidden] { display: none; }
+
+.opening-slice-panel[data-complete="true"] {
+  border-color: #487b75;
+  border-left-color: #79c4bc;
+  background:
+    linear-gradient(90deg, rgba(72, 123, 117, .16), transparent 62%),
+    rgba(14, 13, 20, .94);
+}
+
+.opening-slice-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.opening-slice-heading h2 {
+  margin: 2px 0 0;
+  color: #efe4cb;
+  font-size: .92rem;
+}
+
+.opening-slice-heading > span {
+  color: #c4b88f;
+  font: 700 .62rem/1.35 ui-monospace, monospace;
+  text-align: right;
+}
+
+.opening-slice-track {
+  height: 5px;
+  margin: 11px 0 9px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #28242d;
+}
+
+.opening-slice-track span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #b79243, #e1ca78);
+  transition: width .2s ease;
+}
+
+.opening-slice-panel[data-complete="true"] .opening-slice-track span {
+  background: linear-gradient(90deg, #4d8f88, #92d3cb);
+}
+
+.opening-slice-panel > p {
+  margin: 0;
+  color: #b7afbb;
+  font-size: .69rem;
+  line-height: 1.5;
+}
+
 .chapter-rail, .encounter-rail, .scene-stage {
   border: 1px solid var(--line);
   background: linear-gradient(150deg, rgba(31, 39, 67, 0.92), rgba(11, 14, 28, 0.96));
