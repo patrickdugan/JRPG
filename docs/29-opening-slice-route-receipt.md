@@ -59,9 +59,27 @@ The subsequent full opening route completed the Hound in 32.797 seconds with Ren
 ## Automated regression evidence
 
 - `npm run check`: passed.
-- Full test run with four-way concurrency and forced runner exit: 1,204 passed, 0 failed, 0 skipped.
-- Focused opening-combat and launcher run: 72 passed, 0 failed.
+- Full test run with four-way concurrency and forced runner exit: 1,206 passed, 0 failed, 0 skipped.
+- Focused opening-combat and launcher run: 81 passed, 0 failed.
+- Focused presentation, cadence, and accessibility run: 15 passed, 0 failed.
 - The full run covers action combat, the turn-based rollback, side-view start-spacing contracts, Aya’s active and reserve healing, both Mateus victory routes, and the blind-test launcher source.
+
+## Focused first-play presentation evidence
+
+The opening now enters an opening-only focus layout. It places the current story card and its visible **Continue dialogue** control before the field map in both visual and document order, hides the chapter ledger, future-party card, journals, and irrelevant encounter rail, and retains the Camp link because recovery is part of the playable loop. The top prompt describes only the next action: read with `N`, follow a gold marker, interact with `X`, enter the named encounter, use the route exit, or continue to the next scene. Player mode no longer displays the 30–45-minute QA target, first-clear telemetry, average level, or state-machine terminology.
+
+A fresh browser inspection measured the story card at viewport Y 399 and the map at Y 723 on clean start. At the first cadence gate, the prompt changed to **“Inspect the suspicious seal to continue”**, with the story at Y 109 and the map immediately below at Y 434. The story card was also the scene heading’s next DOM sibling, so keyboard and assistive reading order matched the visible order.
+
+Clean run `b855ed5a` then traversed the focused presentation through the Chapter 3 handoff and continued into the following campaign before its deliberately bounded 720-second route budget expired:
+
+- all seven opening action encounters cleared;
+- 0 battle restarts;
+- 110.142 seconds total combat;
+- 12.438-second median and 38.875-second longest encounter;
+- Mateus reached `phase-3`;
+- 0 console errors and 0 page errors.
+
+The time-budget status occurred after the opening had completed and the driver had continued beyond the slice. It is therefore supplemental evidence that the presentation wave preserved opening reachability, not a full-campaign completion receipt or human timing claim.
 
 ## Defects closed by the opening-slice pass
 

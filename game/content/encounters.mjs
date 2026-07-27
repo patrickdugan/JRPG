@@ -77,7 +77,7 @@ export const ENCOUNTERS = [
     bossMechanic: {
       type: 'escape-boss',
       telegraphs: ['census-sweep'],
-      rule: 'The Bailiff cannot be defeated here; the state machine resolves only after the survival count and exit tile.',
+      rule: 'The Bailiff cannot be defeated here; survive three attacks, then reach the river exit.',
       humaneResolution: 'The bell fracture interrupts the command. The transformed villager is not treated as loot.',
     },
     reward: { keyItems: ['Hot black bell fragment'], story: 'Aya can identify the Takamine seal at dawn.' },

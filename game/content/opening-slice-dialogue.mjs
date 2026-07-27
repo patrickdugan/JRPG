@@ -312,3 +312,35 @@ export function getOpeningSliceProgress(completedBeatIds = [], currentBeatId = n
     targetMinutes: { ...OPENING_SLICE_TARGET_MINUTES },
   });
 }
+
+export function getOpeningSliceGuidance({
+  complete = false,
+  interactionPrompt = '',
+  narrativeComplete = false,
+  operationComplete = false,
+  battlesCleared = false,
+  fieldRouteComplete = false,
+  pendingEncounterName = '',
+} = {}) {
+  if (complete) {
+    return 'The cells are open and Mateus has yielded. The opening chapter is complete; continue when ready.';
+  }
+  if (interactionPrompt) {
+    return `${interactionPrompt} Move with WASD or Q/E/Z/C; interact with X or Enter.`;
+  }
+  if (!narrativeComplete) {
+    return 'Continue the scene with N or the dialogue button. When the story asks you to act, follow the gold field objective.';
+  }
+  if (!operationComplete) {
+    return 'Follow the gold marker. Move with WASD or Q/E/Z/C; interact with X or Enter.';
+  }
+  if (!battlesCleared) {
+    return pendingEncounterName
+      ? `Enter ${pendingEncounterName}. Its battle screen teaches the controls and the immediate counterplay.`
+      : 'Enter the displayed encounter. Its battle screen teaches the controls and the immediate counterplay.';
+  }
+  if (!fieldRouteComplete) {
+    return 'Follow the gold route marker and use the lit exit with X or Enter.';
+  }
+  return 'This scene is complete. Choose Next scene to continue.';
+}

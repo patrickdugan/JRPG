@@ -385,3 +385,76 @@ kbd { padding: 1px 3px; border: 1px solid #536080; border-radius: 2px; color: #e
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
+
+/* The first-play route presents one clear loop: read, act on the field, fight, continue. */
+body.opening-focus .campaign-layout {
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 1100px);
+  margin-inline: auto;
+}
+
+body.opening-focus.opening-has-encounter .campaign-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 0.36fr);
+}
+
+body.opening-focus .chapter-rail,
+body.opening-focus .party-card,
+body.opening-focus .journal-drawer {
+  display: none;
+}
+
+body.opening-focus:not(.opening-has-encounter) .encounter-rail {
+  display: none;
+}
+
+body.opening-focus.opening-has-encounter .encounter-rail {
+  display: block;
+  grid-column: auto;
+}
+
+body.opening-focus .scene-stage {
+  display: flex;
+  flex-direction: column;
+}
+
+body.opening-focus .scene-heading { order: 0; }
+body.opening-focus .scene-card {
+  order: 1;
+  margin: 0 0 13px;
+}
+body.opening-focus .storyworld-card { order: 2; }
+body.opening-focus .map-wrap { order: 3; }
+body.opening-focus .field-feedback { order: 4; }
+body.opening-focus .field-command-row { order: 5; }
+body.opening-focus .scene-controls { order: 6; }
+
+@media (max-width: 900px) {
+  body.opening-focus.opening-has-encounter .campaign-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.opening-focus.opening-has-encounter .encounter-rail {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) 1fr;
+  }
+
+  body.opening-focus .key-art {
+    height: 100%;
+    max-height: none;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  body.opening-focus.opening-has-encounter .encounter-rail {
+    display: block;
+  }
+
+  body.opening-focus .key-art {
+    height: auto;
+    max-height: 220px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}

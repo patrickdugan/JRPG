@@ -8,6 +8,7 @@ import {
   OPENING_SLICE_SCENES,
   OPENING_SLICE_TARGET_MINUTES,
   getOpeningSliceDialogue,
+  getOpeningSliceGuidance,
   getOpeningSliceProgress,
   isOpeningSliceBeat,
 } from '../content/opening-slice-dialogue.mjs';
@@ -62,4 +63,26 @@ test('opening progress remains an immutable 18-scene report', () => {
   });
   assert.equal(Object.isFrozen(partial), true);
   assert.equal(getOpeningSliceProgress(OPENING_SLICE_BEAT_IDS).complete, true);
+});
+
+test('opening guidance teaches the next visible action without playtest jargon', () => {
+  assert.match(getOpeningSliceGuidance(), /Continue the scene with N/u);
+  assert.match(getOpeningSliceGuidance({
+    interactionPrompt: 'Inspect the suspicious seal to continue.',
+  }), /WASD.*interact with X/u);
+  assert.match(getOpeningSliceGuidance({
+    narrativeComplete: true,
+  }), /Follow the gold marker/u);
+  assert.match(getOpeningSliceGuidance({
+    narrativeComplete: true,
+    operationComplete: true,
+    pendingEncounterName: 'Tithe Hound',
+  }), /Enter Tithe Hound/u);
+  assert.match(getOpeningSliceGuidance({
+    narrativeComplete: true,
+    operationComplete: true,
+    battlesCleared: true,
+  }), /gold route marker/u);
+  assert.match(getOpeningSliceGuidance({ complete: true }), /opening chapter is complete/u);
+  assert.doesNotMatch(getOpeningSliceGuidance(), /playtest|first clear|state machine/iu);
 });

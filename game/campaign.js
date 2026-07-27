@@ -16,8 +16,8 @@ import { getActSequenceContextForBeat } from './content/act-route-sequences.mjs'
 import { getFullDialogue } from './content/full-dialogue.mjs';
 import {
   OPENING_SLICE_BEAT_IDS,
-  OPENING_SLICE_TARGET_MINUTES,
   getOpeningSliceDialogue,
+  getOpeningSliceGuidance,
   getOpeningSliceProgress,
   isOpeningSliceBeat,
 } from './content/opening-slice-dialogue.mjs';
@@ -238,6 +238,9 @@ const openingSliceProgress = document.querySelector('#openingSliceProgress');
 const openingSliceTime = document.querySelector('#openingSliceTime');
 const openingSliceGuidance = document.querySelector('#openingSliceGuidance');
 const openingSliceProgressFill = document.querySelector('#openingSliceProgressFill');
+const sceneHeadingElement = document.querySelector('.scene-heading');
+const sceneCardElement = document.querySelector('.scene-card');
+const fieldCommandRowElement = document.querySelector('.field-command-row');
 const chapterKicker = document.querySelector('#chapterKicker');
 const chapterTitle = document.querySelector('#chapterTitle');
 const chapterObjective = document.querySelector('#chapterObjective');
@@ -1721,12 +1724,26 @@ function dialogueLinesForBeat(beat = getBeat()) {
   })));
 }
 
-function renderOpeningSlicePanel(beat, currentBeatReady = false) {
+function renderOpeningSlicePanel(beat, {
+  currentBeatReady = false,
+  narrativeComplete = false,
+  operationComplete = false,
+  battlesCleared = false,
+  fieldRouteComplete = false,
+  pendingEncounterName = '',
+} = {}) {
   const openingBeat = isOpeningSliceBeat(beat.id);
   const openingCompleted = OPENING_SLICE_BEAT_IDS.every((beatId) => (
     isBeatCompleted(campaignState, beatId)
       || (currentBeatReady && beatId === beat.id)
   ));
+  document.body.classList.toggle('opening-focus', openingBeat);
+  document.body.classList.toggle(
+    'opening-has-encounter',
+    openingBeat && Boolean(getBeatEncounterState(beat).selected),
+  );
+  const storyAnchor = openingBeat ? sceneHeadingElement : fieldCommandRowElement;
+  if (storyAnchor.nextElementSibling !== sceneCardElement) storyAnchor.after(sceneCardElement);
   openingSlicePanel.hidden = !openingBeat;
   if (openingSlicePanel.hidden) return;
 
@@ -1741,13 +1758,19 @@ function renderOpeningSlicePanel(beat, currentBeatReady = false) {
   openingSlicePanel.dataset.complete = String(openingCompleted);
   openingSlicePanel.dataset.currentSceneNumber = String(progress.currentSceneNumber ?? '');
   openingSliceProgress.textContent = openingCompleted
-    ? `Opening complete · ${progress.requiredSceneCount}/${progress.requiredSceneCount} scenes`
-    : `Opening · ${progress.completedSceneCount}/${progress.requiredSceneCount} scenes`;
-  openingSliceTime.textContent = `${formatPlaytime(elapsedMs)} active · ${OPENING_SLICE_TARGET_MINUTES.minimum}–${OPENING_SLICE_TARGET_MINUTES.maximum} minute playtest target`;
+    ? `Opening chapter complete · ${progress.requiredSceneCount}/${progress.requiredSceneCount} scenes`
+    : `Opening chapter · Scene ${progress.currentSceneNumber} of ${progress.requiredSceneCount}`;
+  openingSliceTime.textContent = `${formatPlaytime(elapsedMs)} active`;
   openingSliceProgressFill.style.width = `${percent}%`;
-  openingSliceGuidance.textContent = openingCompleted
-    ? 'You have reached the first playable ending: the cells are open, Mateus has yielded, and the larger campaign can begin. Before continuing, note whether the goal, controls, boss wards, and character motives were clear without outside explanation.'
-    : 'Follow the gold field objective, complete the three scene actions, and enter a displayed encounter when it appears. Optional journals never block this opening.';
+  openingSliceGuidance.textContent = getOpeningSliceGuidance({
+    complete: openingCompleted,
+    interactionPrompt: currentDialogueInteractionGate(beat)?.prompt ?? '',
+    narrativeComplete,
+    operationComplete,
+    battlesCleared,
+    fieldRouteComplete,
+    pendingEncounterName,
+  });
 }
 
 function narrativeProgressForBeat(beat = getBeat()) {
@@ -2446,7 +2469,9 @@ function renderBattleLaunch(beat, beatBattleState) {
     launchBattle.removeAttribute('href');
     launchBattle.setAttribute('aria-disabled', 'true');
     launchBattle.textContent = 'No encounter in this scene';
-    battleStatus.textContent = `${summary.firstClears}/${ENCOUNTERS.length} first clears · average level ${summary.averageUnlockedLevel.toFixed(1)}`;
+    battleStatus.textContent = developerMode
+      ? `${summary.firstClears}/${ENCOUNTERS.length} first clears · average level ${summary.averageUnlockedLevel.toFixed(1)}`
+      : 'No battle blocks this scene.';
     return;
   }
 
@@ -2456,7 +2481,11 @@ function renderBattleLaunch(beat, beatBattleState) {
   const winCount = getEncounterWinCount(advancementState, selected.id);
   launchBattle.textContent = pending ? `Enter encounter: ${selected.name}` : `Replay for grind XP: ${selected.name}`;
   const clearedHere = encounters.filter((encounter) => getEncounterWinCount(advancementState, encounter.id) > 0).length;
-  battleStatus.textContent = `${clearedHere}/${encounters.length} scene encounters cleared · ${winCount} wins here · saved repeat speed ${summary.speedMultiplier}×`;
+  battleStatus.textContent = developerMode
+    ? `${clearedHere}/${encounters.length} scene encounters cleared · ${winCount} wins here · saved repeat speed ${summary.speedMultiplier}×`
+    : pending
+      ? 'Uncleared · victory advances the story.'
+      : 'Cleared · replay is optional.';
 }
 
 function requiredRouteProgress() {
@@ -2629,7 +2658,14 @@ function render() {
   progressLabel.textContent = `${beatIndex + 1} of ${chapter.beats.length} scenes`;
   progressFill.style.width = `${Math.round(progress * 100)}%`;
   fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
-  renderOpeningSlicePanel(beat, baseBeatReady && storyworldCleared);
+  renderOpeningSlicePanel(beat, {
+    currentBeatReady: baseBeatReady && storyworldCleared,
+    narrativeComplete: narrativeCleared,
+    operationComplete: operationCleared,
+    battlesCleared,
+    fieldRouteComplete: fieldRouteCleared,
+    pendingEncounterName: beatBattleState.pending?.name ?? '',
+  });
   renderRunProofStatus();
   updateFieldDashboard(level);
   setKeyArt(chapter);
