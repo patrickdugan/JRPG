@@ -8,6 +8,16 @@ function deepFreeze(value) {
   return Object.freeze(value);
 }
 
+export const OPENING_ACTION_ENCOUNTER_IDS = Object.freeze([
+  'prologue-ashen-bailiff',
+  'c1-cinder-hounds',
+  'c1-ash-wisps',
+  'c1-tithe-hound',
+  'fp1-cedar-path',
+  'fp1-flooded-archive',
+  'fp1-mateus',
+]);
+
 const BASE = deepFreeze({
   title: 'Fight, read, recover',
   summary: 'Move freely while attack timers recover. A committed attack briefly locks movement, so strike after a telegraph or from safe spacing.',
@@ -125,4 +135,8 @@ export function getActionBattleCoaching(encounterId, snapshot = null) {
     summary: source.summary,
     steps: [...source.steps],
   });
+}
+
+export function isOpeningActionEncounter(encounterId) {
+  return OPENING_ACTION_ENCOUNTER_IDS.includes(encounterId);
 }

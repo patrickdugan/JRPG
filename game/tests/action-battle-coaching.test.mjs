@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { getActionBattleCoaching } from '../action-battle-coaching.mjs';
+import {
+  OPENING_ACTION_ENCOUNTER_IDS,
+  getActionBattleCoaching,
+  isOpeningActionEncounter,
+} from '../action-battle-coaching.mjs';
 
 test('opening encounters publish concise controls and encounter-specific counterplay', () => {
   const bailiff = getActionBattleCoaching('prologue-ashen-bailiff');
@@ -43,4 +47,19 @@ test('Mateus coaching follows the visible phase and ward state', () => {
     kernel: { actors: [] },
   });
   assert.match(surrender.title, /yields alive/u);
+});
+
+test('the first-clear ready gate covers exactly the seven opening action encounters', () => {
+  assert.deepEqual(OPENING_ACTION_ENCOUNTER_IDS, [
+    'prologue-ashen-bailiff',
+    'c1-cinder-hounds',
+    'c1-ash-wisps',
+    'c1-tithe-hound',
+    'fp1-cedar-path',
+    'fp1-flooded-archive',
+    'fp1-mateus',
+  ]);
+  assert.equal(OPENING_ACTION_ENCOUNTER_IDS.every(isOpeningActionEncounter), true);
+  assert.equal(isOpeningActionEncounter('c3-dock-patrol'), false);
+  assert.equal(Object.isFrozen(OPENING_ACTION_ENCOUNTER_IDS), true);
 });

@@ -369,6 +369,34 @@ def run_probe(chromium: Path) -> dict[str, object]:
             )
             require(canonical_response is not None and canonical_response.status == 200,
                     "Canonical action campaign page did not return HTTP 200.")
+            canonical_page.locator("#beginBattle").wait_for(state="visible")
+            ready_before = canonical_page.evaluate(
+                """() => {
+                  const canvas = document.querySelector('#actionCampaignCanvas');
+                  const snapshot = globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot();
+                  return {
+                    nowMs: snapshot.kernel.nowMs,
+                    badge: document.querySelector('#battleStateBadge').textContent,
+                    introReady: canvas.dataset.introReady,
+                    paused: canvas.dataset.paused,
+                    comboHidden: document.querySelector('#comboPanel').hidden,
+                  };
+                }"""
+            )
+            canonical_page.wait_for_timeout(500)
+            ready_after = canonical_page.evaluate(
+                "() => globalThis.__ACTION_CAMPAIGN_BATTLE__.getSnapshot().kernel.nowMs"
+            )
+            require(ready_before["badge"] == "READY"
+                    and ready_before["introReady"] == "false"
+                    and ready_before["paused"] == "true",
+                    f"Opening first clear did not publish its ready gate: {ready_before}")
+            require(ready_after == ready_before["nowMs"],
+                    f"Opening first clear advanced while the player was reading: {ready_before} / {ready_after}")
+            require(ready_before["comboHidden"] is True,
+                    f"Unavailable future combo leaked into the solo opening: {ready_before}")
+            canonical_page.locator("#beginBattle").click()
+            canonical_page.locator("#actionCampaignCanvas[data-intro-ready='true']").wait_for()
             canonical_page.wait_for_function(
                 """() => {
                   const canvas = document.querySelector('#actionCampaignCanvas');
@@ -501,6 +529,10 @@ def run_probe(chromium: Path) -> dict[str, object]:
                     "liseDawnBolt": combo_after["liseDawnBoltCooldownMs"],
                     "mateusPenitentNight": combo_after["mateusPenitentNightCooldownMs"],
                     "liseHunterThrust": combo_after["liseHunterThrustCooldownMs"],
+                },
+                "openingReadyGate": {
+                    **ready_before,
+                    "kernelNowMsAfterWait": ready_after,
                 },
                 "isolatedStorageKeys": after["storageKeys"],
                 "comboStorageKeys": combo_after["storageKeys"],

@@ -10,7 +10,10 @@ import {
   snapshotActionCampaignBattle,
   switchActionCampaignActor,
 } from './action-campaign-battle-model.mjs';
-import { getActionBattleCoaching } from './action-battle-coaching.mjs';
+import {
+  getActionBattleCoaching,
+  isOpeningActionEncounter,
+} from './action-battle-coaching.mjs';
 import {
   createAdvancementStorageAdapter,
   createAdvancementState,
@@ -138,7 +141,15 @@ const syncedLoadout = syncPartyVitals(loadoutState, getParty(advancementState));
 if (syncedLoadout.ok) loadoutState = syncedLoadout.state;
 let runReceiptState = laboratorySeed.runReceipt;
 let playtimeState = canonicalMode && playtimeLoad?.ok ? playtimeLoad.state : createPlaytimeState();
-let battlePlaytimeCategory = getBattlePlaytimeCategory(getEncounterWinCount(advancementState, query.encounterId));
+const encounterWinCountAtEntry = getEncounterWinCount(advancementState, query.encounterId);
+const introRequired = canonicalMode
+  && encounterWinCountAtEntry === 0
+  && isOpeningActionEncounter(query.encounterId);
+const comboFormationPresent = ['lise', 'mateus'].every((actorId) => (
+  BATTLE_FIGHTER_ACTOR_IDS.includes(actorId)
+));
+let encounterStarted = !introRequired;
+let battlePlaytimeCategory = getBattlePlaytimeCategory(encounterWinCountAtEntry);
 let playtimeLastSample = performance.now();
 let playtimeLastActivity = playtimeLastSample;
 let playtimeUnsavedMs = 0;
@@ -159,15 +170,20 @@ let session = createActionCampaignBattleSession({
 
 const elements = {
   canvas: document.querySelector('#actionCampaignCanvas'),
+  battleIntro: document.querySelector('#battleIntro'),
+  battleIntroTitle: document.querySelector('#battleIntroTitle'),
+  beginBattle: document.querySelector('#beginBattle'),
   pauseCurtain: document.querySelector('#pauseCurtain'),
   battleModeLabel: document.querySelector('#battleModeLabel'),
   encounterTitle: document.querySelector('#encounterTitle'),
   encounterSubtitle: document.querySelector('#encounterSubtitle'),
   campaignLink: document.querySelector('#campaignLink'),
   continueCampaign: document.querySelector('#continueCampaign'),
+  stageLabel: document.querySelector('#stageLabel'),
   stageName: document.querySelector('#stageName'),
   stateBadge: document.querySelector('#battleStateBadge'),
   controlledActor: document.querySelector('#controlledActor'),
+  partyTitle: document.querySelector('#partyTitle'),
   reserveSupport: document.querySelector('#reserveSupport'),
   partyReadout: document.querySelector('#partyReadout'),
   enemyReadout: document.querySelector('#enemyReadout'),
@@ -185,9 +201,13 @@ const elements = {
   comboArts: document.querySelector('#comboArts'),
   comboProximity: document.querySelector('#comboProximity'),
   comboTitle: document.querySelector('#comboTitle'),
+  comboPanel: document.querySelector('#comboPanel'),
+  comboGuide: document.querySelector('#comboGuide'),
+  comboTouch: document.querySelector('#comboTouch'),
   announcement: document.querySelector('#battleAnnouncement'),
   eventLog: document.querySelector('#eventLog'),
   settlementStatus: document.querySelector('#settlementStatus'),
+  settlementKicker: document.querySelector('#settlementKicker'),
   restartBattle: document.querySelector('#restartBattle'),
   storyworldCard: document.querySelector('#storyworldCard'),
   storyworldEyebrow: document.querySelector('#storyworldEyebrow'),
@@ -237,6 +257,19 @@ elements.canvas.dataset.stageMinX = String(session.stage.bounds.minX);
 elements.canvas.dataset.stageMaxX = String(session.stage.bounds.maxX);
 elements.canvas.dataset.sliceMode = String(sliceMode);
 elements.canvas.dataset.canonicalMode = String(canonicalMode);
+elements.canvas.dataset.introRequired = String(introRequired);
+elements.canvas.dataset.introReady = String(encounterStarted);
+elements.stageLabel.textContent = canonicalMode ? 'SIDE-VIEW BATTLE STAGE' : 'SIDE-VIEW TRAINING STAGE';
+elements.partyTitle.textContent = BATTLE_FIGHTER_ACTOR_IDS.length > 1 ? 'Tag fighters' : 'Solo fighter';
+elements.partyReadout.setAttribute('aria-label', 'Combat party');
+elements.settlementKicker.textContent = canonicalMode ? 'BATTLE RESULT' : 'TRAINING RESULT';
+elements.comboPanel.hidden = !comboFormationPresent;
+elements.comboGuide.hidden = !comboFormationPresent;
+elements.comboTouch.hidden = !comboFormationPresent;
+elements.battleIntro.hidden = !introRequired;
+elements.battleIntroTitle.textContent = `Ready: ${getActionBattleCoaching(session.encounter.id).title}`;
+elements.restartBattle.disabled = introRequired;
+document.body.classList.toggle('intro-waiting', introRequired);
 if (sliceMode) {
   elements.battleModeLabel.textContent = 'ACTION SLICE · SESSION CHECKPOINT';
   elements.campaignLink.textContent = 'Leave slice';
@@ -246,7 +279,7 @@ if (sliceMode) {
   elements.battleModeLabel.textContent = 'CAMPAIGN BATTLE · LIVE CONSEQUENCES';
   elements.campaignLink.textContent = 'Leave battle';
   elements.continueCampaign.textContent = 'Continue campaign';
-  elements.settlementStatus.textContent = 'Victory will atomically save rewards, surviving HP, route evidence, and first-clear telemetry.';
+  elements.settlementStatus.textContent = 'Victory saves rewards, surviving HP, and story progress before Continue unlocks.';
 }
 
 const storyworld = loadStoryworldBattlePresentation({
@@ -315,6 +348,26 @@ function announce(message) {
   elements.announcement.textContent = message;
 }
 
+function beginEncounter() {
+  if (encounterStarted) return false;
+  encounterStarted = true;
+  clearHeld();
+  elements.battleIntro.hidden = true;
+  elements.restartBattle.disabled = false;
+  elements.canvas.dataset.introReady = 'true';
+  document.body.classList.remove('intro-waiting');
+  const now = performance.now();
+  lastTimestamp = now;
+  playtimeLastSample = now;
+  playtimeLastActivity = now;
+  const snapshot = snapshotActionCampaignBattle(session);
+  announce(`${session.encounter.name} begins. Movement is live.`);
+  renderDom(snapshot);
+  draw(snapshot, 0);
+  elements.canvas.focus();
+  return true;
+}
+
 function templateId(actorId) {
   return session.actorTemplates[actorId] ?? actorId;
 }
@@ -329,7 +382,7 @@ function maneuverName(maneuverId, actorId = null) {
 }
 
 function queueManeuver(maneuverId) {
-  if (hidden || session.outcome) return;
+  if (!encounterStarted || hidden || session.outcome) return;
   const inputRequest = { id: maneuverId, requestedAt: performance.now() };
   const snapshot = advanceActionCampaignBattle(session, 0, {
     left: held.left,
@@ -342,7 +395,7 @@ function queueManeuver(maneuverId) {
 }
 
 function queueTagSwitch(direction = 1) {
-  if (hidden || session.outcome) return;
+  if (!encounterStarted || hidden || session.outcome) return;
   const result = switchActionCampaignActor(session, direction);
   if (!result.ok) {
     const wait = result.remainingMs > 0 ? ` (${result.remainingMs} ms)` : '';
@@ -1223,8 +1276,10 @@ function renderDom(snapshot) {
     return item;
   }));
 
-  elements.stateBadge.dataset.state = snapshot.outcome ?? snapshot.objective.status;
-  elements.stateBadge.textContent = snapshot.outcome?.toUpperCase() ?? (hidden ? 'PAUSED' : snapshot.objective.status.toUpperCase());
+  const presentationState = snapshot.outcome
+    ?? (hidden ? 'paused' : !encounterStarted ? 'ready' : snapshot.objective.status);
+  elements.stateBadge.dataset.state = presentationState;
+  elements.stateBadge.textContent = presentationState.toUpperCase();
   elements.eventLog.replaceChildren(...recentMessages.map((message) => {
     const item = document.createElement('li');
     item.textContent = message;
@@ -1262,7 +1317,8 @@ function renderDom(snapshot) {
   elements.canvas.dataset.comboAvailable = String(snapshot.combo.available);
   elements.canvas.dataset.comboActive = String(snapshot.combo.active);
   elements.canvas.dataset.comboSeparationPx = snapshot.combo.separationPx == null ? '' : String(Math.round(snapshot.combo.separationPx));
-  elements.canvas.dataset.paused = String(hidden);
+  elements.canvas.dataset.paused = String(hidden || !encounterStarted);
+  elements.canvas.dataset.introReady = String(encounterStarted);
 }
 
 function restart() {
@@ -1310,6 +1366,11 @@ function pollBattleGamepad() {
   }
   const down = (index) => Boolean(pad.buttons[index]?.pressed);
   const edge = (index) => down(index) && !previousGamepadButtons[index];
+  if (!encounterStarted) {
+    if (edge(0) || edge(1)) beginEncounter();
+    for (let index = 0; index < pad.buttons.length; index += 1) previousGamepadButtons[index] = down(index);
+    return;
+  }
   const axisX = Math.abs(pad.axes[0] ?? 0) >= .28 ? pad.axes[0] : 0;
   const axisY = Math.abs(pad.axes[1] ?? 0) >= .4 ? pad.axes[1] : 0;
   gamepadHeld.left = down(14) || axisX < 0;
@@ -1341,8 +1402,16 @@ function pollBattleGamepad() {
 }
 
 window.addEventListener('keydown', (event) => {
-  if (isTypingTarget(event.target) || hidden) return;
+  if (hidden) return;
   const key = event.key.toLowerCase();
+  if (!encounterStarted) {
+    if (!isTypingTarget(event.target) && !event.repeat && (key === 'enter' || key === ' ')) {
+      beginEncounter();
+      event.preventDefault();
+    }
+    return;
+  }
+  if (isTypingTarget(event.target)) return;
   const compactInput = resolveCompactActionKeyDown({
     key,
     repeat: event.repeat,
@@ -1382,6 +1451,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 window.addEventListener('keyup', (event) => {
+  if (!encounterStarted) return;
   const key = event.key.toLowerCase();
   const compactInput = resolveCompactActionKeyUp(key);
   if (compactInput.handled) {
@@ -1400,12 +1470,14 @@ document.addEventListener('visibilitychange', () => {
   hidden = document.hidden;
   clearHeld();
   elements.pauseCurtain.hidden = !hidden;
-  elements.canvas.dataset.paused = String(hidden);
+  elements.canvas.dataset.paused = String(hidden || !encounterStarted);
   playtimeLastSample = performance.now();
   if (hidden) flushCanonicalPlaytime();
   if (!hidden) {
     lastTimestamp = performance.now();
-    announce('Battle resumed. Hidden-tab time was not simulated.');
+    announce(encounterStarted
+      ? 'Battle resumed. Hidden-tab time was not simulated.'
+      : 'Encounter ready. Read the fight card, then begin when ready.');
   }
 });
 
@@ -1421,6 +1493,7 @@ for (const button of document.querySelectorAll('[data-held-control]')) {
   const control = button.dataset.heldControl;
   const release = () => { held[control] = false; };
   button.addEventListener('pointerdown', (event) => {
+    if (!encounterStarted) return;
     held[control] = true;
     button.setPointerCapture?.(event.pointerId);
   });
@@ -1431,6 +1504,10 @@ for (const button of document.querySelectorAll('[data-held-control]')) {
 
 for (const button of document.querySelectorAll('[data-action-control]')) {
   button.addEventListener('click', () => {
+    if (!encounterStarted) {
+      elements.beginBattle.focus();
+      return;
+    }
     const action = button.dataset.actionControl;
     if (action === 'jump') {
       held.jump = false;
@@ -1447,6 +1524,7 @@ for (const button of document.querySelectorAll('[data-action-control]')) {
   });
 }
 
+elements.beginBattle.addEventListener('click', beginEncounter);
 elements.canvas.addEventListener('pointerdown', () => elements.canvas.focus());
 elements.restartBattle.addEventListener('click', restart);
 
@@ -1457,7 +1535,7 @@ function frame(timestamp) {
   playtimeLastSample = timestamp;
   pollBattleGamepad();
   let snapshot;
-  if (!hidden && !session.outcome) {
+  if (!hidden && encounterStarted && !session.outcome) {
     snapshot = advanceActionCampaignBattle(session, elapsedMs, {
       left: held.left || gamepadHeld.left,
       right: held.right || gamepadHeld.right,
@@ -1488,11 +1566,13 @@ function frame(timestamp) {
 }
 
 const initial = snapshotActionCampaignBattle(session);
-announce(initial.objective.supported
-  ? canonicalMode
-    ? `${session.encounter.name} loaded. Victory will commit to the campaign.`
-    : `${session.encounter.name} loaded. This is an isolated training session.`
-  : initial.objective.message);
+announce(introRequired
+  ? `${session.encounter.name} is paused. Read the fight card, then begin when ready.`
+  : initial.objective.supported
+    ? canonicalMode
+      ? `${session.encounter.name} loaded. Victory will commit to the campaign.`
+      : `${session.encounter.name} loaded. This is an isolated training session.`
+    : initial.objective.message);
 renderDom(initial);
 requestAnimationFrame(frame);
 
@@ -1501,6 +1581,7 @@ globalThis.__ACTION_CAMPAIGN_BATTLE__ = Object.freeze({
   getResult: () => laboratoryResult,
   get laboratoryComplete() { return laboratoryComplete; },
   get canonicalComplete() { return canonicalMode && laboratoryComplete; },
+  get introReady() { return encounterStarted; },
   canonicalStorageUnchanged: () => canonicalStorageSnapshotsMatch(
     canonicalStorageAtEntry,
     captureCanonicalStorageSnapshot(canonicalStorage),

@@ -29,5 +29,9 @@ test('rendered route verifier follows canonical action combat and retains an exp
   assert.match(routeRunner, /campaign\.html\?legacyBattle=\{'1' if args\.legacy_battle else '0'\}/u);
   assert.match(routeRunner, /"--legacy-battle"/u);
   assert.match(routeRunner, /def play_action_battle\(self\)/u);
+  assert.match(routeRunner, /#beginBattle/u);
+  assert.match(routeRunner, /data-intro-ready='true'/u);
+  assert.match(routeRunner, /"--stop-after-beat"/u);
+  assert.match(routeRunner, /get_attribute\("data-beat-id"\)/u);
   assert.match(routeRunner, /rendered-controls-only/u);
 });

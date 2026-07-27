@@ -204,3 +204,21 @@ test('bounded sessions can continue only through labeled rendered recovery contr
   assert.match(routeSource, /args\.frontier_reserve_seconds >= args\.max_seconds/);
   assert.doesNotMatch(routeSource, /localStorage|sessionStorage|add_init_script|page\.evaluate/);
 });
+
+test('opening verification can stop at an exact published Campaign beat frontier', () => {
+  assert.match(routeSource, /def campaign_beat_id\(self\) -> str \| None:/);
+  assert.match(routeSource, /get_attribute\("data-beat-id"\)/);
+  assert.match(routeSource, /"--stop-after-beat"/);
+  assert.match(routeSource, /driver\.campaign_beat_id\(\) == args\.stop_after_beat/);
+  assert.match(routeSource, /evidence\["status"\] = "target-reached"/);
+  assert.match(routeSource, /"requestedStopAfterBeat": args\.stop_after_beat/);
+  assert.match(routeSource, /"targetFrontier"/);
+  assert.match(routeSource, /--stop-after-beat cannot be combined with --require-complete/);
+  assert.doesNotMatch(
+    routeSource.slice(
+      routeSource.indexOf('    def campaign_beat_id'),
+      routeSource.indexOf('    def checkpoint', routeSource.indexOf('    def campaign_beat_id')),
+    ),
+    /evaluate|localStorage|sessionStorage/,
+  );
+});

@@ -41,6 +41,8 @@ test('page carries text authority, keyboard and touch controls, and a session-lo
   assert.match(html, /id="partyReadout"/u);
   assert.match(html, /id="enemyReadout"/u);
   assert.match(html, /id="continueCampaign"[^>]*hidden[^>]*aria-disabled="true"/u);
+  assert.match(html, /id="battleIntro"[^>]*aria-labelledby="battleIntroTitle"[^>]*hidden/u);
+  assert.match(html, /id="beginBattle"[^>]*>Begin encounter/u);
   assert.match(html, /<kbd>E<\/kbd>[\s\S]*Hold objective action/u);
   assert.match(html, /<kbd>L<\/kbd>[\s\S]*Hunter–Priest combo/u);
   assert.match(html, /<kbd>Q<\/kbd><kbd>Shift<\/kbd>[\s\S]*Dash/u);
@@ -54,8 +56,8 @@ test('page carries text authority, keyboard and touch controls, and a session-lo
   assert.match(html, /<kbd>Z<\/kbd>[\s\S]*Weapon[\s\S]*risingGuide[\s\S]*slide \/[\s\S]*airGuide/u);
   assert.match(html, /<kbd>X<\/kbd>[\s\S]*Art/u);
   assert.match(html, /<kbd>Tab<\/kbd>[\s\S]*Swap with AI support/u);
-  assert.match(html, /id="partyTitle">Duo fighters/u);
-  assert.match(html, /id="partyReadout"[^>]*aria-label="Duo combat party"/u);
+  assert.match(html, /id="partyTitle">Combat party/u);
+  assert.match(html, /id="partyReadout"[^>]*aria-label="Combat party"/u);
   assert.match(html, /data-held-control="left"/u);
   assert.match(html, /id="movementReadout"[^>]*aria-label="Movement readiness"/u);
   assert.match(html, /data-action-control="dash"/u);
@@ -84,6 +86,11 @@ test('page carries text authority, keyboard and touch controls, and a session-lo
   assert.match(browser, /row\.dataset\.input = choice\.input/u);
   assert.match(model, /aiControlledActorIds/u);
   assert.match(html, /data-action-control="combo"[^>]*>Hunter \+ Priest</u);
+  assert.match(browser, /const introRequired = canonicalMode[\s\S]*isOpeningActionEncounter/u);
+  assert.match(browser, /if \(!hidden && encounterStarted && !session\.outcome\)/u);
+  assert.match(browser, /elements\.battleIntro\.hidden = true/u);
+  assert.match(browser, /elements\.comboPanel\.hidden = !comboFormationPresent/u);
+  assert.match(css, /\.battle-intro\[hidden\] \{ display: none; \}/u);
 });
 
 test('combo input is edge-triggered and calls the kernel only on an explicit request', () => {
@@ -138,7 +145,7 @@ test('runtime clones advancement and loadout, reads Storyworld context, and paus
   assert.match(browser, /loadActionLaboratorySeed/u);
   assert.match(browser, /loadStoryworldBattlePresentation/u);
   assert.match(browser, /document\.addEventListener\('visibilitychange'/u);
-  assert.match(browser, /if \(!hidden && !session\.outcome\)/u);
+  assert.match(browser, /if \(!hidden && encounterStarted && !session\.outcome\)/u);
   assert.match(browser, /pauseCurtain\.hidden = !hidden/u);
   assert.match(css, /\.pause-curtain\[hidden\] \{ display: none; \}/u);
 });

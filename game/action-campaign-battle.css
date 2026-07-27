@@ -128,13 +128,44 @@ h2 { margin-bottom: 0; font-size: 1rem; }
 .state-badge { padding: 6px 9px; border: 1px solid #574c60; color: #c5bac8; font: 700 .62rem/1 ui-monospace, monospace; letter-spacing: .09em; }
 .state-badge[data-state="victory"] { color: #f0d985; border-color: #8b7842; }
 .state-badge[data-state="defeat"] { color: #f17d87; border-color: #8f4048; }
+.state-badge[data-state="ready"] { color: #f0d985; border-color: #8b7842; }
 
 .canvas-wrap { position: relative; overflow: hidden; background: #090812; }
 #actionCampaignCanvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; }
 #actionCampaignCanvas:focus-visible { outline-offset: -4px; }
 
+.battle-intro {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  padding: clamp(18px, 5vw, 52px);
+  color: #eee5d3;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(46, 38, 49, .95), rgba(5, 4, 9, .93) 56%),
+    rgba(5, 4, 9, .92);
+  text-align: center;
+}
+.battle-intro[hidden] { display: none; }
+.battle-intro .eyebrow { margin: 0; color: #e2c46f; }
+.battle-intro h2 { max-width: 560px; color: #fff0cf; font: 500 clamp(1.15rem, 3vw, 1.7rem)/1.15 Georgia, serif; }
+.battle-intro p:not(.eyebrow) { max-width: 680px; margin: 0; color: #c9c1c8; font-size: clamp(.68rem, 1.5vw, .82rem); line-height: 1.65; }
+#beginBattle {
+  margin-top: 4px;
+  padding: 11px 16px;
+  border-color: #9b7f42;
+  color: #17120a;
+  background: #e0c276;
+  font-weight: 800;
+}
+#beginBattle kbd { color: #f5e8c9; background: #2a2114; }
+
 .pause-curtain {
   position: absolute;
+  z-index: 6;
   inset: 0;
   display: grid;
   place-items: center;

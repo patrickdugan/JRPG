@@ -191,6 +191,14 @@ class PlayerDriver:
                 return "__BATTLE__"
             raise
 
+    def campaign_beat_id(self) -> str | None:
+        if not urlparse(self.page.url).path.endswith("campaign.html"):
+            return None
+        map_canvas = self.page.locator("#mapCanvas")
+        if map_canvas.count() == 0:
+            return None
+        return map_canvas.get_attribute("data-beat-id")
+
     def checkpoint(self) -> dict[str, object]:
         path = urlparse(self.page.url).path.rsplit("/", 1)[-1]
         if path == "credits.html":
@@ -226,6 +234,7 @@ class PlayerDriver:
             }
         return {
             "page": path,
+            "beatId": self.campaign_beat_id(),
             "scene": self.scene_key(),
             "dialogue": self.page.locator("#dialogueProgress").inner_text(),
             "fieldObjective": self.page.locator("#fieldObjective").inner_text(),
@@ -1065,13 +1074,18 @@ class PlayerDriver:
 
     def play_action_battle(self) -> None:
         self.page.locator("#battleStateBadge").wait_for()
-        self.page.locator("#actionCampaignCanvas").focus()
         encounter = self.page.locator("#encounterTitle").inner_text()
         for _ in range(100):
             if encounter.strip() and not encounter.startswith("Loading encounter"):
                 break
             self.page.wait_for_timeout(20)
             encounter = self.page.locator("#encounterTitle").inner_text()
+        begin = self.page.locator("#beginBattle")
+        if begin.count() and begin.is_visible():
+            begin.click()
+            self.controls += 1
+            self.page.locator("#actionCampaignCanvas[data-intro-ready='true']").wait_for()
+        self.page.locator("#actionCampaignCanvas").focus()
         battle_started = time.monotonic()
         commands_at_start = self.battle_commands
         restart_count = 0
@@ -1569,6 +1583,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
         "battleMode": "legacy-tactical" if args.legacy_battle else "canonical-action",
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
+        "requestedStopAfterBeat": args.stop_after_beat,
     }
     try:
         with sync_playwright() as playwright:
@@ -1627,6 +1642,13 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     evidence["recoveryPartyPreparation"] = driver.prepare_recovered_party()
 
                 for _ in range(args.max_scenes):
+                    if args.stop_after_beat and driver.campaign_beat_id() == args.stop_after_beat:
+                        evidence["status"] = "target-reached"
+                        evidence["targetFrontier"] = {
+                            "beatId": args.stop_after_beat,
+                            "checkpoint": driver.checkpoint(),
+                        }
+                        break
                     if args.recovery_out and time.monotonic() >= budget.deadline:
                         evidence["status"] = "bounded"
                         evidence["blocker"] = {
@@ -1650,6 +1672,13 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     after = driver.scene_key()
                     after_next_scene = page.locator("#nextScene").inner_text()
                     driver.scenes.append({"before": before, "after": after, "route": page.locator("#routeSummary").inner_text()})
+                    if args.stop_after_beat and driver.campaign_beat_id() == args.stop_after_beat:
+                        evidence["status"] = "target-reached"
+                        evidence["targetFrontier"] = {
+                            "beatId": args.stop_after_beat,
+                            "checkpoint": driver.checkpoint(),
+                        }
+                        break
                     if before == after:
                         if before_next_scene != after_next_scene and after_next_scene.startswith("View credits"):
                             continue
@@ -1771,6 +1800,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--recovery-in", help="Restore a recovery-only checkpoint through Campaign's rendered file control instead of starting New Game.")
     parser.add_argument("--recovery-out", help="Export a recovery-only checkpoint through Campaign's rendered download control before closing.")
     parser.add_argument("--evidence-out", help="After sealing Credits, export playtest evidence through its rendered download control.")
+    parser.add_argument(
+        "--stop-after-beat",
+        help="Stop successfully at the exact published Campaign beat ID without playing that beat.",
+    )
     parser.add_argument("--frontier-reserve-seconds", type=int, default=120, help="When exporting recovery, retain this many seconds rather than starting another scene.")
     parser.add_argument("--require-complete", action="store_true", help="Exit nonzero unless the route seals credits.")
     args = parser.parse_args()
@@ -1785,6 +1818,10 @@ def parse_args() -> argparse.Namespace:
         parser.error("--recovery-out parent directory must already exist")
     if args.evidence_out and not Path(args.evidence_out).expanduser().resolve().parent.is_dir():
         parser.error("--evidence-out parent directory must already exist")
+    if args.stop_after_beat and not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.stop_after_beat):
+        parser.error("--stop-after-beat must be a lowercase hyphenated beat ID")
+    if args.stop_after_beat and args.require_complete:
+        parser.error("--stop-after-beat cannot be combined with --require-complete")
     if args.recovery_out and args.frontier_reserve_seconds >= args.max_seconds:
         parser.error("--frontier-reserve-seconds must be less than --max-seconds when exporting recovery")
     return args

@@ -56,6 +56,12 @@
         >
           Canvas is unavailable. The complete battle state is in the text readout below.
         </canvas>
+        <div id="battleIntro" class="battle-intro" role="group" aria-labelledby="battleIntroTitle" hidden>
+          <p class="eyebrow">READY WHEN YOU ARE</p>
+          <h2 id="battleIntroTitle">Read the fight card before the first move</h2>
+          <p>The encounter is paused. Move with <kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd>; use <kbd>Z</kbd>/<kbd>J</kbd> for the weapon and <kbd>X</kbd>/<kbd>K</kbd> for the art.</p>
+          <button id="beginBattle" type="button">Begin encounter <kbd>Enter</kbd></button>
+        </div>
         <div id="pauseCurtain" class="pause-curtain" hidden>PAUSED WHILE TAB IS HIDDEN</div>
       </div>
 
@@ -79,7 +85,7 @@
           <span><kbd>K</kbd> Art</span>
           <span><kbd>C</kbd> Holy Water</span>
           <span><kbd>V</kbd> Throwing Cross</span>
-          <span><kbd>L</kbd> Hunter–Priest combo</span>
+          <span id="comboGuide"><kbd>L</kbd> Hunter–Priest combo</span>
           <span><kbd>E</kbd> Hold objective action</span>
           <span><kbd>Tab</kbd> Swap with AI support</span>
           <span><kbd>R</kbd> Restart</span>
@@ -100,10 +106,10 @@
     <section id="battleReadout" class="readout-grid" aria-label="Text battle state" tabindex="-1">
       <article class="panel party-panel" aria-labelledby="partyTitle">
         <p class="panel-kicker">PARTY</p>
-        <h2 id="partyTitle">Duo fighters</h2>
+        <h2 id="partyTitle">Combat party</h2>
         <div id="controlledActor"></div>
         <p id="reserveSupport" class="reserve-support" hidden></p>
-        <ul id="partyReadout" class="actor-list" aria-label="Duo combat party"></ul>
+        <ul id="partyReadout" class="actor-list" aria-label="Combat party"></ul>
       </article>
 
       <article class="panel objective-panel" aria-labelledby="objectiveTitle">
@@ -131,7 +137,7 @@
         <p class="muted">Attack animation commitment stops movement. Cooldowns begin only when the animation finishes; movement is free while they count down.</p>
       </article>
 
-      <article class="panel combo-panel" aria-labelledby="comboTitle">
+      <article id="comboPanel" class="panel combo-panel" aria-labelledby="comboTitle">
         <p class="panel-kicker">PARTY COMBINATION</p>
         <h2 id="comboTitle">Hunter–Priest combo</h2>
         <p id="comboAvailability" class="combo-availability">Checking party formation…</p>
@@ -147,7 +153,7 @@
       </article>
 
       <article class="panel settlement-panel" aria-labelledby="settlementTitle">
-        <p class="panel-kicker">TRAINING RESULT</p>
+        <p id="settlementKicker" class="panel-kicker">TRAINING RESULT</p>
         <h2 id="settlementTitle">Return safely</h2>
         <p id="settlementStatus">This training session never changes campaign progress or party state.</p>
         <a id="continueCampaign" class="continue-link" href="campaign.html" hidden aria-disabled="true">Return to campaign</a>
@@ -165,7 +171,7 @@
       <button type="button" data-action-control="throwing-cross" class="art-button">Cross</button>
       <button id="risingTouch" type="button" data-action-control="uppercut" class="maneuver-button">Rise</button>
       <button id="airTouch" type="button" data-action-control="thunder-kick" class="maneuver-button">Air</button>
-      <button type="button" data-action-control="combo" class="combo-button">Hunter + Priest</button>
+      <button id="comboTouch" type="button" data-action-control="combo" class="combo-button">Hunter + Priest</button>
       <button type="button" data-held-control="interact">Objective</button>
       <button type="button" data-action-control="switch">Switch</button>
       <button type="button" data-held-control="right" aria-label="Move right">→</button>
