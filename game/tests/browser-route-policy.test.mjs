@@ -126,7 +126,10 @@ test('narrative mode leaves the 215-entry ledger optional while explicit complet
   assert.match(finishScene, /if self\.completionist:\s+self\.drain_due_route_work\(initial\)/);
   assert.doesNotMatch(finishScene, /self\.finish_dialogue_and_choices\(\)\s+self\.drain_due_route_work\(initial\)/);
   assert.match(routeSource, /parser\.add_argument\(\s+"--completionist"/);
-  assert.match(routeSource, /PlayerDriver\(page, budget, completionist=args\.completionist\)/);
+  assert.match(
+    routeSource,
+    /driver = PlayerDriver\(\s+page,\s+budget,\s+completionist=args\.completionist,/,
+  );
   assert.match(routeSource, /"routeMode": "completionist-215" if args\.completionist else "narrative-selected-route"/);
 });
 
@@ -221,4 +224,31 @@ test('opening verification can stop at an exact published Campaign beat frontier
     ),
     /evaluate|localStorage|sessionStorage/,
   );
+});
+
+test('blind-opening feedback is exported only through the rendered endpoint form', () => {
+  const feedback = routeSource.slice(
+    routeSource.indexOf('    def finish_opening_playtest_feedback'),
+    routeSource.indexOf('    def scene_key', routeSource.indexOf('    def finish_opening_playtest_feedback')),
+  );
+  assert.match(feedback, /#openingPlaytestPanel/);
+  assert.match(feedback, /#openingPlaytestForm/);
+  assert.match(feedback, /select_option\(value\)/);
+  assert.match(feedback, /\.fill\(/);
+  assert.match(feedback, /expect_download\(\)/);
+  assert.match(feedback, /#openingPlaytestSubmit/);
+  assert.match(feedback, /#openingPlaytestThanks/);
+  assert.match(feedback, /set_viewport_size\(\{"width": 390, "height": 844\}\)/);
+  assert.match(feedback, /opening-feedback-compact-layout/);
+  assert.match(feedback, /bounding_box\(\)/);
+  assert.match(feedback, /"compactGeometry": compact_geometry/);
+  assert.match(feedback, /bells-opening-blind-playtest-evidence/);
+  assert.match(feedback, /human-review-required/);
+  assert.doesNotMatch(feedback, /evaluate|localStorage|sessionStorage/);
+  assert.match(routeSource, /"--opening-feedback-out"/);
+  assert.match(routeSource, /openingTest=1&candidate=rendered-control-probe/);
+  assert.match(routeSource, /evidence\["status"\] = "opening-feedback-exported"/);
+  assert.match(routeSource, /"openingFeedbackExport"/);
+  assert.match(routeSource, /--opening-feedback-out cannot be combined with --stop-after-beat/);
+  assert.match(routeSource, /--opening-feedback-out cannot be combined with --require-complete/);
 });

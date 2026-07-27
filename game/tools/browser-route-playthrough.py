@@ -93,10 +93,19 @@ class Budget:
 
 
 class PlayerDriver:
-    def __init__(self, page: Page, budget: Budget, *, completionist: bool = False) -> None:
+    def __init__(
+        self,
+        page: Page,
+        budget: Budget,
+        *,
+        completionist: bool = False,
+        opening_feedback_out: Path | None = None,
+    ) -> None:
         self.page = page
         self.budget = budget
         self.completionist = completionist
+        self.opening_feedback_out = opening_feedback_out
+        self.opening_feedback_receipt: dict[str, object] | None = None
         self.controls = 0
         self.field_moves = 0
         self.battle_commands = 0
@@ -177,6 +186,108 @@ class PlayerDriver:
             "suggestedFilename": download.suggested_filename,
             "renderedControl": True,
         }
+
+    def finish_opening_playtest_feedback(self) -> bool:
+        """Complete the endpoint-only blind-test form through rendered controls."""
+        if self.opening_feedback_out is None or self.opening_feedback_receipt is not None:
+            return False
+        panel = self.page.locator("#openingPlaytestPanel")
+        form = self.page.locator("#openingPlaytestForm")
+        if panel.count() == 0 or not panel.is_visible() or not form.is_visible():
+            return False
+
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        compact_geometry: dict[str, object] = {"viewport": {"width": 390, "height": 844}}
+        for name, locator in {
+            "panel": panel,
+            "firstTextarea": form.locator('textarea[name="comp-cast"]'),
+            "firstRating": form.locator('select[name="rating-goalClarity"]'),
+            "submit": self.page.locator("#openingPlaytestSubmit"),
+        }.items():
+            box = locator.bounding_box()
+            if box is None or box["x"] < -0.5 or box["x"] + box["width"] > 390.5:
+                raise RouteBlocked(
+                    "opening-feedback-compact-layout",
+                    "The endpoint feedback form escaped the compact viewport.",
+                    element=name,
+                    box=box,
+                )
+            compact_geometry[name] = {
+                "x": round(box["x"], 2),
+                "width": round(box["width"], 2),
+            }
+
+        selections = {
+            "priorExposure": "none",
+            "inputDevice": "keyboard",
+            "helpNeeded": "no",
+            "wouldContinue": "yes",
+        }
+        for name, value in selections.items():
+            form.locator(f'[name="{name}"]').select_option(value)
+            self.controls += 1
+        form.locator('[name="testerCode"]').fill("rendered-control-probe")
+        self.controls += 1
+        for name in (
+            "comp-cast",
+            "comp-persecution",
+            "comp-takamine",
+            "comp-mateus",
+            "comp-duel",
+            "comp-recovery",
+            "comp-next",
+            "bestMoment",
+            "confusion",
+            "memorable",
+        ):
+            form.locator(f'[name="{name}"]').fill(f"Rendered-control probe response for {name}.")
+            self.controls += 1
+        for name in (
+            "rating-goalClarity",
+            "rating-controls",
+            "rating-telegraphs",
+            "rating-tagging",
+            "rating-ayaHealing",
+            "rating-characterVoices",
+            "rating-desireToContinue",
+            "rating-pacing",
+        ):
+            form.locator(f'[name="{name}"]').select_option("4")
+            self.controls += 1
+
+        with self.page.expect_download() as download_info:
+            self.page.locator("#openingPlaytestSubmit").click()
+        self.controls += 1
+        download = download_info.value
+        download.save_as(str(self.opening_feedback_out))
+        self.page.locator("#openingPlaytestThanks").wait_for(state="visible")
+        receipt = json.loads(self.opening_feedback_out.read_text(encoding="utf-8"))
+        if (
+            receipt.get("kind") != "bells-opening-blind-playtest-evidence"
+            or receipt.get("verdict") != "human-review-required"
+            or receipt.get("completedBeatCount") != 18
+            or receipt.get("requiredBeatCount") != 18
+            or receipt.get("responses", {}).get("testerCode") != "rendered-control-probe"
+        ):
+            raise RouteBlocked(
+                "opening-feedback-receipt",
+                "The rendered opening feedback download did not preserve the expected evidence contract.",
+                receipt=receipt,
+            )
+        self.opening_feedback_receipt = {
+            "path": str(self.opening_feedback_out),
+            "suggestedFilename": download.suggested_filename,
+            "renderedControl": True,
+            "kind": receipt["kind"],
+            "verdict": receipt["verdict"],
+            "candidateCommit": receipt.get("candidateCommit"),
+            "runId": receipt.get("runId"),
+            "activePlaytimeMs": receipt.get("activePlaytimeMs"),
+            "wallClockMs": receipt.get("wallClockMs"),
+            "restartCount": receipt.get("restartCount"),
+            "compactGeometry": compact_geometry,
+        }
+        return True
 
     def scene_key(self) -> str:
         if self.on_battle_page():
@@ -1514,6 +1625,8 @@ class PlayerDriver:
         if self.on_battle_page():
             self.play_battle_and_resume_scene(initial)
             return
+        if self.finish_opening_playtest_feedback():
+            return
         if self.advance_story_if_ready():
             return
         if self.finish_published_field_objectives(initial):
@@ -1536,6 +1649,8 @@ class PlayerDriver:
                     self.play_battle_and_resume_scene(initial)
                     return
             self.return_to_story_route_if_available()
+            if self.finish_opening_playtest_feedback():
+                return
             if self.advance_story_if_ready():
                 return
             if self.finish_published_field_objectives(initial):
@@ -1549,6 +1664,8 @@ class PlayerDriver:
         if self.use_ready_exit(initial):
             if self.on_battle_page():
                 self.play_battle_and_resume_scene(initial)
+            else:
+                self.finish_opening_playtest_feedback()
             return
         if self.launch_pending_battle_if_ready():
             self.play_battle_and_resume_scene(initial)
@@ -1584,6 +1701,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
         "requestedStopAfterBeat": args.stop_after_beat,
+        "requestedOpeningFeedback": str(Path(args.opening_feedback_out).resolve()) if args.opening_feedback_out else None,
     }
     try:
         with sync_playwright() as playwright:
@@ -1608,11 +1726,22 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 max_battle_commands=args.max_battle_commands,
                 max_action_restarts=args.max_action_restarts,
             )
-            driver = PlayerDriver(page, budget, completionist=args.completionist)
+            driver = PlayerDriver(
+                page,
+                budget,
+                completionist=args.completionist,
+                opening_feedback_out=Path(args.opening_feedback_out).resolve() if args.opening_feedback_out else None,
+            )
             try:
+                opening_test_query = (
+                    "&openingTest=1&candidate=rendered-control-probe"
+                    if args.opening_feedback_out
+                    else ""
+                )
                 response = page.goto(
                     f"{base}/campaign.html?legacyBattle={'1' if args.legacy_battle else '0'}"
-                    f"{'&dev=1' if args.recovery_in or args.recovery_out else ''}",
+                    f"{'&dev=1' if args.recovery_in or args.recovery_out else ''}"
+                    f"{opening_test_query}",
                     wait_until="domcontentloaded",
                 )
                 if response is None or response.status != 200:
@@ -1663,6 +1792,10 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     driver.finish_story_scene()
                     if driver.on_battle_page():
                         driver.play_battle_and_resume_scene(before)
+                    if driver.opening_feedback_receipt is not None:
+                        evidence["status"] = "opening-feedback-exported"
+                        evidence["openingFeedbackExport"] = driver.opening_feedback_receipt
+                        break
                     if driver.on_credits_page():
                         driver.seal_credits()
                         if args.evidence_out:
@@ -1801,6 +1934,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--recovery-out", help="Export a recovery-only checkpoint through Campaign's rendered download control before closing.")
     parser.add_argument("--evidence-out", help="After sealing Credits, export playtest evidence through its rendered download control.")
     parser.add_argument(
+        "--opening-feedback-out",
+        help="Run the blind-opening mode, submit its endpoint feedback form through rendered controls, and save the downloaded JSON receipt.",
+    )
+    parser.add_argument(
         "--stop-after-beat",
         help="Stop successfully at the exact published Campaign beat ID without playing that beat.",
     )
@@ -1818,10 +1955,16 @@ def parse_args() -> argparse.Namespace:
         parser.error("--recovery-out parent directory must already exist")
     if args.evidence_out and not Path(args.evidence_out).expanduser().resolve().parent.is_dir():
         parser.error("--evidence-out parent directory must already exist")
+    if args.opening_feedback_out and not Path(args.opening_feedback_out).expanduser().resolve().parent.is_dir():
+        parser.error("--opening-feedback-out parent directory must already exist")
     if args.stop_after_beat and not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.stop_after_beat):
         parser.error("--stop-after-beat must be a lowercase hyphenated beat ID")
     if args.stop_after_beat and args.require_complete:
         parser.error("--stop-after-beat cannot be combined with --require-complete")
+    if args.opening_feedback_out and args.stop_after_beat:
+        parser.error("--opening-feedback-out cannot be combined with --stop-after-beat")
+    if args.opening_feedback_out and args.require_complete:
+        parser.error("--opening-feedback-out cannot be combined with --require-complete")
     if args.recovery_out and args.frontier_reserve_seconds >= args.max_seconds:
         parser.error("--frontier-reserve-seconds must be less than --max-seconds when exporting recovery")
     return args

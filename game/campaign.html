@@ -47,6 +47,142 @@
         <p id="openingSliceGuidance">Continue the scene with N or the dialogue button. When the story asks you to act, follow the gold field objective.</p>
       </section>
 
+      <section id="openingPlaytestPanel" class="opening-playtest-panel" aria-labelledby="openingPlaytestTitle" tabindex="-1" hidden>
+        <header class="opening-playtest-header">
+          <div>
+            <p class="eyebrow">OPENING COMPLETE · BLIND PLAYTEST</p>
+            <h2 id="openingPlaytestTitle">Before anyone explains the game, tell us what landed</h2>
+          </div>
+          <p>The cells are open and Mateus has yielded. Answer in your own words, then download the feedback receipt. There are no trick questions.</p>
+        </header>
+
+        <dl class="opening-playtest-metrics" aria-label="Opening playtest evidence">
+          <div><dt>Build</dt><dd id="openingPlaytestBuild">unknown</dd></div>
+          <div><dt>Clean run</dt><dd id="openingPlaytestRun">unknown</dd></div>
+          <div><dt>Active time</dt><dd id="openingPlaytestActiveTime">00:00:00</dd></div>
+          <div><dt>Real elapsed</dt><dd id="openingPlaytestElapsedTime">00:00:00</dd></div>
+          <div><dt>Restarts</dt><dd id="openingPlaytestRestarts">0</dd></div>
+        </dl>
+
+        <form id="openingPlaytestForm" class="opening-playtest-form">
+          <fieldset>
+            <legend>Test conditions</legend>
+            <div class="opening-playtest-grid">
+              <label>
+                <span>Anonymous tester code <small>(optional)</small></span>
+                <input name="testerCode" maxlength="80" autocomplete="off">
+              </label>
+              <label>
+                <span>Before today, had you read design documents or watched development?</span>
+                <select name="priorExposure" required>
+                  <option value="">Choose one…</option>
+                  <option value="none">No</option>
+                  <option value="some">Yes</option>
+                </select>
+              </label>
+              <label>
+                <span>Primary input</span>
+                <select name="inputDevice" required>
+                  <option value="">Choose one…</option>
+                  <option value="keyboard">Keyboard</option>
+                  <option value="gamepad">Gamepad</option>
+                  <option value="touch">Touch</option>
+                  <option value="mixed">Mixed</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>
+                <span>Did anyone explain a control, objective, route, or story fact during the run?</span>
+                <select name="helpNeeded" required>
+                  <option value="">Choose one…</option>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              <span>If yes, what help was given?</span>
+              <textarea name="helpDetails" rows="2" maxlength="2000"></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>What happened?</legend>
+            <p class="opening-playtest-instruction">Use your own words. Do not discuss the answers with the observer first.</p>
+            <label>
+              <span>Who are Ren, Aya, Nikola, and Mateus?</span>
+              <textarea name="comp-cast" rows="3" maxlength="4000" required></textarea>
+            </label>
+            <label>
+              <span>What is happening to the hidden Christians, and who benefits from it?</span>
+              <textarea name="comp-persecution" rows="3" maxlength="4000" required></textarea>
+            </label>
+            <label>
+              <span>Why did the party enter Takamine?</span>
+              <textarea name="comp-takamine" rows="3" maxlength="4000" required></textarea>
+            </label>
+            <label>
+              <span>Why did Mateus fight them, and why did he stop?</span>
+              <textarea name="comp-mateus" rows="3" maxlength="4000" required></textarea>
+            </label>
+            <label>
+              <span>What were the two ways to end the Mateus duel?</span>
+              <textarea name="comp-duel" rows="3" maxlength="4000" required></textarea>
+            </label>
+            <label>
+              <span>What do attack commitment and the separate recovery timer ask you to do?</span>
+              <textarea name="comp-recovery" rows="3" maxlength="4000" required></textarea>
+            </label>
+            <label>
+              <span>What do you expect this party to do next?</span>
+              <textarea name="comp-next" rows="3" maxlength="4000" required></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>How did it feel?</legend>
+            <p class="opening-playtest-instruction">Rate each statement from 1 (strongly disagree) to 5 (strongly agree).</p>
+            <div class="opening-playtest-rating-grid">
+              <label><span>I always understood my immediate goal.</span><select name="rating-goalClarity" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>Movement and attacks responded as I expected.</span><select name="rating-controls" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>Enemy warnings and elemental advice affected my decisions.</span><select name="rating-telegraphs" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>Tagging between active fighters was useful and readable.</span><select name="rating-tagging" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>Aya’s reserve healing was understandable.</span><select name="rating-ayaHealing" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>Nikola, Ren, Aya, and Mateus sounded distinct.</span><select name="rating-characterVoices" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>The story made me want to see what happens next.</span><select name="rating-desireToContinue" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+              <label><span>The slice felt paced rather than padded or rushed.</span><select name="rating-pacing" required><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>What stayed with you?</legend>
+            <label><span>What was the best moment?</span><textarea name="bestMoment" rows="3" maxlength="4000" required></textarea></label>
+            <label><span>What was the most confusing or tedious moment?</span><textarea name="confusion" rows="3" maxlength="4000" required></textarea></label>
+            <label><span>Which line, mechanic, or image do you remember most?</span><textarea name="memorable" rows="3" maxlength="4000" required></textarea></label>
+            <label>
+              <span>Would you voluntarily play another hour?</span>
+              <select name="wouldContinue" required>
+                <option value="">Choose one…</option>
+                <option value="yes">Yes</option>
+                <option value="maybe">Maybe</option>
+                <option value="no">No</option>
+              </select>
+            </label>
+          </fieldset>
+
+          <div class="opening-playtest-submit-row">
+            <button id="openingPlaytestSubmit" type="submit">Save and download feedback</button>
+            <p id="openingPlaytestStatus" role="status" aria-live="polite" aria-atomic="true">Complete every field before downloading the receipt.</p>
+          </div>
+        </form>
+
+        <div id="openingPlaytestThanks" class="opening-playtest-thanks" tabindex="-1" hidden>
+          <h3>Thank you. The opening playtest is finished.</h3>
+          <p>Give the downloaded JSON receipt to the developer. You may close this tab; do not continue into Chapter 3 for this test.</p>
+          <button id="openingPlaytestDownloadAgain" type="button">Download receipt again</button>
+        </div>
+      </section>
+
       <section class="campaign-layout" aria-label="Campaign player">
         <aside class="chapter-rail" aria-label="Campaign chapters">
           <div class="rail-heading">

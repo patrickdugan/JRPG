@@ -15,6 +15,10 @@ import {
   isOpeningActionEncounter,
 } from './action-battle-coaching.mjs';
 import {
+  createOpeningPlaytestStorageAdapter,
+  recordOpeningPlaytestRestart,
+} from './opening-playtest-feedback.mjs';
+import {
   createAdvancementStorageAdapter,
   createAdvancementState,
   getEncounterWinCount,
@@ -112,6 +116,7 @@ const BATTLE_FIGHTER_ACTOR_IDS = Object.freeze(canonicalMode
 const sliceBattleVitals = sliceMode ? structuredClone(sliceRun.vitals) : null;
 const canonicalStorage = getDefaultBrowserStorage();
 const canonicalStorageAtEntry = captureCanonicalStorageSnapshot(canonicalStorage);
+const openingPlaytestAdapter = createOpeningPlaytestStorageAdapter();
 const advancementAdapter = createAdvancementStorageAdapter(canonicalStorage);
 const loadoutAdapter = createLoadoutStorageAdapter(canonicalStorage);
 const runReceiptAdapter = createRunReceiptStorageAdapter(canonicalStorage);
@@ -1322,6 +1327,18 @@ function renderDom(snapshot) {
 }
 
 function restart() {
+  if (canonicalMode && isOpeningActionEncounter(query.encounterId)) {
+    const loadedOpeningPlaytest = openingPlaytestAdapter.load();
+    if (loadedOpeningPlaytest.ok
+      && loadedOpeningPlaytest.found
+      && loadedOpeningPlaytest.state.status === 'active'
+      && loadedOpeningPlaytest.state.runId === runReceiptState?.runId) {
+      openingPlaytestAdapter.save(recordOpeningPlaytestRestart(loadedOpeningPlaytest.state, {
+        encounterId: query.encounterId,
+        atEpochMs: Date.now(),
+      }));
+    }
+  }
   session = createActionCampaignBattleSession({
     encounterId: query.encounterId,
   advancementState,

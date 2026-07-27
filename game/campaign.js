@@ -21,6 +21,15 @@ import {
   getOpeningSliceProgress,
   isOpeningSliceBeat,
 } from './content/opening-slice-dialogue.mjs';
+import {
+  OPENING_PLAYTEST_COMPREHENSION_IDS,
+  OPENING_PLAYTEST_RATING_IDS,
+  completeOpeningPlaytestSession,
+  createOpeningPlaytestSession,
+  createOpeningPlaytestStorageAdapter,
+  serializeOpeningPlaytestEvidence,
+  submitOpeningPlaytestSession,
+} from './opening-playtest-feedback.mjs';
 import { getSceneOperation } from './content/scene-operations.mjs';
 import { getCampConversation } from './content/camp-conversations.mjs';
 import { getPartyCouncil } from './content/party-councils.mjs';
@@ -215,6 +224,8 @@ import {
 const campaignQuery = new URLSearchParams(window.location.search);
 let requestedNewGame = campaignQuery.get('new') === '1';
 const extendedOpeningDialogue = campaignQuery.get('extendedOpening') === '1';
+const openingPlaytestRequested = campaignQuery.get('openingTest') === '1';
+const openingPlaytestCandidate = campaignQuery.get('candidate') ?? 'unknown';
 if (campaignQuery.get('legacyBattle') === '1') sessionStorage.setItem('bells.legacyBattle', '1');
 if (campaignQuery.get('legacyBattle') === '0') sessionStorage.removeItem('bells.legacyBattle');
 const legacyBattleRequested = campaignQuery.get('legacyBattle') === '1'
@@ -238,6 +249,16 @@ const openingSliceProgress = document.querySelector('#openingSliceProgress');
 const openingSliceTime = document.querySelector('#openingSliceTime');
 const openingSliceGuidance = document.querySelector('#openingSliceGuidance');
 const openingSliceProgressFill = document.querySelector('#openingSliceProgressFill');
+const openingPlaytestPanel = document.querySelector('#openingPlaytestPanel');
+const openingPlaytestBuild = document.querySelector('#openingPlaytestBuild');
+const openingPlaytestRun = document.querySelector('#openingPlaytestRun');
+const openingPlaytestActiveTime = document.querySelector('#openingPlaytestActiveTime');
+const openingPlaytestElapsedTime = document.querySelector('#openingPlaytestElapsedTime');
+const openingPlaytestRestarts = document.querySelector('#openingPlaytestRestarts');
+const openingPlaytestForm = document.querySelector('#openingPlaytestForm');
+const openingPlaytestStatus = document.querySelector('#openingPlaytestStatus');
+const openingPlaytestThanks = document.querySelector('#openingPlaytestThanks');
+const openingPlaytestDownloadAgain = document.querySelector('#openingPlaytestDownloadAgain');
 const sceneHeadingElement = document.querySelector('.scene-heading');
 const sceneCardElement = document.querySelector('.scene-card');
 const fieldCommandRowElement = document.querySelector('.field-command-row');
@@ -433,6 +454,11 @@ let playtimeState = loadedPlaytime.ok ? loadedPlaytime.state : createPlaytimeSta
 const runReceiptAdapter = createRunReceiptStorageAdapter();
 const loadedRunReceipt = runReceiptAdapter.load();
 let runReceiptState = loadedRunReceipt.ok && loadedRunReceipt.found ? loadedRunReceipt.state : null;
+const openingPlaytestAdapter = createOpeningPlaytestStorageAdapter();
+const loadedOpeningPlaytest = openingPlaytestAdapter.load();
+let openingPlaytestState = loadedOpeningPlaytest.ok && loadedOpeningPlaytest.found
+  ? loadedOpeningPlaytest.state
+  : null;
 const storyworldAdapter = createStoryworldStorageAdapter();
 const loadedStoryworld = storyworldAdapter.load();
 const fallbackStoryworldRunId = runReceiptState?.runId ?? `legacy-unverified-${CAMPAIGN.id}`;
@@ -1745,7 +1771,7 @@ function renderOpeningSlicePanel(beat, {
   const storyAnchor = openingBeat ? sceneHeadingElement : fieldCommandRowElement;
   if (storyAnchor.nextElementSibling !== sceneCardElement) storyAnchor.after(sceneCardElement);
   openingSlicePanel.hidden = !openingBeat;
-  if (openingSlicePanel.hidden) return;
+  if (openingSlicePanel.hidden) return false;
 
   const completedBeatIds = [
     ...campaignState.completedBeatIds,
@@ -1771,6 +1797,128 @@ function renderOpeningSlicePanel(beat, {
     fieldRouteComplete,
     pendingEncounterName,
   });
+  return openingCompleted;
+}
+
+function openingPlaytestEnabled() {
+  return openingPlaytestRequested || openingPlaytestState != null;
+}
+
+function persistOpeningPlaytestSession() {
+  // This session-only observer record is deliberately outside the fourteen
+  // canonical save authorities and cannot authorize gameplay progression.
+  return openingPlaytestAdapter.save(openingPlaytestState);
+}
+
+function startOpeningPlaytestSession(runId) {
+  if (!openingPlaytestEnabled()) return false;
+  const candidateCommit = openingPlaytestRequested
+    ? openingPlaytestCandidate
+    : openingPlaytestState?.candidateCommit ?? 'unknown';
+  try {
+    openingPlaytestState = createOpeningPlaytestSession({
+      candidateCommit,
+      runId,
+      startedAtEpochMs: Date.now(),
+    });
+  } catch {
+    openingPlaytestState = createOpeningPlaytestSession({
+      candidateCommit: 'unknown',
+      runId,
+      startedAtEpochMs: Date.now(),
+    });
+  }
+  persistOpeningPlaytestSession();
+  return true;
+}
+
+function openingPlaytestActiveMs() {
+  return ['prologue', 'chapter-1', 'chapter-2']
+    .reduce((sum, chapterId) => sum + (playtimeState.chapterMs[chapterId] ?? 0), 0);
+}
+
+function openingEncounterWinSnapshot() {
+  const encounterIds = new Set(OPENING_SLICE_BEAT_IDS.flatMap((beatId) => (
+    beatRecordById.get(beatId)?.beat.encounterIds ?? []
+  )));
+  return Object.fromEntries([...encounterIds].sort().map((encounterId) => (
+    [encounterId, getEncounterWinCount(advancementState, encounterId)]
+  )));
+}
+
+function downloadOpeningPlaytestEvidence() {
+  if (openingPlaytestState?.status !== 'submitted') return false;
+  const serialized = serializeOpeningPlaytestEvidence(openingPlaytestState);
+  const blob = new Blob([serialized], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  const candidate = openingPlaytestState.candidateCommit.replace(/[^a-zA-Z0-9._-]+/gu, '-');
+  anchor.href = url;
+  anchor.download = `bells-opening-playtest-${candidate}-${openingPlaytestState.submittedAtEpochMs}.json`;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+  return true;
+}
+
+function renderOpeningPlaytestPanel(openingCompleted) {
+  const sameRun = openingPlaytestState != null
+    && openingPlaytestState.runId === runReceiptState?.runId;
+  const shouldShow = openingCompleted && openingPlaytestEnabled() && sameRun;
+  openingPlaytestPanel.hidden = !shouldShow;
+  if (!shouldShow) return false;
+
+  if (openingPlaytestState.status === 'active') {
+    openingPlaytestState = completeOpeningPlaytestSession(openingPlaytestState, {
+      completedAtEpochMs: Date.now(),
+      activePlaytimeMs: openingPlaytestActiveMs(),
+      completedBeatCount: OPENING_SLICE_BEAT_IDS.length,
+      requiredBeatCount: OPENING_SLICE_BEAT_IDS.length,
+      openingEncounterWins: openingEncounterWinSnapshot(),
+    });
+    persistOpeningPlaytestSession();
+  }
+
+  openingPlaytestPanel.dataset.state = openingPlaytestState.status;
+  openingPlaytestBuild.textContent = openingPlaytestState.candidateCommit;
+  openingPlaytestRun.textContent = openingPlaytestState.runId.slice(0, 8);
+  openingPlaytestActiveTime.textContent = formatPlaytime(openingPlaytestState.completion.activePlaytimeMs);
+  openingPlaytestElapsedTime.textContent = formatPlaytime(openingPlaytestState.completion.wallClockMs);
+  openingPlaytestRestarts.textContent = String(openingPlaytestState.restarts.length);
+  const submitted = openingPlaytestState.status === 'submitted';
+  openingPlaytestForm.hidden = submitted;
+  openingPlaytestThanks.hidden = !submitted;
+  if (openingPlaytestPanel.dataset.revealed !== 'true') {
+    openingPlaytestPanel.dataset.revealed = 'true';
+    queueMicrotask(() => {
+      openingPlaytestPanel.focus({ preventScroll: true });
+      openingPlaytestPanel.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  }
+  return true;
+}
+
+function openingPlaytestResponsesFromForm() {
+  const data = new FormData(openingPlaytestForm);
+  const value = (name) => String(data.get(name) ?? '');
+  return {
+    testerCode: value('testerCode'),
+    priorExposure: value('priorExposure'),
+    inputDevice: value('inputDevice'),
+    helpNeeded: value('helpNeeded'),
+    helpDetails: value('helpDetails'),
+    comprehension: Object.fromEntries(OPENING_PLAYTEST_COMPREHENSION_IDS.map((id) => (
+      [id, value(`comp-${id}`)]
+    ))),
+    ratings: Object.fromEntries(OPENING_PLAYTEST_RATING_IDS.map((id) => (
+      [id, Number(value(`rating-${id}`))]
+    ))),
+    bestMoment: value('bestMoment'),
+    confusion: value('confusion'),
+    memorable: value('memorable'),
+    wouldContinue: value('wouldContinue'),
+  };
 }
 
 function narrativeProgressForBeat(beat = getBeat()) {
@@ -2658,7 +2806,7 @@ function render() {
   progressLabel.textContent = `${beatIndex + 1} of ${chapter.beats.length} scenes`;
   progressFill.style.width = `${Math.round(progress * 100)}%`;
   fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
-  renderOpeningSlicePanel(beat, {
+  const openingCompleted = renderOpeningSlicePanel(beat, {
     currentBeatReady: baseBeatReady && storyworldCleared,
     narrativeComplete: narrativeCleared,
     operationComplete: operationCleared,
@@ -2666,6 +2814,12 @@ function render() {
     fieldRouteComplete: fieldRouteCleared,
     pendingEncounterName: beatBattleState.pending?.name ?? '',
   });
+  if (renderOpeningPlaytestPanel(openingCompleted)) {
+    nextScene.disabled = true;
+    nextScene.textContent = openingPlaytestState.status === 'submitted'
+      ? 'Opening complete — you may stop'
+      : 'Opening complete — finish feedback above';
+  }
   renderRunProofStatus();
   updateFieldDashboard(level);
   setKeyArt(chapter);
@@ -3407,11 +3561,51 @@ resetCampaign.addEventListener('click', () => {
   playtimeLastActivity = playtimeLastSample;
   playtimeUnsavedMs = 0;
   playtimeCategory = 'narrative';
+  if (openingPlaytestEnabled()) startOpeningPlaytestSession(receipt.state.runId);
   if (requestedNewGame) {
     window.history.replaceState(null, '', 'campaign.html');
     requestedNewGame = false;
   }
   render();
+});
+
+openingPlaytestForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  openingPlaytestStatus.dataset.state = '';
+  if (openingPlaytestState?.status !== 'complete') {
+    openingPlaytestStatus.dataset.state = 'error';
+    openingPlaytestStatus.textContent = 'The opening must be complete before feedback can be saved.';
+    return;
+  }
+  try {
+    openingPlaytestState = submitOpeningPlaytestSession(
+      openingPlaytestState,
+      openingPlaytestResponsesFromForm(),
+      { submittedAtEpochMs: Date.now() },
+    );
+    const saved = persistOpeningPlaytestSession();
+    downloadOpeningPlaytestEvidence();
+    openingPlaytestStatus.textContent = saved.ok
+      ? 'Feedback receipt downloaded.'
+      : 'Feedback downloaded, but this browser could not retain a session copy.';
+    render();
+    openingPlaytestThanks.focus({ preventScroll: true });
+    openingPlaytestThanks.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  } catch (error) {
+    openingPlaytestStatus.dataset.state = 'error';
+    openingPlaytestStatus.textContent = error instanceof Error
+      ? error.message
+      : 'Feedback could not be saved.';
+    if (openingPlaytestForm.elements.helpNeeded.value === 'yes'
+      && !openingPlaytestForm.elements.helpDetails.value.trim()) {
+      openingPlaytestForm.elements.helpDetails.focus();
+    }
+  }
+});
+
+openingPlaytestDownloadAgain.addEventListener('click', () => {
+  if (!downloadOpeningPlaytestEvidence()) return;
+  openingPlaytestThanks.querySelector('p').textContent = 'The receipt was downloaded again. Give one copy to the developer, then close this tab.';
 });
 
 window.addEventListener('keydown', (event) => {

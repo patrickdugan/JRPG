@@ -59,7 +59,7 @@ The latest full opening route completed the Hound in 62.235 seconds with Ren at 
 ## Automated regression evidence
 
 - `npm run check`: passed.
-- Full test run with four-way concurrency and forced runner exit: 1,208 passed, 0 failed, 0 skipped.
+- Full test run with four-way concurrency and forced runner exit: 1,219 passed, 0 failed, 0 skipped.
 - Focused ready-gate, combat-page, route-policy, and browser-probe source run: 29 passed, 0 failed.
 - Installed-Chrome action probe: passed with zero restarts and empty console, page-error, and delivery-error arrays.
 - The full run covers action combat, the turn-based rollback, side-view start-spacing contracts, Aya’s active and reserve healing, both Mateus victory routes, and the blind-test launcher source.
@@ -96,6 +96,35 @@ The installed-Chrome probe held the opening gate for 500 ms and observed:
 
 The exact opening route then crossed all seven first-clear gates through their rendered Begin controls before reaching the Chapter 3 handoff. This proves the gate does not deadlock automated reachability; human reading time and comprehension remain part of the blind-test requirement.
 
+## Blind-test endpoint evidence
+
+`PLAYTEST_OPENING.cmd` now starts a run-bound, session-only feedback record alongside the clean New Game. It remains hidden throughout the opening. Once all 18 scenes, seven first clears, the cell lever, rain-lit exit, and after-boss consequence are complete, the Campaign:
+
+- locks Chapter 3 advancement for that test tab;
+- records candidate commit, clean-run ID, active time, real elapsed time, and opening-battle restarts;
+- asks the seven unprompted comprehension questions from the blind-test protocol;
+- records all eight 1–5 experience ratings plus prior exposure, outside help, best/confusing/memorable moments, and willingness to continue;
+- downloads one self-contained `bells-opening-playtest-*.json` receipt;
+- marks only mechanical checks automatically and retains `verdict: "human-review-required"`.
+
+A fresh installed-Chrome rendered-control run exercised the complete endpoint path without storage injection or runtime transition calls:
+
+| Evidence | Result |
+| --- | --- |
+| Route status | `opening-feedback-exported` |
+| Opening scenes | 18 / 18 |
+| Canonical action battles | 7 |
+| Battle restarts | 0 |
+| Driver wall time | 542.375 seconds |
+| Machine active / session wall time | 332,658 / 476,003 ms |
+| Compact viewport | 390 × 844 |
+| Panel / first textarea / submit widths | 374 / 310 / 340 px |
+| Console / page errors | 0 / 0 |
+| Receipt kind | `bells-opening-blind-playtest-evidence` |
+| Receipt verdict | `human-review-required` |
+
+The synthetic form answers exist only to verify input, download, serialization, and compact geometry. Their deliberately short machine active time fails the 30–45-minute check, and their text is not comprehension evidence.
+
 ## Defects closed by the opening-slice pass
 
 1. Ren’s solo Bailiff deployment no longer receives an undefined support fighter.
@@ -111,6 +140,8 @@ The exact opening route then crossed all seven first-clear gates through their r
 11. Opening first clears no longer simulate enemy attacks while a new player is reading the fight card.
 12. Solo opening formations no longer expose the unavailable Hunter–Priest combo.
 13. The rendered-control verifier can stop on the exact published Chapter 3 handoff instead of overshooting the slice.
+14. The blind-test launcher now preserves build/run/timing/restart evidence and collects endpoint feedback without exposing the observer protocol.
+15. The downloaded receipt refuses to auto-grade prose or declare the slice polished without human review.
 
 ## Proof boundary
 

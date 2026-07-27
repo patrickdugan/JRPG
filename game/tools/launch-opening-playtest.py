@@ -9,6 +9,7 @@ import threading
 import webbrowser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urlencode
 
 
 GAME_DIR = Path(__file__).resolve().parents[1]
@@ -23,7 +24,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def candidate_commit() -> str:
     try:
-        result = subprocess.run(
+        revision = subprocess.run(
             ["git", "rev-parse", "--short", "HEAD"],
             cwd=REPO_DIR,
             check=True,
@@ -31,7 +32,16 @@ def candidate_commit() -> str:
             text=True,
             timeout=10,
         )
-        return result.stdout.strip() or "unknown"
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=REPO_DIR,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        commit = revision.stdout.strip() or "unknown"
+        return f"{commit}-dirty" if status.stdout.strip() else commit
     except (OSError, subprocess.SubprocessError):
         return "unknown"
 
@@ -41,8 +51,13 @@ def main() -> int:
     server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
-    url = f"http://127.0.0.1:{server.server_address[1]}/campaign.html?new=1"
     commit = candidate_commit()
+    query = urlencode({
+        "new": "1",
+        "openingTest": "1",
+        "candidate": commit,
+    })
+    url = f"http://127.0.0.1:{server.server_address[1]}/campaign.html?{query}"
     try:
         opened = webbrowser.open(url, new=1)
         print()
@@ -55,6 +70,8 @@ def main() -> int:
         print()
         print("Do not explain controls, story, navigation, or objectives.")
         print("Record questions and stalls instead. Keep this console with the observer.")
+        print("At the ending, let the tester complete the in-game feedback before discussing it.")
+        print("Keep the downloaded bells-opening-playtest JSON receipt.")
         if not opened:
             print("The browser did not open automatically. Open the Game URL manually.")
         input("Press Enter only after the tester has finished to stop the local server...")
