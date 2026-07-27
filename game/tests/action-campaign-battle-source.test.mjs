@@ -20,6 +20,7 @@ test('action page preserves an isolated laboratory lane and adds explicit canoni
   assert.match(browser, /loadActionLaboratorySeed/u);
   assert.match(browser, /canonicalStorageUnchanged/u);
   assert.match(browser, /const canonicalMode = query\.canonical && !sliceMode/u);
+  assert.match(browser, /aya: 'aya'/u);
   assert.match(browser, /settleBattleVictory/u);
   assert.match(browser, /createAdvancementStorageAdapter/u);
   assert.match(browser, /createLoadoutStorageAdapter/u);

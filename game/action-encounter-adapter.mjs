@@ -49,6 +49,52 @@ function deepFreeze(value) {
   return Object.freeze(value);
 }
 
+/**
+ * Top-down Y coordinates cannot survive projection into one side-view lane.
+ * Opening encounters therefore own explicit left-to-right starts instead of
+ * accidentally stacking actors that shared only a board-file column.
+ */
+export const ACTION_START_TILE_OVERRIDES = deepFreeze({
+  'c1-cinder-hounds': {
+    ren: '1,5',
+    aya: '2,5',
+    'cinder-hound-1': '7,1',
+    'cinder-hound-2': '9,1',
+  },
+  'c1-ash-wisps': {
+    ren: '1,5',
+    aya: '2,5',
+    'ash-wisp-1': '7,1',
+    'ash-wisp-2': '9,1',
+  },
+  'c1-tithe-hound': {
+    ren: '1,5',
+    aya: '2,5',
+    'tithe-hound-1': '8,2',
+  },
+  'fp1-cedar-path': {
+    ren: '1,5',
+    aya: '2,5',
+    'cinder-hound-1': '7,1',
+    'ash-wisp-1': '8,1',
+    'cinder-hound-2': '9,1',
+  },
+  'fp1-flooded-archive': {
+    lise: '1,6',
+    ren: '2,6',
+    aya: '3,6',
+    'bell-moth-1': '7,1',
+    'tithe-enforcer-1': '8,3',
+    'bell-moth-2': '9,5',
+  },
+  'fp1-mateus': {
+    lise: '1,3',
+    ren: '2,3',
+    aya: '3,4',
+    'mateus-1': '9,3',
+  },
+});
+
 function clone(value) {
   return value == null ? value : structuredClone(value);
 }
@@ -135,11 +181,11 @@ export function actionEnemyHp(sourceHp, multiplier = 1) {
 export function actionEnemyPower(sourcePower, level) {
   const power = Math.max(0, Number(sourcePower) || 0);
   const normalizedLevel = Math.max(1, Math.round(Number(level) || 1));
-  const multiplier = Math.min(
+  const levelMultiplier = Math.min(
     ACTION_ENEMY_POWER_MULTIPLIER_CAP,
     1 + ((normalizedLevel - 1) * ACTION_ENEMY_POWER_PER_LEVEL),
   );
-  return Math.round(power * multiplier);
+  return Math.round(power * levelMultiplier);
 }
 
 /** Preserve readable counterplay when several turn-authored foes act simultaneously. */
@@ -277,7 +323,7 @@ function partyActor(deployment, index, context) {
     id: actorId,
     name: profile.name,
     faction: 'player',
-    ai: 'deterministic-companion',
+    ai: actorId === 'aya' ? 'deterministic-support' : 'deterministic-companion',
     movementProfileId: ACTION_MOVEMENT_PROFILE_BY_ACTOR_ID[actorId] ?? 'standard',
     level: partyLevel(actorId, context.chapterTarget, context.progress, context.options.partyLevels),
     hp: currentHpFor(actorId, stats.hp, context.options.partyVitals),
@@ -286,7 +332,11 @@ function partyActor(deployment, index, context) {
     guard: stats.guard,
     moveSpeed: movementSpeed(stats.speed),
     offensiveCooldownMs: sharedOffensiveCooldownMs(stats.speed),
-    position: sidePosition(deployment.at, index, context.stage),
+    position: sidePosition(
+      ACTION_START_TILE_OVERRIDES[context.encounter.id]?.[actorId] ?? deployment.at,
+      index,
+      context.stage,
+    ),
     facing: 'right',
     resistances: resistances(profile.resistances),
     attackIds,
@@ -469,8 +519,11 @@ function adaptEnemyTemplate(template, templateIndex, context) {
   const dormantActors = [];
   for (let index = 0; index < count; index += 1) {
     const sourcePosition = template.positions?.[index];
-    const position = sourcePosition
-      ? sidePosition(sourcePosition, templateIndex + index, context.stage)
+    const instanceId = `${template.id}-${index + 1}`;
+    const actionPosition = ACTION_START_TILE_OVERRIDES[context.encounter.id]?.[instanceId]
+      ?? sourcePosition;
+    const position = actionPosition
+      ? sidePosition(actionPosition, templateIndex + index, context.stage)
       : dormantPosition(templateIndex + index, context.stage);
     const actor = enemyActor(template, index, position, context, attackIds);
     (isDormant ? dormantActors : actors).push(actor);

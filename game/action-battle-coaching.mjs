@@ -30,7 +30,7 @@ const OPENING = deepFreeze({
   },
   'c1-cinder-hounds': {
     title: 'A resisted hit is information',
-    summary: 'Cinder Hounds resist Cut and are weak to Pierce. Aya passively wards the most wounded ally.',
+    summary: 'Cinder Hounds resist Cut and are weak to Pierce. Aya wards Ren from reserve while he fights.',
     steps: [
       'Use the weapon and art once each; compare the damage labels.',
       'Dash through or leave a hound’s red lunge lane.',
@@ -48,7 +48,7 @@ const OPENING = deepFreeze({
   },
   'c1-tithe-hound': {
     title: 'Wait for the exposed seal',
-    summary: 'Consume Ink draws a dark line and exposes the Hound’s seal. Evade first, then spend the recovery window attacking.',
+    summary: 'Consume Ink draws a dark line and exposes the Hound’s seal. Evade first; Aya heals from reserve while Ren answers the recovery window.',
     steps: [
       'Leave the published line before Consume Ink lands.',
       'Target the low-health exposed seal when it appears.',
@@ -60,8 +60,8 @@ const OPENING = deepFreeze({
     summary: 'Remove the Ash Wisp first, then separate the two hounds so their lunge lanes do not overlap.',
     steps: [
       'Focus the lowest-health enemy instead of spreading damage.',
-      'Tag with Tab/RB when the controlled fighter is badly hurt.',
-      'Aya supports this duo from the route and heals its most wounded member.',
+      'Dash through a lunge lane instead of trading repeated hits.',
+      'Aya remains in reserve and heals Ren below the ward threshold.',
     ],
   },
   'fp1-flooded-archive': {
@@ -126,4 +126,3 @@ export function getActionBattleCoaching(encounterId, snapshot = null) {
     steps: [...source.steps],
   });
 }
-

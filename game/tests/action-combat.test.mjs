@@ -952,6 +952,29 @@ test('AI support holds formation, follows beyond its leash, and hands the role o
   )), true);
 });
 
+test('backline support retreats from melee range before committing its ranged art', () => {
+  const engine = partyKernel({
+    enemyAi: null,
+    actorOverrides: {
+      ren: { position: { x: 80, y: 300 } },
+      aya: {
+        ai: 'deterministic-support',
+        position: { x: 210, y: 300 },
+      },
+      oni: { position: { x: 300, y: 300 } },
+    },
+  });
+  engine.advance(ACTION_FIXED_STEP_MS);
+  const decision = engine.drainEvents().find(({ type, actorId }) => (
+    type === 'companion-decision' && actorId === 'aya'
+  ));
+  assert.equal(decision.action, 'retreat');
+  assert.equal(decision.targetId, 'oni');
+  assert.deepEqual(decision.intent, { x: -1, y: 0 });
+  assert.equal(actorSnapshot(engine, 'aya').position.x < 210, true);
+  assert.equal(actorSnapshot(engine, 'aya').activeAttack, null);
+});
+
 test('AI support jumps onto an authored one-way platform to rejoin the controlled fighter', () => {
   const platformY = 240;
   const engine = partyKernel({

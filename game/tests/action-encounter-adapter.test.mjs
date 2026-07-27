@@ -5,6 +5,7 @@ import {
   ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION,
   ACTION_ENCOUNTER_IDS,
   ACTION_RECOVERY_PULSE_MS,
+  ACTION_START_TILE_OVERRIDES,
   ACTION_TILE_PX,
   adaptActionEncounter,
   adaptAllActionEncounters,
@@ -188,6 +189,29 @@ test('level geometry becomes grounded side-view positions instead of top-down la
   assert.equal(spec.kernelConfig.actors.every(({ position }) => position.x > 0 && position.x < spec.kernelConfig.stage.maxX), true);
 });
 
+test('opening action starts use authored left-to-right spacing without hostile overlap', () => {
+  assert.deepEqual(Object.keys(ACTION_START_TILE_OVERRIDES), [
+    'c1-cinder-hounds',
+    'c1-ash-wisps',
+    'c1-tithe-hound',
+    'fp1-cedar-path',
+    'fp1-flooded-archive',
+    'fp1-mateus',
+  ]);
+  for (const encounterId of Object.keys(ACTION_START_TILE_OVERRIDES)) {
+    const spec = adaptActionEncounter(encounterId);
+    const party = spec.kernelConfig.actors.filter(({ faction, hp }) => faction === 'player' && hp > 0);
+    const enemies = spec.kernelConfig.actors.filter(({ faction, hp }) => faction === 'enemy' && hp > 0);
+    const rightmostParty = Math.max(...party.map(({ position }) => position.x));
+    const leftmostEnemy = Math.min(...enemies.map(({ position }) => position.x));
+    assert.equal(
+      leftmostEnemy - rightmostParty >= ACTION_TILE_PX * 2,
+      true,
+      `${encounterId} must show threats at least two side-view tiles beyond the party`,
+    );
+  }
+});
+
 test('actual advancement views override recommended party levels and stats', () => {
   const recommended = adaptActionEncounter('c9-kurozane');
   assert.equal(recommended.profiles.party.every(({ level }) => level === 40), true);
@@ -266,9 +290,15 @@ test('all specs are structurally accepted by ActionCombatKernel; representative 
   assert.equal(teaching.kernel.snapshot().actors.length, 4);
   assert.deepEqual(teaching.kernel.snapshot().actors.map(({ id }) => id), ['ren', 'aya', 'cinder-hound-1', 'cinder-hound-2']);
   assert.equal(teaching.kernel.snapshot().controlledActorId, 'ren');
-  assert.equal(teaching.spec.kernelConfig.actors
-    .filter(({ faction }) => faction === 'player')
-    .every(({ ai }) => ai === 'deterministic-companion'), true);
+  assert.deepEqual(
+    teaching.spec.kernelConfig.actors
+      .filter(({ faction }) => faction === 'player')
+      .map(({ id, ai }) => ({ id, ai })),
+    [
+      { id: 'ren', ai: 'deterministic-companion' },
+      { id: 'aya', ai: 'deterministic-support' },
+    ],
+  );
 
   const boss = createActionEncounterKernel('fp1-mateus');
   assert.deepEqual(

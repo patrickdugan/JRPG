@@ -76,6 +76,7 @@ import {
 const query = parseActionCampaignBattleQuery(window.location.search);
 const publicFighterIds = Object.freeze({
   ren: 'ren',
+  aya: 'aya',
   nikola: 'lise',
   lise: 'lise',
   mateus: 'mateus',
@@ -1062,7 +1063,7 @@ function renderDom(snapshot) {
   const reserveSupportIds = session.spec.passiveSupportActorIds ?? [];
   elements.reserveSupport.hidden = reserveSupportIds.length === 0;
   elements.reserveSupport.textContent = reserveSupportIds.includes('aya')
-    ? 'Reserve support · Aya heals the most wounded living fighter below 80% HP every 2.2 seconds.'
+    ? 'Reserve support · Aya heals the most wounded living fighter below 85% HP every 1.6 seconds.'
     : '';
   const enemies = snapshot.kernel.actors.filter(({ faction }) => faction === 'enemy');
   elements.partyReadout.replaceChildren(...party.map((actor) => actorListItem(actor, snapshot.kernel.controlledActorId)));

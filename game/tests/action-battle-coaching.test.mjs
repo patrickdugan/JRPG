@@ -11,6 +11,7 @@ test('opening encounters publish concise controls and encounter-specific counter
 
   const hound = getActionBattleCoaching('c1-tithe-hound');
   assert.match(hound.summary, /exposes the Hound’s seal/u);
+  assert.match(hound.summary, /Aya heals from reserve/u);
   assert.equal(Object.isFrozen(hound), true);
   assert.equal(Object.isFrozen(hound.steps), true);
 });
@@ -43,4 +44,3 @@ test('Mateus coaching follows the visible phase and ward state', () => {
   });
   assert.match(surrender.title, /yields alive/u);
 });
-

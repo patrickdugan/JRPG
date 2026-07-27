@@ -343,6 +343,7 @@ export const ACTION_COMPANION_AI = deepFreeze({
   engageDistancePx: 260,
   verticalFollowDistancePx: 48,
   verticalAlignmentDistancePx: 42,
+  supportRetreatDistancePx: 144,
 });
 
 function clone(value) {
@@ -1476,6 +1477,7 @@ export class ActionCombatKernel {
     for (const actorId of this.actorOrder) {
       const actor = this.getActor(actorId);
       const isCompanion = actor.faction === 'player' && actor.id !== this.controlledActorId;
+      const isBacklineSupport = isCompanion && actor.ai === 'deterministic-support';
       const isEnemy = actor.faction === 'enemy'
         && ['deterministic-chase', 'deterministic-sentry'].includes(actor.ai);
       const isSentry = actor.ai === 'deterministic-sentry';
@@ -1518,6 +1520,20 @@ export class ActionCombatKernel {
       }
       if (target && target.position.x !== actor.position.x) {
         actor.facing = target.position.x > actor.position.x ? 1 : -1;
+      }
+      const targetHorizontalGap = target == null ? Infinity : target.position.x - actor.position.x;
+      if (isBacklineSupport
+          && Math.abs(targetHorizontalGap) < ACTION_COMPANION_AI.supportRetreatDistancePx) {
+        actor.movementIntent = normalizeIntent({
+          x: targetHorizontalGap === 0 ? -actor.facing : -targetHorizontalGap,
+        });
+        this._emit('companion-decision', {
+          actorId: actor.id,
+          action: 'retreat',
+          targetId: target.id,
+          intent: { ...actor.movementIntent },
+        });
+        continue;
       }
       const attackOverlapsTarget = (attackId) => target != null
         && overlaps(attackWorldHitbox(actor, this.attacks[attackId]), actionActorHurtbox(target));

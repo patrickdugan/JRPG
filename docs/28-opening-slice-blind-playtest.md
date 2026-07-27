@@ -5,6 +5,7 @@ This is the release gate for the first 30–45-minute playable slice. Automated 
 ## Test conditions
 
 - Use one tester who has not read the design documents and has not watched development.
+- On Windows, the observer may double-click `PLAYTEST_OPENING.cmd`; it serves the current local commit on an ephemeral localhost port and opens a clean New Game without showing this protocol to the tester.
 - Serve `game/`, open `campaign.html?new=1`, and give the tester no explanation beyond: **“Play until the game tells you the opening is complete.”**
 - Do not answer rules, story, navigation, or control questions during the run. Record each question instead.
 - Record active time from the opening panel, real elapsed time, wipes, restarts, and any point where the tester stops making purposeful progress for 30 seconds.

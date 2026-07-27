@@ -51,9 +51,11 @@ test('query parser preserves canonical battle handoffs and rejects unsafe return
   assert.equal(parseActionCampaignBattleQuery('?mode=lab&canonical=0').canonical, false);
 });
 
-test('canonical campaign deployment keeps required opening actors before converging on the Hunter–Priest duo', () => {
+test('canonical campaign keeps Aya in reserve before converging on the Hunter–Priest duo', () => {
   assert.deepEqual(getCanonicalActionFighterIds('prologue-ashen-bailiff'), ['ren']);
-  assert.deepEqual(getCanonicalActionFighterIds('c1-cinder-hounds'), ['ren', 'aya']);
+  assert.deepEqual(getCanonicalActionFighterIds('c1-cinder-hounds'), ['ren']);
+  assert.deepEqual(getCanonicalActionFighterIds('fp1-cedar-path'), ['ren']);
+  assert.deepEqual(getCanonicalActionFighterIds('fp1-flooded-archive'), ['lise', 'ren']);
   assert.deepEqual(getCanonicalActionFighterIds('fp1-mateus'), ['lise', 'ren']);
   assert.deepEqual(getCanonicalActionFighterIds('c3-dock-patrol'), ['lise', 'mateus']);
   assert.throws(() => getCanonicalActionFighterIds('missing'), /Unknown encounter ID/u);

@@ -256,11 +256,11 @@ export function createActionEffectHooks({
   const effects = effectMap(attackManifest);
   const reserveSupport = {
     actorIds: [...new Set(passiveSupportActorIds)],
-    nextTickAtMs: 2_200,
-    intervalMs: 2_200,
-    restoreFraction: 0.1,
+    nextTickAtMs: 1_600,
+    intervalMs: 1_600,
+    restoreFraction: 0.12,
     minimumRestore: 10,
-    triggerRatio: 0.8,
+    triggerRatio: 0.85,
   };
   return Object.freeze({
     modifyMovement({ actor, speed }) {

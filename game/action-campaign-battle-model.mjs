@@ -824,7 +824,7 @@ export function getCanonicalActionFighterIds(encounterId) {
   const roster = encounter.party?.roster ?? [];
   if (roster.includes('lise') && roster.includes('mateus')) return deepFreeze(['lise', 'mateus']);
   if (roster.includes('lise') && roster.includes('ren')) return deepFreeze(['lise', 'ren']);
-  if (roster.includes('ren') && roster.includes('aya')) return deepFreeze(['ren', 'aya']);
+  if (roster.includes('ren') && roster.includes('aya')) return deepFreeze(['ren']);
   if (roster.includes('ren')) return deepFreeze(['ren']);
   if (roster.includes('lise')) return deepFreeze(['lise', 'mateus']);
   if (roster.includes('mateus')) return deepFreeze(['mateus', 'lise']);

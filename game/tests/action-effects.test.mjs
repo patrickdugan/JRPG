@@ -67,7 +67,7 @@ test('Aya supports the Nikola–Ren duel from reserve without becoming a third c
   );
   const nikola = kernel.getActor('lise');
   nikola.hp = 20;
-  kernel.advance(2_180);
+  kernel.advance(1_580);
   assert.equal(nikola.hp, 20);
   kernel.advance(20);
   const event = kernel.drainEvents().find(({ type, statusId }) => (
@@ -75,7 +75,7 @@ test('Aya supports the Nikola–Ren duel from reserve without becoming a third c
   ));
   assert.equal(event.actorId, 'aya');
   assert.equal(event.targetId, 'lise');
-  assert.equal(event.restoredHp, Math.max(10, Math.ceil(nikola.maxHp * 0.1)));
+  assert.equal(event.restoredHp, Math.max(10, Math.ceil(nikola.maxHp * 0.12)));
 });
 
 test('Blood Ward completion activates both dormant seals and enforces 25% mitigation until they break', () => {
