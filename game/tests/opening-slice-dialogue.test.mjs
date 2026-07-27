@@ -9,6 +9,7 @@ import {
   OPENING_SLICE_TARGET_MINUTES,
   getOpeningSliceDialogue,
   getOpeningSliceGuidance,
+  getOpeningSliceNextStep,
   getOpeningSliceProgress,
   isOpeningSliceBeat,
 } from '../content/opening-slice-dialogue.mjs';
@@ -71,18 +72,70 @@ test('opening guidance teaches the next visible action without playtest jargon',
     interactionPrompt: 'Inspect the suspicious seal to continue.',
   }), /WASD.*interact with X/u);
   assert.match(getOpeningSliceGuidance({
+    interactionPrompt: 'Complete the duel with Mateus before continuing the scene.',
+    interactionKind: 'battle',
+  }), /encounter briefing and begin when ready/u);
+  assert.match(getOpeningSliceGuidance({
     narrativeComplete: true,
+    choicesComplete: true,
   }), /Follow the gold marker/u);
   assert.match(getOpeningSliceGuidance({
     narrativeComplete: true,
+    choicesComplete: true,
     operationComplete: true,
     pendingEncounterName: 'Tithe Hound',
   }), /Enter Tithe Hound/u);
   assert.match(getOpeningSliceGuidance({
     narrativeComplete: true,
+    choicesComplete: true,
     operationComplete: true,
     battlesCleared: true,
   }), /gold route marker/u);
+  assert.match(getOpeningSliceGuidance({
+    narrativeComplete: true,
+  }), /story response/u);
+  assert.match(getOpeningSliceGuidance({
+    narrativeComplete: true,
+    choicesComplete: true,
+    operationComplete: true,
+    battlesCleared: true,
+    fieldRouteComplete: true,
+    storyworldPlacement: 'after-beat',
+  }), /what this scene changed/u);
   assert.match(getOpeningSliceGuidance({ complete: true }), /opening chapter is complete/u);
+  assert.match(getOpeningSliceGuidance({
+    complete: true,
+    feedbackRequired: true,
+  }), /feedback before anyone explains/u);
   assert.doesNotMatch(getOpeningSliceGuidance(), /playtest|first clear|state machine/iu);
+});
+
+test('opening next-step navigation names one exact visible destination', () => {
+  assert.deepEqual(getOpeningSliceNextStep(), {
+    id: 'dialogue',
+    label: 'Continue dialogue',
+  });
+  assert.equal(getOpeningSliceNextStep({ interactionKind: 'field' }).id, 'field');
+  assert.equal(getOpeningSliceNextStep({ interactionKind: 'battle' }).id, 'battle');
+  assert.equal(getOpeningSliceNextStep({
+    narrativeComplete: true,
+  }).id, 'choice');
+  assert.equal(getOpeningSliceNextStep({
+    narrativeComplete: true,
+    choicesComplete: true,
+    operationComplete: true,
+  }).id, 'battle');
+  assert.equal(getOpeningSliceNextStep({
+    narrativeComplete: true,
+    choicesComplete: true,
+    operationComplete: true,
+    battlesCleared: true,
+    fieldRouteComplete: true,
+    storyworldPlacement: 'after-beat',
+  }).id, 'storyworld');
+  assert.equal(getOpeningSliceNextStep({
+    complete: true,
+    feedbackRequired: true,
+  }).id, 'feedback');
+  assert.equal(Object.isFrozen(getOpeningSliceNextStep()), true);
 });

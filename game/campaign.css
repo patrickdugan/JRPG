@@ -156,11 +156,36 @@ h1 {
   background: linear-gradient(90deg, #4d8f88, #92d3cb);
 }
 
-.opening-slice-panel > p {
+.opening-slice-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.opening-slice-next p {
+  flex: 1 1 auto;
   margin: 0;
   color: #b7afbb;
   font-size: .69rem;
   line-height: 1.5;
+}
+
+.opening-slice-next button {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 9px 14px;
+  border-color: #8f7438;
+  color: #fff0bd;
+  background: linear-gradient(180deg, #42351d, #2c2418);
+  font-size: .66rem;
+  white-space: nowrap;
+}
+
+.opening-slice-next button:hover,
+.opening-slice-next button:focus-visible {
+  border-color: #d5b85c;
+  background: linear-gradient(180deg, #554524, #352b1b);
 }
 
 .opening-playtest-panel {
@@ -656,6 +681,17 @@ body.opening-focus .scene-controls { order: 6; }
 }
 
 @media (max-width: 600px) {
+  .opening-slice-next {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .opening-slice-next button {
+    min-height: 44px;
+    width: 100%;
+  }
+
   body.opening-focus.opening-has-encounter .encounter-rail {
     display: block;
   }

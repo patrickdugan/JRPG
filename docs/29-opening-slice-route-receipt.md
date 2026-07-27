@@ -59,7 +59,7 @@ The latest full opening route completed the Hound in 62.235 seconds with Ren at 
 ## Automated regression evidence
 
 - `npm run check`: passed.
-- Full test run with four-way concurrency and forced runner exit: 1,219 passed, 0 failed, 0 skipped.
+- Full test run with four-way concurrency and forced runner exit: 1,221 passed, 0 failed, 0 skipped.
 - Focused ready-gate, combat-page, route-policy, and browser-probe source run: 29 passed, 0 failed.
 - Installed-Chrome action probe: passed with zero restarts and empty console, page-error, and delivery-error arrays.
 - The full run covers action combat, the turn-based rollback, side-view start-spacing contracts, Aya’s active and reserve healing, both Mateus victory routes, and the blind-test launcher source.
@@ -115,8 +115,8 @@ A fresh installed-Chrome rendered-control run exercised the complete endpoint pa
 | Opening scenes | 18 / 18 |
 | Canonical action battles | 7 |
 | Battle restarts | 0 |
-| Driver wall time | 542.375 seconds |
-| Machine active / session wall time | 332,658 / 476,003 ms |
+| Driver wall time | 738.407 seconds |
+| Machine active / session wall time | 462,810 / 647,064 ms |
 | Compact viewport | 390 × 844 |
 | Panel / first textarea / submit widths | 374 / 310 / 340 px |
 | Console / page errors | 0 / 0 |
@@ -142,6 +142,7 @@ The synthetic form answers exist only to verify input, download, serialization, 
 13. The rendered-control verifier can stop on the exact published Chapter 3 handoff instead of overshooting the slice.
 14. The blind-test launcher now preserves build/run/timing/restart evidence and collects endpoint feedback without exposing the observer protocol.
 15. The downloaded receipt refuses to auto-grade prose or declare the slice polished without human review.
+16. The opening banner now names one exact next step and moves focus to its visible dialogue, field, choice, encounter, consequence, scene, or feedback control instead of making a new player search the full page.
 
 ## Proof boundary
 

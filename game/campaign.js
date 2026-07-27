@@ -18,6 +18,7 @@ import {
   OPENING_SLICE_BEAT_IDS,
   getOpeningSliceDialogue,
   getOpeningSliceGuidance,
+  getOpeningSliceNextStep,
   getOpeningSliceProgress,
   isOpeningSliceBeat,
 } from './content/opening-slice-dialogue.mjs';
@@ -249,6 +250,7 @@ const openingSliceProgress = document.querySelector('#openingSliceProgress');
 const openingSliceTime = document.querySelector('#openingSliceTime');
 const openingSliceGuidance = document.querySelector('#openingSliceGuidance');
 const openingSliceProgressFill = document.querySelector('#openingSliceProgressFill');
+const openingSliceAction = document.querySelector('#openingSliceAction');
 const openingPlaytestPanel = document.querySelector('#openingPlaytestPanel');
 const openingPlaytestBuild = document.querySelector('#openingPlaytestBuild');
 const openingPlaytestRun = document.querySelector('#openingPlaytestRun');
@@ -420,6 +422,7 @@ const returnStoryRoute = document.querySelector('#returnStoryRoute');
 const interactFieldButton = document.querySelector('#interactField');
 const fieldObjective = document.querySelector('#fieldObjective');
 const fieldProgress = document.querySelector('#fieldProgress');
+const fieldObjectiveCard = document.querySelector('#fieldObjectiveCard');
 const witnessSummary = document.querySelector('#witnessSummary');
 const witnessList = document.querySelector('#witnessList');
 const witnessStageCard = document.querySelector('#witnessStageCard');
@@ -1752,11 +1755,15 @@ function dialogueLinesForBeat(beat = getBeat()) {
 
 function renderOpeningSlicePanel(beat, {
   currentBeatReady = false,
+  interactionGate = null,
   narrativeComplete = false,
+  choicesComplete = false,
   operationComplete = false,
   battlesCleared = false,
   fieldRouteComplete = false,
   pendingEncounterName = '',
+  storyworldStepPlacement = '',
+  feedbackRequired = false,
 } = {}) {
   const openingBeat = isOpeningSliceBeat(beat.id);
   const openingCompleted = OPENING_SLICE_BEAT_IDS.every((beatId) => (
@@ -1788,15 +1795,33 @@ function renderOpeningSlicePanel(beat, {
     : `Opening chapter · Scene ${progress.currentSceneNumber} of ${progress.requiredSceneCount}`;
   openingSliceTime.textContent = `${formatPlaytime(elapsedMs)} active`;
   openingSliceProgressFill.style.width = `${percent}%`;
+  const interactionKind = interactionGate?.encounterId ? 'battle' : interactionGate ? 'field' : '';
   openingSliceGuidance.textContent = getOpeningSliceGuidance({
     complete: openingCompleted,
-    interactionPrompt: currentDialogueInteractionGate(beat)?.prompt ?? '',
+    feedbackRequired,
+    interactionPrompt: interactionGate?.prompt ?? '',
+    interactionKind,
     narrativeComplete,
+    choicesComplete,
     operationComplete,
     battlesCleared,
     fieldRouteComplete,
     pendingEncounterName,
+    storyworldPlacement: storyworldStepPlacement,
   });
+  const nextStep = getOpeningSliceNextStep({
+    complete: openingCompleted,
+    feedbackRequired,
+    interactionKind,
+    narrativeComplete,
+    choicesComplete,
+    operationComplete,
+    battlesCleared,
+    fieldRouteComplete,
+    storyworldPlacement: storyworldStepPlacement,
+  });
+  openingSliceAction.dataset.openingStep = nextStep.id;
+  openingSliceAction.textContent = nextStep.label;
   return openingCompleted;
 }
 
@@ -2808,11 +2833,17 @@ function render() {
   fieldPlaytime.textContent = formatPlaytime(playtimeState.totalMs);
   const openingCompleted = renderOpeningSlicePanel(beat, {
     currentBeatReady: baseBeatReady && storyworldCleared,
+    interactionGate: currentDialogueInteractionGate(beat),
     narrativeComplete: narrativeCleared,
+    choicesComplete: choicesCleared,
     operationComplete: operationCleared,
     battlesCleared,
     fieldRouteComplete: fieldRouteCleared,
     pendingEncounterName: beatBattleState.pending?.name ?? '',
+    storyworldStepPlacement: storyworldPresentation.shouldPresent
+      ? storyworldPresentation.cluster.placement
+      : '',
+    feedbackRequired: openingPlaytestEnabled(),
   });
   if (renderOpeningPlaytestPanel(openingCompleted)) {
     nextScene.disabled = true;
@@ -3077,6 +3108,28 @@ storyworldContinue.addEventListener('click', () => {
     ? beginStoryworldEncounter(storyworldState, clusterId)
     : advanceStoryworldEncounter(storyworldState, clusterId);
   commitStoryworldTransition('Storyworld progression', result);
+});
+
+openingSliceAction.addEventListener('click', () => {
+  const step = openingSliceAction.dataset.openingStep;
+  const target = {
+    dialogue: continueDialogue,
+    field: fieldObjectiveCard,
+    battle: launchBattle,
+    choice: choiceDeck.querySelector('button:not([disabled])'),
+    storyworld: storyworldPanel,
+    next: nextScene,
+    feedback: openingPlaytestPanel,
+  }[step];
+  if (!target || target.hidden) {
+    openingSliceGuidance.textContent = 'The next step is not available yet. Continue the current scene action.';
+    return;
+  }
+  target.scrollIntoView({
+    block: step === 'field' ? 'center' : 'start',
+    behavior: reducedMotion.matches ? 'auto' : 'smooth',
+  });
+  target.focus({ preventScroll: true });
 });
 
 continueDialogue.addEventListener('click', () => {

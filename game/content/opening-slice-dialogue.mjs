@@ -313,23 +313,76 @@ export function getOpeningSliceProgress(completedBeatIds = [], currentBeatId = n
   });
 }
 
+const OPENING_SLICE_NEXT_STEPS = deepFreeze({
+  dialogue: { id: 'dialogue', label: 'Continue dialogue' },
+  field: { id: 'field', label: 'Show field objective' },
+  battle: { id: 'battle', label: 'Open encounter briefing' },
+  choice: { id: 'choice', label: 'Show story choice' },
+  storyworld: { id: 'storyworld', label: 'Continue consequence' },
+  next: { id: 'next', label: 'Go to next scene' },
+  feedback: { id: 'feedback', label: 'Finish opening feedback' },
+});
+
+export function getOpeningSliceNextStep({
+  complete = false,
+  feedbackRequired = false,
+  interactionKind = '',
+  narrativeComplete = false,
+  choicesComplete = false,
+  operationComplete = false,
+  battlesCleared = false,
+  fieldRouteComplete = false,
+  storyworldPlacement = '',
+} = {}) {
+  if (complete) {
+    return feedbackRequired
+      ? OPENING_SLICE_NEXT_STEPS.feedback
+      : OPENING_SLICE_NEXT_STEPS.next;
+  }
+  if (storyworldPlacement === 'before-beat') return OPENING_SLICE_NEXT_STEPS.storyworld;
+  if (interactionKind === 'battle') return OPENING_SLICE_NEXT_STEPS.battle;
+  if (interactionKind === 'field') return OPENING_SLICE_NEXT_STEPS.field;
+  if (!narrativeComplete) return OPENING_SLICE_NEXT_STEPS.dialogue;
+  if (!choicesComplete) return OPENING_SLICE_NEXT_STEPS.choice;
+  if (!operationComplete) return OPENING_SLICE_NEXT_STEPS.field;
+  if (!battlesCleared) return OPENING_SLICE_NEXT_STEPS.battle;
+  if (!fieldRouteComplete) return OPENING_SLICE_NEXT_STEPS.field;
+  if (storyworldPlacement === 'after-beat') return OPENING_SLICE_NEXT_STEPS.storyworld;
+  return OPENING_SLICE_NEXT_STEPS.next;
+}
+
 export function getOpeningSliceGuidance({
   complete = false,
+  feedbackRequired = false,
   interactionPrompt = '',
+  interactionKind = 'field',
   narrativeComplete = false,
+  choicesComplete = false,
   operationComplete = false,
   battlesCleared = false,
   fieldRouteComplete = false,
   pendingEncounterName = '',
+  storyworldPlacement = '',
 } = {}) {
   if (complete) {
-    return 'The cells are open and Mateus has yielded. The opening chapter is complete; continue when ready.';
+    return feedbackRequired
+      ? 'The cells are open and Mateus has yielded. Complete the feedback before anyone explains the game.'
+      : 'The cells are open and Mateus has yielded. The opening chapter is complete; continue when ready.';
+  }
+  if (storyworldPlacement === 'before-beat') {
+    return 'Resolve the displayed decision before continuing the scene.';
   }
   if (interactionPrompt) {
+    if (interactionKind === 'battle') {
+      return `${interactionPrompt} Open the encounter briefing and begin when ready.`;
+    }
     return `${interactionPrompt} Move with WASD or Q/E/Z/C; interact with X or Enter.`;
   }
   if (!narrativeComplete) {
     return 'Continue the scene with N or the dialogue button. When the story asks you to act, follow the gold field objective.';
+  }
+  if (!choicesComplete) {
+    return 'Choose the displayed story response to record how the party proceeds.';
   }
   if (!operationComplete) {
     return 'Follow the gold marker. Move with WASD or Q/E/Z/C; interact with X or Enter.';
@@ -341,6 +394,9 @@ export function getOpeningSliceGuidance({
   }
   if (!fieldRouteComplete) {
     return 'Follow the gold route marker and use the lit exit with X or Enter.';
+  }
+  if (storyworldPlacement === 'after-beat') {
+    return 'Record what this scene changed before continuing the journey.';
   }
   return 'This scene is complete. Choose Next scene to continue.';
 }

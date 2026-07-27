@@ -44,7 +44,10 @@
           <span id="openingSliceTime">00:00:00 active</span>
         </div>
         <div class="opening-slice-track" aria-hidden="true"><span id="openingSliceProgressFill"></span></div>
-        <p id="openingSliceGuidance">Continue the scene with N or the dialogue button. When the story asks you to act, follow the gold field objective.</p>
+        <div class="opening-slice-next">
+          <p id="openingSliceGuidance">Continue the scene with N or the dialogue button. When the story asks you to act, follow the gold field objective.</p>
+          <button id="openingSliceAction" type="button" data-opening-step="dialogue" aria-describedby="openingSliceGuidance">Continue dialogue</button>
+        </div>
       </section>
 
       <section id="openingPlaytestPanel" class="opening-playtest-panel" aria-labelledby="openingPlaytestTitle" tabindex="-1" hidden>
@@ -221,7 +224,7 @@
               <button type="button" data-field-move="1,1" aria-label="Move south-east">&#8600;</button>
             </div>
             <button id="interactField" class="field-interact" type="button" aria-keyshortcuts="X Enter">Interact / Investigate <kbd>X</kbd></button>
-            <div class="field-objective-card">
+            <div id="fieldObjectiveCard" class="field-objective-card" tabindex="-1">
               <strong>Field objective</strong>
               <span id="fieldObjective"></span>
               <small id="fieldProgress"></small>
