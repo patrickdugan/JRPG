@@ -186,7 +186,9 @@ test('post-victory recovery uses Campaign, Camp, rest, and Remedy controls', () 
 });
 
 test('bounded sessions can continue only through labeled rendered recovery controls', () => {
-  assert.match(routeSource, /page\.locator\("#recoveryFile"\)\.set_input_files\(str\(recovery_in\)\)/);
+  assert.match(routeSource, /with page\.expect_file_chooser\(\) as chooser_info:/);
+  assert.match(routeSource, /page\.locator\("#importRecovery"\)\.click\(\)/);
+  assert.match(routeSource, /chooser_info\.value\.set_files\(str\(recovery_in\)\)/);
   assert.match(routeSource, /page\.locator\("#exportRecovery"\)\.click\(\)/);
   assert.match(routeSource, /download\.save_as\(str\(recovery_out\)\)/);
   assert.match(routeSource, /"recoveryOnly": True/);

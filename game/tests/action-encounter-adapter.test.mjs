@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS,
   ACTION_ENCOUNTER_ADAPTER_SCHEMA_VERSION,
   ACTION_ENCOUNTER_IDS,
   ACTION_RECOVERY_PULSE_MS,
@@ -9,6 +10,8 @@ import {
   adaptAllActionEncounters,
   actionCooldownForRecovery,
   actionEnemyHp,
+  actionEnemyGroupCooldownMs,
+  actionEnemyGroupDamageMultiplier,
   actionEnemyPower,
   createActionEncounterKernel,
   MINIMUM_SHARED_OFFENSIVE_COOLDOWN_MS,
@@ -144,6 +147,32 @@ test('Action Lab enemy Power follows party progression without an unbounded late
   assert.equal(actionEnemyPower(20, 99), 38);
 });
 
+test('simultaneous enemy groups retain a bounded readable shared-action cadence', () => {
+  assert.equal(actionEnemyGroupCooldownMs(320, 1), 320);
+  assert.equal(actionEnemyGroupCooldownMs(320, 2), 480);
+  assert.equal(actionEnemyGroupCooldownMs(320, 4), 800);
+  assert.equal(actionEnemyGroupCooldownMs(320, 20), 800);
+  assert.equal(actionEnemyGroupDamageMultiplier(1), 1);
+  assert.equal(Math.round(actionEnemyGroupDamageMultiplier(2) * 1_000), 741);
+  assert.equal(actionEnemyGroupDamageMultiplier(20), 0.65);
+  const cinderHounds = adaptActionEncounter('c1-cinder-hounds');
+  assert.equal(
+    cinderHounds.kernelConfig.actors
+      .filter(({ id }) => id.startsWith('cinder-hound-'))
+      .every(({ offensiveCooldownMs, statuses }) => (
+        offensiveCooldownMs === 480
+        && statuses.some(({ id, activeEnemyCount }) => id === 'group-pressure' && activeEnemyCount === 2)
+      )),
+    true,
+  );
+  assert.equal(
+    adaptActionEncounter('c1-tithe-hound').kernelConfig.actors
+      .find(({ id }) => id === 'tithe-hound-1')
+      ?.offensiveCooldownMs,
+    ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS,
+  );
+});
+
 test('level geometry becomes grounded side-view positions instead of top-down lanes', () => {
   const spec = adaptActionEncounter('c1-cinder-hounds');
   assert.equal(spec.kernelConfig.stage.maxX, 12 * ACTION_TILE_PX);
@@ -247,6 +276,13 @@ test('all specs are structurally accepted by ActionCombatKernel; representative 
 test('an optional action support actor creates a duo without duplicating authored party members', () => {
   const prologueDuo = adaptActionEncounter('prologue-ashen-bailiff', { supportActorId: 'aya' });
   assert.equal(prologueDuo.supportActorId, 'aya');
+  assert.equal(
+    prologueDuo.kernelConfig.actors.find(({ id }) => id === 'ashen-bailiff-1')?.ai,
+    'deterministic-sentry',
+  );
+  const actionBailiff = prologueDuo.kernelConfig.actors.find(({ id }) => id === 'ashen-bailiff-1');
+  assert.equal(actionBailiff.power, 7);
+  assert.equal(actionBailiff.offensiveCooldownMs, 1_200);
   assert.deepEqual(
     prologueDuo.kernelConfig.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
     ['ren', 'aya'],
@@ -258,6 +294,12 @@ test('an optional action support actor creates a duo without duplicating authore
   assert.deepEqual(
     authoredDuo.kernelConfig.actors.filter(({ faction }) => faction === 'player').map(({ id }) => id),
     ['ren', 'aya'],
+  );
+  assert.equal(
+    authoredDuo.kernelConfig.actors
+      .find(({ id }) => id === 'aya')
+      ?.statuses.some(({ id }) => id === 'passive-healer'),
+    true,
   );
   assert.throws(
     () => adaptActionEncounter('prologue-ashen-bailiff', { supportActorId: 'missing' }),

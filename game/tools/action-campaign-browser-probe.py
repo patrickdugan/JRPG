@@ -434,6 +434,10 @@ def run_probe(chromium: Path) -> dict[str, object]:
                         canonical_page.keyboard.down(key)
                         canonical_page.wait_for_timeout(90)
                         canonical_page.keyboard.up(key)
+                    face_key = "d" if distance > 0 else "a"
+                    canonical_page.keyboard.down(face_key)
+                    canonical_page.wait_for_timeout(25)
+                    canonical_page.keyboard.up(face_key)
                     canonical_page.keyboard.press("k")
                     canonical_page.keyboard.press("j")
                     canonical_page.keyboard.press("v")

@@ -12,6 +12,7 @@ import argparse
 import functools
 import json
 import re
+import statistics
 import sys
 import threading
 import time
@@ -84,6 +85,7 @@ class Budget:
     max_scenes: int
     max_field_moves_per_scene: int
     max_battle_commands: int
+    max_action_restarts: int
 
     def check(self, checkpoint: str) -> None:
         if time.monotonic() >= self.deadline:
@@ -100,15 +102,23 @@ class PlayerDriver:
         self.battle_commands = 0
         self.camp_controls = 0
         self.scenes: list[dict[str, object]] = []
+        self.action_battles: list[dict[str, object]] = []
         self.last_position: tuple[int, int] | None = None
 
     def click(self, selector: str, *, timeout: int = 10_000) -> None:
         self.page.locator(selector).click(timeout=timeout)
         self.controls += 1
 
+    def on_action_battle_page(self) -> bool:
+        return urlparse(self.page.url).path.endswith("action-campaign-battle.html")
+
+    def on_tactical_battle_page(self) -> bool:
+        return urlparse(self.page.url).path.endswith("battle.html") and not self.on_action_battle_page()
+
     def on_battle_page(self) -> bool:
         return (
-            urlparse(self.page.url).path.endswith("battle.html")
+            self.on_action_battle_page()
+            or self.on_tactical_battle_page()
             or self.page.locator("#battleStateBadge").count() > 0
         )
 
@@ -192,7 +202,15 @@ class PlayerDriver:
                 "creditsAction": self.page.locator("#sealCredits").inner_text(),
                 "creditsHint": self.page.locator("#creditsActionHint").inner_text(),
             }
-        if path == "battle.html" or self.on_battle_page():
+        if self.on_action_battle_page():
+            return {
+                "page": path,
+                "encounter": self.page.locator("#encounterTitle").inner_text(),
+                "battleState": self.page.locator("#battleStateBadge").inner_text(),
+                "objective": self.page.locator("#objectiveRuntimeStatus").inner_text(),
+                "lastLog": self.page.locator("#eventLog").inner_text()[-800:],
+            }
+        if path == "battle.html" or self.on_tactical_battle_page():
             return {
                 "page": path,
                 "encounter": self.page.locator("#encounterTitle").inner_text(),
@@ -306,7 +324,7 @@ class PlayerDriver:
                 if (here, vector) in blocked_edges:
                     continue
                 after = self.move(vector)
-                if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                if self.on_battle_page() or self.scene_key() != scene_key:
                     return
                 if after == here:
                     blocked_edges.add((here, vector))
@@ -341,7 +359,7 @@ class PlayerDriver:
                 scene_key,
                 interaction_range=1 if marker_type == "side-story" else 0,
             )
-            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+            if self.on_battle_page() or self.scene_key() != scene_key:
                 return
             choices = self.page.locator("#witnessChoiceDeck button")
             if choices.count() and choices.first.is_visible():
@@ -390,10 +408,10 @@ class PlayerDriver:
                 return
             node_id, target = published
             self.navigate_to_exact_target(target, scene_key)
-            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+            if self.on_battle_page() or self.scene_key() != scene_key:
                 return
             interaction = self.page.locator("#interactField")
-            if interaction.is_disabled() or "story operation" not in interaction.inner_text():
+            if interaction.is_disabled():
                 raise RouteBlocked(
                     "operation-target-mismatch",
                     "The published operation coordinate was reached but its rendered interaction was unavailable.",
@@ -469,7 +487,7 @@ class PlayerDriver:
             return False
         launch.click()
         self.controls += 1
-        self.page.wait_for_url("**/battle.html**")
+        self.page.wait_for_url(re.compile(r"/(?:action-campaign-)?battle\.html"))
         return True
 
     def finish_published_field_objectives(self, scene_key: str) -> bool:
@@ -489,7 +507,7 @@ class PlayerDriver:
                 return False
             target_type, target_id, target, interaction_range = published
             self.navigate_to_exact_target(target, scene_key, interaction_range=interaction_range)
-            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+            if self.on_battle_page() or self.scene_key() != scene_key:
                 return True
             if self.field_objective_target() != published:
                 continue
@@ -508,7 +526,7 @@ class PlayerDriver:
                 )
             interaction.click()
             self.controls += 1
-            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+            if self.on_battle_page() or self.scene_key() != scene_key:
                 return True
             if self.advance_story_if_ready():
                 return True
@@ -625,12 +643,12 @@ class PlayerDriver:
             visited.add(here)
             if self.interact_if_productive():
                 return True
-            if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+            if self.on_battle_page() or self.scene_key() != scene_key:
                 return True
             for vector, reverse in DIRECTIONS:
                 before = self.position()
                 after = self.move(vector)
-                if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                if self.on_battle_page() or self.scene_key() != scene_key:
                     return True
                 if after == before:
                     continue
@@ -665,7 +683,7 @@ class PlayerDriver:
             for vector, reverse in DIRECTIONS:
                 before = self.position()
                 after = self.move(vector)
-                if urlparse(self.page.url).path.endswith("battle.html") or self.scene_key() != scene_key:
+                if self.on_battle_page() or self.scene_key() != scene_key:
                     return True
                 if after == before:
                     continue
@@ -723,6 +741,24 @@ class PlayerDriver:
         self.return_from_camp()
 
     def rest_party_if_needed(self) -> bool:
+        currency_text = self.page.locator("#partyCurrency").inner_text()
+        currency_match = re.search(r"(\d+)\s+mon", currency_text, re.IGNORECASE)
+        currency = int(currency_match.group(1)) if currency_match else 0
+        camp_select = self.page.locator("#campSelect")
+        camp_options = camp_select.locator("option").evaluate_all(
+            """options => options.map(option => ({ value: option.value, text: option.textContent }))"""
+        )
+        affordable_safehouse = next(
+            (
+                option for option in camp_options
+                if option["value"] == "lantern-safehouse" and currency >= 35
+            ),
+            None,
+        )
+        if affordable_safehouse and camp_select.input_value() != affordable_safehouse["value"]:
+            camp_select.select_option(affordable_safehouse["value"])
+            self.controls += 1
+            self.camp_controls += 1
         damaged = False
         members = self.page.locator("#campPartyList [data-member-id]")
         for index in range(members.count()):
@@ -753,6 +789,11 @@ class PlayerDriver:
         return False
 
     def use_remedies_for_damaged_party(self) -> bool:
+        supplies_tab = self.page.locator('[data-camp-tab="supplies"]')
+        if supplies_tab.is_visible() and supplies_tab.get_attribute("aria-pressed") != "true":
+            supplies_tab.click()
+            self.controls += 1
+            self.camp_controls += 1
         filter_button = self.page.locator('[data-inventory-filter="consumable"]')
         if not filter_button.is_visible() or filter_button.is_disabled():
             return False
@@ -808,6 +849,22 @@ class PlayerDriver:
         self.rest_party_if_needed()
         self.return_from_camp()
 
+    def prepare_recovered_party(self) -> dict[str, object]:
+        """Use ordinary Camp controls before resuming an imported frontier."""
+        before = self.checkpoint()
+        self.page.locator('a[href="camp.html"]').first.click()
+        self.controls += 1
+        self.page.wait_for_url("**/camp.html")
+        self.page.locator("#campFeedback").wait_for()
+        rested_or_remedied = self.rest_party_if_needed()
+        self.return_from_camp()
+        return {
+            "throughRenderedCampLink": True,
+            "restedOrRemedied": rested_or_remedied,
+            "before": before,
+            "after": self.checkpoint(),
+        }
+
     def start_due_entries(self) -> None:
         for _ in range(30):
             due = self.page.locator("[data-route-activity-id]")
@@ -855,6 +912,378 @@ class PlayerDriver:
             button.click()
             self.controls += 1
             self.page.locator("#mapCanvas[data-field-state]").wait_for()
+
+    def action_rows(self, selector: str) -> list[dict[str, str]]:
+        return self.page.locator(selector).evaluate_all(
+            """rows => rows.map(row => Object.fromEntries(
+              [...Object.entries(row.dataset)].map(([key, value]) => [key, String(value)])
+            ))"""
+        )
+
+    def action_control_state(self) -> dict[str, object]:
+        return self.page.locator("body").evaluate(
+            """() => {
+              const data = element => Object.fromEntries(
+                [...Object.entries(element.dataset)].map(([key, value]) => [key, String(value)])
+              );
+              const rows = selector => [...document.querySelectorAll(selector)].map(data);
+              return {
+                canvas: data(document.querySelector('#actionCampaignCanvas')),
+                party: rows('#partyReadout li'),
+                enemies: rows('#enemyReadout li[data-defeated="false"]'),
+                attacks: rows('#attackTimers [data-attack-id]'),
+                subweapons: rows('#subweaponTimers [data-subweapon-id]'),
+                requirements: rows('#objectiveRequirements li[data-requirement-id][data-complete="false"]'),
+                entities: rows('#objectiveRequirements li[data-entity-type][data-complete="false"]'),
+              };
+            }"""
+        )
+
+    def action_press(self, key: str) -> None:
+        self.page.keyboard.press(key)
+        self.controls += 1
+        self.battle_commands += 1
+
+    def action_hold(self, key: str, duration_ms: int) -> None:
+        self.page.keyboard.down(key)
+        try:
+            self.page.wait_for_timeout(duration_ms)
+        finally:
+            self.page.keyboard.up(key)
+        self.controls += 1
+        self.battle_commands += 1
+
+    @staticmethod
+    def action_number(record: dict[str, str], key: str, fallback: float = 0) -> float:
+        value = record.get(key)
+        try:
+            return float(value) if value not in (None, "") else fallback
+        except ValueError:
+            return fallback
+
+    def action_target(self, state: dict[str, object], controlled_x: float) -> dict[str, object] | None:
+        entities = state["entities"]
+        for entity in entities:
+            if entity.get("entityType") != "token":
+                continue
+            following = entity.get("recruited") == "true"
+            target_x = self.action_number(
+                entity,
+                "destinationX" if following and entity.get("destinationX") else "positionX",
+            )
+            target_y = self.action_number(
+                entity,
+                "destinationY" if following and entity.get("destinationY") else "positionY",
+                440,
+            )
+            return {
+                "kind": "token-destination" if following else "token",
+                "id": entity.get("entityId"),
+                "x": target_x,
+                "y": target_y,
+                "semantics": "overlap" if following else "interact",
+            }
+
+        actionable_requirements = [
+            requirement for requirement in state["requirements"]
+            if requirement.get("available") == "true"
+            and requirement.get("semantics") != "event-count"
+            and requirement.get("targetX") not in (None, "")
+        ]
+        if actionable_requirements:
+            requirement = actionable_requirements[0]
+            return {
+                "kind": "requirement",
+                "id": requirement.get("requirementId"),
+                "x": self.action_number(requirement, "targetX"),
+                "y": self.action_number(requirement, "targetY", 440),
+                "semantics": requirement.get("semantics"),
+                "castDurationMs": self.action_number(requirement, "castDurationMs"),
+            }
+
+        canvas = state["canvas"]
+        if canvas.get("objectiveType") == "surviveThenExit":
+            enemies = state["enemies"]
+            nearest_enemy_x = (
+                self.action_number(
+                    min(enemies, key=lambda enemy: abs(self.action_number(enemy, "positionX") - controlled_x)),
+                    "positionX",
+                )
+                if enemies else self.action_number(canvas, "stageMaxX", 920)
+            )
+            stage_min = self.action_number(canvas, "stageMinX", 40) + 50
+            stage_max = self.action_number(canvas, "stageMaxX", 920) - 50
+            return {
+                "kind": "evade",
+                "id": "survive-enemy-actions",
+                "x": stage_min if nearest_enemy_x >= controlled_x else stage_max,
+                "y": 440,
+                "semantics": "evade",
+            }
+
+        for entity in entities:
+            if entity.get("entityType") == "object" and entity.get("attackable") == "true":
+                return {
+                    "kind": "object",
+                    "id": entity.get("entityId"),
+                    "x": self.action_number(entity, "positionX"),
+                    "y": self.action_number(entity, "positionY", 440),
+                    "semantics": "attack",
+                }
+
+        enemies = state["enemies"]
+        if enemies:
+            priority = min(
+                enemies,
+                key=lambda enemy: (
+                    self.action_number(enemy, "maxHp", 1),
+                    self.action_number(enemy, "hp", 1)
+                    / max(1, self.action_number(enemy, "maxHp", 1)),
+                    abs(self.action_number(enemy, "positionX") - controlled_x),
+                ),
+            )
+            return {
+                "kind": "enemy",
+                "id": priority.get("actorId"),
+                "x": self.action_number(priority, "positionX"),
+                "y": self.action_number(priority, "positionY", 440),
+                "semantics": "attack",
+                "phase": priority.get("activePhase"),
+            }
+        return None
+
+    def action_party_vitals(self) -> list[dict[str, object]]:
+        return [
+            {
+                "actorId": row.get("actorId"),
+                "hp": int(self.action_number(row, "hp")),
+                "maxHp": int(self.action_number(row, "maxHp")),
+                "defeated": row.get("defeated") == "true",
+            }
+            for row in self.action_rows("#partyReadout li")
+        ]
+
+    def play_action_battle(self) -> None:
+        self.page.locator("#battleStateBadge").wait_for()
+        self.page.locator("#actionCampaignCanvas").focus()
+        encounter = self.page.locator("#encounterTitle").inner_text()
+        for _ in range(100):
+            if encounter.strip() and not encounter.startswith("Loading encounter"):
+                break
+            self.page.wait_for_timeout(20)
+            encounter = self.page.locator("#encounterTitle").inner_text()
+        battle_started = time.monotonic()
+        commands_at_start = self.battle_commands
+        restart_count = 0
+        sweep_right = True
+        last_x: float | None = None
+        stalled_steps = 0
+
+        while self.battle_commands - commands_at_start < self.budget.max_battle_commands:
+            self.budget.check(f"action battle {encounter}")
+            badge = self.page.locator("#battleStateBadge").inner_text().strip()
+            if badge == "VICTORY":
+                continuation = self.page.locator("#continueCampaign")
+                continuation.wait_for(state="visible", timeout=15_000)
+                canvas = self.page.locator("#actionCampaignCanvas")
+                self.action_battles.append({
+                    "encounter": encounter,
+                    "durationSeconds": round(time.monotonic() - battle_started, 3),
+                    "inputs": self.battle_commands - commands_at_start,
+                    "restarts": restart_count,
+                    "objective": self.page.locator("#objectiveRuntimeStatus").inner_text(),
+                    "bossPhase": canvas.get_attribute("data-boss-phase-id"),
+                    "partyVitals": self.action_party_vitals(),
+                })
+                continuation.click()
+                self.controls += 1
+                self.page.wait_for_url("**/campaign.html**")
+                self.page.locator("#sceneTitle").wait_for()
+                self.recover_after_battle()
+                return
+            if badge == "DEFEAT":
+                if restart_count >= self.budget.max_action_restarts:
+                    defeated_state = self.action_control_state()
+                    raise RouteBlocked(
+                        "action-battle-defeat",
+                        "The visible side-view policy exhausted its restart allowance.",
+                        encounter=encounter,
+                        restarts=restart_count,
+                        party=self.action_party_vitals(),
+                        enemies=[
+                            {
+                                "actorId": row.get("actorId"),
+                                "hp": int(self.action_number(row, "hp")),
+                                "maxHp": int(self.action_number(row, "maxHp")),
+                                "phase": row.get("activePhase"),
+                            }
+                            for row in defeated_state["enemies"]
+                        ],
+                        objective=self.page.locator("#objectiveRuntimeStatus").inner_text(),
+                    )
+                self.page.locator("#restartBattle").click()
+                self.controls += 1
+                restart_count += 1
+                self.page.wait_for_timeout(80)
+                self.page.locator("#actionCampaignCanvas").focus()
+                continue
+
+            state = self.action_control_state()
+            canvas = state["canvas"]
+            controlled_id = canvas.get("controlledActorId")
+            party_by_id = {row.get("actorId"): row for row in state["party"]}
+            controlled = party_by_id.get(controlled_id, {})
+            controlled_x = self.action_number(controlled, "positionX", self.action_number(canvas, "movementPositionX"))
+            controlled_y = self.action_number(controlled, "positionY", 440)
+            target = self.action_target(state, controlled_x)
+
+            if last_x is not None and abs(controlled_x - last_x) < 2:
+                stalled_steps += 1
+            else:
+                stalled_steps = 0
+            last_x = controlled_x
+
+            living_support = next(
+                (row for row in state["party"] if row.get("actorId") != controlled_id and row.get("defeated") == "false"),
+                None,
+            )
+            controlled_ratio = (
+                self.action_number(controlled, "hp")
+                / max(1, self.action_number(controlled, "maxHp", 1))
+            )
+            support_ratio = (
+                self.action_number(living_support, "hp")
+                / max(1, self.action_number(living_support, "maxHp", 1))
+                if living_support else 0
+            )
+            if (
+                canvas.get("objectiveType") != "surviveThenExit"
+                and controlled_ratio < 0.38
+                and support_ratio > 0.52
+                and canvas.get("tagCooldownRemainingMs") == "0"
+            ):
+                self.action_press("Tab")
+
+            if target is None:
+                stage_min = self.action_number(canvas, "stageMinX", 48)
+                stage_max = self.action_number(canvas, "stageMaxX", 912)
+                if controlled_x >= stage_max - 70:
+                    sweep_right = False
+                elif controlled_x <= stage_min + 70:
+                    sweep_right = True
+                self.action_hold("d" if sweep_right else "a", 90)
+                if stalled_steps >= 3:
+                    self.action_press("q")
+                    self.action_press("w")
+                    stalled_steps = 0
+                self.action_press("e")
+                self.page.wait_for_timeout(35)
+                continue
+
+            distance = target["x"] - controlled_x
+            vertical_distance = controlled_y - target["y"]
+            objective_semantics = target["semantics"] in ("cast-count", "interact", "overlap")
+            vertical_ready = (
+                target["y"] - 82 <= controlled_y <= target["y"]
+                if objective_semantics else True
+            )
+            ready_attacks = [
+                attack for attack in state["attacks"]
+                if attack.get("ready") == "true"
+            ]
+            ready_subweapons = [
+                subweapon for subweapon in state["subweapons"]
+                if subweapon.get("ready") == "true"
+                and self.action_number(subweapon, "stock") > 0
+            ]
+            if (
+                target["semantics"] == "attack"
+                and not ready_attacks
+                and not ready_subweapons
+            ):
+                self.action_hold("a" if distance > 0 else "d", 80)
+                if abs(distance) < 220:
+                    self.action_press("w")
+                    self.action_press("q")
+                self.page.wait_for_timeout(20)
+                continue
+            attack_reach = max(
+                [
+                    self.action_number(record, "reachPx", 64)
+                    for record in [*ready_attacks, *ready_subweapons]
+                ],
+                default=92,
+            )
+            close_distance = 30 if objective_semantics else max(72, attack_reach - 24)
+            close_x = abs(distance) <= close_distance and vertical_ready
+            if vertical_distance > 70 and abs(distance) < 170:
+                self.action_hold("w", 150)
+                self.action_press("u")
+            if not close_x:
+                if objective_semantics and controlled_y < target["y"] - 82:
+                    stage_midpoint = (
+                        self.action_number(canvas, "stageMinX", 40)
+                        + self.action_number(canvas, "stageMaxX", 920)
+                    ) / 2
+                    direction = "d" if target["x"] >= stage_midpoint else "a"
+                else:
+                    direction = "d" if distance > 0 else "a"
+                self.action_hold(direction, 80)
+                if abs(distance) > 240 or stalled_steps >= 3:
+                    self.action_press("q")
+                if (
+                    canvas.get("objectiveType") == "surviveThenExit"
+                    and target.get("id") == "reach-exit"
+                    and 330 < controlled_x < target["x"] - 110
+                ):
+                    self.action_press("u")
+                    self.action_press("q")
+                if stalled_steps >= 4:
+                    self.action_press("w")
+                    stalled_steps = 0
+            elif target["semantics"] == "cast-count":
+                self.action_hold("e", 240)
+            elif target["semantics"] in ("interact", "overlap"):
+                self.action_press("e")
+
+            if target["semantics"] == "attack":
+                if target.get("phase") in ("windup", "active") and abs(distance) < 190:
+                    self.action_hold("a" if distance > 0 else "d", 60)
+                    self.action_press("q")
+                self.action_hold("d" if distance > 0 else "a", 25)
+                usable_subweapons = [
+                    subweapon for subweapon in ready_subweapons
+                    if self.action_number(subweapon, "reachPx", 64) >= abs(distance) + 20
+                ]
+                ready_subweapon = max(
+                    usable_subweapons,
+                    key=lambda subweapon: self.action_number(subweapon, "reachPx", 64),
+                    default=None,
+                )
+                if ready_subweapon:
+                    self.action_press(
+                        "c" if ready_subweapon.get("subweaponId") == "holy-water" else "v"
+                    )
+                elif ready_attacks:
+                    chosen = max(
+                        ready_attacks,
+                        key=lambda attack: int(self.action_number(attack, "attackIndex")),
+                    )
+                    self.action_press("k" if chosen.get("attackIndex") == "1" else "j")
+                elif len(state["enemies"]) > 1 and abs(distance) < 150:
+                    self.action_press("w")
+                    self.action_press("q")
+                if canvas.get("comboAvailable") == "true":
+                    self.action_press("l")
+            self.page.wait_for_timeout(35)
+
+        raise RouteBlocked(
+            "action-battle-command-budget",
+            "The visible side-view policy did not reach a terminal result.",
+            encounter=encounter,
+            commandBudget=self.budget.max_battle_commands,
+            commandsUsed=self.battle_commands - commands_at_start,
+        )
 
     def battle_control_state(self) -> tuple[str, tuple[int, int], str | None, tuple[int, int] | None]:
         canvas = self.page.locator("#battleCanvas")
@@ -959,7 +1388,7 @@ class PlayerDriver:
                 return False
         return False
 
-    def play_battle(self) -> None:
+    def play_tactical_battle(self) -> None:
         self.page.locator("#battleStateBadge").wait_for()
         encounter = self.page.locator("#encounterTitle").inner_text()
         commands_at_start = self.battle_commands
@@ -1041,6 +1470,12 @@ class PlayerDriver:
             commandBudget=self.budget.max_battle_commands,
             commandsUsed=self.battle_commands - commands_at_start,
         )
+
+    def play_battle(self) -> None:
+        if self.on_action_battle_page():
+            self.play_action_battle()
+            return
+        self.play_tactical_battle()
 
     def play_battle_and_resume_scene(self, scene_key: str) -> None:
         self.play_battle()
@@ -1128,9 +1563,10 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
     page_errors: list[str] = []
     started = time.monotonic()
     evidence: dict[str, object] = {
-        "policy": "rendered-controls-only; no direct storage mutation; no runtime transition calls; optional recovery uses the rendered file control",
+        "policy": "rendered-controls-only; no direct storage mutation; no runtime transition calls; optional recovery uses developer presentation plus its rendered file controls",
         "chromium": str(chromium),
         "routeMode": "completionist-215" if args.completionist else "narrative-selected-route",
+        "battleMode": "legacy-tactical" if args.legacy_battle else "canonical-action",
         "requestedSceneLimit": args.max_scenes,
         "requestedSeconds": args.max_seconds,
     }
@@ -1155,19 +1591,23 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 max_scenes=args.max_scenes,
                 max_field_moves_per_scene=args.max_field_moves,
                 max_battle_commands=args.max_battle_commands,
+                max_action_restarts=args.max_action_restarts,
             )
             driver = PlayerDriver(page, budget, completionist=args.completionist)
             try:
                 response = page.goto(
-                    f"{base}/campaign.html?legacyBattle=1",
+                    f"{base}/campaign.html?legacyBattle={'1' if args.legacy_battle else '0'}"
+                    f"{'&dev=1' if args.recovery_in or args.recovery_out else ''}",
                     wait_until="domcontentloaded",
                 )
                 if response is None or response.status != 200:
                     raise RouteBlocked("delivery", "Campaign did not return HTTP 200.")
                 if args.recovery_in:
                     recovery_in = Path(args.recovery_in).resolve()
+                    with page.expect_file_chooser() as chooser_info:
+                        page.locator("#importRecovery").click()
                     with page.expect_navigation(wait_until="domcontentloaded"):
-                        page.locator("#recoveryFile").set_input_files(str(recovery_in))
+                        chooser_info.value.set_files(str(recovery_in))
                     driver.controls += 1
                     evidence["recoveryImport"] = {
                         "path": str(recovery_in),
@@ -1183,6 +1623,8 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 if proof_badge.get_attribute("data-proof") != "active":
                     raise RouteBlocked("clean-run-receipt", "The rendered start path did not expose a clean-run receipt.", runProof=proof)
                 evidence["startCheckpoint"] = driver.checkpoint()
+                if args.recovery_in:
+                    evidence["recoveryPartyPreparation"] = driver.prepare_recovered_party()
 
                 for _ in range(args.max_scenes):
                     if args.recovery_out and time.monotonic() >= budget.deadline:
@@ -1240,17 +1682,29 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                         "throughRenderedCampaignLink": returned,
                     }
                 if urlparse(page.url).path.endswith("campaign.html"):
-                    with page.expect_download() as download_info:
-                        page.locator("#exportRecovery").click()
-                    driver.controls += 1
-                    download = download_info.value
-                    download.save_as(str(recovery_out))
-                    evidence["recoveryExport"] = {
-                        "path": str(recovery_out),
-                        "suggestedFilename": download.suggested_filename,
-                        "recoveryOnly": True,
-                        "proofClaimed": False,
-                    }
+                    if urlparse(page.url).query != "dev=1":
+                        page.goto(f"{base}/campaign.html?dev=1", wait_until="domcontentloaded")
+                        page.locator("#sceneTitle").wait_for()
+                        evidence["recoveryDeveloperPresentation"] = True
+                    try:
+                        with page.expect_download() as download_info:
+                            page.locator("#exportRecovery").click()
+                        driver.controls += 1
+                        download = download_info.value
+                        download.save_as(str(recovery_out))
+                        evidence["recoveryExport"] = {
+                            "path": str(recovery_out),
+                            "suggestedFilename": download.suggested_filename,
+                            "recoveryOnly": True,
+                            "proofClaimed": False,
+                        }
+                    except PlaywrightTimeoutError as error:
+                        evidence["recoveryExport"] = {
+                            "path": str(recovery_out),
+                            "recoveryOnly": True,
+                            "proofClaimed": False,
+                            "error": str(error),
+                        }
                 else:
                     evidence["recoveryExport"] = {
                         "path": str(recovery_out),
@@ -1258,12 +1712,28 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                         "proofClaimed": False,
                         "error": "The bounded session stopped outside Campaign, so no rendered recovery export was available.",
                     }
+            action_durations = [entry["durationSeconds"] for entry in driver.action_battles]
+            action_survival_ratios = [
+                vital["hp"] / max(1, vital["maxHp"])
+                for entry in driver.action_battles
+                for vital in entry["partyVitals"]
+                if not vital["defeated"]
+            ]
             evidence.update(
                 {
                     "elapsedSeconds": round(time.monotonic() - started, 3),
                     "controlActivations": driver.controls,
                     "fieldMoves": driver.field_moves,
                     "battleCommands": driver.battle_commands,
+                    "actionBattles": driver.action_battles,
+                    "actionBattleSummary": {
+                        "count": len(driver.action_battles),
+                        "totalSeconds": round(sum(action_durations), 3),
+                        "medianSeconds": round(statistics.median(action_durations), 3) if action_durations else None,
+                        "longestSeconds": round(max(action_durations), 3) if action_durations else None,
+                        "totalRestarts": sum(entry["restarts"] for entry in driver.action_battles),
+                        "minimumSurvivorHpRatio": round(min(action_survival_ratios), 4) if action_survival_ratios else None,
+                    },
                     "campControls": driver.camp_controls,
                     "sceneTransitions": driver.scenes,
                     "finalCheckpoint": driver.checkpoint(),
@@ -1283,10 +1753,16 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--chromium", help="Path to Chrome or Edge.")
     parser.add_argument("--headed", action="store_true", help="Show the browser while the bounded attempt runs.")
-    parser.add_argument("--max-scenes", type=int, default=60)
-    parser.add_argument("--max-seconds", type=int, default=300)
+    parser.add_argument("--max-scenes", type=int, default=100)
+    parser.add_argument("--max-seconds", type=int, default=900)
     parser.add_argument("--max-field-moves", type=int, default=4_000)
-    parser.add_argument("--max-battle-commands", type=int, default=500)
+    parser.add_argument("--max-battle-commands", type=int, default=1_200)
+    parser.add_argument("--max-action-restarts", type=int, default=3)
+    parser.add_argument(
+        "--legacy-battle",
+        action="store_true",
+        help="Use the explicit tactical rollback instead of the canonical side-view action route.",
+    )
     parser.add_argument(
         "--completionist",
         action="store_true",
@@ -1301,6 +1777,8 @@ def parse_args() -> argparse.Namespace:
     for name in ("max_scenes", "max_seconds", "max_field_moves", "max_battle_commands", "frontier_reserve_seconds"):
         if getattr(args, name) <= 0:
             parser.error(f"--{name.replace('_', '-')} must be positive")
+    if args.max_action_restarts < 0:
+        parser.error("--max-action-restarts must not be negative")
     if args.recovery_in and not Path(args.recovery_in).is_file():
         parser.error("--recovery-in must name an existing checkpoint file")
     if args.recovery_out and not Path(args.recovery_out).expanduser().resolve().parent.is_dir():

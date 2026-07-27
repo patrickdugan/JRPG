@@ -30,6 +30,10 @@ export const ACTION_ENEMY_HP_COMPRESSION_THRESHOLD = 400;
 export const ACTION_ENEMY_HP_EXCESS_RATIO = 0.65;
 export const ACTION_ENEMY_POWER_PER_LEVEL = 0.025;
 export const ACTION_ENEMY_POWER_MULTIPLIER_CAP = 1.9;
+export const ACTION_ENEMY_GROUP_COOLDOWN_PER_EXTRA = 0.5;
+export const ACTION_ENEMY_GROUP_COOLDOWN_MULTIPLIER_CAP = 2.5;
+export const ACTION_ENEMY_GROUP_DAMAGE_FLOOR = 0.65;
+export const ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS = 2_000;
 
 const PARTY_ATTACK_PREFIX = 'party';
 const ENEMY_ATTACK_PREFIX = 'enemy';
@@ -130,6 +134,22 @@ export function actionEnemyPower(sourcePower, level) {
     1 + ((normalizedLevel - 1) * ACTION_ENEMY_POWER_PER_LEVEL),
   );
   return Math.round(power * multiplier);
+}
+
+/** Preserve readable counterplay when several turn-authored foes act simultaneously. */
+export function actionEnemyGroupCooldownMs(baseMs, activeEnemyCount = 1) {
+  const count = Math.max(1, Math.trunc(Number(activeEnemyCount) || 1));
+  const multiplier = Math.min(
+    ACTION_ENEMY_GROUP_COOLDOWN_MULTIPLIER_CAP,
+    1 + ((count - 1) * ACTION_ENEMY_GROUP_COOLDOWN_PER_EXTRA),
+  );
+  return roundToStep(Math.max(MINIMUM_SHARED_OFFENSIVE_COOLDOWN_MS, baseMs) * multiplier);
+}
+
+/** Bound aggregate mob damage while retaining simultaneous positional pressure. */
+export function actionEnemyGroupDamageMultiplier(activeEnemyCount = 1) {
+  const count = Math.max(1, Math.trunc(Number(activeEnemyCount) || 1));
+  return Math.max(ACTION_ENEMY_GROUP_DAMAGE_FLOOR, 1 / (1 + ((count - 1) * 0.35)));
 }
 
 function attackTiming(skill, sourceKind) {
@@ -264,7 +284,16 @@ function partyActor(deployment, index, context) {
     facing: 'right',
     resistances: resistances(profile.resistances),
     attackIds,
-    statuses: [],
+    statuses: actorId === 'aya'
+      ? [{
+          id: 'passive-healer',
+          nextTickAtMs: 1_600,
+          intervalMs: 1_600,
+          restoreFraction: 0.12,
+          minimumRestore: 10,
+          triggerRatio: 0.85,
+        }]
+      : [],
   };
   return {
     actor,
@@ -378,25 +407,47 @@ function readableEffectName(id) {
 function enemyActor(template, instanceIndex, position, context, attackIds) {
   const instanceId = `${template.id}-${instanceIndex + 1}`;
   const nonHostile = context.encounter.format === 'noncombat-resolution';
+  const tutorialSentry = String(template.role ?? '').includes('immovable');
+  const primaryBoss = ['boss', 'boss-rescue', 'boss-phase', 'final-boss'].includes(context.encounter.format)
+    && template.id === context.encounter.enemies[0]?.id;
   const hp = actionEnemyHp(template.stats.hp);
   const level = positiveLevel(context.options.enemyLevel ?? context.chapterTarget, 'enemyLevel');
+  const adaptedPower = actionEnemyPower(template.stats.power, level);
   return {
     id: instanceId,
     name: (template.count ?? 1) > 1 ? `${template.name} ${instanceIndex + 1}` : template.name,
     faction: nonHostile ? 'neutral' : 'enemy',
-    ai: nonHostile || attackIds.length === 0 ? null : 'deterministic-chase',
+    ai: nonHostile || attackIds.length === 0
+      ? null
+      : tutorialSentry
+        ? 'deterministic-sentry'
+        : 'deterministic-chase',
     level,
     hp,
     maxHp: hp,
-    power: actionEnemyPower(template.stats.power, level),
+    power: tutorialSentry ? Math.max(1, Math.round(adaptedPower * 0.5)) : adaptedPower,
     guard: template.stats.guard ?? 0,
     moveSpeed: movementSpeed(template.stats.speed),
-    offensiveCooldownMs: sharedOffensiveCooldownMs(template.stats.speed),
+    offensiveCooldownMs: tutorialSentry
+      ? 1_200
+      : Math.max(
+          primaryBoss ? ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS : 0,
+          actionEnemyGroupCooldownMs(
+            sharedOffensiveCooldownMs(template.stats.speed),
+            context.activeEnemyCount,
+          ),
+        ),
     position,
     facing: 'left',
     resistances: resistances(template.resistances),
     attackIds,
-    statuses: [],
+    statuses: context.activeEnemyCount > 1
+      ? [{
+          id: 'group-pressure',
+          damageMultiplier: actionEnemyGroupDamageMultiplier(context.activeEnemyCount),
+          activeEnemyCount: context.activeEnemyCount,
+        }]
+      : [],
   };
 }
 
@@ -462,7 +513,10 @@ export function adaptActionEncounter(encounterId, options = {}) {
   const chapterTarget = getChapterLevelTarget(encounter.chapterId);
   const progress = partyProgressById(options.advancementState);
   const stage = actionStageForLevel(level);
-  const context = { encounter, level, stage, chapterTarget, progress, options };
+  const activeEnemyCount = encounter.enemies.reduce((total, template) => (
+    total + (summonedTemplate(template) ? 0 : (template.count ?? template.positions?.length ?? 1))
+  ), 0);
+  const context = { encounter, level, stage, chapterTarget, progress, options, activeEnemyCount };
   const partyDeployment = partyDeploymentsWithSupport(
     encounter,
     options.supportActorId,

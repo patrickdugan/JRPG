@@ -7,6 +7,7 @@ import {
   createActionCampaignBattleSession,
   getActionCampaignComboState,
   getActionCampaignManeuverChoices,
+  getCanonicalActionFighterIds,
   parseActionCampaignBattleQuery,
   snapshotActionCampaignBattle,
   switchActionCampaignActor,
@@ -48,6 +49,14 @@ test('query parser preserves canonical battle handoffs and rejects unsafe return
   assert.equal(parseActionCampaignBattleQuery('?mode=campaign').canonical, true);
   assert.equal(parseActionCampaignBattleQuery('?canonical=1').canonical, true);
   assert.equal(parseActionCampaignBattleQuery('?mode=lab&canonical=0').canonical, false);
+});
+
+test('canonical campaign deployment keeps required opening actors before converging on the Hunter–Priest duo', () => {
+  assert.deepEqual(getCanonicalActionFighterIds('prologue-ashen-bailiff'), ['ren']);
+  assert.deepEqual(getCanonicalActionFighterIds('c1-cinder-hounds'), ['ren', 'aya']);
+  assert.deepEqual(getCanonicalActionFighterIds('fp1-mateus'), ['lise', 'ren']);
+  assert.deepEqual(getCanonicalActionFighterIds('c3-dock-patrol'), ['lise', 'mateus']);
+  assert.throws(() => getCanonicalActionFighterIds('missing'), /Unknown encounter ID/u);
 });
 
 test('session composes the real encounter, authored action stage, loadout vitals, party control, and objective runtime', () => {
@@ -412,6 +421,8 @@ test('carried items plus all token, protection, countdown, and phase-object fami
     advancementState: states.advancement,
     loadoutState: states.loadout,
   });
+  const dockView = snapshotActionCampaignBattle(dock);
+  assert.equal(dockView.objective.entities.tokens.every(({ destination }) => destination?.id === 'boat-exit'), true);
   for (const [index, token] of dock.objectiveEntities.tokens.entries()) {
     token.position = { x: 870 + index * 8, y: dock.stage.groundY };
   }
@@ -452,6 +463,15 @@ test('carried items plus all token, protection, countdown, and phase-object fami
     encounterId: 'c6-ujiro',
     advancementState: states.advancement,
     loadoutState: states.loadout,
+  });
+  const disableOrders = snapshotActionCampaignBattle(ujiro).objective.requirements
+    .find(({ id }) => id === 'disable-orders');
+  assert.deepEqual(disableOrders.targetAnchor, {
+    id: 'orders-ledger',
+    x: 760,
+    y: 300,
+    width: 56,
+    height: 82,
   });
   ujiro.kernel.getActor(ujiro.kernel.snapshot().controlledActorId).position = { x: 760, y: 300 };
   for (let index = 0; index < 12; index += 1) {

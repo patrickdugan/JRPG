@@ -1476,7 +1476,9 @@ export class ActionCombatKernel {
     for (const actorId of this.actorOrder) {
       const actor = this.getActor(actorId);
       const isCompanion = actor.faction === 'player' && actor.id !== this.controlledActorId;
-      const isEnemy = actor.faction === 'enemy' && actor.ai === 'deterministic-chase';
+      const isEnemy = actor.faction === 'enemy'
+        && ['deterministic-chase', 'deterministic-sentry'].includes(actor.ai);
+      const isSentry = actor.ai === 'deterministic-sentry';
       if (actor.hp <= 0
           || actor.hitStunRemainingMs > 0
           || (!isCompanion && !isEnemy)
@@ -1522,7 +1524,7 @@ export class ActionCombatKernel {
       const usableAttack = actor.attackIds.find((attackId) => {
         if (this.attacks[attackId].kind === 'subweapon') return false;
         const state = this.getAttackState(actor.id, attackId);
-        return state.ready && attackOverlapsTarget(attackId);
+        return state.ready && (isSentry || attackOverlapsTarget(attackId));
       });
       if (usableAttack) {
         actor.movementIntent = { x: 0, y: 0 };
@@ -1576,6 +1578,16 @@ export class ActionCombatKernel {
 
       if (!target) {
         actor.movementIntent = { x: 0, y: 0 };
+        continue;
+      }
+      if (isSentry) {
+        actor.movementIntent = { x: 0, y: 0 };
+        this._emit('enemy-decision', {
+          actorId: actor.id,
+          action: 'hold',
+          targetId: target.id,
+          intent: { ...actor.movementIntent },
+        });
         continue;
       }
       const delta = { x: target.position.x - actor.position.x };

@@ -452,6 +452,7 @@ function objectiveEntitySnapshot(session) {
     tokens: director.tokens.map((token) => ({
       id: token.id,
       position: { ...token.position },
+      destination: clone(requirementDestination(session, token.id)),
       bounds: { ...token.bounds },
       hp: token.hp,
       maxHp: token.maxHp,
@@ -473,6 +474,20 @@ function objectiveEntitySnapshot(session) {
     enemyActionCount: director.enemyActionCount,
     bellCount: director.bellCount,
   });
+}
+
+function requirementAnchorSnapshot(session, requirementId) {
+  const requirement = session.objectiveContract.requirements.find(({ id }) => id === requirementId);
+  const anchor = (requirement?.anchorIds ?? [])
+    .map((anchorId) => anchorById(session.stage, anchorId))
+    .find(Boolean);
+  return anchor == null ? null : {
+    id: anchor.id,
+    x: anchor.x,
+    y: anchor.y,
+    width: anchor.width,
+    height: anchor.height,
+  };
 }
 
 function entityEventsFromCombat(session, events) {
@@ -689,6 +704,7 @@ function objectiveSnapshot(session, kernelSnapshot = session.kernel.snapshot()) 
       complete: requirement.completed,
       castElapsedMs: requirement.castElapsedMs,
       castDurationMs: requirement.castDurationMs,
+      targetAnchor: requirementAnchorSnapshot(session, requirement.id),
     })),
     failures: snapshot.failures,
     runtime: snapshot,
@@ -789,6 +805,20 @@ export function parseActionCampaignBattleQuery(search = '', fallbackEncounterId 
       chronicleChoiceId: query.get('chronicleChoice'),
     },
   });
+}
+
+export function getCanonicalActionFighterIds(encounterId) {
+  const encounter = getEncounter(encounterId);
+  if (!encounter) throw new RangeError(`Unknown encounter ID: ${encounterId}.`);
+  const roster = encounter.party?.roster ?? [];
+  if (roster.includes('lise') && roster.includes('mateus')) return deepFreeze(['lise', 'mateus']);
+  if (roster.includes('lise') && roster.includes('ren')) return deepFreeze(['lise', 'ren']);
+  if (roster.includes('ren') && roster.includes('aya')) return deepFreeze(['ren', 'aya']);
+  if (roster.includes('ren')) return deepFreeze(['ren']);
+  if (roster.includes('lise')) return deepFreeze(['lise', 'mateus']);
+  if (roster.includes('mateus')) return deepFreeze(['mateus', 'lise']);
+  if (roster.includes('miyo')) return deepFreeze(['miyo', 'lise']);
+  return deepFreeze(['lise', 'mateus']);
 }
 
 export function createActionCampaignBattleSession({

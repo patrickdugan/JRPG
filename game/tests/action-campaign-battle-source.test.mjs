@@ -35,6 +35,7 @@ test('page carries text authority, keyboard and touch controls, and a session-lo
   assert.match(canvas, /tabindex="0"/u);
   assert.match(canvas, /aria-describedby="battleInstructions battleReadout"/u);
   assert.match(html, /id="battleReadout"[^>]*aria-label="Text battle state"/u);
+  assert.match(html, /id="battleModeLabel"/u);
   assert.match(html, /id="objectiveRequirements"/u);
   assert.match(html, /id="partyReadout"/u);
   assert.match(html, /id="enemyReadout"/u);
@@ -68,6 +69,18 @@ test('page carries text authority, keyboard and touch controls, and a session-lo
   assert.match(browser, /dataset\.duoEnabled/u);
   assert.match(browser, /dataset\.supportActorId/u);
   assert.match(browser, /dataset\.supportState/u);
+  assert.match(browser, /CAMPAIGN BATTLE · LIVE CONSEQUENCES/u);
+  assert.match(browser, /dataset\.actorId/u);
+  assert.match(browser, /dataset\.positionX/u);
+  assert.match(browser, /dataset\.requirementId/u);
+  assert.match(browser, /dataset\.targetX/u);
+  assert.match(browser, /dataset\.entityType/u);
+  assert.match(browser, /dataset\.destinationX/u);
+  assert.match(browser, /row\.dataset\.attackId = choice\.id/u);
+  assert.match(browser, /row\.dataset\.ready = String\(choice\.state\.ready\)/u);
+  assert.match(browser, /row\.dataset\.reachPx/u);
+  assert.match(browser, /row\.dataset\.subweaponId = choice\.id/u);
+  assert.match(browser, /row\.dataset\.input = choice\.input/u);
   assert.match(model, /aiControlledActorIds/u);
   assert.match(html, /data-action-control="combo"[^>]*>Hunter \+ Priest</u);
 });

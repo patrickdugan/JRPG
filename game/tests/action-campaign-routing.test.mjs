@@ -20,10 +20,14 @@ test('every campaign battle handoff uses canonical action routing through one he
   assert.doesNotMatch(outsideHelper, /window\.location\.href = `battle\.html|launchBattle\.href = `battle\.html/u);
 });
 
-test('legacy tactical battle is an explicit sticky rollback used by the rendered route verifier', () => {
+test('rendered route verifier follows canonical action combat and retains an explicit tactical rollback flag', () => {
   assert.match(campaign, /campaignQuery\.get\('legacyBattle'\) === '1'/u);
   assert.match(campaign, /sessionStorage\.setItem\('bells\.legacyBattle', '1'\)/u);
   assert.match(campaign, /return `battle\.html\?\$\{parameters\.toString\(\)\}`/u);
   assert.match(campaign, /parameters\.set\('return', 'campaign\.html\?legacyBattle=1'\)/u);
-  assert.match(routeRunner, /campaign\.html\?legacyBattle=1/u);
+  assert.match(routeRunner, /"battleMode": "legacy-tactical" if args\.legacy_battle else "canonical-action"/u);
+  assert.match(routeRunner, /campaign\.html\?legacyBattle=\{'1' if args\.legacy_battle else '0'\}/u);
+  assert.match(routeRunner, /"--legacy-battle"/u);
+  assert.match(routeRunner, /def play_action_battle\(self\)/u);
+  assert.match(routeRunner, /rendered-controls-only/u);
 });

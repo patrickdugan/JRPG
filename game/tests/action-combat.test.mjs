@@ -145,6 +145,27 @@ function actorSnapshot(engine, actorId) {
   return engine.snapshot().actors.find((actor) => actor.id === actorId);
 }
 
+test('deterministic sentries telegraph at range without erasing an immovable encounter role', () => {
+  const engine = partyKernel({
+    enemyAi: 'deterministic-sentry',
+    actorOverrides: {
+      ren: { position: { x: 40, y: 300 } },
+      aya: { position: { x: 60, y: 300 } },
+      oni: { position: { x: 440, y: 300 } },
+    },
+  });
+  engine.advance(20);
+  const sentry = actorSnapshot(engine, 'oni');
+  assert.equal(sentry.position.x, 440);
+  assert.equal(sentry.activeAttack?.attackId, 'thrust');
+  assert.equal(engine.drainEvents().some(({ type, actorId, action }) => (
+    type === 'enemy-decision' && actorId === 'oni' && action === 'attack'
+  )), true);
+  engine.advance(100);
+  assert.equal(actorSnapshot(engine, 'oni').position.x, 440);
+  assert.equal(actorSnapshot(engine, 'ren').hp, 200);
+});
+
 test('cooldown level scaling is exact, bounded at 55%, and independent of animation durations', () => {
   assert.equal(cooldownMultiplierForLevel(1), 1);
   assert.equal(cooldownMultiplierForLevel(10), 0.8875);

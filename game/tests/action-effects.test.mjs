@@ -23,6 +23,37 @@ function completeAttack(kernel, actorId, attackId) {
   return kernel.drainEvents();
 }
 
+test('Aya passively restores the most wounded living ally on a deterministic ward pulse', () => {
+  const { kernel } = createActionEncounterKernel('c1-cinder-hounds', { automaticVictory: false });
+  for (const actorId of kernel.actorOrder) kernel.getActor(actorId).ai = null;
+  const ren = kernel.getActor('ren');
+  const aya = kernel.getActor('aya');
+  ren.hp = 20;
+  kernel.advance(1_580);
+  assert.equal(ren.hp, 20);
+  kernel.advance(20);
+  const event = kernel.drainEvents().find(({ type }) => type === 'status-heal');
+  assert.deepEqual(
+    {
+      actorId: event.actorId,
+      targetId: event.targetId,
+      statusId: event.statusId,
+      restoredHp: event.restoredHp,
+      hpBefore: event.hpBefore,
+      hpAfter: event.hpAfter,
+    },
+    {
+      actorId: 'aya',
+      targetId: 'ren',
+      statusId: 'passive-healer',
+      restoredHp: Math.ceil(ren.maxHp * 0.12),
+      hpBefore: 20,
+      hpAfter: 20 + Math.ceil(ren.maxHp * 0.12),
+    },
+  );
+  assert.equal(aya.statuses.some(({ id }) => id === 'passive-healer'), true);
+});
+
 test('Blood Ward completion activates both dormant seals and enforces 25% mitigation until they break', () => {
   const { kernel } = createActionEncounterKernel('fp1-mateus', { automaticVictory: false });
   silenceAi(kernel);

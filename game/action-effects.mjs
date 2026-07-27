@@ -159,6 +159,41 @@ function tickStatuses(nowMs, kernel) {
         expireStatus(actor, status, kernel, 'duration');
         continue;
       }
+      if (status.id === 'passive-healer' && actor.hp > 0) {
+        const nextTickAtMs = status.nextTickAtMs ?? nowMs;
+        if (nowMs < nextTickAtMs) continue;
+        const intervalMs = Math.max(1, Math.trunc(status.intervalMs ?? 1_600));
+        status.nextTickAtMs = nextTickAtMs + intervalMs;
+        const triggerRatio = clamp(Number(status.triggerRatio ?? 0.72), 0, 1);
+        const target = kernel.actorOrder
+          .map((candidateId) => kernel.getActor(candidateId))
+          .filter((candidate) => (
+            candidate.faction === actor.faction
+            && candidate.hp > 0
+            && candidate.hp < candidate.maxHp
+            && candidate.hp / candidate.maxHp < triggerRatio
+          ))
+          .sort((first, second) => (
+            (first.hp / first.maxHp) - (second.hp / second.maxHp)
+            || kernel.actorOrder.indexOf(first.id) - kernel.actorOrder.indexOf(second.id)
+          ))[0];
+        if (!target) continue;
+        const restore = Math.max(
+          Math.trunc(status.minimumRestore ?? 1),
+          Math.ceil(target.maxHp * Number(status.restoreFraction ?? 0)),
+        );
+        const hpBefore = target.hp;
+        target.hp = Math.min(target.maxHp, target.hp + restore);
+        kernel._emit('status-heal', {
+          actorId: actor.id,
+          targetId: target.id,
+          statusId: status.id,
+          restoredHp: target.hp - hpBefore,
+          hpBefore,
+          hpAfter: target.hp,
+        });
+        continue;
+      }
       if (status.id !== 'scorch' || actor.hp <= 0) continue;
       const nextTickAtMs = status.nextTickAtMs ?? (status.appliedAtMs + ACTION_SCORCH_TICK_MS);
       if (nowMs < nextTickAtMs) continue;
@@ -198,6 +233,8 @@ export function createActionEffectHooks({
       let multiplier = 1;
       if (findStatus(attacker, 'dread')) multiplier *= 0.8;
       if (findStatus(attacker, 'shock')) multiplier *= 0.85;
+      const groupPressure = findStatus(attacker, 'group-pressure');
+      if (groupPressure) multiplier *= Number(groupPressure.damageMultiplier ?? 1);
       if (findStatus(target, 'guard')) multiplier *= 0.5;
       if (findStatus(target, 'overheated')) multiplier *= 1.2;
       if (findStatus(target, 'final-ward-open')) multiplier *= 1.25;

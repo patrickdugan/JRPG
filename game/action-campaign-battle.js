@@ -5,6 +5,7 @@ import {
   getActionCampaignAttackChoices,
   getActionCampaignManeuverChoices,
   getActionCampaignSubweaponChoices,
+  getCanonicalActionFighterIds,
   parseActionCampaignBattleQuery,
   snapshotActionCampaignBattle,
   switchActionCampaignActor,
@@ -90,8 +91,11 @@ if (sliceRequested) {
 }
 const sliceMode = sliceRun != null;
 const canonicalMode = query.canonical && !sliceMode;
-const requestedLeadId = publicFighterIds[String(laboratoryQuery.get('lead') ?? '').toLowerCase()] ?? 'lise';
-let requestedSupportId = publicFighterIds[String(laboratoryQuery.get('support') ?? '').toLowerCase()] ?? 'mateus';
+const canonicalFighterIds = getCanonicalActionFighterIds(query.encounterId);
+const defaultLeadId = canonicalMode ? canonicalFighterIds[0] : 'lise';
+const defaultSupportId = canonicalMode ? canonicalFighterIds[1] : 'mateus';
+const requestedLeadId = publicFighterIds[String(laboratoryQuery.get('lead') ?? '').toLowerCase()] ?? defaultLeadId;
+let requestedSupportId = publicFighterIds[String(laboratoryQuery.get('support') ?? '').toLowerCase()] ?? defaultSupportId;
 if (requestedSupportId === requestedLeadId) requestedSupportId = requestedLeadId === 'mateus' ? 'lise' : 'mateus';
 const ACTION_LAB_FIGHTER_ACTOR_IDS = Object.freeze(sliceMode
   ? [...sliceRun.fighters]
@@ -150,6 +154,7 @@ let session = createActionCampaignBattleSession({
 const elements = {
   canvas: document.querySelector('#actionCampaignCanvas'),
   pauseCurtain: document.querySelector('#pauseCurtain'),
+  battleModeLabel: document.querySelector('#battleModeLabel'),
   encounterTitle: document.querySelector('#encounterTitle'),
   encounterSubtitle: document.querySelector('#encounterSubtitle'),
   campaignLink: document.querySelector('#campaignLink'),
@@ -216,14 +221,19 @@ elements.stageName.textContent = session.stage.id.replaceAll('-', ' ').toUpperCa
 elements.campaignLink.href = query.returnTarget;
 elements.continueCampaign.href = query.returnTarget;
 elements.canvas.dataset.encounterId = session.encounter.id;
+elements.canvas.dataset.objectiveType = session.encounter.objective.type;
 elements.canvas.dataset.stageId = session.stage.id;
+elements.canvas.dataset.stageMinX = String(session.stage.bounds.minX);
+elements.canvas.dataset.stageMaxX = String(session.stage.bounds.maxX);
 elements.canvas.dataset.sliceMode = String(sliceMode);
 elements.canvas.dataset.canonicalMode = String(canonicalMode);
 if (sliceMode) {
+  elements.battleModeLabel.textContent = 'ACTION SLICE · SESSION CHECKPOINT';
   elements.campaignLink.textContent = 'Leave slice';
   elements.continueCampaign.textContent = 'Continue slice';
   elements.settlementStatus.textContent = 'Victory preserves duo HP only in this session-local slice checkpoint.';
 } else if (canonicalMode) {
+  elements.battleModeLabel.textContent = 'CAMPAIGN BATTLE · LIVE CONSEQUENCES';
   elements.campaignLink.textContent = 'Leave battle';
   elements.continueCampaign.textContent = 'Continue campaign';
   elements.settlementStatus.textContent = 'Victory will atomically save rewards, surviving HP, route evidence, and first-clear telemetry.';
@@ -993,7 +1003,14 @@ function draw(snapshot, elapsedMs) {
 
 function actorListItem(actor, controlledActorId) {
   const item = document.createElement('li');
+  item.dataset.actorId = actor.id;
+  item.dataset.faction = actor.faction;
   item.dataset.defeated = String(actor.hp <= 0);
+  item.dataset.hp = String(Math.ceil(actor.hp));
+  item.dataset.maxHp = String(Math.ceil(actor.maxHp));
+  item.dataset.positionX = String(Math.round(actor.position.x * 100) / 100);
+  item.dataset.positionY = String(Math.round(actor.position.y * 100) / 100);
+  item.dataset.activePhase = actor.activeAttack?.phase ?? '';
   const isDirectlyControlled = actor.id === controlledActorId;
   const controlRole = actor.faction === 'player' ? (isDirectlyControlled ? 'direct' : 'support') : 'hostile';
   item.dataset.controlRole = controlRole;
@@ -1048,13 +1065,29 @@ function renderDom(snapshot) {
   const requirementItems = snapshot.objective.requirements.map((requirement) => {
     const item = document.createElement('li');
     item.dataset.complete = String(requirement.complete);
+    item.dataset.available = String(requirement.available);
+    item.dataset.semantics = requirement.semantics;
+    item.dataset.requirementId = requirement.id;
+    item.dataset.targetX = requirement.targetAnchor == null ? '' : String(requirement.targetAnchor.x);
+    item.dataset.targetY = requirement.targetAnchor == null ? '' : String(requirement.targetAnchor.y);
+    item.dataset.castDurationMs = requirement.castDurationMs == null ? '' : String(requirement.castDurationMs);
+    item.dataset.castElapsedMs = requirement.castElapsedMs == null ? '' : String(requirement.castElapsedMs);
     item.textContent = `${requirement.complete ? '✓' : '○'} ${requirement.id.replaceAll('-', ' ')}`;
     return item;
   });
   const entityItems = [
     ...(snapshot.objective.entities?.tokens ?? []).map((token) => {
       const item = document.createElement('li');
+      const destination = token.destination;
+      item.dataset.entityType = 'token';
+      item.dataset.entityId = token.id;
       item.dataset.complete = String(token.secured);
+      item.dataset.released = String(token.released);
+      item.dataset.recruited = String(token.recruited);
+      item.dataset.positionX = String(Math.round(token.position.x * 100) / 100);
+      item.dataset.positionY = String(Math.round(token.position.y * 100) / 100);
+      item.dataset.destinationX = destination == null ? '' : String(Math.round(destination.x * 100) / 100);
+      item.dataset.destinationY = destination == null ? '' : String(Math.round(destination.y * 100) / 100);
       item.textContent = `${token.secured ? '✓' : token.released ? '→' : '○'} ${token.id.replaceAll('-', ' ')} · ${token.hp}/${token.maxHp} HP · ${
         token.secured ? 'secured' : token.released ? token.recruited ? 'following' : 'awaiting escort' : 'chained'
       }`;
@@ -1062,7 +1095,13 @@ function renderDom(snapshot) {
     }),
     ...(snapshot.objective.entities?.objects ?? []).map((object) => {
       const item = document.createElement('li');
+      item.dataset.entityType = 'object';
+      item.dataset.entityId = object.id;
       item.dataset.complete = String(object.attackable ? object.destroyed : !object.destroyed);
+      item.dataset.attackable = String(object.attackable);
+      item.dataset.protected = String(object.protected);
+      item.dataset.positionX = String(Math.round(object.position.x * 100) / 100);
+      item.dataset.positionY = String(Math.round(object.position.y * 100) / 100);
       item.textContent = `${object.destroyed ? '×' : object.attackable ? '◇' : '◆'} ${object.id.replaceAll('-', ' ')} · ${object.hp}/${object.maxHp} HP`;
       return item;
     }),
@@ -1086,9 +1125,15 @@ function renderDom(snapshot) {
     : `Nikola ↔ Mateus ${Math.round(snapshot.combo.separationPx)} px · maximum ${snapshot.combo.maxAllySeparationPx} px`;
 
   const choices = getActionCampaignAttackChoices(session, snapshot.kernel.controlledActorId);
-  elements.attackTimers.replaceChildren(...choices.map((choice) => {
+  elements.attackTimers.replaceChildren(...choices.map((choice, index) => {
     const row = document.createElement('div');
     row.className = 'attack-timer';
+    row.dataset.attackId = choice.id;
+    row.dataset.attackIndex = String(index);
+    row.dataset.ready = String(choice.state.ready);
+    row.dataset.reason = choice.state.reason ?? '';
+    row.dataset.cooldownRemainingMs = String(choice.state.effectiveCooldownRemainingMs);
+    row.dataset.reachPx = String(session.spec.kernelConfig.attacks[choice.id].hitbox.width);
     const name = document.createElement('strong');
     name.textContent = `${choice.name} · ${choice.delivery}${choice.essence ? ` · ${choice.essence}` : ''}`;
     const output = document.createElement('output');
@@ -1117,6 +1162,10 @@ function renderDom(snapshot) {
     const row = document.createElement('div');
     row.className = 'attack-timer';
     row.dataset.ready = String(choice.state.ready);
+    row.dataset.subweaponId = choice.id;
+    row.dataset.input = choice.input;
+    row.dataset.stock = String(choice.stock);
+    row.dataset.reachPx = String(session.spec.kernelConfig.attacks[choice.attackId].hitbox.width);
     const name = document.createElement('strong');
     name.textContent = `${choice.name} ×${choice.stock} · ${choice.input}`;
     const output = document.createElement('output');
