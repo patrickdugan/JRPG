@@ -99,6 +99,10 @@ export const ENCOUNTERS = [
     enemies: [
       {
         id: 'cinder-hound', name: 'Cinder Hound', count: 2, positions: ['3,1', '8,1'], role: 'line-lunge skirmisher',
+        // Side-view companions and overlapping hitboxes concentrate damage much
+        // faster than the tactical board. Keep the teaching read alive long
+        // enough to see one complete lunge without changing tactical HP.
+        actionHpMultiplier: 1.75,
         stats: { hp: 86, power: 12, guard: 8, speed: 94 },
         resistances: {
           delivery: { cut: 0.75, pierce: 1.25, crush: 1, arcane: 1 },
@@ -136,6 +140,7 @@ export const ENCOUNTERS = [
     enemies: [
       {
         id: 'ash-wisp', name: 'Ash Wisp', count: 2, positions: ['4,1', '7,1'], role: 'slow charged burst caster',
+        actionHpMultiplier: 1.75,
         stats: { hp: 52, power: 11, guard: 5, speed: 82 },
         resistances: {
           delivery: { cut: 1, pierce: 1, crush: 1, arcane: 1 },
@@ -228,6 +233,7 @@ export const ENCOUNTERS = [
     enemies: [
       {
         id: 'cinder-hound', name: 'Cinder Hound', count: 2, positions: ['2,1', '9,1'], role: 'line-lunge skirmisher',
+        actionHpMultiplier: 1.75,
         stats: { hp: 94, power: 10, guard: 9, speed: 94 },
         resistances: {
           delivery: { cut: 0.75, pierce: 1.25, crush: 1, arcane: 1 },
@@ -242,6 +248,7 @@ export const ENCOUNTERS = [
       },
       {
         id: 'ash-wisp', name: 'Ash Wisp', count: 1, positions: ['6,1'], role: 'charged burst caster',
+        actionHpMultiplier: 1.75,
         stats: { hp: 60, power: 12, guard: 5, speed: 82 },
         resistances: {
           delivery: { cut: 1, pierce: 1, crush: 1, arcane: 1 },
@@ -274,6 +281,7 @@ export const ENCOUNTERS = [
     enemies: [
       {
         id: 'tithe-enforcer', name: 'Tithe Enforcer', count: 1, positions: ['6,2'], role: 'shielded forced-movement guard',
+        actionHpMultiplier: 2,
         stats: { hp: 214, power: 17, guard: 15, speed: 88 },
         resistances: {
           delivery: { cut: 0.75, pierce: 1.25, crush: 1, arcane: 1 },
@@ -288,6 +296,7 @@ export const ENCOUNTERS = [
       },
       {
         id: 'bell-moth', name: 'Bell Moth', count: 2, positions: ['4,1', '7,1'], role: 'group-pulse nuisance',
+        actionHpMultiplier: 2,
         stats: { hp: 64, power: 12, guard: 5, speed: 102 },
         resistances: {
           delivery: { cut: 1, pierce: 1, crush: 1, arcane: 1 },

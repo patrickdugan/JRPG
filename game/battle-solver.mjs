@@ -16,6 +16,7 @@ const DIRECTIONS = Object.freeze([
 const BOSS_OBJECTIVES = new Set([
   'defeatBoss',
   'defeatBossWithProtection',
+  'disableOrdersAndProtect',
   'defeatBossAndRelease',
   'defeatBossAndEvacuate',
 ]);
@@ -165,6 +166,16 @@ function incompleteManualRequirement(snapshot) {
   )) ?? null;
 }
 
+function hasIncompleteAutomaticRequirement(snapshot) {
+  return snapshot.objective.requirements.some((requirement) => (
+    requirement.automatic && !requirement.complete
+  ));
+}
+
+function objectiveRequiresEnemyDefeat(snapshot) {
+  return snapshot.objective.type === 'defeatAll' || BOSS_OBJECTIVES.has(snapshot.objective.type);
+}
+
 function moveAlong(engine, actorId, path, trace) {
   let moved = 0;
   for (const direction of path ?? []) {
@@ -236,6 +247,13 @@ export function chooseCampaignCombatCommand(engine) {
     return Object.freeze({ type: 'guard' });
   }
 
+  // Once a protection/survival objective's explicit work is complete, do not
+  // erase its remaining hostile cadence by focus-firing a non-required enemy.
+  // Hold formation and let the authored automatic requirement advance.
+  if (hasIncompleteAutomaticRequirement(snapshot) && !objectiveRequiresEnemyDefeat(snapshot)) {
+    return Object.freeze({ type: 'guard' });
+  }
+
   if (livingEnemies(snapshot).length) {
     const attack = bestAttackPlan(engine, snapshot, actor);
     if (attack?.path.length && snapshot.pace > 0) {
@@ -285,7 +303,10 @@ export function solveCampaignCombat(engine, options = {}) {
     let committed = false;
     const requirement = incompleteManualRequirement(snapshot);
     if (requirement) committed = performManualObjective(engine, snapshot, actor, requirement, trace);
-    if (!committed && livingEnemies(engine.snapshot()).length) {
+    const afterObjective = engine.snapshot();
+    const waitingOnAutomaticObjective = hasIncompleteAutomaticRequirement(afterObjective)
+      && !objectiveRequiresEnemyDefeat(afterObjective);
+    if (!committed && !waitingOnAutomaticObjective && livingEnemies(afterObjective).length) {
       committed = performAttackTurn(engine, engine.snapshot(), engine.getActor(actor.instanceId), trace);
     }
     if (!committed) {

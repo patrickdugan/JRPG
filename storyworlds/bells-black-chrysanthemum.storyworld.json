@@ -30886,7 +30886,7 @@
                   {
                     "pointer_type": "Bounded Number Constant",
                     "script_element_type": "Pointer",
-                    "value": 0.09
+                    "value": 0.12
                   },
                   {
                     "pointer_type": "Bounded Number Pointer",
@@ -31310,7 +31310,7 @@
                   {
                     "pointer_type": "Bounded Number Constant",
                     "script_element_type": "Pointer",
-                    "value": 0.25
+                    "value": 0.37
                   },
                   {
                     "pointer_type": "Bounded Number Pointer",

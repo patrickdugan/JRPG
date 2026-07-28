@@ -11,14 +11,14 @@ test('full-catalog pacing remains a diagnostic ceiling rather than a selected-ro
   assert.equal(STORYWORLD_PACING_REPORT.maximumVisibleWords, 2750);
   assert.equal(STORYWORLD_PACING_REPORT.maximumDecisionCount, 23);
   assert.equal(STORYWORLD_PACING_REPORT.storyworldReferenceMinutes, 21.416666666666668);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 340.9266666666667);
-  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.682111111111111);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceMinutes, 341.9686666666667);
+  assert.equal(STORYWORLD_PACING_REPORT.fullCatalogReferenceHours, 5.699477777777778);
   assert.equal(STORYWORLD_PACING_REPORT.fullCatalogWithinFiveToSixHourTarget, true);
   assert.equal(STORYWORLD_PACING_REPORT.selectedRouteDurationClaim, false);
 });
 
 test('pacing remains an explicit diagnostic and never claims observed playtime', () => {
-  assert.equal(STORYWORLD_PACING_ASSUMPTIONS.fullCanonicalCatalogReferenceMinutes, 319.51);
+  assert.equal(STORYWORLD_PACING_ASSUMPTIONS.fullCanonicalCatalogReferenceMinutes, 320.552);
   assert.equal(STORYWORLD_PACING_ASSUMPTIONS.readingWordsPerMinute, 200);
   assert.equal(STORYWORLD_PACING_ASSUMPTIONS.decisionDwellSeconds, 20);
   assert.equal(STORYWORLD_PACING_REPORT.diagnosticOnly, true);

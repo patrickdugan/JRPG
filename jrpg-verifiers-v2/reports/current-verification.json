@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "kind": "jrpg-verification-report",
-  "generatedAt": "2026-07-21T22:50:47.699Z",
+  "generatedAt": "2026-07-28T19:13:18.856Z",
   "environment": {
     "id": "jrpg-game-design-verifiers-v2",
     "directory": "C:\\projects\\JRPG\\jrpg-verifiers-v2"
@@ -147,7 +147,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 4096,
+        "words": 4233,
         "kinds": [
           "markdown"
         ]
@@ -160,9 +160,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 28044,
-          "words": 4096,
-          "sha256": "d044217cb0b67a0e951b326f80f3b6d316db4b801a0b07edac7f9e40f0ab5e97",
+          "bytes": 28968,
+          "words": 4233,
+          "sha256": "846b8f7db4e2a8ded7767373e9d0a58be436787f41ed69052b43415e1460f92f",
           "errors": []
         }
       ],
@@ -219,7 +219,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 2785,
+        "words": 2812,
         "kinds": [
           "markdown"
         ]
@@ -232,9 +232,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 19529,
-          "words": 2785,
-          "sha256": "b7d34de8dc52d2c8533b993741441d1cbca33691474226cfcc501447f0f161e4",
+          "bytes": 19762,
+          "words": 2812,
+          "sha256": "08857e0484e6d1e4a9ba6612afe7f28be630cd5c050f78de2426856023bd9694",
           "errors": []
         }
       ],
@@ -288,7 +288,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 4056,
+        "words": 4070,
         "kinds": [
           "markdown"
         ]
@@ -301,9 +301,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 26452,
-          "words": 4056,
-          "sha256": "53eb143f52c48c6eb67c1ab803c42fb1f7ea6a58ddd300ddc3a76943921d21e6",
+          "bytes": 26570,
+          "words": 4070,
+          "sha256": "45663ee775192dc6e56c6a5b60e43b5f5b18d3075936d5da47cbceeacc175c3d",
           "errors": []
         }
       ],
@@ -364,9 +364,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 39417,
+          "bytes": 39419,
           "words": 6015,
-          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "sha256": "b15388e09b238e0e8363543b08a8fdf3a828b52d92f28df9355c0c57e0e2f774",
           "errors": []
         }
       ],
@@ -422,7 +422,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 3395,
+        "words": 3412,
         "kinds": [
           "markdown"
         ]
@@ -435,9 +435,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 25531,
-          "words": 3395,
-          "sha256": "25d61fd34dacd520ce0f3515f67f4544e9c4c9606bae792f838bf2328f4047e5",
+          "bytes": 25678,
+          "words": 3412,
+          "sha256": "c4676b67501e1ac5002bda7677d967b72079ab3b221cee7235d13624f68c8dbb",
           "errors": []
         }
       ],
@@ -479,7 +479,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 2968,
+        "words": 3020,
         "kinds": [
           "image",
           "markdown"
@@ -505,9 +505,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 21050,
-          "words": 2968,
-          "sha256": "ca6d900b89a3e791b04be91faf8888514c1ec79fb631ec362f7d10468fd20efa",
+          "bytes": 21460,
+          "words": 3020,
+          "sha256": "c35ddf67203c55857d20919c16bc2ec477c5aa432527c0c88525738a09e8196e",
           "errors": []
         }
       ],
@@ -547,7 +547,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 2968,
+        "words": 3020,
         "kinds": [
           "image",
           "markdown"
@@ -573,9 +573,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 21050,
-          "words": 2968,
-          "sha256": "ca6d900b89a3e791b04be91faf8888514c1ec79fb631ec362f7d10468fd20efa",
+          "bytes": 21460,
+          "words": 3020,
+          "sha256": "c35ddf67203c55857d20919c16bc2ec477c5aa432527c0c88525738a09e8196e",
           "errors": []
         }
       ],
@@ -615,7 +615,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3310,
+        "words": 3373,
         "kinds": [
           "markdown",
           "source"
@@ -629,9 +629,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 2968,
-          "words": 342,
-          "sha256": "66639b44a3b1db716d4f95f56f627f6fd34578437654ab910c5d27aaddb4926e",
+          "bytes": 3065,
+          "words": 353,
+          "sha256": "5797d7bf4f8962708271d2fc1dd1c1d6563de1e1a893d951a59f32fdb9672023",
           "errors": []
         },
         {
@@ -641,9 +641,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 21050,
-          "words": 2968,
-          "sha256": "ca6d900b89a3e791b04be91faf8888514c1ec79fb631ec362f7d10468fd20efa",
+          "bytes": 21460,
+          "words": 3020,
+          "sha256": "c35ddf67203c55857d20919c16bc2ec477c5aa432527c0c88525738a09e8196e",
           "errors": []
         }
       ],
@@ -743,7 +743,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 1473,
+        "words": 1564,
         "kinds": [
           "markdown"
         ]
@@ -756,9 +756,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 10932,
-          "words": 1473,
-          "sha256": "8c7e6a88823f7eea55680c597c5cb2bf0898a41fb36df0691c99ff9c5efa2107",
+          "bytes": 11612,
+          "words": 1564,
+          "sha256": "d53cd7d016ebc554e7e54a2f52abfc59ca19376ebcdd1a9fcc9e43e35d1cd911",
           "errors": []
         }
       ],
@@ -865,7 +865,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 8077,
+        "words": 8202,
         "kinds": [
           "markdown",
           "source"
@@ -879,9 +879,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 14182,
-          "words": 2004,
-          "sha256": "647a5e8ac0625d7c5ec9d2844faa526b34ffa0465bf647d49592900d503f7014",
+          "bytes": 15278,
+          "words": 2129,
+          "sha256": "eb297c10a9aff51ce08409e85b818451656003b0cb43ea4c8d5be539508ea871",
           "errors": []
         },
         {
@@ -949,7 +949,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 8947,
+        "words": 8985,
         "kinds": [
           "markdown",
           "source"
@@ -963,9 +963,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 19529,
-          "words": 2785,
-          "sha256": "b7d34de8dc52d2c8533b993741441d1cbca33691474226cfcc501447f0f161e4",
+          "bytes": 19762,
+          "words": 2812,
+          "sha256": "08857e0484e6d1e4a9ba6612afe7f28be630cd5c050f78de2426856023bd9694",
           "errors": []
         },
         {
@@ -975,9 +975,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 60517,
-          "words": 6162,
-          "sha256": "7a3622da10b437a0251c1e2a79d3f6012f9761db572a54de690266b55188294d",
+          "bytes": 60750,
+          "words": 6173,
+          "sha256": "c523d86fefad5785bee5c0f117cefda32f07e137ee342c96fa10f244d49411e7",
           "errors": []
         }
       ],
@@ -1031,7 +1031,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 7579,
+        "words": 7587,
         "kinds": [
           "markdown",
           "source"
@@ -1045,9 +1045,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 8967,
-          "words": 1234,
-          "sha256": "431c42f877d3bd05953a3506d4bca5c55710b9985a4dce71013fe3d487915f99",
+          "bytes": 9035,
+          "words": 1242,
+          "sha256": "91e59bfd2e455277877543cdc5bb538919c212b79d82072540546ed7e018144a",
           "errors": []
         },
         {
@@ -1111,7 +1111,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3591,
+        "words": 3727,
         "kinds": [
           "markdown",
           "source"
@@ -1137,9 +1137,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 20892,
-          "words": 2198,
-          "sha256": "f8a3b2b46708f9ca4cd8e3a8f171dabb27f3ec02f4e35633f3dbb26d17b65dac",
+          "bytes": 22563,
+          "words": 2334,
+          "sha256": "58a1fcca54332ef1ba991ffdf8c31618051be7817698d0a25555d769777fca93",
           "errors": []
         }
       ],
@@ -1262,7 +1262,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 1440,
+        "words": 1455,
         "kinds": [
           "markdown"
         ]
@@ -1275,9 +1275,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 10761,
-          "words": 1440,
-          "sha256": "dd272b3708b3e864a3396e7249ef3c70da093d8090d7eb2d0f5d9f63c87d0425",
+          "bytes": 10840,
+          "words": 1455,
+          "sha256": "20af6c2c2735d8bb84b99efc7529c0ba681e12d8fbf0602ccf626092da265483",
           "errors": []
         }
       ],
@@ -1318,7 +1318,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 15159,
+        "words": 16655,
         "kinds": [
           "markdown",
           "source"
@@ -1332,9 +1332,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 10761,
-          "words": 1440,
-          "sha256": "dd272b3708b3e864a3396e7249ef3c70da093d8090d7eb2d0f5d9f63c87d0425",
+          "bytes": 10840,
+          "words": 1455,
+          "sha256": "20af6c2c2735d8bb84b99efc7529c0ba681e12d8fbf0602ccf626092da265483",
           "errors": []
         },
         {
@@ -1344,9 +1344,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 155022,
-          "words": 13719,
-          "sha256": "1080aa262bcf27e0757f43ec2c6b7abef3d132994b2b04949bd05545634c12ff",
+          "bytes": 174732,
+          "words": 15200,
+          "sha256": "c55e76b9f49789e0c3e29c27c4e4ecca07cd2c051c5fc08feb191458b00b4a3a",
           "errors": []
         }
       ],
@@ -1387,7 +1387,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 15411,
+        "words": 15899,
         "kinds": [
           "markdown",
           "source"
@@ -1401,9 +1401,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 14182,
-          "words": 2004,
-          "sha256": "647a5e8ac0625d7c5ec9d2844faa526b34ffa0465bf647d49592900d503f7014",
+          "bytes": 15278,
+          "words": 2129,
+          "sha256": "eb297c10a9aff51ce08409e85b818451656003b0cb43ea4c8d5be539508ea871",
           "errors": []
         },
         {
@@ -1413,9 +1413,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 139416,
-          "words": 13407,
-          "sha256": "4ad2f377bcef791a6f0772ebb0eb5c038d2b409f2e3100e083d86ea877ae9d74",
+          "bytes": 144168,
+          "words": 13770,
+          "sha256": "fc765e16844a997ae9ebe853424acaf5aab1913f37c8927edc3d1b84706f8cfc",
           "errors": []
         }
       ],
@@ -1484,9 +1484,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 39417,
+          "bytes": 39419,
           "words": 6015,
-          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "sha256": "b15388e09b238e0e8363543b08a8fdf3a828b52d92f28df9355c0c57e0e2f774",
           "errors": []
         },
         {
@@ -1559,9 +1559,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 39417,
+          "bytes": 39419,
           "words": 6015,
-          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "sha256": "b15388e09b238e0e8363543b08a8fdf3a828b52d92f28df9355c0c57e0e2f774",
           "errors": []
         }
       ],
@@ -1599,7 +1599,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3395,
+        "words": 3412,
         "kinds": [
           "image",
           "markdown"
@@ -1613,9 +1613,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 25531,
-          "words": 3395,
-          "sha256": "25d61fd34dacd520ce0f3515f67f4544e9c4c9606bae792f838bf2328f4047e5",
+          "bytes": 25678,
+          "words": 3412,
+          "sha256": "c4676b67501e1ac5002bda7677d967b72079ab3b221cee7235d13624f68c8dbb",
           "errors": []
         },
         {
@@ -1667,7 +1667,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 9239,
+        "words": 9321,
         "kinds": [
           "data",
           "source"
@@ -1693,9 +1693,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 74500,
-          "words": 8942,
-          "sha256": "8a60732f60f906a2701f0f584aa96eca08b750f0cefda6b73eeeaef2994ab259",
+          "bytes": 75166,
+          "words": 9024,
+          "sha256": "8bce3263803d5f5d96a57d040919d1e0b7cb6c2a3fe6666cfc28bfd36d9c5c49",
           "errors": []
         }
       ],
@@ -1734,7 +1734,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 9713,
+        "words": 9795,
         "kinds": [
           "source",
           "test"
@@ -1748,9 +1748,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 74500,
-          "words": 8942,
-          "sha256": "8a60732f60f906a2701f0f584aa96eca08b750f0cefda6b73eeeaef2994ab259",
+          "bytes": 75166,
+          "words": 9024,
+          "sha256": "8bce3263803d5f5d96a57d040919d1e0b7cb6c2a3fe6666cfc28bfd36d9c5c49",
           "errors": []
         },
         {
@@ -1802,7 +1802,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 9799,
+        "words": 9808,
         "kinds": [
           "image",
           "source"
@@ -1816,9 +1816,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 76988,
-          "words": 9799,
-          "sha256": "bf99082726c8156b01f5e7bf63b3ede8488658103b54f5b9d5e9f5599ce38594",
+          "bytes": 77143,
+          "words": 9808,
+          "sha256": "1746165bda1f25ba26206516780ed3c81c1980be693fd92147164da01703b181",
           "errors": []
         },
         {
@@ -1870,7 +1870,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 17780,
+        "words": 17848,
         "kinds": [
           "markdown",
           "source"
@@ -1884,9 +1884,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 39417,
+          "bytes": 39419,
           "words": 6015,
-          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "sha256": "b15388e09b238e0e8363543b08a8fdf3a828b52d92f28df9355c0c57e0e2f774",
           "errors": []
         },
         {
@@ -1896,9 +1896,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 111479,
-          "words": 11765,
-          "sha256": "573a93f0706b1dfa58d7fa91da86a1275daa05c876f41e72e350faa938a14fc0",
+          "bytes": 111967,
+          "words": 11833,
+          "sha256": "369716fbb0660cc528bd447ff75600002757bdbfeb9e3e285997e1cb235f2a39",
           "errors": []
         }
       ],
@@ -2038,7 +2038,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 2913,
+        "words": 3019,
         "kinds": [
           "markdown"
         ]
@@ -2051,9 +2051,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 10761,
-          "words": 1440,
-          "sha256": "dd272b3708b3e864a3396e7249ef3c70da093d8090d7eb2d0f5d9f63c87d0425",
+          "bytes": 10840,
+          "words": 1455,
+          "sha256": "20af6c2c2735d8bb84b99efc7529c0ba681e12d8fbf0602ccf626092da265483",
           "errors": []
         },
         {
@@ -2063,9 +2063,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 10932,
-          "words": 1473,
-          "sha256": "8c7e6a88823f7eea55680c597c5cb2bf0898a41fb36df0691c99ff9c5efa2107",
+          "bytes": 11612,
+          "words": 1564,
+          "sha256": "d53cd7d016ebc554e7e54a2f52abfc59ca19376ebcdd1a9fcc9e43e35d1cd911",
           "errors": []
         }
       ],
@@ -2109,7 +2109,7 @@
       },
       "metrics": {
         "artifacts": 4,
-        "words": 19186,
+        "words": 19254,
         "kinds": [
           "data",
           "markdown",
@@ -2125,9 +2125,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 39417,
+          "bytes": 39419,
           "words": 6015,
-          "sha256": "421ee9bffee472aca9ba3648fdf77909a7079680809eb1834558426be9e82c02",
+          "sha256": "b15388e09b238e0e8363543b08a8fdf3a828b52d92f28df9355c0c57e0e2f774",
           "errors": []
         },
         {
@@ -2137,9 +2137,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 111479,
-          "words": 11765,
-          "sha256": "573a93f0706b1dfa58d7fa91da86a1275daa05c876f41e72e350faa938a14fc0",
+          "bytes": 111967,
+          "words": 11833,
+          "sha256": "369716fbb0660cc528bd447ff75600002757bdbfeb9e3e285997e1cb235f2a39",
           "errors": []
         },
         {
@@ -2308,8 +2308,8 @@
         ]
       },
       "metrics": {
-        "artifacts": 6,
-        "words": 8390,
+        "artifacts": 8,
+        "words": 10964,
         "kinds": [
           "data",
           "markdown",
@@ -2325,9 +2325,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 32005,
-          "words": 4231,
-          "sha256": "05f683ad84299042ab5a86984cfe72697c7b37a05069c05a6ab2720f52c30499",
+          "bytes": 34660,
+          "words": 4578,
+          "sha256": "7c825b3ce50e930d097733f93d76051dc7cb437bb080cce1a89876bc32242aa2",
           "errors": []
         },
         {
@@ -2349,9 +2349,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 5331,
-          "words": 704,
-          "sha256": "ebb45a152cb2a6a31c434b7fbcc6ab86da71938ca5c7c6157589a7c75c241050",
+          "bytes": 5785,
+          "words": 772,
+          "sha256": "ac10afe65362992f0039b86a65c0d9ae90a761f6beb69e4c1b83b37ef7fabac3",
           "errors": []
         },
         {
@@ -2361,9 +2361,33 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 5829,
-          "words": 857,
-          "sha256": "0420814d0743f5e1b238cf1492364815ee4cac27b3df544f2e819ac6eecf26c5",
+          "bytes": 6429,
+          "words": 941,
+          "sha256": "887dff7be565795552a676347f5ac70c48b59197d0ae98e322ee68a4f450fd32",
+          "errors": []
+        },
+        {
+          "path": "docs/40-top-to-bottom-game-evaluation-and-balance-pass.md",
+          "role": "current whole-game evaluation and applied balance receipt",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 10829,
+          "words": 1530,
+          "sha256": "3ed7868407b55b7fba4a8c74613da5c23f4d331302698cca0d76d887d43d11ed",
+          "errors": []
+        },
+        {
+          "path": "game/action-combat-pacing-audit.mjs",
+          "role": "deterministic side-view cadence verifier",
+          "kinds": [
+            "source"
+          ],
+          "exists": true,
+          "bytes": 5141,
+          "words": 545,
+          "sha256": "bf9c8c4867fcb640056bdf29419003aab202d6def1244cba2f7b93589c2a7b82",
           "errors": []
         },
         {

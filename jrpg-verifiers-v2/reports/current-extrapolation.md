@@ -1,6 +1,6 @@
 # Extrapolation queue: Bells of the Black Chrysanthemum
 
-Generated from the template DAG on 2026-07-21T22:50:50.561Z. Work in listed order; blocked tasks consume only verified upstream evidence.
+Generated from the template DAG on 2026-07-28T19:13:19.495Z. Work in listed order; blocked tasks consume only verified upstream evidence.
 
 ## 1. Staffing and contractor plan (production.staffing)
 
@@ -28,9 +28,9 @@ Acceptance contract:
 
 Verified inputs:
 
-- design.vision: docs/01-vision-doc.md (d044217cb0b6)
-- design.technical-gdd: docs/02-technical-gdd.md (b7d34de8dc52)
-- production.asset-list: docs/06-master-asset-list.md (25d61fd34dac)
+- design.vision: docs/01-vision-doc.md (846b8f7db4e2)
+- design.technical-gdd: docs/02-technical-gdd.md (08857e0484e6)
+- production.asset-list: docs/06-master-asset-list.md (c4676b67501e)
 
 ## 2. Internal video teaser (presentation.video-teaser)
 
@@ -57,11 +57,11 @@ Current evidence problems:
 Verified inputs:
 
 - presentation.battle-shot: assets/production/bells-party-roster-v1.png (f6b28f192a35)
-- presentation.battle-shot: docs/05-art-direction.md (ca6d900b89a3)
+- presentation.battle-shot: docs/05-art-direction.md (c35ddf67203c)
 - presentation.world-shot: assets/production/bells-takamine-keyframe-v1.png (17aea41ebe15)
-- presentation.world-shot: docs/05-art-direction.md (ca6d900b89a3)
-- presentation.menu-shot: game/index.html (66639b44a3b1)
-- presentation.menu-shot: docs/05-art-direction.md (ca6d900b89a3)
+- presentation.world-shot: docs/05-art-direction.md (c35ddf67203c)
+- presentation.menu-shot: game/index.html (5797d7bf4f89)
+- presentation.menu-shot: docs/05-art-direction.md (c35ddf67203c)
 
 ## 3. Final playtests (qa.final-playtests)
 
@@ -90,8 +90,8 @@ Acceptance contract:
 
 Verified inputs:
 
-- chapter.content: docs/04-detailed-outline.md (421ee9bffee4)
-- chapter.content: game/content/campaign.mjs (573a93f0706b)
+- chapter.content: docs/04-detailed-outline.md (b15388e09b23)
+- chapter.content: game/content/campaign.mjs (369716fbb066)
 - chapter.content: docs/rendered-route-playtest-evidence.json (bdf021e41dc7)
 - chapter.content: game/tests/campaign-content.test.mjs (80bec21ea9eb)
 
@@ -126,4 +126,4 @@ Verified inputs:
 
 - qa.final-playtests: docs/19-human-playtest-protocol.md (6e4ed6eef3db)
 - qa.final-playtests: docs/rendered-route-playtest-evidence.json (bdf021e41dc7)
-- production.staffing: docs/00-production-roadmap.md (8c7e6a88823f)
+- production.staffing: docs/00-production-roadmap.md (d53cd7d016eb)

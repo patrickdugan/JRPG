@@ -55,10 +55,10 @@ This performs 5,000 deterministic, uniformly option-sampled runs for each exact 
 
 | Route | Seals Returned | Last Seal at Dawn | Necessary Blade | Empty Throne / civil war | Mean civil-war risk | Mean surrender leverage |
 |---|---:|---:|---:|---:|---:|---:|
-| Salt | 42.32% | 4.90% | 8.82% | 43.96% | 46.37% | 43.90% |
-| Ash | 42.56% | 8.98% | 20.56% | 27.90% | 45.04% | 44.20% |
-| Paper | 48.78% | 26.22% | 20.20% | 4.80% | 39.67% | 50.53% |
-| All routes | 44.55% | 13.37% | 16.53% | 25.55% | — | — |
+| Salt | 29.38% | 4.90% | 8.82% | 56.90% | 46.37% | 43.90% |
+| Ash | 25.58% | 8.98% | 20.56% | 44.88% | 45.04% | 44.20% |
+| Paper | 43.92% | 26.22% | 20.20% | 9.66% | 39.67% | 50.53% |
+| All routes | 32.96% | 13.37% | 16.53% | 37.15% | — | — |
 
 | Route | Mean pride before final tactic | Mean indispensability | Mean guilt pressure |
 |---|---:|---:|---:|

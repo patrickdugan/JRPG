@@ -30,14 +30,14 @@ The DOM-free canonical runner starts every save authority from its pristine cons
 | Combined field interactions | 236 |
 | Authored exits | 41 |
 | Canonical first clears | 23 / 23 |
-| Player combat commands | 228 |
-| Enemy activations | 100 |
-| Safehouse rests | 16 |
+| Player combat commands | 239 |
+| Enemy activations | 96 |
+| Safehouse rests | 19 |
 | Recorded playtime | 0 ms |
 
 The combined 1,454-step result is the useful traversal quantity. The standalone operation-placement audit reports 935 shortest-path steps when each beat starts at its spawn, but adding 935 to the old route-only total would double-count shared paths. The current runner traverses operations and exits in one route and therefore measures their actual deterministic combination.
 
-Canonical trace signature: `fnv1a32:b671cd00`.
+Canonical trace signature: `fnv1a32:3195bf45`.
 
 ## Finite optional-content completion
 
@@ -138,54 +138,48 @@ Duration audit v8 applies exposed low/reference/high assumptions to shipped word
 
 | Scenario | Canonical only | Canonical + quests/chronicles | Intended all-finite route |
 | --- | ---: | ---: | ---: |
-| Low | 193.529 min / 3.23 h | 230.238 min / 3.84 h | 784.334 min / 13.07 h |
-| Reference | 319.510 min / 5.33 h | 403.958 min / 6.73 h | 1,243.563 min / 20.73 h |
-| High | 514.800 min / 8.58 h | 708.389 min / 11.81 h | 1,935.222 min / 32.25 h |
+| Low | 193.920 min / 3.23 h | 230.630 min / 3.84 h | 784.726 min / 13.08 h |
+| Reference | 320.552 min / 5.34 h | 405.000 min / 6.75 h | 1,244.604 min / 20.74 h |
+| High | 516.883 min / 8.61 h | 710.473 min / 11.84 h | 1,937.305 min / 32.29 h |
 
-The canonical-only column is the 60-beat story, required traversal, first clears, and canonical rests. “Canonical + quests/chronicles” adds the 13 finite side quests and 18 witness chronicles. The intended all-finite column adds all 90 talks, 30 councils, 60 archive records, final-beat pre-credits content, and the four one-circuit repeat milestones. The 1× reference model clears 20 hours by 43.563 minutes; the canonical-only reference model is about 5.33 hours, so no critical-path-only 20-hour claim is supportable.
+The canonical-only column is the 60-beat story, required traversal, first clears, and canonical rests. “Canonical + quests/chronicles” adds the 13 finite side quests and 18 witness chronicles. The intended all-finite column adds all 90 talks, 30 councils, 60 archive records, final-beat pre-credits content, and the four one-circuit repeat milestones. The 1× reference model clears 20 hours by 44.604 minutes; the canonical-only reference model is about 5.34 hours, so no critical-path-only 20-hour claim is supportable.
 
 | Repeat presentation speed | Intended-route reference estimate |
 | --- | ---: |
-| 1× | 1,243.563 min |
-| 2× | 1,243.249 min |
-| 4× | 1,243.092 min |
+| 1× | 1,244.604 min |
+| 2× | 1,244.291 min |
+| 4× | 1,244.134 min |
 
 Only the four repeat schedules accelerate. The reference assumptions include 180 reading words per minute, 0.8 seconds per dialogue advance, 0.35 seconds per field step, 5 seconds per interaction, 4 seconds per player combat command, and explicit finite-objective handling time. These are editable model inputs, not confidence intervals and not observed behavior. Crossing 20 hours is a sensitivity result for the complete intended route, not proof that a player reads or acts at those rates.
 
 ## What can prove 20 hours
 
-The versioned run receipt begins only beside pristine campaign and advancement state, uses a run UUID across pages, suspends samples while hidden or after 30 seconds without input, and requires:
-
-- all 60 canonical beats completed in order;
-- all 23 canonical first clears recorded once;
-- all 215 intended-route activities completed before the credits gate will seal the run;
-- explicit completion of the credits after final-beat content;
-- at least 1,200 active minutes belonging to the same clean run.
+The versioned run receipt begins only beside pristine campaign and advancement state, uses a run UUID across pages, and suspends samples while hidden or after 30 seconds without input. Completion gates are profile-specific. Shipped New Game uses the narrative profile: one selected route's canonical scenes and Storyworld decisions, explicit credits completion, and at least 300 active minutes. The separate completionist profile retains all 60 canonical beats, all 23 canonical first clears, the 215-activity itinerary, explicit credits completion, and the 1,200-minute proof target. The optional ledger never becomes a narrative-profile credits gate.
 
 A story-complete receipt remains active, allowing final-beat talks, council, and archive reading to accrue before the player explicitly completes credits. A deterministic completion trace cannot satisfy the time requirement because it calls no playtime transition. Campaign, Battle, Camp, and Credits attach their clean-run samples to the current canonical chapter. Credits exposes the live five-category and eleven-chapter ledger before sealing, then can export a signed schema-v2 JSON snapshot with run identity, receipt revision, category/chapter timing, checkpoint signature and per-chapter deltas, story and first-clear evidence, all six required-route activity types, remaining IDs, and a fail-closed release-target verdict. All three run-bound narrative ledgers must carry the receipt UUID and attributed chapter time must equal total time, or the combined verdict remains false. The signature detects accidental report drift but is not cryptographic or independent attestation. A release claim still needs a witnessed human playthrough; the ledger and export supply its chapter-level timing record.
 
 ### Chapter pacing checkpoints
 
-The build audit re-attributes the reference scenario's shipped quantities to their canonical chapter: dialogue by scene or unlock beat, exact canonical and witness movement by trace, interactions and exits by beat, first-clear commands/activations/rests by encounter trace, finite content by chapter, and each of the four required 1× repeat schedules by milestone beat. Authored `estimatedMinutes` fields and observed elapsed time are excluded. Whole milliseconds use largest-remainder reconciliation, so the eleven checkpoints sum exactly to 74,613,750 ms (1,243.563 displayed minutes).
+The build audit re-attributes the reference scenario's shipped quantities to their canonical chapter: dialogue by scene or unlock beat, exact canonical and witness movement by trace, interactions and exits by beat, first-clear commands/activations/rests by encounter trace, finite content by chapter, and each of the four required 1× repeat schedules by milestone beat. Authored `estimatedMinutes` fields and observed elapsed time are excluded. Whole milliseconds use largest-remainder reconciliation, so the eleven checkpoints sum exactly to 74,676,250 ms (1,244.604 displayed minutes).
 
 | Chapter | Reference checkpoint |
 |---|---:|
-| Prologue — The Night Census | 54.571 min |
+| Prologue — The Night Census | 54.529 min |
 | 1 — River of Names | 59.421 min |
 | 2 — Bell at Takamine | 89.549 min |
-| 3 — Sodegaura Lanterns | 122.170 min |
-| 4 — The Sea Keeps No Ledger | 141.264 min |
+| 3 — Sodegaura Lanterns | 123.234 min |
+| 4 — The Sea Keeps No Ledger | 141.580 min |
 | 5 — Ash in Kagura Pass | 149.717 min |
-| 6 — The Court of Masks | 95.216 min |
-| 7 — The Road of the Dead | 108.410 min |
-| 8 — Lanterns Unhidden | 92.593 min |
-| 9 — The Black Chrysanthemum | 185.965 min |
+| 6 — The Court of Masks | 97.239 min |
+| 7 — The Road of the Dead | 110.183 min |
+| 8 — Lanterns Unhidden | 93.147 min |
+| 9 — The Black Chrysanthemum | 192.580 min |
 | Epilogue — Names at Daybreak | 133.425 min |
 
 Credits displays actual/reference values throughout a run. An unfinished chapter is labeled not started or in progress; a completed chapter shows its percentage and over/short gap. These are tuning checkpoints only. They do not change the 1,200-minute receipt threshold and cannot make `durationProven` or `releaseTargetProven` true.
 
 ## Remaining proof and production gap
 
-The intended all-finite route clears the arithmetic reference target by 43.563 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. Exact witness-fieldwork traversal and chapter-level model attribution are now confirmed; the remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
+The intended all-finite route clears the arithmetic reference target by 44.604 minutes at 1×. That closes only the quantity-model gap for the explicitly contracted 215-activity route. It does not justify a measured 20-hour claim, establish a 20-hour canonical story, or show how naturally a player follows the entry-at-unlock itinerary. Exact witness-fieldwork traversal and chapter-level model attribution are now confirmed; the remaining work includes accessibility and cultural review, chapter-level human timing, a full clean-start intended-route playthrough, and evidence-driven tuning if observed play falls short. Any later expansion should remain finite authored play rather than idle timers or a mandatory repeat treadmill.
 
 Until a clean receipt meets the gate, all documentation must say **20-hour target unproven**.

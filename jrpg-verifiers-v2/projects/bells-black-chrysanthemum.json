@@ -252,6 +252,8 @@
         { "path": "docs/23-current-build-accessibility-audit.md", "role": "accessibility audit" },
         { "path": "docs/24-external-cultural-review-packet.md", "role": "cultural review packet" },
         { "path": "docs/25-combat-balance-audit.md", "role": "balance audit" },
+        { "path": "docs/40-top-to-bottom-game-evaluation-and-balance-pass.md", "role": "current whole-game evaluation and applied balance receipt" },
+        { "path": "game/action-combat-pacing-audit.mjs", "role": "deterministic side-view cadence verifier" },
         { "path": "docs/rendered-route-playtest-evidence.json", "role": "machine-readable QA evidence" },
         { "path": "game/tests/browser-flow-integration.test.mjs", "role": "release route test" }
       ]

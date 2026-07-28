@@ -19,15 +19,15 @@ test('all 23 chronological first clears and first replays stay inside bounded ba
   assert.deepEqual(audit.violations, []);
   assert.deepEqual(audit.summary, {
     firstClearVictories: 23,
-    firstClearPlayerCommands: 224,
-    firstClearEnemyActivations: 95,
+    firstClearPlayerCommands: 239,
+    firstClearEnemyActivations: 96,
     firstClearPartyKnockouts: 0,
     minimumSurvivorHpRatio: 0.154545,
     minimumSurvivorEncounterId: 'fp1-cedar-path',
     maximumPlayerCommands: 50,
     maximumPlayerCommandEncounterId: 'c9-kurozane',
-    repeatPolicySteps: 579,
-    repeatBasePresentationMs: 337_880,
+    repeatPolicySteps: 600,
+    repeatBasePresentationMs: 348_280,
     maximumRepeatBasePresentationMs: 42_760,
     maximumRepeatEncounterId: 'c9-kurozane',
     speedInvariantEncounterCount: 23,
@@ -55,6 +55,15 @@ test('the tuned Cedar Path teaching fight preserves pressure without a policy kn
   assert.deepEqual(encounter.firstClear.observedEnemyRecoveryPulses, [1, 2]);
   assert.ok(encounter.firstClear.minimumSurvivorHpRatio
     >= COMBAT_BALANCE_LIMITS.minimumFirstClearSurvivorHpRatio);
+});
+
+test('Ujiro now requires both the tribunal objectives and a complete boss retreat', () => {
+  const encounter = audit.encounters.find(({ encounterId }) => encounterId === 'c6-ujiro');
+  assert.equal(encounter.firstClear.objectiveCommands, 4);
+  assert.equal(encounter.firstClear.skillCommands, 10);
+  assert.equal(encounter.firstClear.playerCommands, 18);
+  assert.equal(encounter.firstClear.enemyActivations, 3);
+  assert.equal(encounter.firstClear.guardShare, 0.222222);
 });
 
 test('Kurozane exercises every authored phase skill and exact 1/2/3-pulse recovery bands', () => {

@@ -216,7 +216,13 @@ export function buildObjectiveRequirements(objective = {}) {
     case 'protectObjects':
       return [requirement('survive', 'enemyActivation', { count: objective.turns ?? 1, automatic: true }), ...(objective.protectedObjects ?? []).map((id) => requirement(`protected:${id}`, OBJECTIVE_ACTIONS.PROTECT, { targetId: id }))];
     case 'disableOrdersAndProtect':
-      return [requirement('orders-disabled', OBJECTIVE_ACTIONS.DISABLE_ORDERS), ...(objective.protectedObjects ?? []).map((id) => requirement(`protected:${id}`, OBJECTIVE_ACTIONS.PROTECT, { targetId: id }))];
+      return [
+        ...(objective.turns
+          ? [requirement('survive', 'enemyActivation', { count: objective.turns, automatic: true })]
+          : []),
+        requirement('orders-disabled', OBJECTIVE_ACTIONS.DISABLE_ORDERS),
+        ...(objective.protectedObjects ?? []).map((id) => requirement(`protected:${id}`, OBJECTIVE_ACTIONS.PROTECT, { targetId: id })),
+      ];
     case 'returnItemToTile':
       return [requirement(`returned:${objective.item}`, OBJECTIVE_ACTIONS.RETURN_ITEM, { targetId: objective.item, tiles: objective.targetTiles ?? [] })];
     case 'extractAllBeforeCountdown':
@@ -1363,7 +1369,13 @@ export class CampaignCombatEngine {
   _combatSatisfied() {
     const type = this.encounter.objective.type;
     const allEnemiesDefeated = !living(this.actors, 'enemy').length;
-    const bossRequired = ['defeatBoss', 'defeatBossWithProtection', 'defeatBossAndRelease', 'defeatBossAndEvacuate'].includes(type);
+    const bossRequired = [
+      'defeatBoss',
+      'defeatBossWithProtection',
+      'disableOrdersAndProtect',
+      'defeatBossAndRelease',
+      'defeatBossAndEvacuate',
+    ].includes(type);
     return type === 'defeatAll' ? allEnemiesDefeated : bossRequired ? this._bossDefeated() : true;
   }
 

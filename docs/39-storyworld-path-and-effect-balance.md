@@ -79,25 +79,25 @@ Every ending remains reachable on every route. Mean final centroids are separate
 
 | Ending pair | Centroid distance |
 |---|---:|
-| Empty Throne ↔ Seals Returned | 4.81 nudges |
-| Empty Throne ↔ Last Seal at Dawn | 7.28 nudges |
-| Empty Throne ↔ Necessary Blade | 5.11 nudges |
-| Seals Returned ↔ Last Seal at Dawn | 4.14 nudges |
-| Seals Returned ↔ Necessary Blade | 2.89 nudges |
+| Empty Throne ↔ Seals Returned | 4.99 nudges |
+| Empty Throne ↔ Last Seal at Dawn | 6.75 nudges |
+| Empty Throne ↔ Necessary Blade | 4.62 nudges |
+| Seals Returned ↔ Last Seal at Dawn | 4.13 nudges |
+| Seals Returned ↔ Necessary Blade | 3.32 nudges |
 | Last Seal at Dawn ↔ Necessary Blade | 3.64 nudges |
 
 | Route | Seals Returned | Last Seal at Dawn | Necessary Blade | Empty Throne |
 |---|---:|---:|---:|---:|
-| Salt | 42.32% | 4.90% | 8.82% | 43.96% |
-| Ash | 42.56% | 8.98% | 20.56% | 27.90% |
-| Paper | 48.78% | 26.22% | 20.20% | 4.80% |
-| All routes | 44.55% | 13.37% | 16.53% | 25.55% |
+| Salt | 29.38% | 4.90% | 8.82% | 56.90% |
+| Ash | 25.58% | 8.98% | 20.56% | 44.88% |
+| Paper | 43.92% | 26.22% | 20.20% | 9.66% |
+| All routes | 32.96% | 13.37% | 16.53% | 37.15% |
 
-The closest ending pair is living abdication and prepared execution at 2.89 nudges. They share a continuity objective but remain separated by consent, custody, military readiness, and the final use of force. The widest separation is civil war versus witnessed dawn seppuku, which matches the intended dramatic and political contrast.
+The closest ending pair is living abdication and prepared execution at 3.32 nudges. They share a continuity objective but remain separated by consent, custody, military readiness, and the final use of force. The widest separation is civil war versus witnessed dawn seppuku at 6.75 nudges, which matches the intended dramatic and political contrast.
 
 ## Formula calibration
 
-The Last Command's entry reaction has a mean winning margin of `0.0947`; 35.47% of resolutions fall within one ordinary nudge of the runner-up. The climax is therefore responsive near its boundaries without becoming a coin flip. Act III–IV entry margins range from `0.0548` to `0.1716` for the primary conversion clusters, while Sodegaura's consequence margin is `0.0968` with a 29.40% close-decision rate.
+The Last Command was recalibrated after the original locked run because witnessed return and provisional binding made Seals Returned a 44.55% global default. Provisional binding now responds much more strongly to court pressure, witness safety, network consent, party cohesion, proof integrity, and Nikola's oath revision. Witnessed return also fails more often when earlier routes cannot independently verify the transfer. The new locked run holds every global ending below the 40% domination gate while preserving all route and ending geometry bounds.
 
 Lady Enma's consequence reactions have only a 0.33% close-decision rate because custody, death, and compact are categorical consequences after the option and prior-history scoring have done their work. That low ambiguity is intentional. By contrast, **Tribunal Afterword** remains the most contestable consequence calculation, with a `0.0372` mean margin and 71.77% close-decision rate, fitting a scene whose evidence is politically disputable.
 

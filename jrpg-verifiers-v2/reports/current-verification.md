@@ -2,7 +2,7 @@
 
 - Result: **INCOMPLETE**
 - DAG structure: **valid**
-- Generated: 2026-07-21T22:51:07.171Z
+- Generated: 2026-07-28T19:13:19.202Z
 - Nodes: 32
 
 | Status | Count |
@@ -46,7 +46,7 @@
 | chapter.template | verified | 2 | - |
 | chapter.content | verified | 4 | - |
 | qa.final-playtests | partial | 2 | - |
-| qa.release-readiness | partial | 6 | qa.final-playtests, production.staffing |
+| qa.release-readiness | partial | 8 | qa.final-playtests, production.staffing |
 
 ## Direct evidence problems
 

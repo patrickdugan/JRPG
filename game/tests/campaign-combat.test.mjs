@@ -431,6 +431,20 @@ test('threshold-or-objects boss objective supports its authored nonlethal branch
 test('objective action requirements explicitly cover non-defeat encounters', () => {
   const requirements = buildObjectiveRequirements({ type: 'activateRelays', relays: ['west', 'east'] });
   assert.deepEqual(requirements.map((item) => [item.action, item.targetId]), [['activateRelay', 'west'], ['activateRelay', 'east']]);
+  const tribunal = buildObjectiveRequirements({
+    type: 'disableOrdersAndProtect',
+    turns: 3,
+    protectedObjects: ['copy-a', 'copy-b'],
+  });
+  assert.deepEqual(
+    tribunal.map((item) => [item.key, item.action, item.count, item.automatic ?? false]),
+    [
+      ['survive', 'enemyActivation', 3, true],
+      ['orders-disabled', 'disableOrders', 1, false],
+      ['protected:copy-a', 'protect', 1, false],
+      ['protected:copy-b', 'protect', 1, false],
+    ],
+  );
 
   const epilogue = createCampaignCombat('epilogue-memorial-walk');
   for (const targetId of ['testimony-table', 'corrections-shelf', 'unfiled-names', 'tower-lantern']) {

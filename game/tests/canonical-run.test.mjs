@@ -44,8 +44,8 @@ test('canonical DOM-free run legally completes every authority without fabricati
   assert.equal(run.summary.exitCount, 42);
   assert.equal(run.summary.restCount, 19);
   assert.equal(run.summary.dialogueLineCount, 2_849);
-  assert.equal(run.summary.playerCommands, 224);
-  assert.equal(run.summary.enemyActivations, 95);
+  assert.equal(run.summary.playerCommands, 239);
+  assert.equal(run.summary.enemyActivations, 96);
   assert.deepEqual(run.fieldCoverage.routeGaps, []);
   assert.deepEqual(run.fieldCoverage.finalObjectiveGaps, []);
   assert.equal(run.fieldCoverage.sceneOperations.campaignComplete, true);
@@ -72,7 +72,7 @@ test('canonical trace and signature replay identically under the same hard bound
   const replay = runCanonicalCompletion();
 
   assert.match(first.signature, /^fnv1a32:[0-9a-f]{8}$/);
-  assert.equal(first.signature, 'fnv1a32:b671cd00');
+  assert.equal(first.signature, 'fnv1a32:3195bf45');
   assert.equal(replay.signature, first.signature);
   assert.deepEqual(replay.summary, first.summary);
   assert.deepEqual(replay.trace, first.trace);

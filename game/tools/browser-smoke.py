@@ -1146,7 +1146,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             pacing_export = exported_report.get("pacing", {})
             require(pacing_export.get("diagnosticOnly") is True, "Evidence export pacing is not diagnostic-only.")
             require(pacing_export.get("observedPlaytimeProof") is False, "Evidence export pacing fabricated observed proof.")
-            require(pacing_export.get("checkpointSignature") == "fnv1a32:a67d166b", "Evidence checkpoint signature drifted.")
+            require(pacing_export.get("checkpointSignature") == "fnv1a32:95a9f55d", "Evidence checkpoint signature drifted.")
             require(pacing_export.get("aggregateReferenceTargetMs") == 74613750, "Evidence pacing total drifted.")
             require(len(pacing_export.get("chapters", [])) == 11, "Evidence export chapter pacing is incomplete.")
             signature = exported_report.get("signature", "")

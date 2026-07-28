@@ -8,12 +8,12 @@ const deepFreeze = (value) => {
   return value;
 };
 
-export const STORYWORLD_CATALOG_SIGNATURE = "sha256:fb11f250c92adf3ec98fdad4e9e360d3974c326a182671a904cc07e7eebc0b39";
+export const STORYWORLD_CATALOG_SIGNATURE = "sha256:c2a70478a791798b5d2d309b902f33aa5b24bf06dcac0fb32484193a902a73be";
 export const STORYWORLD_CATALOG = deepFreeze({
   "schemaVersion": 1,
   "sourceVersion": 8,
   "sourceIFID": "7fd2f9d9-8d85-4f53-bcc9-7cb31ddd30d4",
-  "sourceHash": "sha256:ec38da9f3e7f726b8db4e0a763c35bd14eb87ca76d32cb2c70f609fdd6e2509d",
+  "sourceHash": "sha256:fe83717fb2dd9a29f3e3c71f91a6c23681638427718ed65705709cdb128e4c18",
   "bindingHash": "sha256:736a7541828449a0384cc62d7664ded20be25d8b90587a728d05b899b236a994",
   "reactionTieBreak": "later-authored-wins",
   "properties": [
@@ -7825,7 +7825,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": false
                     }
                   ],
-                  "offset": 0.09
+                  "offset": 0.12
                 },
                 "effects": [
                   {
@@ -7943,7 +7943,7 @@ export const STORYWORLD_CATALOG = deepFreeze({
                       "invert": true
                     }
                   ],
-                  "offset": 0.25
+                  "offset": 0.37
                 },
                 "effects": [
                   {

@@ -148,6 +148,24 @@ test('Mateus action tuning lengthens the duel without changing generic HP adapta
   assert.throws(() => actionEnemyHp(100, 0), /positive finite/u);
 });
 
+test('opening action cadence multipliers leave tactical HP untouched and preserve authored relative roles', () => {
+  const expectedHp = {
+    'c1-cinder-hounds': { 'cinder-hound-1': 151, 'cinder-hound-2': 151 },
+    'c1-ash-wisps': { 'ash-wisp-1': 91, 'ash-wisp-2': 91 },
+    'fp1-cedar-path': { 'cinder-hound-1': 165, 'cinder-hound-2': 165, 'ash-wisp-1': 105 },
+    'fp1-flooded-archive': { 'tithe-enforcer-1': 428, 'bell-moth-1': 128, 'bell-moth-2': 128 },
+  };
+  for (const [encounterId, actors] of Object.entries(expectedHp)) {
+    const adapted = adaptActionEncounter(encounterId);
+    assert.deepEqual(
+      Object.fromEntries(adapted.kernelConfig.actors
+        .filter(({ id }) => Object.hasOwn(actors, id))
+        .map(({ id, maxHp }) => [id, maxHp])),
+      actors,
+    );
+  }
+});
+
 test('Action Lab enemy Power follows party progression without an unbounded late-game spike', () => {
   assert.equal(actionEnemyPower(20, 1), 20);
   assert.equal(actionEnemyPower(20, 21), 30);

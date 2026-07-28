@@ -39,11 +39,11 @@ The speed preference remains restricted to `1x`, `2x`, or `4x`. It affects only 
 
 | Required repeat speed | Intended-route reference estimate | Hours |
 | --- | ---: | ---: |
-| 1× | 1,243.563 min | 20.73 |
-| 2× | 1,243.249 min | 20.72 |
-| 4× | 1,243.092 min | 20.72 |
+| 1× | 1,244.604 min | 20.74 |
+| 2× | 1,244.291 min | 20.74 |
+| 4× | 1,244.134 min | 20.74 |
 
-Only 0.614 reference minute at 1× belongs to the four required repeat presentation schedules, so speed-up changes the estimate by seconds rather than removing hours of authored play.
+Only 0.627 reference minute at 1× belongs to the four required repeat presentation schedules, so speed-up changes the estimate by seconds rather than removing hours of authored play.
 
 Optional leveling has a separate finite queue: after a manual first clear, Battle offers 1, 5, or 10 Auto-Grind wins. Each victory uses the normal durable reward transaction before the next engine begins; cancellation, defeat, restart, or reload stops the session-only queue. At base Cinder Hound conditions, five deterministic wins schedule 155.00 seconds at 1×, 77.50 seconds at 2×, and 38.75 seconds at 4×. That 116.25-second saving is player-visible leveling convenience, but these optional extra wins remain excluded from the intended-route duration estimate and proof.
 
@@ -53,7 +53,7 @@ The advancement inventory remains the gross, display-name reward ledger used by 
 
 Chapter level targets rise from level 2 after the Prologue to level 40 for Chapter 9 and the Epilogue. Canonical first clears attain those targets; repeat grinding provides optional over-leveling, currency, recovery from skipped party participation, or a lower-difficulty route through later encounters.
 
-The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 193.529/319.510/514.800 minutes and the complete intended route at 784.334/1,243.563/1,935.222 minutes low/reference/high. The 1× reference route is 43.563 minutes above the arithmetic target. These estimates remain unproven until one clean human run completes all route activities, explicitly finishes credits, and records at least 1,200 active minutes on the same receipt.
+The independent quantity audit in `15-content-volume-and-duration-evidence.md` estimates canonical-only play at 193.920/320.552/516.883 minutes and the complete completionist route at 784.726/1,244.604/1,937.305 minutes low/reference/high. The 1× completionist reference is 44.604 minutes above the arithmetic target. These estimates remain unproven: the shipped narrative profile requires a selected route and 300 active minutes, while the separate completionist proof requires all route activities and at least 1,200 active minutes on the same receipt.
 
 ## Save contract
 

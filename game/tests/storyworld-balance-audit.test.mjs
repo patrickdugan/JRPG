@@ -8,7 +8,7 @@ test('seeded whole-route rehearsal keeps four endings live and late gates earned
   assert.equal(audit.totalRuns, 750);
   for (const ending of ['accord', 'revision', 'dawn', 'prepared-execution']) {
     assert.ok(audit.globalEndings[ending] > 0.02, `${ending} is effectively unreachable`);
-    assert.ok(audit.globalEndings[ending] < 0.60, `${ending} dominates the whole campaign`);
+    assert.ok(audit.globalEndings[ending] < 0.40, `${ending} dominates the whole campaign`);
   }
 
   const paper = audit.routes.find(({ route }) => route === 'paper');
