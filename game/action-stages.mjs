@@ -250,7 +250,7 @@ export const ACTION_STAGES = deepFreeze([
       { id: 'observatory-ring-east', left: 654, right: 896, y: 296, oneWay: true },
     ],
     objectiveAnchors: [
-      anchor('north-node', 'object', 480, 214),
+      anchor('north-node', 'object', 480, 330),
       anchor('east-node', 'object', 782, 296),
       anchor('south-node', 'object', 480, 438),
       anchor('west-node', 'object', 178, 296),

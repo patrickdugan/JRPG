@@ -421,3 +421,12 @@ test('caster-centred rings and crosses use their authored radius while anchored 
   assert.equal(hitbox('c9-kurozane', 'enemy:kurozane:black-chrysanthemum').width, 768,
     'a bell-core cross keeps its anchored reach');
 });
+
+test('phase objects hold their station at full strength', () => {
+  const spec = adaptActionEncounter('c9-yearless-bell');
+  const bell = spec.kernelConfig.actors.find(({ id }) => id.startsWith('yearless-bell'));
+  assert.equal(bell.ai, 'deterministic-sentry', 'the Yearless Bell does not chase the party across the observatory');
+  const tutorial = adaptActionEncounter('prologue-ashen-bailiff').kernelConfig.actors
+    .find(({ faction, ai }) => faction === 'enemy' && ai === 'deterministic-sentry');
+  if (tutorial) assert.ok(bell.power > tutorial.power, 'phase objects keep authored power unlike tutorial sentries');
+});

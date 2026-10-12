@@ -76,6 +76,7 @@ const OBJECTIVE_TOKEN_COWER_DISTANCE_PX = 150;
 const OBJECTIVE_TOKEN_BOUNDS = Object.freeze({ width: 28, height: 54 });
 const OBJECTIVE_OBJECT_DEFAULT_HP = 3;
 const OBJECTIVE_CORE_HP = 6;
+const PROTECTION_LANE_MARGIN_PX = 24;
 
 function deepFreeze(value) {
   if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
@@ -578,6 +579,21 @@ function targetedProtectedObjects(director, attacker, manifest) {
     .map((object) => ({ object, amount }));
 }
 
+/**
+ * A living fighter standing in a protected object's column shields it from
+ * stray hits ("Target the archive core only if no hero occupies its
+ * protection lane"). Authored objective-damage skills ignore the lane.
+ */
+function protectionLaneOccupied(session, object) {
+  const left = object.position.x - object.bounds.width / 2 - PROTECTION_LANE_MARGIN_PX;
+  const right = object.position.x + object.bounds.width / 2 + PROTECTION_LANE_MARGIN_PX;
+  for (const actor of session.kernel.actors.values()) {
+    if (actor.faction !== 'player' || actor.hp <= 0) continue;
+    if (actor.position.x >= left && actor.position.x <= right) return true;
+  }
+  return false;
+}
+
 function entityEventsFromCombat(session, events) {
   const result = [];
   const director = session.objectiveEntities;
@@ -629,7 +645,7 @@ function entityEventsFromCombat(session, events) {
             right: object.position.x + object.bounds.width / 2,
             top: object.position.y - object.bounds.height,
             bottom: object.position.y,
-          }))
+          }) && !protectionLaneOccupied(session, object))
           .map((object) => ({ object, amount: 1 }));
       for (const { object, amount } of protectedHits) {
         object.hp = Math.max(0, object.hp - amount);
