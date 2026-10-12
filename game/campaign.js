@@ -192,6 +192,8 @@ import {
   fieldTileLayoutPixelSize,
   resolveFieldTileLayout,
 } from './field-tileset-presentation.mjs';
+import { FIELD_PROP_ATLAS, fieldPropImageHasExpectedSize } from './field-prop-atlas.mjs';
+import { drawFieldPropDressing, resolveFieldPropDressing } from './field-prop-dressing.mjs';
 import {
   SCENE_BACKDROP_ATLAS,
   getSceneBackdropFrameForBeat,
@@ -356,6 +358,22 @@ worldTileAtlasImage.addEventListener('error', () => {
   renderCurrentSceneDirection();
 }, { once: true });
 worldTileAtlasImage.src = WORLD_TILESET_ATLASES.topDown.url;
+const fieldPropAtlasImage = new Image();
+let fieldPropAtlasState = 'loading';
+const fieldPropDressingCache = new WeakMap();
+mapCanvas.dataset.fieldPropArtState = fieldPropAtlasState;
+fieldPropAtlasImage.decoding = 'async';
+fieldPropAtlasImage.addEventListener('load', () => {
+  fieldPropAtlasState = fieldPropImageHasExpectedSize(fieldPropAtlasImage) ? 'ready' : 'error';
+  mapCanvas.dataset.fieldPropArtState = fieldPropAtlasState;
+  renderCurrentSceneDirection();
+}, { once: true });
+fieldPropAtlasImage.addEventListener('error', () => {
+  fieldPropAtlasState = 'error';
+  mapCanvas.dataset.fieldPropArtState = fieldPropAtlasState;
+  renderCurrentSceneDirection();
+}, { once: true });
+fieldPropAtlasImage.src = FIELD_PROP_ATLAS.url;
 const mapName = document.querySelector('#mapName');
 const mapLegend = document.querySelector('#mapLegend');
 const sceneNumber = document.querySelector('#sceneNumber');
@@ -1543,10 +1561,12 @@ function drawMap(level, encounter, now) {
   mapCtx.fillStyle = '#080c16';
   mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
 
-  // Regional top-down tiles are decorative: they read level data only and fall
-  // back to the flat-color renderer below on load failure, wrong size, or an
-  // unknown theme.
-  const worldTileBase = getFieldTileBase(level);
+  // Regional top-down tiles and props are decorative: they read level data
+  // only and fall back to the flat-color renderer below on load failure, wrong
+  // size, or an unknown theme. Dressed impassable cells render as floor under
+  // their props.
+  const propDressing = getFieldPropDressing(level);
+  const worldTileBase = getFieldTileBase(level, propDressing?.dressedCells);
   const worldTileThemeId = worldTileBase?.layout.themeId ?? '';
   if (mapCanvas.dataset.worldTileThemeId !== worldTileThemeId) mapCanvas.dataset.worldTileThemeId = worldTileThemeId;
   if (worldTileBase) {
@@ -1638,6 +1658,7 @@ function drawMap(level, encounter, now) {
       }
     }
   }
+  if (propDressing) drawFieldPropDressing(mapCtx, fieldPropAtlasImage, propDressing, originX, originY, cell);
 
   drawFieldFormationFollowers(level, originX, originY, cell, now);
   drawLevelFieldCharacters(level, originX, originY, cell);
@@ -1787,6 +1808,23 @@ function drawMap(level, encounter, now) {
   const terrainTags = [...new Set((level?.terrain ?? []).map((entry) => entry.type ?? entry.terrain ?? entry.tag).filter(Boolean))];
   const terrainLegend = terrainTags.length ? terrainTags.join(' · ') : 'Tactical preview';
   mapLegend.textContent = `${terrainLegend} · Objective ■ · Witness ● · Side story ◆`;
+}
+
+/** Resolve (once per level) the decorative prop dressing, or null when it cannot draw. */
+function getFieldPropDressing(level) {
+  if (fieldPropAtlasState !== 'ready' || !fieldPropImageHasExpectedSize(fieldPropAtlasImage)) return null;
+  if (!level || typeof level !== 'object') return null;
+  if (fieldPropDressingCache.has(level)) return fieldPropDressingCache.get(level);
+  let dressing = null;
+  try {
+    dressing = resolveFieldPropDressing(level);
+    if (!dressing?.placements?.length) dressing = null;
+  } catch (error) {
+    console.warn('Field props fell back to the tile renderer.', error);
+    dressing = null;
+  }
+  fieldPropDressingCache.set(level, dressing);
+  return dressing;
 }
 
 /**
