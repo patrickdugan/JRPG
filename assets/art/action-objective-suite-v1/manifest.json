@@ -1,0 +1,2598 @@
+{
+  "schemaVersion": 1,
+  "assetId": "action-objective-suite-v1",
+  "status": "production-resolver-ready",
+  "provenance": {
+    "classification": "pixel-authored-deterministic-production",
+    "lane": "pixel-authored deterministic production (code-native primitives)",
+    "generatorUsed": false,
+    "externalPixels": false,
+    "handPixeledClaim": false,
+    "originalityPolicy": "Every pixel is placed by integer-coordinate Pillow primitives in build_action_objective_suite.py. No generated, traced, photographed, or external raster pixels are sampled, and no claim of hand-pixeling is made."
+  },
+  "geometry": {
+    "cellWidth": 64,
+    "cellHeight": 80,
+    "columns": 5,
+    "rows": 28,
+    "sheetWidth": 320,
+    "sheetHeight": 2240,
+    "pivot": [
+      32,
+      77
+    ],
+    "footRow": 77,
+    "minimumSideGutter": 1,
+    "minimumTopGutter": 1,
+    "bottomGutterBelowFootRow": 2,
+    "drawScale": 1.75,
+    "drawScaleSource": "matches the 1.75x party combat draw scale in game/action-campaign-battle.js drawParty()",
+    "facing": "authored facing right; runtime may mirror civilian tokens horizontally",
+    "coordinateOrigin": "top-left",
+    "alphaPolicy": "binary alpha only (0 or 255)"
+  },
+  "palette": {
+    "declared": 61,
+    "used": 61,
+    "usedNames": [
+      "bronze",
+      "bronze_d",
+      "bronze_l",
+      "cedar",
+      "cedar_d",
+      "cedar_l",
+      "cedar_m",
+      "cloth_w",
+      "cloth_w_d",
+      "court",
+      "court_d",
+      "dawn",
+      "dawn_l",
+      "flame",
+      "flame_d",
+      "flame_l",
+      "fog",
+      "fog_l",
+      "hair",
+      "hair_g",
+      "indigo",
+      "indigo_l",
+      "ink",
+      "ink2",
+      "iron",
+      "iron_d",
+      "iron_l",
+      "lacq",
+      "lacq_d",
+      "lacq_l",
+      "moss",
+      "moss_l",
+      "ochre",
+      "ochre_l",
+      "paper",
+      "paper_l",
+      "paper_s",
+      "plum",
+      "plum_l",
+      "rain",
+      "rain2",
+      "red_glow",
+      "rope",
+      "skin_a",
+      "skin_a_d",
+      "skin_b",
+      "skin_b_d",
+      "skin_c",
+      "skin_c_d",
+      "stone",
+      "stone_d",
+      "stone_l",
+      "straw",
+      "straw_d",
+      "violet",
+      "violet_d",
+      "violet_l",
+      "water",
+      "water_d",
+      "water_l",
+      "wood_hi"
+    ]
+  },
+  "kinds": [
+    {
+      "id": "river-gate",
+      "role": "anchor",
+      "row": 0,
+      "states": [
+        "locked",
+        "open",
+        "complete"
+      ],
+      "visualHeight": 71
+    },
+    {
+      "id": "archive-door",
+      "role": "anchor",
+      "row": 1,
+      "states": [
+        "locked",
+        "open",
+        "complete"
+      ],
+      "visualHeight": 72
+    },
+    {
+      "id": "lantern-boat",
+      "role": "anchor",
+      "row": 2,
+      "states": [
+        "waiting",
+        "boarding",
+        "complete"
+      ],
+      "visualHeight": 60
+    },
+    {
+      "id": "safe-shelter",
+      "role": "anchor",
+      "row": 3,
+      "states": [
+        "waiting",
+        "complete"
+      ],
+      "visualHeight": 51
+    },
+    {
+      "id": "escape-arch",
+      "role": "anchor",
+      "row": 4,
+      "states": [
+        "waiting",
+        "complete"
+      ],
+      "visualHeight": 56
+    },
+    {
+      "id": "canal-lock",
+      "role": "anchor",
+      "row": 5,
+      "states": [
+        "closed",
+        "open"
+      ],
+      "visualHeight": 70
+    },
+    {
+      "id": "chain-post",
+      "role": "anchor",
+      "row": 6,
+      "states": [
+        "chained",
+        "broken"
+      ],
+      "visualHeight": 56
+    },
+    {
+      "id": "release-gate",
+      "role": "anchor",
+      "row": 7,
+      "states": [
+        "locked",
+        "ready",
+        "open"
+      ],
+      "visualHeight": 64
+    },
+    {
+      "id": "lantern-relay",
+      "role": "anchor",
+      "row": 8,
+      "states": [
+        "dark",
+        "charging",
+        "lit"
+      ],
+      "visualHeight": 77
+    },
+    {
+      "id": "net-post",
+      "role": "anchor",
+      "row": 9,
+      "states": [
+        "fogged",
+        "clearing",
+        "cleared"
+      ],
+      "visualHeight": 53
+    },
+    {
+      "id": "seal-dais",
+      "role": "anchor",
+      "row": 10,
+      "states": [
+        "dormant",
+        "active",
+        "broken"
+      ],
+      "visualHeight": 38
+    },
+    {
+      "id": "fog-bell",
+      "role": "anchor",
+      "row": 11,
+      "states": [
+        "ringing",
+        "silenced"
+      ],
+      "visualHeight": 67
+    },
+    {
+      "id": "slip-box",
+      "role": "anchor",
+      "row": 12,
+      "states": [
+        "full",
+        "empty"
+      ],
+      "visualHeight": 34
+    },
+    {
+      "id": "water-trough",
+      "role": "anchor",
+      "row": 13,
+      "states": [
+        "flowing",
+        "released"
+      ],
+      "visualHeight": 34
+    },
+    {
+      "id": "release-mark",
+      "role": "anchor",
+      "row": 14,
+      "states": [
+        "waiting",
+        "complete"
+      ],
+      "visualHeight": 41
+    },
+    {
+      "id": "orders-lectern",
+      "role": "anchor",
+      "row": 15,
+      "states": [
+        "active",
+        "disabling",
+        "disabled"
+      ],
+      "visualHeight": 62
+    },
+    {
+      "id": "testimony-table",
+      "role": "anchor",
+      "row": 16,
+      "states": [
+        "pending",
+        "complete"
+      ],
+      "visualHeight": 35
+    },
+    {
+      "id": "corrections-shelf",
+      "role": "anchor",
+      "row": 17,
+      "states": [
+        "pending",
+        "complete"
+      ],
+      "visualHeight": 55
+    },
+    {
+      "id": "record-chest",
+      "role": "anchor",
+      "row": 18,
+      "states": [
+        "pending",
+        "complete"
+      ],
+      "visualHeight": 34
+    },
+    {
+      "id": "tower-lantern",
+      "role": "anchor",
+      "row": 19,
+      "states": [
+        "unlit",
+        "lit"
+      ],
+      "visualHeight": 75
+    },
+    {
+      "id": "shelter-crates",
+      "role": "anchor",
+      "row": 20,
+      "states": [
+        "idle"
+      ],
+      "visualHeight": 44
+    },
+    {
+      "id": "courier",
+      "role": "protected-object",
+      "row": 21,
+      "states": [
+        "safe",
+        "hurt",
+        "down"
+      ],
+      "visualHeight": 39
+    },
+    {
+      "id": "print-block",
+      "role": "protected-object",
+      "row": 22,
+      "states": [
+        "intact",
+        "damaged",
+        "cracked",
+        "destroyed"
+      ],
+      "visualHeight": 33
+    },
+    {
+      "id": "archive-core",
+      "role": "protected-object",
+      "row": 23,
+      "states": [
+        "intact",
+        "damaged",
+        "critical",
+        "destroyed"
+      ],
+      "visualHeight": 73
+    },
+    {
+      "id": "bell-node",
+      "role": "attackable-object",
+      "row": 24,
+      "states": [
+        "active",
+        "charging",
+        "broken",
+        "dormant"
+      ],
+      "visualHeight": 65
+    },
+    {
+      "id": "civilian-a",
+      "role": "token",
+      "row": 25,
+      "states": [
+        "idle",
+        "walk",
+        "bound",
+        "safe",
+        "down"
+      ],
+      "visualHeight": 49
+    },
+    {
+      "id": "civilian-b",
+      "role": "token",
+      "row": 26,
+      "states": [
+        "idle",
+        "walk",
+        "bound",
+        "safe",
+        "down"
+      ],
+      "visualHeight": 49
+    },
+    {
+      "id": "civilian-c",
+      "role": "token",
+      "row": 27,
+      "states": [
+        "idle",
+        "walk",
+        "bound",
+        "safe",
+        "down"
+      ],
+      "visualHeight": 49
+    }
+  ],
+  "frames": [
+    {
+      "id": "river-gate:locked",
+      "kind": "river-gate",
+      "state": "locked",
+      "row": 0,
+      "column": 0,
+      "rect": [
+        0,
+        0,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        7,
+        60,
+        71
+      ],
+      "visualHeight": 71,
+      "opaquePixelCount": 2754,
+      "colorCount": 13,
+      "rgbaSha256": "20cfe0f876d7f8f5ea75c9f2265453cfb6a3df2c25183db8da9686e65cd82624"
+    },
+    {
+      "id": "river-gate:open",
+      "kind": "river-gate",
+      "state": "open",
+      "row": 0,
+      "column": 1,
+      "rect": [
+        64,
+        0,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        7,
+        60,
+        71
+      ],
+      "visualHeight": 71,
+      "opaquePixelCount": 2754,
+      "colorCount": 19,
+      "rgbaSha256": "c6dbd33194ef9fb8c1be3f78c63cd2cbc23fe5e602cdd1feae92f1594877072d"
+    },
+    {
+      "id": "river-gate:complete",
+      "kind": "river-gate",
+      "state": "complete",
+      "row": 0,
+      "column": 2,
+      "rect": [
+        128,
+        0,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        7,
+        60,
+        71
+      ],
+      "visualHeight": 71,
+      "opaquePixelCount": 2754,
+      "colorCount": 22,
+      "rgbaSha256": "ed2900df761260fc4d6124645f59cfd7472676d6e2b4c4bf3c96304696b28c3b"
+    },
+    {
+      "id": "archive-door:locked",
+      "kind": "archive-door",
+      "state": "locked",
+      "row": 1,
+      "column": 0,
+      "rect": [
+        0,
+        80,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        4,
+        6,
+        56,
+        72
+      ],
+      "visualHeight": 72,
+      "opaquePixelCount": 3332,
+      "colorCount": 12,
+      "rgbaSha256": "790f2e4eb6897d42180fb36e829601cb4d124b7460c853c455bda4ce6692e8ca"
+    },
+    {
+      "id": "archive-door:open",
+      "kind": "archive-door",
+      "state": "open",
+      "row": 1,
+      "column": 1,
+      "rect": [
+        64,
+        80,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        4,
+        6,
+        56,
+        72
+      ],
+      "visualHeight": 72,
+      "opaquePixelCount": 3332,
+      "colorCount": 14,
+      "rgbaSha256": "b56cf62099a9c04f507ea22e058bd2e79e204fa0b0b844deae441ca3351dc6e3"
+    },
+    {
+      "id": "archive-door:complete",
+      "kind": "archive-door",
+      "state": "complete",
+      "row": 1,
+      "column": 2,
+      "rect": [
+        128,
+        80,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        4,
+        6,
+        56,
+        72
+      ],
+      "visualHeight": 72,
+      "opaquePixelCount": 3332,
+      "colorCount": 14,
+      "rgbaSha256": "4200bfa7081a8790498f44bacba9dc42773bc67d9e58049b96a59fa7265d2585"
+    },
+    {
+      "id": "lantern-boat:waiting",
+      "kind": "lantern-boat",
+      "state": "waiting",
+      "row": 2,
+      "column": 0,
+      "rect": [
+        0,
+        160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        1,
+        23,
+        62,
+        55
+      ],
+      "visualHeight": 55,
+      "opaquePixelCount": 914,
+      "colorCount": 13,
+      "rgbaSha256": "c037f946848f8df914f8599541ce97e1f076a5dd8c50da76339d30cfd097f7ea"
+    },
+    {
+      "id": "lantern-boat:boarding",
+      "kind": "lantern-boat",
+      "state": "boarding",
+      "row": 2,
+      "column": 1,
+      "rect": [
+        64,
+        160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        1,
+        22,
+        62,
+        56
+      ],
+      "visualHeight": 56,
+      "opaquePixelCount": 952,
+      "colorCount": 14,
+      "rgbaSha256": "db8838db36ea3713a22f700166fedabe0bd79ec8298b0cb278494b51ede26d43"
+    },
+    {
+      "id": "lantern-boat:complete",
+      "kind": "lantern-boat",
+      "state": "complete",
+      "row": 2,
+      "column": 2,
+      "rect": [
+        128,
+        160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        1,
+        18,
+        62,
+        60
+      ],
+      "visualHeight": 60,
+      "opaquePixelCount": 961,
+      "colorCount": 16,
+      "rgbaSha256": "1c19856f1efbea6aa9726711ead48c1e810ba1ceb9e8495376866f8cc75f7e41"
+    },
+    {
+      "id": "safe-shelter:waiting",
+      "kind": "safe-shelter",
+      "state": "waiting",
+      "row": 3,
+      "column": 0,
+      "rect": [
+        0,
+        240,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        27,
+        60,
+        51
+      ],
+      "visualHeight": 51,
+      "opaquePixelCount": 980,
+      "colorCount": 10,
+      "rgbaSha256": "c6abc1d9b8599dd2d7fe27b4c65e9bf86041410fd36523cdccbe3d35beaa8b2d"
+    },
+    {
+      "id": "safe-shelter:complete",
+      "kind": "safe-shelter",
+      "state": "complete",
+      "row": 3,
+      "column": 1,
+      "rect": [
+        64,
+        240,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        27,
+        60,
+        51
+      ],
+      "visualHeight": 51,
+      "opaquePixelCount": 1052,
+      "colorCount": 15,
+      "rgbaSha256": "abdd02053a056b57fabafaa42bba17052681e7c3ce9d2a39f1b294e9b66138d6"
+    },
+    {
+      "id": "escape-arch:waiting",
+      "kind": "escape-arch",
+      "state": "waiting",
+      "row": 4,
+      "column": 0,
+      "rect": [
+        0,
+        320,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        6,
+        22,
+        52,
+        56
+      ],
+      "visualHeight": 56,
+      "opaquePixelCount": 2912,
+      "colorCount": 11,
+      "rgbaSha256": "6b66938ee9e9b5be4be145ad964945403b681f88fb4ba97d55a273acfa82ffc3"
+    },
+    {
+      "id": "escape-arch:complete",
+      "kind": "escape-arch",
+      "state": "complete",
+      "row": 4,
+      "column": 1,
+      "rect": [
+        64,
+        320,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        22,
+        56,
+        56
+      ],
+      "visualHeight": 56,
+      "opaquePixelCount": 2917,
+      "colorCount": 18,
+      "rgbaSha256": "a8619a5046dc28b9d91943e07b5276756b8a3c8abdabda19d48214b8f00fcfe4"
+    },
+    {
+      "id": "canal-lock:closed",
+      "kind": "canal-lock",
+      "state": "closed",
+      "row": 5,
+      "column": 0,
+      "rect": [
+        0,
+        400,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        3,
+        8,
+        58,
+        70
+      ],
+      "visualHeight": 70,
+      "opaquePixelCount": 3172,
+      "colorCount": 12,
+      "rgbaSha256": "d1f442fb34e4aafe0e800c076d8a15a8088b424faeee541ee84fc6e024803652"
+    },
+    {
+      "id": "canal-lock:open",
+      "kind": "canal-lock",
+      "state": "open",
+      "row": 5,
+      "column": 1,
+      "rect": [
+        64,
+        400,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        3,
+        8,
+        58,
+        70
+      ],
+      "visualHeight": 70,
+      "opaquePixelCount": 3174,
+      "colorCount": 13,
+      "rgbaSha256": "d189ea6558ee34d3bcf4a9f81348a361d1e3252643411917a0116d9b1359f113"
+    },
+    {
+      "id": "chain-post:chained",
+      "kind": "chain-post",
+      "state": "chained",
+      "row": 6,
+      "column": 0,
+      "rect": [
+        0,
+        480,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        23,
+        22,
+        36,
+        56
+      ],
+      "visualHeight": 56,
+      "opaquePixelCount": 619,
+      "colorCount": 11,
+      "rgbaSha256": "266b36428b6f3befa1777ed02620546f1e1492fcf6f1dd87d125968346f63916"
+    },
+    {
+      "id": "chain-post:broken",
+      "kind": "chain-post",
+      "state": "broken",
+      "row": 6,
+      "column": 1,
+      "rect": [
+        64,
+        480,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        23,
+        22,
+        36,
+        56
+      ],
+      "visualHeight": 56,
+      "opaquePixelCount": 589,
+      "colorCount": 12,
+      "rgbaSha256": "2634d7950c810fb8b0523c23509c3796d833fd245fd17c68fabb985897677924"
+    },
+    {
+      "id": "release-gate:locked",
+      "kind": "release-gate",
+      "state": "locked",
+      "row": 7,
+      "column": 0,
+      "rect": [
+        0,
+        560,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        7,
+        14,
+        51,
+        64
+      ],
+      "visualHeight": 64,
+      "opaquePixelCount": 3040,
+      "colorCount": 12,
+      "rgbaSha256": "d0649a4356a93d5aeb7f45e1e4499bb66fc5dfca8287c49a67f74655a5cea7f6"
+    },
+    {
+      "id": "release-gate:ready",
+      "kind": "release-gate",
+      "state": "ready",
+      "row": 7,
+      "column": 1,
+      "rect": [
+        64,
+        560,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        7,
+        14,
+        51,
+        64
+      ],
+      "visualHeight": 64,
+      "opaquePixelCount": 3040,
+      "colorCount": 13,
+      "rgbaSha256": "5b540e8e260494c11ed45622d3ea6df25159a8f38263e5c3d53f6ad6cbe4e555"
+    },
+    {
+      "id": "release-gate:open",
+      "kind": "release-gate",
+      "state": "open",
+      "row": 7,
+      "column": 2,
+      "rect": [
+        128,
+        560,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        1,
+        14,
+        57,
+        64
+      ],
+      "visualHeight": 64,
+      "opaquePixelCount": 3492,
+      "colorCount": 12,
+      "rgbaSha256": "96cd6990cd3c710b7ac6d2367c136651bff134cfb50051308f4e0280f1a5a60a"
+    },
+    {
+      "id": "lantern-relay:dark",
+      "kind": "lantern-relay",
+      "state": "dark",
+      "row": 8,
+      "column": 0,
+      "rect": [
+        0,
+        640,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        20,
+        2,
+        24,
+        76
+      ],
+      "visualHeight": 76,
+      "opaquePixelCount": 796,
+      "colorCount": 6,
+      "rgbaSha256": "6c91793d120f6c5652b46b00b367a347ef6feab59e1d33d3da070d85ccf7ce24"
+    },
+    {
+      "id": "lantern-relay:charging",
+      "kind": "lantern-relay",
+      "state": "charging",
+      "row": 8,
+      "column": 1,
+      "rect": [
+        64,
+        640,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        20,
+        1,
+        24,
+        77
+      ],
+      "visualHeight": 77,
+      "opaquePixelCount": 803,
+      "colorCount": 7,
+      "rgbaSha256": "d6fd5ab1488b793e37e395112d313575d3df071e8e51b00b1ac9566b248957d6"
+    },
+    {
+      "id": "lantern-relay:lit",
+      "kind": "lantern-relay",
+      "state": "lit",
+      "row": 8,
+      "column": 2,
+      "rect": [
+        128,
+        640,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        13,
+        2,
+        37,
+        76
+      ],
+      "visualHeight": 76,
+      "opaquePixelCount": 804,
+      "colorCount": 7,
+      "rgbaSha256": "c6cee45705549557e6a9f7359e33d1658a9dac5d6973d64baf5df76a51195136"
+    },
+    {
+      "id": "net-post:fogged",
+      "kind": "net-post",
+      "state": "fogged",
+      "row": 9,
+      "column": 0,
+      "rect": [
+        0,
+        720,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        25,
+        57,
+        53
+      ],
+      "visualHeight": 53,
+      "opaquePixelCount": 1159,
+      "colorCount": 14,
+      "rgbaSha256": "1503ca79b5ec1e3b30ec6d0f2766ffe93d3351d427e9d7d9a26559a61252f502"
+    },
+    {
+      "id": "net-post:clearing",
+      "kind": "net-post",
+      "state": "clearing",
+      "row": 9,
+      "column": 1,
+      "rect": [
+        64,
+        720,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        6,
+        25,
+        51,
+        53
+      ],
+      "visualHeight": 53,
+      "opaquePixelCount": 764,
+      "colorCount": 13,
+      "rgbaSha256": "5a92bc4800604311ed534e111bf4eaff84a3b3287cb370bb65c1aa11b1a2dfa3"
+    },
+    {
+      "id": "net-post:cleared",
+      "kind": "net-post",
+      "state": "cleared",
+      "row": 9,
+      "column": 2,
+      "rect": [
+        128,
+        720,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        4,
+        25,
+        48,
+        53
+      ],
+      "visualHeight": 53,
+      "opaquePixelCount": 675,
+      "colorCount": 13,
+      "rgbaSha256": "469e37002774a0705dbaf469b5b8d1dc2edf256467f3ecebe0e2234be0538611"
+    },
+    {
+      "id": "seal-dais:dormant",
+      "kind": "seal-dais",
+      "state": "dormant",
+      "row": 10,
+      "column": 0,
+      "rect": [
+        0,
+        800,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        10,
+        63,
+        44,
+        15
+      ],
+      "visualHeight": 15,
+      "opaquePixelCount": 576,
+      "colorCount": 4,
+      "rgbaSha256": "5caf2422e190e01e0800ab6cd45c2a002cc7e6c9c82b58bbb1b0f6495a51ace9"
+    },
+    {
+      "id": "seal-dais:active",
+      "kind": "seal-dais",
+      "state": "active",
+      "row": 10,
+      "column": 1,
+      "rect": [
+        64,
+        800,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        10,
+        40,
+        44,
+        38
+      ],
+      "visualHeight": 38,
+      "opaquePixelCount": 647,
+      "colorCount": 7,
+      "rgbaSha256": "b6bebe1d53e4858eeba9e13753d34a0a0863c44fffe14b4c1ef065fc6366ea65"
+    },
+    {
+      "id": "seal-dais:broken",
+      "kind": "seal-dais",
+      "state": "broken",
+      "row": 10,
+      "column": 2,
+      "rect": [
+        128,
+        800,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        6,
+        62,
+        52,
+        16
+      ],
+      "visualHeight": 16,
+      "opaquePixelCount": 589,
+      "colorCount": 4,
+      "rgbaSha256": "0dd05f94d8eddff83d275aaeac70ee3910b830196436b190c4fc1c4f36b338ff"
+    },
+    {
+      "id": "fog-bell:ringing",
+      "kind": "fog-bell",
+      "state": "ringing",
+      "row": 11,
+      "column": 0,
+      "rect": [
+        0,
+        880,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        3,
+        11,
+        58,
+        67
+      ],
+      "visualHeight": 67,
+      "opaquePixelCount": 1500,
+      "colorCount": 18,
+      "rgbaSha256": "529bd2d3b467eaff886a2444d12ca8a85bc97983beed21842cc89731ab3e297e"
+    },
+    {
+      "id": "fog-bell:silenced",
+      "kind": "fog-bell",
+      "state": "silenced",
+      "row": 11,
+      "column": 1,
+      "rect": [
+        64,
+        880,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        3,
+        11,
+        58,
+        67
+      ],
+      "visualHeight": 67,
+      "opaquePixelCount": 1348,
+      "colorCount": 13,
+      "rgbaSha256": "9b8a355744c2f8cd97c5bb31afa8460e036f71d81f0d0696ffc9afb6818f6b8f"
+    },
+    {
+      "id": "slip-box:full",
+      "kind": "slip-box",
+      "state": "full",
+      "row": 12,
+      "column": 0,
+      "rect": [
+        0,
+        960,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        19,
+        44,
+        26,
+        34
+      ],
+      "visualHeight": 34,
+      "opaquePixelCount": 494,
+      "colorCount": 10,
+      "rgbaSha256": "1251dd577b19abead50fd8170d85d137c8540bd717b4b043eeb0da8fc341bb97"
+    },
+    {
+      "id": "slip-box:empty",
+      "kind": "slip-box",
+      "state": "empty",
+      "row": 12,
+      "column": 1,
+      "rect": [
+        64,
+        960,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        19,
+        55,
+        31,
+        23
+      ],
+      "visualHeight": 23,
+      "opaquePixelCount": 454,
+      "colorCount": 7,
+      "rgbaSha256": "71d9128918bf22b06a64c76c4e5c473af9767e8bd566492c2583a742b2641879"
+    },
+    {
+      "id": "water-trough:flowing",
+      "kind": "water-trough",
+      "state": "flowing",
+      "row": 13,
+      "column": 0,
+      "rect": [
+        0,
+        1040,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        14,
+        44,
+        40,
+        34
+      ],
+      "visualHeight": 34,
+      "opaquePixelCount": 488,
+      "colorCount": 9,
+      "rgbaSha256": "08034e200179957479fbedbbf818ecbc83b93183a7dbad6a36d5337284937044"
+    },
+    {
+      "id": "water-trough:released",
+      "kind": "water-trough",
+      "state": "released",
+      "row": 13,
+      "column": 1,
+      "rect": [
+        64,
+        1040,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        14,
+        44,
+        40,
+        34
+      ],
+      "visualHeight": 34,
+      "opaquePixelCount": 506,
+      "colorCount": 13,
+      "rgbaSha256": "68f1e66320e9d8bd71bdb3e4d71b67da8d2546e161544ff78b70f8b099046a35"
+    },
+    {
+      "id": "release-mark:waiting",
+      "kind": "release-mark",
+      "state": "waiting",
+      "row": 14,
+      "column": 0,
+      "rect": [
+        0,
+        1120,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        8,
+        56,
+        48,
+        22
+      ],
+      "visualHeight": 22,
+      "opaquePixelCount": 185,
+      "colorCount": 8,
+      "rgbaSha256": "7cb37823efc151a92af98412d7bdf7bef9d2dfd39c53fdf5498c474a554fd0d5"
+    },
+    {
+      "id": "release-mark:complete",
+      "kind": "release-mark",
+      "state": "complete",
+      "row": 14,
+      "column": 1,
+      "rect": [
+        64,
+        1120,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        8,
+        37,
+        48,
+        41
+      ],
+      "visualHeight": 41,
+      "opaquePixelCount": 209,
+      "colorCount": 6,
+      "rgbaSha256": "93f233f0ea20345eb09492f634e56585d354fe0cc6b84322b32360a2e8cb538d"
+    },
+    {
+      "id": "orders-lectern:active",
+      "kind": "orders-lectern",
+      "state": "active",
+      "row": 15,
+      "column": 0,
+      "rect": [
+        0,
+        1200,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        10,
+        16,
+        43,
+        62
+      ],
+      "visualHeight": 62,
+      "opaquePixelCount": 452,
+      "colorCount": 10,
+      "rgbaSha256": "0602799c2d6b2d3e14dd7d80bb113032b189326a9a4de7ea5258560ac802b51f"
+    },
+    {
+      "id": "orders-lectern:disabling",
+      "kind": "orders-lectern",
+      "state": "disabling",
+      "row": 15,
+      "column": 1,
+      "rect": [
+        64,
+        1200,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        10,
+        18,
+        44,
+        60
+      ],
+      "visualHeight": 60,
+      "opaquePixelCount": 441,
+      "colorCount": 10,
+      "rgbaSha256": "37a4403ad1a95f44cf6f3f8e3475b0a0ff13aa9ed3b8e6ea61e1a294cb6ec69f"
+    },
+    {
+      "id": "orders-lectern:disabled",
+      "kind": "orders-lectern",
+      "state": "disabled",
+      "row": 15,
+      "column": 2,
+      "rect": [
+        128,
+        1200,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        12,
+        44,
+        42,
+        34
+      ],
+      "visualHeight": 34,
+      "opaquePixelCount": 265,
+      "colorCount": 8,
+      "rgbaSha256": "243d1e50c528f4212cc2c5750d7f51ece29d39efcf2f4617f91b93fc1d2fd38e"
+    },
+    {
+      "id": "testimony-table:pending",
+      "kind": "testimony-table",
+      "state": "pending",
+      "row": 16,
+      "column": 0,
+      "rect": [
+        0,
+        1280,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        8,
+        49,
+        48,
+        29
+      ],
+      "visualHeight": 29,
+      "opaquePixelCount": 469,
+      "colorCount": 12,
+      "rgbaSha256": "2ad717972a9dc6d41a2fc9a757741aba27a4420387e5914d3584febdd9ae8120"
+    },
+    {
+      "id": "testimony-table:complete",
+      "kind": "testimony-table",
+      "state": "complete",
+      "row": 16,
+      "column": 1,
+      "rect": [
+        64,
+        1280,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        8,
+        43,
+        48,
+        35
+      ],
+      "visualHeight": 35,
+      "opaquePixelCount": 515,
+      "colorCount": 15,
+      "rgbaSha256": "2e4674220ed359af86ce6904ae985e33f0bcbeb16a297721dd465768247abe65"
+    },
+    {
+      "id": "corrections-shelf:pending",
+      "kind": "corrections-shelf",
+      "state": "pending",
+      "row": 17,
+      "column": 0,
+      "rect": [
+        0,
+        1360,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        12,
+        23,
+        47,
+        55
+      ],
+      "visualHeight": 55,
+      "opaquePixelCount": 1982,
+      "colorCount": 9,
+      "rgbaSha256": "09156d7d44813085a1da911fce9ac10c6988ef6f3d7b238d512aaf60e7358c4e"
+    },
+    {
+      "id": "corrections-shelf:complete",
+      "kind": "corrections-shelf",
+      "state": "complete",
+      "row": 17,
+      "column": 1,
+      "rect": [
+        64,
+        1360,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        12,
+        23,
+        40,
+        55
+      ],
+      "visualHeight": 55,
+      "opaquePixelCount": 1966,
+      "colorCount": 11,
+      "rgbaSha256": "9012a0add1e78949e7a9f7119179b491b49095458f2bc63bfbc8fd7ca2058407"
+    },
+    {
+      "id": "record-chest:pending",
+      "kind": "record-chest",
+      "state": "pending",
+      "row": 18,
+      "column": 0,
+      "rect": [
+        0,
+        1440,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        11,
+        54,
+        42,
+        24
+      ],
+      "visualHeight": 24,
+      "opaquePixelCount": 974,
+      "colorCount": 10,
+      "rgbaSha256": "9cc12ec8337fbc55dd35c49a5cc366c29cf933767d9fc32424c8f232bd703a4e"
+    },
+    {
+      "id": "record-chest:complete",
+      "kind": "record-chest",
+      "state": "complete",
+      "row": 18,
+      "column": 1,
+      "rect": [
+        64,
+        1440,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        11,
+        44,
+        42,
+        34
+      ],
+      "visualHeight": 34,
+      "opaquePixelCount": 1318,
+      "colorCount": 12,
+      "rgbaSha256": "18d3b4f274df3630aa4f33ed55572b24a6e26851ed0c8c6169e0aeb83d2c701d"
+    },
+    {
+      "id": "tower-lantern:unlit",
+      "kind": "tower-lantern",
+      "state": "unlit",
+      "row": 19,
+      "column": 0,
+      "rect": [
+        0,
+        1520,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        19,
+        3,
+        26,
+        75
+      ],
+      "visualHeight": 75,
+      "opaquePixelCount": 814,
+      "colorCount": 6,
+      "rgbaSha256": "e6e6ad8f7b6bc11396f27aefdb6a8ab1d7037032881cc995a9690c67f76477c8"
+    },
+    {
+      "id": "tower-lantern:lit",
+      "kind": "tower-lantern",
+      "state": "lit",
+      "row": 19,
+      "column": 1,
+      "rect": [
+        64,
+        1520,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        13,
+        3,
+        37,
+        75
+      ],
+      "visualHeight": 75,
+      "opaquePixelCount": 822,
+      "colorCount": 8,
+      "rgbaSha256": "5ff6cdd61e3fb497502ba9d9ee8937b6da5a0563318291ee3ab279d88cb59c9e"
+    },
+    {
+      "id": "shelter-crates:idle",
+      "kind": "shelter-crates",
+      "state": "idle",
+      "row": 20,
+      "column": 0,
+      "rect": [
+        0,
+        1600,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        7,
+        34,
+        49,
+        44
+      ],
+      "visualHeight": 44,
+      "opaquePixelCount": 1155,
+      "colorCount": 11,
+      "rgbaSha256": "40141dc683a39c7256bce81612cae0d40c5039f16deeef85a4fed0f7ed12db84"
+    },
+    {
+      "id": "courier:safe",
+      "kind": "courier",
+      "state": "safe",
+      "row": 21,
+      "column": 0,
+      "rect": [
+        0,
+        1680,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        18,
+        39,
+        26,
+        39
+      ],
+      "visualHeight": 39,
+      "opaquePixelCount": 575,
+      "colorCount": 16,
+      "rgbaSha256": "fab037522e753935a544c87c95037502d3bcb4284ff12585ed978183d489311b"
+    },
+    {
+      "id": "courier:hurt",
+      "kind": "courier",
+      "state": "hurt",
+      "row": 21,
+      "column": 1,
+      "rect": [
+        64,
+        1680,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        17,
+        39,
+        37,
+        39
+      ],
+      "visualHeight": 39,
+      "opaquePixelCount": 591,
+      "colorCount": 16,
+      "rgbaSha256": "1e46091e90456385f07686d7963acb457616283a0abad2634026500b393b54d8"
+    },
+    {
+      "id": "courier:down",
+      "kind": "courier",
+      "state": "down",
+      "row": 21,
+      "column": 2,
+      "rect": [
+        128,
+        1680,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        48,
+        59,
+        30
+      ],
+      "visualHeight": 30,
+      "opaquePixelCount": 620,
+      "colorCount": 14,
+      "rgbaSha256": "6d5bfee150541f5752f98ce268ec72c7923983d238d124171fdd36c0fb97e70b"
+    },
+    {
+      "id": "print-block:intact",
+      "kind": "print-block",
+      "state": "intact",
+      "row": 22,
+      "column": 0,
+      "rect": [
+        0,
+        1760,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        9,
+        45,
+        46,
+        33
+      ],
+      "visualHeight": 33,
+      "opaquePixelCount": 698,
+      "colorCount": 11,
+      "rgbaSha256": "6d7137893995ae152820ebd06dbe96fde5be92a6b42f4be0481d08f65f05cd23"
+    },
+    {
+      "id": "print-block:damaged",
+      "kind": "print-block",
+      "state": "damaged",
+      "row": 22,
+      "column": 1,
+      "rect": [
+        64,
+        1760,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        9,
+        45,
+        46,
+        33
+      ],
+      "visualHeight": 33,
+      "opaquePixelCount": 680,
+      "colorCount": 11,
+      "rgbaSha256": "22f58be18573ad68ca6a1a01f9948e8395bb27a6beb80e57e994d2cbf1f681e4"
+    },
+    {
+      "id": "print-block:cracked",
+      "kind": "print-block",
+      "state": "cracked",
+      "row": 22,
+      "column": 2,
+      "rect": [
+        128,
+        1760,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        4,
+        45,
+        57,
+        33
+      ],
+      "visualHeight": 33,
+      "opaquePixelCount": 681,
+      "colorCount": 12,
+      "rgbaSha256": "90c2f69c8d86a1335d6e3b26c6161f956aad4882d4c9e9b317b991c6b55bb17b"
+    },
+    {
+      "id": "print-block:destroyed",
+      "kind": "print-block",
+      "state": "destroyed",
+      "row": 22,
+      "column": 3,
+      "rect": [
+        192,
+        1760,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        6,
+        63,
+        54,
+        15
+      ],
+      "visualHeight": 15,
+      "opaquePixelCount": 413,
+      "colorCount": 9,
+      "rgbaSha256": "8c7ce1186970ac328103ffa179b8d814a8eeebeacd01634a78f9e5c7dc2ba8d3"
+    },
+    {
+      "id": "archive-core:intact",
+      "kind": "archive-core",
+      "state": "intact",
+      "row": 23,
+      "column": 0,
+      "rect": [
+        0,
+        1840,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        3,
+        5,
+        58,
+        73
+      ],
+      "visualHeight": 73,
+      "opaquePixelCount": 3444,
+      "colorCount": 15,
+      "rgbaSha256": "11fd2a2f5f6e3634349c9af9c0f33e261314550d46dca4b87a3b40a1274f768b"
+    },
+    {
+      "id": "archive-core:damaged",
+      "kind": "archive-core",
+      "state": "damaged",
+      "row": 23,
+      "column": 1,
+      "rect": [
+        64,
+        1840,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        5,
+        5,
+        54,
+        73
+      ],
+      "visualHeight": 73,
+      "opaquePixelCount": 3440,
+      "colorCount": 15,
+      "rgbaSha256": "5acf674ca05ddf863450d3c52eb0d8c3c9328f753685f79df244db5e99978258"
+    },
+    {
+      "id": "archive-core:critical",
+      "kind": "archive-core",
+      "state": "critical",
+      "row": 23,
+      "column": 2,
+      "rect": [
+        128,
+        1840,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        3,
+        5,
+        57,
+        73
+      ],
+      "visualHeight": 73,
+      "opaquePixelCount": 3443,
+      "colorCount": 17,
+      "rgbaSha256": "ad5b74562791d99d7f5e9ad26a9d35ab2cbf3aad8771463ab6d1c027f408f0c7"
+    },
+    {
+      "id": "archive-core:destroyed",
+      "kind": "archive-core",
+      "state": "destroyed",
+      "row": 23,
+      "column": 3,
+      "rect": [
+        192,
+        1840,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        2,
+        47,
+        60,
+        31
+      ],
+      "visualHeight": 31,
+      "opaquePixelCount": 1109,
+      "colorCount": 8,
+      "rgbaSha256": "ab481eea54ed4768ef2fab085cc40d3d597f719414b2edaf071ee8fe2b4ed0a7"
+    },
+    {
+      "id": "bell-node:active",
+      "kind": "bell-node",
+      "state": "active",
+      "row": 24,
+      "column": 0,
+      "rect": [
+        0,
+        1920,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        18,
+        17,
+        29,
+        60
+      ],
+      "visualHeight": 61,
+      "opaquePixelCount": 542,
+      "colorCount": 6,
+      "rgbaSha256": "438fb3621674374c91b6bc32891016be3f27c45343908d0637c4b32e0e43ead8"
+    },
+    {
+      "id": "bell-node:charging",
+      "kind": "bell-node",
+      "state": "charging",
+      "row": 24,
+      "column": 1,
+      "rect": [
+        64,
+        1920,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        8,
+        13,
+        49,
+        64
+      ],
+      "visualHeight": 65,
+      "opaquePixelCount": 551,
+      "colorCount": 8,
+      "rgbaSha256": "e2ad31606c433b7382c357c15f22c111ffe577f886a94fcd64040970788db4bc"
+    },
+    {
+      "id": "bell-node:broken",
+      "kind": "bell-node",
+      "state": "broken",
+      "row": 24,
+      "column": 2,
+      "rect": [
+        128,
+        1920,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        12,
+        39,
+        42,
+        39
+      ],
+      "visualHeight": 39,
+      "opaquePixelCount": 177,
+      "colorCount": 6,
+      "rgbaSha256": "a08947bbd875e3558a225efc9148441e222f7e17e1f1ade810ee24a628c963d1"
+    },
+    {
+      "id": "bell-node:dormant",
+      "kind": "bell-node",
+      "state": "dormant",
+      "row": 24,
+      "column": 3,
+      "rect": [
+        192,
+        1920,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        20,
+        19,
+        24,
+        59
+      ],
+      "visualHeight": 59,
+      "opaquePixelCount": 513,
+      "colorCount": 5,
+      "rgbaSha256": "26e44f7c54d24d500e5bde9e8b40177a1424b868f2167534ce98e5f16f729a26"
+    },
+    {
+      "id": "civilian-a:idle",
+      "kind": "civilian-a",
+      "state": "idle",
+      "row": 25,
+      "column": 0,
+      "rect": [
+        0,
+        2000,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        26,
+        35,
+        16,
+        43
+      ],
+      "visualHeight": 43,
+      "opaquePixelCount": 445,
+      "colorCount": 15,
+      "rgbaSha256": "abd41120b9796ab581420cec51610f04ba6955d4d80b82648fa5e2423a640192"
+    },
+    {
+      "id": "civilian-a:walk",
+      "kind": "civilian-a",
+      "state": "walk",
+      "row": 25,
+      "column": 1,
+      "rect": [
+        64,
+        2000,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        24,
+        34,
+        17,
+        44
+      ],
+      "visualHeight": 44,
+      "opaquePixelCount": 459,
+      "colorCount": 15,
+      "rgbaSha256": "00036369ac7839de13bd1409bf53c0020a95ddefd1d18f947ad7727272a3e606"
+    },
+    {
+      "id": "civilian-a:bound",
+      "kind": "civilian-a",
+      "state": "bound",
+      "row": 25,
+      "column": 2,
+      "rect": [
+        128,
+        2000,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        22,
+        43,
+        31,
+        35
+      ],
+      "visualHeight": 35,
+      "opaquePixelCount": 436,
+      "colorCount": 11,
+      "rgbaSha256": "cb357cdbc9781bd2946d95fa3b0feebf3c97ff15a00109246bd9e1e0b5314bd2"
+    },
+    {
+      "id": "civilian-a:safe",
+      "kind": "civilian-a",
+      "state": "safe",
+      "row": 25,
+      "column": 3,
+      "rect": [
+        192,
+        2000,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        21,
+        29,
+        26,
+        49
+      ],
+      "visualHeight": 49,
+      "opaquePixelCount": 464,
+      "colorCount": 17,
+      "rgbaSha256": "6a4372217e88b6c4ee02478b1719cec5468ef1031f364e04dc2a3d5e85e96e5b"
+    },
+    {
+      "id": "civilian-a:down",
+      "kind": "civilian-a",
+      "state": "down",
+      "row": 25,
+      "column": 4,
+      "rect": [
+        256,
+        2000,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        10,
+        49,
+        37,
+        29
+      ],
+      "visualHeight": 29,
+      "opaquePixelCount": 510,
+      "colorCount": 12,
+      "rgbaSha256": "8bc122cccfebc5119e07801df047332d6afa094d3acf38c65fc1d434190b08a3"
+    },
+    {
+      "id": "civilian-b:idle",
+      "kind": "civilian-b",
+      "state": "idle",
+      "row": 26,
+      "column": 0,
+      "rect": [
+        0,
+        2080,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        26,
+        34,
+        16,
+        44
+      ],
+      "visualHeight": 44,
+      "opaquePixelCount": 401,
+      "colorCount": 14,
+      "rgbaSha256": "e9800e1f674214bdf6e7278021639aa2312727cdb7cdac7eb74093c832d821ea"
+    },
+    {
+      "id": "civilian-b:walk",
+      "kind": "civilian-b",
+      "state": "walk",
+      "row": 26,
+      "column": 1,
+      "rect": [
+        64,
+        2080,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        24,
+        33,
+        19,
+        45
+      ],
+      "visualHeight": 45,
+      "opaquePixelCount": 436,
+      "colorCount": 14,
+      "rgbaSha256": "bdcdbd2a43c79fc2633cb1fe9be9cd9a924592abef0f356fc4f7670a9dc36973"
+    },
+    {
+      "id": "civilian-b:bound",
+      "kind": "civilian-b",
+      "state": "bound",
+      "row": 26,
+      "column": 2,
+      "rect": [
+        128,
+        2080,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        22,
+        42,
+        31,
+        36
+      ],
+      "visualHeight": 36,
+      "opaquePixelCount": 432,
+      "colorCount": 13,
+      "rgbaSha256": "01873f8a829ef41d60de5af6c14cc3a7cf331903c22e28db00a463b398c3cc0c"
+    },
+    {
+      "id": "civilian-b:safe",
+      "kind": "civilian-b",
+      "state": "safe",
+      "row": 26,
+      "column": 3,
+      "rect": [
+        192,
+        2080,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        21,
+        29,
+        26,
+        49
+      ],
+      "visualHeight": 49,
+      "opaquePixelCount": 420,
+      "colorCount": 16,
+      "rgbaSha256": "79fcd9ae2034b11de9286695b7bc11274aa80481ec23284ba44286a6628f2431"
+    },
+    {
+      "id": "civilian-b:down",
+      "kind": "civilian-b",
+      "state": "down",
+      "row": 26,
+      "column": 4,
+      "rect": [
+        256,
+        2080,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        4,
+        48,
+        43,
+        30
+      ],
+      "visualHeight": 30,
+      "opaquePixelCount": 479,
+      "colorCount": 11,
+      "rgbaSha256": "80c10ee9bd1eea4d5f01bd029c777bc00e9866a6c7a17b0f499183c57b6d5cb8"
+    },
+    {
+      "id": "civilian-c:idle",
+      "kind": "civilian-c",
+      "state": "idle",
+      "row": 27,
+      "column": 0,
+      "rect": [
+        0,
+        2160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        22,
+        36,
+        20,
+        42
+      ],
+      "visualHeight": 42,
+      "opaquePixelCount": 427,
+      "colorCount": 12,
+      "rgbaSha256": "a7935b64519066c035b425f54d87fc96ee1a107d6f2e526e027aa48053e4fe7a"
+    },
+    {
+      "id": "civilian-c:walk",
+      "kind": "civilian-c",
+      "state": "walk",
+      "row": 27,
+      "column": 1,
+      "rect": [
+        64,
+        2160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        22,
+        35,
+        20,
+        43
+      ],
+      "visualHeight": 43,
+      "opaquePixelCount": 438,
+      "colorCount": 11,
+      "rgbaSha256": "a920742febad4ba1052499b0927c92ad731ca99502a86e7293af21a52fbbb299"
+    },
+    {
+      "id": "civilian-c:bound",
+      "kind": "civilian-c",
+      "state": "bound",
+      "row": 27,
+      "column": 2,
+      "rect": [
+        128,
+        2160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        22,
+        44,
+        31,
+        34
+      ],
+      "visualHeight": 34,
+      "opaquePixelCount": 479,
+      "colorCount": 11,
+      "rgbaSha256": "72a3fef12fe3b694a11ef6f28cdbc3183b6934349c8978e086e28c94ece65504"
+    },
+    {
+      "id": "civilian-c:safe",
+      "kind": "civilian-c",
+      "state": "safe",
+      "row": 27,
+      "column": 3,
+      "rect": [
+        192,
+        2160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        21,
+        29,
+        26,
+        49
+      ],
+      "visualHeight": 49,
+      "opaquePixelCount": 446,
+      "colorCount": 14,
+      "rgbaSha256": "d9e24b821172efff0450e5f0cceb2aac75ef2cd5376f239ca0c4badbf20f8bc5"
+    },
+    {
+      "id": "civilian-c:down",
+      "kind": "civilian-c",
+      "state": "down",
+      "row": 27,
+      "column": 4,
+      "rect": [
+        256,
+        2160,
+        64,
+        80
+      ],
+      "pivot": [
+        32,
+        77
+      ],
+      "alphaBounds": [
+        9,
+        50,
+        38,
+        28
+      ],
+      "visualHeight": 28,
+      "opaquePixelCount": 535,
+      "colorCount": 11,
+      "rgbaSha256": "147f902b9480322d3c6204075d72b6f162c413f0fee9bf7706fba9e22cf4bbf4"
+    }
+  ],
+  "sources": [
+    {
+      "path": "action-objective-suite-v1.source.json",
+      "sha256": "9749d1776e1c2beafc00c27a2747ce2c6f8daa6068261c43c671d95a1988245e"
+    },
+    {
+      "path": "build_action_objective_suite.py",
+      "sha256": "777bffbaf52b976d58b63b3c7fde02cdd81ebc5830c2c4e5a49e19ea9db7fa8e"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "action-objective-atlas-v1.png",
+      "purpose": "transparent-runtime-atlas",
+      "runtime": true,
+      "sha256": "6682b5c1e8788e9d8018c8149a23b4c8fb2104ad6c64f24bb7cdf7e9fbf3c34b",
+      "ihdr": {
+        "width": 320,
+        "height": 2240,
+        "bitDepth": 8,
+        "colorType": 6,
+        "interlace": 0
+      }
+    },
+    {
+      "path": "action-objective-review-sheet-v1.png",
+      "purpose": "labelled-2x-nearest-review-sheet",
+      "runtime": false,
+      "sha256": "fe9c6261cae8db1632ff426547c383edc83f8812b578a00e4928802d56cc4a35",
+      "ihdr": {
+        "width": 1380,
+        "height": 2638,
+        "bitDepth": 8,
+        "colorType": 2,
+        "interlace": 0
+      }
+    }
+  ],
+  "runtimeCopy": {
+    "path": "game/assets/art/action-objective-suite-v1/action-objective-atlas-v1.png",
+    "byteIdenticalToAtlas": true
+  },
+  "builder": {
+    "pillowVersion": "11.3.0",
+    "deterministic": true,
+    "integerAligned": true,
+    "nativeResampling": "none",
+    "reviewResampling": "nearest-neighbor",
+    "twoCleanBuildsByteIdentical": true
+  },
+  "restrictions": [
+    "Original fictional objects only; no real heraldry, crests, shrine gates, temple bells, devotional objects, or real sacred items.",
+    "No readable text or glyphs: ledgers, slips, records, and print blocks carry only abstract strokes and dots.",
+    "Non-gory states only: civilians are bound with rope, knocked down, or sitting; no blood or injury detail.",
+    "Sacred-looking or record objects are never framed as loot or trophies; completion states show preservation, release, or repair.",
+    "No pixels are sampled from generated concepts, photographs, or other games."
+  ]
+}
