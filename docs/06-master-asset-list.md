@@ -120,6 +120,8 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 
 **Enemy total:** 14 base families / 38 planned variants, 7 named boss encounters, 8 boss-form deliverables including phase distinction.
 
+**Summon art receipt (2026-10-12):** `assets/art/enemy-animation-suite-v4/` adds pixel-authored, deterministic 24-cel side-view combat sets for both Blood Ward Seals, the Tithe Hound's Exposed Seal, Kurozane's Court Clone, and the Unfiled Testimony. They are packed as rows 28-32 of the `3840x5280` runtime atlas, so those templates no longer borrow spearman, banner-guard, salt-warden, ronin, or wisp art.
+
 ## 7. Battle stages and hazards
 
 | ID range | Asset family | Qty | Priority | Acceptance rule |
