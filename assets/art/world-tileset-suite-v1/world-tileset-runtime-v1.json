@@ -17,6 +17,12 @@
       "name": "Takamine Rain Village",
       "row": 0,
       "motif": "cedar",
+      "topDownLiquid": {
+        "kind": "water",
+        "base": "hazard",
+        "ripple": "light",
+        "trough": "shadow"
+      },
       "palette": {
         "outline": "#0B1020",
         "deep": "#16233A",
@@ -33,6 +39,12 @@
       "name": "Hoshigawa River Ward",
       "row": 1,
       "motif": "river",
+      "topDownLiquid": {
+        "kind": "water",
+        "base": "hazard",
+        "ripple": "light",
+        "trough": "shadow"
+      },
       "palette": {
         "outline": "#0B1020",
         "deep": "#173047",
@@ -49,6 +61,12 @@
       "name": "Sodegaura Relay Road",
       "row": 2,
       "motif": "road",
+      "topDownLiquid": {
+        "kind": "water",
+        "base": "deep",
+        "ripple": "light",
+        "trough": "outline"
+      },
       "palette": {
         "outline": "#0B1020",
         "deep": "#2B2526",
@@ -65,6 +83,9 @@
       "name": "Kagura Ash Pass",
       "row": 3,
       "motif": "ash",
+      "topDownLiquid": {
+        "kind": "ember"
+      },
       "palette": {
         "outline": "#090D16",
         "deep": "#1B1B22",
@@ -81,6 +102,9 @@
       "name": "Kurohana Black Castle",
       "row": 4,
       "motif": "lacquer",
+      "topDownLiquid": {
+        "kind": "corruption"
+      },
       "palette": {
         "outline": "#080A10",
         "deep": "#111522",
@@ -97,6 +121,12 @@
       "name": "Hidden Archive Chapel",
       "row": 5,
       "motif": "archive",
+      "topDownLiquid": {
+        "kind": "water",
+        "base": "deep",
+        "ripple": "light",
+        "trough": "outline"
+      },
       "palette": {
         "outline": "#0B1020",
         "deep": "#242331",
@@ -113,6 +143,9 @@
       "name": "Oni Forge",
       "row": 6,
       "motif": "forge",
+      "topDownLiquid": {
+        "kind": "ember"
+      },
       "palette": {
         "outline": "#080A0F",
         "deep": "#171A20",
@@ -129,6 +162,9 @@
       "name": "Black Bell Engine",
       "row": 7,
       "motif": "bell-engine",
+      "topDownLiquid": {
+        "kind": "corruption"
+      },
       "palette": {
         "outline": "#080A10",
         "deep": "#141A24",
@@ -392,7 +428,14 @@
           "occludesActor": true,
           "transitionHint": false
         }
-      ]
+      ],
+      "autotileBands": {
+        "north": 3,
+        "south": 1,
+        "west": 2,
+        "east": 1,
+        "innerCorner": 2
+      }
     },
     "sideView": {
       "atlas": "side-view-regional-tiles-v1.png",

@@ -17,6 +17,7 @@
     "atlasWidth": 256,
     "atlasHeight": 128,
     "alphaPolicy": "opaque",
+    "autotileBands": {"north": 3, "south": 1, "west": 2, "east": 1, "innerCorner": 2},
     "roleOrder": [
       "floor-a",
       "floor-b",
@@ -118,6 +119,7 @@
       "id": "takamine-rain-village",
       "name": "Takamine Rain Village",
       "motif": "cedar",
+      "topDownLiquid": {"kind": "water", "base": "hazard", "ripple": "light", "trough": "shadow"},
       "palette": {
         "outline": "#0B1020",
         "deep": "#16233A",
@@ -133,6 +135,7 @@
       "id": "hoshigawa-river-ward",
       "name": "Hoshigawa River Ward",
       "motif": "river",
+      "topDownLiquid": {"kind": "water", "base": "hazard", "ripple": "light", "trough": "shadow"},
       "palette": {
         "outline": "#0B1020",
         "deep": "#173047",
@@ -148,6 +151,7 @@
       "id": "sodegaura-relay-road",
       "name": "Sodegaura Relay Road",
       "motif": "road",
+      "topDownLiquid": {"kind": "water", "base": "deep", "ripple": "light", "trough": "outline"},
       "palette": {
         "outline": "#0B1020",
         "deep": "#2B2526",
@@ -163,6 +167,7 @@
       "id": "kagura-ash-pass",
       "name": "Kagura Ash Pass",
       "motif": "ash",
+      "topDownLiquid": {"kind": "ember"},
       "palette": {
         "outline": "#090D16",
         "deep": "#1B1B22",
@@ -178,6 +183,7 @@
       "id": "kurohana-black-castle",
       "name": "Kurohana Black Castle",
       "motif": "lacquer",
+      "topDownLiquid": {"kind": "corruption"},
       "palette": {
         "outline": "#080A10",
         "deep": "#111522",
@@ -193,6 +199,7 @@
       "id": "hidden-archive-chapel",
       "name": "Hidden Archive Chapel",
       "motif": "archive",
+      "topDownLiquid": {"kind": "water", "base": "deep", "ripple": "light", "trough": "outline"},
       "palette": {
         "outline": "#0B1020",
         "deep": "#242331",
@@ -208,6 +215,7 @@
       "id": "oni-forge",
       "name": "Oni Forge",
       "motif": "forge",
+      "topDownLiquid": {"kind": "ember"},
       "palette": {
         "outline": "#080A0F",
         "deep": "#171A20",
@@ -223,6 +231,7 @@
       "id": "black-bell-engine",
       "name": "Black Bell Engine",
       "motif": "bell-engine",
+      "topDownLiquid": {"kind": "corruption"},
       "palette": {
         "outline": "#080A10",
         "deep": "#141A24",
