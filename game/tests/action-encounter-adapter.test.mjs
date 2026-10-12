@@ -409,3 +409,15 @@ test('terminal projection validates against battle-result-contract without an ad
     /terminal action snapshot/,
   );
 });
+
+test('caster-centred rings and crosses use their authored radius while anchored areas keep reach', () => {
+  const hitbox = (encounterId, attackId) => adaptActionEncounter(encounterId).kernelConfig.attacks[attackId].hitbox;
+  assert.equal(hitbox('c3-dock-patrol', 'enemy:lady-enma:rain-mirror-step').width, 192,
+    'Rain Mirror Step is a radius-1 cross at its destination, not a range-4 ring');
+  assert.equal(hitbox('c4-widow-of-fog', 'enemy:widow-of-fog:receding-call').width, 320);
+  assert.equal(hitbox('c9-kurozane', 'enemy:kurozane:blood-eclipse').width, 320);
+  assert.equal(hitbox('c1-ash-wisps', 'enemy:ash-wisp:paper-ash-burst').width, 512,
+    'a targeted-tile burst keeps its range-based reach');
+  assert.equal(hitbox('c9-kurozane', 'enemy:kurozane:black-chrysanthemum').width, 768,
+    'a bell-core cross keeps its anchored reach');
+});

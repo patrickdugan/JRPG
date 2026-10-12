@@ -223,12 +223,28 @@ function attackTiming(skill, sourceKind) {
   return { windupMs, activeMs, recoveryMs };
 }
 
+/**
+ * A ring or cross centred on its caster (or the caster's destination) has an
+ * authored radius; `range` there is reach or travel, not area. Shapes anchored
+ * to a targeted tile or a stage anchor keep range-based reach.
+ */
+function authoredAreaRadiusTiles(shape) {
+  if (!shape || (shape.type !== 'ring' && shape.type !== 'cross')) return null;
+  const anchor = shape.origin ?? shape.center;
+  if (anchor === 'targeted-tile' || anchor === 'bell-core') return null;
+  const radii = [shape.radius, ...(shape.radii ?? [])].filter(Number.isFinite);
+  return radii.length ? Math.max(...radii) : null;
+}
+
 function attackHitbox(skill) {
   const range = Math.max(0, Number(skill.range) || 0);
   const shapeType = skill.shape?.type ?? 'front';
   const effectiveRange = Math.max(1, range);
   if (shapeType === 'ring' || shapeType === 'cross' || shapeType === 'markedTiles') {
-    const radius = Math.max(ACTION_TILE_PX, effectiveRange * ACTION_TILE_PX);
+    const authoredRadius = authoredAreaRadiusTiles(skill.shape);
+    const radius = authoredRadius == null
+      ? Math.max(ACTION_TILE_PX, effectiveRange * ACTION_TILE_PX)
+      : Math.round((authoredRadius + 0.5) * ACTION_TILE_PX);
     return {
       offsetX: -radius,
       offsetY: 0,

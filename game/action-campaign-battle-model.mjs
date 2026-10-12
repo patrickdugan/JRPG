@@ -68,7 +68,11 @@ const BOSS_COMBAT_TYPES = new Set([
 ]);
 const OBJECTIVE_TOKEN_SPEED_PX_PER_SECOND = 160;
 const OBJECTIVE_TOKEN_RECRUIT_DISTANCE_PX = 132;
-const OBJECTIVE_TOKEN_TRAIL_DISTANCE_PX = 34;
+const OBJECTIVE_TOKEN_TRAIL_DISTANCE_PX = 110;
+// Civilians cannot dodge, so one hit buys a longer window than a fighter's.
+const OBJECTIVE_TOKEN_HIT_INVULNERABILITY_MS = 1_200;
+// Escorted civilians hold position while a hostile is this close to them.
+const OBJECTIVE_TOKEN_COWER_DISTANCE_PX = 150;
 const OBJECTIVE_TOKEN_BOUNDS = Object.freeze({ width: 28, height: 54 });
 const OBJECTIVE_OBJECT_DEFAULT_HP = 3;
 const OBJECTIVE_CORE_HP = 6;
@@ -617,8 +621,11 @@ function entityEventsFromCombat(session, events) {
           result.push({ type: 'objective-object-destroyed', objectId: object.id, actorId: attacker.id });
         }
       }
+      const nowMs = session.kernel.nowMs;
       for (const token of director.tokens) {
         if (token.hp <= 0 || !token.released || !rectsOverlap(hitbox, tokenRect(token))) continue;
+        if (nowMs < (token.invulnerableUntilMs ?? 0)) continue;
+        token.invulnerableUntilMs = nowMs + OBJECTIVE_TOKEN_HIT_INVULNERABILITY_MS;
         token.hp = Math.max(0, token.hp - 1);
         if (token.hp === 0) {
           result.push({
@@ -634,6 +641,15 @@ function entityEventsFromCombat(session, events) {
   return result;
 }
 
+function nearestLivingHostileX(kernelSnapshot, x) {
+  let nearest = null;
+  for (const candidate of kernelSnapshot.actors) {
+    if (candidate.faction !== 'enemy' || candidate.hp <= 0) continue;
+    if (nearest == null || Math.abs(candidate.position.x - x) < Math.abs(nearest - x)) nearest = candidate.position.x;
+  }
+  return nearest;
+}
+
 function moveObjectiveTokens(session, elapsedMs, kernelSnapshot, input) {
   const actor = kernelSnapshot.actors.find(({ id }) => id === kernelSnapshot.controlledActorId && id) ?? null;
   if (!actor || actor.hp <= 0) return;
@@ -647,21 +663,32 @@ function moveObjectiveTokens(session, elapsedMs, kernelSnapshot, input) {
     if (!token.recruited) continue;
     const destination = requirementDestination(session, token.id);
     const actorAtDestination = destination && actorOverlapsAnchor(actor, destination);
-    const trailOffset = OBJECTIVE_TOKEN_TRAIL_DISTANCE_PX + token.order * 12;
+    const trailOffset = OBJECTIVE_TOKEN_TRAIL_DISTANCE_PX + token.order * 30;
+    // Escorted civilians shelter behind the fighter, away from the nearest
+    // living hostile, instead of mirroring the fighter's facing into melee.
+    const threat = nearestLivingHostileX(kernelSnapshot, actor.position.x);
+    const shelterSide = threat == null || threat === actor.position.x
+      ? actor.facing
+      : Math.sign(threat - actor.position.x);
     const target = actorAtDestination
       ? {
           x: destination.x + (token.order - (session.objectiveEntities.tokens.length - 1) / 2) * 18,
           y: destination.y,
         }
       : {
-          x: actor.position.x - actor.facing * trailOffset,
+          x: actor.position.x - shelterSide * trailOffset,
           y: actor.position.y,
         };
     const deltaX = target.x - token.position.x;
     const deltaY = target.y - token.position.y;
     const length = Math.hypot(deltaX, deltaY);
     const maximum = OBJECTIVE_TOKEN_SPEED_PX_PER_SECOND * elapsedMs / 1000;
-    if (length > 0) {
+    const tokenThreat = nearestLivingHostileX(kernelSnapshot, token.position.x);
+    const cowering = !actorAtDestination
+      && tokenThreat != null
+      && Math.abs(tokenThreat - token.position.x) < OBJECTIVE_TOKEN_COWER_DISTANCE_PX
+      && Math.sign(deltaX) === Math.sign(tokenThreat - token.position.x);
+    if (length > 0 && !cowering) {
       const scale = Math.min(1, maximum / length);
       token.position.x = Math.max(
         session.stage.bounds.minX,

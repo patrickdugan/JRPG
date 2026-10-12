@@ -548,3 +548,23 @@ test('Ujiro objective pressure follows authored Seizure Order targets and finish
   session.objectiveEntities.objects.find(({ id }) => id === 'print-block-c').hp = 1;
   assert.equal(hooks.canBeginAttack({ attackId: seizure }), true);
 });
+
+test('escorted witnesses shelter behind the fighter, away from the nearest hostile', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c3-dock-patrol',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const controlled = session.kernel.getActor(session.kernel.snapshot().controlledActorId);
+  controlled.position = { x: 480, y: controlled.position.y };
+  controlled.facing = 1;
+  const hostiles = [...session.kernel.actors.values()].filter(({ faction, hp }) => faction === 'enemy' && hp > 0);
+  for (const hostile of hostiles) hostile.position = { x: 60, y: hostile.position.y };
+  for (const token of session.objectiveEntities.tokens) token.position = { x: 520, y: token.position.y };
+  for (let step = 0; step < 10; step += 1) advanceActionCampaignBattle(session, 20);
+  for (const token of session.objectiveEntities.tokens) {
+    assert.ok(token.position.x > controlled.position.x,
+      `${token.id} stays on the far side of the fighter from the hostiles (${token.position.x})`);
+  }
+});
