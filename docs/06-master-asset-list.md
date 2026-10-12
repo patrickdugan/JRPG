@@ -137,6 +137,8 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 | BTL-001-010 | player command targeting overlays | 10 | P0 | movement route, melee, line, cross, cone, radius, ally target, swap edge, invalid cell, focus. |
 | BTL-011-018 | enemy intent overlays | 8 | P0/P1 | intended line/area/facing, guard, charge, recover, buff, summon, hazard trigger. |
 
+**Receipt (2026-10-12):** `assets/art/action-stage-backdrop-suite-v1/` adds 20 deterministic, pixel-authored 480 x 270 side-view backdrops, one per action stage and drawn at 2x, plus a binary-alpha ground/platform surface-tile atlas. `game/action-stage-backdrop-atlas.mjs` lays the tiles exactly on each stage's `groundY` and platform `left/right/y` from `game/action-stages.mjs`. `drawStage()` in `game/action-campaign-battle.js` now uses them instead of stretching the top-down board, and falls back to the unchanged legacy rendering when a backdrop is missing, mis-sized or unmapped. The suite still needs external cultural review and is not art-locked.
+
 ## 8. VFX, icons, UI, and typography
 
 | ID range | Asset family | Qty | Priority | Minimum package |

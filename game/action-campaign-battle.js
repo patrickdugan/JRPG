@@ -36,6 +36,13 @@ import {
 } from './action-input-grammar.mjs';
 import { getDefaultBrowserStorage } from './browser-storage.mjs';
 import { getBattleStageArt } from './battle-stage-art.mjs';
+import {
+  ACTION_STAGE_BACKDROP_SUITE,
+  ACTION_STAGE_SURFACE_TILES,
+  getActionStageBackdrop,
+  planActionStageSurfaces,
+  resolveActionStageRenderMode,
+} from './action-stage-backdrop-atlas.mjs';
 import { BOSS_COMBAT_ATLAS, getBossCombatDrawPlacement, getBossCombatFrame, hasBossCombatTemplate } from './boss-combat-atlas.mjs';
 import {
   ENEMY_COMBAT_ANIMATION_ATLAS,
@@ -306,7 +313,11 @@ const art = {
   enemyAnimation: { image: new Image(), ready: false, source: ENEMY_COMBAT_ANIMATION_ATLAS },
   boss: { image: new Image(), ready: false, source: BOSS_COMBAT_ATLAS },
   stage: { image: new Image(), ready: false, source: getBattleStageArt(session.encounter.levelId) },
+  backdrop: { image: new Image(), ready: false, source: getActionStageBackdrop(session.stage.id) },
+  backdropTiles: { image: new Image(), ready: false, source: null },
 };
+if (art.backdrop.source) art.backdropTiles.source = ACTION_STAGE_SURFACE_TILES;
+const stageSurfacePlan = planActionStageSurfaces(session.stage, art.backdrop.source);
 
 function loadArt(key) {
   const record = art[key];
@@ -325,7 +336,9 @@ function loadArt(key) {
   record.image.src = record.source.url;
 }
 
-for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage']) loadArt(key);
+for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles']) loadArt(key);
+if (!art.backdrop.source) elements.canvas.dataset.backdropArtState = 'unmapped';
+elements.canvas.dataset.backdropId = art.backdrop.source?.id ?? '';
 
 function clearHeld() {
   held.left = false;
@@ -707,7 +720,7 @@ function bossPose(actor) {
   return 'neutral';
 }
 
-function drawStage() {
+function drawLegacyStageBackground() {
   const gradient = context.createLinearGradient(0, 0, 0, 540);
   gradient.addColorStop(0, '#0a0810');
   gradient.addColorStop(1, '#17101a');
@@ -719,6 +732,9 @@ function drawStage() {
     context.drawImage(art.stage.image, 0, -10, 960, 560);
     context.restore();
   }
+}
+
+function drawLegacyStageSurfaces() {
   context.fillStyle = 'rgba(4, 3, 8, .38)';
   context.fillRect(0, session.stage.groundY, 960, 540 - session.stage.groundY);
   context.strokeStyle = '#695163';
@@ -735,6 +751,29 @@ function drawStage() {
     context.lineTo(platform.right, platform.y);
     context.stroke();
   }
+}
+
+function drawStageSurfaceTiles() {
+  for (const op of stageSurfacePlan) {
+    context.drawImage(art.backdropTiles.image, op.sx, op.sy, op.sw, op.sh, op.dx, op.dy, op.dw, op.dh);
+  }
+}
+
+function drawStage() {
+  const stageRender = resolveActionStageRenderMode({
+    backdrop: art.backdrop.source,
+    backdropReady: art.backdrop.ready,
+    tilesReady: art.backdropTiles.ready,
+  });
+  if (elements.canvas.dataset.stageRender !== stageRender) elements.canvas.dataset.stageRender = stageRender;
+  if (stageRender === 'board-fallback') {
+    drawLegacyStageBackground();
+  } else {
+    context.imageSmoothingEnabled = false;
+    context.drawImage(art.backdrop.image, 0, 0, ACTION_STAGE_BACKDROP_SUITE.canvasWidth, ACTION_STAGE_BACKDROP_SUITE.canvasHeight);
+  }
+  if (stageRender === 'backdrop') drawStageSurfaceTiles();
+  else drawLegacyStageSurfaces();
   for (const anchor of session.stage.objectiveAnchors) {
     context.fillStyle = 'rgba(214, 184, 102, .12)';
     context.strokeStyle = 'rgba(229, 199, 116, .62)';

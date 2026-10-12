@@ -1,0 +1,1025 @@
+{
+  "schemaVersion": 1,
+  "assetId": "action-stage-backdrop-suite-v1",
+  "status": "production-foundation-review",
+  "provenance": {
+    "lane": "pixel-authored deterministic production",
+    "method": "integer-coordinate Pillow primitives at native resolution under explicit per-stage palettes",
+    "generatedConceptPixels": false,
+    "externalPixels": false,
+    "resampling": "none in runtime outputs; review sheet is native 1x",
+    "claimsNotMade": [
+      "hand-pixeled",
+      "hand-authored"
+    ]
+  },
+  "tooling": {
+    "python": "3.12",
+    "pillow": "11.3.0",
+    "requirements": "requirements.txt"
+  },
+  "builderSha256": "59327f170b922e94a1a39aff986109d61d474723c72a88d440364e8a6332877f",
+  "geometry": {
+    "nativeWidth": 480,
+    "nativeHeight": 270,
+    "runtimeScale": 2,
+    "canvasWidth": 960,
+    "canvasHeight": 540,
+    "calmBandTopNative": 64,
+    "tileSize": 16,
+    "tileRoles": [
+      "ground-a",
+      "ground-b",
+      "platform-left",
+      "platform-middle",
+      "platform-right",
+      "support"
+    ]
+  },
+  "surfaceTiles": {
+    "file": "action-stage-surface-tiles.png",
+    "width": 96,
+    "height": 320,
+    "columns": 6,
+    "rows": 20,
+    "mode": "RGBA",
+    "alphaPolicy": "binary",
+    "alphaValues": [
+      0,
+      255
+    ],
+    "sha256": "c0bbc6363202ed70bbe6937ac7344109079b9c9c4a163645d0a4251734cbdd7e"
+  },
+  "reviewSheet": {
+    "file": "action-stage-backdrop-review-sheet.png",
+    "width": 1960,
+    "height": 1478,
+    "purpose": "labelled-review-only",
+    "sha256": "002cf0f56d1c35ec24856f2b45bebb15631214994808d2f0298288d41fd29306"
+  },
+  "renderPolicy": {
+    "presentationOnly": true,
+    "collisionAuthority": "game/action-stages.mjs",
+    "alphaPolicy": "opaque backdrops; binary-alpha surface tiles",
+    "bakeActors": false,
+    "bakeText": false,
+    "bakeUi": false,
+    "bakeSacredObjects": false,
+    "bakeAuthenticHeraldry": false,
+    "bakeVictimFixtures": false,
+    "gore": false
+  },
+  "coverage": {
+    "backdropCount": 20,
+    "distinctBackdropHashes": 20,
+    "stageIds": [
+      "hsh-census-square",
+      "c1-flooded-cedars",
+      "c1-tax-storehouse",
+      "fp1-wet-cedar-stage",
+      "fp1-flooded-archive-stage",
+      "tkm-bell-chamber",
+      "sdg-rain-docks",
+      "sdg-salt-warehouse",
+      "ngi-tide-caves",
+      "ngi-storm-reef",
+      "kgr-ash-fields",
+      "kgr-archive-furnace",
+      "kzu-archive-roof",
+      "kzu-public-tribunal",
+      "hsh-prison-ferry",
+      "hsh-bell-aqueduct",
+      "c8-black-gate",
+      "krh-outer-archive",
+      "krh-observatory",
+      "epi-hoshigawa-archive"
+    ]
+  },
+  "runtimeCopies": [
+    "game/assets/art/action-stage-backdrop-suite-v1/backdrops/<stage-id>.png",
+    "game/assets/art/action-stage-backdrop-suite-v1/action-stage-surface-tiles.png"
+  ],
+  "twoIndependentRendersByteIdentical": true,
+  "externalCulturalReview": "pending",
+  "artLock": false,
+  "backdrops": [
+    {
+      "stageId": "hsh-census-square",
+      "levelId": "hsh-census-square",
+      "index": 0,
+      "title": "Census Square in Rain",
+      "file": "backdrops/hsh-census-square.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "234287e1dda39dc6f27b17ce21740f84076d5e8e7d3a8cd8a0225f32b1925bef",
+      "rgbaSha256": "92e6c5aacf8637b13a999af03a1e48833b8e2cd1737c761b2c5fcc0baead633d",
+      "colorCount": 32,
+      "paletteSize": 36,
+      "groundY": 446,
+      "platforms": [
+        {
+          "id": "river-stair",
+          "left": 754,
+          "right": 906,
+          "y": 350
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "stone",
+        "platform": "stone",
+        "support": "stone"
+      },
+      "supports": true,
+      "surfacePlanSha256": "fcb1cdb0dad2f035108e864fb5ef1b4d41189fbd0518879b3efd8c461c20dfa9",
+      "tileRow": 0,
+      "calmBand": {
+        "rows": [
+          64,
+          223
+        ],
+        "meanLuminanceMilli": 17,
+        "p05LuminanceMilli": 2,
+        "p95LuminanceMilli": 38,
+        "maxLuminanceMilli": 586,
+        "brightPixelPermille": 2.58
+      }
+    },
+    {
+      "stageId": "c1-flooded-cedars",
+      "levelId": "c1-flooded-cedars",
+      "index": 1,
+      "title": "Flooded Cedars",
+      "file": "backdrops/c1-flooded-cedars.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "b7e8fa6eb9780c0a769f4d9c6f570d90fbce247bb1a6b04d814abfa179bbb030",
+      "rgbaSha256": "a90227e07e54e85d19afbf227a9aaba9913a3d0ef8b55bd36dc6e4cb99cceace",
+      "colorCount": 23,
+      "paletteSize": 36,
+      "groundY": 452,
+      "platforms": [
+        {
+          "id": "cedar-root-west",
+          "left": 76,
+          "right": 238,
+          "y": 342
+        },
+        {
+          "id": "cedar-root-east",
+          "left": 650,
+          "right": 852,
+          "y": 318
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "flood",
+        "platform": "root",
+        "support": "none"
+      },
+      "supports": false,
+      "surfacePlanSha256": "67e4de3e075aad1018945d935d805a1aac66249f5c32c79d662b18b5241f93a7",
+      "tileRow": 1,
+      "calmBand": {
+        "rows": [
+          64,
+          226
+        ],
+        "meanLuminanceMilli": 26,
+        "p05LuminanceMilli": 9,
+        "p95LuminanceMilli": 50,
+        "maxLuminanceMilli": 586,
+        "brightPixelPermille": 0.54
+      }
+    },
+    {
+      "stageId": "c1-tax-storehouse",
+      "levelId": "c1-tax-storehouse",
+      "index": 2,
+      "title": "Abandoned Tax Storehouse",
+      "file": "backdrops/c1-tax-storehouse.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "7649a735b1c127b2190ef28e362c000ee225850886fbc5ffc6e3a9e1f1ae2341",
+      "rgbaSha256": "538a2aa694a06780b4ab808e14322e90608ca34d171ba52afe1b088b3654a54b",
+      "colorCount": 23,
+      "paletteSize": 36,
+      "groundY": 442,
+      "platforms": [
+        {
+          "id": "ledger-loft",
+          "left": 610,
+          "right": 858,
+          "y": 294
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "plank",
+        "platform": "beam",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "714cc28eaeb1e036bff71b63c149dc4420b74ba176d47469380ead86b546ebcb",
+      "tileRow": 2,
+      "calmBand": {
+        "rows": [
+          64,
+          221
+        ],
+        "meanLuminanceMilli": 22,
+        "p05LuminanceMilli": 6,
+        "p95LuminanceMilli": 38,
+        "maxLuminanceMilli": 698,
+        "brightPixelPermille": 0.41
+      }
+    },
+    {
+      "stageId": "fp1-wet-cedar-stage",
+      "levelId": "fp1-wet-cedar-stage",
+      "index": 3,
+      "title": "Wet Cedar Service Path",
+      "file": "backdrops/fp1-wet-cedar-stage.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "add19393174d7625192a6d57bfc3b749f149d7c660ea361a8260d42e5662d7eb",
+      "rgbaSha256": "1d90218dbc791558f2885fa5c00939bfa484f644733c678d1f319c447c02464f",
+      "colorCount": 19,
+      "paletteSize": 36,
+      "groundY": 452,
+      "platforms": [
+        {
+          "id": "wet-root-west",
+          "left": 66,
+          "right": 232,
+          "y": 334
+        },
+        {
+          "id": "wet-root-east",
+          "left": 704,
+          "right": 878,
+          "y": 350
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "stone",
+        "platform": "root",
+        "support": "none"
+      },
+      "supports": false,
+      "surfacePlanSha256": "3cdf19ebc30d33d22ebe5074a4149c9fac715f1a9c91f0fa7bce7e2304c99492",
+      "tileRow": 3,
+      "calmBand": {
+        "rows": [
+          64,
+          226
+        ],
+        "meanLuminanceMilli": 26,
+        "p05LuminanceMilli": 6,
+        "p95LuminanceMilli": 60,
+        "maxLuminanceMilli": 129,
+        "brightPixelPermille": 0.0
+      }
+    },
+    {
+      "stageId": "fp1-flooded-archive-stage",
+      "levelId": "fp1-flooded-archive-stage",
+      "index": 4,
+      "title": "Flooded Archive",
+      "file": "backdrops/fp1-flooded-archive-stage.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "c4a85ae77c51c9b3f8d37cd76e59d0002b14628ac609afd9162406a6e781c077",
+      "rgbaSha256": "8a97213dfbac0fe9d33362ab7206b80d6200e9101bf7896df3cd1403edaf03ee",
+      "colorCount": 21,
+      "paletteSize": 36,
+      "groundY": 448,
+      "platforms": [
+        {
+          "id": "archive-gallery-west",
+          "left": 72,
+          "right": 292,
+          "y": 294
+        },
+        {
+          "id": "archive-gallery-east",
+          "left": 656,
+          "right": 888,
+          "y": 294
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "flood",
+        "platform": "beam",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "d376ecb99b7b011a6c008bfe64bf206fc40e332fab451fa64701739988bd0619",
+      "tileRow": 4,
+      "calmBand": {
+        "rows": [
+          64,
+          224
+        ],
+        "meanLuminanceMilli": 19,
+        "p05LuminanceMilli": 4,
+        "p95LuminanceMilli": 35,
+        "maxLuminanceMilli": 808,
+        "brightPixelPermille": 0.23
+      }
+    },
+    {
+      "stageId": "tkm-bell-chamber",
+      "levelId": "tkm-bell-chamber",
+      "index": 5,
+      "title": "Takamine Bell Chamber",
+      "file": "backdrops/tkm-bell-chamber.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "0d867e0e8ed6d8aa245b5f3659d63777490dcb03c08bef9c64b7d1bfca7e0a53",
+      "rgbaSha256": "26acb484c316b772de166a2e9d74fd9183675d77193b3667cd855ee7bff6ed1a",
+      "colorCount": 20,
+      "paletteSize": 38,
+      "groundY": 440,
+      "platforms": [
+        {
+          "id": "ward-dais-west",
+          "left": 102,
+          "right": 282,
+          "y": 304
+        },
+        {
+          "id": "ward-dais-east",
+          "left": 678,
+          "right": 858,
+          "y": 304
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "plank",
+        "platform": "lacquer",
+        "support": "lacquer"
+      },
+      "supports": true,
+      "surfacePlanSha256": "c3308a2b102e22e04099b7f5136f622fd58f5a99ca2560b2ce7ca179490784c6",
+      "tileRow": 5,
+      "calmBand": {
+        "rows": [
+          64,
+          220
+        ],
+        "meanLuminanceMilli": 16,
+        "p05LuminanceMilli": 8,
+        "p95LuminanceMilli": 31,
+        "maxLuminanceMilli": 128,
+        "brightPixelPermille": 0.0
+      }
+    },
+    {
+      "stageId": "sdg-rain-docks",
+      "levelId": "sdg-rain-docks",
+      "index": 6,
+      "title": "Sodegaura Rain Docks",
+      "file": "backdrops/sdg-rain-docks.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "705fa1fd7ac51000b2e2d3c0ba8c0d9040c1ed22dd036740fae738cf6661c791",
+      "rgbaSha256": "f21ee38ca5f11602fd4f9f1104bd70038347951dacb9c19022c56c904e56cbb3",
+      "colorCount": 28,
+      "paletteSize": 36,
+      "groundY": 454,
+      "platforms": [
+        {
+          "id": "cargo-crane-walk",
+          "left": 552,
+          "right": 792,
+          "y": 318
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "dock",
+        "platform": "beam",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "ed47fb0465b9f1479b5879ad8b7887b85d46f0765363111dd6763a1f87872bbd",
+      "tileRow": 6,
+      "calmBand": {
+        "rows": [
+          64,
+          227
+        ],
+        "meanLuminanceMilli": 26,
+        "p05LuminanceMilli": 14,
+        "p95LuminanceMilli": 52,
+        "maxLuminanceMilli": 808,
+        "brightPixelPermille": 2.39
+      }
+    },
+    {
+      "stageId": "sdg-salt-warehouse",
+      "levelId": "sdg-salt-warehouse",
+      "index": 7,
+      "title": "Salt Warehouse",
+      "file": "backdrops/sdg-salt-warehouse.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "c5af8a524c27789d8e1b75ac62dc2f6ec1ad4700ae3db993573d3131948242d9",
+      "rgbaSha256": "dfe89c3dc371ea901902e42d1cb0f63132bed78f2a51e9c47a942476eda507ea",
+      "colorCount": 25,
+      "paletteSize": 39,
+      "groundY": 446,
+      "platforms": [
+        {
+          "id": "salt-stack-west",
+          "left": 70,
+          "right": 272,
+          "y": 312
+        },
+        {
+          "id": "salt-stack-east",
+          "left": 688,
+          "right": 888,
+          "y": 312
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "plank",
+        "platform": "beam",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "4c30b0b31be58bc7fa39a1b802a7c88ef3225e157cf5b7054b7da209c9504d81",
+      "tileRow": 7,
+      "calmBand": {
+        "rows": [
+          64,
+          223
+        ],
+        "meanLuminanceMilli": 20,
+        "p05LuminanceMilli": 6,
+        "p95LuminanceMilli": 46,
+        "maxLuminanceMilli": 481,
+        "brightPixelPermille": 0.01
+      }
+    },
+    {
+      "stageId": "ngi-tide-caves",
+      "levelId": "ngi-tide-caves",
+      "index": 8,
+      "title": "Nagi Tide Caves",
+      "file": "backdrops/ngi-tide-caves.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "19e67789edd19e9fa0a06529295b04567b44cf1b1f24e69150625766c1dd1eed",
+      "rgbaSha256": "608bac96fb7dce4e604bfbabb9737ddd89d0b873ae7480d12ef538d8e2a41f1d",
+      "colorCount": 20,
+      "paletteSize": 36,
+      "groundY": 456,
+      "platforms": [
+        {
+          "id": "tide-shelf-west",
+          "left": 58,
+          "right": 264,
+          "y": 324
+        },
+        {
+          "id": "tide-shelf-east",
+          "left": 690,
+          "right": 904,
+          "y": 286
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "rock",
+        "platform": "rock",
+        "support": "none"
+      },
+      "supports": false,
+      "surfacePlanSha256": "7db8e2e04772f73a0e01000e79b9338f62b5d4a1d863498911f7e769918f37fa",
+      "tileRow": 8,
+      "calmBand": {
+        "rows": [
+          64,
+          228
+        ],
+        "meanLuminanceMilli": 19,
+        "p05LuminanceMilli": 4,
+        "p95LuminanceMilli": 72,
+        "maxLuminanceMilli": 243,
+        "brightPixelPermille": 0.81
+      }
+    },
+    {
+      "stageId": "ngi-storm-reef",
+      "levelId": "ngi-storm-reef",
+      "index": 9,
+      "title": "Storm Reef on the Fog Sea",
+      "file": "backdrops/ngi-storm-reef.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "699ac2b9c3c467cee7a4fca6a68fb543615e354902d6d77566782decbefdb738",
+      "rgbaSha256": "7f631c1460c09c22f0821d7878b4d597a5c87f09ed189912ec13788c274477ba",
+      "colorCount": 21,
+      "paletteSize": 36,
+      "groundY": 458,
+      "platforms": [
+        {
+          "id": "reef-spine-west",
+          "left": 84,
+          "right": 310,
+          "y": 326
+        },
+        {
+          "id": "reef-spine-east",
+          "left": 638,
+          "right": 878,
+          "y": 298
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "rock",
+        "platform": "rock",
+        "support": "none"
+      },
+      "supports": false,
+      "surfacePlanSha256": "52766297e50a96a22f2e2066e1d640d8edf1c4dbaec31838345841f935893fac",
+      "tileRow": 9,
+      "calmBand": {
+        "rows": [
+          64,
+          229
+        ],
+        "meanLuminanceMilli": 36,
+        "p05LuminanceMilli": 10,
+        "p95LuminanceMilli": 92,
+        "maxLuminanceMilli": 269,
+        "brightPixelPermille": 0.3
+      }
+    },
+    {
+      "stageId": "kgr-ash-fields",
+      "levelId": "kgr-ash-fields",
+      "index": 10,
+      "title": "Kagura Ash Pass",
+      "file": "backdrops/kgr-ash-fields.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "0314357dbbcbdf760e92bcfa852b0a9030fc89f71fc146a084dda5861a78e2c5",
+      "rgbaSha256": "3d9e306c4343863b072cbabbf3de51591d5f218ecb7f1825abfd8a19ea8785cd",
+      "colorCount": 27,
+      "paletteSize": 36,
+      "groundY": 448,
+      "platforms": [
+        {
+          "id": "ash-barrow",
+          "left": 624,
+          "right": 864,
+          "y": 320
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "ash",
+        "platform": "rock",
+        "support": "rock"
+      },
+      "supports": true,
+      "surfacePlanSha256": "969b1587e3ecbab13332baac13c6466388232fffaaff4fe5f0771c6684f26503",
+      "tileRow": 10,
+      "calmBand": {
+        "rows": [
+          64,
+          224
+        ],
+        "meanLuminanceMilli": 22,
+        "p05LuminanceMilli": 7,
+        "p95LuminanceMilli": 49,
+        "maxLuminanceMilli": 274,
+        "brightPixelPermille": 0.16
+      }
+    },
+    {
+      "stageId": "kgr-archive-furnace",
+      "levelId": "kgr-archive-furnace",
+      "index": 11,
+      "title": "Oni Forge Archive Furnace",
+      "file": "backdrops/kgr-archive-furnace.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "529af0b0e2ec420a2f32c802a96e94bca04cd2dc535c359565b69a0b64f74f3c",
+      "rgbaSha256": "7e673f1153045c4768f5e84d1286afcdbfd49035e1f4b44a27aee91f1f68c905",
+      "colorCount": 15,
+      "paletteSize": 36,
+      "groundY": 440,
+      "platforms": [
+        {
+          "id": "furnace-gantry-west",
+          "left": 58,
+          "right": 294,
+          "y": 284
+        },
+        {
+          "id": "furnace-gantry-east",
+          "left": 662,
+          "right": 898,
+          "y": 284
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "iron",
+        "platform": "iron",
+        "support": "iron"
+      },
+      "supports": true,
+      "surfacePlanSha256": "16f50168cbc9214c246079bb6cacf6cab586b588f6813e8d73d6b528d7e30a32",
+      "tileRow": 11,
+      "calmBand": {
+        "rows": [
+          64,
+          220
+        ],
+        "meanLuminanceMilli": 18,
+        "p05LuminanceMilli": 6,
+        "p95LuminanceMilli": 34,
+        "maxLuminanceMilli": 450,
+        "brightPixelPermille": 7.24
+      }
+    },
+    {
+      "stageId": "kzu-archive-roof",
+      "levelId": "kzu-archive-roof",
+      "index": 12,
+      "title": "Kozui Archive Roof",
+      "file": "backdrops/kzu-archive-roof.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "ef3f9428d81a59bfdeb11ed3eaa7e70210cd4ba4cc78d5138f4d30f53bf0d8eb",
+      "rgbaSha256": "089e3251d38a3b53902e2e314500d3029649c0518643068ac5de2ca9a32d6422",
+      "colorCount": 23,
+      "paletteSize": 36,
+      "groundY": 450,
+      "platforms": [
+        {
+          "id": "roof-ridge-west",
+          "left": 64,
+          "right": 326,
+          "y": 308
+        },
+        {
+          "id": "roof-ridge-east",
+          "left": 634,
+          "right": 896,
+          "y": 308
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "roof",
+        "platform": "roof",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "3429a94e2f514364fa37a294be5f098a3a3ed385f4d21691de5f0f89b944fd0c",
+      "tileRow": 12,
+      "calmBand": {
+        "rows": [
+          64,
+          225
+        ],
+        "meanLuminanceMilli": 18,
+        "p05LuminanceMilli": 8,
+        "p95LuminanceMilli": 37,
+        "maxLuminanceMilli": 152,
+        "brightPixelPermille": 0.0
+      }
+    },
+    {
+      "stageId": "kzu-public-tribunal",
+      "levelId": "kzu-public-tribunal",
+      "index": 13,
+      "title": "Kozui Public Tribunal",
+      "file": "backdrops/kzu-public-tribunal.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "c4e3c23628c3bab41857859d637772c048b69f2c7e3a831fe90cb71790845333",
+      "rgbaSha256": "6cf93d88592cef4ab1f97ab7cf2710a6c8a730117869de1a25e8f36d2bea2d68",
+      "colorCount": 27,
+      "paletteSize": 35,
+      "groundY": 442,
+      "platforms": [
+        {
+          "id": "tribunal-bench",
+          "left": 620,
+          "right": 876,
+          "y": 300
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "gravel",
+        "platform": "lacquer",
+        "support": "lacquer"
+      },
+      "supports": true,
+      "surfacePlanSha256": "4868336fc72df6e4508d29f12c8fd4e5e342ab3ad08866f2d029029e17847a81",
+      "tileRow": 13,
+      "calmBand": {
+        "rows": [
+          64,
+          221
+        ],
+        "meanLuminanceMilli": 13,
+        "p05LuminanceMilli": 4,
+        "p95LuminanceMilli": 35,
+        "maxLuminanceMilli": 652,
+        "brightPixelPermille": 0.07
+      }
+    },
+    {
+      "stageId": "hsh-prison-ferry",
+      "levelId": "hsh-prison-ferry",
+      "index": 14,
+      "title": "Hushroad Prison Ferry",
+      "file": "backdrops/hsh-prison-ferry.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "9155b4bb67542257bcd72f76a83bc11ec67826b8a45aac015ebcb5481c2490ec",
+      "rgbaSha256": "b21e38be77a5dd4f3b3f34a63cf8f672d64ec518003ce7469a5826e93cce5410",
+      "colorCount": 25,
+      "paletteSize": 36,
+      "groundY": 452,
+      "platforms": [
+        {
+          "id": "ferry-deck",
+          "left": 602,
+          "right": 892,
+          "y": 316
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "dock",
+        "platform": "beam",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "aea93ce5428c43acfbf1bc64fb183ef2d0e72183a9006794c64c899166469ff0",
+      "tileRow": 14,
+      "calmBand": {
+        "rows": [
+          64,
+          226
+        ],
+        "meanLuminanceMilli": 16,
+        "p05LuminanceMilli": 5,
+        "p95LuminanceMilli": 35,
+        "maxLuminanceMilli": 808,
+        "brightPixelPermille": 0.12
+      }
+    },
+    {
+      "stageId": "hsh-bell-aqueduct",
+      "levelId": "hsh-bell-aqueduct",
+      "index": 15,
+      "title": "Hushroad Bell Aqueduct",
+      "file": "backdrops/hsh-bell-aqueduct.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "f0dd7778d73bf200714b8dcc65b0397871dcc5b0ad2d4b0b8a282903364f669b",
+      "rgbaSha256": "57743d81cf1dc0cb410642c6745c07bacaca6529b88f4b1b96f027b433c079cf",
+      "colorCount": 20,
+      "paletteSize": 36,
+      "groundY": 448,
+      "platforms": [
+        {
+          "id": "aqueduct-west",
+          "left": 52,
+          "right": 298,
+          "y": 304
+        },
+        {
+          "id": "aqueduct-east",
+          "left": 662,
+          "right": 908,
+          "y": 304
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "stone",
+        "platform": "stone",
+        "support": "stone"
+      },
+      "supports": true,
+      "surfacePlanSha256": "076d54161edfaf189747ce723ae8150a11fa9209b319cb09c6b1ef095d1c4f0f",
+      "tileRow": 15,
+      "calmBand": {
+        "rows": [
+          64,
+          224
+        ],
+        "meanLuminanceMilli": 21,
+        "p05LuminanceMilli": 4,
+        "p95LuminanceMilli": 53,
+        "maxLuminanceMilli": 191,
+        "brightPixelPermille": 0.0
+      }
+    },
+    {
+      "stageId": "c8-black-gate",
+      "levelId": "c8-black-gate",
+      "index": 16,
+      "title": "Kurohana Black Gate",
+      "file": "backdrops/c8-black-gate.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "9534e6ddd3462d3b11505de935805da895fe843d03caa5e1a529da3eae465d77",
+      "rgbaSha256": "d2d8035f895d4bf3e6bf389e80cec2f15faf4ae2ea691fda6a5b55fb22fa087f",
+      "colorCount": 29,
+      "paletteSize": 40,
+      "groundY": 444,
+      "platforms": [
+        {
+          "id": "gate-wall-west",
+          "left": 54,
+          "right": 284,
+          "y": 290
+        },
+        {
+          "id": "gate-wall-east",
+          "left": 676,
+          "right": 906,
+          "y": 290
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "stone",
+        "platform": "stone",
+        "support": "stone"
+      },
+      "supports": true,
+      "surfacePlanSha256": "451eba02e73c6188ac4e02b83e55bfa95f28d39e2e2c5d285c44c923fb5f8940",
+      "tileRow": 16,
+      "calmBand": {
+        "rows": [
+          64,
+          222
+        ],
+        "meanLuminanceMilli": 15,
+        "p05LuminanceMilli": 2,
+        "p95LuminanceMilli": 31,
+        "maxLuminanceMilli": 612,
+        "brightPixelPermille": 1.05
+      }
+    },
+    {
+      "stageId": "krh-outer-archive",
+      "levelId": "krh-outer-archive",
+      "index": 17,
+      "title": "Kurohana Outer Archive",
+      "file": "backdrops/krh-outer-archive.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "5d0ec0f404b86b6474c082bfa63a2538d93ce28620ea8132bb0dbda2a1fb78a4",
+      "rgbaSha256": "fd805869f19d698f0b58839d74b01d28f0973171160e8c168134611e8aa974e6",
+      "colorCount": 16,
+      "paletteSize": 38,
+      "groundY": 442,
+      "platforms": [
+        {
+          "id": "archive-stack-west",
+          "left": 52,
+          "right": 300,
+          "y": 300
+        },
+        {
+          "id": "archive-stack-east",
+          "left": 660,
+          "right": 908,
+          "y": 300
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "lacquer",
+        "platform": "lacquer",
+        "support": "lacquer"
+      },
+      "supports": true,
+      "surfacePlanSha256": "b7eb8ada9dbd8d37b59fcf58e35bbabd2b0bb9a8967c61c63b073df25583c304",
+      "tileRow": 17,
+      "calmBand": {
+        "rows": [
+          64,
+          221
+        ],
+        "meanLuminanceMilli": 11,
+        "p05LuminanceMilli": 2,
+        "p95LuminanceMilli": 28,
+        "maxLuminanceMilli": 73,
+        "brightPixelPermille": 0.0
+      }
+    },
+    {
+      "stageId": "krh-observatory",
+      "levelId": "krh-observatory",
+      "index": 18,
+      "title": "Kurohana Throne Observatory",
+      "file": "backdrops/krh-observatory.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "127522753e329876fd8d4e6fb8b67a0cb37f8aafc286606dce35c818bcf7907d",
+      "rgbaSha256": "65b463d04fb723138297f844875f40d15d25c63edd258104cea0d041dd7e0840",
+      "colorCount": 19,
+      "paletteSize": 39,
+      "groundY": 438,
+      "platforms": [
+        {
+          "id": "observatory-ring-west",
+          "left": 64,
+          "right": 306,
+          "y": 296
+        },
+        {
+          "id": "observatory-ring-east",
+          "left": 654,
+          "right": 896,
+          "y": 296
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "lacquer",
+        "platform": "bronze",
+        "support": "iron"
+      },
+      "supports": true,
+      "surfacePlanSha256": "4c35dc6e7e345166f00dbc83fd06587ceb5358da4be70eac583d830f3308e552",
+      "tileRow": 18,
+      "calmBand": {
+        "rows": [
+          64,
+          219
+        ],
+        "meanLuminanceMilli": 13,
+        "p05LuminanceMilli": 2,
+        "p95LuminanceMilli": 16,
+        "maxLuminanceMilli": 506,
+        "brightPixelPermille": 0.22
+      }
+    },
+    {
+      "stageId": "epi-hoshigawa-archive",
+      "levelId": "epi-hoshigawa-archive",
+      "index": 19,
+      "title": "Hoshigawa Public Archive at Daybreak",
+      "file": "backdrops/epi-hoshigawa-archive.png",
+      "width": 480,
+      "height": 270,
+      "mode": "RGBA",
+      "sha256": "3a1122ad27eb9bc8cd23e99dab6ccd10cf23655193a0bf21717009997364aebc",
+      "rgbaSha256": "0f16d807abea4c6e86b9043ca62a16eefe04fa98d1726053ad10d1f6f96844cd",
+      "colorCount": 20,
+      "paletteSize": 37,
+      "groundY": 448,
+      "platforms": [
+        {
+          "id": "memorial-gallery",
+          "left": 612,
+          "right": 892,
+          "y": 310
+        }
+      ],
+      "surfaceMaterials": {
+        "ground": "plank",
+        "platform": "beam",
+        "support": "post"
+      },
+      "supports": true,
+      "surfacePlanSha256": "f084a540ea175a43a85faf78d1c34e732f2f468a15b01d3409ca15a1d1ead13a",
+      "tileRow": 19,
+      "calmBand": {
+        "rows": [
+          64,
+          224
+        ],
+        "meanLuminanceMilli": 66,
+        "p05LuminanceMilli": 16,
+        "p95LuminanceMilli": 194,
+        "maxLuminanceMilli": 808,
+        "brightPixelPermille": 23.82
+      }
+    }
+  ]
+}
