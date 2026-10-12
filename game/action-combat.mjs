@@ -17,7 +17,7 @@
  */
 
 export const ACTION_FIXED_STEP_MS = 20;
-export const ACTION_COMBAT_SNAPSHOT_VERSION = 5;
+export const ACTION_COMBAT_SNAPSHOT_VERSION = 6;
 export const ACTION_TAG_COOLDOWN_MS = 240;
 export const ACTION_HIT_STUN_MS = 100;
 export const ACTION_HIT_INVULNERABILITY_MS = 240;
@@ -27,6 +27,8 @@ export const ACTION_KNOCKBACK_LIFT_SPEED_Y = 120;
 export const MINIMUM_COOLDOWN_MULTIPLIER = 0.55;
 export const COOLDOWN_REDUCTION_PER_LEVEL = 0.0125;
 export const ACTION_ARMOR_CONSTANT = 60;
+export const ACTION_DEFAULT_POISE_DAMAGE = 1;
+export const ACTION_COMBO_POISE_BONUS = 1;
 
 export const ACTION_PHASES = Object.freeze({
   WINDUP: 'windup',
@@ -451,6 +453,10 @@ function normalizeAttack(id, source, stepMs) {
       width: positiveNumber(source.hitbox?.width, `${id}.hitbox.width`),
       height: positiveNumber(source.hitbox?.height, `${id}.hitbox.height`),
     },
+    poiseDamage: nonNegativeInteger(source.poiseDamage, `${id}.poiseDamage`, ACTION_DEFAULT_POISE_DAMAGE),
+    // Explicit opt-in for authored self-casts (summons, wards, stances): the
+    // deterministic chase AI may begin them without its hitbox reaching a foe.
+    selfCast: source.selfCast === true,
     tags: clone(source.tags ?? []),
   };
   if (attack.activeMs === 0) throw new RangeError(`${id}.activeMs must be greater than zero.`);
@@ -472,6 +478,25 @@ function normalizeAttack(id, source, stepMs) {
   return deepFreeze(attack);
 }
 
+/**
+ * Poise is opt-in per actor. Hits that land during the actor's wind-up drain
+ * it by the attack's poise damage; reaching zero cancels the wind-up (the
+ * attack starts its normal cooldown) and staggers the actor. Partial regen
+ * restores one point per interval after a quiet delay.
+ */
+function normalizePoise(source, id) {
+  if (source == null) {
+    return { max: 0, regenDelayMs: 0, regenIntervalMs: 0, staggerMs: 0 };
+  }
+  const max = nonNegativeInteger(source.max, `${id}.poise.max`, 0);
+  return {
+    max,
+    regenDelayMs: nonNegativeInteger(source.regenDelayMs, `${id}.poise.regenDelayMs`, 0),
+    regenIntervalMs: nonNegativeInteger(source.regenIntervalMs, `${id}.poise.regenIntervalMs`, 0),
+    staggerMs: nonNegativeInteger(source.staggerMs, `${id}.poise.staggerMs`, 0),
+  };
+}
+
 function normalizeActor(source, attackCatalogue, stage) {
   const id = String(source.id ?? '');
   if (!id) throw new TypeError('Every actor requires an id.');
@@ -482,6 +507,7 @@ function normalizeActor(source, attackCatalogue, stage) {
   for (const attackId of attackIds) {
     if (!attackCatalogue[attackId]) throw new RangeError(`${id} references unknown attack ${attackId}.`);
   }
+  const poise = normalizePoise(source.poise, id);
   return {
     id,
     name: String(source.name ?? id),
@@ -544,6 +570,14 @@ function normalizeActor(source, attackCatalogue, stage) {
     hitFlashRemainingMs: 0,
     knockbackVelocityX: 0,
     lastImpactComboId: null,
+    maxPoise: poise.max,
+    poise: poise.max,
+    poiseRegenDelayMs: poise.regenDelayMs,
+    poiseRegenIntervalMs: poise.regenIntervalMs,
+    poiseRegenDelayRemainingMs: 0,
+    poiseRegenProgressMs: 0,
+    staggerMs: poise.staggerMs,
+    staggerRemainingMs: 0,
     statuses: clone(source.statuses ?? []),
   };
 }
@@ -613,6 +647,9 @@ function phaseFor(activeAttack, attack) {
  * - onFixedStep({ nowMs, stepMs, kernel })
  * - canBeginAttack({ actor, attackId, target, kernel }) may return false to
  *   veto an AI-selected attack whose authored condition does not hold
+ * - prioritizeAttacks({ actor, target, attackIds, kernel }) may return the
+ *   actor's attack ids in authored priority order; the AI still begins only
+ *   the first ready, reachable (or `selfCast`), unvetoed attack
  *
  * Actor status payloads are copied into `actor.statuses` and left opaque to the
  * kernel. Hooks can interpret and update them without coupling this core to a
@@ -931,6 +968,7 @@ export class ActionCombatKernel {
     if (actor.hp <= 0) reason = 'actor-defeated';
     else if (this.outcome) reason = 'combat-ended';
     else if (actor.hitStunRemainingMs > 0) reason = 'hit-stun';
+    else if (actor.staggerRemainingMs > 0) reason = 'staggered';
     else if (committed) reason = 'animation-commitment';
     else if (actor.activeManeuver) reason = 'maneuver-commitment';
     else if (sharedCooldownRemainingMs > 0) reason = 'shared-offensive-cooldown';
@@ -1175,6 +1213,9 @@ export class ActionCombatKernel {
         hitInvulnerabilityRemainingMs: actor.hitInvulnerabilityRemainingMs,
         hitFlashRemainingMs: actor.hitFlashRemainingMs,
         knockbackVelocityX: actor.knockbackVelocityX,
+        poise: actor.poise,
+        maxPoise: actor.maxPoise,
+        staggerRemainingMs: actor.staggerRemainingMs,
         statuses: clone(actor.statuses),
       };
     });
@@ -1243,7 +1284,106 @@ export class ActionCombatKernel {
       actor.hitFlashRemainingMs = Math.max(0, actor.hitFlashRemainingMs - this.fixedStepMs);
       if (actor.hitStunRemainingMs === 0) actor.knockbackVelocityX = 0;
       if (actor.hitInvulnerabilityRemainingMs === 0) actor.lastImpactComboId = null;
+      this._tickPoise(actor);
     }
+  }
+
+  _tickPoise(actor) {
+    if (actor.maxPoise <= 0) return;
+    if (actor.staggerRemainingMs > 0) {
+      actor.staggerRemainingMs = Math.max(0, actor.staggerRemainingMs - this.fixedStepMs);
+      if (actor.staggerRemainingMs === 0 && actor.hp > 0) {
+        actor.poise = actor.maxPoise;
+        actor.poiseRegenDelayRemainingMs = 0;
+        actor.poiseRegenProgressMs = 0;
+        this._emit('poise-restored', { actorId: actor.id, reason: 'stagger-recovered', poise: actor.poise });
+      }
+      return;
+    }
+    if (actor.poise >= actor.maxPoise || actor.poiseRegenIntervalMs <= 0) return;
+    if (actor.poiseRegenDelayRemainingMs > 0) {
+      actor.poiseRegenDelayRemainingMs = Math.max(0, actor.poiseRegenDelayRemainingMs - this.fixedStepMs);
+      return;
+    }
+    actor.poiseRegenProgressMs += this.fixedStepMs;
+    if (actor.poiseRegenProgressMs >= actor.poiseRegenIntervalMs) {
+      actor.poiseRegenProgressMs -= actor.poiseRegenIntervalMs;
+      actor.poise = Math.min(actor.maxPoise, actor.poise + 1);
+    }
+  }
+
+  /** Refill an actor's poise, for example when an authored boss phase begins. */
+  restorePoise(actorId, reason = 'restored') {
+    const actor = this.getActor(actorId);
+    if (!actor) return { ok: false, reason: 'unknown-actor' };
+    if (actor.maxPoise <= 0) return { ok: false, reason: 'no-poise' };
+    const previous = actor.poise;
+    actor.poise = actor.maxPoise;
+    actor.poiseRegenDelayRemainingMs = 0;
+    actor.poiseRegenProgressMs = 0;
+    if (previous !== actor.poise) {
+      this._emit('poise-restored', { actorId: actor.id, reason: String(reason), poise: actor.poise });
+    }
+    return { ok: true, actorId: actor.id, previous, poise: actor.poise };
+  }
+
+  _applyCompletionCooldowns(actor, attack) {
+    const sharedCooldownMs = levelAdjustedCooldownMs(actor.offensiveCooldownMs, actor.level);
+    const authoredIndividualMs = attack.cooldownMs == null
+      ? 0
+      : levelAdjustedCooldownMs(attack.cooldownMs, actor.level);
+    const individualCooldownMs = attack.cooldownMs == null
+      ? 0
+      : Math.max(sharedCooldownMs, authoredIndividualMs);
+    actor.offensiveCooldownRemainingMs = sharedCooldownMs;
+    actor.attackCooldowns[attack.id] = individualCooldownMs;
+    return { sharedCooldownMs, individualCooldownMs };
+  }
+
+  /**
+   * Drain poise for a hit that landed during the target's wind-up. Breaking
+   * poise cancels the wind-up before its active frame, starts that attack's
+   * normal cooldown, and staggers the target.
+   */
+  _applyPoiseDamage(attacker, target, attack, provenance) {
+    if (target.maxPoise <= 0 || target.hp <= 0 || target.staggerRemainingMs > 0) return null;
+    const active = target.activeAttack;
+    if (!active) return null;
+    const committed = this.attacks[active.attackId];
+    if (phaseFor(active, committed) !== ACTION_PHASES.WINDUP) return null;
+    const poiseDamage = attack.poiseDamage + (provenance.comboId != null ? ACTION_COMBO_POISE_BONUS : 0);
+    if (poiseDamage <= 0) return null;
+    const poiseBefore = target.poise;
+    target.poise = Math.max(0, target.poise - poiseDamage);
+    target.poiseRegenDelayRemainingMs = target.poiseRegenDelayMs;
+    target.poiseRegenProgressMs = 0;
+    const broken = target.poise === 0;
+    if (broken) {
+      target.activeAttack = null;
+      const cooldowns = this._applyCompletionCooldowns(target, committed);
+      target.staggerRemainingMs = target.staggerMs;
+      target.movementIntent = { x: 0, y: 0 };
+      this._emit('poise-broken', {
+        actorId: target.id,
+        sourceActorId: attacker.id,
+        sourceAttackId: attack.id,
+        ...provenance,
+        interruptedAttackId: committed.id,
+        poiseDamage,
+        poiseBefore,
+        staggerMs: target.staggerMs,
+      });
+      this._emit('attack-interrupted', {
+        actorId: target.id,
+        attackId: committed.id,
+        reason: 'poise-broken',
+        byActorId: attacker.id,
+        elapsedMs: active.elapsedMs,
+        windupMs: committed.windupMs,
+        ...cooldowns,
+      });
+    }
+    return { poiseDamage, poiseBefore, poiseAfter: target.poise, broken };
   }
 
   _advanceAttackAnimations() {
@@ -1326,6 +1466,9 @@ export class ActionCombatKernel {
     const hpBefore = target.hp;
     target.hp = Math.max(0, target.hp - resolution.damage);
     if (resolution.damage > 0) target.hitFlashRemainingMs = ACTION_HIT_FLASH_MS;
+    const poise = resolution.damage > 0 && target.hp > 0
+      ? this._applyPoiseDamage(attacker, target, attack, provenance)
+      : null;
     if (resolution.damage > 0 && target.hp > 0) {
       const knockbackDirection = target.position.x === attacker.position.x
         ? attacker.facing
@@ -1355,6 +1498,9 @@ export class ActionCombatKernel {
         ? ACTION_HIT_INVULNERABILITY_MS
         : 0,
       knockbackVelocityX: target.hp > 0 && resolution.damage > 0 ? target.knockbackVelocityX : 0,
+      poiseDamage: poise?.poiseDamage ?? 0,
+      poiseAfter: target.maxPoise > 0 ? target.poise : null,
+      poiseBroken: poise?.broken === true,
     });
     this.statusHooks.afterHit?.({ attacker, target, attack, resolution, event, kernel: this });
     return event;
@@ -1430,15 +1576,7 @@ export class ActionCombatKernel {
   }
 
   _completeAttack(actor, attack, active) {
-    const sharedCooldownMs = levelAdjustedCooldownMs(actor.offensiveCooldownMs, actor.level);
-    const authoredIndividualMs = attack.cooldownMs == null
-      ? 0
-      : levelAdjustedCooldownMs(attack.cooldownMs, actor.level);
-    const individualCooldownMs = attack.cooldownMs == null
-      ? 0
-      : Math.max(sharedCooldownMs, authoredIndividualMs);
-    actor.offensiveCooldownRemainingMs = sharedCooldownMs;
-    actor.attackCooldowns[attack.id] = individualCooldownMs;
+    const { sharedCooldownMs, individualCooldownMs } = this._applyCompletionCooldowns(actor, attack);
     actor.activeAttack = null;
     const event = this._emit('attack-complete', {
       actorId: actor.id,
@@ -1485,6 +1623,7 @@ export class ActionCombatKernel {
       const isSentry = actor.ai === 'deterministic-sentry';
       if (actor.hp <= 0
           || actor.hitStunRemainingMs > 0
+          || actor.staggerRemainingMs > 0
           || (!isCompanion && !isEnemy)
           || actor.activeAttack) continue;
       const target = this._nearestOpponent(actor);
@@ -1539,10 +1678,20 @@ export class ActionCombatKernel {
       }
       const attackOverlapsTarget = (attackId) => target != null
         && overlaps(attackWorldHitbox(actor, this.attacks[attackId]), actionActorHurtbox(target));
-      const usableAttack = actor.attackIds.find((attackId) => {
-        if (this.attacks[attackId].kind === 'subweapon') return false;
+      const prioritized = this.statusHooks.prioritizeAttacks?.({
+        actor,
+        target,
+        attackIds: [...actor.attackIds],
+        kernel: this,
+      });
+      const candidateIds = Array.isArray(prioritized)
+        ? prioritized.filter((attackId) => actor.attackIds.includes(attackId))
+        : actor.attackIds;
+      const usableAttack = target == null ? undefined : candidateIds.find((attackId) => {
+        const attack = this.attacks[attackId];
+        if (attack.kind === 'subweapon') return false;
         const state = this.getAttackState(actor.id, attackId);
-        return state.ready && (isSentry || attackOverlapsTarget(attackId))
+        return state.ready && (isSentry || attack.selfCast || attackOverlapsTarget(attackId))
           && this.statusHooks.canBeginAttack?.({ actor, attackId, target, kernel: this }) !== false;
       });
       if (usableAttack) {
@@ -1662,7 +1811,7 @@ export class ActionCombatKernel {
       const maneuverSpec = maneuver ? actor.maneuverSpecs[maneuver.id] : null;
       const seconds = this.fixedStepMs / 1000;
       if (actor.hitStunRemainingMs > 0) actor.velocity.x = actor.knockbackVelocityX;
-      else if (committed) actor.velocity.x = 0;
+      else if (committed || actor.staggerRemainingMs > 0) actor.velocity.x = 0;
       else if (maneuver) actor.velocity.x = maneuver.direction * speed * maneuverSpec.speedMultiplier;
       else if (actor.wallJumpRemainingMs > 0 && actor.movementProfile.wallTechnique) {
         actor.velocity.x = actor.wallJumpDirection
@@ -1671,6 +1820,7 @@ export class ActionCombatKernel {
       }
       else actor.velocity.x = intent.x * speed;
       if (actor.hitStunRemainingMs === 0
+          && actor.staggerRemainingMs === 0
           && !committed
           && !maneuver
           && intent.x !== 0) actor.facing = intent.x > 0 ? 1 : -1;
