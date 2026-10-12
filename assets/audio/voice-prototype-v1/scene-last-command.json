@@ -6,6 +6,7 @@
     "docs/36-act-v-the-last-command.md (confession reversal)"
   ],
   "translationStatus": "Confession-reversal Japanese is authored in docs/36. Every other Japanese line is a draft machine-assisted translation awaiting native review.",
+  "defaultPauseSeconds": 0.4,
   "lines": [
     {
       "id": "01",
@@ -191,6 +192,7 @@
       "ja": "お前は私の息子を殺した！",
       "exaggeration": 1.0,
       "cfg": 0.3,
+      "pauseBeforeSeconds": 1.2,
       "authored": true
     },
     {
@@ -275,6 +277,7 @@
       "ja": "……はい。",
       "exaggeration": 0.25,
       "cfg": 0.3,
+      "pauseBeforeSeconds": 1.5,
       "authored": true
     },
     {

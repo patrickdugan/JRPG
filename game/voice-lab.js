@@ -7,7 +7,7 @@ const SPEAKER_NAMES = {
   ren: 'Ren Ishikawa',
   miyo: 'Miyo Senda',
 };
-const GAP_MS = 450;
+const DEFAULT_PAUSE_SECONDS = 0.4;
 
 const sceneElement = document.querySelector('#scene');
 const statusElement = document.querySelector('#status');
@@ -127,14 +127,24 @@ function playEntry(entry) {
   });
 }
 
+/** Silence before a line is direction: the manifest carries the scene's per-line pauses. */
+function pauseBeforeMs(id) {
+  const seconds = manifest?.pauseBeforeSeconds?.[id] ?? manifest?.defaultPauseSeconds ?? DEFAULT_PAUSE_SECONDS;
+  return seconds * 1000;
+}
+
 async function playAll() {
   stop();
   const token = runToken;
+  let first = true;
   for (const entry of entries()) {
     if (!entry.file) continue;
+    if (!first) {
+      await new Promise((resolve) => setTimeout(resolve, pauseBeforeMs(entry.id)));
+      if (token !== runToken) return;
+    }
+    first = false;
     await playEntry(entry);
-    if (token !== runToken) return;
-    await new Promise((resolve) => setTimeout(resolve, GAP_MS));
     if (token !== runToken) return;
   }
   stopScene.disabled = true;
@@ -146,10 +156,16 @@ stopScene.addEventListener('click', () => {
   stop();
   statusElement.textContent = 'Stopped.';
 });
+function showReadyCount() {
+  const generated = entries().filter((entry) => entry.file).length;
+  statusElement.textContent = `${generated} lines ready in ${language() === 'ja' ? 'Japanese' : 'English'}.`;
+}
+
 for (const input of document.querySelectorAll('input[name="lang"]')) {
   input.addEventListener('change', () => {
     stop();
     render();
+    showReadyCount();
   });
 }
 
@@ -159,8 +175,7 @@ try {
   manifest = await response.json();
   provenance.textContent = manifest.provenance ?? '';
   render();
-  const generated = entries().filter((entry) => entry.file).length;
-  statusElement.textContent = `${generated} lines ready in ${language() === 'ja' ? 'Japanese' : 'English'}.`;
+  showReadyCount();
 } catch (error) {
   statusElement.textContent = `No voice manifest yet (${error.message}). Run assets/audio/voice-prototype-v1/build_voice_prototype.py.`;
 }

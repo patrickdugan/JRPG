@@ -67,7 +67,7 @@ Intensity is the target on a 0–10 scale. The numbers in brackets are the proto
 
 - **Peaks need valleys.** Lines 18 and 22 only work because 20 is quiet and 25 is almost nothing. Never raise 20 or 25 to make them "clearer".
 - **Kurozane loses resonance as he loses power.** His effect chain runs from `oni` (lowered pitch, sub-octave, drive, hall) to `fallen` (thinner) to `mortal` (dry). The plain はい must sound like a different, smaller man.
-- **Silence is direction.** In playback, leave about 0.4 s between lines, about 1.2 s before line 18, and about 1.5 s before line 25. (The listening page currently uses a uniform gap; per-line pauses are a TODO.)
+- **Silence is direction.** In playback, leave about 0.4 s between lines, about 1.2 s before line 18, and about 1.5 s before line 25. These live in the scene script as `defaultPauseSeconds` and per-line `pauseBeforeSeconds`; the generator copies them into the manifest and the listening page honours them.
 - **The Latin line is a hinge.** After Nikola's grandeur all scene long, his one serious question has to drop to nothing.
 
 ## Japanese register rules for this scene
@@ -111,19 +111,23 @@ The generator is resumable: it skips any line whose output file exists and whose
    .\.venv-voice\Scripts\python -m pip uninstall -y unidic
    ```
    Keep `unidic-lite` and remove the full `unidic`: the full package needs a separate dictionary download, and MeCab fails without it.
+
+   The Kokoro line is only needed to render a missing reference timbre. All references are committed under `references/`, so a machine that only performs lines can skip it. That matters on Windows without Visual Studio C++ build tools, because `misaki[ja]` builds `pyopenjtalk` from source.
 5. Render. On first run this downloads Chatterbox Multilingual, Kokoro, and Whisper large-v3-turbo into the Hugging Face cache:
    ```powershell
    $env:PYTHONIOENCODING = "utf-8"
    .\.venv-voice\Scripts\python assets\audio\voice-prototype-v1\build_voice_prototype.py --langs en,ja --takes 3 --device cuda
    ```
    Use `--takes 3` on GPU so the ASR check can pick the cleanest take. Use `--lines 18,22 --force` to retake specific lines.
+
+   On a GPU with less than about 6 GB of VRAM, add `--asr-device cpu` so Whisper runs on the CPU and Chatterbox keeps the GPU to itself.
 6. Bring the results back: commit `game/assets/audio/voice-prototype-v1/` (OGG files and `manifest.json`) on the branch, or copy that folder over.
 
 ## Review checklist
 
 For each line, on the listening page:
 
-- [ ] The words are right (the page's ASR error is under 10%).
+- [ ] The words are right (the page's ASR error is under 10%). Japanese is scored on hiragana readings, so a homophone kanji in Whisper's transcript (鐘/金) does not count against a take.
 - [ ] The intensity matches the map above, especially the valleys at 20 and 25.
 - [ ] Kurozane's effects step down: oni, then fallen, then mortal.
 - [ ] Japanese pronunciation and pitch accent are natural (native reviewer).
@@ -132,8 +136,9 @@ For each line, on the listening page:
 
 ## Open work
 
-- Finish the render: 11 English and 26 Japanese lines remain as of this note.
-- Native Japanese review of the draft translation and of every Japanese take.
-- Per-line pauses in the listening page and in the eventual dialogue runner.
+- All 27 lines are rendered in both languages. English 01–15, 18, and 25 are single-take renders from the first pass; retake them with `--takes 3` if a cleaner take is wanted.
+- Japanese line 11 (Mateus): every take drops the か of 空っぽ (Whisper hears あっぽ). The kept take scores 8.7% but the word is still wrong. Try a higher CFG for this line, or a different word in the draft translation.
+- Native Japanese review of the draft translation and of every Japanese take. Listen first to 03 (その中で heard as その後で), 10 (アヴェラール heard as アムラール), and 11.
+- Per-line pauses in the eventual dialogue runner (the listening page already reads them from the manifest).
 - An opt-in voice setting in the Campaign dialogue runner, with subtitles always on.
 - Extend the cast to Aya, Kiku, Genta, Lady Enma, and Ujiro for their key scenes.
