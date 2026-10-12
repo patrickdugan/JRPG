@@ -52,6 +52,8 @@ The live scene-panorama package accepts `MAP-CIN-001-020`: 20 distinct opaque 32
 
 **Current field-terrain receipt:** the live 80 × 64 transparent atlas contains 19 distinct 16 × 16 overlays: the default stone floor plus every terrain tag authored across all 48 levels. The browser paints the level-owned flat color first and composites the overlay only after an exact dimension gate; image failure, wrong size, and unknown tags retain the flat-color/geometric renderer. This is complete coverage of current live tags, not the planned edge/corner/transition, prop, landmark, foreground-mask, or weather packages above. Overlay pixels never define collision, exits, hazards, movement, or interactions.
 
+**Current field-prop receipt:** `assets/art/field-prop-suite-v1` is a pixel-authored, byte-reproducible 256 × 416 transparent atlas of 216 cell-multiple frames (eight regional building/wall/roof-block families with family-palette props and wide props, plus eight shared tall props), and the pure `game/field-prop-dressing.mjs` resolver dresses 1,086 of the 1,092 authored impassable cells across all 48 levels (99.5%) while never covering walkable cells, exits, spawn points, hazards, or interactables; `drawMap()` integration and external cultural review are still pending.
+
 ## 4. Location and map production
 
 Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small props, foreground masks, collision reference, weather layer, and a 320 x 180 value thumbnail per map. Counts below are maps, not individual screens.
