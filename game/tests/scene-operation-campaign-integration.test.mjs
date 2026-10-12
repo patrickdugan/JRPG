@@ -70,7 +70,7 @@ test('the rendered map publishes the next incomplete field interaction or ready 
   assert.match(campaignSource, /item\.result === unfinishedFieldRequirement\.id \|\| item\.id === unfinishedFieldRequirement\.id/);
   assert.match(campaignSource, /resolvePublishedFieldInteractable\(\s+requiredInteractable,\s+level\.interactables \?\? \[\],\s+status\.flags/);
   assert.match(campaignSource, /item\.available !== false/);
-  assert.match(campaignSource, /normalize\(item\.id\) === normalize\(requiredInteractable\.requires\)/);
+  assert.match(campaignSource, /normalize\(item\.id\) === needed \|\| normalize\(item\.result\) === needed/);
   assert.match(campaignSource, /exitBlockingInteractable = readyExit && authored\?\.available !== false && !authored\?\.consumed/);
   assert.match(campaignSource, /nextRequiredInteractable = publishedRequiredInteractable \?\? exitBlockingInteractable/);
   assert.match(campaignSource, /readyExit = scopedExit\?\.ready \? scopedExit : null/);
@@ -154,4 +154,20 @@ test('New Game and browser lifecycle clear, reload, and persist operation state'
   assert.match(campaignSource, /const refreshedSceneOperations = sceneOperationAdapter\.load\(\)/);
   const saveCalls = campaignSource.match(/sceneOperationAdapter\.save\(sceneOperationState\)/g) ?? [];
   assert.ok(saveCalls.length >= 2, 'pagehide and visibility remain explicit best-effort lifecycle saves');
+});
+
+test('published targets follow multi-step prerequisites named by result flags', () => {
+  const hall = getLevel('krh-audience-hall');
+  const ledger = hall.interactables.find(({ id }) => id === 'ujiro-ledger');
+  const byId = (id) => hall.interactables.find((item) => item.id === id);
+  assert.equal(resolvePublishedFieldInteractable(ledger, hall.interactables, []), byId('living-martyr-west'),
+    'the custody ledger first points at the west prisoner whose rescue starts the chain');
+  assert.equal(
+    resolvePublishedFieldInteractable(ledger, hall.interactables, ['kurohana-martyr-west-rescued']),
+    byId('living-martyr-east'),
+  );
+  assert.equal(
+    resolvePublishedFieldInteractable(ledger, hall.interactables, ['kurohana-martyr-west-rescued', 'kurohana-martyr-east-rescued']),
+    ledger,
+  );
 });

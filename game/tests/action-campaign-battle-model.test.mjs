@@ -608,3 +608,25 @@ test('Bell Warden Chiyo rings the count on every second activation, as authored'
   complete(ring);
   assert.equal(hooks.canBeginAttack({ actor: chiyo, attackId: ring }), false, 'counts never ring back to back');
 });
+
+test('a fighter in the archive core protection lane shields it from stray rings', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c9-yearless-bell',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const core = session.objectiveEntities.objects.find(({ id }) => id === 'archive-core');
+  const party = [...session.kernel.actors.values()].filter(({ faction }) => faction === 'player');
+  const holdParty = (x) => { for (const actor of party) actor.position = { x, y: actor.position.y }; };
+  for (let step = 0; step < 150; step += 1) {
+    holdParty(core.position.x);
+    advanceActionCampaignBattle(session, 20);
+  }
+  assert.equal(core.hp, core.maxHp, 'rings never touch a guarded core');
+  for (let step = 0; step < 150; step += 1) {
+    holdParty(100);
+    advanceActionCampaignBattle(session, 20);
+  }
+  assert.ok(core.hp < core.maxHp, 'an unguarded core takes ring damage');
+});

@@ -480,6 +480,9 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
   const instanceId = `${template.id}-${instanceIndex + 1}`;
   const nonHostile = context.encounter.format === 'noncombat-resolution';
   const tutorialSentry = String(template.role ?? '').includes('immovable');
+  // Phase objects such as the Yearless Bell hold their station without the
+  // tutorial sentry's damage and cadence softening.
+  const phaseObject = String(template.role ?? '').includes('phase-object');
   const primaryBoss = ['boss', 'boss-rescue', 'boss-phase', 'final-boss'].includes(context.encounter.format)
     && template.id === context.encounter.enemies[0]?.id;
   const hp = actionEnemyHp(template.stats.hp, template.actionHpMultiplier ?? 1);
@@ -491,7 +494,7 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
     faction: nonHostile ? 'neutral' : 'enemy',
     ai: nonHostile || attackIds.length === 0
       ? null
-      : tutorialSentry
+      : tutorialSentry || phaseObject
         ? 'deterministic-sentry'
         : 'deterministic-chase',
     level,
