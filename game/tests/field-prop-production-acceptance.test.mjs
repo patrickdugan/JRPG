@@ -11,6 +11,7 @@ const RUNTIME = new URL('../assets/art/field-prop-suite-v1/field-prop-atlas.png'
 const SHADOW = [11, 16, 32, 112];
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+const textSha256 = (bytes) => sha256(Buffer.from(bytes.toString('utf8').replace(/\r\n/gu, '\n'), 'utf8'));
 
 function paeth(left, up, upperLeft) {
   const estimate = left + up - upperLeft;
@@ -98,8 +99,8 @@ test('field prop source and manifest keep provenance, palette, and cultural boun
   const manifest = JSON.parse(manifestBytes);
   assert.equal(source.authorship, 'original-code-native-pixel-primitives');
   assert.equal(manifest.provenanceLane, 'pixel-authored-production');
-  assert.equal(manifest.sourceSha256, sha256(sourceBytes));
-  assert.equal(manifest.builderSha256, sha256(builderBytes));
+  assert.equal(manifest.sourceSha256, textSha256(sourceBytes));
+  assert.equal(manifest.builderSha256, textSha256(builderBytes));
   assert.equal(manifest.pillowVersion, '11.3.0');
   assert.equal(requirements.trim(), 'Pillow==11.3.0');
   assert.equal(manifest.twoIndependentRendersByteIdentical, true);

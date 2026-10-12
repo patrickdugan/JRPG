@@ -6,8 +6,8 @@
   "provenance": "Pixel-authored production asset: deterministic code-native integer primitives at native 16 x 16 cell resolution under explicit per-family palettes. No image generator, traced reference, or external pixels.",
   "runtimeIntegration": "decorative-dressing-of-authored-impassable-cells-via-game/field-prop-dressing.mjs; collision stays level-owned",
   "pillowVersion": "11.3.0",
-  "sourceSha256": "72923fea8ccc4d047b9be062474ee659f43e5be8e320ea225f54942eecc1ea05",
-  "builderSha256": "3fdd900bbe4779401c4166dc6c37b36b84184dc56ea007ac956b39225e6e0a07",
+  "sourceSha256": "7197cd1ac244a1e0701b7713ed69b632b67bd5927b87a38b5396a9aab41fd692",
+  "builderSha256": "e7ec63132866ee4da583fd4b1af3eedeab23251389195dfdf237d7884a9bc4d3",
   "geometry": {
     "cell": 16,
     "columns": 16,

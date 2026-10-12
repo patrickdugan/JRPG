@@ -61,6 +61,11 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def text_sha256(path: Path) -> str:
+    """Hash text sources with LF line endings so checkouts on any platform agree."""
+    return sha256(path.read_bytes().replace(b"\r\n", b"\n"))
+
+
 def png_bytes(image: Image.Image) -> bytes:
     stream = io.BytesIO()
     image.save(stream, format="PNG", optimize=False, compress_level=9)
@@ -2192,8 +2197,8 @@ def build_outputs(source: dict) -> dict[Path, bytes]:
         "provenance": "Pixel-authored production asset: deterministic code-native integer primitives at native 16 x 16 cell resolution under explicit per-family palettes. No image generator, traced reference, or external pixels.",
         "runtimeIntegration": "decorative-dressing-of-authored-impassable-cells-via-game/field-prop-dressing.mjs; collision stays level-owned",
         "pillowVersion": PIL.__version__,
-        "sourceSha256": sha256(SOURCE_PATH.read_bytes()),
-        "builderSha256": sha256(BUILDER_PATH.read_bytes()),
+        "sourceSha256": text_sha256(SOURCE_PATH),
+        "builderSha256": text_sha256(BUILDER_PATH),
         "geometry": {
             **source["geometry"],
             "frameUnit": "16 x 16 cell multiples",
