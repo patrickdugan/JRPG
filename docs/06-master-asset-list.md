@@ -139,6 +139,8 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 
 **Receipt (2026-10-12):** `assets/art/action-stage-backdrop-suite-v1/` adds 20 deterministic, pixel-authored 480 x 270 side-view backdrops, one per action stage and drawn at 2x, plus a binary-alpha ground/platform surface-tile atlas. `game/action-stage-backdrop-atlas.mjs` lays the tiles exactly on each stage's `groundY` and platform `left/right/y` from `game/action-stages.mjs`. `drawStage()` in `game/action-campaign-battle.js` now uses them instead of stretching the top-down board, and falls back to the unchanged legacy rendering when a backdrop is missing, mis-sized or unmapped. The suite still needs external cultural review and is not art-locked.
 
+**Receipt (2026-10-12):** `assets/art/action-objective-suite-v1/` is a pixel-authored deterministic production suite (code-native Pillow primitives, not hand-pixeled). It holds 28 side-view objective kinds in 79 state frames: exits, boat, shelters, culvert, canal lock, chain posts, cell gates, relays, net posts, seal daises, fog bell, slip box, trough, release mark, orders lectern, epilogue records, crates, courier, print blocks, archive core, bell nodes, and three civilian token variants. `game/action-objective-atlas.mjs` resolves them, and the action battle page draws them in place of the objective rectangles, with an exact rectangle fallback and collision-free canvas name labels; `--check` rebuilds byte-identically.
+
 ## 8. VFX, icons, UI, and typography
 
 | ID range | Asset family | Qty | Priority | Minimum package |

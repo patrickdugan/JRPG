@@ -43,6 +43,15 @@ import {
   planActionStageSurfaces,
   resolveActionStageRenderMode,
 } from './action-stage-backdrop-atlas.mjs';
+import {
+  ACTION_OBJECTIVE_ATLAS,
+  actionObjectiveImageHasExpectedSize,
+  createActionObjectiveArtView,
+  resolveActionObjectiveAnchorArt,
+  resolveActionObjectiveObjectArt,
+  resolveActionObjectiveTokenArt,
+} from './action-objective-atlas.mjs';
+import { layoutCanvasLabels, shortenActorName } from './action-label-layout.mjs';
 import { BOSS_COMBAT_ATLAS, getBossCombatDrawPlacement, getBossCombatFrame, hasBossCombatTemplate } from './boss-combat-atlas.mjs';
 import {
   ENEMY_COMBAT_ANIMATION_ATLAS,
@@ -315,6 +324,7 @@ const art = {
   stage: { image: new Image(), ready: false, source: getBattleStageArt(session.encounter.levelId) },
   backdrop: { image: new Image(), ready: false, source: getActionStageBackdrop(session.stage.id) },
   backdropTiles: { image: new Image(), ready: false, source: null },
+  objective: { image: new Image(), ready: false, source: ACTION_OBJECTIVE_ATLAS },
 };
 if (art.backdrop.source) art.backdropTiles.source = ACTION_STAGE_SURFACE_TILES;
 const stageSurfacePlan = planActionStageSurfaces(session.stage, art.backdrop.source);
@@ -336,7 +346,7 @@ function loadArt(key) {
   record.image.src = record.source.url;
 }
 
-for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles']) loadArt(key);
+for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles', 'objective']) loadArt(key);
 if (!art.backdrop.source) elements.canvas.dataset.backdropArtState = 'unmapped';
 elements.canvas.dataset.backdropId = art.backdrop.source?.id ?? '';
 
@@ -774,71 +784,395 @@ function drawStage() {
   }
   if (stageRender === 'backdrop') drawStageSurfaceTiles();
   else drawLegacyStageSurfaces();
-  for (const anchor of session.stage.objectiveAnchors) {
-    context.fillStyle = 'rgba(214, 184, 102, .12)';
-    context.strokeStyle = 'rgba(229, 199, 116, .62)';
-    context.lineWidth = 2;
-    context.fillRect(anchor.x - anchor.width / 2, anchor.y - anchor.height, anchor.width, anchor.height);
-    context.strokeRect(anchor.x - anchor.width / 2, anchor.y - anchor.height, anchor.width, anchor.height);
-    context.fillStyle = '#e1c675';
-    context.font = '700 9px ui-monospace, monospace';
-    context.textAlign = 'center';
-    context.fillText(anchor.id.toUpperCase(), anchor.x, anchor.y - anchor.height - 6);
+  drawObjectiveAnchors();
+}
+
+// Objective art: sprites from action-objective-atlas.mjs with exact rectangle
+// fallbacks. Tags and HP/progress pips are queued here and drawn after actors
+// by drawCanvasLabels() so they stay readable and never overlap actor names.
+const objectiveOverlay = { tags: [], pips: [], bars: [] };
+const objectiveArtFrame = { sprites: 0, fallbacks: 0, kinds: new Set() };
+const objectiveTokenMotion = new Map();
+const canvasTextWidths = new Map();
+const OBJECTIVE_TAG_FONT = '700 9px ui-monospace, monospace';
+const ACTOR_NAME_FONT = '700 10px ui-monospace, monospace';
+const ACTOR_ROLE_FONT = '800 8px ui-monospace, monospace';
+
+function objectiveArtReady() {
+  return art.objective.ready && actionObjectiveImageHasExpectedSize(art.objective.image);
+}
+
+function livingActorTemplateIds() {
+  const result = [];
+  for (const [actorId, actorTemplateId] of Object.entries(session.actorTemplates ?? {})) {
+    const actor = session.kernel.getActor(actorId);
+    if (actor && actor.hp > 0 && !(actor.statuses ?? []).some(({ id }) => id === 'dormant-summon')) {
+      result.push(actorTemplateId);
+    }
   }
+  return result;
+}
+
+function objectiveArtView(entities, requirementProgress) {
+  return createActionObjectiveArtView({
+    contractRequirements: session.objectiveContract.requirements,
+    requirementProgress,
+    entities,
+    outcome: session.outcome,
+    aliveTemplateIds: livingActorTemplateIds(),
+    maxBellCount: session.encounter.objective?.maxBossCounts ?? 0,
+  });
+}
+
+function drawObjectiveSprite(frame, x, y, facing = 1) {
+  const scale = frame.scale;
+  context.save();
+  context.translate(Math.round(x), Math.round(y));
+  if (facing < 0) context.scale(-1, 1);
+  context.drawImage(art.objective.image, frame.x, frame.y, frame.width, frame.height,
+    -frame.pivotX * scale, -frame.pivotY * scale, frame.width * scale, frame.height * scale);
+  context.restore();
+}
+
+function queueObjectiveOverlay(resolved, x, y) {
+  objectiveArtFrame.sprites += 1;
+  objectiveArtFrame.kinds.add(`${resolved.kind}:${resolved.state}`);
+  let cursor = Math.round(y - resolved.frame.visualHeight * resolved.frame.scale) - 3;
+  const pipSource = resolved.pips ?? resolved.countdown;
+  if (pipSource) {
+    const width = pipSource.total * 6 - 2;
+    const left = Math.round(x - width / 2);
+    objectiveOverlay.pips.push({
+      left, top: cursor - 4, right: left + width, bottom: cursor,
+      filled: pipSource.filled, total: pipSource.total,
+      tone: resolved.countdown ? 'countdown' : resolved.urgent ? 'urgent' : 'hp',
+    });
+    cursor -= 7;
+  }
+  if (resolved.progress != null) {
+    const left = Math.round(x - 16);
+    objectiveOverlay.bars.push({ left, top: cursor - 3, right: left + 32, bottom: cursor, value: resolved.progress });
+    cursor -= 6;
+  }
+  if (resolved.label) {
+    objectiveOverlay.tags.push({
+      id: `objective:${resolved.anchorId ?? resolved.id}`,
+      x: Math.round(x),
+      bottom: cursor - 1,
+      full: resolved.label.full.toUpperCase(),
+      short: resolved.label.short.toUpperCase(),
+      relevant: resolved.relevant,
+      complete: resolved.complete,
+      urgent: resolved.urgent === true,
+      worldX: x,
+      worldY: y,
+    });
+  }
+}
+
+function drawObjectiveAnchorFallback(anchor) {
+  objectiveArtFrame.fallbacks += 1;
+  context.fillStyle = 'rgba(214, 184, 102, .12)';
+  context.strokeStyle = 'rgba(229, 199, 116, .62)';
+  context.lineWidth = 2;
+  context.fillRect(anchor.x - anchor.width / 2, anchor.y - anchor.height, anchor.width, anchor.height);
+  context.strokeRect(anchor.x - anchor.width / 2, anchor.y - anchor.height, anchor.width, anchor.height);
+  context.fillStyle = '#e1c675';
+  context.font = '700 9px ui-monospace, monospace';
+  context.textAlign = 'center';
+  context.fillText(anchor.id.toUpperCase(), anchor.x, anchor.y - anchor.height - 6);
+}
+
+function drawObjectiveAnchors() {
+  const ready = objectiveArtReady();
+  const runtime = ready ? session.objectiveRuntime?.snapshot?.() : null;
+  const view = ready ? objectiveArtView(session.objectiveEntities, runtime?.requirements ?? []) : null;
+  for (const anchor of session.stage.objectiveAnchors) {
+    const resolved = view ? resolveActionObjectiveAnchorArt(anchor, view) : null;
+    if (resolved?.owner === 'entity') continue;
+    if (!resolved?.frame) {
+      drawObjectiveAnchorFallback(anchor);
+      continue;
+    }
+    drawObjectiveSprite(resolved.frame, anchor.x, anchor.y);
+    queueObjectiveOverlay(resolved, anchor.x, anchor.y);
+  }
+}
+
+function drawObjectiveObjectFallback(object) {
+  objectiveArtFrame.fallbacks += 1;
+  const left = object.position.x - object.bounds.width / 2;
+  const top = object.position.y - object.bounds.height;
+  context.save();
+  context.globalAlpha = object.destroyed ? 0.38 : 1;
+  context.fillStyle = object.attackable ? '#6f4f86' : '#7e6849';
+  context.strokeStyle = object.attackable ? '#dfb4ff' : '#f1d386';
+  context.lineWidth = object.attackable ? 3 : 2;
+  context.fillRect(left, top, object.bounds.width, object.bounds.height);
+  context.strokeRect(left, top, object.bounds.width, object.bounds.height);
+  context.fillStyle = '#fff4c8';
+  context.font = '800 9px ui-monospace, monospace';
+  context.textAlign = 'center';
+  context.fillText(
+    `${object.id.toUpperCase()} ${object.hp}/${object.maxHp}`,
+    object.position.x,
+    top - 7,
+  );
+  context.restore();
+}
+
+function drawObjectiveTokenFallback(token) {
+  objectiveArtFrame.fallbacks += 1;
+  context.save();
+  context.translate(token.position.x, token.position.y);
+  context.globalAlpha = token.hp <= 0 ? 0.4 : 1;
+  context.fillStyle = token.released ? '#d7cab2' : '#8d7897';
+  context.strokeStyle = token.secured ? '#8be0a4' : '#f1d386';
+  context.lineWidth = token.secured ? 4 : 2;
+  context.fillRect(
+    -token.bounds.width / 2,
+    -token.bounds.height,
+    token.bounds.width,
+    token.bounds.height,
+  );
+  context.strokeRect(
+    -token.bounds.width / 2,
+    -token.bounds.height,
+    token.bounds.width,
+    token.bounds.height,
+  );
+  context.fillStyle = '#fff4c8';
+  context.font = '800 9px ui-monospace, monospace';
+  context.textAlign = 'center';
+  context.fillText(
+    `${token.id.toUpperCase()} ${token.hp}/${token.maxHp}`,
+    0,
+    -token.bounds.height - 7,
+  );
+  context.restore();
+}
+
+function trackObjectiveTokenMotion(token) {
+  const previous = objectiveTokenMotion.get(token.id);
+  const deltaX = previous ? token.position.x - previous.x : 0;
+  const moving = Math.abs(deltaX) > 0.05;
+  const facing = moving ? Math.sign(deltaX) : previous?.facing ?? 1;
+  const motion = { x: token.position.x, facing, moving };
+  objectiveTokenMotion.set(token.id, motion);
+  return motion;
 }
 
 function drawObjectiveEntities(snapshot) {
   const entities = snapshot.objective.entities;
   if (!entities) return;
-  for (const object of entities.objects) {
-    const left = object.position.x - object.bounds.width / 2;
-    const top = object.position.y - object.bounds.height;
-    context.save();
-    context.globalAlpha = object.destroyed ? 0.38 : 1;
-    context.fillStyle = object.attackable ? '#6f4f86' : '#7e6849';
-    context.strokeStyle = object.attackable ? '#dfb4ff' : '#f1d386';
-    context.lineWidth = object.attackable ? 3 : 2;
-    context.fillRect(left, top, object.bounds.width, object.bounds.height);
-    context.strokeRect(left, top, object.bounds.width, object.bounds.height);
-    context.fillStyle = '#fff4c8';
-    context.font = '800 9px ui-monospace, monospace';
-    context.textAlign = 'center';
-    context.fillText(
-      `${object.id.toUpperCase()} ${object.hp}/${object.maxHp}`,
-      object.position.x,
-      top - 7,
-    );
-    context.restore();
+  const ready = objectiveArtReady();
+  const view = ready ? objectiveArtView(entities, snapshot.objective.requirements) : null;
+  // Protected scenery first so attackable nodes stay in front of the core.
+  const objects = view
+    ? [...entities.objects].sort((a, b) => Number(a.attackable) - Number(b.attackable))
+    : entities.objects;
+  for (const object of objects) {
+    const resolved = view ? resolveActionObjectiveObjectArt(object, view) : null;
+    if (!resolved?.frame) {
+      drawObjectiveObjectFallback(object);
+      continue;
+    }
+    drawObjectiveSprite(resolved.frame, object.position.x, object.position.y);
+    queueObjectiveOverlay(resolved, object.position.x, object.position.y);
   }
   for (const token of entities.tokens) {
-    context.save();
-    context.translate(token.position.x, token.position.y);
-    context.globalAlpha = token.hp <= 0 ? 0.4 : 1;
-    context.fillStyle = token.released ? '#d7cab2' : '#8d7897';
-    context.strokeStyle = token.secured ? '#8be0a4' : '#f1d386';
-    context.lineWidth = token.secured ? 4 : 2;
-    context.fillRect(
-      -token.bounds.width / 2,
-      -token.bounds.height,
-      token.bounds.width,
-      token.bounds.height,
-    );
-    context.strokeRect(
-      -token.bounds.width / 2,
-      -token.bounds.height,
-      token.bounds.width,
-      token.bounds.height,
-    );
-    context.fillStyle = '#fff4c8';
-    context.font = '800 9px ui-monospace, monospace';
-    context.textAlign = 'center';
-    context.fillText(
-      `${token.id.toUpperCase()} ${token.hp}/${token.maxHp}`,
-      0,
-      -token.bounds.height - 7,
-    );
-    context.restore();
+    const motion = trackObjectiveTokenMotion(token);
+    const resolved = view
+      ? resolveActionObjectiveTokenArt(token, view, {
+          moving: motion.moving,
+          nowMs: snapshot.kernel.nowMs,
+          reducedMotion: reducedMotion.matches,
+        })
+      : null;
+    if (!resolved?.frame) {
+      drawObjectiveTokenFallback(token);
+      continue;
+    }
+    drawObjectiveSprite(resolved.frame, token.position.x, token.position.y, motion.facing);
+    queueObjectiveOverlay(resolved, token.position.x, token.position.y);
   }
+}
+
+function measureCanvasText(font, text) {
+  const key = `${font}|${text}`;
+  let width = canvasTextWidths.get(key);
+  if (width == null) {
+    context.font = font;
+    width = Math.ceil(context.measureText(text).width);
+    canvasTextWidths.set(key, width);
+  }
+  return width;
+}
+
+function actorLabelRequest(actor, isDirectlyControlled) {
+  const isPlayer = actor.faction === 'player';
+  const name = actor.name.toUpperCase();
+  const shortName = shortenActorName(actor.name, { actorId: templateId(actor.id) }).toUpperCase();
+  const role = isPlayer ? (isDirectlyControlled ? 'YOU' : 'AI SUPPORT') : '';
+  const shortRole = isPlayer ? (isDirectlyControlled ? 'YOU' : 'AI') : '';
+  const roleWidth = role ? measureCanvasText(ACTOR_ROLE_FONT, role) : 0;
+  const shortRoleWidth = shortRole ? measureCanvasText(ACTOR_ROLE_FONT, shortRole) : 0;
+  return {
+    id: `actor:${actor.id}`,
+    type: 'actor',
+    x: actor.position.x,
+    bottom: Math.round(actor.position.y - (isPlayer ? 104 : 124)),
+    width: Math.max(measureCanvasText(ACTOR_NAME_FONT, name), roleWidth) + 4,
+    shortWidth: Math.max(measureCanvasText(ACTOR_NAME_FONT, shortName), shortRoleWidth) + 4,
+    height: isPlayer ? 22 : 12,
+    priority: isDirectlyControlled ? 0 : isPlayer ? 1 : 3,
+    lockFull: isDirectlyControlled,
+    name,
+    shortName,
+    role,
+    shortRole,
+    nameColor: isDirectlyControlled ? '#ffe18b' : '#ddd2bf',
+    roleColor: isDirectlyControlled ? '#ffe18b' : '#78c4c1',
+  };
+}
+
+function objectiveTagRequest(tag, controlled) {
+  const near = controlled != null
+    && Math.abs(controlled.position.x - tag.worldX) <= 170
+    && Math.abs(controlled.position.y - tag.worldY) <= 150;
+  if (!tag.relevant && !near) return null;
+  const prefix = tag.complete ? '✓ ' : '';
+  const full = `${prefix}${tag.full}`;
+  const short = `${prefix}${tag.short}`;
+  const fullWidth = measureCanvasText(OBJECTIVE_TAG_FONT, full) + 8;
+  const shortWidth = measureCanvasText(OBJECTIVE_TAG_FONT, short) + 8;
+  return {
+    id: tag.id,
+    type: 'objective',
+    x: tag.x,
+    bottom: tag.bottom,
+    width: near ? fullWidth : shortWidth,
+    shortWidth: near ? shortWidth : undefined,
+    height: 12,
+    priority: tag.relevant ? 2 : 4,
+    lockFull: false,
+    maxLift: 2,
+    fallbackBottoms: [Math.round(tag.worldY) + 16, Math.round(tag.worldY) + 30],
+    name: near ? full : short,
+    shortName: short,
+    color: tag.complete ? '#9fe0c8' : tag.urgent ? '#f2a08c' : tag.relevant ? '#e1c675' : '#bfb3a0',
+  };
+}
+
+function drawObjectivePips() {
+  for (const pip of objectiveOverlay.pips) {
+    const countdown = pip.tone === 'countdown';
+    const lit = countdown ? '#e26772' : pip.tone === 'urgent' ? '#f2a08c' : '#9fe0c8';
+    for (let index = 0; index < pip.total; index += 1) {
+      const left = pip.left + index * 6;
+      context.fillStyle = countdown ? '#5a2430' : 'rgba(8, 6, 12, .85)';
+      context.fillRect(left - 1, pip.top - 1, 6, 6);
+      context.fillStyle = index < pip.filled ? lit : countdown ? '#170c12' : '#3b3442';
+      context.fillRect(left, pip.top, 4, 4);
+    }
+  }
+  for (const bar of objectiveOverlay.bars) {
+    context.fillStyle = 'rgba(8, 6, 12, .85)';
+    context.fillRect(bar.left - 1, bar.top - 1, bar.right - bar.left + 2, bar.bottom - bar.top + 2);
+    context.fillStyle = '#3b3442';
+    context.fillRect(bar.left, bar.top, bar.right - bar.left, bar.bottom - bar.top);
+    context.fillStyle = '#d7f0d5';
+    context.fillRect(bar.left, bar.top, Math.round((bar.right - bar.left) * bar.value), bar.bottom - bar.top);
+  }
+}
+
+function setCanvasDataset(key, value) {
+  if (elements.canvas.dataset[key] !== value) elements.canvas.dataset[key] = value;
+}
+
+function drawCanvasLabels(snapshot, actorRequests) {
+  const controlled = snapshot.kernel.actors.find(({ id }) => id === snapshot.kernel.controlledActorId) ?? null;
+  const objectiveRequests = objectiveOverlay.tags
+    .map((tag) => objectiveTagRequest(tag, controlled))
+    .filter(Boolean);
+  const requests = [...actorRequests, ...objectiveRequests];
+  const obstacles = [...objectiveOverlay.pips, ...objectiveOverlay.bars].map(({ left, top, right, bottom }) => ({
+    left: left - 1, top: top - 1, right: right + 1, bottom: bottom + 1,
+  }));
+  // Objective tags must not sit on top of a fighter's drawn body.
+  for (const actor of snapshot.kernel.actors) {
+    if (actor.hp <= 0) continue;
+    const hurtbox = actor.effectiveHurtbox;
+    const isPlayer = actor.faction === 'player';
+    obstacles.push({
+      left: Math.min(actor.position.x - 22, hurtbox?.left ?? Infinity),
+      right: Math.max(actor.position.x + 22, hurtbox?.right ?? -Infinity),
+      top: Math.min(actor.position.y - (isPlayer ? 92 : 100), hurtbox?.top ?? Infinity),
+      bottom: actor.position.y,
+      only: 'objective',
+    });
+  }
+  const layout = layoutCanvasLabels(requests, { obstacles });
+  drawObjectivePips();
+  context.save();
+  context.textAlign = 'center';
+  context.lineJoin = 'round';
+  requests.forEach((request, index) => {
+    const placement = layout.labels[index];
+    if (placement.hidden) return;
+    const centerX = (placement.left + placement.right) / 2;
+    if (placement.lift > 0 && request.type === 'actor') {
+      context.strokeStyle = 'rgba(221, 210, 191, .45)';
+      context.lineWidth = 1;
+      context.beginPath();
+      context.moveTo(Math.round(request.x) + .5, placement.bottom);
+      context.lineTo(Math.round(request.x) + .5, placement.bottom + placement.lift);
+      context.stroke();
+    }
+    if (request.type === 'objective') {
+      context.fillStyle = 'rgba(9, 7, 14, .78)';
+      context.fillRect(placement.left, placement.top, placement.right - placement.left, placement.bottom - placement.top);
+      context.strokeStyle = request.color;
+      context.globalAlpha = .55;
+      context.lineWidth = 1;
+      context.strokeRect(placement.left + .5, placement.top + .5,
+        placement.right - placement.left - 1, placement.bottom - placement.top - 1);
+      context.globalAlpha = 1;
+      context.fillStyle = request.color;
+      context.font = OBJECTIVE_TAG_FONT;
+      context.fillText(placement.short ? request.shortName : request.name, centerX, placement.bottom - 3);
+      return;
+    }
+    context.strokeStyle = 'rgba(8, 5, 12, .85)';
+    context.lineWidth = 3;
+    context.font = ACTOR_NAME_FONT;
+    const name = placement.short ? request.shortName : request.name;
+    const nameBaseline = placement.top + 9;
+    context.strokeText(name, centerX, nameBaseline);
+    context.fillStyle = request.nameColor;
+    context.fillText(name, centerX, nameBaseline);
+    if (request.role) {
+      const role = placement.short ? request.shortRole : request.role;
+      context.font = ACTOR_ROLE_FONT;
+      context.strokeText(role, centerX, nameBaseline + 12);
+      context.fillStyle = request.roleColor;
+      context.fillText(role, centerX, nameBaseline + 12);
+    }
+  });
+  context.restore();
+  setCanvasDataset('objectiveArtSprites', String(objectiveArtFrame.sprites));
+  setCanvasDataset('objectiveArtFallbacks', String(objectiveArtFrame.fallbacks));
+  setCanvasDataset('objectiveArtFrames', [...objectiveArtFrame.kinds].sort().join(' '));
+  setCanvasDataset('canvasLabelCount', String(layout.summary.placed));
+  setCanvasDataset('canvasLabelsShortened', String(layout.summary.shortened));
+  setCanvasDataset('canvasLabelsMoved', String(layout.summary.moved));
+  setCanvasDataset('canvasLabelsHidden', String(layout.summary.hidden));
+  objectiveOverlay.tags.length = 0;
+  objectiveOverlay.pips.length = 0;
+  objectiveOverlay.bars.length = 0;
+  objectiveArtFrame.sprites = 0;
+  objectiveArtFrame.fallbacks = 0;
+  objectiveArtFrame.kinds.clear();
 }
 
 function drawFallback(actor, color) {
@@ -1019,6 +1353,7 @@ function drawEnemy(actor, nowMs) {
 function drawActors(snapshot) {
   const nowMs = snapshot.kernel.nowMs;
   const ordered = [...snapshot.kernel.actors].sort((a, b) => a.position.y - b.position.y || a.id.localeCompare(b.id));
+  const actorLabels = [];
   for (const actor of ordered) {
     if (actor.hp <= 0 && actor.statuses.some(({ id }) => id === 'dormant-summon')) continue;
     context.fillStyle = 'rgba(0,0,0,.42)';
@@ -1046,17 +1381,9 @@ function drawActors(snapshot) {
         hurtbox.right - hurtbox.left + 6, hurtbox.bottom - hurtbox.top + 6);
       context.restore();
     }
-    const isDirectlyControlled = actor.id === snapshot.kernel.controlledActorId;
-    context.fillStyle = isDirectlyControlled ? '#ffe18b' : '#ddd2bf';
-    context.font = '700 10px ui-monospace, monospace';
-    context.textAlign = 'center';
-    context.fillText(actor.name.toUpperCase(), actor.position.x, actor.position.y - (actor.faction === 'player' ? 118 : 126));
-    if (actor.faction === 'player') {
-      context.fillStyle = isDirectlyControlled ? '#ffe18b' : '#78c4c1';
-      context.font = '800 8px ui-monospace, monospace';
-      context.fillText(isDirectlyControlled ? 'YOU' : 'AI SUPPORT', actor.position.x, actor.position.y - 106);
-    }
+    actorLabels.push(actorLabelRequest(actor, actor.id === snapshot.kernel.controlledActorId));
   }
+  drawCanvasLabels(snapshot, actorLabels);
 }
 
 function drawFlyouts(elapsedMs) {
