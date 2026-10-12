@@ -513,9 +513,11 @@ function requirementAnchorSnapshot(session, requirementId) {
 const AUTHORED_ATTACK_CONDITIONS = Object.freeze({
   // c6-ujiro: "If a print block is below 2 HP, use Seizure Order."
   'ujiro:seizure-order': Object.freeze({ protectedObjectBelowHp: 2 }),
+  // c7-bell-warden-chiyo: "Use Ringing Count every second activation."
+  'bell-warden-chiyo:ringing-count': Object.freeze({ otherActivationsBetween: 1 }),
 });
 
-function authoredAttackConditionHolds(session, attackId) {
+function authoredAttackConditionHolds(session, attackId, actorId) {
   const manifest = manifestByAttackId(session).get(attackId);
   if (!manifest) return true;
   const condition = AUTHORED_ATTACK_CONDITIONS[`${manifest.ownerTemplateId}:${manifest.sourceSkillId}`];
@@ -525,7 +527,21 @@ function authoredAttackConditionHolds(session, attackId) {
       object.protected && !object.destroyed && object.hp < condition.protectedObjectBelowHp
     ));
   }
+  if (condition.otherActivationsBetween != null) {
+    const director = session.objectiveEntities;
+    const count = director.activationCounts?.get(actorId) ?? 0;
+    const lastIndex = director.lastActivationIndex?.get(`${actorId}:${attackId}`) ?? -1;
+    return count - lastIndex - 1 >= condition.otherActivationsBetween;
+  }
   return true;
+}
+
+function recordEnemyActivation(director, actorId, attackId) {
+  director.activationCounts ??= new Map();
+  director.lastActivationIndex ??= new Map();
+  const index = director.activationCounts.get(actorId) ?? 0;
+  director.lastActivationIndex.set(`${actorId}:${attackId}`, index);
+  director.activationCounts.set(actorId, index + 1);
 }
 
 function manifestByAttackId(session) {
@@ -573,6 +589,7 @@ function entityEventsFromCombat(session, events) {
       const actor = session.kernel.getActor(event.actorId);
       if (actor?.faction === 'enemy') {
         director.enemyActionCount += 1;
+        recordEnemyActivation(director, event.actorId, event.attackId);
         if (sourceSkillByAttackId.get(event.attackId) === 'ringing-count') {
           director.bellCount += 1;
           result.push({
@@ -969,7 +986,7 @@ export function createActionCampaignBattleSession({
     ...sourceStatusHooks,
     canBeginAttack(context) {
       if (sourceStatusHooks?.canBeginAttack?.(context) === false) return false;
-      return sessionRef ? authoredAttackConditionHolds(sessionRef, context.attackId) : true;
+      return sessionRef ? authoredAttackConditionHolds(sessionRef, context.attackId, context.actor?.id) : true;
     },
   });
   const spec = deepFreeze({
