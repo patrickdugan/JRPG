@@ -54,6 +54,8 @@ The live scene-panorama package accepts `MAP-CIN-001-020`: 20 distinct opaque 32
 
 **Current regional field-tile receipt:** Campaign now composes the pixel-authored `world-tileset-suite-v1` top-down atlas (field kit v1.1, eight themes × 16 roles) under those overlays through the DOM-free `game/field-tileset-presentation.mjs` resolver: hash-stable floor variation, wall face/top autotiling for impassable cells, walkable-side edge and corner strips, thresholds at authored exits, and theme-matched liquid under liquid/ember tags, all exactly dimension-gated with `#mapCanvas[data-world-tile-art-state]` and the previous flat-color renderer retained on failure, wrong size, or unknown theme. It is Integrated, not Accepted, reads level data only, and offers a `dressedCells` seam for a future prop layer; it does not deliver the planned ENV-GEN transition, damaged, or wet/dry variants, props, landmarks, or foreground masks.
 
+**Current field-prop receipt:** `assets/art/field-prop-suite-v1` is a pixel-authored, byte-reproducible 256 × 416 transparent atlas of 216 cell-multiple frames (eight regional building/wall/roof-block families with family-palette props and wide props, plus eight shared tall props), and the pure `game/field-prop-dressing.mjs` resolver dresses 1,086 of the 1,092 authored impassable cells across all 48 levels (99.5%) while never covering walkable cells, exits, spawn points, hazards, or interactables; `drawMap()` integration and external cultural review are still pending.
+
 ## 4. Location and map production
 
 Each kit includes tile sheet, auto/edge rules, 6-12 large landmarks, 12-20 small props, foreground masks, collision reference, weather layer, and a 320 x 180 value thumbnail per map. Counts below are maps, not individual screens.

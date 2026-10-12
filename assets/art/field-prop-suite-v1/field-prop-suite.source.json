@@ -1,0 +1,181 @@
+{
+  "assetId": "field-prop-suite-v1",
+  "authorship": "original-code-native-pixel-primitives",
+  "provenanceLane": "pixel-authored-production",
+  "purpose": "Top-down three-quarter field props and landmarks that dress impassable Campaign cells so blocked runs read as buildings, walls, trees, and work goods.",
+  "geometry": {
+    "cell": 16,
+    "columns": 16,
+    "familyBandRows": 3,
+    "sheetWidth": 256,
+    "sheetHeight": 416,
+    "tallBandRow": 24
+  },
+  "alphaPolicy": {
+    "art": "binary (0 or 255)",
+    "shadow": [11, 16, 32, 112],
+    "shadowRule": "one fixed ink shadow value, written only onto otherwise transparent pixels"
+  },
+  "familyOrder": ["village", "river", "relay", "ash", "castle", "archive", "forge", "engine"],
+  "themeFamilies": {
+    "takamine-rain-village": "village",
+    "hoshigawa-river-ward": "river",
+    "sodegaura-relay-road": "relay",
+    "kagura-ash-pass": "ash",
+    "kurohana-black-castle": "castle",
+    "hidden-archive-chapel": "archive",
+    "oni-forge": "forge",
+    "black-bell-engine": "engine"
+  },
+  "familyPieces": [
+    { "id": "strip1-left", "column": 0, "row": 0, "widthCells": 1, "heightCells": 1 },
+    { "id": "strip1-mid-a", "column": 1, "row": 0, "widthCells": 1, "heightCells": 1 },
+    { "id": "strip1-mid-b", "column": 2, "row": 0, "widthCells": 1, "heightCells": 1 },
+    { "id": "strip1-right", "column": 3, "row": 0, "widthCells": 1, "heightCells": 1 },
+    { "id": "wall-top", "column": 0, "row": 1, "widthCells": 1, "heightCells": 1 },
+    { "id": "wall-mid", "column": 1, "row": 1, "widthCells": 1, "heightCells": 1 },
+    { "id": "wall-bottom", "column": 2, "row": 1, "widthCells": 1, "heightCells": 1 },
+    { "id": "strip1-mid-c", "column": 3, "row": 1, "widthCells": 1, "heightCells": 1 },
+    { "id": "strip2-left", "column": 4, "row": 0, "widthCells": 1, "heightCells": 2 },
+    { "id": "strip2-mid-a", "column": 5, "row": 0, "widthCells": 1, "heightCells": 2 },
+    { "id": "strip2-mid-b", "column": 6, "row": 0, "widthCells": 1, "heightCells": 2 },
+    { "id": "strip2-right", "column": 7, "row": 0, "widthCells": 1, "heightCells": 2 },
+    { "id": "block-2x2", "column": 8, "row": 0, "widthCells": 2, "heightCells": 2 },
+    { "id": "block-3x2", "column": 10, "row": 0, "widthCells": 3, "heightCells": 2 },
+    { "id": "block-3x3", "column": 13, "row": 0, "widthCells": 3, "heightCells": 3 }
+  ],
+  "propSlots": { "row": 2, "firstColumn": 0, "count": 9 },
+  "wideSlots": { "row": 2, "firstColumn": 9, "count": 2, "widthCells": 2 },
+  "familyProps": {
+    "village": ["cedar-canopy", "pine-canopy", "stone-lantern", "rice-sacks", "firewood-stack", "water-jar", "fire-bell-frame", "hydrangea-shrub", "boulder"],
+    "river": ["crates", "barrels", "net-rack", "water-jar", "cedar-canopy", "notice-board", "rice-sacks", "beached-skiff", "stone-lantern"],
+    "relay": ["handcart", "notice-board", "rice-sacks", "crates", "barrels", "pine-canopy", "stone-lantern", "firewood-stack", "water-jar"],
+    "ash": ["boulder", "ash-cairn", "pine-canopy", "rice-sacks", "handcart", "crates", "barrels", "firewood-stack", "stone-lantern"],
+    "castle": ["lacquer-screen", "stone-lantern", "registry-desk", "prisoner-lattice", "crates", "notice-board", "pine-canopy", "water-jar", "barrels"],
+    "archive": ["registry-desk", "scroll-shelf", "prisoner-lattice", "crates", "rice-sacks", "water-jar", "stone-lantern", "cedar-canopy", "barrels"],
+    "forge": ["forge-anvil", "coal-bin", "crates", "barrels", "boulder", "prisoner-lattice", "water-jar", "handcart", "firewood-stack"],
+    "engine": ["gear-housing", "pipe-valve", "fire-bell-frame", "crates", "coal-bin", "barrels", "forge-anvil", "boulder", "registry-desk"]
+  },
+  "familyWideProps": {
+    "village": ["drying-rack", "lumber-stack"],
+    "river": ["drying-rack", "cargo-stack"],
+    "relay": ["market-stall", "freight-cart"],
+    "ash": ["rock-pile", "freight-cart"],
+    "castle": ["checkpoint-barrier", "cargo-stack"],
+    "archive": ["long-shelf", "cargo-stack"],
+    "forge": ["quench-trough", "freight-cart"],
+    "engine": ["bellows-machine", "cargo-stack"]
+  },
+  "tallProps": ["cedar", "pine", "dead-pine", "watch-post", "fire-bell-tower", "chimney", "pipe-stack", "lacquer-lantern"],
+  "palettes": {
+    "village": {
+      "outline": "#0B1020", "roofDeep": "#16233A", "roofDark": "#22334A", "roofMid": "#34485C", "roofLight": "#4F6676", "roofHi": "#7C93A0",
+      "ridgeA": "#8FA3AC", "ridgeB": "#5A707E",
+      "wallDark": "#3A2620", "wallMid": "#5A3A2C", "wallLight": "#8B6043",
+      "woodDark": "#2E1F1A", "woodMid": "#5A3A2C", "woodLight": "#8B6043",
+      "paper": "#D7C99A", "glow": "#F6E8B9", "accent": "#A08B58", "accentHi": "#D8BE7A",
+      "metalDark": "#3B4A44", "metalMid": "#637462", "metalHi": "#A08B58",
+      "stoneDark": "#2E3540", "stoneMid": "#4A5462", "stoneLight": "#6B7684",
+      "leafDark": "#13241D", "leafMid": "#23402F", "leafLight": "#3D6340", "leafHi": "#6E8F57",
+      "fabric": "#27466B", "fabricHi": "#4F7392", "special": "#6F7FB8", "specialHi": "#A3AEDC"
+    },
+    "river": {
+      "outline": "#0B1020", "roofDeep": "#1E2629", "roofDark": "#2E3A3E", "roofMid": "#475659", "roofLight": "#64777A", "roofHi": "#8FA3A2",
+      "ridgeA": "#7A5A42", "ridgeB": "#4E3A2E",
+      "wallDark": "#8E8A7A", "wallMid": "#C3BCA2", "wallLight": "#E3DCC2",
+      "woodDark": "#2E211C", "woodMid": "#4E3A2E", "woodLight": "#7A5A42",
+      "paper": "#D7C99A", "glow": "#F6E8B9", "accent": "#4F7392", "accentHi": "#88C8C5",
+      "metalDark": "#2F3C3E", "metalMid": "#547675", "metalHi": "#9DB8B0",
+      "stoneDark": "#3E474C", "stoneMid": "#6F7A80", "stoneLight": "#A4ACAE",
+      "leafDark": "#12241F", "leafMid": "#1F4034", "leafLight": "#356049", "leafHi": "#62886A",
+      "fabric": "#27466B", "fabricHi": "#4F7392", "special": "#2E6B86", "specialHi": "#88C8C5"
+    },
+    "relay": {
+      "outline": "#0B1020", "roofDeep": "#2E2118", "roofDark": "#4A3424", "roofMid": "#6E5232", "roofLight": "#957246", "roofHi": "#B9955C",
+      "ridgeA": "#5A4430", "ridgeB": "#3A2A20",
+      "wallDark": "#7A6650", "wallMid": "#B7A587", "wallLight": "#D2C3A0",
+      "woodDark": "#2B1E18", "woodMid": "#5A3A2C", "woodLight": "#8B6043",
+      "paper": "#D7C99A", "glow": "#E6CB80", "accent": "#762B32", "accentHi": "#B34A3E",
+      "metalDark": "#3E3A36", "metalMid": "#6E665A", "metalHi": "#B09155",
+      "stoneDark": "#3E3532", "stoneMid": "#665044", "stoneLight": "#8B6A54",
+      "leafDark": "#18281E", "leafMid": "#2A4430", "leafLight": "#45663F", "leafHi": "#6E8B52",
+      "fabric": "#762B32", "fabricHi": "#B34A3E", "special": "#B34A3E", "specialHi": "#E6CB80"
+    },
+    "ash": {
+      "outline": "#090D16", "roofDeep": "#15151B", "roofDark": "#23232A", "roofMid": "#36363E", "roofLight": "#4E4D54", "roofHi": "#77736E",
+      "ridgeA": "#A8A29A", "ridgeB": "#4E4D54",
+      "wallDark": "#2A2A30", "wallMid": "#4B4A50", "wallLight": "#77736E",
+      "woodDark": "#261C1C", "woodMid": "#3A2B2B", "woodLight": "#5E4436",
+      "paper": "#C9B48A", "glow": "#F0A050", "accent": "#B35A3E", "accentHi": "#E06B32",
+      "metalDark": "#2A2C30", "metalMid": "#4E5258", "metalHi": "#8A8C88",
+      "stoneDark": "#303039", "stoneMid": "#4B4B52", "stoneLight": "#77736E",
+      "leafDark": "#1E241E", "leafMid": "#313A2C", "leafLight": "#4C5640", "leafHi": "#6E7458",
+      "fabric": "#3A2B2B", "fabricHi": "#5E4436", "special": "#A8A29A", "specialHi": "#C9C2B8"
+    },
+    "castle": {
+      "outline": "#080A10", "roofDeep": "#08090F", "roofDark": "#0E0F18", "roofMid": "#1C1A26", "roofLight": "#2C2836", "roofHi": "#4A4256",
+      "ridgeA": "#B34A3E", "ridgeB": "#1C1A26",
+      "wallDark": "#0E0F18", "wallMid": "#1C1A26", "wallLight": "#2C2836",
+      "woodDark": "#120D14", "woodMid": "#401D2B", "woodLight": "#762B32",
+      "paper": "#A08B58", "glow": "#DFC16F", "accent": "#762B32", "accentHi": "#B34A3E",
+      "metalDark": "#5E4E30", "metalMid": "#A08B58", "metalHi": "#DFC16F",
+      "stoneDark": "#252434", "stoneMid": "#3C3340", "stoneLight": "#65515B",
+      "leafDark": "#0F1A17", "leafMid": "#1C2E26", "leafLight": "#2E4636", "leafHi": "#4E6A4A",
+      "fabric": "#401D2B", "fabricHi": "#762B32", "special": "#781E39", "specialHi": "#B34A3E"
+    },
+    "archive": {
+      "outline": "#0B1020", "roofDeep": "#121219", "roofDark": "#1E1D28", "roofMid": "#2F2D3B", "roofLight": "#45425A", "roofHi": "#625E74",
+      "ridgeA": "#E8DCC0", "ridgeB": "#CFC6AE",
+      "wallDark": "#9A8B73", "wallMid": "#CFC6AE", "wallLight": "#E8DCC0",
+      "woodDark": "#1A1924", "woodMid": "#2E2A3A", "woodLight": "#4A4458",
+      "paper": "#D7C99A", "glow": "#F0C978", "accent": "#5A3A2C", "accentHi": "#8B6043",
+      "metalDark": "#2E2E36", "metalMid": "#5C5A60", "metalHi": "#9A8B73",
+      "stoneDark": "#403947", "stoneMid": "#665A57", "stoneLight": "#9A8B73",
+      "leafDark": "#14241E", "leafMid": "#24402F", "leafLight": "#3D6340", "leafHi": "#6E8F57",
+      "fabric": "#242331", "fabricHi": "#403947", "special": "#987CC0", "specialHi": "#E8DCC0"
+    },
+    "forge": {
+      "outline": "#080A0F", "roofDeep": "#101114", "roofDark": "#1C1D22", "roofMid": "#2E3035", "roofLight": "#46474C", "roofHi": "#6A6A6A",
+      "ridgeA": "#59606A", "ridgeB": "#34383E",
+      "wallDark": "#2E1E1A", "wallMid": "#4A3029", "wallLight": "#6B4232",
+      "woodDark": "#1E1612", "woodMid": "#3A2820", "woodLight": "#5E4030",
+      "paper": "#FFC060", "glow": "#F08032", "accent": "#A05A32", "accentHi": "#F08032",
+      "metalDark": "#1E2126", "metalMid": "#3A3F46", "metalHi": "#6E757E",
+      "stoneDark": "#292D31", "stoneMid": "#44464A", "stoneLight": "#72716D",
+      "leafDark": "#1C2420", "leafMid": "#2C3A30", "leafLight": "#44543E", "leafHi": "#66704E",
+      "fabric": "#2E1E1A", "fabricHi": "#4A3029", "special": "#FFC060", "specialHi": "#FFE0A0"
+    },
+    "engine": {
+      "outline": "#080A10", "roofDeep": "#0B0F16", "roofDark": "#141A24", "roofMid": "#28343C", "roofLight": "#46545A", "roofHi": "#718077",
+      "ridgeA": "#A08B58", "ridgeB": "#7A6338",
+      "wallDark": "#141A24", "wallMid": "#28343C", "wallLight": "#46545A",
+      "woodDark": "#3A2C1E", "woodMid": "#7A6338", "woodLight": "#A08B58",
+      "paper": "#D2B878", "glow": "#D2B878", "accent": "#781E39", "accentHi": "#B0405A",
+      "metalDark": "#28343C", "metalMid": "#46545A", "metalHi": "#9AA89E",
+      "stoneDark": "#28343C", "stoneMid": "#46545A", "stoneLight": "#718077",
+      "leafDark": "#141A24", "leafMid": "#28343C", "leafLight": "#46545A", "leafHi": "#718077",
+      "fabric": "#401D42", "fabricHi": "#781E39", "special": "#781E39", "specialHi": "#B0405A"
+    }
+  },
+  "tallPalette": {
+    "outline": "#0B1020", "leafDark": "#12221B", "leafMid": "#20392C", "leafLight": "#36573C", "leafHi": "#5E7F4E",
+    "pineDark": "#14241F", "pineMid": "#24402F", "pineLight": "#3F6040", "pineHi": "#6E8B52",
+    "deadDark": "#2A2726", "deadMid": "#45403C", "deadLight": "#6A625A", "ash": "#A8A29A",
+    "woodDark": "#2E1F1A", "woodMid": "#5A3A2C", "woodLight": "#8B6043", "woodHi": "#B08A5E",
+    "roofDark": "#22334A", "roofMid": "#34485C", "roofLight": "#4F6676",
+    "brickDark": "#2E1E1A", "brickMid": "#4A3029", "brickLight": "#6B4232", "ember": "#F08032", "emberHi": "#FFC060",
+    "ironDark": "#141A24", "ironMid": "#28343C", "ironLight": "#46545A", "ironHi": "#718077",
+    "bronzeDark": "#4A3A2A", "bronzeMid": "#7A6338", "bronzeLight": "#A08B58", "bronzeHi": "#D2B878", "crimson": "#781E39",
+    "lacquerDark": "#0E0F18", "lacquerMid": "#1C1A26", "lacquerLight": "#2C2836", "vermilion": "#B34A3E", "vermilionDark": "#762B32", "gold": "#DFC16F",
+    "paper": "#D7C99A", "glow": "#F6E8B9"
+  },
+  "restrictions": [
+    "Presentation only: prop pixels never define collision, exits, hazards, movement, or interactions; authored level data stays authoritative.",
+    "Dressing only covers authored impassable cells and never covers walkable cells, exits, spawn points, or interactable positions.",
+    "No text, glyphs, or readable documents are baked into any frame; notice boards and ledgers show blank sheets only.",
+    "Do not depict sacred objects as loot or trophies; stone lanterns and fire-watch bells are secular roadside and village fixtures.",
+    "No real insignia, crests, heraldry, or authentic shogunal or imperial emblems; castle trim is invented lacquer and vermilion geometry.",
+    "No image generator, traced reference, or external pixels; every frame is drawn by deterministic integer primitives in this builder.",
+    "Wrong-size or failed images keep the existing flat wall fallback; external Japanese cultural review is still pending before art lock."
+  ]
+}

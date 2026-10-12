@@ -1,0 +1,4858 @@
+{
+  "assetId": "field-prop-suite-v1",
+  "status": "production-foundation-review",
+  "authorship": "original-code-native-pixel-primitives",
+  "provenanceLane": "pixel-authored-production",
+  "provenance": "Pixel-authored production asset: deterministic code-native integer primitives at native 16 x 16 cell resolution under explicit per-family palettes. No image generator, traced reference, or external pixels.",
+  "runtimeIntegration": "decorative-dressing-of-authored-impassable-cells-via-game/field-prop-dressing.mjs; collision stays level-owned",
+  "pillowVersion": "11.3.0",
+  "sourceSha256": "7197cd1ac244a1e0701b7713ed69b632b67bd5927b87a38b5396a9aab41fd692",
+  "builderSha256": "e7ec63132866ee4da583fd4b1af3eedeab23251389195dfdf237d7884a9bc4d3",
+  "geometry": {
+    "cell": 16,
+    "columns": 16,
+    "familyBandRows": 3,
+    "sheetWidth": 256,
+    "sheetHeight": 416,
+    "tallBandRow": 24,
+    "frameUnit": "16 x 16 cell multiples",
+    "familyBandHeight": 48
+  },
+  "alphaPolicy": {
+    "art": "binary (0 or 255)",
+    "shadow": [
+      11,
+      16,
+      32,
+      112
+    ],
+    "shadowRule": "one fixed ink shadow value, written only onto otherwise transparent pixels"
+  },
+  "familyOrder": [
+    "village",
+    "river",
+    "relay",
+    "ash",
+    "castle",
+    "archive",
+    "forge",
+    "engine"
+  ],
+  "themeFamilies": {
+    "takamine-rain-village": "village",
+    "hoshigawa-river-ward": "river",
+    "sodegaura-relay-road": "relay",
+    "kagura-ash-pass": "ash",
+    "kurohana-black-castle": "castle",
+    "hidden-archive-chapel": "archive",
+    "oni-forge": "forge",
+    "black-bell-engine": "engine"
+  },
+  "frameCount": 216,
+  "frameKinds": {
+    "structure": 120,
+    "prop": 72,
+    "wide-prop": 16,
+    "tall-prop": 8
+  },
+  "distinctFrameHashes": 216,
+  "palette": {
+    "totalOpaqueColors": 186,
+    "perFamily": {
+      "village": 32,
+      "river": 29,
+      "relay": 31,
+      "ash": 28,
+      "castle": 20,
+      "archive": 27,
+      "forge": 26,
+      "engine": 13,
+      "tall": 42
+    }
+  },
+  "frames": [
+    {
+      "id": "village:strip1-left",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "c50009bf71b9864fb545dfe3e9ad7b95e42c6f5195bc8879ebda429463921524",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "village:strip1-mid-a",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "10d52954bc0bba5c7afcb8730930c48c80e6547d64b7d63f8abe9fd656b96698",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "village:strip1-mid-b",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "1e97eae43eefa5639fe154ee7744d0e7f6e50e134a1181e29492e4d6d95db8d1",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "village:strip1-right",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f87a81dc4a0f3b908d0b4b1fec41b651637837a5f6383bf4dec4f70de5a6f5a9",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "village:wall-top",
+      "family": "village",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "eec92e1b765d37fbaa35f0215e1c44b0b4d3bdb6412aa994c8c4b20bb210e1c0",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "village:wall-mid",
+      "family": "village",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "e50d23a7698790fe8d5806fe82437319a7e27a3623c6e08b339945eaea9de1ae",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "village:wall-bottom",
+      "family": "village",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "8e9e60c1474547b561726e6ad4240ffb596cdecb06488143808fe93469d454f9",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "village:strip1-mid-c",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "1182e4e84604ece192fee46820afe3a35c70ac75f32171fffdd353856e093f90",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "village:strip2-left",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        0,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "67b932a42484db805db096297e3a55eba8d96d37a79fd7991ddb0947d0968a88",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "village:strip2-mid-a",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        0,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "2eb1e0b5fe2605337a423d850256bc7c805f1b032e36851e00e2e29827669826",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "village:strip2-mid-b",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        0,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "302c8ab6b97d729fa5feabacba797b04d0c5dfd71c105a4dbd5d70de15e5c005",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "village:strip2-right",
+      "family": "village",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        0,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "f3dedc4925056d20b54f9bb1001eb29afc6b38d4a89e1f068a37951d536954ab",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "village:block-2x2",
+      "family": "village",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        0,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "5dca6e5b4366a4c13c2e7763a90d8c33ecd67e0ed5801bcf7300b9b6b02d06a3",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 19
+    },
+    {
+      "id": "village:block-3x2",
+      "family": "village",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        0,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "9035478d88f142222ad8c848fe16d7471ab9fbb19a6ce554e9bf45b3644e1d86",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 20
+    },
+    {
+      "id": "village:block-3x3",
+      "family": "village",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        0,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "fb433496b380938f966bb252aa27fd692f320d0a345a0e0aae3cd7a477fad717",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 20
+    },
+    {
+      "id": "village:cedar-canopy",
+      "family": "village",
+      "kind": "prop",
+      "name": "cedar-canopy",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "ae6557f547990136a619cdf99d53f0d6ecde557d9849d3baec73b2789caa9ddb",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "village:pine-canopy",
+      "family": "village",
+      "kind": "prop",
+      "name": "pine-canopy",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "553efa7aa3ca5f518aa4e98656174cff09d17471a59383d5f47be865b61c3e07",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "village:stone-lantern",
+      "family": "village",
+      "kind": "prop",
+      "name": "stone-lantern",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "fe5b62cc2210df43f2b8d837823ed820b1c9104963cc58c527b8699bc709a65d",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "village:rice-sacks",
+      "family": "village",
+      "kind": "prop",
+      "name": "rice-sacks",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "72751148b42bb3b47fa762774bcd0283ef15bfbfca9ea3c33e3083f240c03af6",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "village:firewood-stack",
+      "family": "village",
+      "kind": "prop",
+      "name": "firewood-stack",
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7e72c53eda8baabcab591d7aecf88412c044d713136b3ddf61755e4fbe991f9f",
+      "alphaBounds": [
+        0,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "village:water-jar",
+      "family": "village",
+      "kind": "prop",
+      "name": "water-jar",
+      "rect": [
+        80,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f327a9e9825d5b026b124019c9c62bd2ba28cfe38ffaa9e83995feb9d32592e4",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "village:fire-bell-frame",
+      "family": "village",
+      "kind": "prop",
+      "name": "fire-bell-frame",
+      "rect": [
+        96,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "882ab8158b1365bd0aad8cd9b7a8e575eb8694879c0dd30035655a379e1b4889",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "village:hydrangea-shrub",
+      "family": "village",
+      "kind": "prop",
+      "name": "hydrangea-shrub",
+      "rect": [
+        112,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6904e3b57bb2512b7227595e45dfb37371034da86758fef7b27ba77b5496339e",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "village:boulder",
+      "family": "village",
+      "kind": "prop",
+      "name": "boulder",
+      "rect": [
+        128,
+        32,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "56a274bc846da52b88b7f427df1be2013d17c074c84db144b7ef8a293acc3a93",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "village:drying-rack",
+      "family": "village",
+      "kind": "wide-prop",
+      "name": "drying-rack",
+      "rect": [
+        144,
+        32,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "7b524d2c9f1f40874682cbfe17fea89c5c3aefa0ec17a78669ee51a7c6e08056",
+      "alphaBounds": [
+        1,
+        1,
+        32,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "village:lumber-stack",
+      "family": "village",
+      "kind": "wide-prop",
+      "name": "lumber-stack",
+      "rect": [
+        176,
+        32,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "50df5510d23cce56c6fef229e6f91cc3ada21caabc9cf72ef366764e6d474bab",
+      "alphaBounds": [
+        0,
+        3,
+        32,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "river:strip1-left",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "025d4756e55d6fd749ec59aca99589f8f76aebb354e526eb047b1747f2e07e67",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "river:strip1-mid-a",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4f95477cce67f9d8c20b4a5dbca39ee70d9070d9992d1ea6719058962065dd41",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:strip1-mid-b",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f6cb50db4964bf710438f9dda611c23e4da7e0a2b096427ac1968d84fe8c3538",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:strip1-right",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "e2fc7d864b9bcad36aff3ff80cc6e69b271c92682027a6a5cef751425a760f67",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:wall-top",
+      "family": "river",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        64,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "bef108900aeebb464a85e4dbf931625756dc0b9ca50fdbed81f2c2e1001898cd",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "river:wall-mid",
+      "family": "river",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        64,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6cc735ef520097e938b1127e51a8366c3dc66c268440901585fdd913a89ad383",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "river:wall-bottom",
+      "family": "river",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        64,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "34a26e5c9f0002600ccb8c45d0c6224fc60d68a3d03fbfb5fb7ae879b3ede8e8",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "river:strip1-mid-c",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        64,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9611d50979616699ace93183fdbe64f5a99212e85f971611271e05ff6adb7761",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:strip2-left",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        48,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "9958cd13f0717f11eaf1d0664c00bd2926d6b5c9a2a95f4942c31c31aadfd78d",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:strip2-mid-a",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        48,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "be18c8e45cecff25392bec2e4a87f40e72d90818715c2b3dabcc50b4ddf359a1",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:strip2-mid-b",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        48,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "61dca56abf68cc37cf3765b6aee2e7d7bfe3a93bfbf036918115f514b3f5c776",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "river:strip2-right",
+      "family": "river",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        48,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "e0692157a70ee697f393592e7e9dde282e750726e48aeb60014722cbfa3ac28e",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "river:block-2x2",
+      "family": "river",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        48,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "4801260cb72342fa0c743deb207c7fe0d3f096cd993add9f7653ae4b677bf501",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 17
+    },
+    {
+      "id": "river:block-3x2",
+      "family": "river",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        48,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "9c137319f93d85add46ef294feff02a0290ad9470eb7742570739a59ea45797a",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "river:block-3x3",
+      "family": "river",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        48,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "c3823f1754d890e5a6a0e69a3a538f50234f2c20882ef06107db82a401c92cd2",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "river:crates",
+      "family": "river",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        0,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6f70c980b47540dca393a35aca3af7ef0f81ddbd6314f6d8c39bb7254a6f2b84",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "river:barrels",
+      "family": "river",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        16,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f4ee96a9b4cb470736393f38fed166a67f3f744fa869552ea373448b0bc9bbe0",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "river:net-rack",
+      "family": "river",
+      "kind": "prop",
+      "name": "net-rack",
+      "rect": [
+        32,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "d5dade2d08c8874be1f60fa7c1d7fdc523a37625f566ac88a913921fc9eacd53",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "river:water-jar",
+      "family": "river",
+      "kind": "prop",
+      "name": "water-jar",
+      "rect": [
+        48,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "fa697cb846fe5444838a287f76b43376de6f8421161343c5281f070eabf9f518",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "river:cedar-canopy",
+      "family": "river",
+      "kind": "prop",
+      "name": "cedar-canopy",
+      "rect": [
+        64,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "abd573828495cfad98a39f61f0bde7fd5846433e3cfef12406754f28d92418d3",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "river:notice-board",
+      "family": "river",
+      "kind": "prop",
+      "name": "notice-board",
+      "rect": [
+        80,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "c2577dbc82788a7393402cf7c915096a0f9be1332d8c47a45db1d35514fd1067",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "river:rice-sacks",
+      "family": "river",
+      "kind": "prop",
+      "name": "rice-sacks",
+      "rect": [
+        96,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7672979961b32d24375975f9e35503699ebceb2ee53b8a2eebd84538e93f7a86",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "river:beached-skiff",
+      "family": "river",
+      "kind": "prop",
+      "name": "beached-skiff",
+      "rect": [
+        112,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "264ac0fbd5960ccd063853c91368fda2405261b6f380ba3304ac8acf8fa346a6",
+      "alphaBounds": [
+        0,
+        4,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "river:stone-lantern",
+      "family": "river",
+      "kind": "prop",
+      "name": "stone-lantern",
+      "rect": [
+        128,
+        80,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "ef16fb558c9d7444654e32894b7a064fe80dad8caea0975fc54f3fc315ee10f8",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "river:drying-rack",
+      "family": "river",
+      "kind": "wide-prop",
+      "name": "drying-rack",
+      "rect": [
+        144,
+        80,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "4ab51fd4ec35ff9b8c79667132cdaf198cc138ecd3f6c3c6dfb6f4623e759366",
+      "alphaBounds": [
+        1,
+        1,
+        32,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "river:cargo-stack",
+      "family": "river",
+      "kind": "wide-prop",
+      "name": "cargo-stack",
+      "rect": [
+        176,
+        80,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "f8c8e2ce2868531edadbbcf2e6034c349b2f2ca4067d4f8a23634abe5f070ffb",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "relay:strip1-left",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        96,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "989f73274d1bc41c7cdc72268207352b0d33be168805ddbf10f113cd577f8b27",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "relay:strip1-mid-a",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        96,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "82cb0e58a5fa6d6346636a3e99aeb74cc0552d1de605cfcc3e5bd3c535091577",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "relay:strip1-mid-b",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        96,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "07f5fc6636307e05eeefcf8222c334f89c4f3fa28530de2f00a6cc0e5418ee03",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "relay:strip1-right",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        96,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "1d5176710acb2e7c380b23a05b7158968b94f55cae11749af6694c2676374ed5",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "relay:wall-top",
+      "family": "relay",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        112,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "fb0df2b7c07ac323f959eb58360c8b97ff5d0830985e0716409ceec4ead8d7b3",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "relay:wall-mid",
+      "family": "relay",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        112,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "a6931a2f930ca5f5a5fc79684e4e81410d87606cf51bcc8cb8aef96c1938b1e1",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "relay:wall-bottom",
+      "family": "relay",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        112,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7b970c7de41c171a20a23c4b7dd53ca59d82812fcf7a061f4abd90c10b704357",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "relay:strip1-mid-c",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        112,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "23daa5afb708d9148be85d1f71dcda0515695976fa3e3edd196bea4aaff2400a",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "relay:strip2-left",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        96,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "a069d7ee67723ee504d280fbbae0a929298227ea18f288f76f829ed2a30e804c",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "relay:strip2-mid-a",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        96,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "b91ac82cb28b204cf1d2fb1131b45347a833278f0695d42d61261314e0e1aa17",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "relay:strip2-mid-b",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        96,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "1919b9751ebcfa4ab38200c5abe4785cb25914e69389d584d9a0043c7ce6ce27",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "relay:strip2-right",
+      "family": "relay",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        96,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "ded621d4876a6379e70e67a68e4e97b6d6ada694b9fd7b364042ff389b3a5428",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "relay:block-2x2",
+      "family": "relay",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        96,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "a97b754f4ecab04d3e2f70a4595253e3c411701faa8f86d74f5a358bc65624cf",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "relay:block-3x2",
+      "family": "relay",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        96,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "67b0f37b2b9b0610f8235412b32629af1241111edc060cc0c3b10c4bf125193d",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "relay:block-3x3",
+      "family": "relay",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        96,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "8bba0d11071040420b6c1371f977cd1a976f329fee60b0b8cfb52819eef6f4a7",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "relay:handcart",
+      "family": "relay",
+      "kind": "prop",
+      "name": "handcart",
+      "rect": [
+        0,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4650a063edc102a3c3c3aad42f7bb3eca03b01faa15eb05a5aa42675b7b4c702",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "relay:notice-board",
+      "family": "relay",
+      "kind": "prop",
+      "name": "notice-board",
+      "rect": [
+        16,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4b687c8d159e41dfe5f755ec8a9a96ffc8c984ce7a5e5673f177268ae131e044",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "relay:rice-sacks",
+      "family": "relay",
+      "kind": "prop",
+      "name": "rice-sacks",
+      "rect": [
+        32,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9ea32731cfed479deb885ca81895dbfaca32b532d2b14e8951d87a8f4c1bb949",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "relay:crates",
+      "family": "relay",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        48,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "73ed6f1184b4c6273f5a3330a936b68deb97d87dc807fc368437a6dfe1bc966a",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "relay:barrels",
+      "family": "relay",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        64,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9df7acfd12b6efb0e43e7e9abc634e140f52bf09e314533682bec83b2e9ec835",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "relay:pine-canopy",
+      "family": "relay",
+      "kind": "prop",
+      "name": "pine-canopy",
+      "rect": [
+        80,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "aa334556140d445e66d084b7bc257e9d53a175127442aa6213eda2f997448efe",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "relay:stone-lantern",
+      "family": "relay",
+      "kind": "prop",
+      "name": "stone-lantern",
+      "rect": [
+        96,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "80c5c65a81bedf5b93c481848053199827914a7d508a8a5bc6612bf0253f77a1",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "relay:firewood-stack",
+      "family": "relay",
+      "kind": "prop",
+      "name": "firewood-stack",
+      "rect": [
+        112,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "00c26948be558ca13df89b09ef92ce74fac1ea0747f4b2919d9623c36d330021",
+      "alphaBounds": [
+        0,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "relay:water-jar",
+      "family": "relay",
+      "kind": "prop",
+      "name": "water-jar",
+      "rect": [
+        128,
+        128,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7c65a168aadf1c96c684880690c5cc04cc10c874a0c6e04d2d39ed7190e1a403",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "relay:market-stall",
+      "family": "relay",
+      "kind": "wide-prop",
+      "name": "market-stall",
+      "rect": [
+        144,
+        128,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "1368a34695a28273eb229559e2536fea837fb57c80c45be2c483f401d4c148f0",
+      "alphaBounds": [
+        0,
+        0,
+        32,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "relay:freight-cart",
+      "family": "relay",
+      "kind": "wide-prop",
+      "name": "freight-cart",
+      "rect": [
+        176,
+        128,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "be2d60b3a48928e5b4bc6f81dcaaa1ff090a9d5beb477d083211e53da1c479a8",
+      "alphaBounds": [
+        1,
+        1,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "ash:strip1-left",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        144,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "ec3cfcce0977b4cc250dc9f0a7fa73dd05089a440d4f7b4a8b1f1833d2ce1663",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "ash:strip1-mid-a",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        144,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "d997a11c6c42ca65e79d93993f1fce87a3a4baf96cedd628efe188fb8f4cd155",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "ash:strip1-mid-b",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        144,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "8e7937f52f546c3dc3fcf59ec4050b31eb48606eba82617414dd10c3dfd21eb0",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "ash:strip1-right",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        144,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "c11b89439d704ca8ee2b0880d352257ccca4c4a43122da53210487938790a196",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "ash:wall-top",
+      "family": "ash",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        160,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "d34aa4ae6cad239ed0712bbc819f9e1c1ba93ffff764bc803aa38a3adaea447c",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "ash:wall-mid",
+      "family": "ash",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        160,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9094b192d8b5515ee09b246d87e3dd2a58dbb7bd3f257b7bdfd64b08cf881cf5",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "ash:wall-bottom",
+      "family": "ash",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        160,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6f5a4caabf4312ca5f51c84ee27f1665539e51f09289073b71eccbf306a9cb31",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "ash:strip1-mid-c",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        160,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6401670ddcf9dd230d8d501d7cedc73848fddf5fc0d5cf0dbdf98abefcae3343",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "ash:strip2-left",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        144,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "51efc22f3380f9a6c6237238f19417322b8d0f357c47d7589f41af5e1eb333b6",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "ash:strip2-mid-a",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        144,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "2751046e08a58e88f15dbd8f9c8058a4eca07319d4b3d8a7819a7157e085cd76",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "ash:strip2-mid-b",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        144,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "5874ed044b41ee73e35d0665cd25a1a348e97bbda4d170f5b42c35de80fe2ba9",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "ash:strip2-right",
+      "family": "ash",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        144,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "0e82536c393a2052b09c86d358f428af4d4b436646f08a4e35ec4e5f9548b4d9",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "ash:block-2x2",
+      "family": "ash",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        144,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "a2f0504950d26cc8d943d4fc812bce2823e8e30d5e0a5ffcc16d133cc920a6fc",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "ash:block-3x2",
+      "family": "ash",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        144,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "61dd5051ac2879f484b3bd063fb12fe47db8d9b4dbc4ea90ee4bd974acce622a",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 17
+    },
+    {
+      "id": "ash:block-3x3",
+      "family": "ash",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        144,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "ad1d8a45016eaec28f988c11fc690e449d40ae5dd313f2051ba745705c7a1ea8",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "ash:boulder",
+      "family": "ash",
+      "kind": "prop",
+      "name": "boulder",
+      "rect": [
+        0,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4c66608d3a490ec3372679c0b78f37d089c955a75cd7551629af91ec437cf0ac",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "ash:ash-cairn",
+      "family": "ash",
+      "kind": "prop",
+      "name": "ash-cairn",
+      "rect": [
+        16,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "8849a13e7b7d7ef00d6fdac06efc05b56dc12f807e6016736bc680a4cec745e4",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "ash:pine-canopy",
+      "family": "ash",
+      "kind": "prop",
+      "name": "pine-canopy",
+      "rect": [
+        32,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "df416df876ae24bda722cffce2f90c76a05392d2a48c8b2c8d5818682035b3ff",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "ash:rice-sacks",
+      "family": "ash",
+      "kind": "prop",
+      "name": "rice-sacks",
+      "rect": [
+        48,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "cdd2c042de568ae1446353001db9f9868ea9dd94cb6c74523e0f0b007a58ebc8",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "ash:handcart",
+      "family": "ash",
+      "kind": "prop",
+      "name": "handcart",
+      "rect": [
+        64,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "1664cbac4c6cfb8205cdee4b7b36c6602fca2131886c04c195ecf91f387005a0",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "ash:crates",
+      "family": "ash",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        80,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "3e3252ebb6ad10b64f2d58c427afacb57e4a90f9ec4b5bbd6e994d24e6c443b7",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "ash:barrels",
+      "family": "ash",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        96,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "24230ad57f3b03581a649829b6fbd445cbb7dc889c57009198c8b31cd759373b",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "ash:firewood-stack",
+      "family": "ash",
+      "kind": "prop",
+      "name": "firewood-stack",
+      "rect": [
+        112,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "b59f2101f2e03bb0064fce992205de5d8a1b80b9fa32516c12335955d0a3c005",
+      "alphaBounds": [
+        0,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "ash:stone-lantern",
+      "family": "ash",
+      "kind": "prop",
+      "name": "stone-lantern",
+      "rect": [
+        128,
+        176,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "2334618460fcfa4bad1e2f249fb3f4620c70b43e4aaee4b470ef91c8307d03f2",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "ash:rock-pile",
+      "family": "ash",
+      "kind": "wide-prop",
+      "name": "rock-pile",
+      "rect": [
+        144,
+        176,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "d40a7481914f46f221a9f4493f10865048b2bd6c122302005c7f9f081938ecc1",
+      "alphaBounds": [
+        0,
+        2,
+        32,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "ash:freight-cart",
+      "family": "ash",
+      "kind": "wide-prop",
+      "name": "freight-cart",
+      "rect": [
+        176,
+        176,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "ef7dd9ab974c701f5aeffe9931f1556993aef956b4d25d69f64132543c6de99b",
+      "alphaBounds": [
+        1,
+        1,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "castle:strip1-left",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        192,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7994a0863901e76ab64b884158564938e8e95175378c06e8841d128be2d6fa04",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "castle:strip1-mid-a",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        192,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "a815225cc7e92634a7a102f3e802c2f6aedb3521247fe56fcfcc6dde89c3072f",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 12
+    },
+    {
+      "id": "castle:strip1-mid-b",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        192,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "a2045aeebc25f0872ec624bf7747598778c57c04bb0ec086e6f4d3862caa828c",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 12
+    },
+    {
+      "id": "castle:strip1-right",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        192,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "5bc554a4bb9ff9d6516a09ea30a5b2cc7aaf941680a40b0a0c28d3d922ea413c",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "castle:wall-top",
+      "family": "castle",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        208,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "0ab4e6fd5b575fe3cfb36f9366bb57732ccb589e89ddc41203d292b9ab5c8d53",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "castle:wall-mid",
+      "family": "castle",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        208,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6c9336e63cefc58f8b541ddbe9e49c6543b175e007901fdd336ad1482d776058",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "castle:wall-bottom",
+      "family": "castle",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        208,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "578d78c43a429db2b1606cfd37c8e3dac58298cd234872fc77d4642f9258359b",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "castle:strip1-mid-c",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        208,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "6098bd6a53a3d70b903cc20214698436645ed2f04f441fb9859e97fc7bd11f32",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 12
+    },
+    {
+      "id": "castle:strip2-left",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        192,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "b0be7c36147d92993c6d882b2caa14b1308618466baeedbb6d201bfa6921e678",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "castle:strip2-mid-a",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        192,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "f2b2b83ff99e56a3efbf6cbb3d7ae378db60378ea5f967e2946783d30ef17629",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "castle:strip2-mid-b",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        192,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "77ce2fe64be225adccc6a5cdb0490eddf8e317521b9d1188bb6598961810ecca",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "castle:strip2-right",
+      "family": "castle",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        192,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "ba4642dcbeab2e086f9c738bfdb3c7c1ea0b4f1ee0f345356466e1d8676db5c2",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "castle:block-2x2",
+      "family": "castle",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        192,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "40856f151b3d1b09c715ea0b90d052fad59ce1992ddf63c53537d61843255682",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "castle:block-3x2",
+      "family": "castle",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        192,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "98ee323c08f9b08d774ad9b8e282a4bd8b87f9fd72cdc87273b5038520983a44",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "castle:block-3x3",
+      "family": "castle",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        192,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "27c5acb495b244eefbd46cc87db5d7c48683080e823b47efd16643097d7fc343",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "castle:lacquer-screen",
+      "family": "castle",
+      "kind": "prop",
+      "name": "lacquer-screen",
+      "rect": [
+        0,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4cc648938a7a06f73182d3539d817cf1b7e06c110a6f347dfb2a6faaa8fd7df3",
+      "alphaBounds": [
+        1,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "castle:stone-lantern",
+      "family": "castle",
+      "kind": "prop",
+      "name": "stone-lantern",
+      "rect": [
+        16,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "e91e434066b1a8f284d35bbdeb538e25ea8269116d005b55137d70a0c3da9cb3",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "castle:registry-desk",
+      "family": "castle",
+      "kind": "prop",
+      "name": "registry-desk",
+      "rect": [
+        32,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7b105014d2ef0e9fb2488c519c491c154e32efef9cc243fe25f7f3042d2bf69e",
+      "alphaBounds": [
+        1,
+        4,
+        16,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "castle:prisoner-lattice",
+      "family": "castle",
+      "kind": "prop",
+      "name": "prisoner-lattice",
+      "rect": [
+        48,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "db4036cb15571219ee039035f21a9279f60fef5d929d7de6cd55aae3732b8195",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "castle:crates",
+      "family": "castle",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        64,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f74a1fe0675cf35e245b072486ed95da7967d2a48541f9d919c3c712a75f7e92",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "castle:notice-board",
+      "family": "castle",
+      "kind": "prop",
+      "name": "notice-board",
+      "rect": [
+        80,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "46c1a968a10596670d2acc7071d8512d252e7cc347e5000c6ef28b4f9b201ce7",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "castle:pine-canopy",
+      "family": "castle",
+      "kind": "prop",
+      "name": "pine-canopy",
+      "rect": [
+        96,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "acbe075166c659ba6d6c517bf1e2e4b7e106271d9629ea433ef8ba1188fb8764",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "castle:water-jar",
+      "family": "castle",
+      "kind": "prop",
+      "name": "water-jar",
+      "rect": [
+        112,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "724fe6b26e564ffe24f2d98bb3c2a0bee98e414c55658794f6679fe3b83766ba",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "castle:barrels",
+      "family": "castle",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        128,
+        224,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "325e07c20aeb7a32392c4074a8733df72c120696c5e9c5c17cc5e937ab9fc06e",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "castle:checkpoint-barrier",
+      "family": "castle",
+      "kind": "wide-prop",
+      "name": "checkpoint-barrier",
+      "rect": [
+        144,
+        224,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "6db5cbb5d857efd89eedf6013aed5c4fb4377445c33ece2cd029e7c413cdff00",
+      "alphaBounds": [
+        0,
+        3,
+        32,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "castle:cargo-stack",
+      "family": "castle",
+      "kind": "wide-prop",
+      "name": "cargo-stack",
+      "rect": [
+        176,
+        224,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "fb809f63467699f41209c66b0f253d6fe278097278ec1f505716087e1cb3a5db",
+      "alphaBounds": [
+        1,
+        2,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "archive:strip1-left",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        240,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4e345b011b29c6aa0b756d8f658ef9e4ab140657e2979d5a2a54141803d1e444",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 12
+    },
+    {
+      "id": "archive:strip1-mid-a",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        240,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "77a2f0224b62041e7af24e82215e8bd41f54589a3cf276856d7797e341126848",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "archive:strip1-mid-b",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        240,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "21db141f70873a0f61362c4b82971874c82be0515053156a828ab5a1a4668286",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "archive:strip1-right",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        240,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "477b163b221d212398bd2b441a89f4b6a57af748d991fc791d53847f20d4067b",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "archive:wall-top",
+      "family": "archive",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        256,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "3c0d60be8481120489f71370bba6605791f7d29226becb3562e1644b0c1779de",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "archive:wall-mid",
+      "family": "archive",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        256,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "eebec4d14b7ed7341b6972213af377341f77d515c0ce4aa1cd82df2b04824ba1",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "archive:wall-bottom",
+      "family": "archive",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        256,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "373256ff61166952c9ce19427d9090230bea9849945de4dd729e7bd546753c45",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "archive:strip1-mid-c",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        256,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "ee43e04d0b751f7917f7a27b775fc1106d8a0d28d9786375832ee1a10981c8df",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "archive:strip2-left",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        240,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "0d634379a1c6c6bfacfa72f2637bdcbedf439945d40bcc441d22795839500faa",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "archive:strip2-mid-a",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        240,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "845733c1130b29dd2dad5b8cb1a2d77cf5218fd4298cb7b406488034ae530242",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "archive:strip2-mid-b",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        240,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "50252e378d55a655af8f9ca739c2531bfb88c92ad79b9985b5f3c3d4f3e589b1",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "archive:strip2-right",
+      "family": "archive",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        240,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "57f3daa878bdcd43bb2daee88d951848d246fe64253fef0a52c5fc48da8ce65a",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 14
+    },
+    {
+      "id": "archive:block-2x2",
+      "family": "archive",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        240,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "f43d098700b3135003f011116a47d8836d2ffe2e915053ac82696d2c38ac6680",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "archive:block-3x2",
+      "family": "archive",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        240,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "89995b5bb8f63477d3e22594ae2305da3c70d6b11e9235d87b6616961b11ce54",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "archive:block-3x3",
+      "family": "archive",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        240,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "42a43364c5b185f26b7eddcbf9b74a915fd4a8e01c48fab7fb67ac5f80ef4e97",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "archive:registry-desk",
+      "family": "archive",
+      "kind": "prop",
+      "name": "registry-desk",
+      "rect": [
+        0,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f2f31b8d0fbb399ec1fb595deb9e5cd1b4b80ecdf396b89143690e3a6980fdd2",
+      "alphaBounds": [
+        1,
+        4,
+        16,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "archive:scroll-shelf",
+      "family": "archive",
+      "kind": "prop",
+      "name": "scroll-shelf",
+      "rect": [
+        16,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7bbccacbc06f11b7b950311802cd980cd02132a246b69c6ee20dff371bde61e1",
+      "alphaBounds": [
+        1,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "archive:prisoner-lattice",
+      "family": "archive",
+      "kind": "prop",
+      "name": "prisoner-lattice",
+      "rect": [
+        32,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "3ed72d8467b12fc969a02c3a78bf3dff9bffd0f1f996fdea01f2ee6fe6407f32",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "archive:crates",
+      "family": "archive",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        48,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "60bf5b7bd5964adbb0bf299ee70d26c5e6aa53198c6beff6d0021d60ab4b2bcb",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "archive:rice-sacks",
+      "family": "archive",
+      "kind": "prop",
+      "name": "rice-sacks",
+      "rect": [
+        64,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "096366e7c39263581b609dc8e8c53224d48cdab3017df74bba88633af520fbaa",
+      "alphaBounds": [
+        0,
+        2,
+        16,
+        16
+      ],
+      "colorCount": 5
+    },
+    {
+      "id": "archive:water-jar",
+      "family": "archive",
+      "kind": "prop",
+      "name": "water-jar",
+      "rect": [
+        80,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "92d2206d0814cd714410e7a4ae9aa074793783a28c933ed6fe3cb3bfc485026e",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "archive:stone-lantern",
+      "family": "archive",
+      "kind": "prop",
+      "name": "stone-lantern",
+      "rect": [
+        96,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "925156393434172b5c1758f390faf8f6d9f6706955137b7f14c67e34c02167be",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "archive:cedar-canopy",
+      "family": "archive",
+      "kind": "prop",
+      "name": "cedar-canopy",
+      "rect": [
+        112,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7455fd4c4266f6efcf91ea84d9990cbcb76195647007f5ac90d91ea78ffdc07f",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "archive:barrels",
+      "family": "archive",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        128,
+        272,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "97d2a022b3d8b455f061a805f331ebcdb96126615c8880bfcf66472320ec4c93",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "archive:long-shelf",
+      "family": "archive",
+      "kind": "wide-prop",
+      "name": "long-shelf",
+      "rect": [
+        144,
+        272,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "4e8585cd8de62c3043778637ae076e3b4e8b3554fe54eb30adabc45c057e1e9c",
+      "alphaBounds": [
+        1,
+        2,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "archive:cargo-stack",
+      "family": "archive",
+      "kind": "wide-prop",
+      "name": "cargo-stack",
+      "rect": [
+        176,
+        272,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "a40c0d151cba1897fe1e480e8ef2d371f434a4d9bf454ca12136137a95c7a6f5",
+      "alphaBounds": [
+        1,
+        2,
+        32,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "forge:strip1-left",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        288,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "936c41ac168bb7a5236b9cac71c27802b187ae31241b8f38ea7e7b7225650a5f",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 12
+    },
+    {
+      "id": "forge:strip1-mid-a",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        288,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "4ac24966100d2a9a1dc931c3f2bf2cfa4f2f3dbe479e70c85aa0c4f2008c6c2a",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "forge:strip1-mid-b",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        288,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "f418ac7c815342137d97fe724fd0af9acb61ac464365d3586b39377e297381ce",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "forge:strip1-right",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        288,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "177e5271f7ad1d4e682280d5213925c7594251cb8c930e6e153b5e91fcd4cfee",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 13
+    },
+    {
+      "id": "forge:wall-top",
+      "family": "forge",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        304,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "e3d3e7472fb89dd9309be7f3fea428404e3f66dd2483dad283f05a339caef5c5",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "forge:wall-mid",
+      "family": "forge",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        304,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "3eacd9965eb476d641ebf6df08853d8479b3bc86a41f11e0689aec73a3f58f4f",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "forge:wall-bottom",
+      "family": "forge",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        304,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "cb33da7c98ef05a1f6f073a414fa6bdd1a3dca22af79b127788e66c7de26eaa1",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "forge:strip1-mid-c",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        304,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "339e22cec5632b58932ed2ca5cdf8b741a8e1d149b21ddec9a2edad6188e2ddd",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "forge:strip2-left",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        288,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "0177f66ddb4a6fcacd7e20820c612ace0e15fb09e79add2c50ad33f5f18d6eb2",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 16
+    },
+    {
+      "id": "forge:strip2-mid-a",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        288,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "bf732b073c7fa5243539adb75f12c763d30bcf7a62b0c4c95919104fd93e9b01",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "forge:strip2-mid-b",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        288,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "0e8eaf7cdd871f23d29384abd39f393e6efac5a44ffe46567e5aa1e463dda3b7",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "forge:strip2-right",
+      "family": "forge",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        288,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "cbe8f134b775fde9436239b8126ba36e07352a0c7744e9825ba9cf57b3b46362",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 15
+    },
+    {
+      "id": "forge:block-2x2",
+      "family": "forge",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        288,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "eb8f1e0c42a3f7ef45abb5ab2d307d1b1ee632c0b12e8d7fed41d3d5f15043eb",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "forge:block-3x2",
+      "family": "forge",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        288,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "593acc8cde1d69d17ddf4c4013f55c41998b92ab63dde95f87364e7ce41c2785",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "forge:block-3x3",
+      "family": "forge",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        288,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "da83786a37a78e91d8d2b7fcb1291e63e4174574537e871cca2907e7fbc1c8ab",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 18
+    },
+    {
+      "id": "forge:forge-anvil",
+      "family": "forge",
+      "kind": "prop",
+      "name": "forge-anvil",
+      "rect": [
+        0,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "2fc655218c9a5db5ddd1049cfe4f5ebea746c556ce45f7322f297278d6a60945",
+      "alphaBounds": [
+        0,
+        4,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "forge:coal-bin",
+      "family": "forge",
+      "kind": "prop",
+      "name": "coal-bin",
+      "rect": [
+        16,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "dcacd735bad81a8333a1be40386254c7cb64d507790d2d33aa9ea5f149fdaa89",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "forge:crates",
+      "family": "forge",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        32,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "0dee2607a92febceb8a6dc783ff8b0ecff6174df85733d72a5f4385926217413",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "forge:barrels",
+      "family": "forge",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        48,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9e83ce1c2daf559b15a47a03ae9ad67d73b742ae50f0150f7e746eb888a6e4ab",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "forge:boulder",
+      "family": "forge",
+      "kind": "prop",
+      "name": "boulder",
+      "rect": [
+        64,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "1ed522ec39f27c7cefb4dde57fd8238dfba499f113782bb808bce37274536ee2",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "forge:prisoner-lattice",
+      "family": "forge",
+      "kind": "prop",
+      "name": "prisoner-lattice",
+      "rect": [
+        80,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7ca2b6d38c6d68f28f6a3f49ae56f8d0338cdfd8a26deb36f1e68b44081c2b70",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "forge:water-jar",
+      "family": "forge",
+      "kind": "prop",
+      "name": "water-jar",
+      "rect": [
+        96,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "aa00bde54aeabcda8f9dd901851a80b0f86c0ab56ba09c2c7b2151309874a055",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "forge:handcart",
+      "family": "forge",
+      "kind": "prop",
+      "name": "handcart",
+      "rect": [
+        112,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "91d9cdc2e71251d903036f96efa49a2e578a3db1c45688e6deb876679b4f1a6c",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "forge:firewood-stack",
+      "family": "forge",
+      "kind": "prop",
+      "name": "firewood-stack",
+      "rect": [
+        128,
+        320,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9b92bfb6dd0c4b066400364c600d00c11869a0bd654fb520d774b01edda8e142",
+      "alphaBounds": [
+        0,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "forge:quench-trough",
+      "family": "forge",
+      "kind": "wide-prop",
+      "name": "quench-trough",
+      "rect": [
+        144,
+        320,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "2bdb7405494ac20f63058f32f3cd1dd900f5ff28daf2b88ab5fbc2a62b6bc848",
+      "alphaBounds": [
+        1,
+        1,
+        32,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "forge:freight-cart",
+      "family": "forge",
+      "kind": "wide-prop",
+      "name": "freight-cart",
+      "rect": [
+        176,
+        320,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "0ae91247aa55f5d20d9d8c45ab6c93751f434da669af4086c42db125f5f38f52",
+      "alphaBounds": [
+        1,
+        1,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "engine:strip1-left",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip1-left",
+      "rect": [
+        0,
+        336,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "442dc8eb83c337b8e4c86bb35563c5fcfef020652071241284ce6b3653737dd0",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "engine:strip1-mid-a",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip1-mid-a",
+      "rect": [
+        16,
+        336,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "afe89a247b1b0f5287c076a4021eff3dcacbc92e44c5c4f6bd8e3ab7f8b9ab69",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "engine:strip1-mid-b",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip1-mid-b",
+      "rect": [
+        32,
+        336,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "a9395d3d14deb41e5656c582970af2c2500264c09087f01031fb95e110111f5a",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "engine:strip1-right",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip1-right",
+      "rect": [
+        48,
+        336,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "49cbd3601b9dafe3258c1e7ee9d15b232c22b0aa044f2bb5ea393b87d7d7eebc",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "engine:wall-top",
+      "family": "engine",
+      "kind": "structure",
+      "name": "wall-top",
+      "rect": [
+        0,
+        352,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "a89aa6d3edebbe657e798d2b9a880a0baaf35fb1215473c6a2e030a7f8105909",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "engine:wall-mid",
+      "family": "engine",
+      "kind": "structure",
+      "name": "wall-mid",
+      "rect": [
+        16,
+        352,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "39627026cc934874e9a12961539d75f5cf2b723c2e7b4ceb3c98786f9040372a",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "engine:wall-bottom",
+      "family": "engine",
+      "kind": "structure",
+      "name": "wall-bottom",
+      "rect": [
+        32,
+        352,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "9161671f3a1c2c1ba4ec262ad0be6f1fd523a3022e9ffbd21b3aee3b47d368a5",
+      "alphaBounds": [
+        3,
+        0,
+        15,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "engine:strip1-mid-c",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip1-mid-c",
+      "rect": [
+        48,
+        352,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "7d41062ab811b856daae59d7e9035df373d6672096324e483a07b6c2e6fc843d",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "engine:strip2-left",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip2-left",
+      "rect": [
+        64,
+        336,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "73fcf290adcfe8c893031b45ab45f0c36902e0bfa722989763bab5cb33fab98d",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "engine:strip2-mid-a",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip2-mid-a",
+      "rect": [
+        80,
+        336,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "0f6961d21aeee857b7803633e90574b253170165cb61e1829d54b58f6cbc7274",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "engine:strip2-mid-b",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip2-mid-b",
+      "rect": [
+        96,
+        336,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "1c2e63cf0643c0da22b2dd67584061fa8af17d670e244bdb0f493b6a908d4721",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "engine:strip2-right",
+      "family": "engine",
+      "kind": "structure",
+      "name": "strip2-right",
+      "rect": [
+        112,
+        336,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "192a7f5ee01aa92f43f992f128c61ab7baeb6b8820b4b35f65d4c43fbb8cf7a6",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "engine:block-2x2",
+      "family": "engine",
+      "kind": "structure",
+      "name": "block-2x2",
+      "rect": [
+        128,
+        336,
+        32,
+        32
+      ],
+      "widthCells": 2,
+      "heightCells": 2,
+      "rgbaSha256": "319d6a284ff550929a8199f87e4ced09becd53d340be5c834c9547ace8229bf5",
+      "alphaBounds": [
+        1,
+        0,
+        32,
+        32
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "engine:block-3x2",
+      "family": "engine",
+      "kind": "structure",
+      "name": "block-3x2",
+      "rect": [
+        160,
+        336,
+        48,
+        32
+      ],
+      "widthCells": 3,
+      "heightCells": 2,
+      "rgbaSha256": "3cc691bfdde3063842b74916f7a89ed9b537e9fd76c79ca8d6bb7dc588ae4746",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        32
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "engine:block-3x3",
+      "family": "engine",
+      "kind": "structure",
+      "name": "block-3x3",
+      "rect": [
+        208,
+        336,
+        48,
+        48
+      ],
+      "widthCells": 3,
+      "heightCells": 3,
+      "rgbaSha256": "0525d8158452e1acd85d50d2fd662f2b1835a2d77572bacf6899bbc000331c02",
+      "alphaBounds": [
+        1,
+        0,
+        48,
+        48
+      ],
+      "colorCount": 12
+    },
+    {
+      "id": "engine:gear-housing",
+      "family": "engine",
+      "kind": "prop",
+      "name": "gear-housing",
+      "rect": [
+        0,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "b3ce030416285fd05b9504deb02d35d35da926e2d733e7dd959668dd0bd214e2",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "engine:pipe-valve",
+      "family": "engine",
+      "kind": "prop",
+      "name": "pipe-valve",
+      "rect": [
+        16,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "a5202dec9f66b4c45e84b1fffd59e4b2b3999432b7ebc130042b613bea335b93",
+      "alphaBounds": [
+        3,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 8
+    },
+    {
+      "id": "engine:fire-bell-frame",
+      "family": "engine",
+      "kind": "prop",
+      "name": "fire-bell-frame",
+      "rect": [
+        32,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "103d76e53300be5131f8ca8f24eacf76830fa092052272aa07035ce618176f78",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "engine:crates",
+      "family": "engine",
+      "kind": "prop",
+      "name": "crates",
+      "rect": [
+        48,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "8c6cb40697d225a2be4c83b848e8238426193b6bbce26e406854096384442969",
+      "alphaBounds": [
+        1,
+        1,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "engine:coal-bin",
+      "family": "engine",
+      "kind": "prop",
+      "name": "coal-bin",
+      "rect": [
+        64,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "da94d0fb5b68e41e03f3ccf3efa5febf25af825e2146f41f906e072e11af057e",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "engine:barrels",
+      "family": "engine",
+      "kind": "prop",
+      "name": "barrels",
+      "rect": [
+        80,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "22fcae36f9ad5e34280e3335c47b8405b0b4b675a153ff369e18069c472b1afc",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        16
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "engine:forge-anvil",
+      "family": "engine",
+      "kind": "prop",
+      "name": "forge-anvil",
+      "rect": [
+        96,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "ca857e3e81430b09aa85b0d9cbd5f9af11221ac8a7d3a61ab4b88b318416b708",
+      "alphaBounds": [
+        0,
+        4,
+        16,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "engine:boulder",
+      "family": "engine",
+      "kind": "prop",
+      "name": "boulder",
+      "rect": [
+        112,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "872d3c4ba13081d024e9812fcc6da3cc254227eb804ab90d28a1f48c0cdd18d6",
+      "alphaBounds": [
+        1,
+        3,
+        16,
+        16
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "engine:registry-desk",
+      "family": "engine",
+      "kind": "prop",
+      "name": "registry-desk",
+      "rect": [
+        128,
+        368,
+        16,
+        16
+      ],
+      "widthCells": 1,
+      "heightCells": 1,
+      "rgbaSha256": "3bc850fc029a39a7d17a34f4a35837548f94a8220bbfce994abc123669f47772",
+      "alphaBounds": [
+        1,
+        4,
+        16,
+        16
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "engine:bellows-machine",
+      "family": "engine",
+      "kind": "wide-prop",
+      "name": "bellows-machine",
+      "rect": [
+        144,
+        368,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "e6366e6e9f40ace112397675592e8284aa585ecad025daff84071234edfb20b9",
+      "alphaBounds": [
+        1,
+        2,
+        32,
+        16
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "engine:cargo-stack",
+      "family": "engine",
+      "kind": "wide-prop",
+      "name": "cargo-stack",
+      "rect": [
+        176,
+        368,
+        32,
+        16
+      ],
+      "widthCells": 2,
+      "heightCells": 1,
+      "rgbaSha256": "711465ce1d2baf975ae9617aec4e7ed5540e2bb7c508beeaf44b0219c69e5a85",
+      "alphaBounds": [
+        1,
+        2,
+        32,
+        16
+      ],
+      "colorCount": 7
+    },
+    {
+      "id": "tall:cedar",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "cedar",
+      "rect": [
+        0,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "7b9007a1e3a7a977d83d550ca6fddf323894d41403107038feca1afbd274014a",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "tall:pine",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "pine",
+      "rect": [
+        16,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "ab5e1b19c7d5794fbbb527e779bb3566d004c344b4872d38bde96487c3f03871",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 6
+    },
+    {
+      "id": "tall:dead-pine",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "dead-pine",
+      "rect": [
+        32,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "9d21e7477d4978f05db4682504cec309f1df7e8551586da216059a9b26140de5",
+      "alphaBounds": [
+        1,
+        2,
+        16,
+        32
+      ],
+      "colorCount": 4
+    },
+    {
+      "id": "tall:watch-post",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "watch-post",
+      "rect": [
+        48,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "67ab5b561cbf4c0dc04af915ce1ccd571faae967025fa027ec00c8356bac82a4",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "tall:fire-bell-tower",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "fire-bell-tower",
+      "rect": [
+        64,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "cdf67bb78c6d30d036729740e13c89a2238520d3989674bf8d6b1e4036c5da70",
+      "alphaBounds": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 11
+    },
+    {
+      "id": "tall:chimney",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "chimney",
+      "rect": [
+        80,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "1bf62e5248a4ffaabe9c39219cac9ea5a2af27ce95d7b10c9574ebb68c857343",
+      "alphaBounds": [
+        2,
+        1,
+        16,
+        32
+      ],
+      "colorCount": 9
+    },
+    {
+      "id": "tall:pipe-stack",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "pipe-stack",
+      "rect": [
+        96,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "b5c5cd71ebcee462b97bfb1505d245d7516b9c75ca7c7be24a75ae9e5b4c2086",
+      "alphaBounds": [
+        0,
+        1,
+        16,
+        32
+      ],
+      "colorCount": 10
+    },
+    {
+      "id": "tall:lacquer-lantern",
+      "family": "tall",
+      "kind": "tall-prop",
+      "name": "lacquer-lantern",
+      "rect": [
+        112,
+        384,
+        16,
+        32
+      ],
+      "widthCells": 1,
+      "heightCells": 2,
+      "rgbaSha256": "88eb40d69b58ced289f1f60285629d5c0d75a46a96087878c1bcefa3c09521f4",
+      "alphaBounds": [
+        1,
+        0,
+        16,
+        32
+      ],
+      "colorCount": 9
+    }
+  ],
+  "exports": [
+    {
+      "file": "field-prop-atlas.png",
+      "purpose": "transparent-runtime-atlas",
+      "width": 256,
+      "height": 416,
+      "mode": "RGBA",
+      "sha256": "18904fb9a98a6ab2286066347751ce19de8ec538de9d74e9fdac807abb37c8ef"
+    },
+    {
+      "file": "field-prop-contact-sheet.png",
+      "purpose": "labeled-3x-review-only-not-runtime",
+      "width": 1180,
+      "height": 3252,
+      "mode": "RGBA",
+      "sha256": "21fb7a9aa276daf2e36d9a7f436e4e0a774d1cf67064f58f379d06d4337a6744"
+    }
+  ],
+  "twoIndependentRendersByteIdentical": true,
+  "runtimeCopy": "game/assets/art/field-prop-suite-v1/field-prop-atlas.png",
+  "externalCulturalReview": "pending",
+  "artLock": false,
+  "restrictions": [
+    "Presentation only: prop pixels never define collision, exits, hazards, movement, or interactions; authored level data stays authoritative.",
+    "Dressing only covers authored impassable cells and never covers walkable cells, exits, spawn points, or interactable positions.",
+    "No text, glyphs, or readable documents are baked into any frame; notice boards and ledgers show blank sheets only.",
+    "Do not depict sacred objects as loot or trophies; stone lanterns and fire-watch bells are secular roadside and village fixtures.",
+    "No real insignia, crests, heraldry, or authentic shogunal or imperial emblems; castle trim is invented lacquer and vermilion geometry.",
+    "No image generator, traced reference, or external pixels; every frame is drawn by deterministic integer primitives in this builder.",
+    "Wrong-size or failed images keep the existing flat wall fallback; external Japanese cultural review is still pending before art lock."
+  ]
+}
