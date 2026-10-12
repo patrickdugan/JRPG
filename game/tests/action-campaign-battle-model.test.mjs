@@ -401,7 +401,13 @@ test('carried items plus all token, protection, countdown, and phase-object fami
   });
   assert.equal(snapshotActionCampaignBattle(returnItem).objective.supported, true);
   const water = returnItem.stage.objectiveAnchors.find(({ kind }) => kind === 'item-return');
-  returnItem.kernel.getActor(returnItem.kernel.snapshot().controlledActorId).position = { x: water.x, y: water.y };
+  const slip = returnItem.stage.objectiveAnchors.find(({ kind }) => kind === 'item-source');
+  const carrier = returnItem.kernel.getActor(returnItem.kernel.snapshot().controlledActorId);
+  carrier.position = { x: water.x, y: water.y };
+  assert.equal(advanceActionCampaignBattle(returnItem, 20).outcome, null, 'water alone does nothing before the slip is taken');
+  carrier.position = { x: slip.x, y: slip.y };
+  advanceActionCampaignBattle(returnItem, 20, { interactPressed: true });
+  carrier.position = { x: water.x, y: water.y };
   assert.equal(advanceActionCampaignBattle(returnItem, 20).outcome, 'victory');
 
   for (const encounterId of [
