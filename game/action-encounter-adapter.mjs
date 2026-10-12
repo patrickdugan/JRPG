@@ -35,6 +35,21 @@ export const ACTION_ENEMY_GROUP_COOLDOWN_MULTIPLIER_CAP = 2.5;
 export const ACTION_ENEMY_GROUP_DAMAGE_FLOOR = 0.65;
 export const ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS = 2_000;
 
+/**
+ * Interruptible wind-ups. A hit that lands during an enemy wind-up drains
+ * poise (weapon strikes 1, Recovery-3 arts 2, linked combo hits +1); at zero
+ * the wind-up is cancelled onto its normal cooldown and the enemy staggers.
+ * Bosses hold more poise, recover it only slowly between punished wind-ups,
+ * and refill on every authored phase change. Tutorial sentries and phase
+ * objects never stagger.
+ */
+export const ACTION_ENEMY_POISE = deepFreeze({
+  standard: { max: 2, regenDelayMs: 1_800, regenIntervalMs: 600, staggerMs: 450 },
+  boss: { max: 4, regenDelayMs: 3_000, regenIntervalMs: 2_500, staggerMs: 700 },
+});
+export const ACTION_PARTY_ART_POISE_DAMAGE = 2;
+export const ACTION_PARTY_WEAPON_POISE_DAMAGE = 1;
+
 const PARTY_ATTACK_PREFIX = 'party';
 const ENEMY_ATTACK_PREFIX = 'enemy';
 const NEUTRAL_RESISTANCES = Object.freeze({
@@ -236,15 +251,22 @@ function authoredAreaRadiusTiles(shape) {
   return radii.length ? Math.max(...radii) : null;
 }
 
-function attackHitbox(skill) {
+function attackHitbox(skill, { radiusTiles = null } = {}) {
   const range = Math.max(0, Number(skill.range) || 0);
   const shapeType = skill.shape?.type ?? 'front';
   const effectiveRange = Math.max(1, range);
   if (shapeType === 'ring' || shapeType === 'cross' || shapeType === 'markedTiles') {
     const authoredRadius = authoredAreaRadiusTiles(skill.shape);
-    const radius = authoredRadius == null
+    const outerRadius = authoredRadius == null
       ? Math.max(ACTION_TILE_PX, effectiveRange * ACTION_TILE_PX)
       : Math.round((authoredRadius + 0.5) * ACTION_TILE_PX);
+    // A smaller authored ring keeps its ratio to the outermost ring.
+    const largest = Math.max(...authoredRingRadii(skill.shape), 0);
+    const radius = radiusTiles == null || largest <= 0 || radiusTiles >= largest
+      ? outerRadius
+      : authoredRadius == null
+        ? Math.round((outerRadius * radiusTiles) / largest)
+        : Math.round((radiusTiles + 0.5) * ACTION_TILE_PX);
     return {
       offsetX: -radius,
       offsetY: 0,
@@ -267,6 +289,38 @@ function actionAttackId(sourceKind, ownerTemplateId, sourceSkillId) {
   return `${sourceKind}:${ownerTemplateId}:${sourceSkillId}`;
 }
 
+function authoredRingRadii(shape) {
+  if (!shape || (shape.type !== 'ring' && shape.type !== 'cross')) return [];
+  return [shape.radius, ...(shape.radii ?? [])].filter(Number.isFinite);
+}
+
+/**
+ * A ring authored with several radii ("Alternate radius 2 and radius 3
+ * rings") becomes one attack per radius: the outermost keeps the base id and
+ * every smaller ring adds an `@r<radius>` variant with its own hitbox.
+ */
+function adaptAttackVariants(skill, owner) {
+  const base = adaptAttack(skill, owner);
+  const radii = [...new Set(authoredRingRadii(skill.shape))].sort((left, right) => right - left);
+  if (radii.length < 2) return [base];
+  return [base, ...radii.slice(1).map((radiusTiles) => {
+    const id = `${base.id}@r${radiusTiles}`;
+    return {
+      id,
+      config: {
+        ...clone(base.config),
+        name: `${skill.name} · radius ${radiusTiles}`,
+        hitbox: attackHitbox(skill, { radiusTiles }),
+      },
+      manifest: {
+        ...clone(base.manifest),
+        adapterAttackId: id,
+        sourceVariant: `radius-${radiusTiles}`,
+      },
+    };
+  })];
+}
+
 function adaptAttack(skill, { sourceKind, ownerTemplateId }) {
   const id = actionAttackId(sourceKind, ownerTemplateId, skill.id);
   const recoveryPulses = Number.isInteger(skill.recoveryPulses) ? skill.recoveryPulses : 0;
@@ -279,6 +333,9 @@ function adaptAttack(skill, { sourceKind, ownerTemplateId }) {
       power: skill.power ?? 0,
       ...attackTiming(skill, sourceKind),
       cooldownMs: actionCooldownForRecovery(recoveryPulses),
+      poiseDamage: sourceKind === PARTY_ATTACK_PREFIX && recoveryPulses >= 3
+        ? ACTION_PARTY_ART_POISE_DAMAGE
+        : ACTION_PARTY_WEAPON_POISE_DAMAGE,
       hitbox: attackHitbox(skill),
       tags: [sourceKind, skill.shape?.type ?? 'front', skill.dodgeable === false ? 'committed' : 'dodgeable'],
     },
@@ -485,6 +542,7 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
   const phaseObject = String(template.role ?? '').includes('phase-object');
   const primaryBoss = ['boss', 'boss-rescue', 'boss-phase', 'final-boss'].includes(context.encounter.format)
     && template.id === context.encounter.enemies[0]?.id;
+  const namedBoss = primaryBoss || template.id === context.encounter.objective?.bossId;
   const hp = actionEnemyHp(template.stats.hp, template.actionHpMultiplier ?? 1);
   const level = positiveLevel(context.options.enemyLevel ?? context.chapterTarget, 'enemyLevel');
   const adaptedPower = actionEnemyPower(template.stats.power, level);
@@ -516,6 +574,9 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
     facing: 'left',
     resistances: resistances(template.resistances),
     attackIds,
+    poise: nonHostile || tutorialSentry || phaseObject
+      ? null
+      : clone(namedBoss ? ACTION_ENEMY_POISE.boss : ACTION_ENEMY_POISE.standard),
     statuses: context.activeEnemyCount > 1
       ? [{
           id: 'group-pressure',
@@ -527,7 +588,7 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
 }
 
 function adaptEnemyTemplate(template, templateIndex, context) {
-  const attackRecords = (template.skills ?? []).map((skill) => adaptAttack(skill, {
+  const attackRecords = (template.skills ?? []).flatMap((skill) => adaptAttackVariants(skill, {
     sourceKind: ENEMY_ATTACK_PREFIX,
     ownerTemplateId: template.id,
   }));

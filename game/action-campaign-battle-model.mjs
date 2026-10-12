@@ -18,6 +18,7 @@ import {
   projectActionTerminalResult,
   sharedOffensiveCooldownMs,
 } from './action-encounter-adapter.mjs';
+import { authoredSelfCastKeys, createEnemyAiDirector } from './action-enemy-ai.mjs';
 import { adaptActionObjective } from './action-objectives.mjs';
 import { createActionObjectiveRuntime } from './action-objective-runtime.mjs';
 import {
@@ -202,14 +203,19 @@ function living(snapshot, faction) {
 
 function bossActor(session, snapshot) {
   const bossTemplateId = session.spec.profiles.enemies[0]?.templateId;
-  return snapshot.actors.find((actor) => session.actorTemplates[actor.id] === bossTemplateId) ?? null;
+  // A party member can share the boss template id (laboratory Mateus).
+  return snapshot.actors.find((actor) => (
+    actor.faction !== 'player' && session.actorTemplates[actor.id] === bossTemplateId
+  )) ?? null;
 }
 
 function createBossPhaseDirector(encounter, spec, kernel, actorTemplates) {
   const phases = encounter.bossMechanic?.phases;
   if (!Array.isArray(phases) || phases.length === 0) return null;
   const bossTemplateId = encounter.objective?.bossId ?? spec.profiles.enemies[0]?.templateId;
-  const bossActorId = kernel.actorOrder.find((actorId) => actorTemplates[actorId] === bossTemplateId);
+  const bossActorId = kernel.actorOrder.find((actorId) => (
+    actorTemplates[actorId] === bossTemplateId && kernel.getActor(actorId).faction !== 'player'
+  ));
   const boss = bossActorId ? kernel.getActor(bossActorId) : null;
   if (!boss) return null;
   const director = {
@@ -333,6 +339,9 @@ function updateBossPhaseDirector(session, kernelEvents, objective = null) {
         reason: 'boss-hp-threshold',
       };
       applyBossPhaseMoves(director, session.kernel, session.spec);
+      // Each authored HP/objective phase starts with full poise, so an
+      // interrupt must be earned again rather than carried across the beat.
+      session.kernel.restorePoise?.(director.bossActorId, 'phase-change');
       emitted.push(bossPhaseEvent('boss-phase-entered', director, session.kernel, director.lastTransition));
     }
   }
@@ -507,44 +516,6 @@ function requirementAnchorSnapshot(session, requirementId) {
   };
 }
 
-/**
- * Authored AI priorities that the side-view chase AI cannot infer from hitbox
- * reach alone. Keyed by `${ownerTemplateId}:${sourceSkillId}`.
- */
-const AUTHORED_ATTACK_CONDITIONS = Object.freeze({
-  // c6-ujiro: "If a print block is below 2 HP, use Seizure Order."
-  'ujiro:seizure-order': Object.freeze({ protectedObjectBelowHp: 2 }),
-  // c7-bell-warden-chiyo: "Use Ringing Count every second activation."
-  'bell-warden-chiyo:ringing-count': Object.freeze({ otherActivationsBetween: 1 }),
-});
-
-function authoredAttackConditionHolds(session, attackId, actorId) {
-  const manifest = manifestByAttackId(session).get(attackId);
-  if (!manifest) return true;
-  const condition = AUTHORED_ATTACK_CONDITIONS[`${manifest.ownerTemplateId}:${manifest.sourceSkillId}`];
-  if (!condition) return true;
-  if (condition.protectedObjectBelowHp != null) {
-    return session.objectiveEntities.objects.some((object) => (
-      object.protected && !object.destroyed && object.hp < condition.protectedObjectBelowHp
-    ));
-  }
-  if (condition.otherActivationsBetween != null) {
-    const director = session.objectiveEntities;
-    const count = director.activationCounts?.get(actorId) ?? 0;
-    const lastIndex = director.lastActivationIndex?.get(`${actorId}:${attackId}`) ?? -1;
-    return count - lastIndex - 1 >= condition.otherActivationsBetween;
-  }
-  return true;
-}
-
-function recordEnemyActivation(director, actorId, attackId) {
-  director.activationCounts ??= new Map();
-  director.lastActivationIndex ??= new Map();
-  const index = director.activationCounts.get(actorId) ?? 0;
-  director.lastActivationIndex.set(`${actorId}:${attackId}`, index);
-  director.activationCounts.set(actorId, index + 1);
-}
-
 function manifestByAttackId(session) {
   session.manifestByAttackId ??= new Map(
     session.spec.attackManifest.map((entry) => [entry.adapterAttackId, entry]),
@@ -605,7 +576,6 @@ function entityEventsFromCombat(session, events) {
       const actor = session.kernel.getActor(event.actorId);
       if (actor?.faction === 'enemy') {
         director.enemyActionCount += 1;
-        recordEnemyActivation(director, event.actorId, event.attackId);
         if (sourceSkillByAttackId.get(event.attackId) === 'ringing-count') {
           director.bellCount += 1;
           result.push({
@@ -989,6 +959,12 @@ export function createActionCampaignBattleSession({
         ],
     }
     : actor);
+  const selfCastKeys = new Set(authoredSelfCastKeys());
+  for (const entry of sourceSpec.attackManifest) {
+    if (entry.sourceKind === 'enemy' && selfCastKeys.has(`${entry.ownerTemplateId}:${entry.sourceSkillId}`)) {
+      attacks[entry.adapterAttackId].selfCast = true;
+    }
+  }
   const {
     kernelConfig: sourceKernelConfig,
     ...sourceSpecMetadata
@@ -1002,7 +978,25 @@ export function createActionCampaignBattleSession({
     ...sourceStatusHooks,
     canBeginAttack(context) {
       if (sourceStatusHooks?.canBeginAttack?.(context) === false) return false;
-      return sessionRef ? authoredAttackConditionHolds(sessionRef, context.attackId, context.actor?.id) : true;
+      return sessionRef?.enemyAi ? sessionRef.enemyAi.canBeginAttack(context) : true;
+    },
+    prioritizeAttacks(context) {
+      const ordered = sourceStatusHooks?.prioritizeAttacks?.(context) ?? context.attackIds;
+      return sessionRef?.enemyAi
+        ? sessionRef.enemyAi.prioritizeAttacks({ ...context, attackIds: ordered })
+        : ordered;
+    },
+    afterHit(context) {
+      sourceStatusHooks?.afterHit?.(context);
+      sessionRef?.enemyAi?.afterHit(context);
+    },
+    afterAttackComplete(context) {
+      sourceStatusHooks?.afterAttackComplete?.(context);
+      sessionRef?.enemyAi?.afterAttackComplete(context);
+    },
+    onFixedStep(context) {
+      sourceStatusHooks?.onFixedStep?.(context);
+      sessionRef?.enemyAi?.onFixedStep(context);
     },
   });
   const spec = deepFreeze({
@@ -1031,12 +1025,14 @@ export function createActionCampaignBattleSession({
     bossPhaseDirector: createBossPhaseDirector(encounter, spec, kernel, actorTemplates),
     objectiveRuntime: null,
     objectiveEntities: null,
+    enemyAi: null,
     outcome: null,
     recentEvents: [],
     subweaponStock: createActionSubweaponStock(),
   };
   session.objectiveEntities = createObjectiveEntityDirector(encounter, stage, objectiveContract);
   session.objectiveRuntime = createObjectiveBridge(session, objectiveRuntimeFactory);
+  session.enemyAi = createEnemyAiDirector(session);
   sessionRef = session;
   return session;
 }
@@ -1285,6 +1281,7 @@ export function snapshotActionCampaignBattle(session) {
     combo: getActionCampaignComboState(session, kernelSnapshot.controlledActorId),
     subweapons: getActionCampaignSubweaponChoices(session, kernelSnapshot.controlledActorId),
     combatSatisfied: combatSatisfied(session, kernelSnapshot),
+    enemyAi: session.enemyAi?.snapshot() ?? null,
     recentEvents: clone(session.recentEvents),
   });
 }
