@@ -1149,11 +1149,19 @@ export function resolvePublishedFieldInteractable(requiredInteractable, levelInt
   const available = (item) => Boolean(item)
     && item.available !== false
     && (!item.requires || normalizedFlags.has(normalize(item.requires)));
-  if (available(requiredInteractable)) return requiredInteractable;
-  const prerequisite = requiredInteractable?.requires
-    ? levelInteractables.find((item) => normalize(item.id) === normalize(requiredInteractable.requires))
-    : null;
-  return available(prerequisite) ? prerequisite : null;
+  // Walk the prerequisite chain; `requires` names either another
+  // interactable's id or the flag its `result` sets.
+  const visited = new Set();
+  let candidate = requiredInteractable;
+  while (candidate && !visited.has(candidate)) {
+    if (available(candidate)) return candidate;
+    visited.add(candidate);
+    const needed = candidate.requires ? normalize(candidate.requires) : '';
+    candidate = needed
+      ? levelInteractables.find((item) => normalize(item.id) === needed || normalize(item.result) === needed) ?? null
+      : null;
+  }
+  return null;
 }
 
 function fieldPosition() {
