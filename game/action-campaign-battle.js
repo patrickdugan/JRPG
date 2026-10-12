@@ -15,6 +15,16 @@ import {
   isOpeningActionEncounter,
 } from './action-battle-coaching.mjs';
 import {
+  collectEnemyTelegraphs,
+  createSimulationPacer,
+  impactFeedbackForEvents,
+  paceSimulation,
+  phaseBeatForEvents,
+  requestHitStop,
+  requestSlowMotion,
+  screenShakeOffset,
+} from './action-combat-feedback.mjs';
+import {
   createOpeningPlaytestStorageAdapter,
   recordOpeningPlaytestRestart,
 } from './opening-playtest-feedback.mjs';
@@ -262,6 +272,16 @@ let settlementRetryAt = 0;
 const recentMessages = [];
 const flyouts = [];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+// Presentation-only impact state. The pacer only decides how much wall time a
+// frame hands to the fixed-step kernel; it never edits a step's content.
+let simulationPacer = createSimulationPacer();
+let screenShake = { amplitudePx: 0, durationMs: 0, remainingMs: 0 };
+let phaseBanner = null;
+let phaseFlash = { remainingMs: 0, durationMs: 0 };
+const staggerBursts = [];
+const interruptedTelegraphs = [];
+let interruptCount = 0;
+let telegraphFrame = [];
 const displayedObjectiveText = sliceMode && session.encounter.id === 'c1-tithe-hound'
   ? 'Defeat the Tithe Hound.'
   : session.encounter.objective.text;
@@ -516,6 +536,18 @@ function describeEvent(event, snapshot) {
       maxLife: 520,
     });
     return `${target?.name ?? event.targetId} is briefly invulnerable.`;
+  }
+  if (event.type === 'poise-broken') {
+    flyouts.push({
+      x: actor?.position.x ?? 480,
+      y: (actor?.position.y ?? 400) - 104,
+      text: 'STAGGER',
+      tone: 'stagger',
+      life: 900,
+      maxLife: 900,
+    });
+    const source = snapshot.kernel.actors.find(({ id }) => id === event.sourceActorId);
+    return `${source?.name ?? event.sourceActorId} breaks the poise of ${actor?.name ?? event.actorId}: ${attackName(event.interruptedAttackId)} is interrupted.`;
   }
   if (event.type === 'control-switch') return `${actor?.name ?? event.actorId} is now under direct control.`;
   if (event.type === 'combat-end') return event.outcome === 'victory' ? 'Objective and combat conditions complete.' : 'The active party has fallen.';
@@ -1396,7 +1428,10 @@ function drawFlyouts(elapsedMs) {
     item.life -= elapsedMs;
     if (item.life <= 0) { flyouts.splice(index, 1); continue; }
     context.globalAlpha = Math.min(1, item.life / 180);
-    context.fillStyle = item.tone === 'weak' ? '#fff0a6' : item.tone === 'resist' ? '#9fd8e8' : '#f3d795';
+    context.font = item.tone === 'stagger' ? '900 19px ui-monospace, monospace' : '900 15px ui-monospace, monospace';
+    context.fillStyle = item.tone === 'weak' ? '#fff0a6'
+      : item.tone === 'resist' ? '#9fd8e8'
+        : item.tone === 'stagger' ? '#ffd35c' : '#f3d795';
     context.strokeStyle = 'rgba(8, 5, 12, .92)';
     context.lineWidth = 4;
     const y = item.y - (reducedMotion.matches ? 0 : (item.maxLife - item.life) * .03);
@@ -1406,11 +1441,319 @@ function drawFlyouts(elapsedMs) {
   context.restore();
 }
 
+function bossActorIds() {
+  const ids = new Set();
+  if (session.bossPhaseDirector?.bossActorId) ids.add(session.bossPhaseDirector.bossActorId);
+  const bossTemplates = new Set([
+    session.encounter.objective?.bossId,
+    ['boss', 'boss-rescue', 'boss-phase', 'final-boss'].includes(session.encounter.format)
+      ? session.encounter.enemies[0]?.id
+      : null,
+  ].filter(Boolean));
+  for (const [actorId, actorTemplateId] of Object.entries(session.actorTemplates)) {
+    if (bossTemplates.has(actorTemplateId) && session.kernel.getActor(actorId)?.faction !== 'player') ids.add(actorId);
+  }
+  return [...ids];
+}
+
+function applyImpactFeedback(snapshot) {
+  const events = snapshot.recentEvents;
+  if (!events.length) return;
+  const impact = impactFeedbackForEvents(events, snapshot.kernel, {
+    reducedMotion: reducedMotion.matches,
+    bossActorIds: bossActorIds(),
+    attacks: session.spec.kernelConfig.attacks,
+  });
+  if (impact.hitStopMs > 0) requestHitStop(simulationPacer, impact.hitStopMs);
+  const currentShake = screenShake.amplitudePx * (screenShake.remainingMs / Math.max(1, screenShake.durationMs));
+  if (impact.shakePx > 0 && impact.shakePx >= currentShake) {
+    screenShake = { amplitudePx: impact.shakePx, durationMs: impact.shakeMs, remainingMs: impact.shakeMs };
+  }
+  for (const event of events) {
+    if (event.type === 'attack-interrupted') {
+      interruptCount += 1;
+      const actor = snapshot.kernel.actors.find(({ id }) => id === event.actorId);
+      const telegraph = actor
+        ? collectEnemyTelegraphs({
+            actors: [{
+              ...actor,
+              activeAttack: { attackId: event.attackId, phase: 'windup', elapsedMs: event.elapsedMs },
+            }],
+          }, session.spec.kernelConfig.attacks)[0]
+        : null;
+      if (telegraph) interruptedTelegraphs.push({ telegraph, remainingMs: 360, durationMs: 360 });
+      elements.canvas.dataset.lastInterruptedAttackId = event.attackId;
+      elements.canvas.dataset.lastInterruptActorId = event.actorId;
+    }
+    if (event.type === 'poise-broken') {
+      staggerBursts.push({ actorId: event.actorId, remainingMs: 520, durationMs: 520 });
+      elements.canvas.dataset.lastStaggerActorId = event.actorId;
+      elements.canvas.dataset.lastStaggerAtMs = String(event.nowMs);
+    }
+  }
+  const beat = phaseBeatForEvents(events, { reducedMotion: reducedMotion.matches });
+  if (beat) {
+    const director = session.bossPhaseDirector;
+    const bossName = snapshot.kernel.actors.find(({ id }) => id === director?.bossActorId)?.name
+      ?? session.encounter.name;
+    const phaseIndex = director?.phases.findIndex(({ id }) => id === beat.phaseId) ?? -1;
+    const cadence = Boolean(session.encounter.bossMechanic?.phaseCycle);
+    const where = phaseIndex >= 0 && !cadence
+      ? `PHASE ${phaseIndex + 1} OF ${director.phases.length}`
+      : 'PHASE CHANGE';
+    phaseBanner = {
+      ...beat,
+      kicker: beat.kind === 'entered'
+        ? `${bossName.toUpperCase()} · ${where}`
+        : `${bossName.toUpperCase()} · NEXT ACTIVATION`,
+      remainingMs: beat.bannerMs,
+    };
+    if (beat.flashMs > 0) phaseFlash = { remainingMs: beat.flashMs, durationMs: beat.flashMs };
+    if (beat.slowMotionMs > 0) requestSlowMotion(simulationPacer, beat.slowMotionMs, beat.slowMotionScale);
+    elements.canvas.dataset.phaseBanner = beat.phaseId;
+    elements.canvas.dataset.phaseBannerKind = beat.kind;
+  }
+}
+
+function telegraphFillRect(telegraph, progress) {
+  const { left, right, top, bottom } = telegraph.hitbox;
+  const width = right - left;
+  if (telegraph.centred) {
+    const half = (width / 2) * progress;
+    const centre = (left + right) / 2;
+    return { x: centre - half, y: top, width: half * 2, height: bottom - top };
+  }
+  const filled = width * progress;
+  return telegraph.facing >= 0
+    ? { x: left, y: top, width: filled, height: bottom - top }
+    : { x: right - filled, y: top, width: filled, height: bottom - top };
+}
+
+function drawTelegraph(telegraph, { interrupted = false, fade = 1 } = {}) {
+  const { left, right, top, bottom } = telegraph.hitbox;
+  const width = right - left;
+  const height = bottom - top;
+  const staticMarker = reducedMotion.matches;
+  const color = interrupted ? '#9a93a6' : telegraph.color;
+  context.save();
+  context.globalAlpha = fade * (telegraph.phase === 'active' ? 0.32 : 0.1);
+  context.fillStyle = color;
+  context.fillRect(left, top, width, height);
+  if (telegraph.phase === 'windup' && !interrupted) {
+    const fill = telegraphFillRect(telegraph, staticMarker ? 1 : telegraph.progress);
+    context.globalAlpha = fade * (staticMarker ? 0.12 : 0.12 + telegraph.progress * 0.16);
+    context.fillRect(fill.x, fill.y, fill.width, fill.height);
+  }
+  context.globalAlpha = fade * 0.9;
+  context.strokeStyle = color;
+  context.lineWidth = 2;
+  if (telegraph.phase === 'windup') context.setLineDash(interrupted ? [3, 5] : [7, 4]);
+  context.strokeRect(left + 1, top + 1, Math.max(0, width - 2), Math.max(0, height - 2));
+  context.setLineDash([]);
+  // Ground band at the feet: the danger lane reads even behind sprites.
+  context.globalAlpha = fade * 0.8;
+  context.fillStyle = color;
+  context.fillRect(left, bottom - 3, width, 6);
+  if (telegraph.phase === 'windup' && !interrupted) {
+    const fill = telegraphFillRect(telegraph, staticMarker ? 1 : telegraph.progress);
+    context.fillStyle = '#fff4d6';
+    context.globalAlpha = fade * (staticMarker ? 0.55 : 0.95);
+    context.fillRect(fill.x, bottom - 2, fill.width, 4);
+  }
+  if (interrupted) {
+    context.strokeStyle = '#efe6ff';
+    context.lineWidth = 3;
+    context.globalAlpha = fade * 0.85;
+    const cx = (left + right) / 2;
+    const cy = bottom - Math.min(40, height / 2);
+    context.beginPath();
+    context.moveTo(cx - 12, cy - 12);
+    context.lineTo(cx + 12, cy + 12);
+    context.moveTo(cx + 12, cy - 12);
+    context.lineTo(cx - 12, cy + 12);
+    context.stroke();
+  }
+  if (!interrupted) {
+    // The name sits on the second under-feet row at the far end of the lane,
+    // clear of the attacker's poise pips on the first row.
+    context.globalAlpha = fade;
+    context.font = '800 9px ui-monospace, monospace';
+    context.lineJoin = 'round';
+    // Authored command actions advertise that any hit cancels them.
+    const label = telegraph.interruptOnHit && telegraph.phase === 'windup'
+      ? `${telegraph.name.toUpperCase()} · HIT TO INTERRUPT`
+      : telegraph.name.toUpperCase();
+    const alignRight = !telegraph.centred && telegraph.facing > 0;
+    context.textAlign = alignRight ? 'right' : 'left';
+    const labelX = alignRight ? Math.min(956, right - 4) : Math.max(4, left + 4);
+    context.strokeStyle = 'rgba(8, 5, 12, .9)';
+    context.lineWidth = 3;
+    context.strokeText(label, labelX, bottom + 27);
+    context.fillStyle = color;
+    context.fillText(label, labelX, bottom + 27);
+  }
+  context.restore();
+}
+
+function drawTelegraphs(snapshot, elapsedMs) {
+  telegraphFrame = collectEnemyTelegraphs(snapshot.kernel, session.spec.kernelConfig.attacks);
+  for (let index = interruptedTelegraphs.length - 1; index >= 0; index -= 1) {
+    const entry = interruptedTelegraphs[index];
+    entry.remainingMs -= elapsedMs;
+    if (entry.remainingMs <= 0) {
+      interruptedTelegraphs.splice(index, 1);
+      continue;
+    }
+    drawTelegraph(entry.telegraph, {
+      interrupted: true,
+      fade: reducedMotion.matches ? 1 : entry.remainingMs / entry.durationMs,
+    });
+  }
+  for (const telegraph of telegraphFrame) drawTelegraph(telegraph);
+  setCanvasDataset('telegraphCount', String(telegraphFrame.length));
+  setCanvasDataset('telegraphAttackIds', telegraphFrame.map(({ attackId }) => attackId).join(' '));
+}
+
+function drawPoiseDiamond(cx, y, size, fill) {
+  context.beginPath();
+  context.moveTo(cx, y - size / 2 - 1);
+  context.lineTo(cx + size / 2 + 1, y);
+  context.lineTo(cx, y + size / 2 + 1);
+  context.lineTo(cx - size / 2 - 1, y);
+  context.closePath();
+  context.fillStyle = 'rgba(8, 6, 12, .85)';
+  context.fill();
+  context.beginPath();
+  context.moveTo(cx, y - size / 2 + 1);
+  context.lineTo(cx + size / 2 - 1, y);
+  context.lineTo(cx, y + size / 2 - 1);
+  context.lineTo(cx - size / 2 + 1, y);
+  context.closePath();
+  context.fillStyle = fill;
+  context.fill();
+}
+
+function drawPoiseAndStagger(snapshot, elapsedMs) {
+  const bosses = new Set(bossActorIds());
+  for (const actor of snapshot.kernel.actors) {
+    if (actor.faction !== 'enemy' || actor.hp <= 0 || !(actor.maxPoise > 0)) continue;
+    const windup = actor.activeAttack?.phase === 'windup';
+    const staggered = actor.staggerRemainingMs > 0;
+    if (!bosses.has(actor.id) && !windup && !staggered && actor.poise >= actor.maxPoise) continue;
+    const size = 8;
+    const gap = 4;
+    const total = actor.maxPoise * size + (actor.maxPoise - 1) * gap;
+    const startX = Math.round(actor.position.x - total / 2);
+    const y = Math.round(actor.position.y + 13);
+    context.save();
+    for (let index = 0; index < actor.maxPoise; index += 1) {
+      const fill = staggered ? '#5a4a3a' : index < actor.poise ? (windup ? '#ffe08a' : '#d8b65e') : '#3b3442';
+      drawPoiseDiamond(startX + index * (size + gap) + size / 2, y, size, fill);
+    }
+    if (staggered) {
+      const pulse = reducedMotion.matches ? 1 : 0.7 + 0.3 * Math.sin(snapshot.kernel.nowMs * 0.03);
+      context.globalAlpha = 0.85 * pulse;
+      context.strokeStyle = '#ffd35c';
+      context.lineWidth = 3;
+      context.setLineDash([8, 5]);
+      context.beginPath();
+      context.ellipse(actor.position.x, actor.position.y + 2, 40, 10, 0, 0, Math.PI * 2);
+      context.stroke();
+      context.setLineDash([]);
+      context.globalAlpha = 1;
+      context.font = '900 10px ui-monospace, monospace';
+      context.textAlign = 'center';
+      context.strokeStyle = 'rgba(8, 5, 12, .9)';
+      context.lineWidth = 3;
+      context.strokeText('STAGGERED', actor.position.x, y + 14);
+      context.fillStyle = '#ffd35c';
+      context.fillText('STAGGERED', actor.position.x, y + 14);
+    }
+    context.restore();
+  }
+  for (let index = staggerBursts.length - 1; index >= 0; index -= 1) {
+    const burst = staggerBursts[index];
+    burst.remainingMs -= elapsedMs;
+    if (burst.remainingMs <= 0) {
+      staggerBursts.splice(index, 1);
+      continue;
+    }
+    const actor = snapshot.kernel.actors.find(({ id }) => id === burst.actorId);
+    if (!actor) continue;
+    const progress = 1 - burst.remainingMs / burst.durationMs;
+    const radius = reducedMotion.matches ? 46 : 20 + progress * 60;
+    context.save();
+    context.globalAlpha = reducedMotion.matches ? 0.7 : 0.9 * (1 - progress);
+    context.strokeStyle = '#fff1b8';
+    context.lineWidth = 4;
+    context.beginPath();
+    context.arc(actor.position.x, actor.position.y - 48, radius, 0, Math.PI * 2);
+    context.stroke();
+    context.restore();
+  }
+}
+
+function drawPhaseBanner(elapsedMs) {
+  if (phaseFlash.remainingMs > 0) {
+    phaseFlash.remainingMs = Math.max(0, phaseFlash.remainingMs - elapsedMs);
+    context.save();
+    context.globalAlpha = 0.38 * (phaseFlash.remainingMs / Math.max(1, phaseFlash.durationMs));
+    context.fillStyle = '#ffe9c8';
+    context.fillRect(0, 0, 960, 540);
+    context.restore();
+  }
+  if (!phaseBanner) return;
+  phaseBanner.remainingMs -= elapsedMs;
+  if (phaseBanner.remainingMs <= 0) {
+    phaseBanner = null;
+    delete elements.canvas.dataset.phaseBanner;
+    delete elements.canvas.dataset.phaseBannerKind;
+    return;
+  }
+  const elapsed = phaseBanner.bannerMs - phaseBanner.remainingMs;
+  const alpha = phaseBanner.animated
+    ? Math.min(1, elapsed / 150, phaseBanner.remainingMs / 400)
+    : 1;
+  const slide = phaseBanner.animated ? Math.max(0, 1 - elapsed / 180) * -18 : 0;
+  const entered = phaseBanner.kind === 'entered';
+  context.save();
+  context.globalAlpha = alpha;
+  context.translate(0, slide);
+  const width = entered ? 560 : 420;
+  const height = entered ? 64 : 46;
+  const left = 480 - width / 2;
+  const top = 64;
+  context.fillStyle = 'rgba(8, 5, 12, .84)';
+  context.fillRect(left, top, width, height);
+  context.strokeStyle = entered ? '#e8cf7b' : '#9fd8e8';
+  context.lineWidth = 2;
+  context.strokeRect(left + 1, top + 1, width - 2, height - 2);
+  context.fillStyle = entered ? '#b3253a' : '#335a6b';
+  context.fillRect(left, top, 6, height);
+  context.fillRect(left + width - 6, top, 6, height);
+  context.textAlign = 'center';
+  context.fillStyle = entered ? '#e8cf7b' : '#9fd8e8';
+  context.font = '800 10px ui-monospace, monospace';
+  context.fillText(phaseBanner.kicker, 480, top + 17);
+  context.fillStyle = '#f4ead6';
+  context.font = entered ? '500 28px Georgia, serif' : '500 20px Georgia, serif';
+  context.fillText(phaseBanner.title, 480, top + (entered ? 51 : 38));
+  context.restore();
+}
+
 function draw(snapshot, elapsedMs) {
+  if (screenShake.remainingMs > 0) screenShake.remainingMs = Math.max(0, screenShake.remainingMs - elapsedMs);
+  const shake = reducedMotion.matches ? { x: 0, y: 0 } : screenShakeOffset(screenShake, performance.now());
+  context.save();
+  context.translate(shake.x, shake.y);
   drawStage();
+  drawTelegraphs(snapshot, elapsedMs);
   drawObjectiveEntities(snapshot);
   drawActors(snapshot);
+  drawPoiseAndStagger(snapshot, elapsedMs);
   drawFlyouts(elapsedMs);
+  context.restore();
+  drawPhaseBanner(elapsedMs);
   if (snapshot.outcome) {
     context.fillStyle = 'rgba(5, 4, 9, .64)';
     context.fillRect(0, 0, 960, 540);
@@ -1446,6 +1789,10 @@ function actorListItem(actor, controlledActorId) {
   item.dataset.positionX = String(Math.round(actor.position.x * 100) / 100);
   item.dataset.positionY = String(Math.round(actor.position.y * 100) / 100);
   item.dataset.activePhase = actor.activeAttack?.phase ?? '';
+  item.dataset.activeAttackId = actor.activeAttack?.attackId ?? '';
+  item.dataset.poise = String(actor.poise ?? 0);
+  item.dataset.maxPoise = String(actor.maxPoise ?? 0);
+  item.dataset.staggerRemainingMs = String(actor.staggerRemainingMs ?? 0);
   const isDirectlyControlled = actor.id === controlledActorId;
   const controlRole = actor.faction === 'player' ? (isDirectlyControlled ? 'direct' : 'support') : 'hostile';
   item.dataset.controlRole = controlRole;
@@ -1470,6 +1817,8 @@ function actorListItem(actor, controlledActorId) {
     : statuses;
   state.textContent = actor.hp <= 0
     ? actor.statuses.some(({ id }) => id === 'dormant-summon') ? 'DORMANT SUMMON' : 'DEFEATED'
+    : actor.staggerRemainingMs > 0
+      ? `STAGGERED · ${actor.staggerRemainingMs} ms · free hits`
     : actor.hitStunRemainingMs > 0
       ? `HIT STUN · ${actor.hitStunRemainingMs} ms`
       : actor.activeAttack
@@ -1477,6 +1826,13 @@ function actorListItem(actor, controlledActorId) {
       : actor.activeManeuver
         ? maneuverName(actor.activeManeuver.id, actor.id).toUpperCase()
         : `${movementLabel}${otherStatuses.length ? ` · ${otherStatuses.join(' / ')}` : ''}`;
+  if (actor.faction === 'enemy' && actor.maxPoise > 0 && actor.hp > 0) {
+    const poise = document.createElement('small');
+    poise.className = 'poise-readout';
+    poise.textContent = `Poise ${'◆'.repeat(actor.poise)}${'◇'.repeat(Math.max(0, actor.maxPoise - actor.poise))} · hit wind-ups to interrupt`;
+    item.append(name, hp, radiance, state, poise);
+    return item;
+  }
   item.append(name, hp, radiance, state);
   return item;
 }
@@ -1697,6 +2053,10 @@ function renderDom(snapshot) {
   elements.canvas.dataset.comboSeparationPx = snapshot.combo.separationPx == null ? '' : String(Math.round(snapshot.combo.separationPx));
   elements.canvas.dataset.paused = String(hidden || !encounterStarted);
   elements.canvas.dataset.introReady = String(encounterStarted);
+  elements.canvas.dataset.kernelNowMs = String(snapshot.kernel.nowMs);
+  elements.canvas.dataset.interruptCount = String(interruptCount);
+  elements.canvas.dataset.hitStopActive = String(simulationPacer.hitStopRemainingMs > 0);
+  elements.canvas.dataset.hitStopTotalMs = String(Math.round(simulationPacer.frozenTotalMs));
 }
 
 function restart() {
@@ -1727,6 +2087,15 @@ function restart() {
   playtimeLastActivity = playtimeLastSample;
   recentMessages.length = 0;
   flyouts.length = 0;
+  simulationPacer = createSimulationPacer();
+  screenShake = { amplitudePx: 0, durationMs: 0, remainingMs: 0 };
+  phaseBanner = null;
+  phaseFlash = { remainingMs: 0, durationMs: 0 };
+  staggerBursts.length = 0;
+  interruptedTelegraphs.length = 0;
+  interruptCount = 0;
+  delete elements.canvas.dataset.phaseBanner;
+  delete elements.canvas.dataset.phaseBannerKind;
   elements.canvas.dataset.laboratoryResult = 'active';
   delete elements.canvas.dataset.lastManeuverId;
   delete elements.canvas.dataset.lastManeuverInputLatencyMs;
@@ -1925,8 +2294,15 @@ function frame(timestamp) {
   playtimeLastSample = timestamp;
   pollBattleGamepad();
   let snapshot;
-  if (!hidden && encounterStarted && !session.outcome) {
-    snapshot = advanceActionCampaignBattle(session, elapsedMs, {
+  // Hit-stop and phase slow motion hand fewer wall-clock milliseconds to the
+  // kernel; a fully frozen frame runs no fixed steps and keeps queued presses.
+  const paced = !hidden && encounterStarted && !session.outcome
+    ? paceSimulation(simulationPacer, elapsedMs)
+    : null;
+  if (!hidden && encounterStarted && !session.outcome && paced?.frozen) {
+    snapshot = snapshotActionCampaignBattle(session);
+  } else if (!hidden && encounterStarted && !session.outcome) {
+    snapshot = advanceActionCampaignBattle(session, paced.simulatedMs, {
       left: held.left || gamepadHeld.left,
       right: held.right || gamepadHeld.right,
       jumpPressed: pressed.jump,
@@ -1942,6 +2318,7 @@ function frame(timestamp) {
     pressed.subweaponId = null;
     pressed.combo = false;
     consumeSnapshotEvents(snapshot);
+    applyImpactFeedback(snapshot);
     const comboResponseEvent = snapshot.recentEvents.find((event) => (
       event.type === 'combo-start' || event.type === 'combo-blocked'
     ));

@@ -135,7 +135,9 @@ class PlayerDriver:
         return urlparse(self.page.url).path.endswith("credits.html")
 
     def seal_credits(self) -> None:
-        self.page.locator("#creditsStatus").wait_for()
+        # The seal button ships enabled in HTML; credits.js disables it while it
+        # renders the gate and always publishes #creditsStatus[data-state].
+        self.page.locator("#creditsStatus[data-state]").wait_for()
         route_proof = self.page.locator("#routeProof").inner_text()
         route_state = self.page.locator("#routeProof").get_attribute("data-state")
         if self.completionist and (
@@ -1073,6 +1075,49 @@ class PlayerDriver:
         self.controls += 1
         self.battle_commands += 1
 
+    def action_hold_cast(self, target: dict[str, object]) -> None:
+        """Hold the objective key until the rendered cast completes.
+
+        Cast progress advances in simulated time, which hit-stop and phase
+        slow motion briefly pause, so a fixed wall-clock hold can release a
+        cast just short of completion. Hold for the published duration, then
+        keep holding while the rendered progress is still climbing.
+        """
+        duration_ms = max(240, int(target.get("castDurationMs") or 0) + 160)
+        requirement = self.page.locator(
+            f'#objectiveRequirements li[data-requirement-id="{target.get("id")}"]'
+        )
+        self.page.keyboard.down("e")
+        try:
+            self.page.wait_for_timeout(duration_ms)
+            deadline = time.monotonic() + max(2.0, duration_ms * 2 / 1000)
+            last_elapsed = -1.0
+            last_progress_at = time.monotonic()
+            while time.monotonic() < deadline and requirement.count():
+                if requirement.get_attribute("data-complete") == "true":
+                    break
+                elapsed = self.action_number({"value": requirement.get_attribute("data-cast-elapsed-ms") or ""}, "value")
+                cast_total = self.action_number({"value": requirement.get_attribute("data-cast-duration-ms") or ""}, "value")
+                # A finished cast sits at its full duration; a stalled or reset
+                # cast stops climbing. Either way the hold has done its work.
+                if cast_total and elapsed >= cast_total:
+                    self.page.wait_for_timeout(60)
+                    break
+                if elapsed < last_elapsed:
+                    break
+                if elapsed > last_elapsed:
+                    last_elapsed = elapsed
+                    last_progress_at = time.monotonic()
+                elif time.monotonic() - last_progress_at > 0.4:
+                    # Longer than any hit-stop or phase slow motion: the cast
+                    # has stalled (the fighter left the anchor or was bound).
+                    break
+                self.page.wait_for_timeout(60)
+        finally:
+            self.page.keyboard.up("e")
+        self.controls += 1
+        self.battle_commands += 1
+
     @staticmethod
     def action_number(record: dict[str, str], key: str, fallback: float = 0) -> float:
         value = record.get(key)
@@ -1215,9 +1260,18 @@ class PlayerDriver:
                 continuation = self.page.locator("#continueCampaign")
                 continuation.wait_for(state="visible", timeout=15_000)
                 canvas = self.page.locator("#actionCampaignCanvas")
+                kernel_now_ms = self.action_number({"value": canvas.get_attribute("data-kernel-now-ms") or ""}, "value")
                 self.action_battles.append({
                     "encounter": encounter,
                     "durationSeconds": round(time.monotonic() - battle_started, 3),
+                    # Simulated time of the winning attempt; hit-stop and phase
+                    # slow motion add wall time but never simulated time.
+                    "simulatedSeconds": round(kernel_now_ms / 1000, 3),
+                    "hitStopSeconds": round(
+                        self.action_number({"value": canvas.get_attribute("data-hit-stop-total-ms") or ""}, "value") / 1000,
+                        3,
+                    ),
+                    "interrupts": int(self.action_number({"value": canvas.get_attribute("data-interrupt-count") or ""}, "value")),
                     "inputs": self.battle_commands - commands_at_start,
                     "restarts": restart_count,
                     "objective": self.page.locator("#objectiveRuntimeStatus").inner_text(),
@@ -1405,7 +1459,7 @@ class PlayerDriver:
             elif target["semantics"] == "cast-count":
                 # Cast progress resets whenever the key is released, so hold
                 # for the published cast duration plus a small frame margin.
-                self.action_hold("e", max(240, int(target.get("castDurationMs") or 0) + 160))
+                self.action_hold_cast(target)
             elif target["semantics"] in ("interact", "overlap"):
                 self.action_press("e")
 

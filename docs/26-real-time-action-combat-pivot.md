@@ -17,6 +17,8 @@ Every offensive action owns two distinct timing layers:
 
 Cycling attacks cannot bypass the shared weapon cooldown. Defensive and movement verbs may remain available during cooldown when their own state permits them.
 
+One exception is earned by the player: an enemy with poise whose poise is broken by hits landed during its wind-up loses that wind-up before the active frame, starts the attack's normal cooldown, and staggers. Player attacks are never interrupted. Hit-stop and phase-change slow motion only delay when fixed steps run; they never change a step. See [doc 42](42-combat-feel-pass.md).
+
 The exact level multiplier is:
 
 ```text
