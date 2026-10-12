@@ -8,7 +8,7 @@ test('campaign battle draws the backdrop at integer scale and keeps the legacy f
   assert.match(source, /backdrop: \{ image: new Image\(\), ready: false, source: getActionStageBackdrop\(session\.stage\.id\) \}/u);
   assert.match(source, /if \(art\.backdrop\.source\) art\.backdropTiles\.source = ACTION_STAGE_SURFACE_TILES;/u);
   assert.match(source, /const stageSurfacePlan = planActionStageSurfaces\(session\.stage, art\.backdrop\.source\);/u, 'surfaces follow the physics contract');
-  assert.match(source, /'stage', 'backdrop', 'backdropTiles'\]\) loadArt\(key\)/u);
+  assert.match(source, /'stage', 'backdrop', 'backdropTiles'(?:, '[A-Za-z]+')*\]\) loadArt\(key\)/u);
   assert.match(source, /dataset\.backdropArtState = 'unmapped'/u);
   assert.match(source, /record\.ready = record\.image\.naturalWidth === width && record\.image\.naturalHeight === height;/u);
   const drawStage = source.slice(source.indexOf('function drawStage() {'), source.indexOf('function drawObjectiveEntities('));

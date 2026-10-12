@@ -368,10 +368,12 @@ test('Campaign integrates regional tiles decoratively with the exact flat-color 
   assert.doesNotMatch(base, /commitStateChanges|fieldRuntimeState|moveFieldBy|telemetry|evidence|localStorage/u);
 
   const draw = source.slice(source.indexOf('function drawMap'), source.indexOf('function getFieldTileBase'));
-  const tiles = draw.indexOf('const worldTileBase = getFieldTileBase(level)');
+  const tiles = draw.indexOf('const worldTileBase = getFieldTileBase(level, propDressing?.dressedCells)');
   const legacy = draw.indexOf('mapCtx.fillStyle = terrainColor(terrain, palette)');
+  const props = draw.indexOf('drawFieldPropDressing(mapCtx');
   const followers = draw.indexOf('drawFieldFormationFollowers(level');
   assert.ok(tiles > 0 && legacy > tiles && followers > legacy, 'tiles compose before the legacy branch and every actor');
+  assert.ok(props > legacy && followers > props, 'props draw over floor tiles and under every actor');
   assert.match(draw, /if \(worldTileBase\) \{[\s\S]*\} else \{\s*mapCtx\.fillStyle = terrainColor\(terrain, palette\);/u);
   assert.match(draw, /if \(blocked\.has\(key\)\) \{\s*mapCtx\.fillStyle = palette\.blocked;/u);
   assert.match(draw, /if \(exits\.has\(key\)\) \{\s*mapCtx\.strokeStyle = '#72d7d0';/u, 'authored exit markers stay on top of thresholds');
