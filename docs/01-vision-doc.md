@@ -23,6 +23,8 @@ Historical dark-fantasy JRPG. The baseline is a linear, chapter-led party advent
 
 ### Hook: the measured battle stage
 
+> **Superseded for canonical play.** Campaign combat is now side-view real-time action; see the [real-time action-combat pivot](26-real-time-action-combat-pivot.md). The turn-based description below remains accurate for the tactical rollback (`campaign.html?legacyBattle=1`) and records the original design intent.
+
 Every encounter occurs on a small 2D combat stage: a shrine roof, ruined chapel, ship hold, prison yard, or castle hall. Turns remain fully turn-based, but an actor has a limited **Pace** allowance before choosing an action. That lets the player step out of a telegraphed sweep, line up a thrust, protect an ally, or move an enemy into a hazard.
 
 Attack animations have an explicit wind-up, active hit, and **Recovery** value. A powerful sword cut may end a foe’s turn, but it also delays the user’s next activation. The meaningful question is never “can I mash this?” but “is this worth being exposed for two pulses?”

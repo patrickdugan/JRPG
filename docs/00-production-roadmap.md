@@ -4,11 +4,11 @@ This is the controlling execution order for the project. It applies the supplied
 
 ## Locked premise
 
-**Genre:** gothic historical-fantasy, party-based turn-driven JRPG.
+**Genre:** gothic historical-fantasy, party-based JRPG with top-down chapter exploration and side-view real-time action combat. The [real-time action-combat pivot](26-real-time-action-combat-pivot.md) records that change; the turn-driven tactical controller remains an explicit rollback (`campaign.html?legacyBattle=1`).
 
 **Tone:** grave, intimate, and operatic. Sincere faith, fear, betrayal, and mercy are treated seriously; grotesque supernatural spectacle is never played as a wink.
 
-**Hook:** turns are spatially staged. Combatants occupy meaningful lanes and ranges, commit to attacks with visible wind-up and recovery, and can answer that commitment with guard, dodge, elemental counterplay, displacement, or interruption. This makes a turn-based command battle feel as exacting as a duel without becoming real-time action combat.
+**Hook:** every attack is a commitment. Fighters move freely in a side-view arena, but each attack locks them into a visible wind-up, one active hit, and recovery, followed by a cooldown during which they can reposition but not strike. Spacing, jumping, guard, typed elemental counterplay, and objective play decide fights rather than input speed. The original turn-driven framing of this hook survives in the tactical rollback.
 
 **Progression shape:** a linear chapter loop—settlement, route, dungeon, boss, consequence—with optional side spaces. It is intentionally not a metroidvania: the reference point is a brisk 16-bit console-style party JRPG journey, not a backtracking structure.
 
@@ -105,4 +105,4 @@ The rendered-control receipt on recorded runtime `d45dfb2` proves 60/60-scene, 2
 
 ## Scope-control rule
 
-The team may make small, evidence-driven improvements during the slice. A request that changes the chapter structure, makes combat real-time, adds an open-world/metroidvania loop, changes the art language, or invalidates a documented data contract is a major change. It must be recorded and explicitly approved before implementation.
+The team may make small, evidence-driven improvements during the slice. A request that changes the chapter structure, changes the combat model (the real-time pivot was recorded this way in doc 26), adds an open-world/metroidvania loop, changes the art language, or invalidates a documented data contract is a major change. It must be recorded and explicitly approved before implementation.
