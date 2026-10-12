@@ -10,6 +10,7 @@ import {
   ACTION_AI_ADJACENT_PX,
   ACTION_AI_TILE_PX,
   AUTHORED_ENEMY_AI,
+  authoredCommandKeys,
   authoredSelfCastKeys,
 } from '../action-enemy-ai.mjs';
 import { createAdvancementState } from '../advancement.mjs';
@@ -156,6 +157,22 @@ test('only explicitly authored self-casts skip the reach test', () => {
     .map(([id]) => id);
   assert.deepEqual(flagged, ['enemy:mateus:blood-ward']);
   assert.equal(runtime.kernel.attacks['enemy:mateus:blood-ward'].selfCast, true);
+});
+
+test('only authored command actions break on any hit, and their counterplay is authored', () => {
+  assert.deepEqual([...authoredCommandKeys()], ['ujiro:seizure-order', 'ujiro:call-clerks']);
+  for (const key of authoredCommandKeys()) {
+    const [templateId, skillId] = key.split(':');
+    const counterplay = AUTHORED_ENEMY_AI[templateId].skills[skillId].counterplay;
+    const encounter = ENCOUNTERS.find(({ enemies }) => enemies[0]?.id === templateId);
+    assert.ok(encounter.bossMechanic.counterplay.includes(counterplay), `${key} quotes "${counterplay}"`);
+  }
+  const runtime = session('c6-ujiro');
+  const flagged = Object.entries(runtime.kernel.attacks)
+    .filter(([, attack]) => attack.interruptOnHit)
+    .map(([id]) => id)
+    .sort();
+  assert.deepEqual(flagged, ['enemy:ujiro:call-clerks', 'enemy:ujiro:seizure-order']);
 });
 
 test('Tithe Hound inks at range and mauls at adjacency, in authored priority', () => {

@@ -18,7 +18,7 @@ import {
   projectActionTerminalResult,
   sharedOffensiveCooldownMs,
 } from './action-encounter-adapter.mjs';
-import { authoredSelfCastKeys, createEnemyAiDirector } from './action-enemy-ai.mjs';
+import { authoredCommandKeys, authoredSelfCastKeys, createEnemyAiDirector } from './action-enemy-ai.mjs';
 import { adaptActionObjective } from './action-objectives.mjs';
 import { createActionObjectiveRuntime } from './action-objective-runtime.mjs';
 import {
@@ -960,10 +960,12 @@ export function createActionCampaignBattleSession({
     }
     : actor);
   const selfCastKeys = new Set(authoredSelfCastKeys());
+  const commandKeys = new Set(authoredCommandKeys());
   for (const entry of sourceSpec.attackManifest) {
-    if (entry.sourceKind === 'enemy' && selfCastKeys.has(`${entry.ownerTemplateId}:${entry.sourceSkillId}`)) {
-      attacks[entry.adapterAttackId].selfCast = true;
-    }
+    if (entry.sourceKind !== 'enemy') continue;
+    const key = `${entry.ownerTemplateId}:${entry.sourceSkillId}`;
+    if (selfCastKeys.has(key)) attacks[entry.adapterAttackId].selfCast = true;
+    if (commandKeys.has(key)) attacks[entry.adapterAttackId].interruptOnHit = true;
   }
   const {
     kernelConfig: sourceKernelConfig,

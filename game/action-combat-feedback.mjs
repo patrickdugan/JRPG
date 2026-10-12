@@ -108,6 +108,7 @@ export function collectEnemyTelegraphs(kernelSnapshot, attacks) {
       color: telegraphColor(attack),
       delivery: attack.delivery ?? null,
       essence: attack.essence ?? null,
+      interruptOnHit: attack.interruptOnHit === true,
     }));
   }
   return Object.freeze(telegraphs);

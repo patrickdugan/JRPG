@@ -16,6 +16,7 @@ const ATTACKS = Object.freeze({
   jab: { name: 'Jab', delivery: 'cut', power: 6, windupMs: 20, activeMs: 20, recoveryMs: 20, hitbox: { offsetX: 4, offsetY: 0, width: 60, height: 48 } },
   art: { name: 'Art', delivery: 'arcane', power: 6, poiseDamage: 2, windupMs: 20, activeMs: 20, recoveryMs: 20, hitbox: { offsetX: 4, offsetY: 0, width: 60, height: 48 } },
   smash: { name: 'Smash', delivery: 'crush', power: 9, windupMs: 200, activeMs: 20, recoveryMs: 100, cooldownMs: 900, hitbox: { offsetX: 4, offsetY: 0, width: 60, height: 48 } },
+  order: { name: 'Order', delivery: 'arcane', power: 0, interruptOnHit: true, windupMs: 200, activeMs: 20, recoveryMs: 100, hitbox: { offsetX: 4, offsetY: 0, width: 60, height: 48 } },
   ward: { name: 'Ward', delivery: 'arcane', power: 0, selfCast: true, windupMs: 100, activeMs: 20, recoveryMs: 20, hitbox: { offsetX: -10, offsetY: 0, width: 20, height: 48 } },
   wardReach: { name: 'Reach Ward', delivery: 'arcane', power: 0, windupMs: 100, activeMs: 20, recoveryMs: 20, hitbox: { offsetX: -10, offsetY: 0, width: 20, height: 48 } },
 });
@@ -158,6 +159,24 @@ test('poise regenerates one point per interval after the quiet delay, and restor
   assert.deepEqual([event.type, event.reason, event.poise], ['poise-restored', 'phase-change', 4]);
   assert.deepEqual(kernel.restorePoise('hero'), { ok: false, reason: 'no-poise' });
   assert.deepEqual(kernel.restorePoise('ghost'), { ok: false, reason: 'unknown-actor' });
+});
+
+test('an authored command wind-up breaks on any damaging hit, whatever poise remains', () => {
+  const kernel = createKernel({ brute: { attackIds: ['smash', 'order'], poise: { ...POISE, max: 4 } } });
+  assert.equal(kernel.attacks.order.interruptOnHit, true);
+  assert.equal(kernel.attacks.smash.interruptOnHit, false);
+  assert.equal(kernel.requestAttack('brute', 'order').ok, true);
+  assert.equal(kernel.requestAttack('hero', 'jab').ok, true);
+  const events = stepUntil(kernel, (log) => log.some(({ type }) => type === 'attack-interrupted'));
+  const broken = events.find(({ type }) => type === 'poise-broken');
+  assert.deepEqual([broken.interruptedAttackId, broken.poiseBefore, broken.poiseDamage], ['order', 4, 4]);
+  assert.equal(kernel.getActor('brute').staggerRemainingMs, POISE.staggerMs);
+
+  const ordinary = createKernel({ brute: { attackIds: ['smash', 'order'], poise: { ...POISE, max: 4 } } });
+  assert.equal(ordinary.requestAttack('brute', 'smash').ok, true);
+  assert.equal(ordinary.requestAttack('hero', 'jab').ok, true);
+  const hit = stepUntil(ordinary, (log) => log.some(({ type }) => type === 'hit')).find(({ type }) => type === 'hit');
+  assert.deepEqual([hit.poiseDamage, hit.poiseAfter, hit.poiseBroken], [1, 3, false], 'ordinary wind-ups still need their poise drained');
 });
 
 test('actors without poise keep the uninterruptible attack contract', () => {

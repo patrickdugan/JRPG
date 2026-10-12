@@ -23,6 +23,11 @@
  * Self-casts (summons, wards, stances) normally still need their tiny caster-
  * centred hitbox to reach a foe. `selfCast: true` is an explicit opt-in that
  * lets an authored self-cast begin without reaching the target.
+ *
+ * `interruptOnHit: true` marks an authored command action: any damaging hit
+ * during its wind-up breaks the caster's poise, so the encounter's authored
+ * counterplay ("Interrupt orders") is a real, readable option. `counterplay`
+ * quotes the encounter text that authorises it.
  */
 
 import { actionActorHurtbox, attackWorldHitbox, levelAdjustedCooldownMs } from './action-combat.mjs';
@@ -184,10 +189,17 @@ export const AUTHORED_ENEMY_AI = deepFreeze({
   ujiro: {
     order: ['seizure-order', 'call-clerks', 'gavel-line'],
     skills: {
-      'seizure-order': { line: 'If a print block is below 2 HP, use Seizure Order.', when: { protectedObjectBelowHp: 2 } },
+      'seizure-order': {
+        line: 'If a print block is below 2 HP, use Seizure Order.',
+        when: { protectedObjectBelowHp: 2 },
+        interruptOnHit: true,
+        counterplay: 'Interrupt orders, protect the print blocks',
+      },
       'call-clerks': {
         line: 'If fewer than two clerks live, Call Clerks.',
         when: { livingSummonsBelow: { templateIds: ['masked-clerk'], count: 2 } },
+        interruptOnHit: true,
+        counterplay: 'Interrupt orders, protect the print blocks',
       },
       'gavel-line': { line: 'Otherwise Gavel Line at the largest cluster.', when: {} },
     },
@@ -231,15 +243,24 @@ function skillRule(templateId, skillId) {
   return templateRules(templateId)?.skills?.[skillId] ?? null;
 }
 
-/** Template/skill keys whose authored self-cast may begin without reach. */
-export function authoredSelfCastKeys() {
+function flaggedSkillKeys(flag) {
   const keys = [];
   for (const [templateId, rules] of Object.entries(AUTHORED_ENEMY_AI)) {
     for (const [skillId, rule] of Object.entries(rules.skills ?? {})) {
-      if (rule.selfCast) keys.push(`${templateId}:${skillId}`);
+      if (rule[flag]) keys.push(`${templateId}:${skillId}`);
     }
   }
   return Object.freeze(keys);
+}
+
+/** Template/skill keys whose authored self-cast may begin without reach. */
+export function authoredSelfCastKeys() {
+  return flaggedSkillKeys('selfCast');
+}
+
+/** Template/skill keys for authored command actions that any hit interrupts. */
+export function authoredCommandKeys() {
+  return flaggedSkillKeys('interruptOnHit');
 }
 
 function horizontalGap(actor, target) {

@@ -1579,7 +1579,10 @@ function drawTelegraph(telegraph, { interrupted = false, fade = 1 } = {}) {
     context.globalAlpha = fade;
     context.font = '800 9px ui-monospace, monospace';
     context.lineJoin = 'round';
-    const label = telegraph.name.toUpperCase();
+    // Authored command actions advertise that any hit cancels them.
+    const label = telegraph.interruptOnHit && telegraph.phase === 'windup'
+      ? `${telegraph.name.toUpperCase()} · HIT TO INTERRUPT`
+      : telegraph.name.toUpperCase();
     const alignRight = !telegraph.centred && telegraph.facing > 0;
     context.textAlign = alignRight ? 'right' : 'left';
     const labelX = alignRight ? Math.min(956, right - 4) : Math.max(4, left + 4);

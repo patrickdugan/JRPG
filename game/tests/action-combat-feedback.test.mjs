@@ -49,6 +49,11 @@ test('every enemy wind-up publishes its committed world hitbox and fill progress
   assert.equal(lunge.remainingMs, 150);
   assert.equal(lunge.centred, false);
   assert.equal(lunge.color, ACTION_TELEGRAPH_COLORS.essence.ember);
+  assert.equal(lunge.interruptOnHit, false);
+  const order = collectEnemyTelegraphs({
+    actors: [actor({ activeAttack: { attackId: 'order', phase: 'windup', elapsedMs: 20 } })],
+  }, { order: { ...ATTACKS.lunge, name: 'Seizure Order', interruptOnHit: true } })[0];
+  assert.equal(order.interruptOnHit, true, 'command wind-ups advertise that a hit interrupts them');
   assert.equal(ring.phase, 'active');
   assert.equal(ring.progress, 1);
   assert.equal(ring.centred, true);

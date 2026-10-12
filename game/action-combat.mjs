@@ -457,6 +457,9 @@ function normalizeAttack(id, source, stepMs) {
     // Explicit opt-in for authored self-casts (summons, wards, stances): the
     // deterministic chase AI may begin them without its hitbox reaching a foe.
     selfCast: source.selfCast === true,
+    // Authored command actions ("Interrupt orders"): any damaging hit during
+    // this attack's wind-up breaks the caster's poise outright.
+    interruptOnHit: source.interruptOnHit === true,
     tags: clone(source.tags ?? []),
   };
   if (attack.activeMs === 0) throw new RangeError(`${id}.activeMs must be greater than zero.`);
@@ -1351,8 +1354,9 @@ export class ActionCombatKernel {
     if (!active) return null;
     const committed = this.attacks[active.attackId];
     if (phaseFor(active, committed) !== ACTION_PHASES.WINDUP) return null;
-    const poiseDamage = attack.poiseDamage + (provenance.comboId != null ? ACTION_COMBO_POISE_BONUS : 0);
-    if (poiseDamage <= 0) return null;
+    const struckDamage = attack.poiseDamage + (provenance.comboId != null ? ACTION_COMBO_POISE_BONUS : 0);
+    if (struckDamage <= 0) return null;
+    const poiseDamage = committed.interruptOnHit ? Math.max(struckDamage, target.poise) : struckDamage;
     const poiseBefore = target.poise;
     target.poise = Math.max(0, target.poise - poiseDamage);
     target.poiseRegenDelayRemainingMs = target.poiseRegenDelayMs;
