@@ -1092,9 +1092,15 @@ function actorListItem(actor, controlledActorId) {
     ? 'Radiance neutral'
     : `Radiance ${Math.round(radianceMultiplier * 100)}% · ${radianceMultiplier > 1 ? 'WEAK' : 'RESIST'}`;
   const state = document.createElement('small');
-  const statuses = actor.statuses
+  const statusIds = actor.statuses
     .filter(({ id }) => id !== 'dormant-summon')
-    .map(({ id }) => String(id).replaceAll('-', ' ').toUpperCase());
+    .map(({ id }) => String(id));
+  item.dataset.statuses = statusIds.join(' ');
+  const statuses = statusIds.map((id) => id.replaceAll('-', ' ').toUpperCase());
+  const movementLabel = statusIds.includes('bound') ? 'BOUND · ATTACK TO BREAK FREE' : 'FREE MOVEMENT';
+  const otherStatuses = statusIds.includes('bound')
+    ? statuses.filter((label) => label !== 'BOUND')
+    : statuses;
   state.textContent = actor.hp <= 0
     ? actor.statuses.some(({ id }) => id === 'dormant-summon') ? 'DORMANT SUMMON' : 'DEFEATED'
     : actor.hitStunRemainingMs > 0
@@ -1103,7 +1109,7 @@ function actorListItem(actor, controlledActorId) {
       ? `${attackName(actor.activeAttack.attackId)} · ${actor.activeAttack.phase}`
       : actor.activeManeuver
         ? maneuverName(actor.activeManeuver.id, actor.id).toUpperCase()
-        : `FREE MOVEMENT${statuses.length ? ` · ${statuses.join(' / ')}` : ''}`;
+        : `${movementLabel}${otherStatuses.length ? ` · ${otherStatuses.join(' / ')}` : ''}`;
   item.append(name, hp, radiance, state);
   return item;
 }

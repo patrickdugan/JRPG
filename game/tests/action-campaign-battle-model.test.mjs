@@ -479,7 +479,14 @@ test('carried items plus all token, protection, countdown, and phase-object fami
   for (let index = 0; index < 12; index += 1) {
     advanceActionCampaignBattle(ujiro, 100, { interactHeld: true });
   }
-  assert.equal(snapshotActionCampaignBattle(ujiro).outcome, 'victory');
+  assert.equal(
+    snapshotActionCampaignBattle(ujiro).objective.requirements.find(({ id }) => id === 'disable-orders').complete,
+    true,
+  );
+  assert.equal(snapshotActionCampaignBattle(ujiro).outcome, null, 'disabled orders alone do not end the boss encounter');
+  const ujiroBoss = [...ujiro.kernel.actors.values()].find(({ id }) => ujiro.actorTemplates[id] === 'ujiro');
+  ujiroBoss.hp = 0;
+  assert.equal(advanceActionCampaignBattle(ujiro, 20).outcome, 'victory');
 
   const chiyo = createActionCampaignBattleSession({
     encounterId: 'c7-bell-warden-chiyo',
@@ -512,4 +519,32 @@ test('carried items plus all token, protection, countdown, and phase-object fami
   }
   assert.equal(snapshotActionCampaignBattle(bell).outcome, 'victory');
   assert.doesNotThrow(() => createActionCampaignBattleResult(bell));
+});
+
+test('Ujiro objective pressure follows authored Seizure Order targets and finisher priority', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c6-ujiro',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const hooks = session.spec.kernelConfig.statusHooks;
+  const seizure = 'enemy:ujiro:seizure-order';
+  assert.equal(hooks.canBeginAttack({ attackId: seizure }), false, 'Seizure Order waits for a damaged print block');
+  assert.equal(hooks.canBeginAttack({ attackId: 'enemy:ujiro:gavel-line' }), true);
+
+  const ujiroId = [...session.kernel.actors.values()].find(({ id }) => session.actorTemplates[id] === 'ujiro').id;
+  const ujiro = session.kernel.getActor(ujiroId);
+  ujiro.position = { x: 900, y: ujiro.position.y };
+  assert.equal(session.kernel.requestAttack(ujiroId, seizure).ok, true);
+  for (let step = 0; step < 80 && session.kernel.getActor(ujiroId).activeAttack; step += 1) {
+    advanceActionCampaignBattle(session, 20);
+  }
+  const hp = Object.fromEntries(session.objectiveEntities.objects.map(({ id, hp: value }) => [id, value]));
+  assert.deepEqual(hp, { 'print-block-a': 3, 'print-block-b': 2, 'print-block-c': 2 },
+    'one writ marks exactly the two nearest print blocks, not every block inside its reach');
+
+  assert.equal(hooks.canBeginAttack({ attackId: seizure }), false);
+  session.objectiveEntities.objects.find(({ id }) => id === 'print-block-c').hp = 1;
+  assert.equal(hooks.canBeginAttack({ attackId: seizure }), true);
 });

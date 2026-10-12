@@ -611,6 +611,8 @@ function phaseFor(activeAttack, attack) {
  * - afterHit({ attacker, target, attack, resolution, event, kernel })
  * - afterAttackComplete({ actor, attack, active, event, kernel })
  * - onFixedStep({ nowMs, stepMs, kernel })
+ * - canBeginAttack({ actor, attackId, target, kernel }) may return false to
+ *   veto an AI-selected attack whose authored condition does not hold
  *
  * Actor status payloads are copied into `actor.statuses` and left opaque to the
  * kernel. Hooks can interpret and update them without coupling this core to a
@@ -1540,7 +1542,8 @@ export class ActionCombatKernel {
       const usableAttack = actor.attackIds.find((attackId) => {
         if (this.attacks[attackId].kind === 'subweapon') return false;
         const state = this.getAttackState(actor.id, attackId);
-        return state.ready && (isSentry || attackOverlapsTarget(attackId));
+        return state.ready && (isSentry || attackOverlapsTarget(attackId))
+          && this.statusHooks.canBeginAttack?.({ actor, attackId, target, kernel: this }) !== false;
       });
       if (usableAttack) {
         actor.movementIntent = { x: 0, y: 0 };

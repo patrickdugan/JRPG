@@ -62,6 +62,7 @@ const CONNECTED_OBJECTIVE_TYPES = new Set([
 const BOSS_COMBAT_TYPES = new Set([
   'defeatBoss',
   'defeatBossWithProtection',
+  'disableOrdersAndProtect',
   'defeatBossAndRelease',
   'defeatBossAndEvacuate',
 ]);
@@ -501,6 +502,62 @@ function requirementAnchorSnapshot(session, requirementId) {
   };
 }
 
+/**
+ * Authored AI priorities that the side-view chase AI cannot infer from hitbox
+ * reach alone. Keyed by `${ownerTemplateId}:${sourceSkillId}`.
+ */
+const AUTHORED_ATTACK_CONDITIONS = Object.freeze({
+  // c6-ujiro: "If a print block is below 2 HP, use Seizure Order."
+  'ujiro:seizure-order': Object.freeze({ protectedObjectBelowHp: 2 }),
+});
+
+function authoredAttackConditionHolds(session, attackId) {
+  const manifest = manifestByAttackId(session).get(attackId);
+  if (!manifest) return true;
+  const condition = AUTHORED_ATTACK_CONDITIONS[`${manifest.ownerTemplateId}:${manifest.sourceSkillId}`];
+  if (!condition) return true;
+  if (condition.protectedObjectBelowHp != null) {
+    return session.objectiveEntities.objects.some((object) => (
+      object.protected && !object.destroyed && object.hp < condition.protectedObjectBelowHp
+    ));
+  }
+  return true;
+}
+
+function manifestByAttackId(session) {
+  session.manifestByAttackId ??= new Map(
+    session.spec.attackManifest.map((entry) => [entry.adapterAttackId, entry]),
+  );
+  return session.manifestByAttackId;
+}
+
+/**
+ * Encounters that author explicit objective-damage skills (writs, seizures)
+ * resolve protected-object damage through those skills only, matching the
+ * tactical contract. Without such skills, overlapping enemy hitboxes remain
+ * the pressure on protected objects (for example the archive core).
+ */
+function targetedObjectivePressure(session) {
+  session.targetedObjectivePressure ??= session.spec.attackManifest.some(
+    ({ sourceKind, sourceEffect }) => sourceKind === 'enemy' && Number(sourceEffect?.objectiveDamage) > 0,
+  );
+  return session.targetedObjectivePressure;
+}
+
+function targetedProtectedObjects(director, attacker, manifest) {
+  const amount = Math.trunc(Number(manifest?.sourceEffect?.objectiveDamage) || 0);
+  if (amount <= 0) return [];
+  const count = Math.max(1, Math.trunc(Number(manifest.sourceShape?.count) || 1));
+  return director.objects
+    .filter((object) => object.protected && !object.destroyed)
+    .sort((left, right) => (
+      Math.abs(left.position.x - attacker.position.x) - Math.abs(right.position.x - attacker.position.x)
+      || left.id.localeCompare(right.id)
+    ))
+    .slice(0, count)
+    .map((object) => ({ object, amount }));
+}
+
 function entityEventsFromCombat(session, events) {
   const result = [];
   const director = session.objectiveEntities;
@@ -543,14 +600,18 @@ function entityEventsFromCombat(session, events) {
         }
       }
     } else if (attacker.faction === 'enemy') {
-      for (const object of director.objects) {
-        if (!object.protected || object.destroyed || !rectsOverlap(hitbox, {
-          left: object.position.x - object.bounds.width / 2,
-          right: object.position.x + object.bounds.width / 2,
-          top: object.position.y - object.bounds.height,
-          bottom: object.position.y,
-        })) continue;
-        object.hp = Math.max(0, object.hp - 1);
+      const protectedHits = targetedObjectivePressure(session)
+        ? targetedProtectedObjects(director, attacker, manifestByAttackId(session).get(event.attackId))
+        : director.objects
+          .filter((object) => object.protected && !object.destroyed && rectsOverlap(hitbox, {
+            left: object.position.x - object.bounds.width / 2,
+            right: object.position.x + object.bounds.width / 2,
+            top: object.position.y - object.bounds.height,
+            bottom: object.position.y,
+          }))
+          .map((object) => ({ object, amount: 1 }));
+      for (const { object, amount } of protectedHits) {
+        object.hp = Math.max(0, object.hp - amount);
         if (object.hp === 0) {
           object.destroyed = true;
           result.push({ type: 'objective-object-destroyed', objectId: object.id, actorId: attacker.id });
@@ -873,9 +934,17 @@ export function createActionCampaignBattleSession({
     ...sourceSpecMetadata
   } = sourceSpec;
   const {
-    statusHooks,
+    statusHooks: sourceStatusHooks,
     ...cloneableKernelConfig
   } = sourceKernelConfig;
+  let sessionRef = null;
+  const statusHooks = Object.freeze({
+    ...sourceStatusHooks,
+    canBeginAttack(context) {
+      if (sourceStatusHooks?.canBeginAttack?.(context) === false) return false;
+      return sessionRef ? authoredAttackConditionHolds(sessionRef, context.attackId) : true;
+    },
+  });
   const spec = deepFreeze({
     ...clone(sourceSpecMetadata),
     kernelConfig: {
@@ -908,6 +977,7 @@ export function createActionCampaignBattleSession({
   };
   session.objectiveEntities = createObjectiveEntityDirector(encounter, stage, objectiveContract);
   session.objectiveRuntime = createObjectiveBridge(session, objectiveRuntimeFactory);
+  sessionRef = session;
   return session;
 }
 
