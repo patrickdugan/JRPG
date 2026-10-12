@@ -285,10 +285,19 @@ function adaptRequirements(encounter, stageContract) {
         if (!found) throw new RangeError(`${stageContract.id} has no item-return anchor for authored tile ${tile}.`);
         return found;
       });
+      // The carried item exists only after it is taken from its authored source.
+      const source = stageContract.objectiveAnchors.find((entry) => entry.kind === 'item-source');
+      const pickup = source
+        ? requirement(`pickup:${itemId}`, 'interact', { actionId: 'take-item', anchorIds: [source.id] })
+        : null;
       const entry = requirement(`return:${itemId}`, 'overlap', {
-        subject: { kind: 'carried-item', itemId }, anchorIds: anchors.map(({ id }) => id), overlapMode: 'any-anchor',
+        subject: { kind: 'carried-item', itemId },
+        anchorIds: anchors.map(({ id }) => id),
+        overlapMode: 'any-anchor',
+        after: pickup ? [pickup.id] : [],
       });
-      return { requirements: [entry], completion: all([entry.id]) };
+      const requirements = pickup ? [pickup, entry] : [entry];
+      return { requirements, completion: all(requirements.map(({ id }) => id)) };
     }
     case 'extractAllBeforeCountdown': {
       const targetIds = objective.targets ?? [];

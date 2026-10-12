@@ -110,7 +110,11 @@ test('name-slip return preserves tile provenance without using it as collision',
   const encounter = ENCOUNTERS.find(({ id }) => id === 'c7-name-slip-release');
   const contract = adaptActionObjective(encounter);
   assert.deepEqual(contract.requirements[0], {
-    id: 'return:name-slip', semantics: 'overlap', count: 1, after: [],
+    id: 'pickup:name-slip', semantics: 'interact', count: 1, after: [],
+    actionId: 'take-item', anchorIds: ['name-slip-source'],
+  });
+  assert.deepEqual(contract.requirements[1], {
+    id: 'return:name-slip', semantics: 'overlap', count: 1, after: ['pickup:name-slip'],
     subject: { kind: 'carried-item', itemId: 'name-slip' },
     anchorIds: ['flowing-water-a', 'flowing-water-b'], overlapMode: 'any-anchor',
   });
