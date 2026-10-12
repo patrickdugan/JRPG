@@ -1083,9 +1083,13 @@ class PlayerDriver:
 
     def action_target(self, state: dict[str, object], controlled_x: float) -> dict[str, object] | None:
         entities = state["entities"]
-        for entity in entities:
-            if entity.get("entityType") != "token":
-                continue
+        tokens = [entity for entity in entities if entity.get("entityType") == "token"]
+        # Free every waiting token before leading any of them out, so one trip
+        # to the extraction point carries the whole group.
+        waiting = [entity for entity in tokens if entity.get("recruited") != "true"]
+        if waiting:
+            tokens = [min(waiting, key=lambda entity: abs(self.action_number(entity, "positionX") - controlled_x))]
+        for entity in tokens:
             following = entity.get("recruited") == "true"
             target_x = self.action_number(
                 entity,
@@ -1347,7 +1351,8 @@ class PlayerDriver:
                 ],
                 default=92,
             )
-            close_distance = 30 if objective_semantics else max(72, attack_reach - 24)
+            # Objective overlap tests the fighter's centre against a 56 px anchor.
+            close_distance = 18 if objective_semantics else max(72, attack_reach - 24)
             close_x = abs(distance) <= close_distance and vertical_ready
             if (
                 vertical_distance > 70

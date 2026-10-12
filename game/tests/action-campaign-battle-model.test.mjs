@@ -568,3 +568,37 @@ test('escorted witnesses shelter behind the fighter, away from the nearest hosti
       `${token.id} stays on the far side of the fighter from the hostiles (${token.position.x})`);
   }
 });
+
+test('Bell Warden Chiyo rings the count on every second activation, as authored', () => {
+  const states = coreStates();
+  const session = createActionCampaignBattleSession({
+    encounterId: 'c7-bell-warden-chiyo',
+    advancementState: states.advancement,
+    loadoutState: states.loadout,
+  });
+  const hooks = session.spec.kernelConfig.statusHooks;
+  const chiyo = [...session.kernel.actors.values()].find(({ id }) => session.actorTemplates[id] === 'bell-warden-chiyo');
+  const ring = 'enemy:bell-warden-chiyo:ringing-count';
+  const other = 'enemy:bell-warden-chiyo:chain-cast';
+  const keepPartyAway = () => {
+    for (const actor of session.kernel.actors.values()) {
+      if (actor.faction === 'player') actor.position = { x: 60, y: actor.position.y };
+    }
+    session.kernel.getActor(chiyo.id).position = { x: 900, y: session.kernel.getActor(chiyo.id).position.y };
+  };
+  const complete = (attackId) => {
+    for (let step = 0; step < 300 && !session.kernel.getAttackState(chiyo.id, attackId).ready; step += 1) {
+      keepPartyAway();
+      advanceActionCampaignBattle(session, 20);
+    }
+    assert.equal(session.kernel.requestAttack(chiyo.id, attackId).ok, true, attackId);
+    for (let step = 0; step < 120 && session.kernel.getActor(chiyo.id).activeAttack; step += 1) {
+      advanceActionCampaignBattle(session, 20);
+    }
+  };
+  assert.equal(hooks.canBeginAttack({ actor: chiyo, attackId: ring }), false, 'the first activation is not a count');
+  complete(other);
+  assert.equal(hooks.canBeginAttack({ actor: chiyo, attackId: ring }), true);
+  complete(ring);
+  assert.equal(hooks.canBeginAttack({ actor: chiyo, attackId: ring }), false, 'counts never ring back to back');
+});
