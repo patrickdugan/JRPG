@@ -131,6 +131,8 @@ Enemy package = field silhouette where needed, combat idle, move, attack/telegra
 | BTL-001-010 | player command targeting overlays | 10 | P0 | movement route, melee, line, cross, cone, radius, ally target, swap edge, invalid cell, focus. |
 | BTL-011-018 | enemy intent overlays | 8 | P0/P1 | intended line/area/facing, guard, charge, recover, buff, summon, hazard trigger. |
 
+**Receipt (2026-10-12):** `assets/art/action-objective-suite-v1/` is a pixel-authored deterministic production suite (code-native Pillow primitives, not hand-pixeled). It holds 28 side-view objective kinds in 79 state frames: exits, boat, shelters, culvert, canal lock, chain posts, cell gates, relays, net posts, seal daises, fog bell, slip box, trough, release mark, orders lectern, epilogue records, crates, courier, print blocks, archive core, bell nodes, and three civilian token variants. `game/action-objective-atlas.mjs` resolves them, and the action battle page draws them in place of the objective rectangles, with an exact rectangle fallback and collision-free canvas name labels; `--check` rebuilds byte-identically.
+
 ## 8. VFX, icons, UI, and typography
 
 | ID range | Asset family | Qty | Priority | Minimum package |
