@@ -1333,8 +1333,11 @@ class PlayerDriver:
                 if subweapon.get("ready") == "true"
                 and self.action_number(subweapon, "stock") > 0
             ]
+            # Targets a jump can reach are struck mid-air; higher ones need a climb.
+            elevated_attack = target["semantics"] == "attack" and 70 < vertical_distance <= 120
             if (
                 target["semantics"] == "attack"
+                and target["kind"] == "enemy"
                 and not ready_attacks
                 and not ready_subweapons
             ):
@@ -1352,18 +1355,31 @@ class PlayerDriver:
                 default=92,
             )
             # Objective overlap tests the fighter's centre against a 56 px anchor.
-            close_distance = 18 if objective_semantics else max(72, attack_reach - 24)
+            # Raised attack targets are reached by rising from directly beneath.
+            close_distance = 18 if objective_semantics or elevated_attack else max(72, attack_reach - 24)
             close_x = abs(distance) <= close_distance and vertical_ready
             if (
                 vertical_distance > 70
-                and abs(distance) < 170
+                and abs(distance) < (40 if elevated_attack else 170)
                 and canvas.get("movementState") == "grounded"
             ):
-                # Rising maneuvers launch only from the ground; a plain jump
-                # cannot reach raised objective platforms on its own.
-                self.action_press("u")
-                self.page.wait_for_timeout(200)
-                self.action_hold("w", 150)
+                if elevated_attack:
+                    # Maneuver hitboxes do not strike objects and ground
+                    # subweapons fail in the air: jump, then use a ready weapon
+                    # or art near the apex.
+                    if ready_attacks:
+                        self.action_hold("w", 150)
+                        self.action_hold("d" if distance > 0 else "a", 20)
+                        chosen = max(ready_attacks, key=lambda attack: int(self.action_number(attack, "attackIndex")))
+                        self.action_press("k" if chosen.get("attackIndex") == "1" else "j")
+                    self.page.wait_for_timeout(35)
+                    continue
+                else:
+                    # Rising maneuvers launch only from the ground; a plain jump
+                    # cannot reach raised objective platforms on its own.
+                    self.action_press("u")
+                    self.page.wait_for_timeout(200)
+                    self.action_hold("w", 150)
             if not close_x:
                 if objective_semantics and controlled_y < target["y"] - 82:
                     stage_midpoint = (
