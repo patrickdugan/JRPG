@@ -1,0 +1,304 @@
+{
+  "id": "voice-prototype-v1:last-command",
+  "title": "Dawn at the Observatory — The Last Command",
+  "sources": [
+    "game/content/dialogue/script-chapter7-epilogue.mjs (c9-05-dawn-at-observatory)",
+    "docs/36-act-v-the-last-command.md (confession reversal)"
+  ],
+  "translationStatus": "Confession-reversal Japanese is authored in docs/36. Every other Japanese line is a draft machine-assisted translation awaiting native review.",
+  "lines": [
+    {
+      "id": "01",
+      "speaker": "kurozane",
+      "section": "Duel one: the immortal sovereign",
+      "fx": "oni",
+      "direction": "Regal contempt from above; unhurried, enjoying the echo.",
+      "en": "You have cracked my Bell and mistaken damage for mortality. Dawn is an old clerk; it has declared me dead before.",
+      "ja": "我が鐘を砕き、傷を死と取り違えたか。夜明けなど老いた書記にすぎぬ。余の死を告げたのは、これが初めてではない。",
+      "exaggeration": 0.65,
+      "cfg": 0.35
+    },
+    {
+      "id": "02",
+      "speaker": "kurozane",
+      "section": "Duel one: the immortal sovereign",
+      "fx": "oni",
+      "direction": "Persuasive, almost kind; each clause a ledger entry. Twist the knife on 'You counted them for me.'",
+      "en": "I made appetite predictable. A tax instead of a raid. A registry instead of a pogrom. Fewer graves, Father. You counted them for me.",
+      "ja": "余は飢えを読めるものにした。略奪ではなく年貢を。虐殺ではなく戸籍を。墓は減ったのだ、神父。数えたのは、お前だろう。",
+      "exaggeration": 0.6,
+      "cfg": 0.35
+    },
+    {
+      "id": "03",
+      "speaker": "mateus",
+      "section": "Duel one: the immortal sovereign",
+      "direction": "Low, exhausted, precise. Guilt held under the voice, not performed.",
+      "en": "I counted fewer graves because you taught me not to count the people still breathing inside them.",
+      "ja": "墓が減ったのは、その中でまだ息をしている者を数えるなと、お前に教えられたからだ。",
+      "exaggeration": 0.55,
+      "cfg": 0.4
+    },
+    {
+      "id": "04",
+      "speaker": "nikola",
+      "section": "Duel three: the relic",
+      "direction": "Magnificent, overconfident proclamation; he is enjoying himself far too much.",
+      "en": "This iron opened the side of Christ. I shall now prove Christianity superior by using the same spear to kill you.",
+      "ja": "この鉄は、キリストの脇腹を開いたものだ。同じ槍で貴様を討ち、我が信仰の優越を証明してみせよう。",
+      "exaggeration": 0.8,
+      "cfg": 0.4
+    },
+    {
+      "id": "05",
+      "speaker": "mateus",
+      "section": "Duel three: the relic",
+      "direction": "Bone-dry correction; a tired scholar who cannot let an error stand even now.",
+      "en": "It did not kill Christ. He was already dead. Your threat is theologically and anatomically inaccurate.",
+      "ja": "それでキリストが死んだのではない。すでに息絶えておられた。お前の脅しは、神学的にも解剖学的にも不正確だ。",
+      "exaggeration": 0.35,
+      "cfg": 0.5
+    },
+    {
+      "id": "06",
+      "speaker": "nikola",
+      "section": "Duel three: the relic",
+      "direction": "Undaunted, breezy.",
+      "en": "You may correct the inscription after I use it.",
+      "ja": "碑文の訂正は、使い終えてから頼む。",
+      "exaggeration": 0.6,
+      "cfg": 0.45
+    },
+    {
+      "id": "07",
+      "speaker": "kurozane",
+      "section": "Duel one: the immortal sovereign",
+      "fx": "oni",
+      "direction": "Rising scorn; a prosecutor turning the court against the accusers.",
+      "en": "Listen to yourselves. One foreign faith names its violence love. One frontier covenant names its fear duty. You crossed the world to condemn my peace.",
+      "ja": "己の言葉を聞くがいい。異国の信仰は己の暴力を愛と呼び、辺境の盟約は己の恐怖を義務と呼ぶ。そうして海を越え、余の泰平を裁きに来たか。",
+      "exaggeration": 0.75,
+      "cfg": 0.35
+    },
+    {
+      "id": "08",
+      "speaker": "mateus",
+      "section": "Duel two: the living family",
+      "direction": "The thesis of the game. Quiet, absolute, every word placed like a stone.",
+      "en": "We called our violence love. You called yours peace. The dead were not confused by either word.",
+      "ja": "我々は己の暴力を愛と呼んだ。お前は己のそれを泰平と呼んだ。死者は、どちらの言葉にも惑わされなかった。",
+      "exaggeration": 0.5,
+      "cfg": 0.3
+    },
+    {
+      "id": "09",
+      "speaker": "miyo",
+      "section": "Duel two: the living family",
+      "direction": "Steady anger from someone used as an argument; she refuses both men.",
+      "en": "My mother kept me alive. The Senda house kept me alive. You do not get to use my pulse as a receipt for either of you.",
+      "ja": "私を生かしたのは母です。センダの家です。私の脈を、あなたたちどちらの領収書にもさせません。",
+      "exaggeration": 0.7,
+      "cfg": 0.4
+    },
+    {
+      "id": "10",
+      "speaker": "kurozane",
+      "section": "Duel four: Black Sun Concord",
+      "fx": "oni",
+      "direction": "Intimate, seductive, almost fatherly; a voice offering a warm room.",
+      "en": "Avelar, come home. I never asked you to become good, only useful.",
+      "ja": "アヴェラール、帰ってこい。善くなれと言ったことはない。役に立てと言っただけだ。",
+      "exaggeration": 0.45,
+      "cfg": 0.3
+    },
+    {
+      "id": "11",
+      "speaker": "mateus",
+      "section": "Duel four: Black Sun Concord",
+      "direction": "Refusal without heat; the pain of seeing the trap clearly at last.",
+      "en": "You asked me to become empty enough that usefulness felt like shelter.",
+      "ja": "お前が求めたのは、役に立つことが隠れ家に思えるほど、私が空っぽになることだった。",
+      "exaggeration": 0.5,
+      "cfg": 0.35
+    },
+    {
+      "id": "12",
+      "speaker": "mateus",
+      "section": "Duel four: Black Sun Concord",
+      "direction": "Invocation; full voice, the rite opening outward.",
+      "en": "Black Sun Concord!",
+      "ja": "黒陽の盟約！",
+      "exaggeration": 0.9,
+      "cfg": 0.5
+    },
+    {
+      "id": "13",
+      "speaker": "nikola",
+      "section": "Duel four: Black Sun Concord",
+      "direction": "Mid-lunge quip.",
+      "en": "Try not to make it sound like a committee.",
+      "ja": "委員会のように言うな。",
+      "exaggeration": 0.6,
+      "cfg": 0.5
+    },
+    {
+      "id": "14",
+      "speaker": "mateus",
+      "section": "Duel four: Black Sun Concord",
+      "direction": "Clipped, under exertion.",
+      "en": "Try not to miss.",
+      "ja": "外すなよ。",
+      "exaggeration": 0.65,
+      "cfg": 0.5
+    },
+    {
+      "id": "15",
+      "speaker": "kurozane",
+      "section": "Duel five: the pinned ruler",
+      "fx": "fallen",
+      "direction": "Pinned under the spear, breathing hard, still bargaining from the floor. The trap, stated plainly.",
+      "en": "Kill me and every ambitious governor inherits an emergency. Keep me and you inherit my necessity.",
+      "ja": "余を殺せば、野心ある代官どもが非常の世を受け継ぐ。生かせば、余という必要を受け継ぐのだ。",
+      "exaggeration": 0.6,
+      "cfg": 0.35
+    },
+    {
+      "id": "16",
+      "speaker": "mateus",
+      "section": "Duel five: the pinned ruler",
+      "direction": "Measured verdict; the smallest humiliation delivered with great care.",
+      "en": "You wanted history to need you forever. Dawn offers the smaller humiliation: history continuing while you watch.",
+      "ja": "お前は、歴史に永遠に必要とされたかった。夜明けが与えるのは、もっと小さな屈辱だ。お前の目の前で、歴史が続いていくという屈辱だ。",
+      "exaggeration": 0.5,
+      "cfg": 0.35
+    },
+    {
+      "id": "17",
+      "speaker": "ren",
+      "section": "Duel five: the pinned ruler",
+      "direction": "Young, firm, no grandstanding. The last word before the choice.",
+      "en": "No. The weapon defeated you. Conversation decides whether defeat becomes anything except another grave.",
+      "ja": "違う。お前を倒したのは武器だ。その敗北が、ただの墓で終わるかどうか。それを決めるのは、言葉だ。",
+      "exaggeration": 0.55,
+      "cfg": 0.4
+    },
+    {
+      "id": "18",
+      "speaker": "mateus",
+      "section": "The Last Command: confession reversal",
+      "direction": "Two centuries of restraint break at once. Raw, shouted, voice cracking.",
+      "en": "You killed my son!",
+      "ja": "お前は私の息子を殺した！",
+      "exaggeration": 1.0,
+      "cfg": 0.3,
+      "authored": true
+    },
+    {
+      "id": "19",
+      "speaker": "kurozane",
+      "section": "The Last Command: confession reversal",
+      "fx": "fallen",
+      "direction": "Shouting back, defensive, the sovereign mask slipping.",
+      "en": "There was no other way, Mateus! He was a rebel!",
+      "ja": "ほかに道はなかった、マテウス！　あれは謀反人だった！",
+      "exaggeration": 0.95,
+      "cfg": 0.3,
+      "authored": true
+    },
+    {
+      "id": "20",
+      "speaker": "mateus",
+      "section": "The Last Command: confession reversal",
+      "direction": "Sudden quiet after the shout; almost a whisper, unbearable.",
+      "en": "You made me watch his execution.",
+      "ja": "お前は私に、あの子の処刑を見届けさせた。",
+      "exaggeration": 0.7,
+      "cfg": 0.25,
+      "authored": true
+    },
+    {
+      "id": "21",
+      "speaker": "kurozane",
+      "section": "The Last Command: confession reversal",
+      "fx": "fallen",
+      "direction": "Lashing out; cruelty as self-defense.",
+      "en": "You demanded the right!",
+      "ja": "見届ける権利を求めたのは、お前だ！",
+      "exaggeration": 0.9,
+      "cfg": 0.3,
+      "authored": true
+    },
+    {
+      "id": "22",
+      "speaker": "mateus",
+      "section": "The Last Command: confession reversal",
+      "direction": "Thunderous accusation; the heart of the game.",
+      "en": "Do not speak to me of burden. You made me betray my God!",
+      "ja": "“重荷”を語るな。お前は私に、神を裏切らせた！",
+      "exaggeration": 1.0,
+      "cfg": 0.3,
+      "authored": true
+    },
+    {
+      "id": "23",
+      "speaker": "nikola",
+      "section": "The Last Command: confession reversal",
+      "direction": "Ecclesiastical Latin (Italianate vowels), low and grave; for once no performance at all.",
+      "en": "Credis in Deum, Shogun?",
+      "ja": "Credis in Deum, Shogun?",
+      "language": {
+        "en": "it",
+        "ja": "it"
+      },
+      "exaggeration": 0.4,
+      "cfg": 0.4,
+      "authored": true
+    },
+    {
+      "id": "24",
+      "speaker": "mateus",
+      "section": "The Last Command: confession reversal",
+      "direction": "Translating, steady, giving the question its full weight.",
+      "en": "Shogun. He asks whether you believe in God.",
+      "ja": "将軍。神を信じるか、と聞いている。",
+      "exaggeration": 0.45,
+      "cfg": 0.35,
+      "authored": true
+    },
+    {
+      "id": "25",
+      "speaker": "kurozane",
+      "section": "The Last Command: confession reversal",
+      "fx": "mortal",
+      "direction": "Mandatory plain answer. A frightened ordinary man, no sovereign voice, barely audible.",
+      "en": "...Yes.",
+      "ja": "……はい。",
+      "exaggeration": 0.25,
+      "cfg": 0.3,
+      "authored": true
+    },
+    {
+      "id": "26",
+      "speaker": "mateus",
+      "section": "The Last Command: confession reversal",
+      "direction": "Firm, almost gentle; the sentence of a confessor, not a victor.",
+      "en": "Then do not call it a price. Call it sin.",
+      "ja": "ならば、“代価”と言うな。“罪”と言え。",
+      "exaggeration": 0.55,
+      "cfg": 0.3,
+      "authored": true
+    },
+    {
+      "id": "27",
+      "speaker": "kurozane",
+      "section": "The Last Command: confession reversal",
+      "fx": "mortal",
+      "direction": "Begins with the imperial 'yo', catches himself, and finishes as 'watashi': the sovereign fiction ending mid-sentence.",
+      "en": "Not by my... not by my authority. By the authority of those who live after me.",
+      "ja": "余の――……私の権威ではない。私の後を生きる者たちの権威によって。",
+      "exaggeration": 0.4,
+      "cfg": 0.3,
+      "authored": true
+    }
+  ]
+}

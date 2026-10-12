@@ -1,0 +1,79 @@
+{
+  "id": "voice-prototype-v1:cast",
+  "engines": {
+    "performance": "Chatterbox Multilingual (Resemble AI, MIT) via chatterbox-tts; zero-shot timbre from a reference clip, emotion exaggeration, CFG pacing",
+    "reference": "Kokoro-82M (hexgrad, Apache-2.0) stock synthetic voicepacks; used only to create original reference timbres"
+  },
+  "policy": "No real person's voice is cloned. Every timbre starts from a stock synthetic Kokoro voicepack, optionally pitch-shifted, then performed by Chatterbox.",
+  "characters": {
+    "kurozane": {
+      "name": "Shogun Kurozane",
+      "brief": "Centuries-old vampire sovereign. Deep, slow, courtly, enjoys his own cadence. Loses the sovereign resonance as he becomes mortal.",
+      "reference": {
+        "en": { "voice": "am_onyx", "lang": "a", "pitch": -1.0 },
+        "ja": { "voice": "jm_kumo", "lang": "j", "pitch": -3.0 }
+      },
+      "referenceText": {
+        "en": "I found this country exhausted by lords who burned a village to save it from the next lord. I made one hunger answerable to one hand, and the provinces learned to sleep.",
+        "ja": "余が見たこの国は、次の領主から村を守るために村を焼く領主たちに疲れ果てていた。余は一つの飢えを、一つの手に従わせた。"
+      },
+      "fx": {
+        "oni": { "pitch": -2.0, "sub": 0.28, "reverb": 0.42, "drive": 0.15 },
+        "fallen": { "pitch": -1.0, "sub": 0.1, "reverb": 0.22, "drive": 0.05 },
+        "mortal": { "pitch": 0.0, "sub": 0.0, "reverb": 0.1, "drive": 0.0 }
+      }
+    },
+    "mateus": {
+      "name": "Father Mateus Avelar",
+      "brief": "Portuguese-born former Jesuit and court translator turned vampire priest. Weary baritone, scholarly precision; restraint until the confession breaks him.",
+      "reference": {
+        "en": { "voice": "bm_george", "lang": "b", "pitch": 0.0 },
+        "ja": { "voice": "bm_george", "lang": "b", "pitch": 0.0 }
+      },
+      "referenceText": {
+        "en": "I translated fear into scripture for him. I do not escape that sentence by helping to write its last line. Hold the light steady, and let me read the cipher.",
+        "ja": "I translated fear into scripture for him. I do not escape that sentence by helping to write its last line. Hold the light steady, and let me read the cipher."
+      },
+      "fx": { "default": { "reverb": 0.14 } }
+    },
+    "nikola": {
+      "name": "Nikola Dražanić",
+      "brief": "Croatian-born vampire hunter of a self-mythologizing house. Confident, theatrical, one degree too pleased with himself; gravity appears without warning.",
+      "reference": {
+        "en": { "voice": "bm_fable", "lang": "b", "pitch": -0.5 },
+        "ja": { "voice": "bm_fable", "lang": "b", "pitch": -0.5 }
+      },
+      "referenceText": {
+        "en": "The Covenant severs an immortal from office. It does not ask his nation, his blood, or his creed. Kindly step three paces to the left and admire the superior method.",
+        "ja": "The Covenant severs an immortal from office. It does not ask his nation, his blood, or his creed. Kindly step three paces to the left and admire the superior method."
+      },
+      "fx": { "default": { "reverb": 0.14 } }
+    },
+    "ren": {
+      "name": "Ren Ishikawa",
+      "brief": "Young courier turned resistance lead. Plain, quick, unpretentious; quiet authority rather than speeches.",
+      "reference": {
+        "en": { "voice": "am_liam", "lang": "a", "pitch": 0.0 },
+        "ja": { "voice": "jm_kumo", "lang": "j", "pitch": 1.0 }
+      },
+      "referenceText": {
+        "en": "Those are the choices your regime manufactured. They are not the only terms available now. Keep the names between us and the stairs.",
+        "ja": "それはお前の体制が作った選択肢だ。今あるのは、それだけじゃない。名簿は俺たちと階段のあいだに置いておけ。"
+      },
+      "fx": { "default": { "reverb": 0.12 } }
+    },
+    "miyo": {
+      "name": "Miyo Senda",
+      "brief": "Weather scholar and Mateus's granddaughter. Clear, controlled, exact; anger arrives as precision.",
+      "reference": {
+        "en": { "voice": "af_nicole", "lang": "a", "pitch": 0.0 },
+        "ja": { "voice": "jf_alpha", "lang": "j", "pitch": 0.0 }
+      },
+      "referenceText": {
+        "en": "Cloud edge clears in four counts. Direct light lasts three before the bell shadow folds over it. I will call each interval aloud.",
+        "ja": "雲の縁は四つ数えるうちに晴れます。直射の光は三つ。そのあと鐘の影が覆います。間隔は声に出して数えます。"
+      },
+      "fx": { "default": { "reverb": 0.12 } }
+    }
+  }
+}

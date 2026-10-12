@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121118">
+  <title>Voice Lab</title>
+  <link rel="stylesheet" href="./voice-lab.css">
+</head>
+<body>
+  <main class="lab-shell">
+    <header>
+      <p class="eyebrow">Voice prototype v1 · developer review</p>
+      <h1>Dawn at the Observatory</h1>
+      <p class="lede">The final confrontation and the rare confession reversal, performed in English and Japanese by synthetic voices. Not final casting.</p>
+      <div class="controls" role="group" aria-label="Playback">
+        <div class="segmented" role="radiogroup" aria-label="Language">
+          <label><input type="radio" name="lang" value="en" checked> English</label>
+          <label><input type="radio" name="lang" value="ja"> 日本語</label>
+        </div>
+        <button type="button" id="playScene">Play scene</button>
+        <button type="button" id="stopScene" disabled>Stop</button>
+      </div>
+      <output id="status" aria-live="polite">Loading manifest…</output>
+    </header>
+    <section id="scene" aria-label="Scene lines"></section>
+    <footer>
+      <p id="provenance"></p>
+    </footer>
+  </main>
+  <script type="module" src="./voice-lab.js"></script>
+</body>
+</html>

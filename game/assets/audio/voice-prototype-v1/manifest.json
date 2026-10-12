@@ -1,0 +1,566 @@
+{
+  "lines": {
+    "25": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/25-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Mandatory plain answer. A frightened ordinary man, no sovereign voice, barely audible.",
+        "text": "...Yes.",
+        "languageId": "en",
+        "exaggeration": 0.25,
+        "cfgWeight": 0.3,
+        "fx": "mortal",
+        "chosenTake": 0,
+        "seed": 2500,
+        "cer": 0.0,
+        "heard": "Yes.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2500,
+            "cer": 0.0,
+            "heard": "Yes.",
+            "seconds": 148.6
+          }
+        ],
+        "durationSeconds": 0.76,
+        "pitchMedianHz": 481.4,
+        "pitchRangeSemitones": 2.6,
+        "loudnessRangeDb": 31.9
+      }
+    },
+    "18": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/18-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Two centuries of restraint break at once. Raw, shouted, voice cracking.",
+        "text": "You killed my son!",
+        "languageId": "en",
+        "exaggeration": 1.0,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1800,
+        "cer": 0.0,
+        "heard": "You killed my son.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1800,
+            "cer": 0.0,
+            "heard": "You killed my son.",
+            "trimmed": true,
+            "tokenBudget": 94,
+            "seconds": 145.5
+          },
+          {
+            "take": 1,
+            "seed": 1801,
+            "cer": 0.0,
+            "heard": "You killed my son.",
+            "trimmed": true,
+            "tokenBudget": 94,
+            "seconds": 94.5
+          }
+        ],
+        "durationSeconds": 1.55,
+        "pitchMedianHz": 124.2,
+        "pitchRangeSemitones": 13.1,
+        "loudnessRangeDb": 18.0
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/18-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Two centuries of restraint break at once. Raw, shouted, voice cracking.",
+        "text": "お前は私の息子を殺した！",
+        "languageId": "ja",
+        "exaggeration": 1.0,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1800,
+        "cer": 0.0,
+        "heard": "お前は私の息子を殺した",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1800,
+            "cer": 0.0,
+            "heard": "お前は私の息子を殺した",
+            "trimmed": true,
+            "tokenBudget": 123,
+            "seconds": 88.9
+          },
+          {
+            "take": 1,
+            "seed": 1801,
+            "cer": 0.0,
+            "heard": "お前は私の息子を殺した。",
+            "trimmed": true,
+            "tokenBudget": 123,
+            "seconds": 103.0
+          }
+        ],
+        "durationSeconds": 2.07,
+        "pitchMedianHz": 137.8,
+        "pitchRangeSemitones": 5.7,
+        "loudnessRangeDb": 21.7
+      }
+    },
+    "01": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/01-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Regal contempt from above; unhurried, enjoying the echo.",
+        "text": "You have cracked my Bell and mistaken damage for mortality. Dawn is an old clerk; it has declared me dead before.",
+        "languageId": "en",
+        "exaggeration": 0.65,
+        "cfgWeight": 0.35,
+        "fx": "oni",
+        "chosenTake": 0,
+        "seed": 100,
+        "cer": 0.022,
+        "heard": "You have cracked my bell and mistaken damage for mortality. Don is an old clerk. It has declared me dead before.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 100,
+            "cer": 0.022,
+            "heard": "You have cracked my bell and mistaken damage for mortality. Don is an old clerk. It has declared me dead before.",
+            "trimmed": false,
+            "tokenBudget": 355,
+            "seconds": 184.9
+          }
+        ],
+        "durationSeconds": 6.08,
+        "pitchMedianHz": 87.3,
+        "pitchRangeSemitones": 9.3,
+        "loudnessRangeDb": 28.4
+      }
+    },
+    "02": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/02-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Persuasive, almost kind; each clause a ledger entry. Twist the knife on 'You counted them for me.'",
+        "text": "I made appetite predictable. A tax instead of a raid. A registry instead of a pogrom. Fewer graves, Father. You counted them for me.",
+        "languageId": "en",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.35,
+        "fx": "oni",
+        "chosenTake": 0,
+        "seed": 200,
+        "cer": 0.0,
+        "heard": "I made appetite predictable. A tax instead of a raid. A registry instead of a pogrom. Fewer graves, father. You counted them for me.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 200,
+            "cer": 0.0,
+            "heard": "I made appetite predictable. A tax instead of a raid. A registry instead of a pogrom. Fewer graves, father. You counted them for me.",
+            "trimmed": false,
+            "tokenBudget": 408,
+            "seconds": 152.1
+          }
+        ],
+        "durationSeconds": 10.0,
+        "pitchMedianHz": 84.9,
+        "pitchRangeSemitones": 11.6,
+        "loudnessRangeDb": 28.5
+      }
+    },
+    "03": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/03-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Low, exhausted, precise. Guilt held under the voice, not performed.",
+        "text": "I counted fewer graves because you taught me not to count the people still breathing inside them.",
+        "languageId": "en",
+        "exaggeration": 0.55,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 300,
+        "cer": 0.0,
+        "heard": "I counted fewer graves, because you taught me not to count the people still breathing inside them,",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 300,
+            "cer": 0.0,
+            "heard": "I counted fewer graves, because you taught me not to count the people still breathing inside them,",
+            "trimmed": false,
+            "tokenBudget": 311,
+            "seconds": 163.4
+          }
+        ],
+        "durationSeconds": 5.76,
+        "pitchMedianHz": 134.3,
+        "pitchRangeSemitones": 12.9,
+        "loudnessRangeDb": 21.3
+      }
+    },
+    "04": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/04-nikola.ogg",
+        "speaker": "nikola",
+        "section": "Duel three: the relic",
+        "direction": "Magnificent, overconfident proclamation; he is enjoying himself far too much.",
+        "text": "This iron opened the side of Christ. I shall now prove Christianity superior by using the same spear to kill you.",
+        "languageId": "en",
+        "exaggeration": 0.8,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 400,
+        "cer": 0.0,
+        "heard": "This iron opened the side of Christ. I shall now prove Christianity superior by using the same spear to kill you.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 400,
+            "cer": 0.0,
+            "heard": "This iron opened the side of Christ. I shall now prove Christianity superior by using the same spear to kill you.",
+            "trimmed": false,
+            "tokenBudget": 355,
+            "seconds": 220.4
+          }
+        ],
+        "durationSeconds": 7.68,
+        "pitchMedianHz": 126.0,
+        "pitchRangeSemitones": 21.4,
+        "loudnessRangeDb": 28.1
+      }
+    },
+    "05": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/05-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel three: the relic",
+        "direction": "Bone-dry correction; a tired scholar who cannot let an error stand even now.",
+        "text": "It did not kill Christ. He was already dead. Your threat is theologically and anatomically inaccurate.",
+        "languageId": "en",
+        "exaggeration": 0.35,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 500,
+        "cer": 0.0,
+        "heard": "It did not kill Christ. He was already dead. Your threat is theologically and anatomically inaccurate.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 500,
+            "cer": 0.0,
+            "heard": "It did not kill Christ. He was already dead. Your threat is theologically and anatomically inaccurate.",
+            "trimmed": false,
+            "tokenBudget": 325,
+            "seconds": 810.5
+          }
+        ],
+        "durationSeconds": 6.48,
+        "pitchMedianHz": 127.5,
+        "pitchRangeSemitones": 9.6,
+        "loudnessRangeDb": 26.7
+      }
+    },
+    "06": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/06-nikola.ogg",
+        "speaker": "nikola",
+        "section": "Duel three: the relic",
+        "direction": "Undaunted, breezy.",
+        "text": "You may correct the inscription after I use it.",
+        "languageId": "en",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.45,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 600,
+        "cer": 0.0,
+        "heard": "You may correct the inscription after I use it.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 600,
+            "cer": 0.0,
+            "heard": "You may correct the inscription after I use it.",
+            "trimmed": false,
+            "tokenBudget": 174,
+            "seconds": 114.8
+          }
+        ],
+        "durationSeconds": 3.28,
+        "pitchMedianHz": 100.9,
+        "pitchRangeSemitones": 17.1,
+        "loudnessRangeDb": 31.7
+      }
+    },
+    "07": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/07-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Rising scorn; a prosecutor turning the court against the accusers.",
+        "text": "Listen to yourselves. One foreign faith names its violence love. One frontier covenant names its fear duty. You crossed the world to condemn my peace.",
+        "languageId": "en",
+        "exaggeration": 0.75,
+        "cfgWeight": 0.35,
+        "fx": "oni",
+        "chosenTake": 0,
+        "seed": 700,
+        "cer": 0.033,
+        "heard": "Listen to yourselves. One foreign faith names his violence love. One frontier covenant names his fear duty. You crossed the world to condemn my peace.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 700,
+            "cer": 0.033,
+            "heard": "Listen to yourselves. One foreign faith names his violence love. One frontier covenant names his fear duty. You crossed the world to condemn my peace.",
+            "trimmed": false,
+            "tokenBudget": 457,
+            "seconds": 147.0
+          }
+        ],
+        "durationSeconds": 8.4,
+        "pitchMedianHz": 82.4,
+        "pitchRangeSemitones": 8.6,
+        "loudnessRangeDb": 27.4
+      }
+    },
+    "08": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/08-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel two: the living family",
+        "direction": "The thesis of the game. Quiet, absolute, every word placed like a stone.",
+        "text": "We called our violence love. You called yours peace. The dead were not confused by either word.",
+        "languageId": "en",
+        "exaggeration": 0.5,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 800,
+        "cer": 0.0,
+        "heard": "We called our violence love, you called yours peace, the dead were not confused by either word,",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 800,
+            "cer": 0.0,
+            "heard": "We called our violence love, you called yours peace, the dead were not confused by either word,",
+            "trimmed": false,
+            "tokenBudget": 306,
+            "seconds": 103.4
+          }
+        ],
+        "durationSeconds": 5.92,
+        "pitchMedianHz": 129.4,
+        "pitchRangeSemitones": 13.1,
+        "loudnessRangeDb": 21.9
+      }
+    },
+    "09": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/09-miyo.ogg",
+        "speaker": "miyo",
+        "section": "Duel two: the living family",
+        "direction": "Steady anger from someone used as an argument; she refuses both men.",
+        "text": "My mother kept me alive. The Senda house kept me alive. You do not get to use my pulse as a receipt for either of you.",
+        "languageId": "en",
+        "exaggeration": 0.7,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 900,
+        "cer": 0.0,
+        "heard": "My mother kept me alive. The Senda house kept me alive. You do not get to use my pulse as a receipt for either of you.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 900,
+            "cer": 0.0,
+            "heard": "My mother kept me alive. The Senda house kept me alive. You do not get to use my pulse as a receipt for either of you.",
+            "trimmed": false,
+            "tokenBudget": 369,
+            "seconds": 100.1
+          }
+        ],
+        "durationSeconds": 8.04,
+        "pitchMedianHz": 162.0,
+        "pitchRangeSemitones": 18.9,
+        "loudnessRangeDb": 28.9
+      }
+    },
+    "10": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/10-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Intimate, seductive, almost fatherly; a voice offering a warm room.",
+        "text": "Avelar, come home. I never asked you to become good, only useful.",
+        "languageId": "en",
+        "exaggeration": 0.45,
+        "cfgWeight": 0.3,
+        "fx": "oni",
+        "chosenTake": 0,
+        "seed": 1000,
+        "cer": 0.02,
+        "heard": "Avalar, come home. I never asked you to become good, only useful.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1000,
+            "cer": 0.02,
+            "heard": "Avalar, come home. I never asked you to become good, only useful.",
+            "trimmed": false,
+            "tokenBudget": 223,
+            "seconds": 75.4
+          }
+        ],
+        "durationSeconds": 4.4,
+        "pitchMedianHz": 83.9,
+        "pitchRangeSemitones": 8.9,
+        "loudnessRangeDb": 26.0
+      }
+    },
+    "11": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/11-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Refusal without heat; the pain of seeing the trap clearly at last.",
+        "text": "You asked me to become empty enough that usefulness felt like shelter.",
+        "languageId": "en",
+        "exaggeration": 0.5,
+        "cfgWeight": 0.35,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1100,
+        "cer": 0.0,
+        "heard": "You asked me to become empty enough that usefulness felt like shelter.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1100,
+            "cer": 0.0,
+            "heard": "You asked me to become empty enough that usefulness felt like shelter.",
+            "trimmed": false,
+            "tokenBudget": 237,
+            "seconds": 102.7
+          }
+        ],
+        "durationSeconds": 4.48,
+        "pitchMedianHz": 133.9,
+        "pitchRangeSemitones": 30.4,
+        "loudnessRangeDb": 25.2
+      }
+    },
+    "12": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/12-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Invocation; full voice, the rite opening outward.",
+        "text": "Black Sun Concord!",
+        "languageId": "en",
+        "exaggeration": 0.9,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1200,
+        "cer": 0.0,
+        "heard": "Black Sun Concord",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1200,
+            "cer": 0.0,
+            "heard": "Black Sun Concord",
+            "trimmed": false,
+            "tokenBudget": 94,
+            "seconds": 79.2
+          }
+        ],
+        "durationSeconds": 1.84,
+        "pitchMedianHz": 120.0,
+        "pitchRangeSemitones": 9.0,
+        "loudnessRangeDb": 21.9
+      }
+    },
+    "13": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/13-nikola.ogg",
+        "speaker": "nikola",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Mid-lunge quip.",
+        "text": "Try not to make it sound like a committee.",
+        "languageId": "en",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1300,
+        "cer": 0.0,
+        "heard": "Try not to make it sound like a committee.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1300,
+            "cer": 0.0,
+            "heard": "Try not to make it sound like a committee.",
+            "trimmed": false,
+            "tokenBudget": 160,
+            "seconds": 83.4
+          }
+        ],
+        "durationSeconds": 3.28,
+        "pitchMedianHz": 108.2,
+        "pitchRangeSemitones": 17.3,
+        "loudnessRangeDb": 30.4
+      }
+    },
+    "14": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/14-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Clipped, under exertion.",
+        "text": "Try not to miss.",
+        "languageId": "en",
+        "exaggeration": 0.65,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1400,
+        "cer": 0.0,
+        "heard": "Try not to miss.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1400,
+            "cer": 0.0,
+            "heard": "Try not to miss.",
+            "trimmed": true,
+            "tokenBudget": 89,
+            "seconds": 63.8
+          }
+        ],
+        "durationSeconds": 1.17,
+        "pitchMedianHz": 137.4,
+        "pitchRangeSemitones": 10.4,
+        "loudnessRangeDb": 22.1
+      }
+    }
+  },
+  "id": "voice-prototype-v1:last-command",
+  "provenance": "AI-generated synthetic voices: Kokoro-82M reference timbres performed by Chatterbox Multilingual; every file carries the Perth watermark. No real person's voice is cloned.",
+  "sampleRate": 24000,
+  "targetLufs": -18.0
+}
