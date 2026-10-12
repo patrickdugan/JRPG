@@ -1262,6 +1262,14 @@ class PlayerDriver:
             controlled_y = self.action_number(controlled, "positionY", 440)
             target = self.action_target(state, controlled_x)
 
+            if "bound" in (controlled.get("statuses") or "").split():
+                # Action-bound statuses clear when the bound fighter completes
+                # an attack, exactly as the rendered status line instructs.
+                if any(attack.get("ready") == "true" for attack in state["attacks"]):
+                    self.action_press("j")
+                self.page.wait_for_timeout(35)
+                continue
+
             if last_x is not None and abs(controlled_x - last_x) < 2:
                 stalled_steps += 1
             else:
@@ -1341,9 +1349,16 @@ class PlayerDriver:
             )
             close_distance = 30 if objective_semantics else max(72, attack_reach - 24)
             close_x = abs(distance) <= close_distance and vertical_ready
-            if vertical_distance > 70 and abs(distance) < 170:
-                self.action_hold("w", 150)
+            if (
+                vertical_distance > 70
+                and abs(distance) < 170
+                and canvas.get("movementState") == "grounded"
+            ):
+                # Rising maneuvers launch only from the ground; a plain jump
+                # cannot reach raised objective platforms on its own.
                 self.action_press("u")
+                self.page.wait_for_timeout(200)
+                self.action_hold("w", 150)
             if not close_x:
                 if objective_semantics and controlled_y < target["y"] - 82:
                     stage_midpoint = (
@@ -1367,7 +1382,9 @@ class PlayerDriver:
                     self.action_press("w")
                     stalled_steps = 0
             elif target["semantics"] == "cast-count":
-                self.action_hold("e", 240)
+                # Cast progress resets whenever the key is released, so hold
+                # for the published cast duration plus a small frame margin.
+                self.action_hold("e", max(240, int(target.get("castDurationMs") or 0) + 160))
             elif target["semantics"] in ("interact", "overlap"):
                 self.action_press("e")
 
