@@ -87,9 +87,9 @@ import {
 import {
   ENEMY_COMBAT_ANIMATION_ATLAS,
   enemyCombatAnimationImageHasExpectedSize,
-  getEnemyCombatAnimationFrame,
   hasEnemyCombatAnimation,
   sampleEnemyCombatAnimation,
+  sampleEnemyCombatAnimationIdle,
   sampleEnemyCombatAnimationPhase,
 } from './enemy-combat-animation-atlas.mjs';
 import {
@@ -1683,7 +1683,7 @@ function sampleTacticalEnemyFrame(actor, pose, animation, animatedActor, animate
       reducedMotion.matches ? 0 : now - animation.startedAt,
     );
   }
-  return getEnemyCombatAnimationFrame(actor.templateId, 'locomotion', 5);
+  return sampleEnemyCombatAnimationIdle(actor.templateId, now, { reducedMotion: reducedMotion.matches });
 }
 
 function drawBattle(now = performance.now()) {
