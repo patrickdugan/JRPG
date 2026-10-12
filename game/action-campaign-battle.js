@@ -39,9 +39,9 @@ import { getBattleStageArt } from './battle-stage-art.mjs';
 import { BOSS_COMBAT_ATLAS, getBossCombatDrawPlacement, getBossCombatFrame, hasBossCombatTemplate } from './boss-combat-atlas.mjs';
 import {
   ENEMY_COMBAT_ANIMATION_ATLAS,
-  getEnemyCombatAnimationFrame,
   hasEnemyCombatAnimation,
   sampleEnemyCombatAnimation,
+  sampleEnemyCombatAnimationIdle,
   sampleEnemyCombatAnimationPhase,
 } from './enemy-combat-animation-atlas.mjs';
 import { ENEMY_ATLAS, getEnemyAtlasFrame } from './enemy-atlas.mjs';
@@ -923,7 +923,7 @@ function richEnemyFrame(actor, nowMs) {
   if (!actor.grounded || Math.abs(actor.movementIntent.x) > 0) {
     return sampleEnemyCombatAnimation(template, 'locomotion', reducedMotion.matches ? 0 : nowMs);
   }
-  return getEnemyCombatAnimationFrame(template, 'locomotion', 5);
+  return sampleEnemyCombatAnimationIdle(template, nowMs, { reducedMotion: reducedMotion.matches });
 }
 
 function drawEnemy(actor, nowMs) {
@@ -988,7 +988,8 @@ function drawActors(snapshot) {
     context.fill();
     const drawActorBody = () => {
       if (actor.faction === 'player') drawParty(actor, nowMs);
-      else if (actor.faction === 'enemy') drawEnemy(actor, nowMs);
+      // Neutral actors (the epilogue's Unfiled Testimony) share the enemy sprite lane.
+      else if (actor.faction === 'enemy' || actor.faction === 'neutral') drawEnemy(actor, nowMs);
     };
     drawActorBody();
     if (actor.hitFlashRemainingMs > 0) {

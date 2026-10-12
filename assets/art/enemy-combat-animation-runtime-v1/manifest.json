@@ -3,18 +3,35 @@
   "assetId": "enemy-combat-animation-runtime-v1",
   "status": "runtime-integrated-candidate",
   "provenance": {
-    "classification": "deterministically pixelified runtime repack",
-    "notPixelAuthored": true,
-    "source": "Reviewed V2/V3 deterministically pixelified enemy atlases derived from AI-generated stylized animation concepts.",
-    "operation": "Lossless integer-aligned cel repacking only; no resampling, recoloring, interpolation, or generated pixels."
+    "classification": "mixed-lane lossless runtime repack",
+    "operation": "Lossless integer-aligned cel repacking only; no resampling, recoloring, interpolation, or generated pixels.",
+    "lanes": [
+      {
+        "lane": "deterministically-pixelified",
+        "packages": [
+          "enemy-animation-suite-v2",
+          "enemy-animation-suite-v3"
+        ],
+        "notPixelAuthored": true,
+        "source": "Reviewed V2/V3 deterministically pixelified enemy atlases derived from AI-generated stylized animation concepts."
+      },
+      {
+        "lane": "pixel-authored",
+        "packages": [
+          "enemy-animation-suite-v4"
+        ],
+        "notPixelAuthored": false,
+        "source": "V4 summoned ward, seal, echo, and record families rasterized from code-native pixel primitives by build_enemy_animation_suite_v4.py."
+      }
+    ]
   },
   "geometry": {
     "frameWidth": 160,
     "frameHeight": 160,
     "columns": 24,
-    "rows": 28,
+    "rows": 33,
     "atlasWidth": 3840,
-    "atlasHeight": 4480,
+    "atlasHeight": 5280,
     "facing": "screen-left",
     "rootMotionOwnership": "runtime-simulation",
     "alphaPolicy": "binary",
@@ -22,7 +39,7 @@
       0,
       255
     ],
-    "visibleColorCountAcrossRoster": 1678
+    "visibleColorCountAcrossRoster": 1754
   },
   "clips": [
     {
@@ -141,7 +158,8 @@
       "profile": "quadruped",
       "signatureId": "cinder-overload",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 1,
@@ -150,7 +168,8 @@
       "profile": "flyer",
       "signatureId": "ash-nova",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 2,
@@ -159,7 +178,8 @@
       "profile": "flyer",
       "signatureId": "bell-resonance",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 3,
@@ -168,7 +188,8 @@
       "profile": "broad-humanoid",
       "signatureId": "tithe-seal",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 4,
@@ -177,7 +198,8 @@
       "profile": "lean-humanoid",
       "signatureId": "registry-mark",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 5,
@@ -186,7 +208,8 @@
       "profile": "lean-humanoid",
       "signatureId": "undertow-bind",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 6,
@@ -195,7 +218,8 @@
       "profile": "crawler",
       "signatureId": "lantern-drain",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 7,
@@ -204,7 +228,8 @@
       "profile": "broad-humanoid",
       "signatureId": "salt-rampart",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 8,
@@ -213,7 +238,8 @@
       "profile": "lean-humanoid",
       "signatureId": "ash-lane-charge",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 9,
@@ -222,7 +248,8 @@
       "profile": "broad-humanoid",
       "signatureId": "banner-wall",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 10,
@@ -231,7 +258,8 @@
       "profile": "broad-humanoid",
       "signatureId": "ember-vent",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 11,
@@ -240,7 +268,8 @@
       "profile": "lean-humanoid",
       "signatureId": "docket-mark",
       "sourcePackage": "enemy-animation-suite-v2",
-      "sourceVersion": "v2"
+      "sourceVersion": "v2",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 12,
@@ -249,7 +278,8 @@
       "profile": "human",
       "signatureId": "last-vow-draw",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 13,
@@ -258,7 +288,8 @@
       "profile": "armored-human",
       "signatureId": "ash-match-volley",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 14,
@@ -267,7 +298,8 @@
       "profile": "human",
       "signatureId": "smoke-relay",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 15,
@@ -276,7 +308,8 @@
       "profile": "armored-human",
       "signatureId": "banner-wall",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 16,
@@ -285,7 +318,8 @@
       "profile": "quadruped",
       "signatureId": "storm-tail",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 17,
@@ -294,7 +328,8 @@
       "profile": "broad-beast",
       "signatureId": "dream-vacuum",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 18,
@@ -303,7 +338,8 @@
       "profile": "quadruped",
       "signatureId": "twin-flame-lash",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 19,
@@ -312,7 +348,8 @@
       "profile": "arachnid",
       "signatureId": "silk-prison",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 20,
@@ -321,7 +358,8 @@
       "profile": "quadruped",
       "signatureId": "crosswind-dash",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 21,
@@ -330,7 +368,8 @@
       "profile": "broad-beast",
       "signatureId": "belly-drum-quake",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 22,
@@ -339,7 +378,8 @@
       "profile": "broad-beast",
       "signatureId": "shell-surge",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 23,
@@ -348,7 +388,8 @@
       "profile": "broad-beast",
       "signatureId": "earth-gore-charge",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 24,
@@ -357,7 +398,8 @@
       "profile": "serpent-plant",
       "signatureId": "black-bloom-devour",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 25,
@@ -366,7 +408,8 @@
       "profile": "rooted-plant",
       "signatureId": "razor-canopy",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 26,
@@ -375,7 +418,8 @@
       "profile": "rooted-plant",
       "signatureId": "crimson-pollen-ambush",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "row": 27,
@@ -384,14 +428,66 @@
       "profile": "rooted-plant",
       "signatureId": "false-lantern-lure",
       "sourcePackage": "enemy-animation-suite-v3",
-      "sourceVersion": "v3"
+      "sourceVersion": "v3",
+      "provenanceLane": "deterministically-pixelified"
+    },
+    {
+      "row": 28,
+      "id": "blood-ward-west",
+      "name": "Blood Ward Seal (West)",
+      "profile": "ward-object",
+      "signatureId": "sanguine-ward-pulse",
+      "sourcePackage": "enemy-animation-suite-v4",
+      "sourceVersion": "v4",
+      "provenanceLane": "pixel-authored"
+    },
+    {
+      "row": 29,
+      "id": "blood-ward-east",
+      "name": "Blood Ward Seal (East)",
+      "profile": "ward-object",
+      "signatureId": "sanguine-ward-pulse",
+      "sourcePackage": "enemy-animation-suite-v4",
+      "sourceVersion": "v4",
+      "provenanceLane": "pixel-authored"
+    },
+    {
+      "row": 30,
+      "id": "tithe-seal",
+      "name": "Exposed Seal",
+      "profile": "seal-object",
+      "signatureId": "ink-wax-stamp",
+      "sourcePackage": "enemy-animation-suite-v4",
+      "sourceVersion": "v4",
+      "provenanceLane": "pixel-authored"
+    },
+    {
+      "row": 31,
+      "id": "court-clone",
+      "name": "Court Clone",
+      "profile": "umbral-human",
+      "signatureId": "clone-order",
+      "sourcePackage": "enemy-animation-suite-v4",
+      "sourceVersion": "v4",
+      "provenanceLane": "pixel-authored"
+    },
+    {
+      "row": 32,
+      "id": "unfiled-testimony",
+      "name": "Unfiled Testimony",
+      "profile": "paper-spirit",
+      "signatureId": "testimony-unfold",
+      "sourcePackage": "enemy-animation-suite-v4",
+      "sourceVersion": "v4",
+      "provenanceLane": "pixel-authored"
     }
   ],
   "sources": [
     {
       "package": "enemy-animation-suite-v2",
       "contract": "../enemy-animation-suite-v2/enemy-animation-suite-v2.source.json",
-      "contractSha256": "8eb878349f8731df60681514f0c536a300001b2987d80a22c971eef9f1225613"
+      "contractSha256": "8eb878349f8731df60681514f0c536a300001b2987d80a22c971eef9f1225613",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "package": "enemy-animation-suite-v2",
@@ -468,7 +564,8 @@
     {
       "package": "enemy-animation-suite-v3",
       "contract": "../enemy-animation-suite-v3/enemy-animation-suite-v3.source.json",
-      "contractSha256": "7b46fe57562031a5e42c193259d0bae4a705d3df42e3bdef5939d99fa999d521"
+      "contractSha256": "7b46fe57562031a5e42c193259d0bae4a705d3df42e3bdef5939d99fa999d521",
+      "provenanceLane": "deterministically-pixelified"
     },
     {
       "package": "enemy-animation-suite-v3",
@@ -565,19 +662,55 @@
       "enemyId": "lantern-vine-maw",
       "path": "../enemy-animation-suite-v3/lantern-vine-maw-atlas-v3.png",
       "sha256": "5e67381d64a47a61061a01676101fe3968d14496ce83918beb46bc52823e7750"
+    },
+    {
+      "package": "enemy-animation-suite-v4",
+      "contract": "../enemy-animation-suite-v4/enemy-animation-suite-v4.source.json",
+      "contractSha256": "632666c881afc212f10ff5e1da139508d612b39d2f931cdf220c12a2f57fa212",
+      "provenanceLane": "pixel-authored"
+    },
+    {
+      "package": "enemy-animation-suite-v4",
+      "enemyId": "blood-ward-west",
+      "path": "../enemy-animation-suite-v4/blood-ward-west-atlas-v4.png",
+      "sha256": "61dde7e26a55dd15513d2d168fb71163db7923619b5e2ef0398ef5662a9fcac3"
+    },
+    {
+      "package": "enemy-animation-suite-v4",
+      "enemyId": "blood-ward-east",
+      "path": "../enemy-animation-suite-v4/blood-ward-east-atlas-v4.png",
+      "sha256": "10ce0fea683eb735446bc72816e60f29fa6762dbd283a2e108f5e941017c013a"
+    },
+    {
+      "package": "enemy-animation-suite-v4",
+      "enemyId": "tithe-seal",
+      "path": "../enemy-animation-suite-v4/tithe-seal-atlas-v4.png",
+      "sha256": "d1d76142173e6a6e800d3b619881e2f7b4443597a93fe4e8a0bfd54bae1233a9"
+    },
+    {
+      "package": "enemy-animation-suite-v4",
+      "enemyId": "court-clone",
+      "path": "../enemy-animation-suite-v4/court-clone-atlas-v4.png",
+      "sha256": "21dc5c6cc9ac03e1873ac1cf2be2e91453745ed6fd737052d39083290ef2b109"
+    },
+    {
+      "package": "enemy-animation-suite-v4",
+      "enemyId": "unfiled-testimony",
+      "path": "../enemy-animation-suite-v4/unfiled-testimony-atlas-v4.png",
+      "sha256": "c1dabbf058a18e04443258c16fb401fb74ca86552d76830293c04a7295008d1b"
     }
   ],
   "output": {
     "path": "enemy-combat-animation-atlas-v1.png",
     "runtimePath": "game/assets/art/enemy-combat-animation-runtime-v1/enemy-combat-animation-atlas-v1.png",
-    "sha256": "878e05d1f2d1665cc07dd6793bf2d09f961b26e1b4ef7ad9ff2e5c1a96cd637b",
+    "sha256": "7446565555767c6e5d4f7409cba41a9586a2b5449e73d7e077020d6c211178dc",
     "width": 3840,
-    "height": 4480,
+    "height": 5280,
     "mode": "RGBA"
   },
   "builder": {
     "path": "build_enemy_combat_animation_runtime_v1.py",
-    "sha256": "ce54fddd8126898048e5f1252398828c04ad90082b92e9d95cf67f26a825d60b",
+    "sha256": "970c3e5283b57ad82f0a77318ae54b79d64f0b6d57b20f96b8a2d086a4b7ce4c",
     "pillowVersion": "11.3.0"
   }
 }

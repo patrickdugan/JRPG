@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "assetId": "enemy-animation-suite-v4",
+  "artifactVersion": "v4",
+  "title": "Summoned Ward, Seal, Echo, and Record Enemy Animation Suite V4",
+  "status": "pixel-authored-runtime-integrated",
+  "provenance": {
+    "classification": "pixel-authored deterministic production",
+    "notPixelAuthored": false,
+    "method": "Code-native pixel primitives (integer-rounded polygons, ellipses, pixel runs, and mask edge operations) rasterized at native 160x160 resolution under explicit per-family palettes by build_enemy_animation_suite_v4.py.",
+    "generatorSurface": "none; no image generator, source raster, resampling, interpolation, or dithering",
+    "originalityPolicy": "Original fictional designs. The Blood Ward is an invented lacquer ward-lantern, not a real reliquary, monstrance, cross, or devotional object; the Tithe Seal mark and every glyph are invented and unreadable; the Court Clone echoes Kurozane's in-game silhouette language without reproducing real heraldry; no gore."
+  },
+  "runtimeAtlas": {
+    "columns": 6,
+    "rows": 4,
+    "frameWidth": 160,
+    "frameHeight": 160,
+    "atlasWidth": 960,
+    "atlasHeight": 640,
+    "minimumTransparentGutter": 2,
+    "visibleColorCeiling": 64,
+    "dither": "none",
+    "alphaPolicy": "binary; translucency is suggested with clustered transparent pixels, never partial alpha",
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "vfxOverflowPolicy": "contained inside the authored frame"
+  },
+  "anchorProfiles": {
+    "ward-object": {
+      "pivot": [80, 148],
+      "foot": [80, 151],
+      "hurtBounds": [52, 22, 56, 112]
+    },
+    "seal-object": {
+      "pivot": [80, 148],
+      "foot": [80, 151],
+      "hurtBounds": [50, 34, 60, 94]
+    },
+    "umbral-human": {
+      "pivot": [80, 148],
+      "foot": [80, 152],
+      "hurtBounds": [46, 14, 70, 138]
+    },
+    "paper-spirit": {
+      "pivot": [80, 148],
+      "foot": [80, 151],
+      "hurtBounds": [44, 26, 72, 110]
+    }
+  },
+  "clips": [
+    {
+      "id": "locomotion",
+      "row": 0,
+      "frameDurationsMs": [120, 100, 90, 100, 90, 120],
+      "phases": ["contact", "compression", "passing", "extension", "second-contact", "ready"],
+      "events": []
+    },
+    {
+      "id": "basic-attack",
+      "row": 1,
+      "frameDurationsMs": [180, 150, 100, 80, 130, 240],
+      "phases": ["ready", "anticipation", "commitment", "active", "follow-through", "recovery"],
+      "events": [{ "name": "damage", "frameIndex": 3 }]
+    },
+    {
+      "id": "signature-attack",
+      "row": 2,
+      "frameDurationsMs": [220, 180, 140, 100, 180, 300],
+      "phases": ["ready", "anticipation", "charge", "active", "recoil", "recovery"],
+      "events": [{ "name": "enemy-signature", "frameIndex": 3 }]
+    },
+    {
+      "id": "hurt-defeat",
+      "row": 3,
+      "frameDurationsMs": [100, 100, 120, 160, 300, 600],
+      "phases": ["hurt-contact", "compression", "stagger", "collapse", "defeated", "defeated-hold"],
+      "events": [{ "name": "hurt", "frameIndex": 0 }, { "name": "defeatedHold", "frameIndex": 5 }]
+    }
+  ],
+  "enemies": [
+    {
+      "catalogId": "SUM-001",
+      "group": "summoned-object",
+      "id": "blood-ward-west",
+      "name": "Blood Ward Seal (West)",
+      "role": "Father Mateus's temporary west ward object; stationary-capable, attackable, phase-two summon",
+      "profile": "ward-object",
+      "signatureId": "sanguine-ward-pulse",
+      "idleLoop": true
+    },
+    {
+      "catalogId": "SUM-002",
+      "group": "summoned-object",
+      "id": "blood-ward-east",
+      "name": "Blood Ward Seal (East)",
+      "role": "Father Mateus's temporary east ward object; mirrored wine-glass and oxidized-bronze variant of the west ward",
+      "profile": "ward-object",
+      "signatureId": "sanguine-ward-pulse",
+      "idleLoop": true
+    },
+    {
+      "catalogId": "SUM-003",
+      "group": "summoned-object",
+      "id": "tithe-seal",
+      "name": "Exposed Seal",
+      "role": "Tithe Hound's temporary weak-point summon exposed by Consume Ink; hovering ink-and-wax registry seal",
+      "profile": "seal-object",
+      "signatureId": "ink-wax-stamp",
+      "idleLoop": true
+    },
+    {
+      "catalogId": "SUM-004",
+      "group": "umbral-echo",
+      "id": "court-clone",
+      "name": "Court Clone",
+      "role": "Kurozane's temporary command summon; umbral echo of his armored spear silhouette",
+      "profile": "umbral-human",
+      "signatureId": "clone-order",
+      "idleLoop": false
+    },
+    {
+      "catalogId": "SUM-005",
+      "group": "record-spirit",
+      "id": "unfiled-testimony",
+      "name": "Unfiled Testimony",
+      "role": "non-hostile epilogue record gap; paper-and-ash testimony that is acknowledged, never defeated",
+      "profile": "paper-spirit",
+      "signatureId": "testimony-unfold",
+      "idleLoop": true
+    }
+  ]
+}

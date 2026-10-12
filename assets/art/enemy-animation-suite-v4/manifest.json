@@ -1,0 +1,6326 @@
+{
+  "schemaVersion": 1,
+  "assetId": "enemy-animation-suite-v4",
+  "title": "Summoned Ward, Seal, Echo, and Record Enemy Animation Suite V4",
+  "status": "pixel-authored-runtime-integrated",
+  "provenance": {
+    "classification": "pixel-authored deterministic production",
+    "notPixelAuthored": false,
+    "method": "Code-native pixel primitives (integer-rounded polygons, ellipses, pixel runs, and mask edge operations) rasterized at native 160x160 resolution under explicit per-family palettes by build_enemy_animation_suite_v4.py.",
+    "generatorSurface": "none; no image generator, source raster, resampling, interpolation, or dithering",
+    "originalityPolicy": "Original fictional designs. The Blood Ward is an invented lacquer ward-lantern, not a real reliquary, monstrance, cross, or devotional object; the Tithe Seal mark and every glyph are invented and unreadable; the Court Clone echoes Kurozane's in-game silhouette language without reproducing real heraldry; no gore."
+  },
+  "build": {
+    "builder": "build_enemy_animation_suite_v4.py",
+    "builderSha256": "07fd52c42162c04d21079f5bde29cd394463661bb661157186dfd1c3617653c9",
+    "source": "enemy-animation-suite-v4.source.json",
+    "sourceSha256": "632666c881afc212f10ff5e1da139508d612b39d2f931cdf220c12a2f57fa212",
+    "pillowVersion": "11.3.0",
+    "check": "python build_enemy_animation_suite_v4.py --check"
+  },
+  "geometry": {
+    "columns": 6,
+    "rows": 4,
+    "frameWidth": 160,
+    "frameHeight": 160,
+    "atlasWidth": 960,
+    "atlasHeight": 640,
+    "minimumTransparentGutter": 2,
+    "visibleColorCeiling": 64,
+    "dither": "none",
+    "alphaPolicy": "binary; translucency is suggested with clustered transparent pixels, never partial alpha",
+    "facing": "screen-left",
+    "rootMotionOwnership": "runtime-simulation",
+    "vfxOverflowPolicy": "contained inside the authored frame"
+  },
+  "clips": [
+    {
+      "id": "locomotion",
+      "row": 0,
+      "frameDurationsMs": [
+        120,
+        100,
+        90,
+        100,
+        90,
+        120
+      ],
+      "phases": [
+        "contact",
+        "compression",
+        "passing",
+        "extension",
+        "second-contact",
+        "ready"
+      ],
+      "events": []
+    },
+    {
+      "id": "basic-attack",
+      "row": 1,
+      "frameDurationsMs": [
+        180,
+        150,
+        100,
+        80,
+        130,
+        240
+      ],
+      "phases": [
+        "ready",
+        "anticipation",
+        "commitment",
+        "active",
+        "follow-through",
+        "recovery"
+      ],
+      "events": [
+        {
+          "name": "damage",
+          "frameIndex": 3
+        }
+      ]
+    },
+    {
+      "id": "signature-attack",
+      "row": 2,
+      "frameDurationsMs": [
+        220,
+        180,
+        140,
+        100,
+        180,
+        300
+      ],
+      "phases": [
+        "ready",
+        "anticipation",
+        "charge",
+        "active",
+        "recoil",
+        "recovery"
+      ],
+      "events": [
+        {
+          "name": "enemy-signature",
+          "frameIndex": 3
+        }
+      ]
+    },
+    {
+      "id": "hurt-defeat",
+      "row": 3,
+      "frameDurationsMs": [
+        100,
+        100,
+        120,
+        160,
+        300,
+        600
+      ],
+      "phases": [
+        "hurt-contact",
+        "compression",
+        "stagger",
+        "collapse",
+        "defeated",
+        "defeated-hold"
+      ],
+      "events": [
+        {
+          "name": "hurt",
+          "frameIndex": 0
+        },
+        {
+          "name": "defeatedHold",
+          "frameIndex": 5
+        }
+      ]
+    }
+  ],
+  "anchorProfiles": {
+    "ward-object": {
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ]
+    },
+    "seal-object": {
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ]
+    },
+    "umbral-human": {
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ]
+    },
+    "paper-spirit": {
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ]
+    }
+  },
+  "enemyOrder": [
+    "blood-ward-west",
+    "blood-ward-east",
+    "tithe-seal",
+    "court-clone",
+    "unfiled-testimony"
+  ],
+  "enemies": [
+    {
+      "catalogId": "SUM-001",
+      "group": "summoned-object",
+      "id": "blood-ward-west",
+      "name": "Blood Ward Seal (West)",
+      "role": "Father Mateus's temporary west ward object; stationary-capable, attackable, phase-two summon",
+      "profile": "ward-object",
+      "signatureId": "sanguine-ward-pulse",
+      "idleLoop": true,
+      "atlas": "blood-ward-west-atlas-v4.png",
+      "review": "blood-ward-west-review-3x-v4.png",
+      "frameCount": 24,
+      "distinctFrameCount": 24,
+      "paletteSize": 21,
+      "palette": {
+        "ink": "#0B1020",
+        "lq0": "#120F1C",
+        "lq1": "#1C1729",
+        "lq2": "#2A2238",
+        "lq3": "#40344F",
+        "lq4": "#5E4D6C",
+        "ch1": "#2B2C3B",
+        "ch2": "#4A4C5E",
+        "ch3": "#7C8094",
+        "b0": "#4A3820",
+        "b1": "#6E5A30",
+        "b2": "#A08B58",
+        "b3": "#D2BA7C",
+        "b4": "#F2E2A8",
+        "g0": "#2A0814",
+        "g1": "#4E1022",
+        "g2": "#7A1A32",
+        "g3": "#AA2840",
+        "g4": "#D8485A",
+        "g5": "#F48A84",
+        "g6": "#FFE0CC"
+      },
+      "visibleColorsInAtlas": 19,
+      "maximumVisibleColorsInFrame": 19
+    },
+    {
+      "catalogId": "SUM-002",
+      "group": "summoned-object",
+      "id": "blood-ward-east",
+      "name": "Blood Ward Seal (East)",
+      "role": "Father Mateus's temporary east ward object; mirrored wine-glass and oxidized-bronze variant of the west ward",
+      "profile": "ward-object",
+      "signatureId": "sanguine-ward-pulse",
+      "idleLoop": true,
+      "atlas": "blood-ward-east-atlas-v4.png",
+      "review": "blood-ward-east-review-3x-v4.png",
+      "frameCount": 24,
+      "distinctFrameCount": 24,
+      "paletteSize": 21,
+      "palette": {
+        "ink": "#0B1020",
+        "lq0": "#120F1C",
+        "lq1": "#1C1729",
+        "lq2": "#2A2238",
+        "lq3": "#40344F",
+        "lq4": "#5E4D6C",
+        "ch1": "#2B2C3B",
+        "ch2": "#4A4C5E",
+        "ch3": "#7C8094",
+        "b0": "#26302A",
+        "b1": "#3E4A3E",
+        "b2": "#637462",
+        "b3": "#8FA07A",
+        "b4": "#C4D0A0",
+        "g0": "#1E0816",
+        "g1": "#3A0E26",
+        "g2": "#5C1636",
+        "g3": "#842244",
+        "g4": "#B03A5C",
+        "g5": "#DC7890",
+        "g6": "#FFDCE0"
+      },
+      "visibleColorsInAtlas": 19,
+      "maximumVisibleColorsInFrame": 19
+    },
+    {
+      "catalogId": "SUM-003",
+      "group": "summoned-object",
+      "id": "tithe-seal",
+      "name": "Exposed Seal",
+      "role": "Tithe Hound's temporary weak-point summon exposed by Consume Ink; hovering ink-and-wax registry seal",
+      "profile": "seal-object",
+      "signatureId": "ink-wax-stamp",
+      "idleLoop": true,
+      "atlas": "tithe-seal-atlas-v4.png",
+      "review": "tithe-seal-review-3x-v4.png",
+      "frameCount": 24,
+      "distinctFrameCount": 24,
+      "paletteSize": 19,
+      "palette": {
+        "ink": "#0B1020",
+        "w0": "#3A0E14",
+        "w1": "#621820",
+        "w2": "#8E2A2C",
+        "w3": "#B8443A",
+        "w4": "#DC6E52",
+        "w5": "#F6A880",
+        "p0": "#5A5244",
+        "p1": "#8A7E62",
+        "p2": "#B8AA84",
+        "p3": "#D7C99A",
+        "p4": "#F6E8B9",
+        "k0": "#16233A",
+        "k1": "#27466B",
+        "k2": "#4F7392",
+        "k3": "#8FB4C8",
+        "y0": "#A08B58",
+        "y1": "#E8CF7B",
+        "y2": "#FFF2C0"
+      },
+      "visibleColorsInAtlas": 18,
+      "maximumVisibleColorsInFrame": 16
+    },
+    {
+      "catalogId": "SUM-004",
+      "group": "umbral-echo",
+      "id": "court-clone",
+      "name": "Court Clone",
+      "role": "Kurozane's temporary command summon; umbral echo of his armored spear silhouette",
+      "profile": "umbral-human",
+      "signatureId": "clone-order",
+      "idleLoop": false,
+      "atlas": "court-clone-atlas-v4.png",
+      "review": "court-clone-review-3x-v4.png",
+      "frameCount": 24,
+      "distinctFrameCount": 24,
+      "paletteSize": 14,
+      "palette": {
+        "ink": "#07060E",
+        "u0": "#0E0B19",
+        "u1": "#181430",
+        "u2": "#262044",
+        "u3": "#3A3060",
+        "u4": "#56478C",
+        "v1": "#7A5CB4",
+        "v2": "#AE90E0",
+        "v3": "#DCCDF6",
+        "c0": "#3A0C1C",
+        "c1": "#6E1A34",
+        "c2": "#A82E48",
+        "c3": "#E25C6A",
+        "c4": "#FFB8B0"
+      },
+      "visibleColorsInAtlas": 13,
+      "maximumVisibleColorsInFrame": 13
+    },
+    {
+      "catalogId": "SUM-005",
+      "group": "record-spirit",
+      "id": "unfiled-testimony",
+      "name": "Unfiled Testimony",
+      "role": "non-hostile epilogue record gap; paper-and-ash testimony that is acknowledged, never defeated",
+      "profile": "paper-spirit",
+      "signatureId": "testimony-unfold",
+      "idleLoop": true,
+      "atlas": "unfiled-testimony-atlas-v4.png",
+      "review": "unfiled-testimony-review-3x-v4.png",
+      "frameCount": 24,
+      "distinctFrameCount": 24,
+      "paletteSize": 22,
+      "palette": {
+        "ink": "#0B1020",
+        "pa0": "#4A4436",
+        "pa1": "#7E7458",
+        "pa2": "#B4A67E",
+        "pa3": "#D7C99A",
+        "pa4": "#F6E8B9",
+        "pb1": "#6E6A5C",
+        "pb2": "#9C9478",
+        "pb3": "#C2B898",
+        "k0": "#16233A",
+        "k1": "#3A4A66",
+        "a0": "#2E2A2C",
+        "a1": "#4C4446",
+        "a2": "#7A706C",
+        "a3": "#A89E96",
+        "g1": "#C89A48",
+        "g2": "#E8C46A",
+        "g3": "#FFF0C0",
+        "t0": "#1E3A48",
+        "t1": "#3E6E7A",
+        "t2": "#88C8C5",
+        "t3": "#D7F0D5"
+      },
+      "visibleColorsInAtlas": 21,
+      "maximumVisibleColorsInFrame": 20
+    }
+  ],
+  "exports": [
+    {
+      "path": "blood-ward-west-atlas-v4.png",
+      "role": "transparent-runtime-atlas",
+      "enemyId": "blood-ward-west",
+      "sha256": "61dde7e26a55dd15513d2d168fb71163db7923619b5e2ef0398ef5662a9fcac3",
+      "width": 960,
+      "height": 640,
+      "mode": "RGBA",
+      "runtime": true
+    },
+    {
+      "path": "blood-ward-west-review-3x-v4.png",
+      "role": "labeled-3x-review-only-not-runtime",
+      "enemyId": "blood-ward-west",
+      "sha256": "b4fe0ffa0c087f8dee5c1199e8cd63a5e6709cb3fb06330f493dc84e91845d90",
+      "width": 2880,
+      "height": 2022,
+      "mode": "RGB",
+      "runtime": false
+    },
+    {
+      "path": "blood-ward-east-atlas-v4.png",
+      "role": "transparent-runtime-atlas",
+      "enemyId": "blood-ward-east",
+      "sha256": "10ce0fea683eb735446bc72816e60f29fa6762dbd283a2e108f5e941017c013a",
+      "width": 960,
+      "height": 640,
+      "mode": "RGBA",
+      "runtime": true
+    },
+    {
+      "path": "blood-ward-east-review-3x-v4.png",
+      "role": "labeled-3x-review-only-not-runtime",
+      "enemyId": "blood-ward-east",
+      "sha256": "34a9e69330493f8bf8a522fe9666f2c8c90e690d6cbb9239519ba1a49f96a2bd",
+      "width": 2880,
+      "height": 2022,
+      "mode": "RGB",
+      "runtime": false
+    },
+    {
+      "path": "tithe-seal-atlas-v4.png",
+      "role": "transparent-runtime-atlas",
+      "enemyId": "tithe-seal",
+      "sha256": "d1d76142173e6a6e800d3b619881e2f7b4443597a93fe4e8a0bfd54bae1233a9",
+      "width": 960,
+      "height": 640,
+      "mode": "RGBA",
+      "runtime": true
+    },
+    {
+      "path": "tithe-seal-review-3x-v4.png",
+      "role": "labeled-3x-review-only-not-runtime",
+      "enemyId": "tithe-seal",
+      "sha256": "bb932857ff4c75995ba6dd4d4d2536ecc6b1430969ead200bc398c4394eeb18d",
+      "width": 2880,
+      "height": 2022,
+      "mode": "RGB",
+      "runtime": false
+    },
+    {
+      "path": "court-clone-atlas-v4.png",
+      "role": "transparent-runtime-atlas",
+      "enemyId": "court-clone",
+      "sha256": "21dc5c6cc9ac03e1873ac1cf2be2e91453745ed6fd737052d39083290ef2b109",
+      "width": 960,
+      "height": 640,
+      "mode": "RGBA",
+      "runtime": true
+    },
+    {
+      "path": "court-clone-review-3x-v4.png",
+      "role": "labeled-3x-review-only-not-runtime",
+      "enemyId": "court-clone",
+      "sha256": "0dda132c87351073e0f5714dff1c270ebe3b754a7a21c517b691fc0dadd3132d",
+      "width": 2880,
+      "height": 2022,
+      "mode": "RGB",
+      "runtime": false
+    },
+    {
+      "path": "unfiled-testimony-atlas-v4.png",
+      "role": "transparent-runtime-atlas",
+      "enemyId": "unfiled-testimony",
+      "sha256": "c1dabbf058a18e04443258c16fb401fb74ca86552d76830293c04a7295008d1b",
+      "width": 960,
+      "height": 640,
+      "mode": "RGBA",
+      "runtime": true
+    },
+    {
+      "path": "unfiled-testimony-review-3x-v4.png",
+      "role": "labeled-3x-review-only-not-runtime",
+      "enemyId": "unfiled-testimony",
+      "sha256": "5b31f2d8f71d8dcd0852a775f575ad78f54e7bb82fc859371c8d83e5702947f7",
+      "width": 2880,
+      "height": 2022,
+      "mode": "RGB",
+      "runtime": false
+    },
+    {
+      "path": "enemy-animation-roster-contact-sheet-v4.png",
+      "role": "labeled-2x-key-frame-contact-sheet-review-only",
+      "sha256": "16a12afbbfa0d34293004fcb33bf12d376e5779714a05af301ed5a37fa221512",
+      "width": 2560,
+      "height": 1708,
+      "mode": "RGB",
+      "runtime": false
+    }
+  ],
+  "frames": [
+    {
+      "id": "blood-ward-west:locomotion:0",
+      "enemyId": "blood-ward-west",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "220c97d586d9c6b7be55b03c1d0edba2bbb85b7e2bf09d69f5af44db343b4f64",
+      "alphaBounds": [
+        44,
+        13,
+        117,
+        126
+      ],
+      "transparentGutter": {
+        "left": 44,
+        "top": 13,
+        "right": 43,
+        "bottom": 34
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:locomotion:1",
+      "enemyId": "blood-ward-west",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "0169d9d9ea263ba258238ec687e9501922fa26a36b2e42eef1fac333d15c42b7",
+      "alphaBounds": [
+        48,
+        12,
+        112,
+        125
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 12,
+        "right": 48,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:locomotion:2",
+      "enemyId": "blood-ward-west",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "passing",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "6f079da3129c65e60fc385efa27b8b3f661ee3ee413f35c2588a70f911b248ce",
+      "alphaBounds": [
+        49,
+        10,
+        113,
+        123
+      ],
+      "transparentGutter": {
+        "left": 49,
+        "top": 10,
+        "right": 47,
+        "bottom": 37
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:locomotion:3",
+      "enemyId": "blood-ward-west",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "extension",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "2c15ad45f5346e66c1b9861d493d570d8149064a8f23dc8e1da8aae8e9693ff2",
+      "alphaBounds": [
+        44,
+        9,
+        116,
+        122
+      ],
+      "transparentGutter": {
+        "left": 44,
+        "top": 9,
+        "right": 44,
+        "bottom": 38
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:locomotion:4",
+      "enemyId": "blood-ward-west",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "second-contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "092923316e9332126901127513ac506019de24f1ba18d9953de7f7aff369b344",
+      "alphaBounds": [
+        48,
+        10,
+        112,
+        123
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 10,
+        "right": 48,
+        "bottom": 37
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:locomotion:5",
+      "enemyId": "blood-ward-west",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "5f32bad13167ae63602edef66caf76503b2399546fbb114f7e54ce04da39f116",
+      "alphaBounds": [
+        49,
+        12,
+        113,
+        125
+      ],
+      "transparentGutter": {
+        "left": 49,
+        "top": 12,
+        "right": 47,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:basic-attack:0",
+      "enemyId": "blood-ward-west",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "4299089a1484b5b5b0922d7ff44b8f72094140bbdf45cc7a287e9e2abbbfbea6",
+      "alphaBounds": [
+        46,
+        12,
+        116,
+        125
+      ],
+      "transparentGutter": {
+        "left": 46,
+        "top": 12,
+        "right": 44,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:basic-attack:1",
+      "enemyId": "blood-ward-west",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 150,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "8bd3e685acfaf1a5a60728e1567dbd168c75432722dcce255b70610b02042ac4",
+      "alphaBounds": [
+        53,
+        16,
+        112,
+        129
+      ],
+      "transparentGutter": {
+        "left": 53,
+        "top": 16,
+        "right": 48,
+        "bottom": 31
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:basic-attack:2",
+      "enemyId": "blood-ward-west",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "commitment",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "a1911f3f7088900c5e8bcbbccbdba9cf004205fc4c1b56b3b58fe6a1ea1878b5",
+      "alphaBounds": [
+        50,
+        11,
+        111,
+        124
+      ],
+      "transparentGutter": {
+        "left": 50,
+        "top": 11,
+        "right": 49,
+        "bottom": 36
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:basic-attack:3",
+      "enemyId": "blood-ward-west",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 80,
+      "phase": "active",
+      "events": [
+        "damage"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "52d6c86630830347df24e969e4f16fb8e20c07168ba49e2818bd62efb48183ba",
+      "alphaBounds": [
+        35,
+        9,
+        126,
+        122
+      ],
+      "transparentGutter": {
+        "left": 35,
+        "top": 9,
+        "right": 34,
+        "bottom": 38
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:basic-attack:4",
+      "enemyId": "blood-ward-west",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 130,
+      "phase": "follow-through",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "27f91d23ad692aacb84b7dd892b8290f49c5cc3adf01ca41bd9dd74b992d0da3",
+      "alphaBounds": [
+        32,
+        10,
+        112,
+        124
+      ],
+      "transparentGutter": {
+        "left": 32,
+        "top": 10,
+        "right": 48,
+        "bottom": 36
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:basic-attack:5",
+      "enemyId": "blood-ward-west",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 240,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "ca9f15ba6632d8baef734687a9b16ecaf4838a0b1893d4e00ca2906849ef9ae1",
+      "alphaBounds": [
+        45,
+        12,
+        115,
+        125
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 12,
+        "right": 45,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:signature-attack:0",
+      "enemyId": "blood-ward-west",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 220,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "6cecd7a35dcf96fe7144d7c80a533b6a11edb4af6277546e3ef4230d399059be",
+      "alphaBounds": [
+        45,
+        14,
+        115,
+        127
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 14,
+        "right": 45,
+        "bottom": 33
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:signature-attack:1",
+      "enemyId": "blood-ward-west",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "d0018ec977a1fbf1cd816cd7a084a5f5b7a51712bc48ea1b0b17c1b1385367f4",
+      "alphaBounds": [
+        52,
+        15,
+        113,
+        128
+      ],
+      "transparentGutter": {
+        "left": 52,
+        "top": 15,
+        "right": 47,
+        "bottom": 32
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:signature-attack:2",
+      "enemyId": "blood-ward-west",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 140,
+      "phase": "charge",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "bdd0987c649511c3790e5b05b257b9f7287b110caee3187d1335ac576380dc5b",
+      "alphaBounds": [
+        46,
+        10,
+        115,
+        123
+      ],
+      "transparentGutter": {
+        "left": 46,
+        "top": 10,
+        "right": 45,
+        "bottom": 37
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:signature-attack:3",
+      "enemyId": "blood-ward-west",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "active",
+      "events": [
+        "sanguine-ward-pulse"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "0e9e27f3e8c949c0e72552ebbf2d4d3b9ecf384cb56a21d647b87c67308078c2",
+      "alphaBounds": [
+        5,
+        2,
+        117,
+        122
+      ],
+      "transparentGutter": {
+        "left": 5,
+        "top": 2,
+        "right": 43,
+        "bottom": 38
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:signature-attack:4",
+      "enemyId": "blood-ward-west",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "recoil",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "d33ba0fd97d2eba5d74ab1932cdf5313cf6bfb7eac25a352cf8428d85558d5c5",
+      "alphaBounds": [
+        9,
+        2,
+        116,
+        124
+      ],
+      "transparentGutter": {
+        "left": 9,
+        "top": 2,
+        "right": 44,
+        "bottom": 36
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:signature-attack:5",
+      "enemyId": "blood-ward-west",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "c3a6dea26a0a466f0d54022bda74a5c74b8ea29e38dfc69cc1be099a533a239e",
+      "alphaBounds": [
+        51,
+        13,
+        110,
+        126
+      ],
+      "transparentGutter": {
+        "left": 51,
+        "top": 13,
+        "right": 50,
+        "bottom": 34
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:hurt-defeat:0",
+      "enemyId": "blood-ward-west",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "hurt-contact",
+      "events": [
+        "hurt"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "fb4bc2a80e7a7a7e6fb60090024781cfa495673af2c2ad48a39ea6a5ffa7b880",
+      "alphaBounds": [
+        40,
+        14,
+        130,
+        125
+      ],
+      "transparentGutter": {
+        "left": 40,
+        "top": 14,
+        "right": 30,
+        "bottom": 35
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:hurt-defeat:1",
+      "enemyId": "blood-ward-west",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "fe3f1b983a3b996da406893a2bc5671b8f5e449e64fb7ca2bf9516dc1e95770b",
+      "alphaBounds": [
+        54,
+        16,
+        116,
+        129
+      ],
+      "transparentGutter": {
+        "left": 54,
+        "top": 16,
+        "right": 44,
+        "bottom": 31
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:hurt-defeat:2",
+      "enemyId": "blood-ward-west",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "stagger",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "74c8ace415a66a66a13bbdd61b8ce29eb2b6fd77dabdc3344efc82a242e12720",
+      "alphaBounds": [
+        48,
+        14,
+        109,
+        127
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 14,
+        "right": 51,
+        "bottom": 33
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:hurt-defeat:3",
+      "enemyId": "blood-ward-west",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 160,
+      "phase": "collapse",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "53749fadc7ba9621d3f77baa1289673e49baaf4fbb80643522519f2c76d468d9",
+      "alphaBounds": [
+        37,
+        36,
+        118,
+        147
+      ],
+      "transparentGutter": {
+        "left": 37,
+        "top": 36,
+        "right": 42,
+        "bottom": 13
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:hurt-defeat:4",
+      "enemyId": "blood-ward-west",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "defeated",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "2704e8384d044b1636c97ec4ca73886903ae673f0886ec2614a3ef33efb853a6",
+      "alphaBounds": [
+        21,
+        97,
+        154,
+        150
+      ],
+      "transparentGutter": {
+        "left": 21,
+        "top": 97,
+        "right": 6,
+        "bottom": 10
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-west:hurt-defeat:5",
+      "enemyId": "blood-ward-west",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 600,
+      "phase": "defeated-hold",
+      "events": [
+        "defeatedHold"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "0ab70be28dc27214deeac8fff60247b2e157066f181f31d73bb37542547b164c",
+      "alphaBounds": [
+        19,
+        102,
+        153,
+        151
+      ],
+      "transparentGutter": {
+        "left": 19,
+        "top": 102,
+        "right": 7,
+        "bottom": 9
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:locomotion:0",
+      "enemyId": "blood-ward-east",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "efd463741ed5933e083a776f3fd952a7edbf1df76d916b6413b0aec2d9d616d4",
+      "alphaBounds": [
+        51,
+        13,
+        111,
+        126
+      ],
+      "transparentGutter": {
+        "left": 51,
+        "top": 13,
+        "right": 49,
+        "bottom": 34
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:locomotion:1",
+      "enemyId": "blood-ward-east",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "54967a06977183650a83217feced1c9720028e717e7a0770b0b86d0744186b00",
+      "alphaBounds": [
+        45,
+        12,
+        117,
+        125
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 12,
+        "right": 43,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:locomotion:2",
+      "enemyId": "blood-ward-east",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "passing",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "fbaa21bd733e9f65b3c18d22982ee7fdf68c82319ebb4910414bc6e9e880f9f0",
+      "alphaBounds": [
+        47,
+        10,
+        113,
+        123
+      ],
+      "transparentGutter": {
+        "left": 47,
+        "top": 10,
+        "right": 47,
+        "bottom": 37
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:locomotion:3",
+      "enemyId": "blood-ward-east",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "extension",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "b376e845182e3e1a4a48f174489f8f93b7f79838cbdc8491378947bb1df7c790",
+      "alphaBounds": [
+        50,
+        9,
+        111,
+        122
+      ],
+      "transparentGutter": {
+        "left": 50,
+        "top": 9,
+        "right": 49,
+        "bottom": 38
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:locomotion:4",
+      "enemyId": "blood-ward-east",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "second-contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "34f0349b67e39972249560fb41e7bc14cfff2266dcd53bf04080844343891446",
+      "alphaBounds": [
+        45,
+        10,
+        117,
+        123
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 10,
+        "right": 43,
+        "bottom": 37
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:locomotion:5",
+      "enemyId": "blood-ward-east",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "768c5627e4d2aff3c1ecbe1c666c01165ac787fdd5e76da2e9821c9fb760babf",
+      "alphaBounds": [
+        47,
+        12,
+        113,
+        125
+      ],
+      "transparentGutter": {
+        "left": 47,
+        "top": 12,
+        "right": 47,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:basic-attack:0",
+      "enemyId": "blood-ward-east",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "4e9850b4418edeaf457f1c384e674bdbdc64155c06a1d7c64ee97c962870efeb",
+      "alphaBounds": [
+        51,
+        12,
+        110,
+        125
+      ],
+      "transparentGutter": {
+        "left": 51,
+        "top": 12,
+        "right": 50,
+        "bottom": 35
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:basic-attack:1",
+      "enemyId": "blood-ward-east",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 150,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "b715616e338b16f21e8b4a986ee539519ad80f974980351b966e4b5bbc750806",
+      "alphaBounds": [
+        53,
+        16,
+        112,
+        129
+      ],
+      "transparentGutter": {
+        "left": 53,
+        "top": 16,
+        "right": 48,
+        "bottom": 31
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:basic-attack:2",
+      "enemyId": "blood-ward-east",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "commitment",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "4f497f1c0d2e6d847a0f294ad55df2a4cd24924ece4161f20bf847757461b060",
+      "alphaBounds": [
+        49,
+        11,
+        111,
+        124
+      ],
+      "transparentGutter": {
+        "left": 49,
+        "top": 11,
+        "right": 49,
+        "bottom": 36
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:basic-attack:3",
+      "enemyId": "blood-ward-east",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 80,
+      "phase": "active",
+      "events": [
+        "damage"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "46d9236c5fa893f55d6b9f4c991823fce76d85ddfe2052cad7b68de152ec4fe1",
+      "alphaBounds": [
+        35,
+        9,
+        126,
+        122
+      ],
+      "transparentGutter": {
+        "left": 35,
+        "top": 9,
+        "right": 34,
+        "bottom": 38
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:basic-attack:4",
+      "enemyId": "blood-ward-east",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 130,
+      "phase": "follow-through",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "bf320eecd5eefb030cf7fe36e29ff51e4a642c2cd85ce90dff96349b7925f145",
+      "alphaBounds": [
+        32,
+        10,
+        118,
+        124
+      ],
+      "transparentGutter": {
+        "left": 32,
+        "top": 10,
+        "right": 42,
+        "bottom": 36
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:basic-attack:5",
+      "enemyId": "blood-ward-east",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 240,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "5b283e4fc5359b77ff6ddee01d9c92229f742976b6f45f5aa9ebac0f0294b862",
+      "alphaBounds": [
+        48,
+        12,
+        114,
+        125
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 12,
+        "right": 46,
+        "bottom": 35
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:signature-attack:0",
+      "enemyId": "blood-ward-east",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 220,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "d5310200c2f06ccd3a2a3940d5b6d33d1d3d158d73b791c0f41cafe6308463f5",
+      "alphaBounds": [
+        47,
+        14,
+        115,
+        127
+      ],
+      "transparentGutter": {
+        "left": 47,
+        "top": 14,
+        "right": 45,
+        "bottom": 33
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:signature-attack:1",
+      "enemyId": "blood-ward-east",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "f88206822979377ac4066a0750f24586668f186e3b8889f4d0df8e46ac5d2776",
+      "alphaBounds": [
+        54,
+        15,
+        113,
+        128
+      ],
+      "transparentGutter": {
+        "left": 54,
+        "top": 15,
+        "right": 47,
+        "bottom": 32
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:signature-attack:2",
+      "enemyId": "blood-ward-east",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 140,
+      "phase": "charge",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "8020d13c0f6dc00676a1ea6b22c6f28cddbc61e289ae01a5157347ffee2a0c2d",
+      "alphaBounds": [
+        46,
+        10,
+        115,
+        123
+      ],
+      "transparentGutter": {
+        "left": 46,
+        "top": 10,
+        "right": 45,
+        "bottom": 37
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:signature-attack:3",
+      "enemyId": "blood-ward-east",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "active",
+      "events": [
+        "sanguine-ward-pulse"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "62d1031cdfebba037ae87d136ea66efa77b3c840d335573dd81509f581daf029",
+      "alphaBounds": [
+        5,
+        2,
+        117,
+        122
+      ],
+      "transparentGutter": {
+        "left": 5,
+        "top": 2,
+        "right": 43,
+        "bottom": 38
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:signature-attack:4",
+      "enemyId": "blood-ward-east",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "recoil",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "9511681309f6ce243300a30cd5120636e7e2c99d9472043c7338cf801405ab73",
+      "alphaBounds": [
+        9,
+        2,
+        112,
+        124
+      ],
+      "transparentGutter": {
+        "left": 9,
+        "top": 2,
+        "right": 48,
+        "bottom": 36
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:signature-attack:5",
+      "enemyId": "blood-ward-east",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "03013fb45bd4687c7f7e5b31033b43131c0978fe4efdda7233c950cc493fff3c",
+      "alphaBounds": [
+        44,
+        13,
+        116,
+        126
+      ],
+      "transparentGutter": {
+        "left": 44,
+        "top": 13,
+        "right": 44,
+        "bottom": 34
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:hurt-defeat:0",
+      "enemyId": "blood-ward-east",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "hurt-contact",
+      "events": [
+        "hurt"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "ac0a4d1b12a98f1855172acc4657610c788aae777896b882b7ce9b96a9b34ebf",
+      "alphaBounds": [
+        45,
+        14,
+        123,
+        125
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 14,
+        "right": 37,
+        "bottom": 35
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:hurt-defeat:1",
+      "enemyId": "blood-ward-east",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "ca201c185e8ca5f9f23f1f9b015aca3e1b1728892a67715c0b80244904f872d9",
+      "alphaBounds": [
+        49,
+        16,
+        117,
+        129
+      ],
+      "transparentGutter": {
+        "left": 49,
+        "top": 16,
+        "right": 43,
+        "bottom": 31
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:hurt-defeat:2",
+      "enemyId": "blood-ward-east",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "stagger",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "c5e9c69ddd3921e44f01c81f91c6647922d2c0863535758c3cade3d8044d26cd",
+      "alphaBounds": [
+        45,
+        14,
+        117,
+        127
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 14,
+        "right": 43,
+        "bottom": 33
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:hurt-defeat:3",
+      "enemyId": "blood-ward-east",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 160,
+      "phase": "collapse",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "429b615e899665969d3238494a8c78ef84dce07bd8dd02c04ce571ea2fda1d51",
+      "alphaBounds": [
+        37,
+        36,
+        118,
+        147
+      ],
+      "transparentGutter": {
+        "left": 37,
+        "top": 36,
+        "right": 42,
+        "bottom": 13
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:hurt-defeat:4",
+      "enemyId": "blood-ward-east",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "defeated",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "b8a161589b085ee36f6e2f76f579c5a57454b587e1a190ed01d9253b783b0626",
+      "alphaBounds": [
+        21,
+        97,
+        154,
+        150
+      ],
+      "transparentGutter": {
+        "left": 21,
+        "top": 97,
+        "right": 6,
+        "bottom": 10
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "blood-ward-east:hurt-defeat:5",
+      "enemyId": "blood-ward-east",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 600,
+      "phase": "defeated-hold",
+      "events": [
+        "defeatedHold"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        52,
+        22,
+        56,
+        112
+      ],
+      "rgbaSha256": "4fe91583b67d8ea623b7a562375d4c3bad1bd013be268c2d23cfb956a659ead5",
+      "alphaBounds": [
+        19,
+        102,
+        153,
+        151
+      ],
+      "transparentGutter": {
+        "left": 19,
+        "top": 102,
+        "right": 7,
+        "bottom": 9
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:locomotion:0",
+      "enemyId": "tithe-seal",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "2edb4c1accc35b6690cf53e269a542de548442f9a4ff2b8aaf461a630a06dc83",
+      "alphaBounds": [
+        38,
+        22,
+        124,
+        126
+      ],
+      "transparentGutter": {
+        "left": 38,
+        "top": 22,
+        "right": 36,
+        "bottom": 34
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:locomotion:1",
+      "enemyId": "tithe-seal",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "753527eaae86724c17761c03b532c14caf537dab26d6bba5ee814260998a5a4b",
+      "alphaBounds": [
+        43,
+        21,
+        119,
+        125
+      ],
+      "transparentGutter": {
+        "left": 43,
+        "top": 21,
+        "right": 41,
+        "bottom": 35
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:locomotion:2",
+      "enemyId": "tithe-seal",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "passing",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "ea2bfe03f963f3b6fad80166d8c850be7b7120e60636897b99064948a9d17031",
+      "alphaBounds": [
+        38,
+        20,
+        123,
+        124
+      ],
+      "transparentGutter": {
+        "left": 38,
+        "top": 20,
+        "right": 37,
+        "bottom": 36
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:locomotion:3",
+      "enemyId": "tithe-seal",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "extension",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "947655096c38fa60b9e8a78e95d5c5d9c52be45a8c62d68d9aff37a2fcaf7ec8",
+      "alphaBounds": [
+        43,
+        19,
+        119,
+        123
+      ],
+      "transparentGutter": {
+        "left": 43,
+        "top": 19,
+        "right": 41,
+        "bottom": 37
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:locomotion:4",
+      "enemyId": "tithe-seal",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "second-contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "331c0585cfcea48af943f6ce4b5cd443b31a3aac4506ef650be8b64312a7a86f",
+      "alphaBounds": [
+        38,
+        20,
+        124,
+        124
+      ],
+      "transparentGutter": {
+        "left": 38,
+        "top": 20,
+        "right": 36,
+        "bottom": 36
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:locomotion:5",
+      "enemyId": "tithe-seal",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "9c3b1ee6e83d7b9100f8fbaf8bd0be2efb4b65e2d4a06a2bd7c58606309be9d0",
+      "alphaBounds": [
+        43,
+        21,
+        119,
+        125
+      ],
+      "transparentGutter": {
+        "left": 43,
+        "top": 21,
+        "right": 41,
+        "bottom": 35
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:basic-attack:0",
+      "enemyId": "tithe-seal",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "6f60f67eaffcc9ab36f73e182c0e973642fc47c425ab57fca9c3faf4a3842e04",
+      "alphaBounds": [
+        39,
+        21,
+        123,
+        125
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 21,
+        "right": 37,
+        "bottom": 35
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:basic-attack:1",
+      "enemyId": "tithe-seal",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 150,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "18ab7f398892b884652fc8ab25dad79e53361e728e930d07b9feeee523053538",
+      "alphaBounds": [
+        48,
+        17,
+        114,
+        120
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 17,
+        "right": 46,
+        "bottom": 40
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:basic-attack:2",
+      "enemyId": "tithe-seal",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "commitment",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "44e7b0296f2128fb18bc302f59218bf780270c76fc89cf0d2d8911ebdd81a1b1",
+      "alphaBounds": [
+        38,
+        21,
+        115,
+        124
+      ],
+      "transparentGutter": {
+        "left": 38,
+        "top": 21,
+        "right": 45,
+        "bottom": 36
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:basic-attack:3",
+      "enemyId": "tithe-seal",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 80,
+      "phase": "active",
+      "events": [
+        "damage"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "a3ba9ba66201aec023f004a8cc98a2fcb9b488c3b5ca5ae167cb1ed9102e0fb8",
+      "alphaBounds": [
+        15,
+        26,
+        121,
+        127
+      ],
+      "transparentGutter": {
+        "left": 15,
+        "top": 26,
+        "right": 39,
+        "bottom": 33
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:basic-attack:4",
+      "enemyId": "tithe-seal",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 130,
+      "phase": "follow-through",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "4368ceb93cf70d06953051c0052ebbea8f23f2bbfc577b182e9de1176fe0ba47",
+      "alphaBounds": [
+        18,
+        24,
+        120,
+        127
+      ],
+      "transparentGutter": {
+        "left": 18,
+        "top": 24,
+        "right": 40,
+        "bottom": 33
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:basic-attack:5",
+      "enemyId": "tithe-seal",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 240,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "26a19f488e9c9079d49672d3009a41053f24ce75d33ce170ccf3ce55ff5adb18",
+      "alphaBounds": [
+        40,
+        22,
+        117,
+        126
+      ],
+      "transparentGutter": {
+        "left": 40,
+        "top": 22,
+        "right": 43,
+        "bottom": 34
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:signature-attack:0",
+      "enemyId": "tithe-seal",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 220,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "741c0ea2190a27bf1cb27524110cf8cf3cbc1c8a084db21b4ed2b001b2a48859",
+      "alphaBounds": [
+        39,
+        23,
+        123,
+        127
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 23,
+        "right": 37,
+        "bottom": 33
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:signature-attack:1",
+      "enemyId": "tithe-seal",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "0fe7f4c825e076c90d79322d8cbbe78a197b6eee335eb8e52a241ca6577abc0d",
+      "alphaBounds": [
+        50,
+        20,
+        111,
+        124
+      ],
+      "transparentGutter": {
+        "left": 50,
+        "top": 20,
+        "right": 49,
+        "bottom": 36
+      },
+      "visibleColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:signature-attack:2",
+      "enemyId": "tithe-seal",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 140,
+      "phase": "charge",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "3d290d5b05cb3bdd05b61917507d1b058d12a802a395b95a2076e76061236fcc",
+      "alphaBounds": [
+        50,
+        18,
+        111,
+        122
+      ],
+      "transparentGutter": {
+        "left": 50,
+        "top": 18,
+        "right": 49,
+        "bottom": 38
+      },
+      "visibleColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:signature-attack:3",
+      "enemyId": "tithe-seal",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "active",
+      "events": [
+        "ink-wax-stamp"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "60a12190a2144d7a5825d2b3b83e8c040ad385e65bed5d3cc63f2570b849da68",
+      "alphaBounds": [
+        21,
+        19,
+        141,
+        123
+      ],
+      "transparentGutter": {
+        "left": 21,
+        "top": 19,
+        "right": 19,
+        "bottom": 37
+      },
+      "visibleColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:signature-attack:4",
+      "enemyId": "tithe-seal",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "recoil",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "7d97dfc3844f44c25ff5f2b8b1cf4df6426a387a4c402071c1011b26b9e950a4",
+      "alphaBounds": [
+        35,
+        21,
+        127,
+        124
+      ],
+      "transparentGutter": {
+        "left": 35,
+        "top": 21,
+        "right": 33,
+        "bottom": 36
+      },
+      "visibleColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:signature-attack:5",
+      "enemyId": "tithe-seal",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "1b444898d2a03b48bedc45d03afd6bd28431820e9c91d2e3cf6e02f5af641782",
+      "alphaBounds": [
+        39,
+        22,
+        122,
+        126
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 22,
+        "right": 38,
+        "bottom": 34
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:hurt-defeat:0",
+      "enemyId": "tithe-seal",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "hurt-contact",
+      "events": [
+        "hurt"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "31ac6bf845c80881ff71df45ad3c92639cc8f672dba7e17045ebf656637e815a",
+      "alphaBounds": [
+        33,
+        23,
+        136,
+        124
+      ],
+      "transparentGutter": {
+        "left": 33,
+        "top": 23,
+        "right": 24,
+        "bottom": 36
+      },
+      "visibleColors": 13,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:hurt-defeat:1",
+      "enemyId": "tithe-seal",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "e1040b1c65497d8665a50bf3ae2d12cb3030ebbb0a16d6e7d8f544a4a46b028e",
+      "alphaBounds": [
+        45,
+        24,
+        123,
+        128
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 24,
+        "right": 37,
+        "bottom": 32
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:hurt-defeat:2",
+      "enemyId": "tithe-seal",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "stagger",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "8c555b046e86678e0efd38238baa8fe318c82c16bca1f13c0a531196de222e2e",
+      "alphaBounds": [
+        40,
+        23,
+        124,
+        125
+      ],
+      "transparentGutter": {
+        "left": 40,
+        "top": 23,
+        "right": 36,
+        "bottom": 35
+      },
+      "visibleColors": 15,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:hurt-defeat:3",
+      "enemyId": "tithe-seal",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 160,
+      "phase": "collapse",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "0196d79dfb8dbe5dbbd1184afa5fc2488f9679bab5e2d5f08586a4eb7009b445",
+      "alphaBounds": [
+        42,
+        36,
+        122,
+        129
+      ],
+      "transparentGutter": {
+        "left": 42,
+        "top": 36,
+        "right": 38,
+        "bottom": 31
+      },
+      "visibleColors": 14,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:hurt-defeat:4",
+      "enemyId": "tithe-seal",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "defeated",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "5925fe7ddf7fd263ab9e8ae439067ec5e50a8617904acbc5b26da63216091ac8",
+      "alphaBounds": [
+        21,
+        116,
+        142,
+        153
+      ],
+      "transparentGutter": {
+        "left": 21,
+        "top": 116,
+        "right": 18,
+        "bottom": 7
+      },
+      "visibleColors": 14,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "tithe-seal:hurt-defeat:5",
+      "enemyId": "tithe-seal",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 600,
+      "phase": "defeated-hold",
+      "events": [
+        "defeatedHold"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        50,
+        34,
+        60,
+        94
+      ],
+      "rgbaSha256": "efb8cc74084fb68e861b60f269af764d30e3eeaf7bf048680844874aa387df89",
+      "alphaBounds": [
+        19,
+        124,
+        150,
+        154
+      ],
+      "transparentGutter": {
+        "left": 19,
+        "top": 124,
+        "right": 10,
+        "bottom": 6
+      },
+      "visibleColors": 14,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:locomotion:0",
+      "enemyId": "court-clone",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "e4d93fd976e316e2b3d476692ee97b2325ad34ec083534e76e9fc71fd816b688",
+      "alphaBounds": [
+        36,
+        17,
+        118,
+        152
+      ],
+      "transparentGutter": {
+        "left": 36,
+        "top": 17,
+        "right": 42,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:locomotion:1",
+      "enemyId": "court-clone",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "04b73e6c14a0d972c10c26f793f94e277d6f1d172fc6ee6906fe2f291d1c9e66",
+      "alphaBounds": [
+        34,
+        16,
+        122,
+        152
+      ],
+      "transparentGutter": {
+        "left": 34,
+        "top": 16,
+        "right": 38,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:locomotion:2",
+      "enemyId": "court-clone",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "passing",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "fd4c2f36bda863d396601fb16de384cdb41cbbeed6130f4607411090aaba8768",
+      "alphaBounds": [
+        34,
+        14,
+        116,
+        152
+      ],
+      "transparentGutter": {
+        "left": 34,
+        "top": 14,
+        "right": 44,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:locomotion:3",
+      "enemyId": "court-clone",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "extension",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "f4a0ce9791ca0a3b5cff9e2b6d018335d38ebefaf42d82e8e23f02444bf3daa2",
+      "alphaBounds": [
+        35,
+        17,
+        115,
+        152
+      ],
+      "transparentGutter": {
+        "left": 35,
+        "top": 17,
+        "right": 45,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:locomotion:4",
+      "enemyId": "court-clone",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "second-contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "77cc1de95257bf3188975de70426653858d7beb873abdbd1bcac7ca7021c35c5",
+      "alphaBounds": [
+        36,
+        17,
+        114,
+        152
+      ],
+      "transparentGutter": {
+        "left": 36,
+        "top": 17,
+        "right": 46,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:locomotion:5",
+      "enemyId": "court-clone",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "1b7fff67a1255b23d29b184847e34b4e6b930f825bdb31cd5973a214e987008b",
+      "alphaBounds": [
+        36,
+        15,
+        111,
+        152
+      ],
+      "transparentGutter": {
+        "left": 36,
+        "top": 15,
+        "right": 49,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:basic-attack:0",
+      "enemyId": "court-clone",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "eb8fd0a661409a3d96e386b010d29d6e9d05aa3492b88a695f0b2771b6cf0932",
+      "alphaBounds": [
+        32,
+        15,
+        111,
+        152
+      ],
+      "transparentGutter": {
+        "left": 32,
+        "top": 15,
+        "right": 49,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:basic-attack:1",
+      "enemyId": "court-clone",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 150,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "1d0066135b2a87d3f152effa012adeb52e7e4ac344c91cfca6d2f2f459bffa84",
+      "alphaBounds": [
+        62,
+        13,
+        137,
+        152
+      ],
+      "transparentGutter": {
+        "left": 62,
+        "top": 13,
+        "right": 23,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:basic-attack:2",
+      "enemyId": "court-clone",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "commitment",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "9cbbd9b1b07bf1d049c49b55c244c271fd6a32f9f048e570353e5412532ef9fc",
+      "alphaBounds": [
+        21,
+        18,
+        117,
+        152
+      ],
+      "transparentGutter": {
+        "left": 21,
+        "top": 18,
+        "right": 43,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:basic-attack:3",
+      "enemyId": "court-clone",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 80,
+      "phase": "active",
+      "events": [
+        "damage"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "d26afd8e33de0e4e478a2e27c9b23d57a2973614d78260844f201498525837de",
+      "alphaBounds": [
+        4,
+        23,
+        118,
+        152
+      ],
+      "transparentGutter": {
+        "left": 4,
+        "top": 23,
+        "right": 42,
+        "bottom": 8
+      },
+      "visibleColors": 10,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:basic-attack:4",
+      "enemyId": "court-clone",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 130,
+      "phase": "follow-through",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "023efca1a2d8803a8b0a67ff96305f13db9c9c2c4c371f2c12bfa28bce99b7a4",
+      "alphaBounds": [
+        8,
+        21,
+        118,
+        152
+      ],
+      "transparentGutter": {
+        "left": 8,
+        "top": 21,
+        "right": 42,
+        "bottom": 8
+      },
+      "visibleColors": 10,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:basic-attack:5",
+      "enemyId": "court-clone",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 240,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "b01d14c754c4a53ce00dcc9bef2225bfd158755b32e60e5b4fa92d697fac8764",
+      "alphaBounds": [
+        28,
+        15,
+        112,
+        152
+      ],
+      "transparentGutter": {
+        "left": 28,
+        "top": 15,
+        "right": 48,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:signature-attack:0",
+      "enemyId": "court-clone",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 220,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "8d915197526afc0b9dcb0d3112491361669c11be2a057cdaa4fa418ef5c21929",
+      "alphaBounds": [
+        39,
+        15,
+        111,
+        152
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 15,
+        "right": 49,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:signature-attack:1",
+      "enemyId": "court-clone",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "18e07ef9441fc6571b53e4999c8f98b54b35a3329f3c73b275f2d666e9804933",
+      "alphaBounds": [
+        67,
+        15,
+        116,
+        152
+      ],
+      "transparentGutter": {
+        "left": 67,
+        "top": 15,
+        "right": 44,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:signature-attack:2",
+      "enemyId": "court-clone",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 140,
+      "phase": "charge",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "3a80c4169bcb5183a340187196492f6cb29be497473adb74cc67b87769096c21",
+      "alphaBounds": [
+        58,
+        13,
+        119,
+        152
+      ],
+      "transparentGutter": {
+        "left": 58,
+        "top": 13,
+        "right": 41,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:signature-attack:3",
+      "enemyId": "court-clone",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "active",
+      "events": [
+        "clone-order"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "c755fd8a81f0326a0b67e4201f2c7601f746882348a14b5ea38feb0307fcf1fc",
+      "alphaBounds": [
+        7,
+        16,
+        117,
+        152
+      ],
+      "transparentGutter": {
+        "left": 7,
+        "top": 16,
+        "right": 43,
+        "bottom": 8
+      },
+      "visibleColors": 12,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:signature-attack:4",
+      "enemyId": "court-clone",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "recoil",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "6358d2130d7c17907121f8249ab4aae72f1aade66be137758fa665f75b5b977a",
+      "alphaBounds": [
+        25,
+        15,
+        115,
+        152
+      ],
+      "transparentGutter": {
+        "left": 25,
+        "top": 15,
+        "right": 45,
+        "bottom": 8
+      },
+      "visibleColors": 10,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:signature-attack:5",
+      "enemyId": "court-clone",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "3dc4808718f7e116943e2c2ae7904c8cd7947b65962e41e87b80c13300c6d66b",
+      "alphaBounds": [
+        39,
+        15,
+        112,
+        152
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 15,
+        "right": 48,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:hurt-defeat:0",
+      "enemyId": "court-clone",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "hurt-contact",
+      "events": [
+        "hurt"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "63555dab611a04917a47280494c25ac438ac9b392c1688c0ae656a1f597501af",
+      "alphaBounds": [
+        76,
+        11,
+        135,
+        152
+      ],
+      "transparentGutter": {
+        "left": 76,
+        "top": 11,
+        "right": 25,
+        "bottom": 8
+      },
+      "visibleColors": 13,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:hurt-defeat:1",
+      "enemyId": "court-clone",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "3fadc99cf4059cea3dbc1b7c39af8122365a08c72a463d7a1fde3a76acf076c8",
+      "alphaBounds": [
+        32,
+        21,
+        128,
+        152
+      ],
+      "transparentGutter": {
+        "left": 32,
+        "top": 21,
+        "right": 32,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:hurt-defeat:2",
+      "enemyId": "court-clone",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "stagger",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "11a045f8bc755f6a8322cf24ccb0f943668602e55e1d155fb4a746fa3dfad51b",
+      "alphaBounds": [
+        76,
+        13,
+        130,
+        152
+      ],
+      "transparentGutter": {
+        "left": 76,
+        "top": 13,
+        "right": 30,
+        "bottom": 8
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:hurt-defeat:3",
+      "enemyId": "court-clone",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 160,
+      "phase": "collapse",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "f66595675afb622f4581339023d21b303597aab8abac8e44907d6d839a1e6bfc",
+      "alphaBounds": [
+        30,
+        44,
+        128,
+        156
+      ],
+      "transparentGutter": {
+        "left": 30,
+        "top": 44,
+        "right": 32,
+        "bottom": 4
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:hurt-defeat:4",
+      "enemyId": "court-clone",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "defeated",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "c02c00304b6867d9549a6916f45bcb2e64d086d15f36eea2c23ee37f22835c16",
+      "alphaBounds": [
+        37,
+        47,
+        123,
+        148
+      ],
+      "transparentGutter": {
+        "left": 37,
+        "top": 47,
+        "right": 37,
+        "bottom": 12
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "court-clone:hurt-defeat:5",
+      "enemyId": "court-clone",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 600,
+      "phase": "defeated-hold",
+      "events": [
+        "defeatedHold"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        152
+      ],
+      "hurtBounds": [
+        46,
+        14,
+        70,
+        138
+      ],
+      "rgbaSha256": "8440e88e3c86339691c36c662749d0b6a48b142e77aedaf8bae5dcba32d71698",
+      "alphaBounds": [
+        61,
+        117,
+        121,
+        154
+      ],
+      "transparentGutter": {
+        "left": 61,
+        "top": 117,
+        "right": 39,
+        "bottom": 6
+      },
+      "visibleColors": 8,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:locomotion:0",
+      "enemyId": "unfiled-testimony",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "7d5cda84537dfc863da42b9efc4405cec6e613dd0c9de4a07eb8a07f9da3b398",
+      "alphaBounds": [
+        45,
+        26,
+        115,
+        143
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 26,
+        "right": 45,
+        "bottom": 17
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:locomotion:1",
+      "enemyId": "unfiled-testimony",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "13158c030b0bd3e10dfe3ccdac5a188e569dd02a871a0e089ad1d7dccbd10e8d",
+      "alphaBounds": [
+        45,
+        25,
+        117,
+        142
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 25,
+        "right": 43,
+        "bottom": 18
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:locomotion:2",
+      "enemyId": "unfiled-testimony",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "passing",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "ee86fbace4ba71fdc9906fef0bf253b098031c94f5e9a22de0758763b008d887",
+      "alphaBounds": [
+        39,
+        24,
+        122,
+        141
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 24,
+        "right": 38,
+        "bottom": 19
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:locomotion:3",
+      "enemyId": "unfiled-testimony",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "extension",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "5ef6c87e18b17fb579d0f4989fd77319dfffdc09c1793ea5ec3ed6ae1849304b",
+      "alphaBounds": [
+        45,
+        23,
+        115,
+        140
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 23,
+        "right": 45,
+        "bottom": 20
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:locomotion:4",
+      "enemyId": "unfiled-testimony",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 90,
+      "phase": "second-contact",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "599e1065b5530385271c444ab4212211cd73f5efaaf5fb7fbeb7e3ca94e8cd55",
+      "alphaBounds": [
+        45,
+        24,
+        114,
+        141
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 24,
+        "right": 46,
+        "bottom": 19
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:locomotion:5",
+      "enemyId": "unfiled-testimony",
+      "clipId": "locomotion",
+      "row": 0,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        0,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "621534cc15507db5502476c6bcf36a4ce1d072c766e469b137e0cc609a54303b",
+      "alphaBounds": [
+        39,
+        25,
+        122,
+        142
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 25,
+        "right": 38,
+        "bottom": 18
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:basic-attack:0",
+      "enemyId": "unfiled-testimony",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "488ba0c92effc0416191540c5950a676dc6e9152608296ca4e2871865028b53a",
+      "alphaBounds": [
+        45,
+        25,
+        114,
+        142
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 25,
+        "right": 46,
+        "bottom": 18
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:basic-attack:1",
+      "enemyId": "unfiled-testimony",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 150,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "d490e17db2bc6d48bd32dfe6654e0eac6ee091394e9d2002dc85d6e1821d1c57",
+      "alphaBounds": [
+        45,
+        22,
+        116,
+        139
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 22,
+        "right": 44,
+        "bottom": 21
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:basic-attack:2",
+      "enemyId": "unfiled-testimony",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "commitment",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "b4bd99afa55f54fff8e0edb347e2f92420690165275909469561d941ccf36be3",
+      "alphaBounds": [
+        42,
+        25,
+        121,
+        139
+      ],
+      "transparentGutter": {
+        "left": 42,
+        "top": 25,
+        "right": 39,
+        "bottom": 21
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:basic-attack:3",
+      "enemyId": "unfiled-testimony",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 80,
+      "phase": "active",
+      "events": [
+        "damage"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "6d7f1e391ea53e199dd46a1d95a1ab1fe026c0227607eea57054afe0a16833e0",
+      "alphaBounds": [
+        13,
+        26,
+        122,
+        139
+      ],
+      "transparentGutter": {
+        "left": 13,
+        "top": 26,
+        "right": 38,
+        "bottom": 21
+      },
+      "visibleColors": 20,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:basic-attack:4",
+      "enemyId": "unfiled-testimony",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 130,
+      "phase": "follow-through",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "726a21fc78c93e483e2e06f96c02a881045cff5c04425008c4b20dc20e40b996",
+      "alphaBounds": [
+        39,
+        25,
+        122,
+        140
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 25,
+        "right": 38,
+        "bottom": 20
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:basic-attack:5",
+      "enemyId": "unfiled-testimony",
+      "clipId": "basic-attack",
+      "row": 1,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        160,
+        160,
+        160
+      ],
+      "durationMs": 240,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "94f3c2cab0181c9140c06812e56eb76756898910ae55ed6a666e4613ed4e4f4f",
+      "alphaBounds": [
+        45,
+        26,
+        114,
+        143
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 26,
+        "right": 46,
+        "bottom": 17
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:signature-attack:0",
+      "enemyId": "unfiled-testimony",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 220,
+      "phase": "ready",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "503aa36d81170346f0bbc969bae648a29cfd798cf37ae82dd8d4f45b7ecc9a2d",
+      "alphaBounds": [
+        39,
+        27,
+        122,
+        144
+      ],
+      "transparentGutter": {
+        "left": 39,
+        "top": 27,
+        "right": 38,
+        "bottom": 16
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:signature-attack:1",
+      "enemyId": "unfiled-testimony",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "anticipation",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "ad3f9149f352335532569e7467f9aaa9d431941f36ea28838bcfa85f5f5e4772",
+      "alphaBounds": [
+        44,
+        23,
+        116,
+        140
+      ],
+      "transparentGutter": {
+        "left": 44,
+        "top": 23,
+        "right": 44,
+        "bottom": 20
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:signature-attack:2",
+      "enemyId": "unfiled-testimony",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 140,
+      "phase": "charge",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "70dca4f78d9b6b848619cbf6ae68a6db6e6c03c637f252f78f5c9cdbccf3286d",
+      "alphaBounds": [
+        45,
+        22,
+        116,
+        139
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 22,
+        "right": 44,
+        "bottom": 21
+      },
+      "visibleColors": 20,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:signature-attack:3",
+      "enemyId": "unfiled-testimony",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "active",
+      "events": [
+        "testimony-unfold"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "b3b53a406c9ef80833662d827f5634bc32227d5e91aa52f2f97d361742e52a19",
+      "alphaBounds": [
+        7,
+        23,
+        118,
+        139
+      ],
+      "transparentGutter": {
+        "left": 7,
+        "top": 23,
+        "right": 42,
+        "bottom": 21
+      },
+      "visibleColors": 20,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:signature-attack:4",
+      "enemyId": "unfiled-testimony",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 180,
+      "phase": "recoil",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "72d578ea5dd76e5567be2b8be81f51141ba2abbe2a8d7cf03da29cee10f65263",
+      "alphaBounds": [
+        36,
+        24,
+        125,
+        141
+      ],
+      "transparentGutter": {
+        "left": 36,
+        "top": 24,
+        "right": 35,
+        "bottom": 19
+      },
+      "visibleColors": 19,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:signature-attack:5",
+      "enemyId": "unfiled-testimony",
+      "clipId": "signature-attack",
+      "row": 2,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        320,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "recovery",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "12292defdaf9f2d6e308da848d57d88c842330b23219e4828354e2aa69d248e6",
+      "alphaBounds": [
+        45,
+        26,
+        115,
+        143
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 26,
+        "right": 45,
+        "bottom": 17
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:hurt-defeat:0",
+      "enemyId": "unfiled-testimony",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 0,
+      "rect": [
+        0,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "hurt-contact",
+      "events": [
+        "hurt"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "d80030f244b9a11a10709f5e88556ac6a7e8084946f9138a51d3ce27abfcc56e",
+      "alphaBounds": [
+        48,
+        26,
+        123,
+        146
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 26,
+        "right": 37,
+        "bottom": 14
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:hurt-defeat:1",
+      "enemyId": "unfiled-testimony",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 1,
+      "rect": [
+        160,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 100,
+      "phase": "compression",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "d754d333e0d4911a3b410e55207c816bd97de65b1e99a6041664522a899cbe0c",
+      "alphaBounds": [
+        48,
+        33,
+        122,
+        141
+      ],
+      "transparentGutter": {
+        "left": 48,
+        "top": 33,
+        "right": 38,
+        "bottom": 19
+      },
+      "visibleColors": 18,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:hurt-defeat:2",
+      "enemyId": "unfiled-testimony",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 2,
+      "rect": [
+        320,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 120,
+      "phase": "stagger",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "e515fa4b2d62a7e36b656dd4ccdf2647d53d39c5b18e37f0cbd5574cbd95fa8a",
+      "alphaBounds": [
+        43,
+        31,
+        128,
+        145
+      ],
+      "transparentGutter": {
+        "left": 43,
+        "top": 31,
+        "right": 32,
+        "bottom": 15
+      },
+      "visibleColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:hurt-defeat:3",
+      "enemyId": "unfiled-testimony",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 3,
+      "rect": [
+        480,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 160,
+      "phase": "collapse",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "32ddfb3cbafca7a45c8773600a62c2847bf8ddb9e29039b8529519b67baaed6e",
+      "alphaBounds": [
+        43,
+        50,
+        134,
+        156
+      ],
+      "transparentGutter": {
+        "left": 43,
+        "top": 50,
+        "right": 26,
+        "bottom": 4
+      },
+      "visibleColors": 17,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:hurt-defeat:4",
+      "enemyId": "unfiled-testimony",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 4,
+      "rect": [
+        640,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 300,
+      "phase": "defeated",
+      "events": [],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "a4012733f5ff985af50e75e0a4d2e74daa517315513994a3ac65f18411d82d65",
+      "alphaBounds": [
+        42,
+        115,
+        130,
+        151
+      ],
+      "transparentGutter": {
+        "left": 42,
+        "top": 115,
+        "right": 30,
+        "bottom": 9
+      },
+      "visibleColors": 11,
+      "alphaValues": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "unfiled-testimony:hurt-defeat:5",
+      "enemyId": "unfiled-testimony",
+      "clipId": "hurt-defeat",
+      "row": 3,
+      "frameIndex": 5,
+      "rect": [
+        800,
+        480,
+        160,
+        160
+      ],
+      "durationMs": 600,
+      "phase": "defeated-hold",
+      "events": [
+        "defeatedHold"
+      ],
+      "pivot": [
+        80,
+        148
+      ],
+      "foot": [
+        80,
+        151
+      ],
+      "hurtBounds": [
+        44,
+        26,
+        72,
+        110
+      ],
+      "rgbaSha256": "1e214fee2e9d25080e8f1aa317b1e8dfa98ea2ba6f0703c7eafe15532b17bf7a",
+      "alphaBounds": [
+        45,
+        108,
+        113,
+        149
+      ],
+      "transparentGutter": {
+        "left": 45,
+        "top": 108,
+        "right": 47,
+        "bottom": 11
+      },
+      "visibleColors": 16,
+      "alphaValues": [
+        0,
+        255
+      ]
+    }
+  ],
+  "runtimeIntegration": {
+    "status": "packed-into-enemy-combat-animation-runtime-v1",
+    "runtimeAtlas": "../enemy-combat-animation-runtime-v1/enemy-combat-animation-atlas-v1.png",
+    "notes": "Rows are appended after the V2/V3 families; pivots, profiles, and idle-loop flags are mirrored in game/enemy-combat-animation-atlas.mjs."
+  }
+}

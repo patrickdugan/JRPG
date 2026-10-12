@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pack the reviewed V2/V3 enemy animation families into one runtime atlas."""
+"""Pack the reviewed V2/V3/V4 enemy animation families into one runtime atlas."""
 
 from __future__ import annotations
 
@@ -26,7 +26,20 @@ ATLAS_COLUMNS = CLIP_COLUMNS * CLIP_ROWS
 SUITES = (
     ("enemy-animation-suite-v2", "enemy-animation-suite-v2.source.json", "v2"),
     ("enemy-animation-suite-v3", "enemy-animation-suite-v3.source.json", "v3"),
+    ("enemy-animation-suite-v4", "enemy-animation-suite-v4.source.json", "v4"),
 )
+PIXELIFIED_LANE = "deterministically-pixelified"
+PIXEL_AUTHORED_LANE = "pixel-authored"
+
+
+def provenance_lane(contract: dict) -> str:
+    """Read each suite's own provenance record; never infer authorship from appearance."""
+    provenance = contract["provenance"]
+    if provenance.get("notPixelAuthored") is False and provenance.get("classification") == "pixel-authored deterministic production":
+        return PIXEL_AUTHORED_LANE
+    if provenance.get("notPixelAuthored") is True:
+        return PIXELIFIED_LANE
+    raise ValueError(f"{contract['assetId']} has an unclassified provenance record")
 
 
 def sha256(data: bytes) -> str:
@@ -45,11 +58,13 @@ def load_sources() -> tuple[list[dict], list[dict], list[dict]]:
             clips = contract["clips"]
         elif clips != contract["clips"]:
             raise ValueError(f"{suite_name} clip contract differs from the shared runtime contract")
+        lane = provenance_lane(contract)
         source_records.append(
             {
                 "package": suite_name,
                 "contract": f"../{suite_name}/{contract_name}",
                 "contractSha256": sha256(contract_bytes),
+                "provenanceLane": lane,
             }
         )
         for enemy in contract["enemies"]:
@@ -69,6 +84,7 @@ def load_sources() -> tuple[list[dict], list[dict], list[dict]]:
                     **enemy,
                     "sourcePackage": suite_name,
                     "sourceVersion": version,
+                    "provenanceLane": lane,
                     "atlasPath": atlas_path,
                 }
             )
@@ -122,10 +138,22 @@ def build_manifest(
         "assetId": "enemy-combat-animation-runtime-v1",
         "status": "runtime-integrated-candidate",
         "provenance": {
-            "classification": "deterministically pixelified runtime repack",
-            "notPixelAuthored": True,
-            "source": "Reviewed V2/V3 deterministically pixelified enemy atlases derived from AI-generated stylized animation concepts.",
+            "classification": "mixed-lane lossless runtime repack",
             "operation": "Lossless integer-aligned cel repacking only; no resampling, recoloring, interpolation, or generated pixels.",
+            "lanes": [
+                {
+                    "lane": PIXELIFIED_LANE,
+                    "packages": ["enemy-animation-suite-v2", "enemy-animation-suite-v3"],
+                    "notPixelAuthored": True,
+                    "source": "Reviewed V2/V3 deterministically pixelified enemy atlases derived from AI-generated stylized animation concepts.",
+                },
+                {
+                    "lane": PIXEL_AUTHORED_LANE,
+                    "packages": ["enemy-animation-suite-v4"],
+                    "notPixelAuthored": False,
+                    "source": "V4 summoned ward, seal, echo, and record families rasterized from code-native pixel primitives by build_enemy_animation_suite_v4.py.",
+                },
+            ],
         },
         "geometry": {
             "frameWidth": FRAME_WIDTH,
@@ -156,6 +184,7 @@ def build_manifest(
                 "signatureId": enemy["signatureId"],
                 "sourcePackage": enemy["sourcePackage"],
                 "sourceVersion": enemy["sourceVersion"],
+                "provenanceLane": enemy["provenanceLane"],
             }
             for row, enemy in enumerate(enemies)
         ],

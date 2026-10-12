@@ -1,8 +1,10 @@
 /**
- * Runtime addressing for the reviewed V2/V3 side-view enemy animation roster.
+ * Runtime addressing for the reviewed V2/V3/V4 side-view enemy animation roster.
  *
- * The atlas is a lossless repack of deterministically pixelified derivatives.
- * Combat simulation continues to own movement, facing, collision, and damage.
+ * The atlas is a lossless repack. Rows 0-27 are deterministically pixelified
+ * V2/V3 derivatives; rows 28-32 are the pixel-authored V4 summoned wards,
+ * seal, umbral echo, and record spirit. Combat simulation continues to own
+ * movement, facing, collision, and damage.
  */
 
 function deepFreeze(value) {
@@ -14,9 +16,9 @@ function deepFreeze(value) {
 export const ENEMY_COMBAT_ANIMATION_ATLAS = deepFreeze({
   url: './assets/art/enemy-combat-animation-runtime-v1/enemy-combat-animation-atlas-v1.png',
   width: 3840,
-  height: 4480,
+  height: 5280,
   columns: 24,
-  rows: 28,
+  rows: 33,
   cellWidth: 160,
   cellHeight: 160,
   facing: 'screen-left',
@@ -70,6 +72,10 @@ const PROFILE_GEOMETRY = deepFreeze({
   arachnid: { pivot: [80, 138], footPoint: [80, 151], hurtBounds: [18, 55, 124, 84], scale: 1 },
   'serpent-plant': { pivot: [80, 145], footPoint: [80, 151], hurtBounds: [30, 12, 100, 140], scale: 1.04 },
   'rooted-plant': { pivot: [80, 146], footPoint: [80, 151], hurtBounds: [24, 28, 112, 120], scale: 1 },
+  'ward-object': { pivot: [80, 148], footPoint: [80, 151], hurtBounds: [52, 22, 56, 112], scale: 1 },
+  'seal-object': { pivot: [80, 148], footPoint: [80, 151], hurtBounds: [50, 34, 60, 94], scale: 0.9 },
+  'umbral-human': { pivot: [80, 148], footPoint: [80, 152], hurtBounds: [46, 14, 70, 138], scale: 0.97 },
+  'paper-spirit': { pivot: [80, 148], footPoint: [80, 151], hurtBounds: [44, 26, 72, 110], scale: 0.92 },
 });
 
 const ENTRY_ROWS = [
@@ -101,15 +107,27 @@ const ENTRY_ROWS = [
   ['razor-bamboo-stalker', 'Razor Bamboo Stalker', 'rooted-plant', 'razor-canopy'],
   ['spider-lily-ambusher', 'Spider-Lily Ambusher', 'rooted-plant', 'crimson-pollen-ambush'],
   ['lantern-vine-maw', 'Lantern-Vine Maw', 'rooted-plant', 'false-lantern-lure'],
+  ['blood-ward-west', 'Blood Ward Seal (West)', 'ward-object', 'sanguine-ward-pulse', { idleLoop: true }],
+  ['blood-ward-east', 'Blood Ward Seal (East)', 'ward-object', 'sanguine-ward-pulse', { idleLoop: true }],
+  ['tithe-seal', 'Exposed Seal', 'seal-object', 'ink-wax-stamp', { idleLoop: true }],
+  ['court-clone', 'Court Clone', 'umbral-human', 'clone-order'],
+  ['unfiled-testimony', 'Unfiled Testimony', 'paper-spirit', 'testimony-unfold', { idleLoop: true }],
 ];
 
+/** First runtime row authored in the pixel-authored V4 lane. */
+export const ENEMY_COMBAT_ANIMATION_PIXEL_AUTHORED_FIRST_ROW = 28;
+
 export const ENEMY_COMBAT_ANIMATION_ENTRIES = deepFreeze(ENTRY_ROWS.map(
-  ([id, name, profile, signatureId], row) => ({
+  ([id, name, profile, signatureId, options = {}], row) => ({
     id,
     name,
     profile,
     signatureId,
     row,
+    idleLoop: options.idleLoop === true,
+    provenanceLane: row >= ENEMY_COMBAT_ANIMATION_PIXEL_AUTHORED_FIRST_ROW
+      ? 'pixel-authored'
+      : 'deterministically-pixelified',
     ...PROFILE_GEOMETRY[profile],
   }),
 ));
@@ -122,16 +140,11 @@ export const ENEMY_COMBAT_ANIMATION_ALIASES = deepFreeze({
   'ashen-bailiff': 'tithe-enforcer',
   'ashen-garrison': 'provincial-banner-guard',
   'archive-warden': 'bell-scribe',
-  'blood-ward-east': 'ashen-banner-guard',
-  'blood-ward-west': 'ashen-spearman',
   'bound-ashen-oni': 'forge-thrall',
   'bound-ashen-patrol': 'ashen-spearman',
-  'court-clone': 'mourning-ronin',
   'dock-retainer': 'drowned-retainer',
   'fog-skimmer': 'lantern-leech',
   'masked-clerk': 'bell-scribe',
-  'tithe-seal': 'salt-warden',
-  'unfiled-testimony': 'ash-wisp',
 });
 
 const ENTRY_BY_ID = new Map(ENEMY_COMBAT_ANIMATION_ENTRIES.map((entry) => [entry.id, entry]));
@@ -212,6 +225,18 @@ export function sampleEnemyCombatAnimation(templateId, clipId, elapsedMs = 0) {
     totalDurationMs,
     complete: !clip.loop && safeElapsed >= totalDurationMs,
   });
+}
+
+/**
+ * Resting presentation for an actor that is neither moving nor attacking.
+ * Hovering objects (`idleLoop`) keep their hover/pulse loop alive; everyone
+ * else holds the locomotion "ready" frame. Reduced motion always holds.
+ */
+export function sampleEnemyCombatAnimationIdle(templateId, elapsedMs = 0, { reducedMotion = false } = {}) {
+  const entry = getEnemyCombatAnimationEntry(templateId);
+  if (!entry) throw new RangeError(`Unknown enemy combat animation template: ${templateId}`);
+  if (!entry.idleLoop || reducedMotion) return getEnemyCombatAnimationFrame(templateId, 'locomotion', 5);
+  return sampleEnemyCombatAnimation(templateId, 'locomotion', elapsedMs);
 }
 
 function segmentForPhase(clipId, phase) {
