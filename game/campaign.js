@@ -185,6 +185,13 @@ import {
   fieldTerrainImageHasExpectedSize,
   getFieldTerrainFrame,
 } from './field-terrain-atlas.mjs';
+import { WORLD_TILESET_ATLASES, worldTilesetImageHasExpectedSize } from './world-tileset-atlas.mjs';
+import {
+  canDrawFieldTileLayout,
+  drawFieldTileLayout,
+  fieldTileLayoutPixelSize,
+  resolveFieldTileLayout,
+} from './field-tileset-presentation.mjs';
 import {
   SCENE_BACKDROP_ATLAS,
   getSceneBackdropFrameForBeat,
@@ -330,6 +337,25 @@ fieldTerrainAtlasImage.addEventListener('error', () => {
   renderCurrentSceneDirection();
 }, { once: true });
 fieldTerrainAtlasImage.src = FIELD_TERRAIN_ATLAS.url;
+const worldTileAtlasImage = new Image();
+let worldTileAtlasState = 'loading';
+let fieldTileBaseCache = new WeakMap();
+mapCanvas.dataset.worldTileArtState = worldTileAtlasState;
+mapCanvas.dataset.worldTileThemeId = '';
+worldTileAtlasImage.decoding = 'async';
+worldTileAtlasImage.addEventListener('load', () => {
+  worldTileAtlasState = worldTilesetImageHasExpectedSize(worldTileAtlasImage, 'topDown') ? 'ready' : 'error';
+  mapCanvas.dataset.worldTileArtState = worldTileAtlasState;
+  fieldTileBaseCache = new WeakMap();
+  renderCurrentSceneDirection();
+}, { once: true });
+worldTileAtlasImage.addEventListener('error', () => {
+  worldTileAtlasState = 'error';
+  mapCanvas.dataset.worldTileArtState = worldTileAtlasState;
+  fieldTileBaseCache = new WeakMap();
+  renderCurrentSceneDirection();
+}, { once: true });
+worldTileAtlasImage.src = WORLD_TILESET_ATLASES.topDown.url;
 const mapName = document.querySelector('#mapName');
 const mapLegend = document.querySelector('#mapLegend');
 const sceneNumber = document.querySelector('#sceneNumber');
@@ -1517,42 +1543,71 @@ function drawMap(level, encounter, now) {
   mapCtx.fillStyle = '#080c16';
   mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
 
+  // Regional top-down tiles are decorative: they read level data only and fall
+  // back to the flat-color renderer below on load failure, wrong size, or an
+  // unknown theme.
+  const worldTileBase = getFieldTileBase(level);
+  const worldTileThemeId = worldTileBase?.layout.themeId ?? '';
+  if (mapCanvas.dataset.worldTileThemeId !== worldTileThemeId) mapCanvas.dataset.worldTileThemeId = worldTileThemeId;
+  if (worldTileBase) {
+    mapCtx.imageSmoothingEnabled = false;
+    mapCtx.drawImage(
+      worldTileBase.canvas,
+      0,
+      0,
+      worldTileBase.canvas.width,
+      worldTileBase.canvas.height,
+      originX,
+      originY,
+      width * cell,
+      height * cell,
+    );
+  }
+
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const key = `${x},${y}`;
       const px = originX + x * cell;
       const py = originY + y * cell;
       const terrain = terrainAt(level ?? {}, x, y);
-      mapCtx.fillStyle = terrainColor(terrain, palette);
-      mapCtx.fillRect(px, py, cell, cell);
-      const terrainFrame = fieldTerrainAtlasState === 'ready'
-        && fieldTerrainImageHasExpectedSize(fieldTerrainAtlasImage)
-        ? getFieldTerrainFrame(terrain)
-        : null;
-      if (terrainFrame) {
-        mapCtx.imageSmoothingEnabled = false;
-        mapCtx.drawImage(
-          fieldTerrainAtlasImage,
-          terrainFrame.x,
-          terrainFrame.y,
-          terrainFrame.width,
-          terrainFrame.height,
-          px,
-          py,
-          cell,
-          cell,
-        );
-      }
-      mapCtx.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.035)';
-      mapCtx.fillRect(px, py, cell, cell);
-      mapCtx.strokeStyle = 'rgba(219,227,242,0.11)';
-      mapCtx.strokeRect(px + 0.5, py + 0.5, cell - 1, cell - 1);
+      if (worldTileBase) {
+        if (!worldTileBase.layout.cells[y * width + x].impassable) {
+          mapCtx.lineWidth = 1;
+          mapCtx.strokeStyle = 'rgba(219,227,242,0.06)';
+          mapCtx.strokeRect(px + 0.5, py + 0.5, cell - 1, cell - 1);
+        }
+      } else {
+        mapCtx.fillStyle = terrainColor(terrain, palette);
+        mapCtx.fillRect(px, py, cell, cell);
+        const terrainFrame = fieldTerrainAtlasState === 'ready'
+          && fieldTerrainImageHasExpectedSize(fieldTerrainAtlasImage)
+          ? getFieldTerrainFrame(terrain)
+          : null;
+        if (terrainFrame) {
+          mapCtx.imageSmoothingEnabled = false;
+          mapCtx.drawImage(
+            fieldTerrainAtlasImage,
+            terrainFrame.x,
+            terrainFrame.y,
+            terrainFrame.width,
+            terrainFrame.height,
+            px,
+            py,
+            cell,
+            cell,
+          );
+        }
+        mapCtx.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.035)';
+        mapCtx.fillRect(px, py, cell, cell);
+        mapCtx.strokeStyle = 'rgba(219,227,242,0.11)';
+        mapCtx.strokeRect(px + 0.5, py + 0.5, cell - 1, cell - 1);
 
-      if (blocked.has(key)) {
-        mapCtx.fillStyle = palette.blocked;
-        mapCtx.fillRect(px + 3, py + 3, cell - 6, cell - 6);
-        mapCtx.fillStyle = 'rgba(255,255,255,0.13)';
-        mapCtx.fillRect(px + 5, py + 5, cell - 10, 3);
+        if (blocked.has(key)) {
+          mapCtx.fillStyle = palette.blocked;
+          mapCtx.fillRect(px + 3, py + 3, cell - 6, cell - 6);
+          mapCtx.fillStyle = 'rgba(255,255,255,0.13)';
+          mapCtx.fillRect(px + 5, py + 5, cell - 10, 3);
+        }
       }
       if (terrain === 'water') {
         const wave = Math.sin(now / 360 + x * 1.7 + y) * 2;
@@ -1732,6 +1787,44 @@ function drawMap(level, encounter, now) {
   const terrainTags = [...new Set((level?.terrain ?? []).map((entry) => entry.type ?? entry.terrain ?? entry.tag).filter(Boolean))];
   const terrainLegend = terrainTags.length ? terrainTags.join(' · ') : 'Tactical preview';
   mapLegend.textContent = `${terrainLegend} · Objective ■ · Witness ● · Side story ◆`;
+}
+
+/**
+ * Compose (once per level, atlas state, and dressing) the native-resolution
+ * regional tile base for drawMap. Returns null whenever drawMap must keep its
+ * flat-color renderer: atlas loading/failed/wrong size, unknown theme, or a
+ * resolver error. `dressedCells` is the prop-dressing seam documented in
+ * field-tileset-presentation.mjs; pass it only when that layer draws.
+ */
+function getFieldTileBase(level, dressedCells = undefined) {
+  if (worldTileAtlasState !== 'ready' || !worldTilesetImageHasExpectedSize(worldTileAtlasImage, 'topDown')) return null;
+  if (!level || typeof level !== 'object') return null;
+  const terrainReady = fieldTerrainAtlasState === 'ready' && fieldTerrainImageHasExpectedSize(fieldTerrainAtlasImage);
+  const dressedKey = dressedCells ? [...dressedCells].sort().join('|') : '';
+  const cached = fieldTileBaseCache.get(level);
+  if (cached && cached.terrainReady === terrainReady && cached.dressedKey === dressedKey) return cached.base;
+  let base = null;
+  try {
+    const layout = resolveFieldTileLayout(level, { dressedCells });
+    if (canDrawFieldTileLayout(layout, worldTileAtlasImage)) {
+      const size = fieldTileLayoutPixelSize(layout);
+      const canvas = document.createElement('canvas');
+      canvas.width = size.width;
+      canvas.height = size.height;
+      const context = canvas.getContext('2d');
+      context.imageSmoothingEnabled = false;
+      const draws = drawFieldTileLayout(context, layout, {
+        worldTopDown: worldTileAtlasImage,
+        fieldTerrain: terrainReady ? fieldTerrainAtlasImage : null,
+      });
+      if (draws > 0) base = { layout, canvas };
+    }
+  } catch (error) {
+    console.warn('Regional field tiles fell back to the flat-color renderer.', error);
+    base = null;
+  }
+  fieldTileBaseCache.set(level, { terrainReady, dressedKey, base });
+  return base;
 }
 
 function formatEnemies(enemies = []) {
