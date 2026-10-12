@@ -186,3 +186,24 @@ test('vertical-slice battles carry checkpoint vitals, settle receipts, and expos
   assert.match(html, /aria-label="Controller controls"/u);
   assert.match(html, /LB Combo · RB Tag/u);
 });
+
+test('combat feel stays presentation-only: telegraphs, poise reads, and paced hit-stop', () => {
+  assert.match(browser, /from '\.\/action-combat-feedback\.mjs'/u);
+  assert.match(browser, /collectEnemyTelegraphs\(snapshot\.kernel, session\.spec\.kernelConfig\.attacks\)/u);
+  assert.match(browser, /setCanvasDataset\('telegraphCount'/u);
+  assert.match(browser, /item\.dataset\.poise = /u);
+  assert.match(browser, /item\.dataset\.maxPoise = /u);
+  assert.match(browser, /item\.dataset\.staggerRemainingMs = /u);
+  assert.match(browser, /dataset\.kernelNowMs = String\(snapshot\.kernel\.nowMs\)/u);
+  assert.match(browser, /reducedMotion\.matches \? \{ x: 0, y: 0 \} : screenShakeOffset/u);
+  // Playtime is sampled from wall-clock frames before pacing, so hit-stop and
+  // phase slow motion count as active play rather than as a pause.
+  const frameLoop = browser.slice(browser.indexOf('function frame(timestamp)'));
+  const sample = frameLoop.indexOf('sampleCanonicalPlaytime(timestamp, timestamp - playtimeLastSample)');
+  const pacing = frameLoop.indexOf('paceSimulation(simulationPacer, elapsedMs)');
+  assert.ok(sample >= 0 && pacing > sample);
+  // A frozen frame advances no fixed steps and keeps queued presses for later.
+  assert.match(frameLoop, /paced\?\.frozen\) \{\s*snapshot = snapshotActionCampaignBattle\(session\);/u);
+  assert.match(frameLoop, /advanceActionCampaignBattle\(session, paced\.simulatedMs, \{/u);
+  assert.doesNotMatch(browser, /dataset\.paused = String\([^)]*hitStop/u);
+});

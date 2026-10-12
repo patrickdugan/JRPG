@@ -1215,9 +1215,18 @@ class PlayerDriver:
                 continuation = self.page.locator("#continueCampaign")
                 continuation.wait_for(state="visible", timeout=15_000)
                 canvas = self.page.locator("#actionCampaignCanvas")
+                kernel_now_ms = self.action_number({"value": canvas.get_attribute("data-kernel-now-ms") or ""}, "value")
                 self.action_battles.append({
                     "encounter": encounter,
                     "durationSeconds": round(time.monotonic() - battle_started, 3),
+                    # Simulated time of the winning attempt; hit-stop and phase
+                    # slow motion add wall time but never simulated time.
+                    "simulatedSeconds": round(kernel_now_ms / 1000, 3),
+                    "hitStopSeconds": round(
+                        self.action_number({"value": canvas.get_attribute("data-hit-stop-total-ms") or ""}, "value") / 1000,
+                        3,
+                    ),
+                    "interrupts": int(self.action_number({"value": canvas.get_attribute("data-interrupt-count") or ""}, "value")),
                     "inputs": self.battle_commands - commands_at_start,
                     "restarts": restart_count,
                     "objective": self.page.locator("#objectiveRuntimeStatus").inner_text(),
