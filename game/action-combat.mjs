@@ -17,10 +17,26 @@
  */
 
 export const ACTION_FIXED_STEP_MS = 20;
-export const ACTION_COMBAT_SNAPSHOT_VERSION = 6;
+export const ACTION_COMBAT_SNAPSHOT_VERSION = 7;
 export const ACTION_TAG_COOLDOWN_MS = 240;
 export const ACTION_HIT_STUN_MS = 100;
+/** Post-hit invulnerability for enemies and neutral actors. */
 export const ACTION_HIT_INVULNERABILITY_MS = 240;
+/**
+ * Party fighters get a longer grace after a damaging hit so a second, mistimed
+ * read cannot chain immediately into another hit (doc 43). Enemies keep the
+ * shorter window, so party damage and poise pressure are unchanged.
+ */
+export const ACTION_PARTY_HIT_INVULNERABILITY_MS = 360;
+/** Leniency windows (doc 43): coyote jump, landing jump buffer, and input buffer. */
+export const ACTION_COYOTE_WINDOW_MS = 140;
+export const ACTION_JUMP_BUFFER_WINDOW_MS = 160;
+/**
+ * A buffered attack or maneuver press that arrives while the actor is still
+ * committed, cooling down, or in hit-stun is held for this long and starts on
+ * the first fixed step it becomes legal. It never bypasses a cooldown.
+ */
+export const ACTION_INPUT_BUFFER_WINDOW_MS = 160;
 export const ACTION_HIT_FLASH_MS = 120;
 export const ACTION_KNOCKBACK_SPEED_X = 160;
 export const ACTION_KNOCKBACK_LIFT_SPEED_Y = 120;
@@ -42,9 +58,20 @@ const DEFAULT_OFFENSIVE_COOLDOWN_MS = 400;
 const DEFAULT_GRAVITY = 1800;
 const DEFAULT_JUMP_SPEED = 520;
 const POSITION_PRECISION = 1_000_000;
-const COYOTE_WINDOW_MS = 100;
-const JUMP_BUFFER_WINDOW_MS = 120;
 const RELEASED_JUMP_GRAVITY_MULTIPLIER = 2.25;
+const BUFFERABLE_ATTACK_REASONS = new Set([
+  'animation-commitment',
+  'maneuver-commitment',
+  'shared-offensive-cooldown',
+  'attack-cooldown',
+  'hit-stun',
+]);
+const BUFFERABLE_MANEUVER_REASONS = new Set([
+  'animation-commitment',
+  'maneuver-commitment',
+  'maneuver-cooldown',
+  'hit-stun',
+]);
 
 const DELIVERY_KEYS = Object.freeze(['cut', 'pierce', 'crush', 'arcane']);
 const ESSENCE_KEYS = Object.freeze(['ember', 'frost', 'storm', 'radiance', 'umbral']);
@@ -454,6 +481,8 @@ function normalizeAttack(id, source, stepMs) {
       height: positiveNumber(source.hitbox?.height, `${id}.hitbox.height`),
     },
     poiseDamage: nonNegativeInteger(source.poiseDamage, `${id}.poiseDamage`, ACTION_DEFAULT_POISE_DAMAGE),
+    // Extra poise damage each damaging hit deals while this attack winds up.
+    tellPoiseBonus: nonNegativeInteger(source.tellPoiseBonus, `${id}.tellPoiseBonus`, 0),
     // Explicit opt-in for authored self-casts (summons, wards, stances): the
     // deterministic chase AI may begin them without its hitbox reaching a foe.
     selfCast: source.selfCast === true,
@@ -483,17 +512,22 @@ function normalizeAttack(id, source, stepMs) {
 
 /**
  * Poise is opt-in per actor. Hits that land during the actor's wind-up drain
- * it by the attack's poise damage; reaching zero cancels the wind-up (the
- * attack starts its normal cooldown) and staggers the actor. Partial regen
- * restores one point per interval after a quiet delay.
+ * it by the attack's poise damage plus the wind-up's `tellPoiseBonus`;
+ * reaching zero cancels the wind-up (the attack starts its normal cooldown)
+ * and staggers the actor. Hits outside a wind-up only chip poise down to
+ * `neutralFloor` (default: max, so no neutral chip) and never break it.
+ * Partial regen restores one point per interval after a quiet delay.
  */
 function normalizePoise(source, id) {
   if (source == null) {
-    return { max: 0, regenDelayMs: 0, regenIntervalMs: 0, staggerMs: 0 };
+    return { max: 0, neutralFloor: 0, regenDelayMs: 0, regenIntervalMs: 0, staggerMs: 0 };
   }
   const max = nonNegativeInteger(source.max, `${id}.poise.max`, 0);
+  const neutralFloor = nonNegativeInteger(source.neutralFloor, `${id}.poise.neutralFloor`, max);
+  if (neutralFloor > max) throw new RangeError(`${id}.poise.neutralFloor must not exceed poise.max.`);
   return {
     max,
+    neutralFloor: Math.max(1, neutralFloor),
     regenDelayMs: nonNegativeInteger(source.regenDelayMs, `${id}.poise.regenDelayMs`, 0),
     regenIntervalMs: nonNegativeInteger(source.regenIntervalMs, `${id}.poise.regenIntervalMs`, 0),
     staggerMs: nonNegativeInteger(source.staggerMs, `${id}.poise.staggerMs`, 0),
@@ -573,8 +607,10 @@ function normalizeActor(source, attackCatalogue, stage) {
     hitFlashRemainingMs: 0,
     knockbackVelocityX: 0,
     lastImpactComboId: null,
+    inputBuffer: null,
     maxPoise: poise.max,
     poise: poise.max,
+    poiseNeutralFloor: poise.neutralFloor,
     poiseRegenDelayMs: poise.regenDelayMs,
     poiseRegenIntervalMs: poise.regenIntervalMs,
     poiseRegenDelayRemainingMs: 0,
@@ -728,6 +764,8 @@ export class ActionCombatKernel {
     if (this.tagCooldownRemainingMs > 0) {
       return { ok: false, reason: 'tag-cooldown', remainingMs: this.tagCooldownRemainingMs };
     }
+    const previous = this.getActor(previousActorId);
+    if (previous) previous.inputBuffer = null;
     this.controlledActorId = requestedActorId;
     this.tagCooldownRemainingMs = ACTION_TAG_COOLDOWN_MS;
     this._emit('control-switch', {
@@ -852,8 +890,8 @@ export class ActionCombatKernel {
     }
     if (options.buffer) {
       if (options.held != null) actor.jumpHeld = Boolean(options.held);
-      actor.jumpBufferRemainingMs = JUMP_BUFFER_WINDOW_MS;
-      return { ok: true, actorId, buffered: true, windowMs: JUMP_BUFFER_WINDOW_MS };
+      actor.jumpBufferRemainingMs = ACTION_JUMP_BUFFER_WINDOW_MS;
+      return { ok: true, actorId, buffered: true, windowMs: ACTION_JUMP_BUFFER_WINDOW_MS };
     }
     return { ok: false, reason: 'airborne' };
   }
@@ -927,7 +965,7 @@ export class ActionCombatKernel {
     };
   }
 
-  requestManeuver(actorId, maneuverId) {
+  requestManeuver(actorId, maneuverId, options = {}) {
     const actor = this.getActor(actorId);
     const spec = actor?.maneuverSpecs?.[maneuverId];
     if (!actor) return { ok: false, reason: 'unknown-actor' };
@@ -935,17 +973,79 @@ export class ActionCombatKernel {
     if (actor.hp <= 0) return { ok: false, reason: 'actor-defeated' };
     if (this.outcome) return { ok: false, reason: 'combat-ended' };
     const controlFailure = this._playerControlFailure(actor);
-    if (controlFailure) return controlFailure;
+    if (controlFailure) return this._maybeBufferInput(actor, 'maneuver', maneuverId, controlFailure, options);
     const state = this.getManeuverState(actorId, maneuverId);
-    if (!state.ready) return {
+    if (!state.ready) return this._maybeBufferInput(actor, 'maneuver', maneuverId, {
       ok: false,
       reason: state.reason,
       remainingMs: state.reason === 'hit-stun'
         ? actor.hitStunRemainingMs
         : state.cooldownRemainingMs,
-    };
+    }, options);
 
     return this._startManeuver(actor, maneuverId);
+  }
+
+  /**
+   * Hold a blocked press for ACTION_INPUT_BUFFER_WINDOW_MS when the caller
+   * asked for buffering and the block is only a matter of timing (commitment,
+   * cooldown, or hit-stun). The latest press replaces any earlier one.
+   */
+  _maybeBufferInput(actor, kind, id, failure, options) {
+    const reasons = kind === 'attack' ? BUFFERABLE_ATTACK_REASONS : BUFFERABLE_MANEUVER_REASONS;
+    if (!options?.buffer || failure.ok || !reasons.has(failure.reason)) return failure;
+    actor.inputBuffer = {
+      kind,
+      id,
+      reason: failure.reason,
+      remainingMs: ACTION_INPUT_BUFFER_WINDOW_MS,
+      heldMs: 0,
+    };
+    this._emit('input-buffered', {
+      actorId: actor.id,
+      kind,
+      id,
+      reason: failure.reason,
+      windowMs: ACTION_INPUT_BUFFER_WINDOW_MS,
+    });
+    return { ...failure, buffered: true, windowMs: ACTION_INPUT_BUFFER_WINDOW_MS };
+  }
+
+  /** Start held presses on the first fixed step they become legal. */
+  _consumeInputBuffers() {
+    for (const actorId of this.actorOrder) {
+      const actor = this.getActor(actorId);
+      const buffer = actor.inputBuffer;
+      if (!buffer) continue;
+      buffer.remainingMs = Math.max(0, buffer.remainingMs - this.fixedStepMs);
+      buffer.heldMs += this.fixedStepMs;
+      const result = buffer.kind === 'attack'
+        ? this.requestAttack(actor.id, buffer.id)
+        : this.requestManeuver(actor.id, buffer.id);
+      if (result.ok) {
+        actor.inputBuffer = null;
+        this._emit('input-buffer-consumed', {
+          actorId: actor.id,
+          kind: buffer.kind,
+          id: buffer.id,
+          heldMs: buffer.heldMs,
+        });
+        continue;
+      }
+      const reasons = buffer.kind === 'attack' ? BUFFERABLE_ATTACK_REASONS : BUFFERABLE_MANEUVER_REASONS;
+      if (buffer.remainingMs > 0 && reasons.has(result.reason)) {
+        buffer.reason = result.reason;
+        continue;
+      }
+      actor.inputBuffer = null;
+      this._emit('input-buffer-expired', {
+        actorId: actor.id,
+        kind: buffer.kind,
+        id: buffer.id,
+        reason: result.reason,
+        heldMs: buffer.heldMs,
+      });
+    }
   }
 
   /** Return the actor-specific definition behind one stable input slot. */
@@ -988,19 +1088,30 @@ export class ActionCombatKernel {
     });
   }
 
-  requestAttack(actorId, attackId) {
+  requestAttack(actorId, attackId, options = {}) {
     const actor = this.getActor(actorId);
     if (actor) {
       const controlFailure = this._playerControlFailure(actor);
-      if (controlFailure) return controlFailure;
+      if (controlFailure) return this._maybeBufferInput(actor, 'attack', attackId, controlFailure, options);
       if (actor.activeManeuver) {
         if (!this._canCancelManeuverInto(actor, 'attack')) {
-          return { ok: false, reason: 'maneuver-commitment' };
+          return this._maybeBufferInput(actor, 'attack', attackId, { ok: false, reason: 'maneuver-commitment' }, options);
         }
-        this._finishManeuver(actor, 'cancelled', 'attack');
+        // Cancel the maneuver only for an attack that can actually begin;
+        // a cooling attack reports its cooldown and leaves the maneuver alone.
+        const state = this.getAttackState(actorId, attackId);
+        if (state?.reason === 'maneuver-commitment' && state.effectiveCooldownRemainingMs > 0) {
+          return this._maybeBufferInput(actor, 'attack', attackId, {
+            ok: false,
+            reason: state.sharedCooldownRemainingMs > 0 ? 'shared-offensive-cooldown' : 'attack-cooldown',
+            remainingMs: state.effectiveCooldownRemainingMs,
+          }, options);
+        }
+        if (state?.reason === 'maneuver-commitment') this._finishManeuver(actor, 'cancelled', 'attack');
       }
     }
-    return this._beginAttack(actorId, attackId);
+    const result = this._beginAttack(actorId, attackId);
+    return actor ? this._maybeBufferInput(actor, 'attack', attackId, result, options) : result;
   }
 
   /** Atomically begin a synchronized attack for two or more living party actors. */
@@ -1216,8 +1327,10 @@ export class ActionCombatKernel {
         hitInvulnerabilityRemainingMs: actor.hitInvulnerabilityRemainingMs,
         hitFlashRemainingMs: actor.hitFlashRemainingMs,
         knockbackVelocityX: actor.knockbackVelocityX,
+        inputBuffer: actor.inputBuffer ? { ...actor.inputBuffer } : null,
         poise: actor.poise,
         maxPoise: actor.maxPoise,
+        poiseNeutralFloor: actor.maxPoise > 0 ? actor.poiseNeutralFloor : null,
         staggerRemainingMs: actor.staggerRemainingMs,
         statuses: clone(actor.statuses),
       };
@@ -1243,6 +1356,7 @@ export class ActionCombatKernel {
     this._ensureLivingControlledActor();
     this._updateOutcome();
     if (!this.outcome) {
+      this._consumeInputBuffers();
       this._updateAiActions();
       this._applyMovement();
       this._advanceManeuvers();
@@ -1344,19 +1458,37 @@ export class ActionCombatKernel {
   }
 
   /**
-   * Drain poise for a hit that landed during the target's wind-up. Breaking
-   * poise cancels the wind-up before its active frame, starts that attack's
-   * normal cooldown, and staggers the target.
+   * Drain poise for a damaging hit. During the target's wind-up the hit deals
+   * its poise damage plus the tell's bonus; breaking poise cancels the
+   * wind-up before its active frame, starts that attack's normal cooldown,
+   * and staggers the target. Outside a wind-up the hit only chips poise down
+   * to the target's neutral floor and never breaks it.
    */
   _applyPoiseDamage(attacker, target, attack, provenance) {
     if (target.maxPoise <= 0 || target.hp <= 0 || target.staggerRemainingMs > 0) return null;
-    const active = target.activeAttack;
-    if (!active) return null;
-    const committed = this.attacks[active.attackId];
-    if (phaseFor(active, committed) !== ACTION_PHASES.WINDUP) return null;
-    const struckDamage = attack.poiseDamage + (provenance.comboId != null ? ACTION_COMBO_POISE_BONUS : 0);
+    // Maneuver attacks carry no normalized poise damage; they strike for one.
+    const basePoise = Number.isSafeInteger(attack.poiseDamage) && attack.poiseDamage >= 0
+      ? attack.poiseDamage
+      : ACTION_DEFAULT_POISE_DAMAGE;
+    const struckDamage = basePoise + (provenance.comboId != null ? ACTION_COMBO_POISE_BONUS : 0);
     if (struckDamage <= 0) return null;
-    const poiseDamage = committed.interruptOnHit ? Math.max(struckDamage, target.poise) : struckDamage;
+    const active = target.activeAttack;
+    const committed = active ? this.attacks[active.attackId] : null;
+    const duringTell = committed != null && phaseFor(active, committed) === ACTION_PHASES.WINDUP;
+    if (!duringTell) {
+      if (target.poiseNeutralFloor >= target.maxPoise) return null;
+      // Sustained pressure keeps a chipped enemy primed: every neutral hit
+      // restarts the regen delay, even once poise sits at the floor.
+      target.poiseRegenDelayRemainingMs = target.poiseRegenDelayMs;
+      target.poiseRegenProgressMs = 0;
+      const chip = Math.min(struckDamage, Math.max(0, target.poise - target.poiseNeutralFloor));
+      if (chip <= 0) return null;
+      const poiseBefore = target.poise;
+      target.poise -= chip;
+      return { poiseDamage: chip, poiseBefore, poiseAfter: target.poise, broken: false, duringTell: false };
+    }
+    const tellDamage = struckDamage + committed.tellPoiseBonus;
+    const poiseDamage = committed.interruptOnHit ? Math.max(tellDamage, target.poise) : tellDamage;
     const poiseBefore = target.poise;
     target.poise = Math.max(0, target.poise - poiseDamage);
     target.poiseRegenDelayRemainingMs = target.poiseRegenDelayMs;
@@ -1387,7 +1519,11 @@ export class ActionCombatKernel {
         ...cooldowns,
       });
     }
-    return { poiseDamage, poiseBefore, poiseAfter: target.poise, broken };
+    return { poiseDamage, poiseBefore, poiseAfter: target.poise, broken, duringTell: true };
+  }
+
+  _hitInvulnerabilityMs(target) {
+    return target.faction === 'player' ? ACTION_PARTY_HIT_INVULNERABILITY_MS : ACTION_HIT_INVULNERABILITY_MS;
   }
 
   _advanceAttackAnimations() {
@@ -1478,7 +1614,7 @@ export class ActionCombatKernel {
         ? attacker.facing
         : (target.position.x > attacker.position.x ? 1 : -1);
       target.hitStunRemainingMs = ACTION_HIT_STUN_MS;
-      target.hitInvulnerabilityRemainingMs = ACTION_HIT_INVULNERABILITY_MS;
+      target.hitInvulnerabilityRemainingMs = this._hitInvulnerabilityMs(target);
       target.knockbackVelocityX = knockbackDirection * ACTION_KNOCKBACK_SPEED_X;
       target.lastImpactComboId = provenance.comboId ?? null;
       target.movementIntent = { x: 0, y: 0 };
@@ -1499,12 +1635,13 @@ export class ActionCombatKernel {
       hpAfter: target.hp,
       hitStunMs: target.hp > 0 && resolution.damage > 0 ? ACTION_HIT_STUN_MS : 0,
       invulnerabilityMs: target.hp > 0 && resolution.damage > 0
-        ? ACTION_HIT_INVULNERABILITY_MS
+        ? this._hitInvulnerabilityMs(target)
         : 0,
       knockbackVelocityX: target.hp > 0 && resolution.damage > 0 ? target.knockbackVelocityX : 0,
       poiseDamage: poise?.poiseDamage ?? 0,
       poiseAfter: target.maxPoise > 0 ? target.poise : null,
       poiseBroken: poise?.broken === true,
+      poiseDuringTell: poise?.duringTell === true,
     });
     this.statusHooks.afterHit?.({ attacker, target, attack, resolution, event, kernel: this });
     return event;
@@ -1893,7 +2030,7 @@ export class ActionCombatKernel {
         actor.position.y = roundPosition(proposedPosition.y);
         actor.grounded = false;
         if (wasGrounded && actor.velocity.y >= 0 && !actor.activeManeuver) {
-          actor.coyoteRemainingMs = COYOTE_WINDOW_MS;
+          actor.coyoteRemainingMs = ACTION_COYOTE_WINDOW_MS;
         }
         if (actor.position.y === this.stage.minY && actor.velocity.y < 0) actor.velocity.y = 0;
       }
