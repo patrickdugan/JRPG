@@ -13,7 +13,7 @@ Classify the asset before modifying it. Never infer authorship from appearance.
 2. **Deterministic pixelification**: Convert an existing raster to a fixed native resolution and bounded palette with `scripts/pixelify.py`. Label the result `deterministically pixelified`; do not call it pixel-authored.
 3. **Pixel-authored production**: Edit pixels or code-native primitives at native resolution, under an explicit palette and geometry contract. A pixelified image may be an underlay, but it is not proof of authorship.
 
-Read [references/provenance-contract.md](references/provenance-contract.md) whenever reporting authorship or production status. Read [references/animation-contract.md](references/animation-contract.md) for clips, sheets, pivots, attacks, or runtime atlases.
+Read [references/provenance-contract.md](references/provenance-contract.md) whenever reporting authorship or production status. Read [references/animation-contract.md](references/animation-contract.md) for clips, sheets, pivots, attacks, or runtime atlases: every clip that loops or plays as a unit needs 20-30 unique frames, and attack clips are three bands (wind-up, active, recovery) sampled by simulation phase progress. Integrate an existing approved animation kit before drawing a character from scratch.
 
 ## Pixelify a raster
 
@@ -74,6 +74,11 @@ Never say `hand-authored`, `hand-pixeled`, or `pixel-authored` for generated or 
 
 - `scripts/pixelify.py`: deterministic fixed-resolution conversion, palette reduction, nearest-neighbor preview, manifest, and byte check.
 - `scripts/audit_pixel_art.py`: dimension, palette, alpha, and nearest-neighbor preview audit.
+- `scripts/anim_timeline.py`: pose-parameter keyframes, easing, bands, loops, and spring follow-through for code-authored animation.
+- `scripts/anim_primitives.py`: integer mask primitives (limbs, tapers, smears, shading bands, 4-connected outline) for code-authored builders.
+- `scripts/anim_rig.py`: cut-out rig for raster sprites (slices, pivots, hierarchy, RotSprite-style rotation, joint caps, cleanup) and a JSON spec CLI.
+- `scripts/anim_sheet.py`: the 20-30 unique-frame check, trimmed shelf packing (4096 px rows), `bbc-animation-clips/1` manifests, `--validate`.
+- `scripts/anim_preview.py`: contact sheets, motion GIFs, frame strips, and onion skins for review.
 - `requirements.txt`: tested Pillow version lock for byte-level reproducibility.
 - `references/provenance-contract.md`: authorship classifications and allowed claims.
 - `references/animation-contract.md`: sprite-sheet and combat-animation geometry contract.

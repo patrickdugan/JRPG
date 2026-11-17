@@ -48,6 +48,15 @@ Required evidence:
 - rebuild or edit trail
 - human visual review
 
+### Rig-posed and keyframed derivatives
+
+The lanes above do not change for animation. A code-authored builder that
+rasterizes keyed pose parameters with integer primitives is pixel-authored. A
+cut-out rig re-renders existing pixels, so its output inherits the source's
+lane with the suffix `(rig-posed)`: a pixelified source stays
+`deterministically-pixelified (rig-posed)`, a pixel-authored source becomes
+`pixel-authored (rig-posed)`. Never claim hand-pixeled in-betweens for rig output.
+
 ## Derivative records
 
 Every conversion manifest should record:

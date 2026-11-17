@@ -49,6 +49,18 @@ Use `f` for frames and `p` for Recovery pulses. A clip finishes visually before 
 
 Do not stretch a 24f swing across an entire 48f Recovery pulse merely to fill time. When the clip completes, display the appropriate recovery stance or a low-motion held loop until the simulation returns the actor to the initiative order.
 
+### 2.2 Frame standard: 20-30 unique frames per cycle (action combat)
+
+This standard supersedes the frame counts in the tables of sections 5-7 for every new or converted clip. The technical contract, toolkit, and worked examples live in `skills/pixel-art-production/references/animation-contract.md`; the runtime is `game/animation-clip-runtime.mjs`.
+
+- **Frame counts.** Every clip that loops or plays as a unit has 20-30 unique frames: idle, locomotion (walk, hover, drift), each attack cycle, hit/stagger, phase transition, and defeat. A frame is unique when its alpha-trimmed pixels differ from every other frame in the clip, so a whole-sprite translation is not a new frame. Loops do not repeat their first frame at the end.
+- **Attacks in three bands.** An attack clip is authored as three contiguous bands aligned to the simulation phases: wind-up, active, recovery (together 20-30 unique frames; the boss pilot uses 10-16 / 4 / 10). The renderer samples each band by that phase's progress fraction, never by wall-clock time, so the strike frame is on screen exactly when the hitbox is live, whatever duration gameplay tuning chooses. Durations inside a band are relative weights; weight the last wind-up frames to hold the tell.
+- **Craft.** Ease the wind-up into a held peak (slow-in), make the strike fast (two to four frames), and cushion the recovery. Give the peak wind-up strong anticipation and a readable silhouette change at 1x, plus a glint or glow step. Signature and command attacks get a distinct tell no ordinary strike makes. Active frames may carry one or two hard-edged, in-palette smears along the weapon arc. Cloth, hair, ribbons, chains, tails, and plates trail the body as secondary motion. Holds (repeated frames or heavier weights) give weight and intent but never count as unique frames.
+- **Per-character sheets.** Each character ships one manifest (`bbc-animation-clips/1`) and sheets no wider than 4096 px; frames are trimmed, de-duplicated, and shelf-packed with rows wrapping. The manifest lists clips -> frames with rect, pivot (foot point), band, events, and a pixel hash, plus exact sheet dimensions. The runtime loads only the characters an encounter needs and keeps the previous art path as an exact fallback when a sheet is missing, invalid, or the wrong size.
+- **Reduced motion.** Loops hold a key frame; attack bands show their key frame (peak tell, strike, settle), so tells stay readable; gameplay-timed clips (stagger, transition, defeat) step through key frames only.
+- **Provenance.** The lane rules apply unchanged. Code-authored builders that rasterize keyed pose parameters stay pixel-authored. Raster-derived clips (the cut-out rig re-rendering pixelified keys) stay labelled by their source lane, for example `deterministically-pixelified (rig-posed)`.
+- **Integrate before drawing.** Where an approved animation kit already exists for a character, build its clips from that kit's keys (rig-posed fills between keys) before authoring new art.
+
 ## 3. Canvas, anchors, and source format
 
 | Asset | Nominal frame | Pivot / foot point | Notes |
