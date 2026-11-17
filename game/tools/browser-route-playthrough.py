@@ -312,6 +312,16 @@ class PlayerDriver:
             return None
         return map_canvas.get_attribute("data-beat-id")
 
+    def safe_checkpoint(self) -> dict[str, object]:
+        """Checkpoint for error paths: a stalled page must not lose the recovery export."""
+        try:
+            return self.checkpoint()
+        except PlaywrightTimeoutError as error:
+            return {
+                "page": urlparse(self.page.url).path.rsplit("/", 1)[-1],
+                "checkpointError": str(error).splitlines()[0],
+            }
+
     def checkpoint(self) -> dict[str, object]:
         path = urlparse(self.page.url).path.rsplit("/", 1)[-1]
         if path == "credits.html":
@@ -956,7 +966,12 @@ class PlayerDriver:
             return True
         link = self.page.locator('a[href="campaign.html"]:visible').first
         if link.count() == 0:
-            return False
+            # A page that stalled while loading has no rendered link yet;
+            # reload it once, as a player would, before giving up.
+            self.page.reload(wait_until="domcontentloaded")
+            link = self.page.locator('a[href="campaign.html"]:visible').first
+            if link.count() == 0:
+                return False
         link.click(no_wait_after=True)
         self.controls += 1
         self.page.wait_for_url("**/campaign.html")
@@ -1924,7 +1939,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     evidence["blocker"] = {
                         "code": "playwright-timeout",
                         "message": str(error),
-                        "checkpoint": driver.checkpoint(),
+                        "checkpoint": driver.safe_checkpoint(),
                     }
             if args.recovery_out:
                 recovery_out = Path(args.recovery_out).resolve()
