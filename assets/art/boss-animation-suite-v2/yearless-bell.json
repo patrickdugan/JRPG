@@ -1,0 +1,2942 @@
+{
+ "schema": "bbc-animation-clips/1",
+ "characterId": "yearless-bell",
+ "nativeFacing": "right",
+ "logicalFrame": [
+  232,
+  160
+ ],
+ "footPoint": [
+  116,
+  148
+ ],
+ "maxSheetWidth": 4096,
+ "uniqueFrameStandard": [
+  20,
+  30
+ ],
+ "alphaPolicy": "binary",
+ "provenance": {
+  "lane": "pixel-authored",
+  "authorship": "original-code-native-pixel-primitives",
+  "builder": "assets/art/boss-animation-suite-v2/build_boss_animation_suite_v2.py",
+  "identitySource": "assets/art/boss-combat-suite/boss-combat-suite.source.json",
+  "pillow": "11.3.0"
+ },
+ "assetId": "boss-animation-suite-v2:yearless-bell",
+ "label": "YEARLESS BELL",
+ "encounterId": "c9-yearless-bell",
+ "paletteId": "PAL-BOS-BELL",
+ "presentationPixelScale": 1.35,
+ "attackClips": {
+  "enemy:yearless-bell:yearless-ring@r2": "strike",
+  "enemy:yearless-bell:yearless-ring": "signature"
+ },
+ "sheets": [
+  {
+   "path": "yearless-bell.png",
+   "width": 4084,
+   "height": 460,
+   "sha256": "45d36434cc7cf1d597f587e53dff0d72041ad409748e37fcfc8717d5edee4cad",
+   "bytes": 110226,
+   "decodedBytes": 7514560
+  }
+ ],
+ "clips": [
+  {
+   "id": "idle",
+   "kind": "loop",
+   "loop": true,
+   "frameCount": 24,
+   "uniqueFrames": 24,
+   "durationMs": 1680,
+   "keyFrames": [
+    0
+   ],
+   "notes": {
+    "drivenBy": "kernel time"
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      0,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "key": true,
+     "hash": "54ad9183ee264ac9"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      89,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "77d1d801bb44a961"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      178,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "a643a3931b28f5d4"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      267,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "330b638d97669396"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      356,
+      0,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 70,
+     "hash": "ec4c4b652df0fc5b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      445,
+      0,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 70,
+     "hash": "d7ac0e92737e0fba"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      534,
+      0,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 70,
+     "hash": "44235b6b23301741"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      623,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "60798cd70b0022b9"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      712,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "08cd00cf231ecf81"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      801,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "3a92bfdf9359775e"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      890,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "61245fbb9ce2a732"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      979,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "c15df4a885e1f297"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1068,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "e7c7214728df0fa1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1157,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "6f4c08cf3241461c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1246,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "2dd52a23433b581c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1335,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 70,
+     "hash": "dac6bb28a901cbb3"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1424,
+      0,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 70,
+     "hash": "cfe0b78f9b30e9e4"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1513,
+      0,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 70,
+     "hash": "9508853298e69013"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1602,
+      0,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 70,
+     "hash": "57bad70ef1c747f8"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1691,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "9b56cd419a6197ff"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1780,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "32e14365767659f3"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1869,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "db59a7ad37e97fb1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1958,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "336c9c555419a88a"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2047,
+      0,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 70,
+     "hash": "e6bc4a9f3c2c9830"
+    }
+   ]
+  },
+  {
+   "id": "locomotion",
+   "kind": "loop",
+   "loop": true,
+   "frameCount": 24,
+   "uniqueFrames": 24,
+   "durationMs": 1080,
+   "keyFrames": [
+    0
+   ],
+   "notes": {
+    "drivenBy": "kernel time while moving"
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      2136,
+      0,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "key": true,
+     "hash": "82c2518f27575383"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2225,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "72bbd707dfda803b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2314,
+      0,
+      91,
+      110
+     ],
+     "pivot": [
+      46,
+      105
+     ],
+     "durationMs": 45,
+     "hash": "3c369643c6867172"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2405,
+      0,
+      92,
+      110
+     ],
+     "pivot": [
+      47,
+      105
+     ],
+     "durationMs": 45,
+     "hash": "60eb1a1395a15e1d"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2497,
+      0,
+      91,
+      111
+     ],
+     "pivot": [
+      47,
+      106
+     ],
+     "durationMs": 45,
+     "hash": "137fcd4bda054a7f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2588,
+      0,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 45,
+     "hash": "b701b95cb4da1fc6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2677,
+      0,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 45,
+     "hash": "abe797abc8e498b9"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2766,
+      0,
+      89,
+      110
+     ],
+     "pivot": [
+      45,
+      105
+     ],
+     "durationMs": 45,
+     "hash": "155d2529dc381ebf"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2855,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "554fea3ef86cb187"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2944,
+      0,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "hash": "5b347c5ffe8ca6fd"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3033,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 45,
+     "hash": "9a45f9e313c05bc4"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3122,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 45,
+     "hash": "a18969d94bbbfc47"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3211,
+      0,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 45,
+     "hash": "8e2a060c8fbe5dd2"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3300,
+      0,
+      90,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 45,
+     "hash": "2268cc789da6bd2e"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3390,
+      0,
+      91,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "hash": "a2f39986f6f8d40e"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3481,
+      0,
+      91,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "hash": "9fae2d918bc13355"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3572,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "3b84ee0fbd51aeda"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3661,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "1f159ec547e9ca19"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3750,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "394b975448f97433"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3839,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "429098a064f1936e"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3928,
+      0,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 45,
+     "hash": "afc09a2528c339a6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      0,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "hash": "a4e572e8dcd4366b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      89,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "hash": "dc6baff233028440"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      178,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 45,
+     "hash": "2b6dd0b01e40bde9"
+    }
+   ]
+  },
+  {
+   "id": "strike",
+   "kind": "attack",
+   "loop": false,
+   "frameCount": 26,
+   "uniqueFrames": 26,
+   "durationMs": 1000,
+   "keyFrames": [
+    11,
+    13,
+    25
+   ],
+   "bands": [
+    {
+     "name": "windup",
+     "start": 0,
+     "count": 12,
+     "key": 11
+    },
+    {
+     "name": "active",
+     "start": 12,
+     "count": 4,
+     "key": 13
+    },
+    {
+     "name": "recovery",
+     "start": 16,
+     "count": 10,
+     "key": 25
+    }
+   ],
+   "notes": {
+    "drivenBy": "enemy attack phase progress",
+    "name": "Yearless Ring (radius 2)",
+    "attacks": [
+     "yearless-ring@r2"
+    ]
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      267,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "events": [
+      "windupStart"
+     ],
+     "hash": "ddc85068dc18fadb"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      356,
+      111,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "9958970ffa0b7846"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      445,
+      111,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "c9ef26871c3ead3a"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      534,
+      111,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "b21212ca45f44679"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      623,
+      111,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "fe64ff80efa1fc78"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      712,
+      111,
+      91,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "d60a09ea793231aa"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      803,
+      111,
+      93,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "37bc64ea12647404"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      896,
+      111,
+      94,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "ef9d39d9e9a7c693"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      990,
+      111,
+      96,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "9bda05ea56cda5fa"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1086,
+      111,
+      98,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 43,
+     "band": "windup",
+     "hash": "b2dde128a28c176c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1184,
+      111,
+      99,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 52,
+     "band": "windup",
+     "hash": "1cb299e0b1d491bd"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1283,
+      111,
+      99,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 70,
+     "band": "windup",
+     "events": [
+      "telegraphPeak"
+     ],
+     "key": true,
+     "hash": "668bbf82d1e6ec85"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1382,
+      111,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "events": [
+      "activeStart"
+     ],
+     "hash": "1690e594c25b0a7c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1471,
+      111,
+      93,
+      108
+     ],
+     "pivot": [
+      49,
+      103
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "events": [
+      "hit"
+     ],
+     "key": true,
+     "hash": "5d9e81f313428e22"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1564,
+      111,
+      100,
+      108
+     ],
+     "pivot": [
+      56,
+      103
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "hash": "f7d47eec041d431d"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1664,
+      111,
+      105,
+      108
+     ],
+     "pivot": [
+      61,
+      103
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "hash": "d79823ee418244f9"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1769,
+      111,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 38,
+     "band": "recovery",
+     "events": [
+      "recoveryStart"
+     ],
+     "hash": "d9d512228b935fa6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1858,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "3e50ed3753c30365"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1947,
+      111,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "2ead1204532aa706"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2036,
+      111,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "1e81e2701b1d2bad"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2125,
+      111,
+      90,
+      106
+     ],
+     "pivot": [
+      46,
+      101
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "36a901748a78a3c1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2215,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "5de572d46fab52e6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2304,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "e8a6387e3231c8a6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2393,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 37,
+     "band": "recovery",
+     "hash": "43d60d4c7cd1ca2f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2482,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 47,
+     "band": "recovery",
+     "hash": "a534ab5240d84718"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2571,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 56,
+     "band": "recovery",
+     "events": [
+      "complete"
+     ],
+     "key": true,
+     "hash": "417f719acd3c17ce"
+    }
+   ]
+  },
+  {
+   "id": "signature",
+   "kind": "attack",
+   "loop": false,
+   "frameCount": 30,
+   "uniqueFrames": 30,
+   "durationMs": 1180,
+   "keyFrames": [
+    15,
+    17,
+    29
+   ],
+   "bands": [
+    {
+     "name": "windup",
+     "start": 0,
+     "count": 16,
+     "key": 15
+    },
+    {
+     "name": "active",
+     "start": 16,
+     "count": 4,
+     "key": 17
+    },
+    {
+     "name": "recovery",
+     "start": 20,
+     "count": 10,
+     "key": 29
+    }
+   ],
+   "notes": {
+    "drivenBy": "enemy attack phase progress",
+    "name": "Yearless Ring (radius 4)",
+    "attacks": [
+     "yearless-ring"
+    ],
+    "tell": "Node sockets light in a square sequence, chime plates swing wide and the core swells before the wide ring."
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      2660,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "events": [
+      "windupStart"
+     ],
+     "hash": "318b76b8eaf7988d"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2749,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "fda9b036fb6000fb"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2838,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "33f0dc6a269cbe27"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2927,
+      111,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "92ef0ceb1ae4cb37"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3016,
+      111,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "a83adc4361210739"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3105,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "fd9254d164d9e1fd"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3194,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "7ac64bf5029bbf21"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3283,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 36,
+     "band": "windup",
+     "hash": "8578045fb9079cd3"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3372,
+      111,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "7bc1a8665a5f5229"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3461,
+      111,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "9acb2243140d5e74"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3550,
+      111,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "cd119f27ba02e963"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3639,
+      111,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 35,
+     "band": "windup",
+     "hash": "079f9a211b11e660"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3728,
+      111,
+      89,
+      109
+     ],
+     "pivot": [
+      45,
+      104
+     ],
+     "durationMs": 44,
+     "band": "windup",
+     "hash": "78285b45b7a839bf"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3817,
+      111,
+      89,
+      110
+     ],
+     "pivot": [
+      45,
+      105
+     ],
+     "durationMs": 44,
+     "band": "windup",
+     "hash": "8c79211ffeb4482a"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3906,
+      111,
+      89,
+      110
+     ],
+     "pivot": [
+      45,
+      105
+     ],
+     "durationMs": 53,
+     "band": "windup",
+     "hash": "2317ede540e45c49"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3995,
+      111,
+      89,
+      110
+     ],
+     "pivot": [
+      45,
+      105
+     ],
+     "durationMs": 71,
+     "band": "windup",
+     "events": [
+      "telegraphPeak"
+     ],
+     "key": true,
+     "hash": "40b4fa0671b5005f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      0,
+      221,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "events": [
+      "activeStart"
+     ],
+     "hash": "d336a2329c4d8be6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      89,
+      221,
+      93,
+      109
+     ],
+     "pivot": [
+      49,
+      104
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "events": [
+      "hit"
+     ],
+     "key": true,
+     "hash": "6400025920ca7757"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      182,
+      221,
+      107,
+      111
+     ],
+     "pivot": [
+      58,
+      106
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "hash": "24b6250c0365c785"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      289,
+      221,
+      119,
+      117
+     ],
+     "pivot": [
+      63,
+      112
+     ],
+     "durationMs": 30,
+     "band": "active",
+     "hash": "3a234c05e8835616"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      408,
+      221,
+      89,
+      108
+     ],
+     "pivot": [
+      45,
+      103
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "events": [
+      "recoveryStart"
+     ],
+     "hash": "5379d62c0e3bd600"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      497,
+      221,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "ee9127fb0350b8b8"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      586,
+      221,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "a2f55ed9b1a1fbb6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      675,
+      221,
+      89,
+      107
+     ],
+     "pivot": [
+      45,
+      102
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "b7c6e6cec0f4670b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      764,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "32ace00eab573968"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      853,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "16ffb0634ac0cb34"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      942,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "f9a15948d89b6c5b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1031,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 39,
+     "band": "recovery",
+     "hash": "e690a450e3f8c959"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1120,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 49,
+     "band": "recovery",
+     "hash": "78e8f9444c583ca5"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1209,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 59,
+     "band": "recovery",
+     "events": [
+      "complete"
+     ],
+     "key": true,
+     "hash": "f26da5e22b6b72e2"
+    }
+   ]
+  },
+  {
+   "id": "stagger",
+   "kind": "progress",
+   "loop": false,
+   "frameCount": 22,
+   "uniqueFrames": 22,
+   "durationMs": 704,
+   "keyFrames": [
+    1,
+    12
+   ],
+   "notes": {
+    "drivenBy": "staggerRemainingMs / staggerMs"
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      1298,
+      221,
+      97,
+      104
+     ],
+     "pivot": [
+      47,
+      99
+     ],
+     "durationMs": 32,
+     "events": [
+      "poiseBroken"
+     ],
+     "hash": "cc550189bca26905"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1395,
+      221,
+      100,
+      105
+     ],
+     "pivot": [
+      49,
+      100
+     ],
+     "durationMs": 32,
+     "key": true,
+     "hash": "aaa74da469bf6ae5"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1495,
+      221,
+      99,
+      106
+     ],
+     "pivot": [
+      49,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "e8ebb65c93edc0b9"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1594,
+      221,
+      99,
+      106
+     ],
+     "pivot": [
+      49,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "d5b807d359510069"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1693,
+      221,
+      98,
+      105
+     ],
+     "pivot": [
+      49,
+      100
+     ],
+     "durationMs": 32,
+     "hash": "2350dc10103da875"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1791,
+      221,
+      93,
+      104
+     ],
+     "pivot": [
+      49,
+      99
+     ],
+     "durationMs": 32,
+     "hash": "fb31d8490a99109b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1884,
+      221,
+      89,
+      104
+     ],
+     "pivot": [
+      50,
+      99
+     ],
+     "durationMs": 32,
+     "hash": "0e8645f40438ff32"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1973,
+      221,
+      89,
+      105
+     ],
+     "pivot": [
+      50,
+      100
+     ],
+     "durationMs": 32,
+     "hash": "19c0a7fbeba91d0c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2062,
+      221,
+      91,
+      105
+     ],
+     "pivot": [
+      52,
+      100
+     ],
+     "durationMs": 32,
+     "hash": "73a41c526e106f3f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2153,
+      221,
+      91,
+      105
+     ],
+     "pivot": [
+      52,
+      100
+     ],
+     "durationMs": 32,
+     "hash": "5d0ded3bc7a56436"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2244,
+      221,
+      89,
+      104
+     ],
+     "pivot": [
+      50,
+      99
+     ],
+     "durationMs": 32,
+     "hash": "59626398d9426271"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2333,
+      221,
+      89,
+      104
+     ],
+     "pivot": [
+      50,
+      99
+     ],
+     "durationMs": 32,
+     "hash": "3a4afa580deb1977"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2422,
+      221,
+      89,
+      103
+     ],
+     "pivot": [
+      49,
+      98
+     ],
+     "durationMs": 32,
+     "key": true,
+     "hash": "b093b694d339c0f8"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2511,
+      221,
+      89,
+      102
+     ],
+     "pivot": [
+      49,
+      97
+     ],
+     "durationMs": 32,
+     "hash": "d3597a5ce84e145e"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2600,
+      221,
+      89,
+      102
+     ],
+     "pivot": [
+      49,
+      97
+     ],
+     "durationMs": 32,
+     "hash": "97d5703d454f9f08"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2689,
+      221,
+      89,
+      103
+     ],
+     "pivot": [
+      48,
+      98
+     ],
+     "durationMs": 32,
+     "hash": "02ca2472ff41ac80"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2778,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "96f95bfd5c08eb19"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2867,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "8216a9eb096c40e1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2956,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "c35323133985aabe"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3045,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "405b5859c2e92b9b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3134,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 32,
+     "hash": "73b6436c29fbea37"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3223,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 32,
+     "events": [
+      "staggerEnd"
+     ],
+     "hash": "5c202830bfb837a5"
+    }
+   ]
+  },
+  {
+   "id": "transition",
+   "kind": "progress",
+   "loop": false,
+   "frameCount": 24,
+   "uniqueFrames": 24,
+   "durationMs": 960,
+   "keyFrames": [
+    14
+   ],
+   "notes": {
+    "drivenBy": "BOSS_TRANSITION_HOLD_MS from boss-phase-entered"
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      3312,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 40,
+     "events": [
+      "phaseStart"
+     ],
+     "hash": "eae0d4c408424788"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3401,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 40,
+     "hash": "627754665b2f04fa"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3490,
+      221,
+      89,
+      106
+     ],
+     "pivot": [
+      45,
+      101
+     ],
+     "durationMs": 40,
+     "hash": "57eec85865cae2e1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3579,
+      221,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 40,
+     "hash": "8eea46e00d6c22a2"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3668,
+      221,
+      89,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 40,
+     "hash": "4c3e401b04be9cab"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3757,
+      221,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "5b1948cd6ef558a2"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3846,
+      221,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "1029762a1d01ea44"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3935,
+      221,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "f43e6c63086cd46c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      0,
+      338,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "07a7901ea467b674"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      89,
+      338,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "dc947606cfb65ba0"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      178,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "8b95bf08334a2f57"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      267,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "dd9b918696d3202f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      356,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "e4c26ec6f3922689"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      445,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "da63ecb46638b0ab"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      534,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "events": [
+      "phaseReveal"
+     ],
+     "key": true,
+     "hash": "af874c946f753468"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      623,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "67248fb24fcf6fa4"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      712,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "43fd78f80ef875d7"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      801,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "79cf149365b2a2e1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      890,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "4c2e5fe02336aa4f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      979,
+      338,
+      89,
+      122
+     ],
+     "pivot": [
+      45,
+      117
+     ],
+     "durationMs": 40,
+     "hash": "e8b28347618a5e24"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1068,
+      338,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "c2bcac7f9e543e38"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1157,
+      338,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "c827c454b141bd5b"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1246,
+      338,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "f5320f7e3e3ec210"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1335,
+      338,
+      89,
+      111
+     ],
+     "pivot": [
+      45,
+      106
+     ],
+     "durationMs": 40,
+     "hash": "382b98b6649aeab0"
+    }
+   ]
+  },
+  {
+   "id": "defeat",
+   "kind": "progress",
+   "loop": false,
+   "frameCount": 24,
+   "uniqueFrames": 24,
+   "durationMs": 1200,
+   "keyFrames": [
+    23
+   ],
+   "notes": {
+    "drivenBy": "BOSS_DEFEAT_HOLD_MS wall clock, last frame held"
+   },
+   "frames": [
+    {
+     "sheet": 0,
+     "rect": [
+      1424,
+      338,
+      90,
+      105
+     ],
+     "pivot": [
+      45,
+      100
+     ],
+     "durationMs": 50,
+     "hash": "d8e843024407a5e0"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1514,
+      338,
+      89,
+      103
+     ],
+     "pivot": [
+      45,
+      98
+     ],
+     "durationMs": 50,
+     "hash": "49d4a5e5d6733bda"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1603,
+      338,
+      89,
+      102
+     ],
+     "pivot": [
+      45,
+      97
+     ],
+     "durationMs": 50,
+     "hash": "f352b865e97a39cd"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1692,
+      338,
+      90,
+      101
+     ],
+     "pivot": [
+      44,
+      96
+     ],
+     "durationMs": 50,
+     "hash": "c96766ee858357a0"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1782,
+      338,
+      91,
+      100
+     ],
+     "pivot": [
+      44,
+      95
+     ],
+     "durationMs": 50,
+     "hash": "3c40163758c708aa"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1873,
+      338,
+      91,
+      100
+     ],
+     "pivot": [
+      44,
+      95
+     ],
+     "durationMs": 50,
+     "hash": "ee08de510a6cc055"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      1964,
+      338,
+      92,
+      100
+     ],
+     "pivot": [
+      45,
+      95
+     ],
+     "durationMs": 50,
+     "hash": "aac833c265568217"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2056,
+      338,
+      92,
+      99
+     ],
+     "pivot": [
+      46,
+      94
+     ],
+     "durationMs": 50,
+     "hash": "dfc503d01e70720e"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2148,
+      338,
+      93,
+      99
+     ],
+     "pivot": [
+      48,
+      94
+     ],
+     "durationMs": 50,
+     "hash": "490f19e39adc1969"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2241,
+      338,
+      96,
+      97
+     ],
+     "pivot": [
+      51,
+      92
+     ],
+     "durationMs": 50,
+     "hash": "bb897694a1d3c255"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2337,
+      338,
+      100,
+      94
+     ],
+     "pivot": [
+      54,
+      89
+     ],
+     "durationMs": 50,
+     "hash": "a5836f6761529dc1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2437,
+      338,
+      105,
+      90
+     ],
+     "pivot": [
+      57,
+      85
+     ],
+     "durationMs": 50,
+     "hash": "f48dec9d1243eaa6"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2542,
+      338,
+      110,
+      87
+     ],
+     "pivot": [
+      60,
+      82
+     ],
+     "durationMs": 50,
+     "hash": "cd659cc54ea4d884"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2652,
+      338,
+      113,
+      84
+     ],
+     "pivot": [
+      61,
+      79
+     ],
+     "durationMs": 50,
+     "hash": "ed8490fe446914fe"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2765,
+      338,
+      115,
+      82
+     ],
+     "pivot": [
+      62,
+      77
+     ],
+     "durationMs": 50,
+     "hash": "8afcc189d2ace85c"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2880,
+      338,
+      116,
+      82
+     ],
+     "pivot": [
+      62,
+      77
+     ],
+     "durationMs": 50,
+     "hash": "df3f1d5e8b7bfc68"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      2996,
+      338,
+      119,
+      79
+     ],
+     "pivot": [
+      63,
+      74
+     ],
+     "durationMs": 50,
+     "hash": "73c4c31c7aa31f27"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3115,
+      338,
+      120,
+      76
+     ],
+     "pivot": [
+      63,
+      71
+     ],
+     "durationMs": 50,
+     "hash": "e7583cb3797030bb"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3235,
+      338,
+      122,
+      73
+     ],
+     "pivot": [
+      64,
+      68
+     ],
+     "durationMs": 50,
+     "hash": "cc08cd8b5f08dd4f"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3357,
+      338,
+      124,
+      72
+     ],
+     "pivot": [
+      65,
+      67
+     ],
+     "durationMs": 50,
+     "hash": "5f1ca90cb500c9c1"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3481,
+      338,
+      125,
+      70
+     ],
+     "pivot": [
+      65,
+      65
+     ],
+     "durationMs": 50,
+     "hash": "21aefcde2909ec43"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3606,
+      338,
+      127,
+      69
+     ],
+     "pivot": [
+      66,
+      64
+     ],
+     "durationMs": 50,
+     "hash": "6e85a5e2601e48d2"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3733,
+      338,
+      127,
+      68
+     ],
+     "pivot": [
+      66,
+      63
+     ],
+     "durationMs": 50,
+     "hash": "16f1c78562db03ca"
+    },
+    {
+     "sheet": 0,
+     "rect": [
+      3860,
+      338,
+      127,
+      68
+     ],
+     "pivot": [
+      66,
+      63
+     ],
+     "durationMs": 50,
+     "events": [
+      "defeatedHold"
+     ],
+     "key": true,
+     "hash": "da64fb81e496a84a"
+    }
+   ]
+  }
+ ]
+}

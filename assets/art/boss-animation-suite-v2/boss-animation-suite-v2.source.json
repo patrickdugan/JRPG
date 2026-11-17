@@ -1,0 +1,446 @@
+{
+  "assetId": "boss-animation-suite-v2",
+  "status": "editable-production-runtime-candidate",
+  "authorship": "original-code-native-pixel-primitives",
+  "provenanceLane": "pixel-authored",
+  "identitySource": "../boss-combat-suite/boss-combat-suite.source.json",
+  "geometry": {
+    "logicalFrame": [
+      232,
+      160
+    ],
+    "footPoint": [
+      116,
+      148
+    ],
+    "authoringOrigin": [
+      60,
+      32
+    ],
+    "nativeFacing": "right",
+    "maxSheetWidth": 4096,
+    "packing": "trimmed alpha bounds + 1 px transparent ring, shelf rows wrap at 4096 px",
+    "minimumTransparentGutter": 2,
+    "presentationPixelScale": 1.35
+  },
+  "standard": {
+    "uniqueFramesPerClip": [
+      20,
+      30
+    ],
+    "uniqueness": "translation-invariant SHA-256 of trimmed RGBA; holds and pure translations do not count",
+    "attackBands": [
+      "windup",
+      "active",
+      "recovery"
+    ],
+    "attackSampling": "each band sampled by the simulation phase's progress fraction; frame durationMs inside a band are relative weights",
+    "progressSampling": "stagger by stagger timer, transition by BOSS_TRANSITION_HOLD_MS, defeat by BOSS_DEFEAT_HOLD_MS; last frame held",
+    "reducedMotion": "loops hold their first key frame; attack bands show their key frame (peak tell, strike, settle); progress clips step through key frames only"
+  },
+  "clips": [
+    {
+      "id": "idle",
+      "kind": "loop",
+      "frames": 24,
+      "durationMs": 70,
+      "keyFrames": [
+        0
+      ],
+      "drivenBy": "kernel time"
+    },
+    {
+      "id": "locomotion",
+      "kind": "loop",
+      "frames": 24,
+      "durationMs": 45,
+      "keyFrames": [
+        0
+      ],
+      "drivenBy": "kernel time while moving"
+    },
+    {
+      "id": "strike",
+      "kind": "attack",
+      "drivenBy": "enemy attack phase progress",
+      "bands": {
+        "windup": {
+          "frames": 12,
+          "weights": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1.25,
+            1.5,
+            2
+          ],
+          "durationMs": 480,
+          "events": {
+            "0": [
+              "windupStart"
+            ],
+            "11": [
+              "telegraphPeak"
+            ]
+          }
+        },
+        "active": {
+          "frames": 4,
+          "weights": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "durationMs": 120,
+          "events": {
+            "0": [
+              "activeStart"
+            ],
+            "1": [
+              "hit"
+            ]
+          }
+        },
+        "recovery": {
+          "frames": 10,
+          "weights": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1.25,
+            1.5
+          ],
+          "durationMs": 400,
+          "events": {
+            "0": [
+              "recoveryStart"
+            ],
+            "9": [
+              "complete"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "signature",
+      "kind": "attack",
+      "drivenBy": "enemy attack phase progress",
+      "bands": {
+        "windup": {
+          "frames": 16,
+          "weights": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1.25,
+            1.25,
+            1.5,
+            2
+          ],
+          "durationMs": 640,
+          "events": {
+            "0": [
+              "windupStart"
+            ],
+            "15": [
+              "telegraphPeak"
+            ]
+          }
+        },
+        "active": {
+          "frames": 4,
+          "weights": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "durationMs": 120,
+          "events": {
+            "0": [
+              "activeStart"
+            ],
+            "1": [
+              "hit"
+            ]
+          }
+        },
+        "recovery": {
+          "frames": 10,
+          "weights": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1.25,
+            1.5
+          ],
+          "durationMs": 420,
+          "events": {
+            "0": [
+              "recoveryStart"
+            ],
+            "9": [
+              "complete"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "stagger",
+      "kind": "progress",
+      "frames": 22,
+      "durationMs": 32,
+      "keyFrames": [
+        1,
+        12
+      ],
+      "events": {
+        "0": [
+          "poiseBroken"
+        ],
+        "21": [
+          "staggerEnd"
+        ]
+      },
+      "drivenBy": "staggerRemainingMs / staggerMs"
+    },
+    {
+      "id": "transition",
+      "kind": "progress",
+      "frames": 24,
+      "durationMs": 40,
+      "keyFrames": [
+        14
+      ],
+      "events": {
+        "0": [
+          "phaseStart"
+        ],
+        "14": [
+          "phaseReveal"
+        ]
+      },
+      "drivenBy": "BOSS_TRANSITION_HOLD_MS from boss-phase-entered"
+    },
+    {
+      "id": "defeat",
+      "kind": "progress",
+      "frames": 24,
+      "durationMs": 50,
+      "keyFrames": [
+        23
+      ],
+      "events": {
+        "23": [
+          "defeatedHold"
+        ]
+      },
+      "drivenBy": "BOSS_DEFEAT_HOLD_MS wall clock, last frame held"
+    }
+  ],
+  "bosses": [
+    {
+      "id": "tithe-hound",
+      "rig": "quadruped",
+      "strike": {
+        "name": "Ledger Maul",
+        "attacks": [
+          "ledger-maul"
+        ]
+      },
+      "signature": {
+        "name": "Consume Ink",
+        "attacks": [
+          "consume-ink"
+        ],
+        "tell": "Rears back, rib plates flare, docket latch springs open, jaw unhinges to draw the ink line."
+      }
+    },
+    {
+      "id": "mateus",
+      "rig": "humanoid",
+      "strike": {
+        "name": "Pale Cut / Sanguine Step",
+        "attacks": [
+          "pale-cut",
+          "sanguine-step"
+        ]
+      },
+      "signature": {
+        "name": "Crimson Litany / Blood Ward",
+        "attacks": [
+          "crimson-litany",
+          "blood-ward"
+        ],
+        "tell": "Hands lock, blade rises to vertical, arms open wide while a thorned crescent gathers overhead."
+      }
+    },
+    {
+      "id": "captain-kaji",
+      "rig": "humanoid",
+      "strike": {
+        "name": "Salt Cut / Chain Haul",
+        "attacks": [
+          "salt-cut",
+          "chain-haul"
+        ]
+      },
+      "signature": {
+        "name": "Crane Surge",
+        "attacks": [
+          "crane-surge"
+        ],
+        "tell": "Spool brake releases, hook whirls overhead on a widening loop of cable, storm sparks along the line."
+      }
+    },
+    {
+      "id": "widow-of-fog",
+      "rig": "widow",
+      "strike": {
+        "name": "Name Drag",
+        "attacks": [
+          "name-drag"
+        ]
+      },
+      "signature": {
+        "name": "Receding Call",
+        "attacks": [
+          "receding-call"
+        ],
+        "tell": "Rises, ribbons invert upward, filament arms spread to full width and the net opens into a ring."
+      }
+    },
+    {
+      "id": "furnace-abbot",
+      "rig": "furnace",
+      "strike": {
+        "name": "Hammer Decree",
+        "attacks": [
+          "hammer-decree"
+        ]
+      },
+      "signature": {
+        "name": "Forge Sermon",
+        "attacks": [
+          "forge-sermon"
+        ],
+        "tell": "Vent plates open in three steps, chimneys puff, the mantle swells and the vent face goes white-hot."
+      }
+    },
+    {
+      "id": "ujiro",
+      "rig": "humanoid",
+      "strike": {
+        "name": "Gavel Line",
+        "attacks": [
+          "gavel-line"
+        ]
+      },
+      "signature": {
+        "name": "Seizure Order / Call Clerks",
+        "attacks": [
+          "seizure-order",
+          "call-clerks"
+        ],
+        "command": true,
+        "tell": "Command tell: docket case snaps open overhead and an order slip unfurls while the baton points to the sky. Any hit interrupts."
+      }
+    },
+    {
+      "id": "bell-warden-chiyo",
+      "rig": "humanoid",
+      "strike": {
+        "name": "Chain Cast",
+        "attacks": [
+          "chain-cast"
+        ]
+      },
+      "signature": {
+        "name": "Ringing Count / Warden Bell",
+        "attacks": [
+          "ringing-count",
+          "warden-bell"
+        ],
+        "tell": "Yoke dampers separate, calibration hammer rises behind the head and strikes the yoke into resonance rings."
+      }
+    },
+    {
+      "id": "lady-enma",
+      "rig": "enma",
+      "strike": {
+        "name": "Cinder Parasol Wing",
+        "attacks": [
+          "cinder-parasol-wing"
+        ]
+      },
+      "signature": {
+        "name": "Paired Ashes / Abandonment Cry",
+        "attacks": [
+          "paired-ashes",
+          "abandonment-cry"
+        ],
+        "tell": "Fan snaps fully open overhead, parasol wing flares behind her, sleeves lift and cinders gather on the fan ribs."
+      }
+    },
+    {
+      "id": "yearless-bell",
+      "rig": "bell",
+      "strike": {
+        "name": "Yearless Ring (radius 2)",
+        "attacks": [
+          "yearless-ring@r2"
+        ]
+      },
+      "signature": {
+        "name": "Yearless Ring (radius 4)",
+        "attacks": [
+          "yearless-ring"
+        ],
+        "tell": "Node sockets light in a square sequence, chime plates swing wide and the core swells before the wide ring."
+      }
+    }
+  ],
+  "safety": {
+    "gore": false,
+    "realEmblems": false,
+    "devotionalProps": false,
+    "actorLikeness": false,
+    "construction": "Invented mechanical, docket, cable, lattice, ash, and fog geometry only."
+  },
+  "externalBosses": [
+    {
+      "id": "kurozane",
+      "builder": "../kurozane-boss-clips-v2/build_kurozane_boss_clips_v2.py",
+      "lane": "deterministically-pixelified (rig-posed)",
+      "reason": "Shogun Kurozane's approved final-battle and Oni kits already exist; his clips are rig-posed from those keys instead of redrawn."
+    }
+  ]
+}

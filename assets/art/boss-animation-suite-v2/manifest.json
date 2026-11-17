@@ -1,0 +1,646 @@
+{
+ "schemaVersion": 1,
+ "assetId": "boss-animation-suite-v2",
+ "status": "editable-production-runtime-candidate",
+ "authorship": "original-code-native-pixel-primitives",
+ "provenanceLane": "pixel-authored",
+ "canonicalSource": "boss-animation-suite-v2.source.json",
+ "builder": "build_boss_animation_suite_v2.py",
+ "geometry": {
+  "logicalFrame": [
+   232,
+   160
+  ],
+  "footPoint": [
+   116,
+   148
+  ],
+  "authoringOrigin": [
+   60,
+   32
+  ],
+  "nativeFacing": "right",
+  "maxSheetWidth": 4096,
+  "packing": "trimmed alpha bounds + 1 px transparent ring, shelf rows wrap at 4096 px",
+  "minimumTransparentGutter": 2,
+  "presentationPixelScale": 1.35
+ },
+ "standard": {
+  "uniqueFramesPerClip": [
+   20,
+   30
+  ],
+  "uniqueness": "translation-invariant SHA-256 of trimmed RGBA; holds and pure translations do not count",
+  "attackBands": [
+   "windup",
+   "active",
+   "recovery"
+  ],
+  "attackSampling": "each band sampled by the simulation phase's progress fraction; frame durationMs inside a band are relative weights",
+  "progressSampling": "stagger by stagger timer, transition by BOSS_TRANSITION_HOLD_MS, defeat by BOSS_DEFEAT_HOLD_MS; last frame held",
+  "reducedMotion": "loops hold their first key frame; attack bands show their key frame (peak tell, strike, settle); progress clips step through key frames only"
+ },
+ "sources": [
+  {
+   "path": "boss-animation-suite-v2.source.json",
+   "sha256": "b30c3f208545d923f782df171d3b4013dac287c08a0128598879001b928a42c4"
+  },
+  {
+   "path": "boss_rigs_v2.py",
+   "sha256": "b5db84a83dfd79195d5fab1e2c243ea508498567d23d18f6c1f53006bee7bc5d"
+  },
+  {
+   "path": "boss_rigs_creature_v2.py",
+   "sha256": "3509fa3db926f8dd840ab4944aaaed5eaa7ed82823ed8771b9606bc2f7af8ad6"
+  },
+  {
+   "path": "boss_motion_v2.py",
+   "sha256": "f8918cc055c08fd4dfe2ac7f67c5120e71b96351d247784891866c4acb93e51f"
+  },
+  {
+   "path": "boss_cast_humanoid_v2.py",
+   "sha256": "30f8d33d0e1d1b341cf59f96b3f162830178c5dc8b5db4bfdd12fd5d15e38ec3"
+  },
+  {
+   "path": "boss_cast_creature_v2.py",
+   "sha256": "4f4af074c1aab4064d49c3cbc668c6db6b277f18ec9f98c19646a31d5c82c540"
+  },
+  {
+   "path": "boss_performances_v2.py",
+   "sha256": "a233d0d9b1dc1521ef739827d6cc2efb7a6b632705adb491dd4d798fd6bd3c85"
+  },
+  {
+   "path": "build_boss_animation_suite_v2.py",
+   "sha256": "6d9801c07ebe1ec9ce7340be5e65065c0f8d514669d67bc4218d6c58c5dd5ef0"
+  },
+  {
+   "path": "../boss-combat-suite/boss-combat-suite.source.json",
+   "sha256": "79fc338a739e3eb843a5e09a23cca971aedb73e83593c771191f65328edfe16f"
+  }
+ ],
+ "toolkit": [
+  {
+   "path": "skills/pixel-art-production/scripts/anim_timeline.py",
+   "sha256": "053076781b0b3bc32cf6bf70ad80ad721b72542096bc0ccba987c8808fff32bc"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_primitives.py",
+   "sha256": "ecf0e319653219f1773d8f9434d1371b7982621d200db9ec7b3b912b678bf60a"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_sheet.py",
+   "sha256": "e58bcdd45c904f3ab970bc668db81bcb2f9b519cd03596549d490396746fb994"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_preview.py",
+   "sha256": "ba1271ab86ec38e47af82986e6e451a625e3ea13bb456080be1de75a4055d0a9"
+  }
+ ],
+ "bosses": [
+  {
+   "id": "tithe-hound",
+   "sheets": [
+    {
+     "path": "tithe-hound.png",
+     "width": 4069,
+     "height": 413,
+     "sha256": "d4d78e4f884972ddc1ecae4407cf676aab2e02387da59e754fbaa3e9c69bd185",
+     "bytes": 130078,
+     "decodedBytes": 6721988
+    }
+   ],
+   "manifest": {
+    "path": "tithe-hound.json",
+    "sha256": "b06d7c6fc4eb2bc1035eb991f1840189a5b872446fc8b6813b71704314d09222"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "mateus",
+   "sheets": [
+    {
+     "path": "mateus.png",
+     "width": 4053,
+     "height": 540,
+     "sha256": "51a959f70713bd76a3c92436c524a3ccd21f7a4f248d99970d733ca8f8dc2d81",
+     "bytes": 149374,
+     "decodedBytes": 8754480
+    }
+   ],
+   "manifest": {
+    "path": "mateus.json",
+    "sha256": "718b98bc714b16d2c521457d1566f6fb6c3cdff1c0b92df82094d6cdbb90fc8c"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "captain-kaji",
+   "sheets": [
+    {
+     "path": "captain-kaji.png",
+     "width": 4091,
+     "height": 479,
+     "sha256": "8cd18a63ffc21fc98bbbf9655ca70d927c648414607edc3fe50caec1f04e7203",
+     "bytes": 143323,
+     "decodedBytes": 7838356
+    }
+   ],
+   "manifest": {
+    "path": "captain-kaji.json",
+    "sha256": "6251feb99c474766e9cb1dd388de2933d049a43501f28388812201c54acc1764"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "widow-of-fog",
+   "sheets": [
+    {
+     "path": "widow-of-fog.png",
+     "width": 4072,
+     "height": 569,
+     "sha256": "474d878f98dde704a4996a39d98e1731ffdf6cfac79af51c9517f85a2fc40d71",
+     "bytes": 128253,
+     "decodedBytes": 9267872
+    }
+   ],
+   "manifest": {
+    "path": "widow-of-fog.json",
+    "sha256": "a4ac0a83f3fd4dc18f63d0a2860c93f3e448a3daa4bf8060149d8aff0bb51c9f"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 23
+    }
+   }
+  },
+  {
+   "id": "furnace-abbot",
+   "sheets": [
+    {
+     "path": "furnace-abbot.png",
+     "width": 4081,
+     "height": 730,
+     "sha256": "1cffc76decde63cf5e076cf10e4869d60319e500092504ceeb17f8f83d0f9834",
+     "bytes": 147645,
+     "decodedBytes": 11916520
+    }
+   ],
+   "manifest": {
+    "path": "furnace-abbot.json",
+    "sha256": "eb35164fb47df46e5472f432fc2cf210737c154540a2fbc1e8a3c0eab608ae47"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "ujiro",
+   "sheets": [
+    {
+     "path": "ujiro.png",
+     "width": 4063,
+     "height": 507,
+     "sha256": "26412219c9d5629b6be72b1ae689342304768529dead9a74800d469bb072396f",
+     "bytes": 129874,
+     "decodedBytes": 8239764
+    }
+   ],
+   "manifest": {
+    "path": "ujiro.json",
+    "sha256": "c1901e82522be3ec55440962efa66b26da131fa661498f508bf2d8c521b21974"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "bell-warden-chiyo",
+   "sheets": [
+    {
+     "path": "bell-warden-chiyo.png",
+     "width": 4091,
+     "height": 607,
+     "sha256": "a6c2df35696c2b1abcfc6f0d01aa680ba0c42499a1f8c852d5f2fb3f4d7c45f7",
+     "bytes": 190902,
+     "decodedBytes": 9932948
+    }
+   ],
+   "manifest": {
+    "path": "bell-warden-chiyo.json",
+    "sha256": "2bff7b80d065e144f157cfdbcb7cb08b31a6c72d74e4d2c761f5867f707a78b6"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "lady-enma",
+   "sheets": [
+    {
+     "path": "lady-enma.png",
+     "width": 4077,
+     "height": 581,
+     "sha256": "889eeeb2507cd049dba713ed55cb1668ae71a92840782188f46555d8f67dc174",
+     "bytes": 166100,
+     "decodedBytes": 9474948
+    }
+   ],
+   "manifest": {
+    "path": "lady-enma.json",
+    "sha256": "5736358fd4aea8ed770b5d7279c523305586f43bfcd39f142a450f4c89f47005"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  },
+  {
+   "id": "yearless-bell",
+   "sheets": [
+    {
+     "path": "yearless-bell.png",
+     "width": 4084,
+     "height": 460,
+     "sha256": "45d36434cc7cf1d597f587e53dff0d72041ad409748e37fcfc8717d5edee4cad",
+     "bytes": 110226,
+     "decodedBytes": 7514560
+    }
+   ],
+   "manifest": {
+    "path": "yearless-bell.json",
+    "sha256": "1955844c256e91ab738740870ab0b6939dcdacad4ea8b63fe006144ef607a83c"
+   },
+   "clips": {
+    "idle": {
+     "frames": 24,
+     "unique": 24
+    },
+    "locomotion": {
+     "frames": 24,
+     "unique": 24
+    },
+    "strike": {
+     "frames": 26,
+     "unique": 26,
+     "bands": {
+      "windup": 12,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "signature": {
+     "frames": 30,
+     "unique": 30,
+     "bands": {
+      "windup": 16,
+      "active": 4,
+      "recovery": 10
+     }
+    },
+    "stagger": {
+     "frames": 22,
+     "unique": 22
+    },
+    "transition": {
+     "frames": 24,
+     "unique": 24
+    },
+    "defeat": {
+     "frames": 24,
+     "unique": 24
+    }
+   }
+  }
+ ],
+ "externalBosses": [
+  {
+   "id": "kurozane",
+   "builder": "../kurozane-boss-clips-v2/build_kurozane_boss_clips_v2.py",
+   "lane": "deterministically-pixelified (rig-posed)",
+   "reason": "Shogun Kurozane's approved final-battle and Oni kits already exist; his clips are rig-posed from those keys instead of redrawn."
+  }
+ ],
+ "totals": {
+  "bosses": 9,
+  "frames": 1566,
+  "uniqueFrames": 1565,
+  "sheetBytes": 1295775,
+  "decodedBytesPerBoss": {
+   "tithe-hound": 6721988,
+   "mateus": 8754480,
+   "captain-kaji": 7838356,
+   "widow-of-fog": 9267872,
+   "furnace-abbot": 11916520,
+   "ujiro": 8239764,
+   "bell-warden-chiyo": 9932948,
+   "lady-enma": 9474948,
+   "yearless-bell": 7514560
+  }
+ },
+ "safety": {
+  "gore": false,
+  "realEmblems": false,
+  "devotionalProps": false,
+  "actorLikeness": false,
+  "construction": "Invented mechanical, docket, cable, lattice, ash, and fog geometry only."
+ }
+}
