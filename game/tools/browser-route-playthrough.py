@@ -328,6 +328,20 @@ class PlayerDriver:
         return map_canvas.get_attribute("data-beat-id")
 
     def checkpoint(self) -> dict[str, object]:
+        """Describe the current page; never raises, so failures keep their cause."""
+        self.page.set_default_timeout(3_000)
+        try:
+            return self._checkpoint_fields()
+        except (PlaywrightTimeoutError, Exception) as error:  # noqa: BLE001
+            return {
+                "page": urlparse(self.page.url).path.rsplit("/", 1)[-1],
+                "url": self.page.url,
+                "checkpointError": f"{type(error).__name__}: {str(error)[:300]}",
+            }
+        finally:
+            self.page.set_default_timeout(15_000)
+
+    def _checkpoint_fields(self) -> dict[str, object]:
         path = urlparse(self.page.url).path.rsplit("/", 1)[-1]
         if path == "credits.html":
             return {
