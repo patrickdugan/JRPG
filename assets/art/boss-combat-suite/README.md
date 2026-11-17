@@ -14,3 +14,11 @@ python build_boss_combat_suite.py --check
 ```
 
 The manifest records source and builder hashes, PNG IHDR and SHA-256 data, canonical encounter mappings, per-frame raw-RGBA hashes and alpha bounds, and explicit pivot, ground, hit, and phase anchors. The builder renders twice in memory before writing or checking any file.
+
+## Runtime status (2026-11-17)
+
+Battle now draws bosses from the v2 clip sheets (`../boss-animation-suite-v2/`, and
+`../kurozane-boss-clips-v2/` for Shogun Kurozane) at the 20-30 unique-frame standard.
+This seven-pose atlas is unchanged and is the exact fallback: when a boss's v2
+manifest or sheet fails to load, fails validation, or has the wrong size, Battle
+draws this atlas through the same code path as before.
