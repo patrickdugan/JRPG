@@ -74,3 +74,20 @@ The rendered-route driver also learned to hold casts for their published duratio
 - The blind opening playtest in [doc 28](28-opening-slice-blind-playtest.md).
 - Human readability review of the new field tiles, props, stage backdrops, objective sprites, and enemy art, plus the external cultural review.
 - Balance by feel: the Cinder Fan's Second Mask can end in about ten seconds through its weak point, and Chiyo remains the tightest fight.
+
+## 2026-11-17: full route on main with every pass merged
+
+**Build:** `main` with the combat-feel, timing-windows, boss animation, and party animation passes merged (`a7dfa84`), plus route-driver fixes through the commit that adds this section.
+
+**Result:** a fresh New Game reaches **Journey complete** on the player Credits page ("Story 54/54 · interludes 22/22 · 00:45:51 played"). The run used two segments: New Game through the Archive Node Release on `a7dfa84`, then a resume from that run's recovery export through the Yearless Bell, Kurozane, the Memorial Walk, and Credits after the driver's raised-target jump fix.
+
+| Measure | Value |
+| --- | --- |
+| Action battles | 21 |
+| Action-battle restarts | 0 |
+| Longest battle | 52.7 s (Ujiro) |
+| Lowest surviving fighter HP | 52.7% |
+| Console, page, and HTTP errors | none |
+| Credits outcome | `journey-finished` (proof receipt left open below the five-hour floor) |
+
+The player-facing credits finish is recorded separately from the clean-run proof receipt (`game/player-journey-completion.mjs`). Developer mode (`?dev=1`) keeps the strict five-hour seal and the evidence export, which the player presentation hides.

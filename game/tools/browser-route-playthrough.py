@@ -1983,7 +1983,12 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     if driver.on_credits_page():
                         driver.seal_credits()
                         if args.evidence_out:
-                            evidence["playtestEvidenceExport"] = driver.export_credits_evidence(Path(args.evidence_out).resolve())
+                            if driver.credits_outcome == "journey-finished" and not page.locator("#exportEvidence").is_visible():
+                                # Evidence export is a developer control; the player
+                                # presentation hides it after a journey finish.
+                                evidence["playtestEvidenceExport"] = {"skipped": "developer-only control hidden in player presentation"}
+                            else:
+                                evidence["playtestEvidenceExport"] = driver.export_credits_evidence(Path(args.evidence_out).resolve())
                         evidence["creditsOutcome"] = driver.credits_outcome
                         evidence["status"] = "complete" if driver.credits_outcome == "receipt-sealed" else "journey-complete"
                         break
