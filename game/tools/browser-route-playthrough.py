@@ -112,6 +112,8 @@ class PlayerDriver:
         self.camp_controls = 0
         self.scenes: list[dict[str, object]] = []
         self.action_battles: list[dict[str, object]] = []
+        # Enemy id -> the attack id of the tell already answered with a step back.
+        self.answered_tells: dict[str, str] = {}
         self.last_position: tuple[int, int] | None = None
 
     def click(self, selector: str, *, timeout: int = 10_000) -> None:
@@ -1072,6 +1074,7 @@ class PlayerDriver:
                 subweapons: rows('#subweaponTimers [data-subweapon-id]'),
                 requirements: rows('#objectiveRequirements li[data-requirement-id][data-complete="false"]'),
                 entities: rows('#objectiveRequirements li[data-entity-type][data-complete="false"]'),
+                protectedObjects: rows('#objectiveRequirements li[data-entity-type="object"][data-protected="true"][data-complete="true"]'),
               };
             }"""
         )
@@ -1233,8 +1236,39 @@ class PlayerDriver:
                 "y": self.action_number(priority, "positionY", 440),
                 "semantics": "attack",
                 "phase": priority.get("activePhase"),
+                "attackId": priority.get("activeAttackId"),
             }
         return None
+
+    def new_enemy_tell(self, target: dict[str, object]) -> bool:
+        """True once per enemy tell: the first poll that sees a new wind-up.
+
+        A player steps out of a published tell once and then fights on; with
+        long, readable wind-ups the policy would otherwise retreat on every
+        poll for the whole tell and leave protected lanes unguarded.
+        """
+        enemy_id = str(target.get("id"))
+        if target.get("phase") not in ("windup", "active"):
+            self.answered_tells.pop(enemy_id, None)
+            return False
+        attack_id = str(target.get("attackId") or "")
+        if self.answered_tells.get(enemy_id) == attack_id:
+            return False
+        self.answered_tells[enemy_id] = attack_id
+        return True
+
+    def nearest_protected_lane(self, state: dict[str, object], controlled_x: float, within: float) -> float | None:
+        """The x of the nearest intact protected object within reach, if any.
+
+        A fighter standing in a protected object's column shields it from
+        stray hits, so a tell near one is answered by holding its lane.
+        """
+        lanes = [
+            self.action_number(entity, "positionX")
+            for entity in state.get("protectedObjects", [])
+            if abs(self.action_number(entity, "positionX") - controlled_x) <= within
+        ]
+        return min(lanes, key=lambda x: abs(x - controlled_x)) if lanes else None
 
     def action_party_vitals(self) -> list[dict[str, object]]:
         return [
@@ -1248,6 +1282,7 @@ class PlayerDriver:
         ]
 
     def play_action_battle(self) -> None:
+        self.answered_tells = {}
         self.page.locator("#battleStateBadge").wait_for()
         encounter = self.page.locator("#encounterTitle").inner_text()
         for _ in range(100):
@@ -1439,8 +1474,15 @@ class PlayerDriver:
                     if ready_attacks:
                         self.action_hold("w", 150)
                         self.action_hold("d" if distance > 0 else "a", 20)
-                        chosen = max(ready_attacks, key=lambda attack: int(self.action_number(attack, "attackIndex")))
-                        self.action_press("k" if chosen.get("attackIndex") == "1" else "j")
+                        # Re-read readiness after the jump: a stale press would be
+                        # held by the input buffer and land after the apex.
+                        airborne_ready = [
+                            attack for attack in self.action_rows("#attackTimers [data-attack-id]")
+                            if attack.get("ready") == "true"
+                        ]
+                        if airborne_ready:
+                            chosen = max(airborne_ready, key=lambda attack: int(self.action_number(attack, "attackIndex")))
+                            self.action_press("k" if chosen.get("attackIndex") == "1" else "j")
                     self.page.wait_for_timeout(35)
                     continue
                 else:
@@ -1479,9 +1521,13 @@ class PlayerDriver:
                 self.action_press("e")
 
             if target["semantics"] == "attack":
-                if target.get("phase") in ("windup", "active") and abs(distance) < 190:
-                    self.action_hold("a" if distance > 0 else "d", 60)
-                    self.action_press("q")
+                if target["kind"] == "enemy" and self.new_enemy_tell(target) and abs(distance) < 190:
+                    lane_x = self.nearest_protected_lane(state, controlled_x, 160)
+                    if lane_x is None:
+                        self.action_hold("a" if distance > 0 else "d", 60)
+                        self.action_press("q")
+                    elif abs(lane_x - controlled_x) > 24:
+                        self.action_hold("d" if lane_x > controlled_x else "a", min(600, int(abs(lane_x - controlled_x) * 7)))
                 self.action_hold("d" if distance > 0 else "a", 25)
                 usable_subweapons = [
                     subweapon for subweapon in ready_subweapons
