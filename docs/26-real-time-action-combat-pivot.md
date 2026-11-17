@@ -17,7 +17,7 @@ Every offensive action owns two distinct timing layers:
 
 Cycling attacks cannot bypass the shared weapon cooldown. Defensive and movement verbs may remain available during cooldown when their own state permits them.
 
-One exception is earned by the player: an enemy with poise whose poise is broken by hits landed during its wind-up loses that wind-up before the active frame, starts the attack's normal cooldown, and staggers. Player attacks are never interrupted. Hit-stop and phase-change slow motion only delay when fixed steps run; they never change a step. See [doc 42](42-combat-feel-pass.md).
+One exception is earned by the player: an enemy with poise whose poise is broken by hits landed during its wind-up (hits outside a wind-up only chip poise to a floor) loses that wind-up before the active frame, starts the attack's normal cooldown, and staggers. Player attacks are never interrupted. Hit-stop and phase-change slow motion only delay when fixed steps run; they never change a step. See [doc 42](42-combat-feel-pass.md).
 
 The exact level multiplier is:
 
@@ -27,6 +27,8 @@ effectiveCooldownMs = round(baseCooldownMs * cooldownMultiplier(level))
 ```
 
 Level therefore improves attack cadence without deleting the minimum 55% recovery floor or making animation readability level-dependent.
+
+Enemy wind-ups and recoveries come from tiered tell bands (standard 380–460 ms, elite 540–580, boss 680–760, signature and command 920–1,000), and a 160 ms input buffer holds a press blocked only by commitment, cooldown, or hit-stun until the first legal step without skipping either layer. See [doc 43](43-timing-windows-pass.md).
 
 ## Preserved RPG authority
 

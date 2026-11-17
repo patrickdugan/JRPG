@@ -14,5 +14,6 @@ test('opening action encounters survive long enough to teach without becoming at
     assert.equal(encounter.outcome, 'victory');
     assert.ok(encounter.hitCount > 0, `${encounter.encounterId} never produced contact`);
     assert.ok(encounter.attackStartCount > 0, `${encounter.encounterId} never began an attack`);
+    assert.ok(encounter.enemyStrikeCount > 0, `${encounter.encounterId} ended before any enemy tell resolved`);
   }
 });

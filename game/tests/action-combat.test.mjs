@@ -6,6 +6,7 @@ import {
   ACTION_HIT_FLASH_MS,
   ACTION_HIT_INVULNERABILITY_MS,
   ACTION_HIT_STUN_MS,
+  ACTION_JUMP_BUFFER_WINDOW_MS,
   ACTION_KNOCKBACK_SPEED_X,
   ACTION_MOVEMENT_PROFILES,
   ACTION_TAG_COOLDOWN_MS,
@@ -322,7 +323,7 @@ test('dash-to-attack cancel, one-use air dash, variable jump, and landing buffer
     ok: true,
     actorId: 'ren',
     buffered: true,
-    windowMs: 120,
+    windowMs: ACTION_JUMP_BUFFER_WINDOW_MS,
   });
   buffered.advance(20);
   assert.equal(actorSnapshot(buffered, 'ren').grounded, false);

@@ -33,22 +33,74 @@ export const ACTION_ENEMY_POWER_MULTIPLIER_CAP = 1.9;
 export const ACTION_ENEMY_GROUP_COOLDOWN_PER_EXTRA = 0.5;
 export const ACTION_ENEMY_GROUP_COOLDOWN_MULTIPLIER_CAP = 2.5;
 export const ACTION_ENEMY_GROUP_DAMAGE_FLOOR = 0.65;
-export const ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS = 2_000;
+export const ACTION_BOSS_SHARED_COOLDOWN_FLOOR_MS = 1_400;
 
 /**
- * Interruptible wind-ups. A hit that lands during an enemy wind-up drains
- * poise (weapon strikes 1, Recovery-3 arts 2, linked combo hits +1); at zero
- * the wind-up is cancelled onto its normal cooldown and the enemy staggers.
- * Bosses hold more poise, recover it only slowly between punished wind-ups,
- * and refill on every authored phase change. Tutorial sentries and phase
- * objects never stagger.
+ * Interruptible wind-ups. Every damaging hit on a poised enemy drains poise
+ * by the striking attack's poise damage (weapon strikes 1, Recovery-3 arts 2,
+ * linked combo hits +1). Outside a wind-up the hit only chips poise down to
+ * the profile's neutral floor and never breaks it. During a wind-up the hit
+ * also adds the tell's own `tellPoiseBonus` (see ACTION_ENEMY_TELL_TIERS);
+ * at zero the wind-up is cancelled onto its normal cooldown and the enemy
+ * staggers. Bosses hold more poise, recover it only slowly, and refill on
+ * every authored phase change. Tutorial sentries and phase objects never
+ * stagger.
  */
 export const ACTION_ENEMY_POISE = deepFreeze({
-  standard: { max: 2, regenDelayMs: 1_800, regenIntervalMs: 600, staggerMs: 450 },
-  boss: { max: 4, regenDelayMs: 3_000, regenIntervalMs: 2_500, staggerMs: 700 },
+  standard: { max: 2, neutralFloor: 1, regenDelayMs: 1_800, regenIntervalMs: 600, staggerMs: 500 },
+  boss: { max: 4, neutralFloor: 3, regenDelayMs: 3_000, regenIntervalMs: 2_500, staggerMs: 800 },
 });
 export const ACTION_PARTY_ART_POISE_DAMAGE = 2;
 export const ACTION_PARTY_WEAPON_POISE_DAMAGE = 1;
+
+/**
+ * Readable enemy tells by tier (doc 43). Every enemy attack's wind-up is
+ *   windupBaseMs + committedMs (not dodgeable) + complexMs (cross, ring,
+ *   marked tiles, lane endpoint) + min(rangeCapMs, range × rangeStepMs)
+ * and its recovery (the punish window, when the attacker cannot move) is
+ *   recoveryBaseMs + min(3, Recovery pulses) × recoveryPerPulseMs
+ *   + recoveryCommittedMs (not dodgeable),
+ * each rounded to the fixed step. Active frames stay 80–100 ms.
+ *
+ * - standard: ordinary enemies and summons.
+ * - elite: an encounter's named boss outside a boss format (Lady Enma's
+ *   escort and archive arenas) and the immovable tutorial sentry.
+ * - boss: the primary enemy of a boss, boss-rescue, boss-phase, or
+ *   final-boss encounter.
+ * - signature: a boss's authored Recovery-3 art; a boss with no Recovery-3
+ *   art and no command marks its highest-Recovery (2+) art instead.
+ * - command: a boss or elite order, summons, countdown, or objective seizure
+ *   (`effect.summons`, `countdownDelta`, `objectiveDamage`).
+ *
+ * `tellPoiseBonus` is added to every damaging hit that lands during that
+ * tell, so boss and elite tells are where poise really breaks: against a
+ * boss's 4 poise, one art (2 + 2) breaks a signature or command tell, and one
+ * weapon strike (1 + 2) breaks it after a neutral hit has chipped poise to 3.
+ */
+export const ACTION_ENEMY_TELL_TIERS = deepFreeze({
+  standard: {
+    windupBaseMs: 380, committedMs: 40, complexMs: 20, rangeStepMs: 5, rangeCapMs: 20,
+    recoveryBaseMs: 220, recoveryPerPulseMs: 30, recoveryCommittedMs: 40, tellPoiseBonus: 0,
+  },
+  elite: {
+    windupBaseMs: 500, committedMs: 40, complexMs: 20, rangeStepMs: 10, rangeCapMs: 40,
+    recoveryBaseMs: 300, recoveryPerPulseMs: 40, recoveryCommittedMs: 40, tellPoiseBonus: 1,
+  },
+  boss: {
+    windupBaseMs: 660, committedMs: 40, complexMs: 20, rangeStepMs: 10, rangeCapMs: 40,
+    recoveryBaseMs: 360, recoveryPerPulseMs: 60, recoveryCommittedMs: 40, tellPoiseBonus: 1,
+  },
+  signature: {
+    windupBaseMs: 880, committedMs: 40, complexMs: 20, rangeStepMs: 10, rangeCapMs: 60,
+    recoveryBaseMs: 520, recoveryPerPulseMs: 40, recoveryCommittedMs: 40, tellPoiseBonus: 2,
+  },
+  command: {
+    windupBaseMs: 880, committedMs: 40, complexMs: 20, rangeStepMs: 10, rangeCapMs: 60,
+    recoveryBaseMs: 520, recoveryPerPulseMs: 40, recoveryCommittedMs: 40, tellPoiseBonus: 2,
+  },
+});
+export const ACTION_ENEMY_TELL_CLASSES = Object.freeze(Object.keys(ACTION_ENEMY_TELL_TIERS));
+const BOSS_ENCOUNTER_FORMATS = new Set(['boss', 'boss-rescue', 'boss-phase', 'final-boss']);
 
 const PARTY_ATTACK_PREFIX = 'party';
 const ENEMY_ATTACK_PREFIX = 'enemy';
@@ -219,23 +271,65 @@ export function actionEnemyGroupDamageMultiplier(activeEnemyCount = 1) {
   return Math.max(ACTION_ENEMY_GROUP_DAMAGE_FLOOR, 1 / (1 + ((count - 1) * 0.35)));
 }
 
-function attackTiming(skill, sourceKind) {
+function recoveryPulsesOf(skill) {
+  return Number.isInteger(skill?.recoveryPulses) && skill.recoveryPulses > 0 ? skill.recoveryPulses : 0;
+}
+
+function commandSkill(skill) {
+  const effect = skill?.effect ?? {};
+  return (effect.summons?.length ?? 0) > 0 || effect.countdownDelta != null || effect.objectiveDamage != null;
+}
+
+/** The tell tier of an enemy template within one encounter (doc 43). */
+export function actionEnemyTier(template, encounter) {
+  if (BOSS_ENCOUNTER_FORMATS.has(encounter?.format) && template?.id === encounter.enemies?.[0]?.id) return 'boss';
+  if (template?.id === encounter?.objective?.bossId) return 'elite';
+  if (String(template?.role ?? '').includes('immovable')) return 'elite';
+  return 'standard';
+}
+
+/** The tell class of one enemy skill: its tier, or signature or command. */
+export function actionEnemyTellClass(skill, template, tier) {
+  if (tier === 'standard') return 'standard';
+  if (commandSkill(skill)) return 'command';
+  if (tier !== 'boss') return tier;
+  const skills = template?.skills ?? [];
+  if (recoveryPulsesOf(skill) >= 3) return 'signature';
+  if (skills.some((candidate) => recoveryPulsesOf(candidate) >= 3 || commandSkill(candidate))) return 'boss';
+  const highest = Math.max(0, ...skills.map(recoveryPulsesOf));
+  return highest >= 2 && recoveryPulsesOf(skill) === highest ? 'signature' : 'boss';
+}
+
+/** Enemy wind-up, active, and recovery milliseconds for one tell class. */
+export function actionEnemyAttackTiming(skill, tellClass) {
+  const tier = ACTION_ENEMY_TELL_TIERS[tellClass];
+  if (!tier) throw new RangeError(`Unknown enemy tell class ${tellClass}.`);
   const range = Math.max(0, Number(skill.range) || 0);
-  const shapeType = skill.shape?.type ?? 'front';
-  const arcane = skill.delivery === 'arcane';
-  const complex = COMPLEX_SHAPES.has(shapeType);
+  const committed = skill.dodgeable === false;
+  const complex = COMPLEX_SHAPES.has(skill.shape?.type ?? 'front');
   const windupMs = roundToStep(
-    sourceKind === PARTY_ATTACK_PREFIX
-      ? 100 + (arcane ? 80 : 0) + Math.min(60, range * 10)
-      : 180 + (skill.telegraph ? 40 : 0) + (complex ? 60 : 0) + Math.min(80, range * 20),
+    tier.windupBaseMs
+      + (committed ? tier.committedMs : 0)
+      + (complex ? tier.complexMs : 0)
+      + Math.min(tier.rangeCapMs, range * tier.rangeStepMs),
   );
-  const activeMs = roundToStep(arcane || range > 1 ? 100 : 80);
+  const activeMs = roundToStep(skill.delivery === 'arcane' || range > 1 ? 100 : 80);
   const recoveryMs = roundToStep(
-    sourceKind === PARTY_ATTACK_PREFIX
-      ? 140 + (arcane ? 80 : 20)
-      : 180 + (complex ? 60 : 0) + (skill.dodgeable === false ? 40 : 0),
+    tier.recoveryBaseMs
+      + Math.min(3, recoveryPulsesOf(skill)) * tier.recoveryPerPulseMs
+      + (committed ? tier.recoveryCommittedMs : 0),
   );
   return { windupMs, activeMs, recoveryMs };
+}
+
+function partyAttackTiming(skill) {
+  const range = Math.max(0, Number(skill.range) || 0);
+  const arcane = skill.delivery === 'arcane';
+  return {
+    windupMs: roundToStep(100 + (arcane ? 80 : 0) + Math.min(60, range * 10)),
+    activeMs: roundToStep(arcane || range > 1 ? 100 : 80),
+    recoveryMs: roundToStep(140 + (arcane ? 80 : 20)),
+  };
 }
 
 /**
@@ -321,9 +415,11 @@ function adaptAttackVariants(skill, owner) {
   })];
 }
 
-function adaptAttack(skill, { sourceKind, ownerTemplateId }) {
+function adaptAttack(skill, { sourceKind, ownerTemplateId, tellClass = null }) {
   const id = actionAttackId(sourceKind, ownerTemplateId, skill.id);
   const recoveryPulses = Number.isInteger(skill.recoveryPulses) ? skill.recoveryPulses : 0;
+  const enemy = sourceKind === ENEMY_ATTACK_PREFIX;
+  const resolvedTellClass = enemy ? (tellClass ?? 'standard') : null;
   return {
     id,
     config: {
@@ -331,11 +427,12 @@ function adaptAttack(skill, { sourceKind, ownerTemplateId }) {
       delivery: skill.delivery ?? null,
       essence: skill.essence ?? null,
       power: skill.power ?? 0,
-      ...attackTiming(skill, sourceKind),
+      ...(enemy ? actionEnemyAttackTiming(skill, resolvedTellClass) : partyAttackTiming(skill)),
       cooldownMs: actionCooldownForRecovery(recoveryPulses),
       poiseDamage: sourceKind === PARTY_ATTACK_PREFIX && recoveryPulses >= 3
         ? ACTION_PARTY_ART_POISE_DAMAGE
         : ACTION_PARTY_WEAPON_POISE_DAMAGE,
+      ...(enemy ? { tellPoiseBonus: ACTION_ENEMY_TELL_TIERS[resolvedTellClass].tellPoiseBonus } : {}),
       hitbox: attackHitbox(skill),
       tags: [sourceKind, skill.shape?.type ?? 'front', skill.dodgeable === false ? 'committed' : 'dodgeable'],
     },
@@ -343,6 +440,7 @@ function adaptAttack(skill, { sourceKind, ownerTemplateId }) {
       adapterAttackId: id,
       sourceKind,
       ownerTemplateId,
+      ...(enemy ? { tellClass: resolvedTellClass } : {}),
       sourceSkillId: skill.id,
       sourceRecoveryPulses: recoveryPulses,
       sourceRange: skill.range ?? 0,
@@ -540,7 +638,7 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
   // Phase objects such as the Yearless Bell hold their station without the
   // tutorial sentry's damage and cadence softening.
   const phaseObject = String(template.role ?? '').includes('phase-object');
-  const primaryBoss = ['boss', 'boss-rescue', 'boss-phase', 'final-boss'].includes(context.encounter.format)
+  const primaryBoss = BOSS_ENCOUNTER_FORMATS.has(context.encounter.format)
     && template.id === context.encounter.enemies[0]?.id;
   const namedBoss = primaryBoss || template.id === context.encounter.objective?.bossId;
   const hp = actionEnemyHp(template.stats.hp, template.actionHpMultiplier ?? 1);
@@ -588,9 +686,11 @@ function enemyActor(template, instanceIndex, position, context, attackIds) {
 }
 
 function adaptEnemyTemplate(template, templateIndex, context) {
+  const tier = actionEnemyTier(template, context.encounter);
   const attackRecords = (template.skills ?? []).flatMap((skill) => adaptAttackVariants(skill, {
     sourceKind: ENEMY_ATTACK_PREFIX,
     ownerTemplateId: template.id,
+    tellClass: actionEnemyTellClass(skill, template, tier),
   }));
   const attackIds = attackRecords.map(({ id }) => id);
   const count = template.count ?? template.positions?.length ?? 1;
@@ -624,6 +724,7 @@ function adaptEnemyTemplate(template, templateIndex, context) {
       resistances: resistances(template.resistances),
       spawnState: isDormant ? 'authored-summon-not-instantiated' : (context.encounter.format === 'noncombat-resolution' ? 'initial-neutral' : 'initial'),
       role: template.role ?? null,
+      tellTier: tier,
     },
   };
 }

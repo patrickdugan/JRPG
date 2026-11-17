@@ -25,6 +25,7 @@ const BASE = deepFreeze({
     'Move with Left/Right or A/D.',
     'Use Z/J for the weapon and X/K for the character art.',
     'Watch the objective and enemy warning shapes; movement remains available during cooldown.',
+    'Hits drain the poise pips under an enemy; a hit during a glowing wind-up can break it and stagger the enemy.',
   ],
 });
 
@@ -51,7 +52,7 @@ const OPENING = deepFreeze({
     title: 'Break the charge',
     summary: 'Ash Wisps ignore Umbral damage and open to Radiance. Focus one low-health wisp at a time.',
     steps: [
-      'Close distance before committing an attack.',
+      'Strike a wisp while its charge glows: an art breaks the charge and staggers the wisp.',
       'Use the brighter Radiance art when available.',
       'A defeated wisp removes an entire source of pressure.',
     ],
@@ -60,7 +61,7 @@ const OPENING = deepFreeze({
     title: 'Wait for the exposed seal',
     summary: 'Consume Ink draws a dark line and exposes the Hound’s seal. Evade first; Aya heals from reserve while Ren answers the recovery window.',
     steps: [
-      'Leave the published line before Consume Ink lands.',
+      'Leave the published line before Consume Ink lands, or break its long wind-up with Cinder Route.',
       'Target the low-health exposed seal when it appears.',
       'Pierce or Radiance gives the clearest result.',
     ],

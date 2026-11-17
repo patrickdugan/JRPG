@@ -1142,8 +1142,10 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
     session.kernel.setJumpHeld(controlledActorId, jumpHeld);
     if (input.jumpPressed) session.kernel.requestJump(controlledActorId, { buffer: true, held: jumpHeld });
     if (typeof input.maneuverPressed === 'string') {
-      const started = session.kernel.requestManeuver(controlledActorId, input.maneuverPressed);
-      if (!started.ok) {
+      // Timing-only blocks (commitment, cooldown, hit-stun) hold the press in
+      // the kernel's input buffer; it reports a block only if it expires.
+      const started = session.kernel.requestManeuver(controlledActorId, input.maneuverPressed, { buffer: true });
+      if (!started.ok && !started.buffered) {
         controllerEvents.push({
           type: 'maneuver-blocked',
           actorId: controlledActorId,
@@ -1155,7 +1157,7 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
     }
     if (Number.isSafeInteger(input.attackIndex)) {
       const attackId = getActionCampaignAttackChoices(session, controlledActorId)[input.attackIndex]?.id;
-      if (attackId) session.kernel.requestAttack(controlledActorId, attackId);
+      if (attackId) session.kernel.requestAttack(controlledActorId, attackId, { buffer: true });
     }
     if (typeof input.subweaponPressed === 'string') {
       const choice = getActionCampaignSubweaponChoices(session, controlledActorId)
@@ -1222,6 +1224,16 @@ export function advanceActionCampaignBattle(session, elapsedMs, input = {}) {
   const elapsed = Math.max(0, Math.min(100, Math.round(Number(elapsedMs) || 0)));
   session.kernel.advance(elapsed);
   const kernelEvents = session.kernel.drainEvents();
+  for (const event of kernelEvents) {
+    if (event.type !== 'input-buffer-expired' || event.kind !== 'maneuver') continue;
+    controllerEvents.push({
+      type: 'maneuver-blocked',
+      actorId: event.actorId,
+      maneuverId: event.id,
+      reason: event.reason,
+      remainingMs: 0,
+    });
+  }
   const bossPhaseEvents = updateBossPhaseDirector(session, kernelEvents);
   const kernelSnapshot = session.kernel.snapshot();
   moveObjectiveTokens(session, elapsed, kernelSnapshot, input);
