@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 GAME_DIR = Path(__file__).resolve().parents[1]
-SHIPPED_SUFFIXES = frozenset({".html", ".css", ".js", ".mjs", ".png", ".svg"})
+SHIPPED_SUFFIXES = frozenset({".html", ".css", ".js", ".mjs", ".png", ".svg", ".json"})
 EXCLUDED_PARTS = frozenset({"node_modules", "tests", "tools"})
 
 

@@ -62,7 +62,22 @@ import {
   resolveActionObjectiveTokenArt,
 } from './action-objective-atlas.mjs';
 import { layoutCanvasLabels, shortenActorName } from './action-label-layout.mjs';
-import { BOSS_COMBAT_ATLAS, getBossCombatDrawPlacement, getBossCombatFrame, hasBossCombatTemplate } from './boss-combat-atlas.mjs';
+import {
+  BOSS_COMBAT_ATLAS,
+  BOSS_DEFEAT_HOLD_MS,
+  BOSS_TRANSITION_HOLD_MS,
+  getBossCombatDrawPlacement,
+  getBossCombatFrame,
+  hasBossCombatTemplate,
+} from './boss-combat-atlas.mjs';
+import { animationDrawPlacement, createAnimationSheetLoader } from './animation-clip-runtime.mjs';
+import {
+  BOSS_ANIMATION_SUITE,
+  bossAnimationManifestUrl,
+  hasBossAnimationClips,
+  sampleBossAnimation,
+  selectBossAnimationClip,
+} from './boss-animation-clips.mjs';
 import {
   ENEMY_COMBAT_ANIMATION_ATLAS,
   hasEnemyCombatAnimation,
@@ -367,6 +382,43 @@ function loadArt(key) {
 }
 
 for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles', 'objective']) loadArt(key);
+
+// v2 boss clips: lazily fetch only the bosses this encounter contains. Any
+// failure (fetch, validation, wrong sheet size) leaves the static atlas path.
+const bossAnimationLoader = createAnimationSheetLoader({
+  resolveManifestUrl: bossAnimationManifestUrl,
+  fetchJson: (url) => fetch(url).then((response) => {
+    if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
+    return response.json();
+  }),
+  createImage: () => new Image(),
+  validateOptions: { requiredClips: BOSS_ANIMATION_SUITE.requiredClips },
+  onChange: () => updateBossAnimationArtState(),
+});
+const bossAnimationTimers = {
+  session: null,
+  defeatStartedAt: new Map(),
+  transitionStartedAt: new Map(),
+  phaseRevision: new Map(),
+  staggerPeakMs: new Map(),
+};
+
+function encounterBossAnimationTemplates() {
+  return [...new Set(Object.values(session.actorTemplates ?? {}))].filter(hasBossAnimationClips);
+}
+
+function updateBossAnimationArtState() {
+  const templates = encounterBossAnimationTemplates();
+  const states = templates.map((id) => bossAnimationLoader.state(id));
+  const state = !templates.length ? 'unmapped'
+    : states.every((value) => value === 'ready') ? 'ready'
+      : states.find((value) => value !== 'ready' && value !== 'loading') ?? 'loading';
+  setCanvasDataset('bossAnimArtState', state);
+  setCanvasDataset('bossAnimTemplates', templates.join(' '));
+}
+
+for (const bossTemplateId of encounterBossAnimationTemplates()) bossAnimationLoader.request(bossTemplateId);
+updateBossAnimationArtState();
 if (!art.backdrop.source) elements.canvas.dataset.backdropArtState = 'unmapped';
 elements.canvas.dataset.backdropId = art.backdrop.source?.id ?? '';
 
@@ -1331,9 +1383,106 @@ function richEnemyFrame(actor, nowMs) {
   return sampleEnemyCombatAnimationIdle(template, nowMs, { reducedMotion: reducedMotion.matches });
 }
 
+/**
+ * Presentation-only boss clip timers (they never feed the simulation). A new
+ * session (restart) clears them. Phase transitions are read from the phase
+ * director's revision, which increments exactly on boss-phase-entered.
+ */
+function syncBossAnimationTimers(actor, nowMs) {
+  if (bossAnimationTimers.session !== session) {
+    bossAnimationTimers.session = session;
+    for (const key of ['defeatStartedAt', 'transitionStartedAt', 'phaseRevision', 'staggerPeakMs']) {
+      bossAnimationTimers[key].clear();
+    }
+  }
+  const director = session.bossPhaseDirector;
+  if (director?.bossActorId !== actor.id) return null;
+  const seen = bossAnimationTimers.phaseRevision.get(actor.id);
+  if (seen !== undefined && director.revision > seen) bossAnimationTimers.transitionStartedAt.set(actor.id, nowMs);
+  bossAnimationTimers.phaseRevision.set(actor.id, director.revision);
+  return director.phases[director.phaseIndex]?.id ?? null;
+}
+
+function bossStaggerTotalMs(actor) {
+  const authored = session.spec.kernelConfig.actors.find(({ id }) => id === actor.id)?.poise?.staggerMs ?? 0;
+  const peak = Math.max(bossAnimationTimers.staggerPeakMs.get(actor.id) ?? 0, actor.staggerRemainingMs ?? 0);
+  if (actor.staggerRemainingMs > 0) bossAnimationTimers.staggerPeakMs.set(actor.id, peak);
+  else bossAnimationTimers.staggerPeakMs.delete(actor.id);
+  return authored || peak;
+}
+
+function recordBossAnimationRead(read) {
+  setCanvasDataset('bossAnimSource', read.source);
+  setCanvasDataset('bossAnimClip', read.clip);
+  setCanvasDataset('bossAnimFrame', String(read.frame));
+  setCanvasDataset('bossAnimBand', read.band);
+  setCanvasDataset('bossAnimUnique', String(read.unique));
+  setCanvasDataset('bossAnimForm', read.form);
+}
+
+/** Draw a boss from its v2 clip sheet. Returns false (static fallback) unless its sheet is ready. */
+function drawBossAnimation(actor, template, nowMs) {
+  const entry = bossAnimationLoader.get(template);
+  if (!entry) return false;
+  const { prepared, images } = entry;
+  const phaseId = syncBossAnimationTimers(actor, nowMs);
+  const wallMs = performance.now();
+  const terminal = actor.hp <= 0 || actor.active === false;
+  if (terminal && !bossAnimationTimers.defeatStartedAt.has(actor.id)) {
+    bossAnimationTimers.defeatStartedAt.set(actor.id, wallMs);
+  } else if (!terminal) {
+    bossAnimationTimers.defeatStartedAt.delete(actor.id);
+  }
+  const transitionStart = bossAnimationTimers.transitionStartedAt.get(actor.id);
+  const selection = selectBossAnimationClip({
+    prepared,
+    actor,
+    phaseId,
+    attackProgress: attackPhaseProgress(actor),
+    staggerTotalMs: bossStaggerTotalMs(actor),
+    defeatElapsedMs: terminal ? wallMs - bossAnimationTimers.defeatStartedAt.get(actor.id) : 0,
+    defeatHoldMs: BOSS_DEFEAT_HOLD_MS,
+    transitionElapsedMs: transitionStart == null ? null : nowMs - transitionStart,
+    transitionHoldMs: BOSS_TRANSITION_HOLD_MS,
+    timeMs: nowMs,
+  });
+  const sample = sampleBossAnimation(prepared, selection, { reducedMotion: reducedMotion.matches });
+  const placement = animationDrawPlacement(prepared, sample, {
+    anchorX: actor.position.x,
+    anchorY: actor.position.y,
+    scale: prepared.manifest.presentationPixelScale ?? BOSS_ANIMATION_SUITE.presentationPixelScale,
+    facing: actor.facing,
+  });
+  context.save();
+  context.imageSmoothingEnabled = false;
+  context.translate(placement.anchorX, placement.anchorY);
+  if (placement.flip) context.scale(-1, 1);
+  context.drawImage(images[placement.sheet], placement.sx, placement.sy, placement.sw, placement.sh,
+    placement.ox, placement.oy, placement.dw, placement.dh);
+  context.restore();
+  recordBossAnimationRead({
+    source: 'clips-v2',
+    clip: sample.clipId,
+    frame: sample.index,
+    band: sample.band ?? selection.mode,
+    unique: sample.uniqueFrames,
+    form: selection.form ?? '',
+  });
+  return true;
+}
+
 function drawEnemy(actor, nowMs) {
   const template = templateId(actor.id);
   if (hasBossCombatTemplate(template)) {
+    if (drawBossAnimation(actor, template, nowMs)) return;
+    recordBossAnimationRead({
+      source: art.boss.ready ? 'static-v1' : 'token',
+      clip: bossPose(actor),
+      frame: 0,
+      band: '',
+      unique: 1,
+      form: '',
+    });
     const frame = getBossCombatFrame(template, bossPose(actor));
     const placement = getBossCombatDrawPlacement(frame, {
       anchorX: actor.position.x,
