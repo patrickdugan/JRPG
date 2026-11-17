@@ -36,6 +36,12 @@ import {
 } from './playtest-evidence.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
 import { applyPresentationMode, PRESENTATION_MODES } from './presentation-mode.mjs';
+import {
+  canFinishJourney,
+  createPlayerJourneyRecord,
+  createPlayerJourneyStorageAdapter,
+  isJourneyFinished,
+} from './player-journey-completion.mjs';
 
 const presentationMode = applyPresentationMode();
 const developerMode = presentationMode === PRESENTATION_MODES.DEVELOPER;
@@ -52,6 +58,7 @@ const timingAttribution = document.querySelector('#timingAttribution');
 const pacingBasis = document.querySelector('#pacingBasis');
 const pageAudio = mountAudioControls({ desiredLoop: 'exploration' });
 const receiptAdapter = createRunReceiptStorageAdapter();
+const journeyAdapter = createPlayerJourneyStorageAdapter();
 const campaignAdapter = createLocalStorageAdapter();
 const loadedCampaign = campaignAdapter.load();
 let campaignState = loadedCampaign.state ?? createCampaignState();
@@ -159,6 +166,7 @@ function renderTimingLedger(report = null) {
 }
 
 function render() {
+  delete sealCredits.dataset.finishMode;
   const routeTotals = requiredRouteProgress.metrics.total;
   const routeReady = requiredRouteProgress.creditsGate.creditsReady;
   if (!receiptState) {
@@ -230,6 +238,30 @@ function render() {
         : 'Complete every canonical story scene before sealing the run.'
       : 'Complete the story before finishing the credits.';
     sealCredits.disabled = true;
+    return;
+  }
+  if (narrativeRun && !narrativeGate.ready && canFinishJourney({
+    developerMode,
+    narrativeRun,
+    storyComplete: report.storyComplete,
+    gateReasons: narrativeGate.reasons,
+  })) {
+    const journey = journeyAdapter.load();
+    if (isJourneyFinished(journey.record, receiptState.runId)) {
+      creditsStatus.dataset.state = 'journey-complete';
+      creditsStatus.textContent = `Journey complete · ${elapsed}`;
+      creditsActionHint.textContent = 'Your ending is recorded. Camp and Campaign remain available.';
+      sealCredits.textContent = 'Journey complete';
+      sealCredits.dataset.finishMode = 'journey';
+      sealCredits.disabled = true;
+      return;
+    }
+    creditsStatus.dataset.state = 'active';
+    creditsStatus.textContent = `Story complete · ${elapsed}`;
+    creditsActionHint.textContent = 'Finish the journey to close the story. Camp and Campaign remain available afterwards.';
+    sealCredits.textContent = 'Finish the journey';
+    sealCredits.dataset.finishMode = 'journey';
+    sealCredits.disabled = false;
     return;
   }
   if (narrativeRun && !narrativeGate.ready) {
@@ -315,7 +347,26 @@ sealCredits.addEventListener('click', () => {
   if (report.profileId === RUN_RECEIPT_PROFILE_IDS.NARRATIVE_5_6H) {
     const refreshedStoryworld = storyworldAdapter.load();
     storyworldState = refreshedStoryworld.ok && refreshedStoryworld.found ? refreshedStoryworld.state : null;
-    if (!deriveNarrativeCreditsGate(receiptState, storyworldState).ready) {
+    const gate = deriveNarrativeCreditsGate(receiptState, storyworldState);
+    if (!gate.ready && canFinishJourney({
+      developerMode,
+      narrativeRun: true,
+      storyComplete: report.storyComplete,
+      gateReasons: gate.reasons,
+    })) {
+      const saved = journeyAdapter.save(createPlayerJourneyRecord(receiptState.runId, report.totalMs));
+      if (!saved.ok) {
+        creditsStatus.dataset.state = 'error';
+        creditsStatus.textContent = 'Progress could not be saved. Please try again.';
+        creditsStatus.focus();
+        return;
+      }
+      pageAudio.playCue('uiConfirm');
+      render();
+      creditsStatus.focus();
+      return;
+    }
+    if (!gate.ready) {
       render();
       creditsStatus.focus();
       return;

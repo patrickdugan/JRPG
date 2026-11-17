@@ -2,6 +2,18 @@
 
 An original, gothic historical-fantasy action JRPG set in a fictionalized early Edo Japan, where a vampiric Shogun turns persecution into a supernatural order. It combines top-down party exploration with side-view real-time combat, free movement, committed attack animations, post-animation cooldowns, and readable elemental detail.
 
+## Play
+
+Double-click **`PLAY.cmd`** (Windows; needs Python 3 on PATH) or run `python game/tools/launch-game.py`. It serves the game at `http://127.0.0.1:8642/index.html` and opens the title screen. Progress saves automatically in your browser at that address, so always launch the same way. Choose **New Game** for a fresh run or **Continue** to resume.
+
+| Where | Keys |
+| --- | --- |
+| Story | `N` or *Continue dialogue* advances lines; click a choice button to choose |
+| Field | `W` `A` `S` `D` move · `Q` `E` `Z` `C` diagonals · `X` or `Enter` interact; follow the gold objective marker |
+| Battle | `A`/`D` move · `W` or `Space` jump · `J` weapon · `K` art · `C` Holy Water · `V` Throwing Cross · `Q` dash · `S` slide · `U`/`I` rising and diving maneuvers · `L` duo combo · `E` hold an objective action · `Tab` swap fighters · `R` restart. Hits during an enemy's wind-up stagger it. A standard gamepad also works. |
+
+A complete story run takes a few hours. Finishing the story unlocks **Finish the journey** on the Credits page; the five-hour clean-run proof receipt is a separate developer measurement (`?dev=1`) and never blocks the ending.
+
 ## Current milestone
 
 Side-view real-time action is now the canonical campaign combat route. The [integrated action campaign battle](game/action-campaign-battle.html) runs all real encounters and authored side-view stages with free movement, grounded jumping, fixed attack commitments, visible post-animation cooldowns, level-scaled timer recovery, typed damage, deterministic companions/enemies, cooldown-preserving party switching, shipped sprites, Storyworld context, active-play telemetry, and atomic campaign settlement. All 18 objective families are authoritative, including escort/incapacitation tokens, protected scenery, countdown extractions, and attackable phase objects. Authored pulls, pushes, statuses, summons, weak points, defensive windows, Mateus's 25% Blood Ward, and typed HP/cadence boss phases execute through deterministic action seams. Nikola and Mateus can perform Black Sun Concord as an atomic two-character cast while retaining each typed hit and native cooldown. The complete tactical controller remains available as the explicit per-tab rollback at `campaign.html?legacyBattle=1`.

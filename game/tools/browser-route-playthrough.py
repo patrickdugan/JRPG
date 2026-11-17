@@ -113,6 +113,7 @@ class PlayerDriver:
         self.scenes: list[dict[str, object]] = []
         self.action_battles: list[dict[str, object]] = []
         self.last_position: tuple[int, int] | None = None
+        self.credits_outcome: str | None = None
 
     def click(self, selector: str, *, timeout: int = 10_000) -> None:
         self.page.locator(selector).click(timeout=timeout)
@@ -159,14 +160,28 @@ class PlayerDriver:
                 creditsHint=self.page.locator("#creditsActionHint").inner_text(),
                 routeProof=route_proof,
             )
+        journey_finish = seal.get_attribute("data-finish-mode") == "journey"
         seal.click()
         self.controls += 1
+        expected_state = "journey-complete" if journey_finish else "sealed"
         for _ in range(40):
-            if self.page.locator("#creditsStatus").get_attribute("data-state") == "sealed":
+            if self.page.locator("#creditsStatus").get_attribute("data-state") == expected_state:
                 break
             self.page.wait_for_timeout(50)
         status = self.page.locator("#creditsStatus").inner_text()
         normalized_status = status.casefold()
+        if journey_finish:
+            # Player finish below the five-hour floor: the proof receipt stays
+            # open; only the separate journey completion is recorded.
+            if not normalized_status.startswith("journey complete"):
+                raise RouteBlocked(
+                    "journey-finish",
+                    "The rendered credits control did not record the player journey completion.",
+                    creditsStatus=status,
+                )
+            self.credits_outcome = "journey-finished"
+            return
+        self.credits_outcome = "receipt-sealed"
         if not normalized_status.startswith("credits complete"):
             raise RouteBlocked(
                 "credits-seal",
@@ -1892,7 +1907,8 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                         driver.seal_credits()
                         if args.evidence_out:
                             evidence["playtestEvidenceExport"] = driver.export_credits_evidence(Path(args.evidence_out).resolve())
-                        evidence["status"] = "complete"
+                        evidence["creditsOutcome"] = driver.credits_outcome
+                        evidence["status"] = "complete" if driver.credits_outcome == "receipt-sealed" else "journey-complete"
                         break
                     after = driver.scene_key()
                     after_next_scene = page.locator("#nextScene").inner_text()
@@ -2066,7 +2082,7 @@ def main() -> int:
     args = parse_args()
     evidence = run_attempt(find_chromium(args.chromium), args)
     print(json.dumps(evidence, indent=2, ensure_ascii=True))
-    return 1 if args.require_complete and evidence.get("status") != "complete" else 0
+    return 1 if args.require_complete and evidence.get("status") not in ("complete", "journey-complete") else 0
 
 
 if __name__ == "__main__":

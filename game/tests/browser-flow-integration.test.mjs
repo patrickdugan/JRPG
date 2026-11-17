@@ -85,7 +85,9 @@ test('credits are an explicit durable seal boundary after story completion', () 
   assert.match(creditsSource, /report\.storyComplete/);
   assert.match(creditsSource, /report\.creditsComplete/);
   assert.match(creditsSource, /createPlaytestEvidenceReport\(receiptState, requiredRouteProgress, storyworldState\)/);
-  assert.match(sealBoundary, /deriveNarrativeCreditsGate\(receiptState, storyworldState\)\.ready/);
+  assert.match(sealBoundary, /const gate = deriveNarrativeCreditsGate\(receiptState, storyworldState\)/);
+  assert.ok(sealBoundary.indexOf('if (!gate.ready) {') < completeIndex,
+    'the proof receipt seals only after the strict narrative gate is ready');
   assert.match(creditsSource, /serializePlaytestEvidenceReport\(report\)/);
   assert.match(creditsSource, /chapterId: campaignState\.current\.chapterId/);
   assert.match(creditsSource, /renderTimingLedger\(report\)/);
