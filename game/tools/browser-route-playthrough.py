@@ -1501,17 +1501,19 @@ class PlayerDriver:
                     # subweapons fail in the air: jump, then use a ready weapon
                     # or art near the apex.
                     if ready_attacks:
-                        self.action_hold("w", 150)
-                        self.action_hold("d" if distance > 0 else "a", 20)
-                        # Re-read readiness after the jump: a stale press would be
-                        # held by the input buffer and land after the apex.
-                        airborne_ready = [
-                            attack for attack in self.action_rows("#attackTimers [data-attack-id]")
-                            if attack.get("ready") == "true"
-                        ]
-                        if airborne_ready:
-                            chosen = max(airborne_ready, key=lambda attack: int(self.action_number(attack, "attackIndex")))
+                        # Hold jump through the apex (releasing early lowers it via
+                        # variable jump height) and strike about 120 ms into the
+                        # rise so the active frame lands near the top.
+                        chosen = max(ready_attacks, key=lambda attack: int(self.action_number(attack, "attackIndex")))
+                        self.page.keyboard.down("w")
+                        try:
+                            self.page.wait_for_timeout(120)
                             self.action_press("k" if chosen.get("attackIndex") == "1" else "j")
+                            self.page.wait_for_timeout(260)
+                        finally:
+                            self.page.keyboard.up("w")
+                        self.controls += 1
+                        self.battle_commands += 1
                     self.page.wait_for_timeout(35)
                     continue
                 else:
