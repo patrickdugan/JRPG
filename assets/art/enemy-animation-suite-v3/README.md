@@ -117,3 +117,7 @@ Before promotion, tune per-encounter scale and verify pivots, hurt boxes, attack
 hit boxes, projectile paths, VFX anchors, root motion, and event timing against
 the side-scroll combat camera. This art package does not modify combat runtime
 code.
+
+## Runtime status (party-anim audit)
+
+Integrated indirectly through `enemy-combat-animation-runtime-v1` (lossless repack). Nothing further to wire.

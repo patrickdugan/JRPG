@@ -91,3 +91,7 @@ the transparent runtime candidates.
 Before runtime promotion, tune per-encounter scale and verify pivots, hurt boxes,
 attack hit boxes, VFX anchors, and event timing against the actual side-scroll
 combat camera. No runtime code is changed by this asset package.
+
+## Runtime status (party-anim audit)
+
+Integrated indirectly: `enemy-combat-animation-runtime-v1` repacks these atlases pixel-identically and `game/enemy-combat-animation-atlas.mjs` draws that repack. Nothing further to wire.

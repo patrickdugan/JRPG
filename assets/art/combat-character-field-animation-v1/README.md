@@ -34,3 +34,7 @@ python build_combat_character_field_animation.py --check
 `combat-character-field-animation-motion-preview-v1.gif` and the contact sheet
 are review artifacts. Runtime timing, pivots, frame events, and clip order live
 in `manifest.json`.
+
+## Runtime status (party-anim audit)
+
+Not wired directly, by decision. `roster-animation-runtime-v1` already derives its enemy encounter-trigger frames from this package's field keys, and `enemy-field-suite-v3` (80x80, 12 frames per state) is what the runtime draws. The 48x48 four-direction walks here would be a downgrade. Provenance unchanged: deterministically pixelified derivative.

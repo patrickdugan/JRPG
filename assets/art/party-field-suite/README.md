@@ -18,3 +18,7 @@ Run `python build_party_field_suite.py` to rebuild. Run `python build_party_fiel
 ## Scope and limits
 
 This is a readable field key-pose suite with a selectable two-phase directional walk for all six formation-owned field leaders, not the complete 4-6 frame idle or 6-8 frame walk requirement. It establishes character silhouettes, four-direction movement, foot registration, palette ownership, and live interaction/hazard reactions. A visible following formation, alternate facings and in-betweens for interaction and recoil, portraits, and external cultural review remain separate approval work. Nikola and Mateus use distinct original fictional male faces and proportions with no real-person references. Costume and tool marks use only plain, invented geometry; there are no sacred-object props.
+
+## Runtime status (party-anim audit)
+
+Superseded for runtime by `party-field-suite-v3` (`game/sprite-atlas.mjs`). Kept as the palette and identity source read by `party-combat-suite`. Not wired directly.
