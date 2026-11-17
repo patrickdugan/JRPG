@@ -974,7 +974,7 @@ class PlayerDriver:
                 return False
         link.click(no_wait_after=True)
         self.controls += 1
-        self.page.wait_for_url("**/campaign.html")
+        self.page.wait_for_url(lambda url: urlparse(url).path.endswith("campaign.html"))
         self.page.locator("#sceneTitle").wait_for()
         return True
 
@@ -1945,17 +1945,21 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                 recovery_out = Path(args.recovery_out).resolve()
                 if not urlparse(page.url).path.endswith("campaign.html"):
                     prior_page = urlparse(page.url).path.rsplit("/", 1)[-1]
-                    returned = driver.return_to_campaign_for_recovery()
+                    try:
+                        returned = driver.return_to_campaign_for_recovery()
+                    except PlaywrightTimeoutError as error:
+                        returned = False
+                        evidence["recoveryFrontierReturnError"] = str(error).splitlines()[0]
                     evidence["recoveryFrontierReturn"] = {
                         "from": prior_page,
                         "throughRenderedCampaignLink": returned,
                     }
                 if urlparse(page.url).path.endswith("campaign.html"):
-                    if urlparse(page.url).query != "dev=1":
-                        page.goto(f"{base}/campaign.html?dev=1", wait_until="domcontentloaded")
-                        page.locator("#sceneTitle").wait_for()
-                        evidence["recoveryDeveloperPresentation"] = True
                     try:
+                        if urlparse(page.url).query != "dev=1":
+                            page.goto(f"{base}/campaign.html?dev=1", wait_until="domcontentloaded")
+                            page.locator("#sceneTitle").wait_for()
+                            evidence["recoveryDeveloperPresentation"] = True
                         with page.expect_download() as download_info:
                             page.locator("#exportRecovery").click()
                         driver.controls += 1
@@ -2005,7 +2009,7 @@ def run_attempt(chromium: Path, args: argparse.Namespace) -> dict[str, object]:
                     },
                     "campControls": driver.camp_controls,
                     "sceneTransitions": driver.scenes,
-                    "finalCheckpoint": driver.checkpoint(),
+                    "finalCheckpoint": driver.safe_checkpoint(),
                     "consoleErrors": console_errors,
                     "pageErrors": page_errors,
                 }
