@@ -5,7 +5,10 @@
  * simple player policy closes distance, dashes across dead space, and commits the
  * first ready authored attack while companion AI remains authoritative. The
  * resulting windows catch opening encounters that collapse before their first
- * telegraph or become low-risk health sponges.
+ * telegraph or become low-risk health sponges. Every case must also let at
+ * least one enemy tell reach its active frame; the Ash Wisps case, whose
+ * authored rule is "The charge persists across the Wisp's next activation and
+ * can be interrupted", must also show the policy interrupting a charge.
  */
 
 import { pathToFileURL } from 'node:url';
@@ -22,9 +25,12 @@ export const ACTION_COMBAT_PACING_CASES = Object.freeze([
   }),
   Object.freeze({
     encounterId: 'c1-ash-wisps',
-    minimumMs: 7_000,
+    // Readable 460 ms charges let the policy's art interrupt both wisps
+    // (doc 43), so the teaching fight ends sooner than its 7 s pre-pass floor.
+    minimumMs: 3_000,
     maximumMs: 30_000,
     minimumSurvivorRatio: 0.20,
+    minimumInterrupts: 1,
   }),
   Object.freeze({
     encounterId: 'fp1-cedar-path',
@@ -93,6 +99,8 @@ export function runActionCombatPacingCase(testCase) {
   let elapsedMs = 0;
   let hitCount = 0;
   let attackStartCount = 0;
+  let enemyStrikeCount = 0;
+  let interruptCount = 0;
 
   while (!kernel.snapshot().outcome && elapsedMs < hardStopMs) {
     applySimplePlayerPolicy(kernel);
@@ -101,6 +109,8 @@ export function runActionCombatPacingCase(testCase) {
     for (const event of kernel.drainEvents()) {
       if (event.type === 'hit') hitCount += 1;
       if (event.type === 'attack-start') attackStartCount += 1;
+      if (event.type === 'hitbox-resolved' && kernel.getActor(event.actorId)?.faction === 'enemy') enemyStrikeCount += 1;
+      if (event.type === 'poise-broken') interruptCount += 1;
     }
   }
 
@@ -110,6 +120,12 @@ export function runActionCombatPacingCase(testCase) {
   if (snapshot.outcome !== 'victory') violations.push(`expected victory; received ${snapshot.outcome ?? 'timeout'}`);
   if (elapsedMs < testCase.minimumMs) violations.push(`resolved in ${elapsedMs} ms; minimum is ${testCase.minimumMs} ms`);
   if (elapsedMs > testCase.maximumMs) violations.push(`resolved in ${elapsedMs} ms; maximum is ${testCase.maximumMs} ms`);
+  if (enemyStrikeCount < (testCase.minimumEnemyStrikes ?? 1)) {
+    violations.push(`only ${enemyStrikeCount} enemy tells reached their active frame`);
+  }
+  if (interruptCount < (testCase.minimumInterrupts ?? 0)) {
+    violations.push(`interrupted ${interruptCount} wind-ups; minimum is ${testCase.minimumInterrupts}`);
+  }
   if (minimumSurvivorRatio < testCase.minimumSurvivorRatio) {
     violations.push(
       `minimum survivor ratio ${minimumSurvivorRatio.toFixed(3)} is below ${testCase.minimumSurvivorRatio.toFixed(3)}`,
@@ -123,6 +139,8 @@ export function runActionCombatPacingCase(testCase) {
     minimumSurvivorRatio: Number(minimumSurvivorRatio.toFixed(4)),
     hitCount,
     attackStartCount,
+    enemyStrikeCount,
+    interruptCount,
     violations: Object.freeze(violations),
   });
 }

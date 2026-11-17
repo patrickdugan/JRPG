@@ -202,7 +202,10 @@ test('Mateus casts Blood Ward from range in phase two and gates Crimson Litany o
   place(mateus, 800);
   mateus.hp = Math.floor(mateus.maxHp * 0.55);
   const events = [];
-  for (let step = 0; step < 80; step += 1) {
+  // Wards rise when the full Blood Ward animation completes, plus a second of approach.
+  const ward = runtime.kernel.attacks['enemy:mateus:blood-ward'];
+  const steps = Math.ceil((ward.windupMs + ward.activeMs + ward.recoveryMs + 1_000) / 20);
+  for (let step = 0; step < steps; step += 1) {
     for (const hero of party(runtime)) place(hero, 80);
     events.push(...advanceActionCampaignBattle(runtime, 20).recentEvents);
   }
