@@ -1,0 +1,148 @@
+{
+  "assetId": "kurozane-boss-clips-v2",
+  "characterId": "kurozane",
+  "status": "integrated-runtime-boss-clips",
+  "provenance": {
+    "lane": "deterministically-pixelified (rig-posed)",
+    "sourceClassification": "AI-generated stylized concept boards (see the source kits)",
+    "derivativeClassification": "deterministically pixelified keys, posed by a cut-out rig",
+    "notPixelAuthored": true,
+    "derivation": "Every frame is one source key re-rendered through a two-part cut-out rig (Scale2x x3 + nearest-neighbour rotation, no new colours, binary alpha). The kits' keys are the only full pose changes; rig-posed moving holds fill the clips to the 20-30 unique-frame standard."
+  },
+  "kits": {
+    "final": {
+      "atlas": "../kurozane-final-battle-v1/kurozane-final-battle-atlas-v1.png",
+      "manifest": "../kurozane-final-battle-v1/manifest.json"
+    },
+    "oni": {
+      "atlas": "../kurozane-oni-attack-suite-v1/kurozane-oni-attack-atlas-v1.png",
+      "manifest": "../kurozane-oni-attack-suite-v1/manifest.json"
+    }
+  },
+  "geometry": {
+    "sourceCell": [160, 160],
+    "logicalFrame": [192, 192],
+    "sourceOffset": [16, 16],
+    "footPoint": [96, 166],
+    "soleRowInSourceCell": 150,
+    "groundRowRule": "per kit clip: median over its keys of the lowest row holding at least 8 opaque pixels",
+    "nativeFacing": "left",
+    "maxSheetWidth": 4096,
+    "presentationPixelScale": 1.0
+  },
+  "phaseForms": { "court": "", "bell": "demon", "dawn": "demon" },
+  "attackClips": {
+    "enemy:kurozane:yearless-thrust": "strike",
+    "enemy:kurozane:court-command": "signature",
+    "enemy:kurozane:blood-eclipse": "eclipse",
+    "enemy:kurozane:black-chrysanthemum": "chrysanthemum"
+  },
+  "unboundKitClips": {
+    "note": "The Oni kit's five attacks have no live kernel attack in c9-kurozane (court-command, yearless-thrust, blood-eclipse, black-chrysanthemum). Their ready, follow-through, and recovery keys pose the armoured locomotion and stagger clips; the attack keys wait for kernel attacks that use them.",
+    "clips": ["oni-gauntlet-swipes", "oni-predator-jump", "oni-spear-wheel", "oni-mouth-cannon", "oni-chest-spiral-barrage"]
+  },
+  "clips": [
+    { "id": "idle", "kind": "loop", "durationMs": 80, "keyFrames": [0], "form": "armour", "drivenBy": "kernel time",
+      "segments": [{ "key": "final:court-command:0", "frames": 20, "motion": "breathe" }] },
+    { "id": "locomotion", "kind": "loop", "durationMs": 55, "keyFrames": [0], "form": "armour", "drivenBy": "kernel time while moving",
+      "segments": [{ "key": "oni:oni-spear-wheel:0", "frames": 20, "motion": "stalk" }] },
+    { "id": "strike", "kind": "attack", "form": "armour", "drivenBy": "enemy attack phase progress (Yearless Thrust)",
+      "bands": {
+        "windup": { "durationMs": 440, "weights": [1, 1, 1, 1, 1, 1, 1, 1.25, 1.5, 2], "events": { "0": ["windupStart"], "9": ["telegraphPeak"] },
+          "segments": [
+            { "key": "final:yearless-thrust:0", "frames": 3, "motion": "toward", "toward": "final:yearless-thrust:1" },
+            { "key": "final:yearless-thrust:1", "frames": 4, "motion": "toward", "toward": "final:yearless-thrust:2" },
+            { "key": "final:yearless-thrust:2", "frames": 3, "motion": "tremble" }] },
+        "active": { "durationMs": 120, "weights": [1, 1, 1, 1], "events": { "0": ["activeStart"], "1": ["hit"] },
+          "segments": [{ "key": "final:yearless-thrust:3", "frames": 4, "motion": "drive" }] },
+        "recovery": { "durationMs": 400, "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1.25, 1.5], "events": { "0": ["recoveryStart"], "9": ["complete"] },
+          "segments": [
+            { "key": "final:yearless-thrust:4", "frames": 5, "motion": "toward", "toward": "final:yearless-thrust:5" },
+            { "key": "final:yearless-thrust:5", "frames": 5, "motion": "settle" }] }
+      } },
+    { "id": "signature", "kind": "attack", "form": "armour", "drivenBy": "enemy attack phase progress (Court Command)",
+      "bands": {
+        "windup": { "durationMs": 560, "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1.25, 1.5, 2], "events": { "0": ["windupStart"], "11": ["telegraphPeak"] },
+          "segments": [
+            { "key": "final:court-command:0", "frames": 3, "motion": "toward", "toward": "final:court-command:1" },
+            { "key": "final:court-command:1", "frames": 4, "motion": "toward", "toward": "final:court-command:2" },
+            { "key": "final:court-command:2", "frames": 5, "motion": "tremble" }] },
+        "active": { "durationMs": 120, "weights": [1, 1, 1, 1], "events": { "0": ["activeStart"], "1": ["hit"] },
+          "segments": [{ "key": "final:court-command:3", "frames": 4, "motion": "drive" }] },
+        "recovery": { "durationMs": 420, "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1.25, 1.5], "events": { "0": ["recoveryStart"], "9": ["complete"] },
+          "segments": [
+            { "key": "final:court-command:4", "frames": 5, "motion": "toward", "toward": "final:court-command:5" },
+            { "key": "final:court-command:5", "frames": 5, "motion": "settle" }] }
+      } },
+    { "id": "stagger", "kind": "progress", "durationMs": 35, "keyFrames": [0, 6], "form": "armour", "drivenBy": "staggerRemainingMs / staggerMs",
+      "events": { "0": ["poiseBroken"], "20": ["staggerEnd"] },
+      "segments": [
+        { "key": "oni:oni-gauntlet-swipes:4", "frames": 6, "motion": "recoil" },
+        { "key": "oni:oni-predator-jump:5", "frames": 9, "motion": "daze" },
+        { "key": "final:court-command:0", "frames": 6, "motion": "settle" }] },
+    { "id": "transition", "kind": "progress", "durationMs": 45, "keyFrames": [12], "form": "armour-to-demon", "drivenBy": "BOSS_TRANSITION_HOLD_MS from entering the bell phase",
+      "events": { "0": ["phaseStart"], "12": ["phaseReveal"] },
+      "segments": [
+        { "key": "final:blood-eclipse-transform:0", "frames": 4, "motion": "toward", "toward": "final:blood-eclipse-transform:1" },
+        { "key": "final:blood-eclipse-transform:1", "frames": 4, "motion": "toward", "toward": "final:blood-eclipse-transform:2" },
+        { "key": "final:blood-eclipse-transform:2", "frames": 4, "motion": "tremble" },
+        { "key": "final:blood-eclipse-transform:3", "frames": 4, "motion": "toward", "toward": "final:blood-eclipse-transform:4" },
+        { "key": "final:blood-eclipse-transform:4", "frames": 4, "motion": "toward", "toward": "final:blood-eclipse-transform:5" },
+        { "key": "final:blood-eclipse-transform:5", "frames": 4, "motion": "settle" }] },
+    { "id": "defeat", "kind": "progress", "durationMs": 55, "keyFrames": [20], "form": "demon-to-ward-broken", "drivenBy": "BOSS_DEFEAT_HOLD_MS wall clock, last frame held",
+      "events": { "0": ["wardBreak"], "20": ["defeatedHold"] },
+      "segments": [
+        { "key": "final:black-chrysanthemum-defeat:3", "frames": 7, "motion": "recoil" },
+        { "key": "final:black-chrysanthemum-defeat:4", "frames": 7, "motion": "toward", "toward": "final:black-chrysanthemum-defeat:5" },
+        { "key": "final:black-chrysanthemum-defeat:5", "frames": 7, "motion": "settle" }] },
+    { "id": "idle@demon", "kind": "loop", "durationMs": 80, "keyFrames": [0], "form": "demon", "drivenBy": "kernel time (bell, dawn)",
+      "segments": [{ "key": "final:blood-eclipse-transform:5", "frames": 20, "motion": "breathe" }] },
+    { "id": "locomotion@demon", "kind": "loop", "durationMs": 55, "keyFrames": [0], "form": "demon", "drivenBy": "kernel time while moving (bell, dawn)",
+      "segments": [{ "key": "final:blood-eclipse-transform:3", "frames": 20, "motion": "stalk" }] },
+    { "id": "stagger@demon", "kind": "progress", "durationMs": 35, "keyFrames": [0, 6], "form": "demon", "drivenBy": "staggerRemainingMs / staggerMs (bell, dawn)",
+      "events": { "0": ["poiseBroken"], "20": ["staggerEnd"] },
+      "segments": [
+        { "key": "final:blood-eclipse-transform:4", "frames": 6, "motion": "recoil" },
+        { "key": "final:black-chrysanthemum-defeat:0", "frames": 9, "motion": "daze" },
+        { "key": "final:blood-eclipse-transform:5", "frames": 6, "motion": "settle" }] },
+    { "id": "eclipse", "kind": "attack", "form": "demon", "drivenBy": "enemy attack phase progress (Blood Eclipse)",
+      "bands": {
+        "windup": { "durationMs": 520, "weights": [1, 1, 1, 1, 1, 1, 1, 1.25, 1.5, 2], "events": { "0": ["windupStart"], "9": ["telegraphPeak"] },
+          "segments": [
+            { "key": "final:blood-eclipse-transform:5", "frames": 4, "motion": "toward", "toward": "final:black-chrysanthemum-defeat:0" },
+            { "key": "final:black-chrysanthemum-defeat:0", "frames": 6, "motion": "tremble" }] },
+        "active": { "durationMs": 120, "weights": [1, 1, 1, 1], "events": { "0": ["activeStart"], "1": ["hit"] },
+          "segments": [{ "key": "final:black-chrysanthemum-defeat:1", "frames": 4, "motion": "drive" }] },
+        "recovery": { "durationMs": 420, "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1.25, 1.5], "events": { "0": ["recoveryStart"], "9": ["complete"] },
+          "segments": [
+            { "key": "final:blood-eclipse-transform:4", "frames": 4, "motion": "toward", "toward": "final:blood-eclipse-transform:5" },
+            { "key": "final:blood-eclipse-transform:5", "frames": 6, "motion": "settle" }] }
+      } },
+    { "id": "chrysanthemum", "kind": "attack", "form": "demon", "drivenBy": "enemy attack phase progress (Black Chrysanthemum)",
+      "bands": {
+        "windup": { "durationMs": 520, "weights": [1, 1, 1, 1, 1, 1, 1, 1.25, 1.5, 2], "events": { "0": ["windupStart"], "9": ["telegraphPeak"] },
+          "segments": [
+            { "key": "final:black-chrysanthemum-defeat:0", "frames": 4, "motion": "toward", "toward": "final:black-chrysanthemum-defeat:1" },
+            { "key": "final:black-chrysanthemum-defeat:1", "frames": 6, "motion": "tremble" }] },
+        "active": { "durationMs": 120, "weights": [1, 1, 1, 1], "events": { "0": ["activeStart"], "1": ["hit"] },
+          "segments": [{ "key": "final:black-chrysanthemum-defeat:2", "frames": 4, "motion": "drive" }] },
+        "recovery": { "durationMs": 420, "weights": [1, 1, 1, 1, 1, 1, 1, 1, 1.25, 1.5], "events": { "0": ["recoveryStart"], "9": ["complete"] },
+          "segments": [
+            { "key": "final:blood-eclipse-transform:4", "frames": 4, "motion": "toward", "toward": "final:blood-eclipse-transform:5" },
+            { "key": "final:blood-eclipse-transform:5", "frames": 6, "motion": "settle" }] }
+      } },
+    { "id": "transition@dawn", "kind": "progress", "durationMs": 45, "keyFrames": [13], "form": "demon", "drivenBy": "BOSS_TRANSITION_HOLD_MS from entering the dawn phase",
+      "events": { "0": ["phaseStart"], "13": ["phaseReveal"] },
+      "segments": [
+        { "key": "final:blood-eclipse-transform:5", "frames": 6, "motion": "toward", "toward": "final:black-chrysanthemum-defeat:0" },
+        { "key": "final:black-chrysanthemum-defeat:0", "frames": 7, "motion": "toward", "toward": "final:black-chrysanthemum-defeat:1" },
+        { "key": "final:black-chrysanthemum-defeat:1", "frames": 8, "motion": "settle" }] }
+  ],
+  "safety": {
+    "gore": false,
+    "realEmblems": false,
+    "devotionalProps": false,
+    "actorLikeness": false,
+    "defeat": "Living, ward-broken Kurozane kneels with his helmet set down; no death loop, execution flourish, or gore (doc 10 section 7.3)."
+  }
+}

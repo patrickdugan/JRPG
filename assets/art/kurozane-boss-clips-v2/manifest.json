@@ -1,0 +1,162 @@
+{
+ "schemaVersion": 1,
+ "assetId": "kurozane-boss-clips-v2",
+ "status": "integrated-runtime-boss-clips",
+ "provenance": {
+  "lane": "deterministically-pixelified (rig-posed)",
+  "sourceClassification": "AI-generated stylized concept boards (see the source kits)",
+  "derivativeClassification": "deterministically pixelified keys, posed by a cut-out rig",
+  "notPixelAuthored": true,
+  "derivation": "Every frame is one source key re-rendered through a two-part cut-out rig (Scale2x x3 + nearest-neighbour rotation, no new colours, binary alpha). The kits' keys are the only full pose changes; rig-posed moving holds fill the clips to the 20-30 unique-frame standard.",
+  "builder": "assets/art/kurozane-boss-clips-v2/build_kurozane_boss_clips_v2.py",
+  "sources": [
+   {
+    "kit": "final",
+    "role": "atlas",
+    "path": "assets/art/kurozane-final-battle-v1/kurozane-final-battle-atlas-v1.png",
+    "sha256": "686d59fa9c2e81700c8d39713580b90c1c7ac0b6621a9ae8a62fa9465bbf2154"
+   },
+   {
+    "kit": "final",
+    "role": "manifest",
+    "path": "assets/art/kurozane-final-battle-v1/manifest.json",
+    "sha256": "66bbef6003e0a3067478788b0294baf9f4dcc8c6d4420632f87efe275820a63c"
+   },
+   {
+    "kit": "oni",
+    "role": "atlas",
+    "path": "assets/art/kurozane-oni-attack-suite-v1/kurozane-oni-attack-atlas-v1.png",
+    "sha256": "b923a10b0e6d627642240223eb3d1915f91ab2a6fcd23c8d2f0ef788150d32c1"
+   },
+   {
+    "kit": "oni",
+    "role": "manifest",
+    "path": "assets/art/kurozane-oni-attack-suite-v1/manifest.json",
+    "sha256": "09498f82f39af001f2372ba35a5af74d43702168ccf065b42cc8f8947bfc48ca"
+   }
+  ],
+  "groundRows": {
+   "final:black-chrysanthemum-defeat": 136,
+   "final:blood-eclipse-transform": 146,
+   "final:court-command": 157,
+   "final:yearless-thrust": 150,
+   "oni:oni-gauntlet-swipes": 144,
+   "oni:oni-predator-jump": 134,
+   "oni:oni-spear-wheel": 126
+  },
+  "pillow": "11.3.0"
+ },
+ "sources": [
+  {
+   "path": "kurozane-boss-clips-v2.source.json",
+   "sha256": "093a60d04e776087386dfd422064b8d3fcaaedeb4da79df9087c6b3eac876ae4"
+  },
+  {
+   "path": "build_kurozane_boss_clips_v2.py",
+   "sha256": "37c34e6316705c8c6ea4b00409c5e9d4897ed8c762d79da5a67443ad9825579d"
+  }
+ ],
+ "toolkit": [
+  {
+   "path": "skills/pixel-art-production/scripts/anim_timeline.py",
+   "sha256": "053076781b0b3bc32cf6bf70ad80ad721b72542096bc0ccba987c8808fff32bc"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_primitives.py",
+   "sha256": "ecf0e319653219f1773d8f9434d1371b7982621d200db9ec7b3b912b678bf60a"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_rig.py",
+   "sha256": "cbba7454af009cede431fd2225f1d011bd24dc6b3a81238c35f64b9575a2761b"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_sheet.py",
+   "sha256": "e58bcdd45c904f3ab970bc668db81bcb2f9b519cd03596549d490396746fb994"
+  },
+  {
+   "path": "skills/pixel-art-production/scripts/anim_preview.py",
+   "sha256": "ba1271ab86ec38e47af82986e6e451a625e3ea13bb456080be1de75a4055d0a9"
+  }
+ ],
+ "sheets": [
+  {
+   "path": "kurozane.png",
+   "width": 4095,
+   "height": 1149,
+   "sha256": "e0eeb458cb6f705d9a59536f438eaad21ec0d3454075f4c23c59485ec5f379c0",
+   "bytes": 1532960,
+   "decodedBytes": 18820620
+  }
+ ],
+ "manifest": {
+  "path": "kurozane.json",
+  "sha256": "a8e0f6521ad9f5ac60b582c45ad802cc3f15b2531a0c81ecf908f0f1bd3161ce"
+ },
+ "clips": {
+  "idle": {
+   "frames": 20,
+   "unique": 20,
+   "form": "armour"
+  },
+  "locomotion": {
+   "frames": 20,
+   "unique": 20,
+   "form": "armour"
+  },
+  "strike": {
+   "frames": 24,
+   "unique": 24,
+   "form": "armour"
+  },
+  "signature": {
+   "frames": 26,
+   "unique": 26,
+   "form": "armour"
+  },
+  "stagger": {
+   "frames": 21,
+   "unique": 20,
+   "form": "armour"
+  },
+  "transition": {
+   "frames": 24,
+   "unique": 24,
+   "form": "armour-to-demon"
+  },
+  "defeat": {
+   "frames": 21,
+   "unique": 20,
+   "form": "demon-to-ward-broken"
+  },
+  "idle@demon": {
+   "frames": 20,
+   "unique": 20,
+   "form": "demon"
+  },
+  "locomotion@demon": {
+   "frames": 20,
+   "unique": 20,
+   "form": "demon"
+  },
+  "stagger@demon": {
+   "frames": 21,
+   "unique": 21,
+   "form": "demon"
+  },
+  "eclipse": {
+   "frames": 24,
+   "unique": 23,
+   "form": "demon"
+  },
+  "chrysanthemum": {
+   "frames": 24,
+   "unique": 24,
+   "form": "demon"
+  },
+  "transition@dawn": {
+   "frames": 21,
+   "unique": 20,
+   "form": "demon"
+  }
+ }
+}
