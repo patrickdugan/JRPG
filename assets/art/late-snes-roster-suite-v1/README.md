@@ -55,3 +55,7 @@ python .\verify_late_snes_roster_suite.py
 The second command rebuilds every generated file in a temporary directory and
 requires byte-identical output. The verifier checks all 156 native cels for
 geometry, palette, binary alpha, and transparent gutter compliance.
+
+## Runtime status (party-anim audit)
+
+Not wired, by decision. It holds four poses per character (idle, move, signature, hurt) on 64x64 left-facing cels, from an AI-generated pixel lane. The runtime already shows 20 to 24 frame banded party clips (`party-animation-suite-v2`) and 24-frame enemy clips (`enemy-combat-animation-runtime-v1`), so integrating four-pose sheets would reduce motion and mix a left-facing convention into a right-facing pipeline.

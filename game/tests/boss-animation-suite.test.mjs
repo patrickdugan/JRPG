@@ -328,7 +328,7 @@ test('the battle page keeps the exact static atlas path as the fallback and expo
   const v1 = /if \(drawBossAnimation\(actor, template, nowMs\)\) return;[\s\S]*?const frame = getBossCombatFrame\(template, bossPose\(actor\)\);\s*const placement = getBossCombatDrawPlacement\(frame, \{\s*anchorX: actor\.position\.x,\s*groundY: actor\.position\.y,\s*drawHeight: frame\.height \* Math\.min\(1\.35, frame\.scale\),\s*\}\);\s*if \(!art\.boss\.ready\) return drawFallback\(actor, '#cb4652'\);/u;
   assert.match(browser, v1);
   assert.match(browser, /const entry = bossAnimationLoader\.get\(template\);\s*if \(!entry\) return false;/u);
-  assert.match(browser, /for \(const key of \['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss',/u);
+  assert.match(browser, /for \(const key of \['party', 'partyAnimation',(?: 'partyExtended',)? 'enemy', 'enemyAnimation', 'boss',/u);
   assert.match(browser, /setCanvasDataset\('bossAnimArtState', state\)/u);
   assert.match(browser, /setCanvasDataset\('bossAnimSource', read\.source\)/u);
   assert.match(browser, /setCanvasDataset\('bossAnimClip', read\.clip\)/u);

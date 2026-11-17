@@ -48,3 +48,7 @@ python .\build_combat_character_coverage.py
 python .\verify_combat_character_coverage.py
 python .\build_combat_character_coverage.py --check
 ```
+
+## Runtime status (party-anim audit)
+
+Not wired to the runtime, by decision. Its seven party portraits and field atlases are the same pixels the runtime already loads through `party-portrait-suite-v2` and `party-field-suite-v3`; its enemy field and portrait lanes are superseded by `enemy-field-suite-v3` (80x80 cels, wired in `roster-animation-atlas.mjs`). Keeping it unreferenced avoids showing a lower-resolution duplicate. It remains the inventory source for roster coverage.

@@ -195,6 +195,10 @@ This cut is the first staffing and outsourcing package. It is intentionally comp
 - Do not make distinct particle systems for every damage-number outcome. Shared delivery/essence modules plus clear weak/resist feedback are the production-saving rule.
 - Do not place generated concept pixels in production sprite sheets. They are references; all shippable pixels require original, editable source and the normal approval gates.
 
+## 13. Party combat animation status
+
+`assets/art/party-animation-suite-v2` (pixel-authored) adds 20 to 24 frame idle, move, tired, banded basic strike, guard, hurt, both signatures and defeat clips for all seven fighters, plus a 6-frame ready snap. The runtime draws it ahead of the 4 to 6 frame `roster-animation-runtime-v1` clips, which remain the fallback. The tired loop plays during the post-animation cooldown, driven by the same timer as the cooldown ring above each fighter. `combat-character-coverage-v1`, `combat-character-field-animation-v1`, `late-snes-roster-suite-v1` and the superseded party field suites are intentionally not wired; each README records why.
+
 ## 12. Asset-list maintenance cadence
 
 The producer updates this file weekly during pre-production and after each chapter outline lock. Any new P0/P1 item needs: story/map owner, technical requirement, art reference, rough effort, reuse decision, and approval date. A late item that creates a new tileset, party silhouette, UI system, or boss family is a scope change and must be reviewed before assignment.

@@ -87,3 +87,7 @@ and are not used at runtime.
 The atlases are packed losslessly into rows 28 to 32 of
 `../enemy-combat-animation-runtime-v1/enemy-combat-animation-atlas-v1.png` by
 that package's builder. Rebuild it after changing this suite.
+
+## Runtime status (party-anim audit)
+
+Integrated indirectly through `enemy-combat-animation-runtime-v1` (lossless repack); it also replaced the alias stand-ins. Nothing further to wire.

@@ -79,6 +79,24 @@ import {
   selectBossAnimationClip,
 } from './boss-animation-clips.mjs';
 import {
+  COOLDOWN_RING_INNER,
+  COOLDOWN_RING_OUTER,
+  PARTY_LABEL_BOTTOM_OFFSET,
+  advanceCooldownTracker,
+  cooldownRingBox,
+  cooldownRingCenter,
+  cooldownRingPips,
+  cooldownRingPlan,
+} from './cooldown-ring.mjs';
+import {
+  PARTY_EXTENDED_GEOMETRY,
+  resolveCooldownPose,
+  samplePartyExtended,
+  samplePartyExtendedPhase,
+  samplePartyExtendedProgress,
+  samplePartyTired,
+} from './party-extended-animation.mjs';
+import {
   ENEMY_COMBAT_ANIMATION_ATLAS,
   hasEnemyCombatAnimation,
   sampleEnemyCombatAnimation,
@@ -353,6 +371,7 @@ if (storyworld) {
 const art = {
   party: { image: new Image(), ready: false, source: PARTY_COMBAT_ATLAS },
   partyAnimation: { image: new Image(), ready: false, source: PARTY_ANIMATION_GEOMETRY },
+  partyExtended: { image: new Image(), ready: false, source: PARTY_EXTENDED_GEOMETRY },
   enemy: { image: new Image(), ready: false, source: ENEMY_ATLAS },
   enemyAnimation: { image: new Image(), ready: false, source: ENEMY_COMBAT_ANIMATION_ATLAS },
   boss: { image: new Image(), ready: false, source: BOSS_COMBAT_ATLAS },
@@ -381,7 +400,7 @@ function loadArt(key) {
   record.image.src = record.source.url;
 }
 
-for (const key of ['party', 'partyAnimation', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles', 'objective']) loadArt(key);
+for (const key of ['party', 'partyAnimation', 'partyExtended', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles', 'objective']) loadArt(key);
 
 // v2 boss clips: lazily fetch only the bosses this encounter contains. Any
 // failure (fetch, validation, wrong sheet size) leaves the static atlas path.
@@ -1105,7 +1124,7 @@ function actorLabelRequest(actor, isDirectlyControlled) {
     id: `actor:${actor.id}`,
     type: 'actor',
     x: actor.position.x,
-    bottom: Math.round(actor.position.y - (isPlayer ? 104 : 124)),
+    bottom: Math.round(actor.position.y - (isPlayer ? PARTY_LABEL_BOTTOM_OFFSET : 124)),
     width: Math.max(measureCanvasText(ACTOR_NAME_FONT, name), roleWidth) + 4,
     shortWidth: Math.max(measureCanvasText(ACTOR_NAME_FONT, shortName), shortRoleWidth) + 4,
     height: isPlayer ? 22 : 12,
@@ -1183,6 +1202,8 @@ function drawCanvasLabels(snapshot, actorRequests) {
   const obstacles = [...objectiveOverlay.pips, ...objectiveOverlay.bars].map(({ left, top, right, bottom }) => ({
     left: left - 1, top: top - 1, right: right + 1, bottom: bottom + 1,
   }));
+  obstacles.push(...ringBoxes);
+  ringBoxes.length = 0;
   // Objective tags must not sit on top of a fighter's drawn body.
   for (const actor of snapshot.kernel.actors) {
     if (actor.hp <= 0) continue;
@@ -1286,8 +1307,72 @@ function partyActionClip(actor) {
   return index <= 0 ? 'basic-strike' : index === 1 ? 'signature-a' : 'signature-b';
 }
 
-function richPartyFrame(actor, nowMs) {
+// Presentation-only trackers: cooldown ring sweep, hit and defeat start times.
+const partyPresentation = new Map();
+const ringBoxes = [];
+
+function partyPresentationState(actor, nowMs) {
+  let state = partyPresentation.get(actor.id);
+  if (!state) {
+    state = { shared: null, art: null, hitAtMs: null, defeatAtMs: null, wasStunned: false, pose: 'idle', ring: null, stamp: -1 };
+    partyPresentation.set(actor.id, state);
+  }
+  if (state.stamp === nowMs) return state;
+  state.stamp = nowMs;
+  const artRemaining = Math.max(0, ...Object.values(actor.attackCooldowns ?? {}));
+  state.shared = advanceCooldownTracker(state.shared, actor.offensiveCooldownRemainingMs ?? 0, nowMs);
+  state.art = advanceCooldownTracker(state.art, artRemaining, nowMs);
+  const stunned = actor.hitStunRemainingMs > 0;
+  if (stunned && !state.wasStunned) state.hitAtMs = nowMs;
+  state.wasStunned = stunned;
+  if (actor.hp <= 0) state.defeatAtMs ??= nowMs;
+  else state.defeatAtMs = null;
+  return state;
+}
+
+function extendedPartyFrame(actor, nowMs, state) {
   const memberId = templateId(actor.id);
+  const still = reducedMotion.matches;
+  if (actor.hp <= 0) {
+    return samplePartyExtended(memberId, 'defeat', still ? Number.MAX_SAFE_INTEGER : nowMs - (state.defeatAtMs ?? nowMs));
+  }
+  const moving = !actor.grounded || actor.activeManeuver || Math.abs(actor.movementIntent.x) > 0;
+  if (actor.hitStunRemainingMs > 0) {
+    return samplePartyExtendedProgress(memberId, 'hurt', 1 - actor.hitStunRemainingMs / 100);
+  }
+  if (actor.activeAttack) {
+    return samplePartyExtendedPhase(memberId, partyActionClip(actor), actor.activeAttack.phase, attackPhaseProgress(actor));
+  }
+  if (actor.activeManeuver?.id === 'uppercut') return samplePartyExtended(memberId, 'signature-a', actor.activeManeuver.elapsedMs * 3);
+  if (actor.activeManeuver?.id === 'thunder-kick') return samplePartyExtended(memberId, 'signature-b', actor.activeManeuver.elapsedMs * 2);
+  if (moving) return samplePartyExtended(memberId, 'move', still ? 0 : nowMs);
+  const hurtAge = state.hitAtMs == null ? Infinity : nowMs - state.hitAtMs;
+  if (!still && hurtAge >= 100 && hurtAge < 440) return samplePartyExtended(memberId, 'hurt', hurtAge);
+  const cooldown = resolveCooldownPose({
+    free: true,
+    sharedRemainingMs: state.shared.remainingMs,
+    sharedTotalMs: state.shared.totalMs,
+    completedAtMs: state.shared.completedAtMs,
+    nowMs,
+    reducedMotion: still,
+  });
+  if (cooldown.clipId === 'tired') {
+    return still ? samplePartyTired(memberId, 500, 1000)
+      : samplePartyTired(memberId, state.shared.remainingMs, state.shared.totalMs);
+  }
+  if (cooldown.clipId === 'ready-snap') return samplePartyExtended(memberId, 'ready-snap', cooldown.sinceMs);
+  return samplePartyExtended(memberId, 'idle', still ? 0 : nowMs);
+}
+
+function richPartyFrame(actor, nowMs) {
+  const state = partyPresentationState(actor, nowMs);
+  if (art.partyExtended.ready) {
+    const extended = extendedPartyFrame(actor, nowMs, state);
+    state.pose = extended.clipId;
+    return extended;
+  }
+  const memberId = templateId(actor.id);
+  state.pose = 'legacy';
   if (actor.hp <= 0) return samplePartyAnimation(memberId, 'defeat', Number.MAX_SAFE_INTEGER);
   if (actor.hitStunRemainingMs > 0) {
     return samplePartyAnimation(memberId, 'hurt', (100 - actor.hitStunRemainingMs) * 4.4);
@@ -1312,6 +1397,54 @@ function richPartyFrame(actor, nowMs) {
   return samplePartyAnimation(memberId, 'idle', reducedMotion.matches ? 0 : nowMs);
 }
 
+/** Cooldown ring: stepped pips, inner = shared weapon gate, outer = longer per-art cooldown. */
+function drawCooldownRing(actor, nowMs) {
+  const state = partyPresentationState(actor, nowMs);
+  const reduced = reducedMotion.matches;
+  const plan = cooldownRingPlan({
+    sharedRemainingMs: state.shared.remainingMs,
+    sharedTotalMs: state.shared.totalMs,
+    artRemainingMs: state.art.remainingMs,
+    artTotalMs: state.art.totalMs,
+    completedAtMs: state.shared.completedAtMs,
+    nowMs,
+    reducedMotion: reduced,
+  });
+  state.ring = plan;
+  if (!plan.visible || actor.hp <= 0) return;
+  const center = cooldownRingCenter(actor.position.x, actor.position.y);
+  ringBoxes.push({ ...cooldownRingBox(center.x, center.y, plan.outer ? COOLDOWN_RING_OUTER : COOLDOWN_RING_INNER), only: 'actor' });
+  const drawRing = (ring, progress, lit, unlit) => {
+    const pips = cooldownRingPips(ring);
+    const half = Math.floor(ring.pip / 2);
+    pips.forEach((pip, index) => {
+      const left = center.x + pip.x - half;
+      const top = center.y + pip.y - half;
+      context.fillStyle = 'rgba(8, 6, 12, .88)';
+      context.fillRect(left - 1, top - 1, ring.pip + 2, ring.pip + 2);
+      const on = index < progress.filled || progress.ready;
+      context.fillStyle = on ? lit : unlit;
+      context.fillRect(left, top, ring.pip, ring.pip);
+      if (on && !progress.ready && index === progress.filled - 1 && !reduced && Math.floor(nowMs / 120) % 2 === 0) {
+        context.fillStyle = '#fff3d0';
+        context.fillRect(left + 1, top + 1, 1, 1);
+      }
+    });
+  };
+  if (plan.outer) drawRing(COOLDOWN_RING_OUTER, plan.outer, '#78c4c1', '#3a4a56');
+  if (plan.inner) drawRing(COOLDOWN_RING_INNER, plan.inner, plan.inner.ready ? '#fff3d0' : '#f0cf6e', '#5a5170');
+  if (plan.glint != null) {
+    const reach = 2 + plan.glint;
+    context.fillStyle = '#fff3d0';
+    const edge = COOLDOWN_RING_INNER.radius + 4;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      for (let step = 0; step < reach; step += 1) {
+        context.fillRect(center.x + dx * (edge + step * 2) - 1, center.y + dy * (edge + step * 2) - 1, 2, 2);
+      }
+    }
+  }
+}
+
 function drawParty(actor, nowMs) {
   const fallbackFrame = getPartyCombatFrame(templateId(actor.id), partyPose(actor));
   const richFrame = art.partyAnimation.ready ? richPartyFrame(actor, nowMs) : null;
@@ -1325,7 +1458,7 @@ function drawParty(actor, nowMs) {
         pivotY: richFrame.pivot[1],
       }
     : fallbackFrame;
-  const image = richFrame ? art.partyAnimation.image : art.party.image;
+  const image = richFrame ? (richFrame.atlas === 'extended' ? art.partyExtended.image : art.partyAnimation.image) : art.party.image;
   const scale = 1.75;
   if (!richFrame && !art.party.ready) return drawFallback(actor, '#78c4c1');
   const maneuver = actor.activeManeuver;
@@ -1547,6 +1680,7 @@ function drawActors(snapshot) {
       else if (actor.faction === 'enemy' || actor.faction === 'neutral') drawEnemy(actor, nowMs);
     };
     drawActorBody();
+    if (actor.faction === 'player') drawCooldownRing(actor, nowMs);
     if (actor.hitFlashRemainingMs > 0) {
       context.save();
       context.globalAlpha = Math.min(0.72, actor.hitFlashRemainingMs / 120);
@@ -1564,6 +1698,13 @@ function drawActors(snapshot) {
     }
     actorLabels.push(actorLabelRequest(actor, actor.id === snapshot.kernel.controlledActorId));
   }
+  const partyStates = ordered.filter((actor) => actor.faction === 'player').map((actor) => {
+    const state = partyPresentation.get(actor.id);
+    const inner = state?.ring?.inner;
+    return `${templateId(actor.id)}:${state?.pose ?? 'none'}:${inner ? `${inner.filled}/${inner.segments}` : 'off'}`;
+  });
+  setCanvasDataset('partyAnimationState', partyStates.join(' '));
+  setCanvasDataset('cooldownRingCount', String(partyStates.filter((entry) => !entry.endsWith(':off')).length));
   drawCanvasLabels(snapshot, actorLabels);
 }
 
