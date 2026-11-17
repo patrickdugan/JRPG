@@ -1431,8 +1431,8 @@ function drawCooldownRing(actor, nowMs) {
       }
     });
   };
-  if (plan.outer) drawRing(COOLDOWN_RING_OUTER, plan.outer, '#78c4c1', '#3a4a56');
-  if (plan.inner) drawRing(COOLDOWN_RING_INNER, plan.inner, plan.inner.ready ? '#fff3d0' : '#f0cf6e', '#5a5170');
+  if (plan.outer) drawRing(COOLDOWN_RING_OUTER, plan.outer, '#78c4c1', '#5d7684');
+  if (plan.inner) drawRing(COOLDOWN_RING_INNER, plan.inner, plan.inner.ready ? '#fff3d0' : '#f0cf6e', '#8a7f9c');
   if (plan.glint != null) {
     const reach = 2 + plan.glint;
     context.fillStyle = '#fff3d0';

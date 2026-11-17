@@ -9,12 +9,12 @@
  * per-art cooldown.
  */
 
-export const COOLDOWN_RING_INNER = Object.freeze({ radius: 6, segments: 12, pip: 3 });
-export const COOLDOWN_RING_OUTER = Object.freeze({ radius: 10, segments: 18, pip: 3 });
+export const COOLDOWN_RING_INNER = Object.freeze({ radius: 10, segments: 12, pip: 4 });
+export const COOLDOWN_RING_OUTER = Object.freeze({ radius: 16, segments: 18, pip: 3 });
 /** Vertical distance from the fighter's feet to the ring centre. */
-export const COOLDOWN_RING_CENTER_OFFSET = 98;
+export const COOLDOWN_RING_CENTER_OFFSET = 102;
 /** Distance from the feet to the bottom edge of a party name label above the ring. */
-export const PARTY_LABEL_BOTTOM_OFFSET = 113;
+export const PARTY_LABEL_BOTTOM_OFFSET = 124;
 export const COOLDOWN_GLINT_MS = 240;
 
 function clamp01(value) {
