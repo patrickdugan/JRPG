@@ -20,6 +20,12 @@ test('opening encounters publish concise controls and encounter-specific counter
   assert.equal(Object.isFrozen(hound.steps), true);
 });
 
+test('coaching names the interrupt read where the encounter teaches it', () => {
+  assert.match(getActionBattleCoaching('c1-ash-wisps').steps[0], /charge glows: an art breaks the charge/u);
+  assert.match(getActionBattleCoaching('c1-tithe-hound').steps[0], /break its long wind-up/u);
+  assert.match(getActionBattleCoaching('c3-captain-kaji').steps.join(' '), /poise pips/u);
+});
+
 test('Mateus coaching follows the visible phase and ward state', () => {
   const first = getActionBattleCoaching('fp1-mateus', {
     bossPhase: { phaseId: 'phase-1' },
