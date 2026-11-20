@@ -52,6 +52,6 @@ jobs:
         with:
           name: july-illustration-browser-review
           path: |
-            artifacts/july-illustration-review.png
+            artifacts/july-illustration-*.png
             artifacts/july-illustration-review.json
           if-no-files-found: ignore
