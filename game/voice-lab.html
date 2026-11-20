@@ -23,6 +23,17 @@
       </div>
       <output id="status" aria-live="polite">Loading manifest…</output>
     </header>
+    <section class="review-toolbar" aria-labelledby="reviewHeading">
+      <h2 id="reviewHeading">Audition ledger</h2>
+      <p>Mark takes and leave direction for the next render. Reviews stay in this browser until exported; they remain separate from the campaign save.</p>
+      <p id="reviewSummary" aria-live="polite">Loading review coverage…</p>
+      <div class="controls">
+        <button type="button" id="exportReviews" disabled>Export review JSON</button>
+        <label class="review-import">Import review JSON <input type="file" id="importReviews" accept=".json,application/json"></label>
+        <button type="button" id="clearReviews">Clear local reviews</button>
+      </div>
+      <output id="reviewStatus" role="status" aria-live="polite"></output>
+    </section>
     <section id="scene" aria-label="Scene lines"></section>
     <footer>
       <p id="provenance"></p>

@@ -1,4 +1,15 @@
-/** Developer review page for the voice prototype manifest. Presentation only. */
+/** Developer listening page for the synthetic prototype and its local audition ledger. */
+import {
+  VOICE_REVIEW_STORAGE_KEY,
+  VOICE_REVIEW_STATES,
+  emptyVoiceReviewBook,
+  updateVoiceReview,
+  validateVoiceReviewBook,
+  voiceReviewIdentity,
+  voiceReviewKey,
+  voiceReviewSummary,
+} from './voice-review.mjs';
+
 const MANIFEST_URL = './assets/audio/voice-prototype-v1/manifest.json';
 const SPEAKER_NAMES = {
   kurozane: 'Shogun Kurozane',
@@ -8,16 +19,22 @@ const SPEAKER_NAMES = {
   miyo: 'Miyo Senda',
 };
 const DEFAULT_PAUSE_SECONDS = 0.4;
-
 const sceneElement = document.querySelector('#scene');
 const statusElement = document.querySelector('#status');
 const playScene = document.querySelector('#playScene');
 const stopScene = document.querySelector('#stopScene');
 const provenance = document.querySelector('#provenance');
+const reviewSummaryElement = document.querySelector('#reviewSummary');
+const reviewStatus = document.querySelector('#reviewStatus');
+const exportReviews = document.querySelector('#exportReviews');
+const importReviews = document.querySelector('#importReviews');
+const clearReviews = document.querySelector('#clearReviews');
 
 let manifest = null;
 let current = null;
 let runToken = 0;
+let reviews = emptyVoiceReviewBook();
+let reviewLocked = false;
 
 function language() {
   return document.querySelector('input[name="lang"]:checked')?.value ?? 'en';
@@ -39,10 +56,73 @@ function metricsText(entry) {
     `cfg ${entry.cfgWeight}`,
     entry.pitchRangeSemitones != null ? `pitch range ${entry.pitchRangeSemitones} st` : null,
     entry.loudnessRangeDb != null ? `loudness range ${entry.loudnessRangeDb} dB` : null,
-    `take ${entry.chosenTake + 1}/${entry.takes?.length ?? 1}`,
-    `ASR error ${(entry.cer * 100).toFixed(0)}%`,
+    `take ${(entry.chosenTake ?? 0) + 1}/${entry.takes?.length ?? 1}`,
+    Number.isFinite(entry.cer) ? `ASR error ${(entry.cer * 100).toFixed(0)}%` : null,
   ];
   return parts.filter(Boolean).join(' · ');
+}
+
+function showReviewSummary() {
+  if (!manifest) return;
+  const count = voiceReviewSummary(reviews, manifest, language());
+  reviewSummaryElement.textContent = `${count.accepted}/${count.total} accepted · ${count.retake} retakes · ${count.pronunciation} pronunciation · ${count.script} script/translation · ${count.pending} pending · ${count.audioReady} audio files listed`;
+}
+
+function persistReviews() {
+  try {
+    localStorage.setItem(VOICE_REVIEW_STORAGE_KEY, JSON.stringify(reviews));
+    reviewStatus.textContent = 'Review saved on this device. Export JSON to share it.';
+  } catch (error) {
+    reviewStatus.textContent = `Local save unavailable (${error.message}). Export the review JSON.`;
+  }
+}
+
+function saveLineReview(lineId, status, note) {
+  if (reviewLocked) return;
+  try {
+    reviews = updateVoiceReview(reviews, manifest, language(), lineId, status, note);
+    persistReviews();
+    showReviewSummary();
+  } catch (error) {
+    reviewStatus.textContent = error.message;
+  }
+}
+
+function buildReviewControls(entry) {
+  const lang = language();
+  if (!voiceReviewIdentity(manifest, lang, entry.id)) return null;
+  const key = voiceReviewKey(lang, entry.id);
+  const review = reviews.entries[key];
+  const controls = document.createElement('div');
+  controls.className = 'review';
+  const stateLabel = document.createElement('label');
+  stateLabel.textContent = 'Audition verdict';
+  const select = document.createElement('select');
+  select.dataset.reviewState = key;
+  for (const [state, name] of Object.entries(VOICE_REVIEW_STATES)) {
+    const option = document.createElement('option');
+    option.value = state;
+    option.textContent = name;
+    if (state === 'accepted' && !entry.file) option.disabled = true;
+    select.append(option);
+  }
+  select.value = review?.status ?? 'pending';
+  select.disabled = reviewLocked;
+  stateLabel.append(select);
+  const noteLabel = document.createElement('label');
+  noteLabel.textContent = 'Direction / retake notes';
+  const notes = document.createElement('textarea');
+  notes.dataset.reviewNotes = key;
+  notes.rows = 2;
+  notes.maxLength = 1200;
+  notes.placeholder = 'Pronunciation, pacing, accent, translation…';
+  notes.value = review?.note ?? '';
+  notes.disabled = reviewLocked;
+  noteLabel.append(notes);
+  select.addEventListener('change', () => saveLineReview(entry.id, select.value, notes.value));
+  notes.addEventListener('change', () => saveLineReview(entry.id, select.value, notes.value));
+  controls.append(stateLabel, noteLabel);
+  return controls;
 }
 
 function render() {
@@ -70,15 +150,15 @@ function render() {
     button.setAttribute('aria-label', `Play line ${entry.id}, ${SPEAKER_NAMES[meta.speaker] ?? meta.speaker}`);
     button.addEventListener('click', () => {
       runToken += 1;
-      playEntry(entry);
+      void playEntry(entry);
     });
     const speaker = document.createElement('p');
     speaker.className = 'speaker';
     speaker.textContent = `${entry.id} · ${SPEAKER_NAMES[meta.speaker] ?? meta.speaker}`;
-    const text = document.createElement('p');
-    text.className = 'text';
-    text.lang = entry.file ? (entry.languageId === 'it' ? 'la' : lang) : 'en';
-    text.textContent = entry.text ?? entry.fallback.text;
+    const spokenText = document.createElement('p');
+    spokenText.className = 'text';
+    spokenText.lang = entry.file ? (entry.languageId === 'it' ? 'la' : lang) : 'en';
+    spokenText.textContent = entry.text ?? entry.fallback.text;
     const direction = document.createElement('p');
     direction.className = 'direction';
     direction.textContent = meta.direction ?? '';
@@ -86,16 +166,19 @@ function render() {
     metrics.className = 'metrics';
     metrics.textContent = metricsText(entry);
     if (entry.cer > 0.25) metrics.classList.add('warn');
-    article.append(button, speaker, text, direction, metrics);
+    article.append(button, speaker, spokenText, direction, metrics);
+    const reviewControls = buildReviewControls(entry);
+    if (reviewControls) article.append(reviewControls);
     sceneElement.append(article);
   }
+  showReviewSummary();
 }
 
 function stop() {
   runToken += 1;
   if (current) {
     current.audio.pause();
-    current.element?.classList.remove('playing');
+    current.finish(); // Cancel the awaited clip too, so restarting the scene cannot strand it.
   }
   current = null;
   stopScene.disabled = true;
@@ -105,25 +188,30 @@ function playEntry(entry) {
   return new Promise((resolve) => {
     if (current) {
       current.audio.pause();
-      current.element?.classList.remove('playing');
+      current.finish();
     }
     const element = sceneElement.querySelector(`[data-line-id="${entry.id}"]`);
     const audio = new Audio(entry.file);
-    current = { audio, element };
+    let finished = false;
+    const done = (errorMessage = '') => {
+      if (finished) return;
+      finished = true;
+      element?.classList.remove('playing');
+      if (current?.audio === audio) {
+        current = null;
+        stopScene.disabled = true;
+      }
+      if (errorMessage) statusElement.textContent = errorMessage;
+      resolve();
+    };
+    current = { audio, element, finish: done };
     element?.classList.add('playing');
     element?.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     stopScene.disabled = false;
     statusElement.textContent = `Playing ${entry.id} · ${SPEAKER_NAMES[entry.speaker] ?? entry.speaker}`;
-    const done = () => {
-      element?.classList.remove('playing');
-      resolve();
-    };
-    audio.addEventListener('ended', done, { once: true });
-    audio.addEventListener('error', () => {
-      statusElement.textContent = `Could not play ${entry.file}`;
-      done();
-    }, { once: true });
-    audio.play().catch(done);
+    audio.addEventListener('ended', () => done(), { once: true });
+    audio.addEventListener('error', () => done(`Could not play ${entry.file}`), { once: true });
+    audio.play().catch(() => done(`Playback unavailable for ${entry.id}.`));
   });
 }
 
@@ -151,16 +239,86 @@ async function playAll() {
   statusElement.textContent = 'Scene complete.';
 }
 
-playScene.addEventListener('click', playAll);
-stopScene.addEventListener('click', () => {
-  stop();
-  statusElement.textContent = 'Stopped.';
-});
 function showReadyCount() {
   const generated = entries().filter((entry) => entry.file).length;
   statusElement.textContent = `${generated} lines ready in ${language() === 'ja' ? 'Japanese' : 'English'}.`;
 }
 
+function loadSavedReviews() {
+  try {
+    const saved = localStorage.getItem(VOICE_REVIEW_STORAGE_KEY);
+    if (!saved) return;
+    const checked = validateVoiceReviewBook(JSON.parse(saved), manifest);
+    if (!checked.valid) {
+      reviewLocked = true;
+      reviewStatus.textContent = `Saved audition notes do not match the current takes (${checked.errors.slice(0, 2).join('; ')}). Export the old file, then import a matching version or clear the local reviews.`;
+      return;
+    }
+    reviews = checked.book;
+    reviewStatus.textContent = 'Recovered saved audition notes from this browser.';
+  } catch (error) {
+    reviewLocked = true;
+    reviewStatus.textContent = `Saved review data could not be read (${error.message}). Export a backup before clearing.`;
+  }
+}
+
+function downloadJSON(data) {
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bells-voice-reviews-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+exportReviews.addEventListener('click', () => {
+  if (!manifest) return;
+  // Preserve the original, even if its take identity is now stale.
+  const oldRaw = reviewLocked ? localStorage.getItem(VOICE_REVIEW_STORAGE_KEY) : null;
+  downloadJSON(oldRaw ?? `${JSON.stringify(reviews, null, 2)}\n`);
+  reviewStatus.textContent = 'Downloaded review JSON.';
+});
+
+importReviews.addEventListener('change', async () => {
+  const file = importReviews.files?.[0];
+  if (!file || !manifest) return;
+  try {
+    if (file.size > 256_000) throw new Error('Review file exceeds 256 KB.');
+    const result = validateVoiceReviewBook(JSON.parse(await file.text()), manifest);
+    if (!result.valid) throw new Error(result.errors.slice(0, 3).join('; '));
+    reviews = result.book;
+    reviewLocked = false;
+    persistReviews();
+    render();
+    reviewStatus.textContent = `Imported ${Object.keys(reviews.entries).length} audition reviews.`;
+  } catch (error) {
+    reviewStatus.textContent = `Import rejected: ${error.message}`;
+  } finally {
+    importReviews.value = '';
+  }
+});
+
+clearReviews.addEventListener('click', () => {
+  if (!confirm('Clear all local voice audition notes? Export your reviews first if you need a backup.')) return;
+  try {
+    localStorage.removeItem(VOICE_REVIEW_STORAGE_KEY);
+    reviews = emptyVoiceReviewBook();
+    reviewLocked = false;
+    render();
+    reviewStatus.textContent = 'Local voice audition notes cleared.';
+  } catch (error) {
+    reviewStatus.textContent = `Could not clear local notes: ${error.message}`;
+  }
+});
+
+playScene.addEventListener('click', () => { void playAll(); });
+stopScene.addEventListener('click', () => {
+  stop();
+  statusElement.textContent = 'Stopped.';
+});
 for (const input of document.querySelectorAll('input[name="lang"]')) {
   input.addEventListener('change', () => {
     stop();
@@ -174,8 +332,11 @@ try {
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   manifest = await response.json();
   provenance.textContent = manifest.provenance ?? '';
+  loadSavedReviews();
   render();
   showReadyCount();
+  exportReviews.disabled = false;
 } catch (error) {
   statusElement.textContent = `No voice manifest yet (${error.message}). Run assets/audio/voice-prototype-v1/build_voice_prototype.py.`;
+  reviewStatus.textContent = 'The audition ledger needs the rendered voice manifest.';
 }
