@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gothic SVG Motion Studio | Bells of the Black Chrysanthemum</title>
+  <link rel="stylesheet" href="./svg-motion-studio.css">
+</head>
+<body>
+  <a href="#studio" class="skip-link">Skip to motion studio</a>
+  <header class="site-header">
+    <p class="eyebrow">Bells of the Black Chrysanthemum · Developer art studio</p>
+    <h1>Gothic Vector Animation</h1>
+    <p>62 character identities. 69 editable vector sheets. 686 animated pose cells. Every figure uses original SVG paths, with the July character concepts recorded as identity references.</p>
+    <nav><a href="./illustration-review.html">July original illustrations</a><a href="./index.html?dev=1">Game title</a></nav>
+  </header>
+  <main id="studio" class="layout">
+    <aside class="catalog">
+      <h2>Cast</h2>
+      <label for="filter">Find a character</label><input id="filter" type="search" placeholder="Name or group">
+      <nav id="castList" aria-label="Vector rig identities"></nav>
+    </aside>
+    <section class="workbench">
+      <div class="tool-head">
+        <div><p class="eyebrow" id="status">Loading...</p><h2 id="characterName"></h2><p id="identityNote"></p></div>
+        <div class="controls">
+          <label for="viewMode">View</label>
+          <select id="viewMode"><option value="action">Action poses</option><option value="field">Field facings</option></select>
+          <button id="playToggle" type="button" aria-pressed="false">Play animation</button>
+        </div>
+      </div>
+      <div class="center-stage">
+        <svg viewBox="0 0 144 160" xmlns="http://www.w3.org/2000/svg" id="vectorView" role="img" aria-labelledby="characterName">
+          <image id="sheetImage" href="" x="0" y="0" width="1872" height="160" preserveAspectRatio="none"/>
+        </svg>
+        <div class="stage-readout"><span id="poseName"></span><span>Anchor 72,149 · Right-facing · SVG paths</span></div>
+      </div>
+      <div class="timeline" id="poseButtons" aria-label="Animation cells"></div>
+      <div class="metadata">
+        <section><h3>Original concept reference</h3><a id="conceptLink" target="_blank" rel="noopener noreferrer"></a><p>Illustration source is a reference for silhouette, identity and costume. This vector rig is separately authored.</p></section>
+        <section><h3>Production lane</h3><p>Editable source candidate. Existing pixel gameplay remains authoritative until the selected SVG clips clear visual, accessibility and collision acceptance.</p><a id="downloadSheet" download>Open this SVG sheet</a></section>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./svg-motion-studio.js"></script>
+</body>
+</html>
