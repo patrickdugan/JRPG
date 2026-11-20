@@ -19,11 +19,11 @@ SVG = "{http://www.w3.org/2000/svg}"
 class VectorSuiteTests(unittest.TestCase):
     def test_cast_matches_existing_roster_and_boss_contracts(self):
         build.validate_sources()
-        self.assertEqual(len(CAST["cast"]),46)
-        self.assertEqual(len({x["id"] for x in CAST["cast"]}),46)
+        self.assertEqual(len(CAST["cast"]),62)
+        self.assertEqual(len({x["id"] for x in CAST["cast"]}),62)
         self.assertEqual(set(x["group"] for x in CAST["cast"]),{
             "party","enemy-v2","enemy-v3-human","enemy-v3-beast",
-            "enemy-v3-plant","boss-state","boss"})
+            "enemy-v3-plant","boss-state","boss","npc"})
 
     def test_69_sheets_cover_686_cells(self):
         outputs=build.build()
