@@ -77,7 +77,7 @@ def smoke() -> dict:
                 "mimeType": "application/json",
                 "buffer": json.dumps(report).encode("utf-8"),
             })
-            assert "Imported 4" in page.locator("#reviewStatus").inner_text()
+            page.wait_for_function("() => document.querySelector('#reviewStatus').textContent.includes('Imported 4')")
             assert page.locator("#verdict").input_value() == "unreviewed"
 
             stale = json.loads(json.dumps(report))
@@ -87,7 +87,7 @@ def smoke() -> dict:
                 "mimeType": "application/json",
                 "buffer": json.dumps(stale).encode("utf-8"),
             })
-            assert "Import rejected" in page.locator("#reviewStatus").inner_text()
+            page.wait_for_function("() => document.querySelector('#reviewStatus').textContent.includes('Import rejected')")
             page.locator('#assetList button[data-asset-id="nikola"]').click()
             assert page.locator("#verdict").input_value() == "use-as-reference"
             SCREENSHOT.parent.mkdir(parents=True, exist_ok=True)
