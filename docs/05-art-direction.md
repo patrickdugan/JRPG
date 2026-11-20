@@ -1,6 +1,8 @@
 # Bells of the Black Chrysanthemum - Art Direction
 
-**Status:** pre-production visual contract<br>
+**Status:** pre-production visual contract
+
+**High-definition painted animation review (November 2026):** the user-directed concept-quality character artwork is a separate production lane from the earlier compact pixel sheets. Correct canonical actors, source-painted identities and isolated attack VFX must pass native-size visual review before a reversible in-game adapter is proposed. See [the painted-motion source and acceptance note](47-hd-painted-motion-pass.md). The earlier code-authored SVG puppet study is a technical prototype and is not approved as final character art.<br>
 **Audience:** art director, environment artists, character artists, UI/UX, VFX, animation, technical art<br>
 **Scope:** 2D pixel-art JRPG, 320 x 180 logical pixels, integer-scaled; the first playable and the 20-25 hour production target.
 
