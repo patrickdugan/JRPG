@@ -66,13 +66,15 @@ def pick_device(requested: str, minimum_free_gb: float) -> str:
 # ---------------------------------------------------------------- references
 
 def render_reference(character_id: str, character: dict, lang: str, device: str) -> Path:
+    target = SUITE / "references" / lang / f"{character_id}.wav"
+    if target.exists():
+        return target
+    # Kokoro is needed only to render a missing reference, so a machine that
+    # just performs lines can skip it (misaki[ja] builds pyopenjtalk from source).
     import librosa
     import soundfile as sf
     from kokoro import KPipeline
 
-    target = SUITE / "references" / lang / f"{character_id}.wav"
-    if target.exists():
-        return target
     spec = character["reference"][lang]
     text = character["referenceText"][lang]
     pipeline = KPipeline(lang_code=spec["lang"], device=device)
@@ -87,10 +89,23 @@ def render_reference(character_id: str, character: dict, lang: str, device: str)
 
 # --------------------------------------------------------------- performance
 
+_KAKASI = None
+
+
+def to_hiragana(text: str) -> str:
+    """Compare Japanese by reading: Whisper often picks a homophone (鐘/金, 書記/初期)."""
+    global _KAKASI
+    if _KAKASI is None:
+        import pykakasi
+
+        _KAKASI = pykakasi.kakasi()
+    return "".join(item["hira"] for item in _KAKASI.convert(text))
+
+
 def normalise_text(text: str, lang: str) -> str:
     text = unicodedata.normalize("NFKC", text).lower()
     if lang == "ja":
-        return re.sub(r"[\s、。，．・…―ー\-—“”\"'「」『』！？!?.,]", "", text)
+        return re.sub(r"[\s、。，．・…―ー\-—“”\"'「」『』！？!?.,]", "", to_hiragana(text))
     return re.sub(r"[^a-z0-9]", "", text)
 
 
@@ -118,6 +133,17 @@ class Transcriber:
             device=0 if device == "cuda" else -1,
             torch_dtype=torch.float16 if device == "cuda" else torch.float32,
         )
+        # Word timestamps need only the decoder's cross-attention, but generate()
+        # requests attentions from the whole model. The encoder would then return
+        # 32 layers of 1500x1500 self-attention maps (about 5.8 GB per call in fp32).
+        encoder = self.pipe.model.get_encoder()
+        encoder_forward = encoder.forward
+
+        def forward_without_attentions(*args, **kwargs):
+            kwargs["output_attentions"] = False
+            return encoder_forward(*args, **kwargs)
+
+        encoder.forward = forward_without_attentions
 
     def __call__(self, audio: np.ndarray, sample_rate: int, lang: str, *, words: bool = False):
         result = self.pipe(
@@ -238,6 +264,8 @@ def main() -> int:
     parser.add_argument("--device", default="auto", choices=["auto", "cuda", "cpu"])
     parser.add_argument("--min-free-gb", type=float, default=6.0)
     parser.add_argument("--whisper", default="openai/whisper-large-v3-turbo")
+    parser.add_argument("--asr-device", default="same", choices=["same", "cuda", "cpu"],
+                        help="Device for Whisper; 'cpu' leaves a small GPU to Chatterbox alone.")
     parser.add_argument("--references-only", action="store_true")
     parser.add_argument("--threads", type=int, default=10, help="CPU threads for torch (leave room for other jobs).")
     parser.add_argument("--force", action="store_true", help="Regenerate lines that already have current output.")
@@ -254,7 +282,8 @@ def main() -> int:
     wanted = {item for item in args.lines.split(",") if item}
     lines = [line for line in scene["lines"] if not wanted or line["id"] in wanted]
     device = pick_device(args.device, args.min_free_gb)
-    print(f"device={device} langs={langs} lines={len(lines)} takes={args.takes}", flush=True)
+    asr_device = device if args.asr_device == "same" else args.asr_device
+    print(f"device={device} asr={asr_device} langs={langs} lines={len(lines)} takes={args.takes}", flush=True)
 
     references = {
         (speaker, lang): render_reference(speaker, cast[speaker], lang, "cpu")
@@ -277,7 +306,7 @@ def main() -> int:
         return base_inference(*inference_args, **inference_kwargs)
 
     model.t3.inference = capped_inference
-    transcribe = Transcriber(device, args.whisper)
+    transcribe = Transcriber(asr_device, args.whisper)
     manifest_path = RUNTIME / "manifest.json"
     manifest = load_json(manifest_path) if manifest_path.exists() else {"lines": {}}
     manifest.update({
@@ -285,7 +314,15 @@ def main() -> int:
         "provenance": "AI-generated synthetic voices: Kokoro-82M reference timbres performed by Chatterbox Multilingual; every file carries the Perth watermark. No real person's voice is cloned.",
         "sampleRate": SAMPLE_RATE_OUT,
         "targetLufs": TARGET_LUFS,
+        "defaultPauseSeconds": scene.get("defaultPauseSeconds", 0.4),
+        "pauseBeforeSeconds": {line["id"]: line["pauseBeforeSeconds"] for line in scene["lines"] if "pauseBeforeSeconds" in line},
     })
+
+    def save_manifest() -> None:
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+    save_manifest()
 
     for lang in langs:
         for line in lines:
@@ -347,8 +384,7 @@ def main() -> int:
                 "takes": [{key: value for key, value in item.items() if key != "audio"} for item in takes],
                 **prosody_metrics(best["audio"], model.sr),
             }
-            manifest_path.parent.mkdir(parents=True, exist_ok=True)
-            manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+            save_manifest()
     print("done", flush=True)
     return 0
 

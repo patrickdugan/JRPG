@@ -28,6 +28,54 @@
         "pitchMedianHz": 481.4,
         "pitchRangeSemitones": 2.6,
         "loudnessRangeDb": 31.9
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/25-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Mandatory plain answer. A frightened ordinary man, no sovereign voice, barely audible.",
+        "text": "……はい。",
+        "languageId": "ja",
+        "exaggeration": 0.25,
+        "cfgWeight": 0.3,
+        "fx": "mortal",
+        "chosenTake": 1,
+        "seed": 2501,
+        "cer": 0.0,
+        "heard": "はい。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2500,
+            "cer": 0.0,
+            "heard": "はい",
+            "trimmed": false,
+            "tokenBudget": 77,
+            "seconds": 5.3
+          },
+          {
+            "take": 1,
+            "seed": 2501,
+            "cer": 0.0,
+            "heard": "はい。",
+            "trimmed": false,
+            "tokenBudget": 77,
+            "seconds": 11.5
+          },
+          {
+            "take": 2,
+            "seed": 2502,
+            "cer": 0.0,
+            "heard": "はい",
+            "trimmed": false,
+            "tokenBudget": 77,
+            "seconds": 8.3
+          }
+        ],
+        "durationSeconds": 0.76,
+        "pitchMedianHz": 80.8,
+        "pitchRangeSemitones": 4.3,
+        "loudnessRangeDb": 32.0
       }
     },
     "18": {
@@ -140,6 +188,54 @@
         "pitchMedianHz": 87.3,
         "pitchRangeSemitones": 9.3,
         "loudnessRangeDb": 28.4
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/01-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Regal contempt from above; unhurried, enjoying the echo.",
+        "text": "我が鐘を砕き、傷を死と取り違えたか。夜明けなど老いた書記にすぎぬ。余の死を告げたのは、これが初めてではない。",
+        "languageId": "ja",
+        "exaggeration": 0.65,
+        "cfgWeight": 0.35,
+        "fx": "oni",
+        "chosenTake": 2,
+        "seed": 102,
+        "cer": 0.073,
+        "heard": "我が金を砕き傷をしと取り違えたか夜明けなど多いた初期に過ぎぬ 夜の死を告げたのはこれが初めてではない",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 100,
+            "cer": 0.091,
+            "heard": "我が亀を砕き傷を一取り違えたか夜明けなどを置いた初期に過ぎぬ夜の死を告げたのはこれが初めてではない",
+            "trimmed": false,
+            "tokenBudget": 396,
+            "seconds": 44.7
+          },
+          {
+            "take": 1,
+            "seed": 101,
+            "cer": 0.073,
+            "heard": "我が金を砕き傷をしと取り違えたか夜明けなどを置いた初期に過ぎぬ夜の死を告げたのはこれが初めてではない",
+            "trimmed": false,
+            "tokenBudget": 396,
+            "seconds": 38.1
+          },
+          {
+            "take": 2,
+            "seed": 102,
+            "cer": 0.073,
+            "heard": "我が金を砕き傷をしと取り違えたか夜明けなど多いた初期に過ぎぬ 夜の死を告げたのはこれが初めてではない",
+            "trimmed": false,
+            "tokenBudget": 396,
+            "seconds": 49.2
+          }
+        ],
+        "durationSeconds": 9.56,
+        "pitchMedianHz": 87.8,
+        "pitchRangeSemitones": 8.1,
+        "loudnessRangeDb": 30.8
       }
     },
     "02": {
@@ -172,6 +268,54 @@
         "pitchMedianHz": 84.9,
         "pitchRangeSemitones": 11.6,
         "loudnessRangeDb": 28.5
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/02-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Persuasive, almost kind; each clause a ledger entry. Twist the knife on 'You counted them for me.'",
+        "text": "余は飢えを読めるものにした。略奪ではなく年貢を。虐殺ではなく戸籍を。墓は減ったのだ、神父。数えたのは、お前だろう。",
+        "languageId": "ja",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.35,
+        "fx": "oni",
+        "chosenTake": 0,
+        "seed": 200,
+        "cer": 0.016,
+        "heard": "世は上を読めるものにした虐奪ではなく年貢を虐殺ではなく戸籍を墓は減ったのだ神父数えたのはお前だろう",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 200,
+            "cer": 0.016,
+            "heard": "世は上を読めるものにした虐奪ではなく年貢を虐殺ではなく戸籍を墓は減ったのだ神父数えたのはお前だろう",
+            "trimmed": false,
+            "tokenBudget": 415,
+            "seconds": 49.3
+          },
+          {
+            "take": 1,
+            "seed": 201,
+            "cer": 0.032,
+            "heard": "要は上を読めるものにした 虐奪ではなく年貢を虐殺ではなく戸籍を墓は減ったのだ神父数えたのはお前だろう",
+            "trimmed": false,
+            "tokenBudget": 415,
+            "seconds": 51.5
+          },
+          {
+            "take": 2,
+            "seed": 202,
+            "cer": 0.032,
+            "heard": "世は上を読めるものにした略奪ではなく年号虐殺ではなく戸籍を墓は減ったのだ神父数えたのはお前だろう",
+            "trimmed": false,
+            "tokenBudget": 415,
+            "seconds": 37.5
+          }
+        ],
+        "durationSeconds": 10.2,
+        "pitchMedianHz": 77.4,
+        "pitchRangeSemitones": 9.1,
+        "loudnessRangeDb": 28.0
       }
     },
     "03": {
@@ -204,6 +348,54 @@
         "pitchMedianHz": 134.3,
         "pitchRangeSemitones": 12.9,
         "loudnessRangeDb": 21.3
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/03-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Low, exhausted, precise. Guilt held under the voice, not performed.",
+        "text": "墓が減ったのは、その中でまだ息をしている者を数えるなと、お前に教えられたからだ。",
+        "languageId": "ja",
+        "exaggeration": 0.55,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 2,
+        "seed": 302,
+        "cer": 0.045,
+        "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 300,
+            "cer": 0.045,
+            "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 23.7
+          },
+          {
+            "take": 1,
+            "seed": 301,
+            "cer": 0.045,
+            "heard": "墓が減ったのは、そのあたでまだ息をしているものを数えるなとお前に教えられたからだ。",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 29.8
+          },
+          {
+            "take": 2,
+            "seed": 302,
+            "cer": 0.045,
+            "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
+            "trimmed": true,
+            "tokenBudget": 305,
+            "seconds": 41.5
+          }
+        ],
+        "durationSeconds": 5.69,
+        "pitchMedianHz": 134.7,
+        "pitchRangeSemitones": 11.6,
+        "loudnessRangeDb": 20.2
       }
     },
     "04": {
@@ -236,6 +428,54 @@
         "pitchMedianHz": 126.0,
         "pitchRangeSemitones": 21.4,
         "loudnessRangeDb": 28.1
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/04-nikola.ogg",
+        "speaker": "nikola",
+        "section": "Duel three: the relic",
+        "direction": "Magnificent, overconfident proclamation; he is enjoying himself far too much.",
+        "text": "この鉄は、キリストの脇腹を開いたものだ。同じ槍で貴様を討ち、我が信仰の優越を証明してみせよう。",
+        "languageId": "ja",
+        "exaggeration": 0.8,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 400,
+        "cer": 0.035,
+        "heard": "この鉄はキリストの脇腹を開いたものだ。同時槍で貴様を撃ち、我が信仰の優越を証明してみせよう。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 400,
+            "cer": 0.035,
+            "heard": "この鉄はキリストの脇腹を開いたものだ。同時槍で貴様を撃ち、我が信仰の優越を証明してみせよう。",
+            "trimmed": false,
+            "tokenBudget": 350,
+            "seconds": 39.7
+          },
+          {
+            "take": 1,
+            "seed": 401,
+            "cer": 0.053,
+            "heard": "この鉄はキリストの脇腹を開いたものだ。同時ありで貴様を討ち、我が信仰の優越を証明してみせよう。",
+            "trimmed": false,
+            "tokenBudget": 350,
+            "seconds": 48.3
+          },
+          {
+            "take": 2,
+            "seed": 402,
+            "cer": 0.053,
+            "heard": "この鉄はキリストの脇腹を開いたものだ。同時やりで貴様を討ち、我が信仰の優越を証明してみせよ。",
+            "trimmed": false,
+            "tokenBudget": 350,
+            "seconds": 36.3
+          }
+        ],
+        "durationSeconds": 8.4,
+        "pitchMedianHz": 125.7,
+        "pitchRangeSemitones": 16.6,
+        "loudnessRangeDb": 27.0
       }
     },
     "05": {
@@ -268,6 +508,54 @@
         "pitchMedianHz": 127.5,
         "pitchRangeSemitones": 9.6,
         "loudnessRangeDb": 26.7
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/05-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel three: the relic",
+        "direction": "Bone-dry correction; a tired scholar who cannot let an error stand even now.",
+        "text": "それでキリストが死んだのではない。すでに息絶えておられた。お前の脅しは、神学的にも解剖学的にも不正確だ。",
+        "languageId": "ja",
+        "exaggeration": 0.35,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 501,
+        "cer": 0.017,
+        "heard": "それでキリストが死んだのではないすでに生き絶えておられたお前の脅しは神学的にも解剖学的にも正確だ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 500,
+            "cer": 0.0,
+            "heard": "それでキリストが死んだのではないすでに生き絶えておられたお前の脅しは心学的にも解剖学的にも不正確だ",
+            "trimmed": false,
+            "tokenBudget": 383,
+            "seconds": 39.1
+          },
+          {
+            "take": 1,
+            "seed": 501,
+            "cer": 0.017,
+            "heard": "それでキリストが死んだのではないすでに生き絶えておられたお前の脅しは神学的にも解剖学的にも正確だ",
+            "trimmed": false,
+            "tokenBudget": 383,
+            "seconds": 35.8
+          },
+          {
+            "take": 2,
+            "seed": 502,
+            "cer": 0.0,
+            "heard": "それでキリストが死んだのではないすでに生き絶えておられたお前の脅しは心学的にも解剖学的にも不正確だ",
+            "trimmed": false,
+            "tokenBudget": 383,
+            "seconds": 40.8
+          }
+        ],
+        "durationSeconds": 8.0,
+        "pitchMedianHz": 135.5,
+        "pitchRangeSemitones": 28.9,
+        "loudnessRangeDb": 21.5
       }
     },
     "06": {
@@ -300,6 +588,54 @@
         "pitchMedianHz": 100.9,
         "pitchRangeSemitones": 17.1,
         "loudnessRangeDb": 31.7
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/06-nikola.ogg",
+        "speaker": "nikola",
+        "section": "Duel three: the relic",
+        "direction": "Undaunted, breezy.",
+        "text": "碑文の訂正は、使い終えてから頼む。",
+        "languageId": "ja",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.45,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 600,
+        "cer": 0.05,
+        "heard": "秘文の訂正は使い終えてから頼む",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 600,
+            "cer": 0.05,
+            "heard": "秘文の訂正は使い終えてから頼む",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 13.9
+          },
+          {
+            "take": 1,
+            "seed": 601,
+            "cer": 0.05,
+            "heard": "秘文の訂正は使い終えてから頼む",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 16.2
+          },
+          {
+            "take": 2,
+            "seed": 602,
+            "cer": 0.05,
+            "heard": "秘文の訂正は使い終えてから頼む。",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 12.7
+          }
+        ],
+        "durationSeconds": 3.28,
+        "pitchMedianHz": 102.4,
+        "pitchRangeSemitones": 20.5,
+        "loudnessRangeDb": 30.5
       }
     },
     "07": {
@@ -332,6 +668,54 @@
         "pitchMedianHz": 82.4,
         "pitchRangeSemitones": 8.6,
         "loudnessRangeDb": 27.4
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/07-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel one: the immortal sovereign",
+        "direction": "Rising scorn; a prosecutor turning the court against the accusers.",
+        "text": "己の言葉を聞くがいい。異国の信仰は己の暴力を愛と呼び、辺境の盟約は己の恐怖を義務と呼ぶ。そうして海を越え、余の泰平を裁きに来たか。",
+        "languageId": "ja",
+        "exaggeration": 0.75,
+        "cfgWeight": 0.35,
+        "fx": "oni",
+        "chosenTake": 1,
+        "seed": 701,
+        "cer": 0.071,
+        "heard": "己の言葉を聞くがいい異国の信仰は己の暴力を愛とこび偏狂の名役は己の恐怖を義務とこぶそうして海を越え世の大平を裁きに来たか",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 700,
+            "cer": 0.082,
+            "heard": "おのれの言葉を聞くがいい異国の信仰はおのれの暴力をあいとこび偏狂の名役はおのれの恐怖を義務とこむそうして海を越え世の大平を裁きに来たか",
+            "trimmed": false,
+            "tokenBudget": 467,
+            "seconds": 85.0
+          },
+          {
+            "take": 1,
+            "seed": 701,
+            "cer": 0.071,
+            "heard": "己の言葉を聞くがいい異国の信仰は己の暴力を愛とこび偏狂の名役は己の恐怖を義務とこぶそうして海を越え世の大平を裁きに来たか",
+            "trimmed": false,
+            "tokenBudget": 467,
+            "seconds": 49.1
+          },
+          {
+            "take": 2,
+            "seed": 702,
+            "cer": 0.071,
+            "heard": "おのれの言葉を聞くがいい異国の信仰はおのれの暴力をあいとこび返協の名役はおのれの恐怖を義務とこぶそうして海を越え世の大平を裁きに来たか",
+            "trimmed": false,
+            "tokenBudget": 467,
+            "seconds": 82.9
+          }
+        ],
+        "durationSeconds": 10.48,
+        "pitchMedianHz": 89.4,
+        "pitchRangeSemitones": 7.9,
+        "loudnessRangeDb": 28.2
       }
     },
     "08": {
@@ -364,6 +748,54 @@
         "pitchMedianHz": 129.4,
         "pitchRangeSemitones": 13.1,
         "loudnessRangeDb": 21.9
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/08-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel two: the living family",
+        "direction": "The thesis of the game. Quiet, absolute, every word placed like a stone.",
+        "text": "我々は己の暴力を愛と呼んだ。お前は己のそれを泰平と呼んだ。死者は、どちらの言葉にも惑わされなかった。",
+        "languageId": "ja",
+        "exaggeration": 0.5,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 2,
+        "seed": 802,
+        "cer": 0.0,
+        "heard": "我々は己の暴力を愛と呼んだ。お前は己のそれを太平と呼んだ。死者はどちらの言葉にも惑わされなかった。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 800,
+            "cer": 0.065,
+            "heard": "我々は己の暴力を愛と呼んだお前は己のそれを大平と呼んだ死者はどちらの言葉にも惑わされなかった",
+            "trimmed": false,
+            "tokenBudget": 370,
+            "seconds": 27.9
+          },
+          {
+            "take": 1,
+            "seed": 801,
+            "cer": 0.0,
+            "heard": "我々は己の暴力を愛と呼んだお前は己のそれを大兵と呼んだ死者はどちらの言葉にも惑わされなかった",
+            "trimmed": false,
+            "tokenBudget": 370,
+            "seconds": 36.2
+          },
+          {
+            "take": 2,
+            "seed": 802,
+            "cer": 0.0,
+            "heard": "我々は己の暴力を愛と呼んだ。お前は己のそれを太平と呼んだ。死者はどちらの言葉にも惑わされなかった。",
+            "trimmed": false,
+            "tokenBudget": 370,
+            "seconds": 36.8
+          }
+        ],
+        "durationSeconds": 8.68,
+        "pitchMedianHz": 136.3,
+        "pitchRangeSemitones": 12.4,
+        "loudnessRangeDb": 17.6
       }
     },
     "09": {
@@ -396,6 +828,54 @@
         "pitchMedianHz": 162.0,
         "pitchRangeSemitones": 18.9,
         "loudnessRangeDb": 28.9
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/09-miyo.ogg",
+        "speaker": "miyo",
+        "section": "Duel two: the living family",
+        "direction": "Steady anger from someone used as an argument; she refuses both men.",
+        "text": "私を生かしたのは母です。センダの家です。私の脈を、あなたたちどちらの領収書にもさせません。",
+        "languageId": "ja",
+        "exaggeration": 0.7,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 901,
+        "cer": 0.0,
+        "heard": "私を生かしたのは母です。センダの家です。私の脈をあなたたちどちらの領収書にもさせません。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 900,
+            "cer": 0.037,
+            "heard": "私を生かしたのは母です 千田の家です私の脈をあなたたちどちらの領収書にもさせません",
+            "trimmed": false,
+            "tokenBudget": 337,
+            "seconds": 34.0
+          },
+          {
+            "take": 1,
+            "seed": 901,
+            "cer": 0.0,
+            "heard": "私を生かしたのは母です。センダの家です。私の脈をあなたたちどちらの領収書にもさせません。",
+            "trimmed": false,
+            "tokenBudget": 337,
+            "seconds": 23.9
+          },
+          {
+            "take": 2,
+            "seed": 902,
+            "cer": 0.0,
+            "heard": "私を生かしたのは母です。センダーの家です。私の脈をあなたたちどちらの領収書にもさせません。",
+            "trimmed": false,
+            "tokenBudget": 337,
+            "seconds": 34.9
+          }
+        ],
+        "durationSeconds": 6.4,
+        "pitchMedianHz": 269.4,
+        "pitchRangeSemitones": 9.6,
+        "loudnessRangeDb": 20.1
       }
     },
     "10": {
@@ -428,6 +908,54 @@
         "pitchMedianHz": 83.9,
         "pitchRangeSemitones": 8.9,
         "loudnessRangeDb": 26.0
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/10-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Intimate, seductive, almost fatherly; a voice offering a warm room.",
+        "text": "アヴェラール、帰ってこい。善くなれと言ったことはない。役に立てと言っただけだ。",
+        "languageId": "ja",
+        "exaggeration": 0.45,
+        "cfgWeight": 0.3,
+        "fx": "oni",
+        "chosenTake": 2,
+        "seed": 1002,
+        "cer": 0.056,
+        "heard": "アムラール帰ってこいよくなれと言ったことはない 役に立てと言っただけだ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1000,
+            "cer": 0.083,
+            "heard": "アメラール帰ってこいよくなれと言ったことがない役に立てと言っただけだ",
+            "trimmed": false,
+            "tokenBudget": 298,
+            "seconds": 18.3
+          },
+          {
+            "take": 1,
+            "seed": 1001,
+            "cer": 0.056,
+            "heard": "アベラール返ってこいよくなれと言ったことはない役に立てと言っただけだ",
+            "trimmed": false,
+            "tokenBudget": 298,
+            "seconds": 32.9
+          },
+          {
+            "take": 2,
+            "seed": 1002,
+            "cer": 0.056,
+            "heard": "アムラール帰ってこいよくなれと言ったことはない 役に立てと言っただけだ",
+            "trimmed": false,
+            "tokenBudget": 298,
+            "seconds": 23.0
+          }
+        ],
+        "durationSeconds": 6.72,
+        "pitchMedianHz": 79.6,
+        "pitchRangeSemitones": 7.9,
+        "loudnessRangeDb": 31.4
       }
     },
     "11": {
@@ -460,6 +988,81 @@
         "pitchMedianHz": 133.9,
         "pitchRangeSemitones": 30.4,
         "loudnessRangeDb": 25.2
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/11-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Refusal without heat; the pain of seeing the trap clearly at last.",
+        "text": "お前が求めたのは、役に立つことが隠れ家に思えるほど、私が空っぽになることだった。",
+        "languageId": "ja",
+        "exaggeration": 0.5,
+        "cfgWeight": 0.35,
+        "fx": "default",
+        "chosenTake": 4,
+        "seed": 1104,
+        "cer": 0.087,
+        "heard": "お膳が求めたのは役に立つことがかくれいえに思えるほど私があっぽになることだった",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1100,
+            "cer": 0.13,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私があっ歩になることだった",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 49.5
+          },
+          {
+            "take": 1,
+            "seed": 1101,
+            "cer": 0.109,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私がアップになることだった",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 14.7
+          },
+          {
+            "take": 2,
+            "seed": 1102,
+            "cer": 0.13,
+            "heard": "お膳が求めたのは役に立つことがかくれえに思えるほど私があっぼになることだった",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 15.3
+          },
+          {
+            "take": 3,
+            "seed": 1103,
+            "cer": 0.152,
+            "heard": "お膳が求めたのは役に立つことが隠れいに思えるほど私があっ歩になることだった",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 19.4
+          },
+          {
+            "take": 4,
+            "seed": 1104,
+            "cer": 0.087,
+            "heard": "お膳が求めたのは役に立つことがかくれいえに思えるほど私があっぽになることだった",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 18.9
+          },
+          {
+            "take": 5,
+            "seed": 1105,
+            "cer": 0.13,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が悪歩になることだった",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 18.7
+          }
+        ],
+        "durationSeconds": 6.52,
+        "pitchMedianHz": 127.1,
+        "pitchRangeSemitones": 12.4,
+        "loudnessRangeDb": 21.1
       }
     },
     "12": {
@@ -492,6 +1095,54 @@
         "pitchMedianHz": 120.0,
         "pitchRangeSemitones": 9.0,
         "loudnessRangeDb": 21.9
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/12-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Invocation; full voice, the rite opening outward.",
+        "text": "黒陽の盟約！",
+        "languageId": "ja",
+        "exaggeration": 0.9,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 2,
+        "seed": 1202,
+        "cer": 0.0,
+        "heard": "黒用の名薬",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1200,
+            "cer": 0.0,
+            "heard": "黒用の名薬",
+            "trimmed": false,
+            "tokenBudget": 84,
+            "seconds": 9.5
+          },
+          {
+            "take": 1,
+            "seed": 1201,
+            "cer": 0.0,
+            "heard": "黒用の名薬",
+            "trimmed": false,
+            "tokenBudget": 84,
+            "seconds": 9.7
+          },
+          {
+            "take": 2,
+            "seed": 1202,
+            "cer": 0.0,
+            "heard": "黒用の名薬",
+            "trimmed": true,
+            "tokenBudget": 84,
+            "seconds": 14.7
+          }
+        ],
+        "durationSeconds": 1.34,
+        "pitchMedianHz": 151.2,
+        "pitchRangeSemitones": 4.6,
+        "loudnessRangeDb": 21.5
       }
     },
     "13": {
@@ -524,6 +1175,54 @@
         "pitchMedianHz": 108.2,
         "pitchRangeSemitones": 17.3,
         "loudnessRangeDb": 30.4
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/13-nikola.ogg",
+        "speaker": "nikola",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Mid-lunge quip.",
+        "text": "委員会のように言うな。",
+        "languageId": "ja",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 1301,
+        "cer": 0.0,
+        "heard": "委員会のように言うな。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1300,
+            "cer": 0.0,
+            "heard": "委員会のように言うな",
+            "trimmed": false,
+            "tokenBudget": 116,
+            "seconds": 14.8
+          },
+          {
+            "take": 1,
+            "seed": 1301,
+            "cer": 0.0,
+            "heard": "委員会のように言うな。",
+            "trimmed": false,
+            "tokenBudget": 116,
+            "seconds": 7.7
+          },
+          {
+            "take": 2,
+            "seed": 1302,
+            "cer": 0.0,
+            "heard": "委員会のように言うな。",
+            "trimmed": false,
+            "tokenBudget": 116,
+            "seconds": 14.2
+          }
+        ],
+        "durationSeconds": 2.16,
+        "pitchMedianHz": 139.9,
+        "pitchRangeSemitones": 17.8,
+        "loudnessRangeDb": 31.2
       }
     },
     "14": {
@@ -556,11 +1255,1124 @@
         "pitchMedianHz": 137.4,
         "pitchRangeSemitones": 10.4,
         "loudnessRangeDb": 22.1
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/14-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel four: Black Sun Concord",
+        "direction": "Clipped, under exertion.",
+        "text": "外すなよ。",
+        "languageId": "ja",
+        "exaggeration": 0.65,
+        "cfgWeight": 0.5,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 1401,
+        "cer": 0.0,
+        "heard": "外すなよ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1400,
+            "cer": 0.0,
+            "heard": "外すなよ",
+            "trimmed": false,
+            "tokenBudget": 77,
+            "seconds": 9.4
+          },
+          {
+            "take": 1,
+            "seed": 1401,
+            "cer": 0.0,
+            "heard": "外すなよ",
+            "trimmed": false,
+            "tokenBudget": 77,
+            "seconds": 10.1
+          },
+          {
+            "take": 2,
+            "seed": 1402,
+            "cer": 0.0,
+            "heard": "外すなよ",
+            "trimmed": false,
+            "tokenBudget": 77,
+            "seconds": 10.0
+          }
+        ],
+        "durationSeconds": 1.12,
+        "pitchMedianHz": 126.0,
+        "pitchRangeSemitones": 11.8,
+        "loudnessRangeDb": 25.0
+      }
+    },
+    "15": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/15-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel five: the pinned ruler",
+        "direction": "Pinned under the spear, breathing hard, still bargaining from the floor. The trap, stated plainly.",
+        "text": "Kill me and every ambitious governor inherits an emergency. Keep me and you inherit my necessity.",
+        "languageId": "en",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.35,
+        "fx": "fallen",
+        "chosenTake": 0,
+        "seed": 1500,
+        "cer": 0.0,
+        "heard": "Kill me and every ambitious governor inherits an emergency. Keep me and you inherit my necessity.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1500,
+            "cer": 0.0,
+            "heard": "Kill me and every ambitious governor inherits an emergency. Keep me and you inherit my necessity.",
+            "trimmed": true,
+            "tokenBudget": 311,
+            "seconds": 111.6
+          }
+        ],
+        "durationSeconds": 5.45,
+        "pitchMedianHz": 86.8,
+        "pitchRangeSemitones": 10.1,
+        "loudnessRangeDb": 23.9
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/15-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "Duel five: the pinned ruler",
+        "direction": "Pinned under the spear, breathing hard, still bargaining from the floor. The trap, stated plainly.",
+        "text": "余を殺せば、野心ある代官どもが非常の世を受け継ぐ。生かせば、余という必要を受け継ぐのだ。",
+        "languageId": "ja",
+        "exaggeration": 0.6,
+        "cfgWeight": 0.35,
+        "fx": "fallen",
+        "chosenTake": 1,
+        "seed": 1501,
+        "cer": 0.061,
+        "heard": "世を殺せば野心ある大官どもが非常の世を受け継ぐ生かせば天という必要を受け継ぐのだ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1500,
+            "cer": 0.163,
+            "heard": "世を好せば野心ある大官どもが非常の世を受けけいぐ生かせば天という必要を受けけいぐのだ",
+            "trimmed": false,
+            "tokenBudget": 331,
+            "seconds": 44.3
+          },
+          {
+            "take": 1,
+            "seed": 1501,
+            "cer": 0.061,
+            "heard": "世を殺せば野心ある大官どもが非常の世を受け継ぐ生かせば天という必要を受け継ぐのだ",
+            "trimmed": false,
+            "tokenBudget": 331,
+            "seconds": 38.4
+          },
+          {
+            "take": 2,
+            "seed": 1502,
+            "cer": 0.082,
+            "heard": "世を殺せば野心ある大官どもは非常の世を受け継ぐ生かせば天という必要を受け継ぐのだ",
+            "trimmed": false,
+            "tokenBudget": 331,
+            "seconds": 41.2
+          }
+        ],
+        "durationSeconds": 9.24,
+        "pitchMedianHz": 80.1,
+        "pitchRangeSemitones": 9.0,
+        "loudnessRangeDb": 31.1
+      }
+    },
+    "16": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/16-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel five: the pinned ruler",
+        "direction": "Measured verdict; the smallest humiliation delivered with great care.",
+        "text": "You wanted history to need you forever. Dawn offers the smaller humiliation: history continuing while you watch.",
+        "languageId": "en",
+        "exaggeration": 0.5,
+        "cfgWeight": 0.35,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1600,
+        "cer": 0.0,
+        "heard": "you wanted history to need you forever. Dawn offers the smaller humiliation, history continuing while you watch.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1600,
+            "cer": 0.0,
+            "heard": "you wanted history to need you forever. Dawn offers the smaller humiliation, history continuing while you watch.",
+            "trimmed": false,
+            "tokenBudget": 353,
+            "seconds": 63.0
+          },
+          {
+            "take": 1,
+            "seed": 1601,
+            "cer": 0.032,
+            "heard": "He wanted history to need you forever, Dawn offers the smaller humiliation, history continuing while you watch,",
+            "trimmed": false,
+            "tokenBudget": 353,
+            "seconds": 23.2
+          },
+          {
+            "take": 2,
+            "seed": 1602,
+            "cer": 0.032,
+            "heard": "He wanted history to need you forever. Dawn offers the smaller humiliation, history continuing while you watch.",
+            "trimmed": false,
+            "tokenBudget": 353,
+            "seconds": 21.2
+          }
+        ],
+        "durationSeconds": 6.68,
+        "pitchMedianHz": 127.1,
+        "pitchRangeSemitones": 12.9,
+        "loudnessRangeDb": 21.3
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/16-mateus.ogg",
+        "speaker": "mateus",
+        "section": "Duel five: the pinned ruler",
+        "direction": "Measured verdict; the smallest humiliation delivered with great care.",
+        "text": "お前は、歴史に永遠に必要とされたかった。夜明けが与えるのは、もっと小さな屈辱だ。お前の目の前で、歴史が続いていくという屈辱だ。",
+        "languageId": "ja",
+        "exaggeration": 0.5,
+        "cfgWeight": 0.35,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 1600,
+        "cer": 0.0,
+        "heard": "お前は歴史に永遠に必要とされたかった 夜明けが与えるのはもっと小さな屈辱だお前の目の前で歴史が続いていくという屈辱だ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1600,
+            "cer": 0.0,
+            "heard": "お前は歴史に永遠に必要とされたかった 夜明けが与えるのはもっと小さな屈辱だお前の目の前で歴史が続いていくという屈辱だ",
+            "trimmed": false,
+            "tokenBudget": 454,
+            "seconds": 40.6
+          },
+          {
+            "take": 1,
+            "seed": 1601,
+            "cer": 0.0,
+            "heard": "お前は歴史に永遠に必要とされたかった夜明けが与えるのはもっと小さな屈辱だお前の目の前で歴史が続いていくという屈辱だ",
+            "trimmed": false,
+            "tokenBudget": 454,
+            "seconds": 52.4
+          },
+          {
+            "take": 2,
+            "seed": 1602,
+            "cer": 0.0,
+            "heard": "お前は歴史に永遠に必要とされたかった。夜明けが与えるのはもっと小さな屈辱だ。お前の目の前で歴史が続いていくという屈辱だ。",
+            "trimmed": false,
+            "tokenBudget": 454,
+            "seconds": 45.2
+          }
+        ],
+        "durationSeconds": 9.2,
+        "pitchMedianHz": 143.5,
+        "pitchRangeSemitones": 9.2,
+        "loudnessRangeDb": 20.4
+      }
+    },
+    "17": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/17-ren.ogg",
+        "speaker": "ren",
+        "section": "Duel five: the pinned ruler",
+        "direction": "Young, firm, no grandstanding. The last word before the choice.",
+        "text": "No. The weapon defeated you. Conversation decides whether defeat becomes anything except another grave.",
+        "languageId": "en",
+        "exaggeration": 0.55,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 1701,
+        "cer": 0.0,
+        "heard": "No, the weapon defeated you. Conversation decides whether defeat becomes anything except another grave.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1700,
+            "cer": 0.0,
+            "heard": "No, the weapon defeated you. Conversation decides whether defeat becomes anything except another grave.",
+            "trimmed": false,
+            "tokenBudget": 328,
+            "seconds": 34.3
+          },
+          {
+            "take": 1,
+            "seed": 1701,
+            "cer": 0.0,
+            "heard": "No, the weapon defeated you. Conversation decides whether defeat becomes anything except another grave.",
+            "trimmed": false,
+            "tokenBudget": 328,
+            "seconds": 35.3
+          },
+          {
+            "take": 2,
+            "seed": 1702,
+            "cer": 0.0,
+            "heard": "No, the weapon defeated you. Conversation decides whether defeat becomes anything except another grave.",
+            "trimmed": false,
+            "tokenBudget": 328,
+            "seconds": 29.3
+          }
+        ],
+        "durationSeconds": 6.66,
+        "pitchMedianHz": 125.0,
+        "pitchRangeSemitones": 16.3,
+        "loudnessRangeDb": 19.7
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/17-ren.ogg",
+        "speaker": "ren",
+        "section": "Duel five: the pinned ruler",
+        "direction": "Young, firm, no grandstanding. The last word before the choice.",
+        "text": "違う。お前を倒したのは武器だ。その敗北が、ただの墓で終わるかどうか。それを決めるのは、言葉だ。",
+        "languageId": "ja",
+        "exaggeration": 0.55,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 1701,
+        "cer": 0.0,
+        "heard": "違う。お前を倒したのは武器だ。その敗北が、ただの墓で終わるかどうか、それを決めるのは言葉だ。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1700,
+            "cer": 0.0,
+            "heard": "違う、お前を倒したのは武器だ。その敗北がただの墓で終わるかどうか、それを決めるのは言葉だ。",
+            "trimmed": false,
+            "tokenBudget": 350,
+            "seconds": 41.6
+          },
+          {
+            "take": 1,
+            "seed": 1701,
+            "cer": 0.0,
+            "heard": "違う。お前を倒したのは武器だ。その敗北が、ただの墓で終わるかどうか、それを決めるのは言葉だ。",
+            "trimmed": false,
+            "tokenBudget": 350,
+            "seconds": 35.6
+          },
+          {
+            "take": 2,
+            "seed": 1702,
+            "cer": 0.0,
+            "heard": "違う。お前を倒したのは武器だ。その敗北がただの墓で終わるかどうか、それを決めるのは言葉だ。",
+            "trimmed": false,
+            "tokenBudget": 350,
+            "seconds": 41.4
+          }
+        ],
+        "durationSeconds": 7.24,
+        "pitchMedianHz": 110.4,
+        "pitchRangeSemitones": 9.1,
+        "loudnessRangeDb": 28.5
+      }
+    },
+    "19": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/19-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Shouting back, defensive, the sovereign mask slipping.",
+        "text": "There was no other way, Mateus! He was a rebel!",
+        "languageId": "en",
+        "exaggeration": 0.95,
+        "cfgWeight": 0.3,
+        "fx": "fallen",
+        "chosenTake": 1,
+        "seed": 1901,
+        "cer": 0.057,
+        "heard": "There was no other way, Mattis. He was a rebel.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1900,
+            "cer": 0.114,
+            "heard": "There was no other way, Matthias. He was a rebel.",
+            "trimmed": false,
+            "tokenBudget": 174,
+            "seconds": 23.0
+          },
+          {
+            "take": 1,
+            "seed": 1901,
+            "cer": 0.057,
+            "heard": "There was no other way, Mattis. He was a rebel.",
+            "trimmed": false,
+            "tokenBudget": 174,
+            "seconds": 10.9
+          },
+          {
+            "take": 2,
+            "seed": 1902,
+            "cer": 0.057,
+            "heard": "There was no other way, Mattis. He was a rebel.",
+            "trimmed": false,
+            "tokenBudget": 174,
+            "seconds": 27.8
+          }
+        ],
+        "durationSeconds": 3.32,
+        "pitchMedianHz": 81.0,
+        "pitchRangeSemitones": 7.0,
+        "loudnessRangeDb": 21.5
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/19-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Shouting back, defensive, the sovereign mask slipping.",
+        "text": "ほかに道はなかった、マテウス！　あれは謀反人だった！",
+        "languageId": "ja",
+        "exaggeration": 0.95,
+        "cfgWeight": 0.3,
+        "fx": "fallen",
+        "chosenTake": 0,
+        "seed": 1900,
+        "cer": 0.0,
+        "heard": "他に道はなかったマテウスあれは無本人だった",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 1900,
+            "cer": 0.0,
+            "heard": "他に道はなかったマテウスあれは無本人だった",
+            "trimmed": false,
+            "tokenBudget": 214,
+            "seconds": 16.5
+          },
+          {
+            "take": 1,
+            "seed": 1901,
+            "cer": 0.0,
+            "heard": "他に道はなかったマテウスあれは無本人だった",
+            "trimmed": false,
+            "tokenBudget": 214,
+            "seconds": 19.9
+          },
+          {
+            "take": 2,
+            "seed": 1902,
+            "cer": 0.0,
+            "heard": "他に道はなかったマテウスあれは無本人だった",
+            "trimmed": false,
+            "tokenBudget": 214,
+            "seconds": 12.5
+          }
+        ],
+        "durationSeconds": 3.48,
+        "pitchMedianHz": 100.9,
+        "pitchRangeSemitones": 10.3,
+        "loudnessRangeDb": 32.6
+      }
+    },
+    "20": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/20-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Sudden quiet after the shout; almost a whisper, unbearable.",
+        "text": "You made me watch his execution.",
+        "languageId": "en",
+        "exaggeration": 0.7,
+        "cfgWeight": 0.25,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 2000,
+        "cer": 0.0,
+        "heard": "You made me watch his execution.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2000,
+            "cer": 0.0,
+            "heard": "You made me watch his execution.",
+            "trimmed": false,
+            "tokenBudget": 133,
+            "seconds": 7.9
+          },
+          {
+            "take": 1,
+            "seed": 2001,
+            "cer": 0.0,
+            "heard": "You made me watch his execution.",
+            "trimmed": false,
+            "tokenBudget": 133,
+            "seconds": 24.9
+          },
+          {
+            "take": 2,
+            "seed": 2002,
+            "cer": 0.0,
+            "heard": "You made me watch his execution.",
+            "trimmed": false,
+            "tokenBudget": 133,
+            "seconds": 7.4
+          }
+        ],
+        "durationSeconds": 2.56,
+        "pitchMedianHz": 120.0,
+        "pitchRangeSemitones": 13.4,
+        "loudnessRangeDb": 23.0
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/20-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Sudden quiet after the shout; almost a whisper, unbearable.",
+        "text": "お前は私に、あの子の処刑を見届けさせた。",
+        "languageId": "ja",
+        "exaggeration": 0.7,
+        "cfgWeight": 0.25,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 2000,
+        "cer": 0.0,
+        "heard": "お前は私にあの子の処刑を見届けさせた。",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2000,
+            "cer": 0.0,
+            "heard": "お前は私にあの子の処刑を見届けさせた。",
+            "trimmed": false,
+            "tokenBudget": 175,
+            "seconds": 27.0
+          },
+          {
+            "take": 1,
+            "seed": 2001,
+            "cer": 0.0,
+            "heard": "お前は私にあの子の処刑を見届けさせた。",
+            "trimmed": false,
+            "tokenBudget": 175,
+            "seconds": 15.3
+          },
+          {
+            "take": 2,
+            "seed": 2002,
+            "cer": 0.0,
+            "heard": "お前は私にあの子の処刑を見届けさせた。",
+            "trimmed": false,
+            "tokenBudget": 175,
+            "seconds": 23.8
+          }
+        ],
+        "durationSeconds": 3.96,
+        "pitchMedianHz": 134.7,
+        "pitchRangeSemitones": 10.0,
+        "loudnessRangeDb": 20.6
+      }
+    },
+    "21": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/21-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Lashing out; cruelty as self-defense.",
+        "text": "You demanded the right!",
+        "languageId": "en",
+        "exaggeration": 0.9,
+        "cfgWeight": 0.3,
+        "fx": "fallen",
+        "chosenTake": 2,
+        "seed": 2102,
+        "cer": 0.0,
+        "heard": "You demanded the right.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2100,
+            "cer": 0.105,
+            "heard": "You demand the right.",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 12.1
+          },
+          {
+            "take": 1,
+            "seed": 2101,
+            "cer": 0.0,
+            "heard": "You demanded the right.",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 5.4
+          },
+          {
+            "take": 2,
+            "seed": 2102,
+            "cer": 0.0,
+            "heard": "You demanded the right.",
+            "trimmed": true,
+            "tokenBudget": 108,
+            "seconds": 11.3
+          }
+        ],
+        "durationSeconds": 1.63,
+        "pitchMedianHz": 166.8,
+        "pitchRangeSemitones": 19.3,
+        "loudnessRangeDb": 29.2
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/21-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Lashing out; cruelty as self-defense.",
+        "text": "見届ける権利を求めたのは、お前だ！",
+        "languageId": "ja",
+        "exaggeration": 0.9,
+        "cfgWeight": 0.3,
+        "fx": "fallen",
+        "chosenTake": 0,
+        "seed": 2100,
+        "cer": 0.0,
+        "heard": "見届ける権利を求めたのはお前だ",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2100,
+            "cer": 0.0,
+            "heard": "見届ける権利を求めたのはお前だ",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 16.7
+          },
+          {
+            "take": 1,
+            "seed": 2101,
+            "cer": 0.0,
+            "heard": "見届ける権利を求めたのはお前だ",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 16.5
+          },
+          {
+            "take": 2,
+            "seed": 2102,
+            "cer": 0.0,
+            "heard": "見届ける権利を求めたのはお前だ",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 11.5
+          }
+        ],
+        "durationSeconds": 3.56,
+        "pitchMedianHz": 80.1,
+        "pitchRangeSemitones": 6.2,
+        "loudnessRangeDb": 35.9
+      }
+    },
+    "22": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/22-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Thunderous accusation; the heart of the game.",
+        "text": "Do not speak to me of burden. You made me betray my God!",
+        "languageId": "en",
+        "exaggeration": 1.0,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 2200,
+        "cer": 0.0,
+        "heard": "Do not speak to me of burden. You made me betray my God.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2200,
+            "cer": 0.0,
+            "heard": "Do not speak to me of burden. You made me betray my God.",
+            "trimmed": false,
+            "tokenBudget": 199,
+            "seconds": 13.2
+          },
+          {
+            "take": 1,
+            "seed": 2201,
+            "cer": 0.0,
+            "heard": "Do not speak to me of burden. You made me betray my God.",
+            "trimmed": false,
+            "tokenBudget": 199,
+            "seconds": 16.2
+          },
+          {
+            "take": 2,
+            "seed": 2202,
+            "cer": 0.0,
+            "heard": "Do not speak to me of burden. You made me betray my God.",
+            "trimmed": true,
+            "tokenBudget": 199,
+            "seconds": 19.9
+          }
+        ],
+        "durationSeconds": 3.68,
+        "pitchMedianHz": 125.0,
+        "pitchRangeSemitones": 7.3,
+        "loudnessRangeDb": 18.5
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/22-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Thunderous accusation; the heart of the game.",
+        "text": "“重荷”を語るな。お前は私に、神を裏切らせた！",
+        "languageId": "ja",
+        "exaggeration": 1.0,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 2200,
+        "cer": 0.0,
+        "heard": "主にを語るなお前は私に神を裏切らせた",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2200,
+            "cer": 0.0,
+            "heard": "主にを語るなお前は私に神を裏切らせた",
+            "trimmed": false,
+            "tokenBudget": 194,
+            "seconds": 28.8
+          },
+          {
+            "take": 1,
+            "seed": 2201,
+            "cer": 0.0,
+            "heard": "おもにをかたるなおまえはわたしにかみをうらぎらせた",
+            "trimmed": false,
+            "tokenBudget": 194,
+            "seconds": 13.1
+          },
+          {
+            "take": 2,
+            "seed": 2202,
+            "cer": 0.04,
+            "heard": "主によ語るなお前は私に髪を裏切らせた",
+            "trimmed": false,
+            "tokenBudget": 194,
+            "seconds": 25.2
+          }
+        ],
+        "durationSeconds": 5.0,
+        "pitchMedianHz": 135.9,
+        "pitchRangeSemitones": 12.1,
+        "loudnessRangeDb": 31.8
+      }
+    },
+    "23": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/23-nikola.ogg",
+        "speaker": "nikola",
+        "section": "The Last Command: confession reversal",
+        "direction": "Ecclesiastical Latin (Italianate vowels), low and grave; for once no performance at all.",
+        "text": "Credis in Deum, Shogun?",
+        "languageId": "it",
+        "exaggeration": 0.4,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 2,
+        "seed": 2302,
+        "cer": 0.0,
+        "heard": "Credis in Deum Shogun",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2300,
+            "cer": 0.167,
+            "heard": "Quedising Deum Shogun",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 7.3
+          },
+          {
+            "take": 1,
+            "seed": 2301,
+            "cer": 0.0,
+            "heard": "Credis in Deum Shogun",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 10.7
+          },
+          {
+            "take": 2,
+            "seed": 2302,
+            "cer": 0.0,
+            "heard": "Credis in Deum Shogun",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 7.2
+          }
+        ],
+        "durationSeconds": 2.44,
+        "pitchMedianHz": 108.2,
+        "pitchRangeSemitones": 15.3,
+        "loudnessRangeDb": 21.1
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/23-nikola.ogg",
+        "speaker": "nikola",
+        "section": "The Last Command: confession reversal",
+        "direction": "Ecclesiastical Latin (Italianate vowels), low and grave; for once no performance at all.",
+        "text": "Credis in Deum, Shogun?",
+        "languageId": "it",
+        "exaggeration": 0.4,
+        "cfgWeight": 0.4,
+        "fx": "default",
+        "chosenTake": 1,
+        "seed": 2301,
+        "cer": 0.0,
+        "heard": "credis in deum shogun",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2300,
+            "cer": 0.0,
+            "heard": "Credis in Deum Shogun.",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 13.6
+          },
+          {
+            "take": 1,
+            "seed": 2301,
+            "cer": 0.0,
+            "heard": "credis in deum shogun",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 11.1
+          },
+          {
+            "take": 2,
+            "seed": 2302,
+            "cer": 0.0,
+            "heard": "Credis in Deum Shogun.",
+            "trimmed": false,
+            "tokenBudget": 108,
+            "seconds": 12.1
+          }
+        ],
+        "durationSeconds": 2.52,
+        "pitchMedianHz": 126.0,
+        "pitchRangeSemitones": 10.3,
+        "loudnessRangeDb": 22.7
+      }
+    },
+    "24": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/24-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Translating, steady, giving the question its full weight.",
+        "text": "Shogun. He asks whether you believe in God.",
+        "languageId": "en",
+        "exaggeration": 0.45,
+        "cfgWeight": 0.35,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 2400,
+        "cer": 0.0,
+        "heard": "Shogun, he asks whether you believe in God,",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2400,
+            "cer": 0.0,
+            "heard": "Shogun, he asks whether you believe in God,",
+            "trimmed": false,
+            "tokenBudget": 163,
+            "seconds": 10.1
+          },
+          {
+            "take": 1,
+            "seed": 2401,
+            "cer": 0.0,
+            "heard": "Shogun, he asks whether you believe in God.",
+            "trimmed": false,
+            "tokenBudget": 163,
+            "seconds": 18.1
+          },
+          {
+            "take": 2,
+            "seed": 2402,
+            "cer": 0.0,
+            "heard": "Shogun, he asks whether you believe in God.",
+            "trimmed": false,
+            "tokenBudget": 163,
+            "seconds": 12.5
+          }
+        ],
+        "durationSeconds": 3.48,
+        "pitchMedianHz": 137.8,
+        "pitchRangeSemitones": 28.9,
+        "loudnessRangeDb": 21.4
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/24-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Translating, steady, giving the question its full weight.",
+        "text": "将軍。神を信じるか、と聞いている。",
+        "languageId": "ja",
+        "exaggeration": 0.45,
+        "cfgWeight": 0.35,
+        "fx": "default",
+        "chosenTake": 0,
+        "seed": 2400,
+        "cer": 0.0,
+        "heard": "将軍神を信じるかと聞いている",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2400,
+            "cer": 0.0,
+            "heard": "将軍神を信じるかと聞いている",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 15.3
+          },
+          {
+            "take": 1,
+            "seed": 2401,
+            "cer": 0.0,
+            "heard": "将軍神を信じるかと聞いている",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 26.1
+          },
+          {
+            "take": 2,
+            "seed": 2402,
+            "cer": 0.0,
+            "heard": "将軍、神を信じるかと聞いている。",
+            "trimmed": false,
+            "tokenBudget": 155,
+            "seconds": 16.6
+          }
+        ],
+        "durationSeconds": 3.52,
+        "pitchMedianHz": 133.1,
+        "pitchRangeSemitones": 27.7,
+        "loudnessRangeDb": 26.1
+      }
+    },
+    "26": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/26-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Firm, almost gentle; the sentence of a confessor, not a victor.",
+        "text": "Then do not call it a price. Call it sin.",
+        "languageId": "en",
+        "exaggeration": 0.55,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 2,
+        "seed": 2602,
+        "cer": 0.0,
+        "heard": "then do not call it a price, call it sin,",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2600,
+            "cer": 0.0,
+            "heard": "Then do not call it a price, call it sin,",
+            "trimmed": false,
+            "tokenBudget": 157,
+            "seconds": 12.9
+          },
+          {
+            "take": 1,
+            "seed": 2601,
+            "cer": 0.0,
+            "heard": "Then do not call it a price, call it sin.",
+            "trimmed": false,
+            "tokenBudget": 157,
+            "seconds": 11.3
+          },
+          {
+            "take": 2,
+            "seed": 2602,
+            "cer": 0.0,
+            "heard": "then do not call it a price, call it sin,",
+            "trimmed": false,
+            "tokenBudget": 157,
+            "seconds": 13.7
+          }
+        ],
+        "durationSeconds": 2.76,
+        "pitchMedianHz": 124.2,
+        "pitchRangeSemitones": 13.6,
+        "loudnessRangeDb": 21.1
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/26-mateus.ogg",
+        "speaker": "mateus",
+        "section": "The Last Command: confession reversal",
+        "direction": "Firm, almost gentle; the sentence of a confessor, not a victor.",
+        "text": "ならば、“代価”と言うな。“罪”と言え。",
+        "languageId": "ja",
+        "exaggeration": 0.55,
+        "cfgWeight": 0.3,
+        "fx": "default",
+        "chosenTake": 2,
+        "seed": 2602,
+        "cer": 0.0,
+        "heard": "ならば代価と言うな罪と言え",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2600,
+            "cer": 0.067,
+            "heard": "ならば大化というな罪といえ",
+            "trimmed": false,
+            "tokenBudget": 175,
+            "seconds": 15.2
+          },
+          {
+            "take": 1,
+            "seed": 2601,
+            "cer": 0.2,
+            "heard": "ならば大化というのは罪と言え",
+            "trimmed": false,
+            "tokenBudget": 175,
+            "seconds": 11.6
+          },
+          {
+            "take": 2,
+            "seed": 2602,
+            "cer": 0.0,
+            "heard": "ならば代価と言うな罪と言え",
+            "trimmed": false,
+            "tokenBudget": 175,
+            "seconds": 26.7
+          }
+        ],
+        "durationSeconds": 4.08,
+        "pitchMedianHz": 122.1,
+        "pitchRangeSemitones": 22.5,
+        "loudnessRangeDb": 22.6
+      }
+    },
+    "27": {
+      "en": {
+        "file": "./assets/audio/voice-prototype-v1/en/27-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Begins with the imperial 'yo', catches himself, and finishes as 'watashi': the sovereign fiction ending mid-sentence.",
+        "text": "Not by my... not by my authority. By the authority of those who live after me.",
+        "languageId": "en",
+        "exaggeration": 0.4,
+        "cfgWeight": 0.3,
+        "fx": "mortal",
+        "chosenTake": 2,
+        "seed": 2702,
+        "cer": 0.0,
+        "heard": "not by my, not by my authority, by the authority of those who live after me.",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2700,
+            "cer": 0.0,
+            "heard": "not by my not by my authority by the authority of those who live after me",
+            "trimmed": false,
+            "tokenBudget": 259,
+            "seconds": 12.8
+          },
+          {
+            "take": 1,
+            "seed": 2701,
+            "cer": 0.0,
+            "heard": "not by my, not by my authority, by the authority of those who live after me.",
+            "trimmed": true,
+            "tokenBudget": 259,
+            "seconds": 25.2
+          },
+          {
+            "take": 2,
+            "seed": 2702,
+            "cer": 0.0,
+            "heard": "not by my, not by my authority, by the authority of those who live after me.",
+            "trimmed": false,
+            "tokenBudget": 259,
+            "seconds": 19.7
+          }
+        ],
+        "durationSeconds": 5.64,
+        "pitchMedianHz": 84.4,
+        "pitchRangeSemitones": 9.7,
+        "loudnessRangeDb": 25.9
+      },
+      "ja": {
+        "file": "./assets/audio/voice-prototype-v1/ja/27-kurozane.ogg",
+        "speaker": "kurozane",
+        "section": "The Last Command: confession reversal",
+        "direction": "Begins with the imperial 'yo', catches himself, and finishes as 'watashi': the sovereign fiction ending mid-sentence.",
+        "text": "余の――……私の権威ではない。私の後を生きる者たちの権威によって。",
+        "languageId": "ja",
+        "exaggeration": 0.4,
+        "cfgWeight": 0.3,
+        "fx": "mortal",
+        "chosenTake": 1,
+        "seed": 2701,
+        "cer": 0.029,
+        "heard": "4の私の権威ではない私の後を生きる者たちの権威によって",
+        "takes": [
+          {
+            "take": 0,
+            "seed": 2700,
+            "cer": 0.2,
+            "heard": "世の官房も私の権威ではない 私のあてを生きる者たちの権威によって",
+            "trimmed": false,
+            "tokenBudget": 259,
+            "seconds": 40.3
+          },
+          {
+            "take": 1,
+            "seed": 2701,
+            "cer": 0.029,
+            "heard": "4の私の権威ではない私の後を生きる者たちの権威によって",
+            "trimmed": false,
+            "tokenBudget": 259,
+            "seconds": 39.9
+          },
+          {
+            "take": 2,
+            "seed": 2702,
+            "cer": 0.029,
+            "heard": "世の私の権威ではない私の後を生きる者たちの権威よって",
+            "trimmed": false,
+            "tokenBudget": 259,
+            "seconds": 33.8
+          }
+        ],
+        "durationSeconds": 7.0,
+        "pitchMedianHz": 87.3,
+        "pitchRangeSemitones": 30.2,
+        "loudnessRangeDb": 26.8
       }
     }
   },
   "id": "voice-prototype-v1:last-command",
   "provenance": "AI-generated synthetic voices: Kokoro-82M reference timbres performed by Chatterbox Multilingual; every file carries the Perth watermark. No real person's voice is cloned.",
   "sampleRate": 24000,
-  "targetLufs": -18.0
+  "targetLufs": -18.0,
+  "defaultPauseSeconds": 0.4,
+  "pauseBeforeSeconds": {
+    "18": 1.2,
+    "25": 1.5
+  }
 }
