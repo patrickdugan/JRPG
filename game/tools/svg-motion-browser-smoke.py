@@ -54,6 +54,7 @@ def main():
             npc_asset=page.request.get(base+"/assets/art/svg-cel-suite-v1/sheets/npc-physician-field.svg")
             assert npc_asset.status==200
             page.locator('#castList button[data-actor="nikola-drazanic"]').click()
+            page.locator("#viewMode").select_option("action")
             page.locator("#poseButtons button[data-pose='9']").click()
             screenshot=ROOT.parent/"artifacts"/"svg-motion-studio.png"
             screenshot.parent.mkdir(exist_ok=True,parents=True)
