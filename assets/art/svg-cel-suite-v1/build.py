@@ -53,7 +53,7 @@ def strip(a: dict, variant: str) -> str:
     return "".join(parts)
 
 
-def standalone(a: dict, pose: str, variant: str) -> str:
+def standalone(a: dict, pose: str, variant: str = "action") -> str:
     return header(a, variant, W) + (
         '<g id="cell-%s" data-pose="%s" data-anchor-x="72" '
         'data-anchor-y="149">%s</g>\n</svg>\n' %
