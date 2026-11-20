@@ -1,0 +1,38 @@
+name: Export canonical HD character references
+on:
+  push:
+    branches: [feature/hd-painted-character-motion]
+  workflow_dispatch:
+jobs:
+  references:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify source images and package canonical reference boards
+        run: |
+          python - <<'PY'
+          import json,hashlib,pathlib
+          files = [
+            "assets/art/concepts/dravanic-lance-of-longinus-concept-v2.png",
+            "assets/art/concepts/vampire-priest-concept-v2.png",
+            "assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png",
+            *[f"assets/art/party-portrait-suite-v2/sources/{x}-portrait-expressions-source-v2.png" for x in ("ren","aya","genta","kiku","miyo")],
+            "assets/production/bells-party-roster-v1.png",
+            "assets/production/bells-party-field-atlas-v1.png"
+          ]
+          out=pathlib.Path("hd-art-reference-export")
+          for path in files:
+            p=pathlib.Path(path)
+            assert p.is_file(), path
+            d=out/path
+            d.parent.mkdir(parents=True,exist_ok=True)
+            d.write_bytes(p.read_bytes())
+          manifest={str(p.relative_to(out)):{"sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"bytes":p.stat().st_size} for p in out.rglob("*") if p.is_file()}
+          (out/"source-manifest.json").write_text(json.dumps(manifest,indent=2))
+          print(len(files),"canonical images exported")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-canonical-july-art-references
+          path: hd-art-reference-export/
