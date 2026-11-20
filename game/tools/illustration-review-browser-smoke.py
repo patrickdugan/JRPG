@@ -49,6 +49,8 @@ def smoke() -> dict:
                 })""")
                 assert page.locator("#assetSha").inner_text().strip()
                 assert "/assets/art/july-illustrations-v1/" in page.locator("#sourceImage").get_attribute("src")
+                SCREENSHOT.parent.mkdir(parents=True, exist_ok=True)
+                page.screenshot(path=str(SCREENSHOT.parent / ("july-illustration-" + ident + ".png")), full_page=True)
 
             page.locator('#assetList button[data-asset-id="nikola"]').click()
             page.locator("#verdict").select_option("use-as-reference")
