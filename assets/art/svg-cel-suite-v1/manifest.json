@@ -1,0 +1,2086 @@
+{
+  "schemaVersion": 1,
+  "assetId": "svg-cel-suite-v1",
+  "castPath": "cast.json",
+  "generatorPath": "build.py",
+  "identityCount": 62,
+  "actionSheetCount": 46,
+  "fieldSheetCount": 23,
+  "npcRoleCount": 16,
+  "sheetCount": 69,
+  "generatedCellCount": 686,
+  "frameSize": [
+    144,
+    160
+  ],
+  "simulationRootMotion": true,
+  "imageEmbeds": 0,
+  "exports": [
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/ren-portrait-expressions-source-v2.png",
+      "variant": "action",
+      "output": "sheets/ren-action.svg",
+      "sha256": "5015821e5d4b9a200c44cbcb28691e15bf56df165702180cbf278f4dff356fbe",
+      "bytes": 46533,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "ren",
+      "name": "Ren Ishikawa",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/ren-portrait-expressions-source-v2.png",
+      "variant": "field",
+      "output": "sheets/ren-field.svg",
+      "sha256": "32ef5a5fbbcbe5fc8a609de40cc1f145eb4e0a9958e232bacfb349008e971b74",
+      "bytes": 27691,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/aya-portrait-expressions-source-v2.png",
+      "variant": "action",
+      "output": "sheets/aya-action.svg",
+      "sha256": "db1afa67c0687756de0e2e4e7a3da0126ac47f59c042493e92886c2b8f885d66",
+      "bytes": 51709,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "aya",
+      "name": "Aya Shinohara",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/aya-portrait-expressions-source-v2.png",
+      "variant": "field",
+      "output": "sheets/aya-field.svg",
+      "sha256": "42116dd5b50a36461eef6bd77ff840a134b02b63e9c67870809e7ed29924fe3c",
+      "bytes": 30877,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "nikola-drazanic",
+      "name": "Nikola Dražanić",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/concepts/dravanic-lance-of-longinus-concept-v2.png",
+      "variant": "action",
+      "output": "sheets/nikola-drazanic-action.svg",
+      "sha256": "1cea3c38e4b56cd8b2074df241a95f58e981f84bb4a26bf3d8c8e33a07f9bf3c",
+      "bytes": 52385,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "nikola-drazanic",
+      "name": "Nikola Dražanić",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/concepts/dravanic-lance-of-longinus-concept-v2.png",
+      "variant": "field",
+      "output": "sheets/nikola-drazanic-field.svg",
+      "sha256": "a5784fcc65128e46304e1102823428e5975b2c398ef29543c9d3017f7acdeba2",
+      "bytes": 31009,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/concepts/vampire-priest-concept-v2.png",
+      "variant": "action",
+      "output": "sheets/mateus-action.svg",
+      "sha256": "e5fb12504a107af41ea26c5a19f571a89fbb3b43be5d8d305df30ee0b4916b18",
+      "bytes": 48925,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "mateus",
+      "name": "Father Mateus Avelar",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/concepts/vampire-priest-concept-v2.png",
+      "variant": "field",
+      "output": "sheets/mateus-field.svg",
+      "sha256": "3c9417be0fd9ae6308c45791a013803759e907f1ea5026766f0bc6e636306c08",
+      "bytes": 29158,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/genta-portrait-expressions-source-v2.png",
+      "variant": "action",
+      "output": "sheets/genta-action.svg",
+      "sha256": "b0071f14a84f9fc94bf941c568d1cf783097ae37a5a498e33edd2749a8e68d1a",
+      "bytes": 55498,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "genta",
+      "name": "Genta Mononobe",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/genta-portrait-expressions-source-v2.png",
+      "variant": "field",
+      "output": "sheets/genta-field.svg",
+      "sha256": "95c85740a44e4e80aad189b42d0898f4cb85b21fab332b8729c3ae74737f9bc4",
+      "bytes": 32927,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/kiku-portrait-expressions-source-v2.png",
+      "variant": "action",
+      "output": "sheets/kiku-action.svg",
+      "sha256": "3ab3dd3271c5c8c346e1ab34fa5f57c4abce06aaa7af314830ae71b959cc33f2",
+      "bytes": 50689,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "kiku",
+      "name": "Kiku Nawa",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/kiku-portrait-expressions-source-v2.png",
+      "variant": "field",
+      "output": "sheets/kiku-field.svg",
+      "sha256": "53e3893c12af21a7a85815c03f8f1aa8c5778e118ea31fd6b2ab0612a1d5791a",
+      "bytes": 30247,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "miyo-senda",
+      "name": "Miyo Senda",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/miyo-portrait-expressions-source-v2.png",
+      "variant": "action",
+      "output": "sheets/miyo-senda-action.svg",
+      "sha256": "c7f4c60d16b0663ebbb349406db3109b2c8fc8ebb11d1f8acedbe5423756601c",
+      "bytes": 57054,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "miyo-senda",
+      "name": "Miyo Senda",
+      "group": "party",
+      "rig": "human",
+      "reference": "assets/art/party-portrait-suite-v2/sources/miyo-portrait-expressions-source-v2.png",
+      "variant": "field",
+      "output": "sheets/miyo-senda-field.svg",
+      "sha256": "c10f58071893e7d345db52bb012433f4460069a6ee3e6857c828e07d6e3a2ecd",
+      "bytes": 34167,
+      "poses": [
+        "south-idle",
+        "south-walk",
+        "north-idle",
+        "north-walk",
+        "east-idle",
+        "east-walk",
+        "west-idle",
+        "west-walk"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "cinder-hound",
+      "name": "Cinder Hound",
+      "group": "enemy-v2",
+      "rig": "hound",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/cinder-hound-action.svg",
+      "sha256": "d2a087410939db9d7fe38c6236ced2bdc436a6a6ffe707b31c7763744006ce96",
+      "bytes": 28796,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "ash-wisp",
+      "name": "Ash Wisp",
+      "group": "enemy-v2",
+      "rig": "wisp",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/ash-wisp-action.svg",
+      "sha256": "20736deaba1b5f75857990f8235e097086da9c5c03d948a31acd06455918b890",
+      "bytes": 12108,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "bell-moth",
+      "name": "Bell Moth",
+      "group": "enemy-v2",
+      "rig": "moth",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/bell-moth-action.svg",
+      "sha256": "796e8e617a82849dcbc9d54df3ced7940547c9cc86f489f955d0facf37799eef",
+      "bytes": 13099,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "tithe-enforcer",
+      "name": "Tithe Enforcer",
+      "group": "enemy-v2",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/tithe-enforcer-action.svg",
+      "sha256": "33370d9869d35d0dc72807cadae713cafeece54a6f261b52f82ea3df2a7bc265",
+      "bytes": 44523,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "registry-hound",
+      "name": "Registry Hound",
+      "group": "enemy-v2",
+      "rig": "hound",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/registry-hound-action.svg",
+      "sha256": "8326302b7fb4dab7482ba8bca57ce186f2e0e0e3c3ac6fa92aae481ebc7e1cbb",
+      "bytes": 28828,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "drowned-retainer",
+      "name": "Drowned Retainer",
+      "group": "enemy-v2",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/drowned-retainer-action.svg",
+      "sha256": "78dc03a66d504fca5ad5ef4fc0f76d491a6597f6ef93834aebd0f50b81e587d1",
+      "bytes": 48260,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "lantern-leech",
+      "name": "Lantern Leech",
+      "group": "enemy-v2",
+      "rig": "leech",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/lantern-leech-action.svg",
+      "sha256": "13b83bebfddb47d3fdfceaca39e3e78ba3d9cfeb4b79e6d846a84b72265144a0",
+      "bytes": 11420,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "salt-warden",
+      "name": "Salt Warden",
+      "group": "enemy-v2",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/salt-warden-action.svg",
+      "sha256": "a50acb18f86a352fbce5bee1137e46b399386e62e0ad6c4473e02b7aca198fe1",
+      "bytes": 53822,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "ashen-spearman",
+      "name": "Ashen Spearman",
+      "group": "enemy-v2",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/ashen-spearman-action.svg",
+      "sha256": "cf5101456be5f0d4d8980e009ac2d8900ac88790ec2c8031bf3073d12f43c4cb",
+      "bytes": 51400,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "ashen-banner-guard",
+      "name": "Ashen Banner Guard",
+      "group": "enemy-v2",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/ashen-banner-guard-action.svg",
+      "sha256": "0db14df8ac1b360fe9a435d469f60083f3997aa0a6ad6e60ecbb4231cdbd2813",
+      "bytes": 55663,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "forge-thrall",
+      "name": "Forge Thrall",
+      "group": "enemy-v2",
+      "rig": "forge",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/forge-thrall-action.svg",
+      "sha256": "3744bd6a7d39d234207876da81d870cff4b7c96445a69b4efc24f3025e1b2425",
+      "bytes": 17691,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "bell-scribe",
+      "name": "Bell Scribe",
+      "group": "enemy-v2",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/bell-scribe-action.svg",
+      "sha256": "880af518dc4a8755a4325f4a297f4b71fac03bb51a881217d97777ec9698612d",
+      "bytes": 48661,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "mourning-ronin",
+      "name": "Mourning Ronin",
+      "group": "enemy-v3-human",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/mourning-ronin-action.svg",
+      "sha256": "2a27fbd4a294f7ca6173bda10beb3871124bdf07b7443f6d3867a0c12dd909b4",
+      "bytes": 46733,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "court-arquebusier",
+      "name": "Court Arquebusier",
+      "group": "enemy-v3-human",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/court-arquebusier-action.svg",
+      "sha256": "94694e512019b1dc2fdd527e725424d4abd3ce73c29e6de5cbe052d5838f6944",
+      "bytes": 51617,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "veil-courier",
+      "name": "Veil Courier",
+      "group": "enemy-v3-human",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/veil-courier-action.svg",
+      "sha256": "7c12dab3eb7f6a4884d235ad0473be1593cb1af3521debd10dc0eb7eb91f7880",
+      "bytes": 49769,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "provincial-banner-guard",
+      "name": "Provincial Banner Guard",
+      "group": "enemy-v3-human",
+      "rig": "human",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/provincial-banner-guard-action.svg",
+      "sha256": "e6860c7d306f52bd216f8ed22c8f3fb47c46030b599772bb202720b8cf51fd8c",
+      "bytes": 55743,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "storm-nue",
+      "name": "Storm Nue",
+      "group": "enemy-v3-beast",
+      "rig": "chimera",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/storm-nue-action.svg",
+      "sha256": "5096ef6df3c6687a96bc1b538fe275dbff372a130e976e7564a35bfa98bda2c9",
+      "bytes": 30477,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "dream-baku",
+      "name": "Dream Baku",
+      "group": "enemy-v3-beast",
+      "rig": "baku",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/dream-baku-action.svg",
+      "sha256": "3abda29aefd45ec5eaacc87de3438d6551f0fa1b6636b8c14ff803d0569fa58b",
+      "bytes": 28608,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "twin-tail-nekomata",
+      "name": "Twin-Tail Nekomata",
+      "group": "enemy-v3-beast",
+      "rig": "cat",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/twin-tail-nekomata-action.svg",
+      "sha256": "612e306489f69a1f7bd016bd761457491e9e3311c3e69c559e9158918be33699",
+      "bytes": 29139,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "silk-jorogumo",
+      "name": "Silk Jorogumo",
+      "group": "enemy-v3-beast",
+      "rig": "spider",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/silk-jorogumo-action.svg",
+      "sha256": "b8dc4076400fc27227168eed99b7c73afb021e3bb3f760795699f0c801b1c568",
+      "bytes": 24773,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "sickle-weasel",
+      "name": "Sickle Weasel",
+      "group": "enemy-v3-beast",
+      "rig": "weasel",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/sickle-weasel-action.svg",
+      "sha256": "610f60bc191e275efa3d44e0203f4958bec6419ebd2c856a1ce1efdf88de810f",
+      "bytes": 30463,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "drum-tanuki",
+      "name": "Drum Tanuki",
+      "group": "enemy-v3-beast",
+      "rig": "tanuki",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/drum-tanuki-action.svg",
+      "sha256": "a0e3d0c73de6547ecd75e001e75df37f9f10d9c24e0d05050686edfc10bef24a",
+      "bytes": 29235,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "marsh-kappa-beast",
+      "name": "Marsh Kappa-Beast",
+      "group": "enemy-v3-beast",
+      "rig": "kappa",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/marsh-kappa-beast-action.svg",
+      "sha256": "a32bef5c43495b0b6a688c81fc2ff75c601abc5e280c6e9868865bdb59cd45ce",
+      "bytes": 29968,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "ushi-oni-behemoth",
+      "name": "Ushi-Oni Behemoth",
+      "group": "enemy-v3-beast",
+      "rig": "behemoth",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/ushi-oni-behemoth-action.svg",
+      "sha256": "063d727fd0928cb49644a360a9bf390d62111bd17b6618a6240964ef1d435e91",
+      "bytes": 28889,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "black-chrysanthemum-nest-woman",
+      "name": "Black Chrysanthemum Nest-Woman",
+      "group": "enemy-v3-plant",
+      "rig": "blossom",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/black-chrysanthemum-nest-woman-action.svg",
+      "sha256": "457dc6ed9238bd5ad3da471afa98046cb8192dcfd863b226fa7f1e4bf458a8c2",
+      "bytes": 45203,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "razor-bamboo-stalker",
+      "name": "Razor Bamboo Stalker",
+      "group": "enemy-v3-plant",
+      "rig": "bamboo",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/razor-bamboo-stalker-action.svg",
+      "sha256": "3bc1b1735ad455418eea5165013e51bebec5eb420356c454f33de462ece4a9ae",
+      "bytes": 18393,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "spider-lily-ambusher",
+      "name": "Spider-Lily Ambusher",
+      "group": "enemy-v3-plant",
+      "rig": "lily",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/spider-lily-ambusher-action.svg",
+      "sha256": "dd9bf6c1fe0dc0a3a0c5f7ac796492548536a76adb5268a5e24bcbca541a74a3",
+      "bytes": 36346,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "lantern-vine-maw",
+      "name": "Lantern-Vine Maw",
+      "group": "enemy-v3-plant",
+      "rig": "maw",
+      "reference": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
+      "variant": "action",
+      "output": "sheets/lantern-vine-maw-action.svg",
+      "sha256": "95dbd90190111593276e0c37934cf3f39db74290b46e7fda0634fcf652b9e4ef",
+      "bytes": 23243,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "kurozane-court-human",
+      "name": "Kurozane · Court Human",
+      "group": "boss-state",
+      "rig": "human",
+      "reference": "assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png",
+      "variant": "action",
+      "output": "sheets/kurozane-court-human-action.svg",
+      "sha256": "c8a68ede9e12a612dc697d9058f6f7c86fea281329429943752bb453619e5cdb",
+      "bytes": 50730,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "kurozane-oni-armor",
+      "name": "Kurozane · Oni Armor",
+      "group": "boss-state",
+      "rig": "human",
+      "reference": "assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png",
+      "variant": "action",
+      "output": "sheets/kurozane-oni-armor-action.svg",
+      "sha256": "1d3481b50a7691e4ce0d9872dda574b504bd96eb2eb02ad069e4e37586652932",
+      "bytes": 58693,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "kurozane-demon-mode",
+      "name": "Kurozane · Demon Mode",
+      "group": "boss-state",
+      "rig": "oni",
+      "reference": "assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png",
+      "variant": "action",
+      "output": "sheets/kurozane-demon-mode-action.svg",
+      "sha256": "e0d54d4bfb3ec2eb3c80275be63e9b62b5705abd0da3b7bb50173629ccc47cb4",
+      "bytes": 61985,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "kurozane-ward-broken",
+      "name": "Kurozane · Ward Broken",
+      "group": "boss-state",
+      "rig": "human",
+      "reference": "assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png",
+      "variant": "action",
+      "output": "sheets/kurozane-ward-broken-action.svg",
+      "sha256": "64943e40c55a98bb96156fb34950000c61a0b8d556a090ce422c2d937141d96a",
+      "bytes": 50730,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "captain-kaji",
+      "name": "Captain Kaji",
+      "group": "boss",
+      "rig": "human",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/captain-kaji-action.svg",
+      "sha256": "7ed10b7653276790d72c9c7637b342e6dc58a8f8869f2493962cfb6bc35e351e",
+      "bytes": 52966,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "widow-of-fog",
+      "name": "Widow of Fog",
+      "group": "boss",
+      "rig": "widow",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/widow-of-fog-action.svg",
+      "sha256": "b18f543def0383a3f0919ac8875c9dfc1737bd3f94031753d4eec94360d2970d",
+      "bytes": 13777,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "furnace-abbot",
+      "name": "Furnace Abbot",
+      "group": "boss",
+      "rig": "forge",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/furnace-abbot-action.svg",
+      "sha256": "87f59081dad609fecaa577205283ce1c3a3438f7fe868be3b57aa786a4dc0842",
+      "bytes": 17706,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "ujiro",
+      "name": "Magistrate Ujiro Arata",
+      "group": "boss",
+      "rig": "human",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/ujiro-action.svg",
+      "sha256": "e5e9ccecb4ef3ef1ce1f29d90bb99c2b4b1bdf401d283dfd5c89b03b01b2d488",
+      "bytes": 50457,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "bell-warden-chiyo",
+      "name": "Bell Warden Chiyo",
+      "group": "boss",
+      "rig": "human",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/bell-warden-chiyo-action.svg",
+      "sha256": "033c44e21a920a5fb42afad579363165b4236f9d3cb47ad604f20a5f7bf143c8",
+      "bytes": 56465,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "lady-enma",
+      "name": "Lady Enma of Ash",
+      "group": "boss",
+      "rig": "human",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/lady-enma-action.svg",
+      "sha256": "47f1f240fba7d36dd13d07ebb01e9d59147be899c30d04e759557e8c5e802167",
+      "bytes": 51021,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "yearless-bell",
+      "name": "Yearless Bell",
+      "group": "boss",
+      "rig": "bell",
+      "reference": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
+      "variant": "action",
+      "output": "sheets/yearless-bell-action.svg",
+      "sha256": "4aeb24db06a5cd2a5d5f0ee36b17aee5e27099354021ecb6e54b0964e3bdb215",
+      "bytes": 17193,
+      "poses": [
+        "idle-a",
+        "idle-b",
+        "run-contact",
+        "run-pass",
+        "jump",
+        "windup",
+        "active",
+        "recovery",
+        "guard",
+        "signature",
+        "stagger",
+        "hurt",
+        "defeat"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-speaker",
+      "name": "Community · speaker",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-speaker-field.svg",
+      "sha256": "23880ecde380d8b417c74b4203a075dc893ceb278218edecced686981c303a47",
+      "bytes": 6392,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-interviewee",
+      "name": "Community · interviewee",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-interviewee-field.svg",
+      "sha256": "04e89acb05b75eba6fd1eda721519c8be90c0a1c2e22f0a5f80c90c4e864615b",
+      "bytes": 6412,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-confined-person",
+      "name": "Community · confined person",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-confined-person-field.svg",
+      "sha256": "c0deef93665aa102da3e17bde035a75a39eb951f36341f21763d272546ca704d",
+      "bytes": 6432,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-courier",
+      "name": "Community · courier",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-courier-field.svg",
+      "sha256": "6d0b3ffeffd84321d1c5754d69ff8fc76c0a55ef8e78e026cfcf8d125e4d6fd0",
+      "bytes": 7020,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-dock-worker",
+      "name": "Community · dock worker",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-dock-worker-field.svg",
+      "sha256": "6d511a3f197b60163393e60703e71d052908054b9c1ce82b75baacd0f85dd74a",
+      "bytes": 6822,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-ferry-captain",
+      "name": "Community · ferry captain",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-ferry-captain-field.svg",
+      "sha256": "7872b985e77d49d3df407b46b78dcf4d745667608df2eb7d7bfed91877afbd95",
+      "bytes": 6998,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-market-seller",
+      "name": "Community · market seller",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-market-seller-field.svg",
+      "sha256": "c8bf70bea7a1779466675d8eed13e3a76914d7f8def46d11faa0315dfcfc2f56",
+      "bytes": 7066,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-trade-broker",
+      "name": "Community · trade broker",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-trade-broker-field.svg",
+      "sha256": "47466219f61115ffc377f03a616b47cb34cf1700b6bc23541fddc509bc1edaef",
+      "bytes": 7045,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-print-organizer",
+      "name": "Community · print organizer",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-print-organizer-field.svg",
+      "sha256": "2c1f13ae46dd754b4c5ffe243277089f55041f443c55c2500939a8619a9f0503",
+      "bytes": 7060,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-port-clerk",
+      "name": "Community · port clerk",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-port-clerk-field.svg",
+      "sha256": "a35abfe792d5cd041cea0abc44739750a55c13e28fbc4724ef11a8a98f07967b",
+      "bytes": 7241,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-physician",
+      "name": "Community · physician",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-physician-field.svg",
+      "sha256": "a7a02b20da2626a25ccdd6d23be5b0b0dcd63216c2d1f8190eafca15cc631a61",
+      "bytes": 7900,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-resident",
+      "name": "Community · resident",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-resident-field.svg",
+      "sha256": "b8925974a41ae49b91c2a13ee5b2a154d3fadc9d3ce88e233a4de6c8b0980f45",
+      "bytes": 6397,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-former-retainer",
+      "name": "Community · former retainer",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-former-retainer-field.svg",
+      "sha256": "a5277471d51fe820f188a91de621866efebdb0650d1251042c33005d8c66087b",
+      "bytes": 7122,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-caretaker",
+      "name": "Community · caretaker",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-caretaker-field.svg",
+      "sha256": "d1b6f76660ae77798fafc61afea22f6fdf16bcc29a3907134dccac35e192bb16",
+      "bytes": 6986,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-net-mender",
+      "name": "Community · net mender",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-net-mender-field.svg",
+      "sha256": "b7f29e6d6fd00f06f156661a39bf457846db38b5d8de4eab88baeef569369d75",
+      "bytes": 7763,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    },
+    {
+      "id": "npc-post-keeper",
+      "name": "Community · post keeper",
+      "group": "npc",
+      "rig": "human",
+      "reference": "assets/art/npc-field-suite/npc-field-suite.source.json",
+      "variant": "field",
+      "output": "sheets/npc-post-keeper-field.svg",
+      "sha256": "3e10b0bd00cf63d42115390a57123d43d9b6c491bfd6d333fd6c41969419be41",
+      "bytes": 7040,
+      "poses": [
+        "south-idle",
+        "south-gesture"
+      ],
+      "width": 144,
+      "height": 160,
+      "foot": [
+        72,
+        149
+      ],
+      "provenance": "code-authored-svg-from-concept-contract"
+    }
+  ]
+}
