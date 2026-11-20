@@ -9,8 +9,8 @@ export const ILLUSTRATION_REFERENCES = Object.freeze([
   {
     id: 'nikola',
     label: 'Nikola Dražanić',
-    detail: 'The Croatian hunter, his Longinus spear, and the original Western Gothic graphic silhouette.',
-    approvedUse: 'Character identity, cloak, rapier, heraldic restraint, value grouping, and long-form illustration direction.',
+    detail: 'The Croatian hunter and Longinus spear. This July board is itself pixel-styled, so treat it as character identity evidence while tracing the separate Occidental vector artwork.',
+    approvedUse: 'Historical design evidence: silhouette, cloak, weapon and heraldic construction. Its pixel-style rendering is not the requested vector-art finish.',
     source: {
       path: 'assets/art/concepts/dravanic-lance-of-longinus-concept-v2.png',
       file: 'nikola-original-v2.png',
@@ -29,8 +29,8 @@ export const ILLUSTRATION_REFERENCES = Object.freeze([
   {
     id: 'mateus',
     label: 'Father Mateus Avelar',
-    detail: 'The vampire priest, with precise costume construction and a restrained European Gothic bearing.',
-    approvedUse: 'Character identity, coat and collar construction, grave expression, contour weight, and dramatic shadow.',
+    detail: 'The vampire priest in a textured, painterly July concept with a restrained European Gothic bearing.',
+    approvedUse: 'Historical design evidence: coat, collar, grave expression and character proportions. The painterly treatment is not yet an Occidental vector-style approval.',
     source: {
       path: 'assets/art/concepts/vampire-priest-concept-v2.png',
       file: 'mateus-original-v2.png',
@@ -49,8 +49,8 @@ export const ILLUSTRATION_REFERENCES = Object.freeze([
   {
     id: 'kurozane',
     label: 'Shogun Kurozane',
-    detail: 'The Japanese ruler in human, Oni-armored and blood-fueled states, with one face maintained across transformations.',
-    approvedUse: 'Japanese period portrait conventions, historically grounded armor geometry, and transformation identity continuity.',
+    detail: 'The Japanese ruler in human, Oni-armored and demon states. This source is a painterly illustration, with facial and armor continuity worth preserving.',
+    approvedUse: 'Historical design evidence: Japanese period identity, early-Edo armor geometry, and transformation continuity. A future graphic/vector treatment needs separate approval.',
     source: {
       path: 'assets/art/concepts/kurozane-three-state-demon-mode-concept-v3.png',
       file: 'kurozane-original-v3.png',
