@@ -4,7 +4,7 @@
 
 The high-resolution, original July character images remain in the GitHub repository. They were committed in July 2026, before the August C-drive dump. The archive is preserved under assets/art/concepts and assets/concepts. They are **original PNG illustrations** and reference boards; the repository records no editable character Illustrator/SVG source for these images. "Occidental vector-style illustration" describes the intended visual language, not the encoding of the recovered originals.
 
-The live gameplay sprites, effects and maps remain their own production layer. The original art and that later pixel-derived art should be evaluated side by side before selecting new portraits or key art. Git blob identity proves image preservation, while a human visual review must decide artistic acceptance.
+Visual inspection of the recovered boards matters: Nikola's July v2 original is already pixel-styled. Mateus's v2 concept and Kurozane's v3 concept use textured painterly shading. The July world target was explicitly briefed as pixel art. None of these four images, by itself, establishes the distinct Occidental vector-style originals described by the user. The specific earlier vector-art files have not been identified in the current repository scan. Character identities and costume designs can still be preserved as historical evidence. The live gameplay sprites, effects and maps remain their own production layer. The original art and that later pixel-derived art should be evaluated side by side before selecting new portraits or key art. Git blob identity proves image preservation, while a human visual review must decide artistic acceptance.
 
 ## Sources recovered and linked for review
 
@@ -21,7 +21,7 @@ Comparisons in the archive reference a Nikola pixelification, a complete later p
 
 ## Current illustration direction for future work
 
-Use the July original character concepts as the anchor for a deliberate **Occidental Gothic vector-style illustration language**, with restrained flat areas of ink, clean contour geometry, economical internal lines, readable garment construction, and theatrical light. Apply that graphic method to characters across the Japanese and European cast with their own documented history, anatomy, clothing and identities intact.
+Use these July character concepts as identity and costume evidence when pursuing the user-requested **Occidental Gothic vector-style illustration language**, with restrained flat areas of ink, clean contour geometry, economical internal lines, readable garment construction, and theatrical light. Apply that graphic method to characters across the Japanese and European cast with their own documented history, anatomy, clothing and identities intact.
 
 For Nikola, preserve the Croatian frontier-hunter silhouette, dark oxblood doublet, rain cloak, and long-weapon posture. For Mateus, preserve the weary priest's economy of gesture and cassock-derived layering. Kurozane must retain the original Japanese facial identity across unarmored, Oni-armored and demon modes, supported by early-Edo material and armor references. Japanese characters retain Japanese identity regardless of whether their artwork uses a Western graphic method.
 
