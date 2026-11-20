@@ -1,0 +1,47 @@
+name: Voice audition and hosted browser
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/voice-audition-review]
+  pull_request:
+    paths:
+      - 'game/voice-lab.*'
+      - 'game/voice-review.mjs'
+      - 'game/tests/voice-review.test.mjs'
+      - 'game/tools/voice-review-browser-smoke.py'
+      - '.github/workflows/voice-review-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audition:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate game JavaScript
+        working-directory: game
+        run: npm run check
+      - name: Exercise voice review contract
+        run: node --test game/tests/voice-review.test.mjs
+      - name: Install headless browser
+        run: |
+          python -m pip install 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Check Voice Lab with real browser
+        run: python game/tools/voice-review-browser-smoke.py
+      - name: Preserve visual QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-audition-browser
+          path: artifacts/voice-review-browser.png
+          if-no-files-found: ignore
