@@ -70,14 +70,14 @@ def smoke(chromium: str | None, minimum_lines: int, screenshot_path: Path) -> di
                 page.locator('[data-review-state="en:01"]').wait_for()
                 check(page.locator('[data-review-state="en:01"]').input_value() == 'accepted', 'Reload lost English verdict.')
                 check('Opening vowel clean' in page.locator('[data-review-notes="en:01"]').input_value(), 'Reload lost note.')
-                page.locator('input[name="lang"][value="ja"]').check()
+                page.locator('label:has(input[name="lang"][value="ja"])').click()
                 ja = page.locator('[data-review-state="ja:01"]')
                 ja.wait_for()
                 check(ja.input_value() == 'pending', 'English verdict leaked into Japanese.')
                 ja.select_option('pronunciation')
                 page.locator('[data-review-notes="ja:01"]').fill('Check pitch accent with a native director.')
                 page.locator('[data-review-notes="ja:01"]').blur()
-                page.locator('input[name="lang"][value="en"]').check()
+                page.locator('label:has(input[name="lang"][value="en"])').click()
                 check(page.locator('[data-review-state="en:01"]').input_value() == 'accepted', 'Japanese edit changed English verdict.')
 
                 with page.expect_download() as download_info:
