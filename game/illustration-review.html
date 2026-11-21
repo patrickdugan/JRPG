@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101821">
+  <title>July Illustration Archive | Bells of the Black Chrysanthemum</title>
+  <link rel="stylesheet" href="./illustration-review.css">
+</head>
+<body>
+  <a href="#artReview" class="skip-link">Skip to art</a>
+  <div class="studio">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Bells of the Black Chrysanthemum · Art direction</p>
+        <h1>July Illustration Archive</h1>
+        <p class="lead">Original July artwork preserved in Git, shown beside later pixel treatments. These source boards have mixed raster styles; the separate Occidental vector-art direction still needs its exact source identified.</p>
+      </div>
+      <a href="index.html?dev=1" class="back-link">Return to game</a>
+    </header>
+    <div class="archive-layout">
+      <aside class="index">
+        <h2>Source studies</h2>
+        <nav id="assetList" aria-label="July reference images"></nav>
+        <p class="index-note">The original illustrations are PNG artwork. Vector-style describes the intended graphic language. Editable vector reconstruction needs its own approved source files.</p>
+      </aside>
+      <main id="artReview" class="review" tabindex="-1">
+        <div class="review-heading">
+          <div>
+            <p id="assetCounter" class="eyebrow"></p>
+            <h2 id="assetTitle">Loading original art...</h2>
+            <p id="assetDetail" class="asset-detail"></p>
+          </div>
+          <button id="nextAsset" type="button" class="quiet-button">Next study</button>
+        </div>
+        <div class="visual-grid">
+          <figure class="art-panel original">
+            <div class="panel-label"><strong>July source illustration</strong><span>Original Git blob</span></div>
+            <div class="art-canvas"><img id="sourceImage" alt="Original illustration" decoding="async"></div>
+            <figcaption>
+              <span id="sourceStatus">Loading...</span>
+              <a id="sourceLink" target="_blank" rel="noopener noreferrer">View original on GitHub</a>
+            </figcaption>
+          </figure>
+          <figure class="art-panel derivative">
+            <div class="panel-label"><strong id="laterTitle">Later production treatment</strong><span>Comparison only</span></div>
+            <div class="art-canvas"><img id="laterImage" alt="Later production study" decoding="async"></div>
+            <figcaption id="laterNote"></figcaption>
+          </figure>
+        </div>
+        <div class="review-bottom">
+          <section class="identity-contract" aria-labelledby="identityTitle">
+            <p class="eyebrow">Identity authority</p>
+            <h3 id="identityTitle">Preserve this design</h3>
+            <p id="assetUse"></p>
+            <p class="hash">Source Git object: <code id="assetSha"></code></p>
+          </section>
+          <section class="review-form" aria-labelledby="reviewTitle">
+            <p class="eyebrow">Editorial record, local to this browser</p>
+            <h3 id="reviewTitle">Visual direction verdict</h3>
+            <label for="verdict">Decision</label>
+            <select id="verdict">
+              <option value="unreviewed">Needs visual review</option>
+              <option value="use-as-reference">Use as primary reference</option>
+              <option value="needs-revision">Needs revision / art correction</option>
+            </select>
+            <label for="note">Notes for the next illustration pass</label>
+            <textarea id="note" maxlength="2500" rows="3" placeholder="Face, silhouette, materials, lighting, likeness drift..."></textarea>
+            <div class="review-actions">
+              <button id="exportReview" type="button">Export review JSON</button>
+              <label class="import-button" for="importReview">Import JSON<input id="importReview" type="file" accept=".json,application/json"></label>
+            </div>
+            <output id="reviewStatus" role="status" aria-live="polite"></output>
+          </section>
+        </div>
+      </main>
+    </div>
+    <footer>Source files are byte-identical aliases of the July Git objects. This developer review changes no campaign saves, battle art, or published illustration approvals.</footer>
+  </div>
+  <script type="module" src="./illustration-review.js"></script>
+</body>
+</html>

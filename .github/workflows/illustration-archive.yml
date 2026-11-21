@@ -1,0 +1,57 @@
+name: July illustration source preservation and browser review
+on:
+  push:
+    branches:
+      - feature/july-illustration-recovery
+    paths:
+      - 'game/illustration-*'
+      - 'game/tools/illustration-review-browser-smoke.py'
+      - 'game/tests/illustration-source.test.mjs'
+      - 'game/index.html'
+      - 'game/assets/art/july-illustrations-v1/**'
+      - 'docs/05-art-direction.md'
+      - 'docs/45-july-illustration-recovery.md'
+      - '.github/workflows/illustration-archive.yml'
+  pull_request:
+    paths:
+      - 'game/illustration-*'
+      - 'game/tools/illustration-review-browser-smoke.py'
+      - 'game/tests/illustration-source.test.mjs'
+      - 'game/index.html'
+      - 'game/assets/art/july-illustrations-v1/**'
+      - 'docs/05-art-direction.md'
+      - 'docs/45-july-illustration-recovery.md'
+      - '.github/workflows/illustration-archive.yml'
+  workflow_dispatch:
+
+jobs:
+  original-art:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate JavaScript syntax
+        run: cd game && npm run check
+      - name: Verify exact original PNG blobs and review contracts
+        run: node --test game/tests/illustration-source.test.mjs
+      - name: Install headless browser
+        run: |
+          python -m pip install 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Exercise the rendered archive and export
+        run: python game/tools/illustration-review-browser-smoke.py
+      - name: Preserve the actual visual review and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-illustration-browser-review
+          path: |
+            artifacts/july-illustration-*.png
+            artifacts/july-illustration-review.json
+          if-no-files-found: ignore

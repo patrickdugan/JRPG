@@ -1,5 +1,14 @@
 # Bells of the Black Chrysanthemum — Browser Runtime
 
+## Gothic SVG motion studio
+
+The developer-only [Vector Motion Studio](svg-motion-studio.html) displays editable SVG motion sheets for the 46 combat identities, 7 party field facings, and 16 civilian roles. The code-authored [SVG cel suite](../assets/art/svg-cel-suite-v1/README.md) holds 69 SVG strips and 686 key pose cells. Exact source and game-runtime mirror bytes are validated by the generator. This art-production review surface has no canonical action-combat, quest, save or playtime effects. Run the studio through the same local game server; use index.html?dev=1 to follow its developer link. Historical July concept drawings are separate from these newly authored vector rigs.
+
+## Recovered July source illustrations
+
+The developer-only [July Illustration Archive](illustration-review.html) presents the original July 2026 high-resolution character illustrations directly from unchanged Git blobs, next to later pixel-art treatments. Use `index.html?dev=1` to follow the developer link or open the archive page under the same local game server. Art decisions persist in a dedicated editorial browser key and can be exported/imported as Git-bound review JSON. They do not modify campaign saves, action combat or existing raster art. [Recovery and next-art contract](../docs/45-july-illustration-recovery.md) documents the user-directed Occidental vector-style treatment and the distinction between original illustrated PNGs and editable SVG files.
+
+
 ## Action-combat migration
 
 `action-battle-prototype.html` is the non-canonical side-view real-time feel proof. Ren runs and jumps freely except during fixed wind-up, active-hit, and recovery animation commitment. A shared weapon cooldown and longer Cinder Route cooldown begin only afterward, remain visible in milliseconds, and permit immediate movement. Level changes timers through `max(0.55, 1 - 0.0125 × (level - 1))` without accelerating animation.
