@@ -5,6 +5,9 @@ on:
     paths:
       - 'assets/art/hd-boss-binary-import-v1/**'
       - 'game/tools/hydrate-hd-boss-binary-packages.py'
+      - 'game/tests/hd-boss-art-intakes.test.mjs'
+      - 'game/tests/hd-boss-final-four-intake.test.mjs'
+      - 'game/tests/hd-boss-binary-manifest.test.mjs'
       - '.github/workflows/hd-final-boss-import.yml'
   workflow_dispatch:
 permissions:
