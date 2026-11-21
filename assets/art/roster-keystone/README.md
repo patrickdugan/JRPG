@@ -8,7 +8,7 @@ Do not infer final visual approval from generated image or motion file counts. T
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Playable party | 7 | 7 | 7 | 0 | 7 |
 | Regular enemies | 28 | 12 | 12 | 16 | 28 |
-| Major named bosses | 7 | 7 review candidates (5 individual, 2 composite) | 7 candidate sets | 2 still need standalone premium sources | 7 |
+| Major named bosses | 7 | 7 individual painted review candidates | 7 candidate sets | 0 need standalone sources; matte and motion polish pending | 7 |
 | Kurozane forms | 4 | Shared form study | Shared 6-clip study | Phase-bound optional HD; binaries in ZIP | 4 |
 | Civilian NPC roles | 16 | 0 | 0 | 16 | 16 |
 
@@ -124,3 +124,7 @@ The six-key painted original preserves his salt-cut sword, chain-haul hook, spoo
 - **Human review**: alpha/white matte, foot anchors, pose clarity, armor/period authenticity and effect occlusion.
 
 The reviewer should update statuses in `roster.json` with every approved or committed batch. `game/tests/roster-keystone.test.mjs` validates ID completeness against the canonical sources.
+
+## Final three premium boss source archives committed as Git binaries
+
+Lady Enma, Bell Warden Chiyo and Yearless Bell each have a new individual 1536×1024 source and a ten-clip motion candidate. All three **original, exact source ZIP archives** are now stored as 1.5 MB SHA-verified Git binary chunks under `assets/art/hd-boss-binary-import-v1/`. The hosted import job reconstructs these bytes and commits the unpacked runtime images in separate under-90-MiB Git commits. Original pixel boss clips and gameplay hitboxes remain authoritative. All high-resolution candidates need final visual approval. See [binary import documentation](../../../docs/55-hd-final-boss-binary-import.md).

@@ -1,7 +1,7 @@
 {
   "schema": "jrpg-hd-boss-binary-archives/1",
-  "revision": "2026-11-21",
-  "readyForImport": false,
+  "revision": "2026-11-21-three-full-resolution-archives-in-git",
+  "readyForImport": true,
   "expectedBosses": [
     "lady-enma",
     "bell-warden-chiyo",
@@ -58,6 +58,107 @@
           "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-08.bin",
           "bytes": 561500,
           "gitBlobSHA1": "ecf4e8ea77d0b8aa9993464ede1977e0ed2eb0dd"
+        }
+      ]
+    },
+    "bell-warden-chiyo": {
+      "archive": "JRPG_HD_Boss_bell_warden_chiyo_v2.zip",
+      "bytes": 10742579,
+      "sha256": "bbdc7443ccf63a8e14f73117b07100561e8ca62eca2079ae025186a1982ccd09",
+      "source": "individual 1536x1024 six-pose painted shrine warden",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "1583b4ea6ef42974d2bfdc40d0559beee7b1840d"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "59a607d255139d3c27514327e9e6dbedd374e4f0"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "0005a4442dd945b4de79cd0acb99ed96792cfb3c"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "0e649a88eab0a87556129ad03a482a89a7de912f"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "794f9585b369d52644909dae263dd92a089a5c51"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "a50264ab3e9a708f9d21ba5f6b39861380353e58"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-06.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "9105c1b6e902ed9ac77e93e7451d6d26ae25fb3f"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/bell-warden-chiyo-v2/part-07.bin",
+          "bytes": 242579,
+          "gitBlobSHA1": "f5b073309f0a12cb049839eff4f88d94d5f7b483"
+        }
+      ]
+    },
+    "yearless-bell": {
+      "archive": "JRPG_HD_Boss_yearless_bell_v2.zip",
+      "bytes": 13319588,
+      "sha256": "3eb43fa3b680c9d6f146f82a7938a815a8d9559c00eab59f948fe121cb12913a",
+      "source": "individual 1536x1024 six-pose bronze bell, painted checkerboard-matted",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "d627fa720f55bf223b759f7761114efffc480d34"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "54efda8b2b042773a7df3d867436ab0c6821fe08"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "1266b545cac1d24c15dcf876b5be7d38644449f4"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "770792cc70d50692cedbda0777bf2d597697fed3"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "cdaab2af7720032ccb67b654822b4fcd2808bc6a"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "7050c67fda204e89e79607789d7bb39a68b29244"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-06.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "2e27d66cc5c99cc09d02531760cf33ebebd74201"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-07.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "9a995850d60d2095b1b5a3e0e55b2e4e981ad5b8"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/yearless-bell-v2/part-08.bin",
+          "bytes": 1319588,
+          "gitBlobSHA1": "ef3910db43ab49c302e8c3a6f4cd1d0daaff0a48"
         }
       ]
     }
