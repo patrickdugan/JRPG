@@ -31,13 +31,21 @@ test('three premium boss animation candidate receipts are indexed by canonical b
   }
 });
 
-test('other four named bosses are correctly marked pending for premium body art',()=>{
+test('final four named bosses have review-only body candidates with explicit provenance',()=>{
   for(const id of ['ujiro','bell-warden-chiyo','lady-enma','yearless-bell']){
-    const row=byId[id];
+    const row=byId[id],p='assets/art/roster-keystone/'+id+'-hd-intake.json';
     assert.ok(row && row.kind==='named-boss',id);
-    assert.equal(row.paintedKeyArt,'pending');
-    assert.equal(row.hdMotion24,'pending');
-    assert.equal(row.assetInGit,false);
+    assert.ok(existsSync(base+p),id);
+    const receipt=load(p);
+    assert.equal(receipt.bossId,id);
+    assert.equal(row.paintedKeyArt,row.assetInGit?'candidate-in-Git':'candidate-in-ZIP');
+    assert.equal(row.hdMotion24,row.assetInGit?'candidate-in-Git':'candidate-in-ZIP');
+    assert.equal(receipt.binarySourceInGit,row.assetInGit);
+    assert.equal(receipt.motion.clipCount,10);
+    assert.equal(receipt.motion.frameCount,240);
+    assert.equal(row.visualApproval,'pending');
+    assert.match(receipt.qualityNote,id==='ujiro'?/Standalone six-pose/:/premium/);
+    assert.match(row.hdBossBodyCandidate.sourceSha256,/^[a-f0-9]{64}$/);
   }
 });
 
