@@ -1,7 +1,7 @@
 {
   "schema": "jrpg-hd-boss-binary-archives/2",
-  "revision": "2026-11-22-four-reviewed-archives",
-  "readyForImport": false,
+  "revision": "2026-11-22-four-boss-original-archives-verified-in-git",
+  "readyForImport": true,
   "expectedBosses": [
     "captain-kaji",
     "widow-of-fog",
