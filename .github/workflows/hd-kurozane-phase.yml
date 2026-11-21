@@ -38,10 +38,14 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Exercise HD v2 runtime and six-key image fallback in Chromium
         run: python game/tools/hd-motion-browser-smoke.py
+      - name: Verify all six Kurozane poses draw on actual Chromium canvas
+        run: python game/tools/hd-kurozane-browser-smoke.py
       - name: Save browser evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: kurozane-hd-phase-qa
-          path: artifacts/hd-motion-chromium.png
+          path: |
+            artifacts/hd-motion-chromium.png
+            artifacts/hd-kurozane-phase-browser.png
           if-no-files-found: ignore
