@@ -111,6 +111,8 @@ def import_package(pack,repo,*,apply=False,commit=False,push=False):
     files['game/assets/art/hd-painted-v1/manifest.json']=dump(key)
     files['game/assets/art/hd-painted-v1/motion-manifest.json']=dump(motion)
     if commit:
+        staged=subprocess.check_output(['git','diff','--cached','--name-only'],cwd=repo,text=True).strip()
+        if staged:raise CandidateError('Pre-existing staged changes must be committed separately')
         head=subprocess.check_output(['git','branch','--show-current'],cwd=repo,text=True).strip()
         if not head or head in {'main','master'}:
             raise CandidateError('Refusing Git import to default/detached branch')
