@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21-premium-chiyo-npc-motion",
+  "revision": "2026-11-21-chiyo-premium-civilian-motion-prototype",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -39,6 +39,15 @@
       "clips": 10,
       "frames": 240,
       "binariesInGit": false
+    },
+    "npcMotionSourceCandidate": {
+      "identities": 16,
+      "clips": 96,
+      "cells": 2304,
+      "framesPerClip": 24,
+      "binaryFilesCommitted": false,
+      "source": "original code native pixel sprite atlas",
+      "scope": "optional npc field animation; premium HD paintings remain pending"
     }
   },
   "targets": {
@@ -1114,7 +1123,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-interviewee",
@@ -1133,7 +1169,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-confined-person",
@@ -1152,7 +1215,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-courier",
@@ -1171,7 +1261,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-dock-worker",
@@ -1190,7 +1307,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-ferry-captain",
@@ -1209,7 +1353,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-market-seller",
@@ -1228,7 +1399,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-trade-broker",
@@ -1247,7 +1445,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-print-organizer",
@@ -1266,7 +1491,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-port-clerk",
@@ -1285,7 +1537,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-physician",
@@ -1304,7 +1583,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-resident",
@@ -1323,7 +1629,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-former-retainer",
@@ -1342,7 +1675,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-caretaker",
@@ -1361,7 +1721,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-net-mender",
@@ -1380,7 +1767,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     },
     {
       "id": "npc-post-keeper",
@@ -1399,7 +1813,34 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": false,
+        "visualReview": "pending"
+      }
     }
   ]
 }
