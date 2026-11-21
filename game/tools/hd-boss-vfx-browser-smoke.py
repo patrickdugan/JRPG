@@ -32,8 +32,8 @@ def check():
                     page.wait_for_function("""([boss,phase]) => {
                       const c=document.querySelector('#preview');
                       return c.dataset.loaded==='true'&&c.dataset.boss===boss&&c.dataset.phase===phase;
-                    }""",[boss_id,phase])
-                    page.locator("#frame").fill("9")
+                    }""", arg=[boss_id,phase])
+                    page.locator("#frame").evaluate("(e) => { e.value = '9'; e.dispatchEvent(new Event('input', {bubbles: true})); }")
                     page.wait_for_function("() => document.querySelector('#preview').dataset.frame==='9'")
                     checked.append(boss_id+"/"+phase)
             screenshot=GAME.parent/"artifacts"/"hd-boss-vfx-studio.png"
