@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21-premium-boss-original-binaries-chunked-git",
+  "revision": "2026-11-22-seven-named-boss-runtime-candidates-in-git",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -38,7 +38,7 @@
       "archiveSHA256": "bbdc7443ccf63a8e14f73117b07100561e8ca62eca2079ae025186a1982ccd09",
       "clips": 10,
       "frames": 240,
-      "binariesInGit": false
+      "binariesInGit": true
     },
     "npcMotionSourceCandidate": {
       "identities": 16,
@@ -58,10 +58,41 @@
       "archiveCount": 3,
       "chunks": 26,
       "sourceIntegrity": "SHA-256 and Git blob object SHA-1",
-      "runtimeImport": "pending-bot-commit",
+      "runtimeImport": "complete-three-premium-candidates",
       "clips": 30,
       "frames": 720,
-      "visualApproval": "pending"
+      "visualApproval": "pending",
+      "runtimeAssetsInGit": true
+    },
+    "namedBossArtInGit": {
+      "candidateCount": 7,
+      "committedSourcePaintings": 7,
+      "sixPoseAtlases": 7,
+      "motionClips": 70,
+      "framesPerClip": 24,
+      "totalFrames": 1680,
+      "visualApproval": "pending",
+      "commits": {
+        "captain-kaji": "ece9e4d183b84dc2610300fe4c914304e8be7b3c",
+        "widow-of-fog": "e80eafc4f910cc9a8bfc3c9841ede9a200073620",
+        "furnace-abbot": "dfb4215d447c645beb5cc91986c60bfad933dd81",
+        "ujiro": "b6b2c51254c40354c80eabf67b844cc826337d8d"
+      },
+      "sourceArchives": {
+        "firstThree": {
+          "bytes": 36623667,
+          "parts": 26,
+          "manifest": "assets/art/hd-boss-binary-import-v1/manifest.json"
+        },
+        "remainingFour": {
+          "bytes": 43933244,
+          "parts": 31,
+          "manifest": "assets/art/hd-boss-binary-import-v2/manifest.json",
+          "importRun": "https://github.com/patrickdugan/JRPG/actions/runs/44935663172"
+        }
+      },
+      "engineStatus": "optional-hd-art",
+      "motionSource": "source-derived-frame-deformations"
     }
   },
   "targets": {
