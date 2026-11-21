@@ -451,6 +451,36 @@ const hdPaintedArt = createHdPaintedArtRuntime({
   },
 });
 
+// Committed source-derived animation bridge for the 16 regular enemies whose
+// premium painted six-pose masters remain in production. This art lane comes
+// AFTER the first-party painted pack. Both lanes are presentation-only.
+const hdMissingArt = createHdPaintedArtRuntime({
+  root: './assets/art/hd-painted-v1/overlay-missing-v1/',
+  enabled: hdPaintedEnabled,
+  motionEnabled: hdMotionEnabled,
+  fetchJson: async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Source-derived art HTTP ' + response.status);
+    return response.json();
+  },
+  createImage: () => new Image(),
+  onChange: (id, state) => {
+    elements.canvas.dataset.hdSourceDerivedId = id;
+    elements.canvas.dataset.hdSourceDerivedState = state;
+  },
+  onMotionChange: (id, clip, state) => {
+    elements.canvas.dataset.hdSourceDerivedId = id;
+    elements.canvas.dataset.hdSourceDerivedClip = clip;
+    elements.canvas.dataset.hdSourceDerivedMotionState = state;
+  },
+  onMotionFrame: (id, clip, frame) => {
+    elements.canvas.dataset.hdSourceDerivedId = id;
+    elements.canvas.dataset.hdSourceDerivedClip = clip;
+    elements.canvas.dataset.hdSourceDerivedFrame = String(frame);
+    elements.canvas.dataset.hdSourceDerivedMotionState = 'ready';
+  },
+});
+
 // v2 boss clips: lazily fetch only the bosses this encounter contains. Any
 // failure (fetch, validation, wrong sheet size) leaves the static atlas path.
 const bossAnimationLoader = createAnimationSheetLoader({
@@ -1729,6 +1759,15 @@ function drawActors(snapshot) {
       // decoded atlas has passed its geometry check. Every other state uses
       // the original richly animated pixel path unchanged.
       if (hdPaintedArt.draw(context, actor, templateId(actor.id), {
+        nowMs,
+        phaseProgress: attackPhaseProgress(actor),
+        reducedMotion: reducedMotion.matches,
+      })) {
+        hdArtDrawCount += 1;
+        return;
+      }
+      // Source-derived fallback remains separate from approved painterly HD.
+      if (hdMissingArt.draw(context, actor, templateId(actor.id), {
         nowMs,
         phaseProgress: attackPhaseProgress(actor),
         reducedMotion: reducedMotion.matches,
