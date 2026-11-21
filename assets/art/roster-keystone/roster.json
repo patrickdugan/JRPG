@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21",
+  "revision": "2026-11-21-hd-boss-effects",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -847,7 +847,20 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "generator-committed-awaiting-hosted-art-build",
+        "generator": "game/tools/build-hd-boss-vfx.py",
+        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
+        "cells": 24,
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "furnace-abbot",
@@ -866,7 +879,20 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "generator-committed-awaiting-hosted-art-build",
+        "generator": "game/tools/build-hd-boss-vfx.py",
+        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
+        "cells": 24,
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "ujiro",
@@ -885,7 +911,20 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "generator-committed-awaiting-hosted-art-build",
+        "generator": "game/tools/build-hd-boss-vfx.py",
+        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
+        "cells": 24,
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "bell-warden-chiyo",
@@ -904,7 +943,20 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "generator-committed-awaiting-hosted-art-build",
+        "generator": "game/tools/build-hd-boss-vfx.py",
+        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
+        "cells": 24,
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "lady-enma",
@@ -923,7 +975,20 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "generator-committed-awaiting-hosted-art-build",
+        "generator": "game/tools/build-hd-boss-vfx.py",
+        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
+        "cells": 24,
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "yearless-bell",
@@ -942,7 +1007,20 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "generator-committed-awaiting-hosted-art-build",
+        "generator": "game/tools/build-hd-boss-vfx.py",
+        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
+        "cells": 24,
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "npc-speaker",

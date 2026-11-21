@@ -14,6 +14,10 @@ Do not infer final visual approval from generated image or motion file counts. T
 
 **Existing HD candidate motion count**: 196 clips / 4,704 frames in downloadable packages, consisting of 70 party + 120 regular enemy + 6 Kurozane studies. Additional 160 regular-enemy clips / 3,840 frames are the immediate goal. A separate Git-committed *source-derived* lane may fill engine-visible gaps; it must retain honest provenance distinct from hand-painted HD masters.
 
+## Six-boss HD presentation VFX (review lane)
+
+Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have a versioned 12-frame windup / 12-frame active VFX generator. The generated transparent images remain a separate art stream from boss body animation. **The six premium painted body masters are still pending** and old pixel boss animation remains the exact fallback. Source: [boss VFX documentation](../../../docs/52-hd-boss-vfx.md).
+
 ## Production checklist
 
 | Canonical ID | Kind | Family | Painted master | 24f motion | Binary Git | Engine | Visual review |
