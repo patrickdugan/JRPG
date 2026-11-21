@@ -1,0 +1,58 @@
+name: HD painted 24-frame motion contracts
+on:
+  push:
+    branches: [feature/hd-painted-motion-inbetweens]
+  pull_request:
+    paths:
+      - 'game/hd-painted-animation.mjs'
+      - 'game/hd-painted-motion.mjs'
+      - 'game/action-campaign-battle.js'
+      - 'game/tests/hd-painted-motion.test.mjs'
+      - 'game/tests/hd-painted-animation.test.mjs'
+      - 'docs/49-hd-motion-inbetweens.md'
+      - '.github/workflows/hd-motion-contract.yml'
+  workflow_dispatch:
+
+jobs:
+  engine-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: cd game && npm run check
+      - name: Verify HD v1 fallback and motion v2 phase contracts
+        run: node --test game/tests/hd-painted-animation.test.mjs game/tests/hd-painted-motion.test.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser QA dependencies
+        run: |
+          python -m pip install 'pillow>=11,<13' 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Headless Chromium real image and six-key fallback
+        run: python game/tools/hd-motion-browser-smoke.py
+      - name: Keep browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hd-motion-chromium-smoke
+          path: artifacts/hd-motion-chromium.png
+          if-no-files-found: ignore
+      - name: Ensure v2 rendering stays an optional presentation lane
+        run: |
+          node --input-type=module - <<'JS'
+          import {readFileSync} from 'node:fs';
+          import assert from 'node:assert/strict';
+          const source=readFileSync('game/action-campaign-battle.js','utf8');
+          assert.match(source,/motionEnabled: hdMotionEnabled/);
+          assert.match(source,/phaseProgress: attackPhaseProgress\(actor\)/);
+          assert.match(source,/getHdArtMode\(window.location.search\)/);
+          assert.match(source,/hdPaintedArt.draw\(context, actor/);
+          const motion=readFileSync('game/hd-painted-motion.mjs','utf8');
+          for(const name of ['localStorage','sessionStorage','kernel.advance','actor.hp =']) assert.ok(!motion.includes(name));
+          console.log('HD motion stays presentation-only, with opt-in and fallback');
+          JS
