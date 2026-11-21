@@ -4,6 +4,7 @@
  * The boss's current pixel/painted body remains the default drawing source.
  */
 export const HD_BOSS_VFX_SCHEMA = 'bbc-hd-boss-vfx/1';
+export const HD_BOSS_SOURCE_SCHEMA = 'bbc-hd-boss-vfx-source/1';
 export const HD_BOSS_VFX_ROOT = './assets/art/hd-boss-vfx-v1/';
 export const HD_BOSS_VFX_FRAMES = 12;
 export const HD_BOSS_VFX_CELL = 256;
@@ -37,6 +38,26 @@ export function validateHdBossVfxManifest(manifest) {
           entry.decodedFrameSHA256.length !== 12 ||
           entry.decodedFrameSHA256.some(x=>!HEX64.test(x)) ||
           new Set(entry.decodedFrameSHA256).size !== 12) return {ok:false,reason:'stage:'+id+'/'+stage};
+    }
+  }
+  return {ok:true,reason:'ok'};
+}
+
+/** Exact source-art fallback until hosted PNG generation has completed. */
+export function validateHdBossSourceManifest(data) {
+  if (!data || data.schema !== HD_BOSS_SOURCE_SCHEMA ||
+      data.gameplayAuthority !== 'none' ||
+      data.frameSize?.[0] !== 256 || data.frameSize?.[1] !== 256 ||
+      data.framesPerStage !== 12 || data.totalCells !== 144 ||
+      data.stageCount !== 12 ||
+      Object.keys(data.bosses ?? {}).length !== 6) return {ok:false,reason:'source-header'};
+  for(const id of HD_BOSS_VFX_NAMES){
+    const b=data.bosses[id];
+    if(!b || Object.keys(b.stages ?? {}).length !== 2) return {ok:false,reason:'source-boss:'+id};
+    for(const stage of STAGES){
+      const item=b.stages?.[stage];
+      if(item?.file !== 'vector-sources/'+id+'-'+stage+'.svg' ||
+         !/^[a-f0-9]{40}$/.test(item.gitBlob)) return {ok:false,reason:'source-stage:'+id+'/'+stage};
     }
   }
   return {ok:true,reason:'ok'};
@@ -86,11 +107,17 @@ export function createHdBossVfxRuntime({
   let manifestPromise=null, failure=null;
   function manifest() {
     if (!manifestPromise) manifestPromise=Promise.resolve()
-      .then(()=>fetchJson(root+'manifest.json'))
-      .then(data=>{
-        const v=validateHdBossVfxManifest(data);
-        if (!v.ok) throw new Error(v.reason);
-        return data;
+      .then(async()=>{
+        // Prefer optimized PNG; independently committed editable SVG cels
+        // supply a deterministic fallback while GitHub Actions is queued.
+        try {
+          const png=await fetchJson(root+'manifest.json');
+          if (validateHdBossVfxManifest(png).ok) return png;
+        } catch { /* Source SVG assets remain available as fallback. */ }
+        const vector=await fetchJson(root+'source-manifest.json');
+        const checked=validateHdBossSourceManifest(vector);
+        if(!checked.ok)throw new Error(checked.reason);
+        return vector;
       })
       .catch(e=>{failure=String(e?.message||e);return null});
     return manifestPromise;

@@ -29,7 +29,7 @@ span#readout{font-weight:700}
 <canvas width="512" height="512" id="preview" aria-label="Selected boss attack effect"></canvas>
 <div class="caption"><span id="readout" role="status"></span></div>
 <script type="module">
-import { HD_BOSS_VFX_NAMES, validateHdBossVfxManifest } from './hd-boss-vfx.mjs';
+import { HD_BOSS_VFX_NAMES, validateHdBossVfxManifest, validateHdBossSourceManifest } from './hd-boss-vfx.mjs';
 const boss=document.getElementById('boss'),phase=document.getElementById('phase');
 const frame=document.getElementById('frame'),readout=document.getElementById('readout');
 const canvas=document.getElementById('preview'),ctx=canvas.getContext('2d');
@@ -37,11 +37,21 @@ for(const id of HD_BOSS_VFX_NAMES){const o=document.createElement('option');o.va
 const root='./assets/art/hd-boss-vfx-v1/';
 let image=null,manifest=null,token=0;
 try{
- const resp=await fetch(root+'manifest.json');
- if(!resp.ok)throw new Error('Manifest HTTP '+resp.status);
- manifest=await resp.json();
- const verdict=validateHdBossVfxManifest(manifest);
- if(!verdict.ok)throw new Error('Invalid manifest: '+verdict.reason);
+ let response;
+ try {response=await fetch(root+'manifest.json');}
+ catch {response=null;}
+ if (response?.ok){
+   const candidate=await response.json();
+   if(validateHdBossVfxManifest(candidate).ok)manifest=candidate;
+ }
+ if(!manifest){
+   const source=await fetch(root+'source-manifest.json');
+   if(!source.ok)throw new Error('No committed VFX manifest: HTTP '+source.status);
+   const candidate=await source.json();
+   const verdict=validateHdBossSourceManifest(candidate);
+   if(!verdict.ok)throw new Error('Invalid vector source manifest: '+verdict.reason);
+   manifest=candidate;
+ }
 }catch(e){readout.textContent=String(e);throw e;}
 function draw(){
  ctx.clearRect(0,0,512,512);

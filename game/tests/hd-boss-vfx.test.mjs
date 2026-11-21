@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   HD_BOSS_VFX_NAMES,
-  HD_BOSS_VFX_SCHEMA,
+  HD_BOSS_VFX_SCHEMA, HD_BOSS_SOURCE_SCHEMA, validateHdBossSourceManifest,
   validateHdBossVfxManifest,
   selectHdBossVfx,
   hdBossVfxDrawPlan,
@@ -125,4 +125,29 @@ test('disabled runtime never fetches or changes canvas',async()=>{
   assert.equal(data,null);
   assert.equal(runtime.status,'off');
   assert.equal(fetched,0);
+});
+
+test('directly committed SVG cels provide a working source fallback',async()=>{
+  const meta={schema:HD_BOSS_SOURCE_SCHEMA,gameplayAuthority:'none',
+    frameSize:[256,256],framesPerStage:12,totalCells:144,stageCount:12,
+    bosses:Object.fromEntries(HD_BOSS_VFX_NAMES.map(id=>[id,{
+      stages:Object.fromEntries(['windup','active'].map(stage=>[
+        stage,{file:'vector-sources/'+id+'-'+stage+'.svg',gitBlob:'a'.repeat(40)}
+      ]))
+    }]))};
+  assert.equal(validateHdBossSourceManifest(meta).ok,true);
+  const seen=[];
+  class FakeSVG{
+    naturalWidth=3072;naturalHeight=256;
+    handlers={};addEventListener(event,callback){this.handlers[event]=callback;}
+    set src(v){seen.push(v);this.handlers.load();}
+  }
+  const runtime=createHdBossVfxRuntime({
+    enabled:true,fetchJson:async path=>{
+      if(path.endsWith('/manifest.json'))throw new Error('404 - binary not built yet');
+      return meta;
+    },createImage:()=>new FakeSVG(),
+  });
+  assert.ok(await runtime.request('lady-enma','active'));
+  assert.equal(seen[0].endsWith('/vector-sources/lady-enma-active.svg'),true);
 });

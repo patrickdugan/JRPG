@@ -45,3 +45,11 @@ A high-resolution six-pose Widow of Fog candidate was generated in the
 current ChatGPT conversation and is held for visual review and binary import.
 The other five named bosses still require concept-quality six-key body art,
 character-specific in-betweens, anchored cels and human art approval.
+
+## Immediate Git availability
+
+Twelve SVG strips with 12 editable frame groups each are committed directly
+under game/assets/art/hd-boss-vfx-v1/vector-sources, along with the
+source-manifest.json Git-blob inventory. The browser loader and review studio
+prefer the source-generated PNG strips once they are committed, and render
+these editable SVG strips as the fallback in the meantime.
