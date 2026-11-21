@@ -41,8 +41,16 @@ def make_fixture():
               else ['idle','move','windup','active','hurt','defeat'],
             'sha256':hashlib.sha256(data.read_bytes()).hexdigest()
         }
+    (ART/'cards').mkdir(parents=True,exist_ok=True)
+    card=Image.new('RGB',(768,1152),(32,35,43))
+    ImageDraw.Draw(card).text((90,90),'CINDER HOUND ENCOUNTER ART TEST',fill=(245,205,135))
+    card_path=ART/'cards'/'cinder-hound.png'
+    card.save(card_path)
+    cards={'cinder-hound':{'file':'cards/cinder-hound.png','width':768,'height':1152,
+                          'sha256':hashlib.sha256(card_path.read_bytes()).hexdigest()}}
     manifest=ART/'manifest.json'
-    manifest.write_text(json.dumps({'schema':'bbc-hd-painted/1','frameCount':6,'actors':actors}))
+    manifest.write_text(json.dumps({'schema':'bbc-hd-painted/1','frameCount':6,
+                                   'actors':actors,'cards':cards}))
     return manifest
 
 def probe():
@@ -72,6 +80,10 @@ def probe():
             painted=page.locator('#actionCampaignCanvas').evaluate(
                 "(el)=>({mode:el.dataset.hdArtMode,count:el.dataset.hdArtDrawCount,template:el.dataset.hdArtTemplate})")
             assert painted['mode']=='hd' and int(painted['count'])>0,painted
+            page.locator("#hdEnemyArtLink:not([hidden])").wait_for(timeout=15000)
+            assert page.locator("#hdEnemyArtLink").get_attribute("href").endswith("cards/cinder-hound.png")
+            card_check=page.request.get(base+"/assets/art/hd-painted-v1/cards/cinder-hound.png")
+            assert card_check.status==200, card_check.status
             OUT.mkdir(parents=True,exist_ok=True)
             page.screenshot(path=str(OUT/'painted-action-campaign.png'),full_page=True)
             classic=ctx.new_page()
