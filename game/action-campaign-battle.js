@@ -406,6 +406,7 @@ for (const key of ['party', 'partyAnimation', 'partyExtended', 'enemy', 'enemyAn
 // Developer opt-in rendered-art lane. Loading is lazy, per-template, and can
 // never feed back into the fixed-step kernel, objectives, collision or saves.
 const hdPaintedEnabled = getHdArtMode(window.location.search) === 'hd';
+const hdEnemyCardTemplates = new Set(['silk-jorogumo', 'bell-moth', 'cinder-hound', 'razor-bamboo-stalker']);
 elements.canvas.dataset.hdArtMode = hdPaintedEnabled ? 'hd' : 'classic';
 elements.canvas.dataset.hdArtState = hdPaintedEnabled ? 'loading' : 'off';
 elements.canvas.dataset.hdArtDrawCount = '0';
@@ -420,6 +421,14 @@ const hdPaintedArt = createHdPaintedArtRuntime({
   onChange: (id, state) => {
     elements.canvas.dataset.hdArtTemplate = id;
     elements.canvas.dataset.hdArtState = state;
+    if (state === 'ready' && hdEnemyCardTemplates.has(id)) {
+      const link = document.querySelector('#hdEnemyArtLink');
+      if (link) {
+        link.href = './assets/art/hd-painted-v1/cards/' + id + '.png';
+        link.textContent = 'View ' + id.replaceAll('-', ' ') + ' encounter card';
+        link.hidden = false;
+      }
+    }
   },
 });
 
