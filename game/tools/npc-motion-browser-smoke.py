@@ -34,7 +34,7 @@ def check():
                    return c.dataset.clip===name&&c.dataset.loaded==='16';
                 }""",clip)
                 page.locator("#play").uncheck()
-                page.locator("#frame").fill("17")
+                page.locator("#frame").evaluate("(el) => { el.value = \"17\"; el.dispatchEvent(new Event(\"input\", { bubbles: true })); }")
                 page.wait_for_function("() => document.querySelector('#roster').dataset.frame==='17'")
                 checked.append(clip)
             page.locator("#clip").select_option("walk")
