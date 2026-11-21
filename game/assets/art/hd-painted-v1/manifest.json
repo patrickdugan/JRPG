@@ -43,6 +43,27 @@
         "defeat"
       ],
       "sha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c"
+    },
+    "yearless-bell": {
+      "file": "sheets/yearless-bell.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 194,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "sway",
+        "yearless-ring-windup",
+        "yearless-ring-active",
+        "ward-stagger",
+        "collapse"
+      ],
+      "sha256": "3ccd3009bc336bacbfcd820f0d2935233e212eef4475f18fc360ffc9458f1e6b"
     }
   }
 }

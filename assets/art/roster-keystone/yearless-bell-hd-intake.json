@@ -40,9 +40,13 @@
   },
   "package": "JRPG_HD_Boss_yearless_bell_v2.zip",
   "batch": "3-boss-chunked-git-import-20261121",
-  "binarySourceInGit": false,
+  "binarySourceInGit": true,
   "engineIntegration": "optional-hd-mode-after-import",
   "qualityNote": "Standalone premium-resolution painted source; Individually generated mechanical boss painting with pale/checker matte separation. Silhouette cleanup and manual art review pending.",
   "gameplayAuthority": false,
-  "binaryArchiveInGit": true
+  "binaryArchiveInGit": true,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }
