@@ -422,12 +422,15 @@ const hdPaintedArt = createHdPaintedArtRuntime({
     elements.canvas.dataset.hdArtTemplate = id;
     elements.canvas.dataset.hdArtState = state;
     if (state === 'ready' && hdEnemyCardTemplates.has(id)) {
-      const link = document.querySelector('#hdEnemyArtLink');
-      if (link) {
-        link.href = './assets/art/hd-painted-v1/cards/' + id + '.png';
+      const url = './assets/art/hd-painted-v1/cards/' + id + '.png';
+      fetch(url, { method: 'HEAD' }).then((response) => {
+        if (!response.ok) return;
+        const link = document.querySelector('#hdEnemyArtLink');
+        if (!link) return;
+        link.href = url;
         link.textContent = 'View ' + id.replaceAll('-', ' ') + ' encounter card';
         link.hidden = false;
-      }
+      }).catch(() => {}); // The card is optional; a failed request leaves the link hidden.
     }
   },
 });
