@@ -53,3 +53,7 @@ under game/assets/art/hd-boss-vfx-v1/vector-sources, along with the
 source-manifest.json Git-blob inventory. The browser loader and review studio
 prefer the source-generated PNG strips once they are committed, and render
 these editable SVG strips as the fallback in the meantime.
+
+## Furnace Abbot premium-body candidate
+
+The six-key painted Furnace Abbot candidate has its own checked pack: JRPG_HD_Boss_FurnaceAbbot_v1.zip. It contains a 1536×1024 original image, six 384×384 alpha-extracted keys, ten 24-frame WebP atlases, and an install/check script. The six-key source and the resulting motion are available in the conversation artifact and await binary Git import; no claim of body-art approval is made. See assets/art/roster-keystone/furnace-abbot-hd-intake.json for exact file SHA-256 receipts. The existing Furnace Abbot v2 boss-animation suite remains available as a fallback.

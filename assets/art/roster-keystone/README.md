@@ -8,7 +8,7 @@ Do not infer final visual approval from generated image or motion file counts. T
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Playable party | 7 | 7 | 7 | 0 | 7 |
 | Regular enemies | 28 | 12 | 12 | 16 | 28 |
-| Major named bosses | 7 | 1 candidate (Kaji) | 1 candidate (Kaji) | 6 need HD source | 7 |
+| Major named bosses | 7 | 3 candidates (Kaji, Widow, Furnace) | 3 candidates | 4 need premium HD sources | 7 |
 | Kurozane forms | 4 | Shared form study | Shared 6-clip study | Phase-bound optional HD; binaries in ZIP | 4 |
 | Civilian NPC roles | 16 | 0 | 0 | 16 | 16 |
 
@@ -19,6 +19,8 @@ Do not infer final visual approval from generated image or motion file counts. T
 Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have a versioned 12-frame windup / 12-frame active VFX generator. The generated transparent images remain a separate art stream from boss body animation. **The six premium painted body masters are still pending** and old pixel boss animation remains the exact fallback. Source: [boss VFX documentation](../../../docs/52-hd-boss-vfx.md).
 
 **Widow of Fog candidate (Nov 21):** six newly painted key poses and 240 generated motion cells are packaged for direct art review, with the source hash recorded in [the Widow intake](widow-of-fog-hd-intake.json). These painted binaries remain outside the Git tree pending manual acceptance and upload. The six-boss VFX source, meanwhile, is tracked separately in this branch.
+
+**Furnace Abbot candidate (Nov 21):** six new concept-quality key poses with the canonical Hammer Decree and Forge Sermon tells, ten generated 24-frame clips, and a separately validated installer. See [the Furnace intake](furnace-abbot-hd-intake.json); its binary PNG/WebP assets are distributed in the conversation ZIP pending Git upload and manual visual review. The light-source matte has provisional transparency and requires edge cleanup.
 
 ## Production checklist
 
@@ -65,7 +67,7 @@ Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Be
 | kurozane-ward-broken | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
 | captain-kaji | named-boss | major-boss | candidate-in-ZIP | 240-frame candidate-in-ZIP | pending | optional-HD-after-install | pending |
 | widow-of-fog | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| furnace-abbot | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| furnace-abbot | named-boss | major-boss | candidate-in-ZIP | candidate-in-ZIP | candidate-in-ZIP | optional-hd-after-package-install | candidate-in-ZIP |
 | ujiro | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
 | bell-warden-chiyo | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
 | lady-enma | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
