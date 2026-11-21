@@ -33,9 +33,9 @@ def fixture(folder):
   draw=ImageDraw.Draw(atlas)
   for i in range(24):
    x=(i%12)*192;y=(i//12)*192
-   draw.ellipse((x+80+i%6,y+30,x+120+i%6,y+72),fill='#e8d0b4')
-   draw.polygon([(x+75+i%6,y+70),(x+110+i%6,y+70),
-      (x+124+i%6,y+182),(x+64+i%6,y+182)],fill=(68+j*5,93+j*3,112,255))
+   draw.ellipse((x+80+i,y+30,x+120+i,y+72),fill='#e8d0b4')
+   draw.polygon([(x+75+i,y+70),(x+110+i,y+70),
+      (x+124+i,y+182),(x+64+i,y+182)],fill=(68+j*5,93+j*3,112,255))
   path=folder/'motion/ren'/ (name+'.webp')
   atlas.save(path,'WEBP',quality=92,method=1)
   delivered=Image.open(path).convert('RGBA')
