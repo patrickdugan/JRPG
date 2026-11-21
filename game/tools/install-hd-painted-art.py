@@ -15,7 +15,7 @@ def install(source,check=False):
     if (source/'assets'/'manifest.json').is_file():
         source=source/'assets'
     manifest=json.loads((source/'manifest.json').read_text(encoding='utf-8'))
-    if manifest.get('schema')!='bbc-hd-painted/1' or len(manifest.get('actors',{}))!=12:
+    if manifest.get('schema')!='bbc-hd-painted/1' or len(manifest.get('actors',{}))!=12 or len(manifest.get('cards',{}))!=4:
         raise ValueError('Expected 12 HD character records')
     items=[('manifest.json',source/'manifest.json')]
     for actor,record in manifest['actors'].items():
@@ -28,6 +28,16 @@ def install(source,check=False):
         if not art.is_file() or sha(art)!=record['sha256']:
             raise ValueError('Missing or corrupt sprite for '+actor)
         items.append((rel,art))
+    for actor,record in manifest['cards'].items():
+        if actor not in ('silk-jorogumo','bell-moth','cinder-hound','razor-bamboo-stalker'):
+            raise ValueError('Unrecognized enemy card '+actor)
+        rel='cards/'+actor+'.png'
+        if record['file']!=rel or record['width']!=768 or record['height']!=1152:
+            raise ValueError('Invalid enemy card geometry: '+actor)
+        art=source/rel
+        if not art.is_file() or sha(art)!=record['sha256']:
+            raise ValueError('Missing or corrupt card '+actor)
+        items.append((rel,art))
     if not check:
         for name,src in items:
             dst=TARGET/name
@@ -35,7 +45,7 @@ def install(source,check=False):
             shutil.copyfile(src,dst)
             if sha(dst)!=sha(src):
                 raise IOError('Imported image checksum changed: '+name)
-    print(json.dumps({'ok':True,'checkOnly':check,'atlases':len(items)-1,'target':str(TARGET)},indent=2))
+    print(json.dumps({'ok':True,'checkOnly':check,'atlases':12,'enemyCards':4,'target':str(TARGET)},indent=2))
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('package',type=Path)
