@@ -57,3 +57,30 @@ these editable SVG strips as the fallback in the meantime.
 ## Furnace Abbot premium-body candidate
 
 The six-key painted Furnace Abbot candidate has its own checked pack: JRPG_HD_Boss_FurnaceAbbot_v1.zip. It contains a 1536×1024 original image, six 384×384 alpha-extracted keys, ten 24-frame WebP atlases, and an install/check script. The six-key source and the resulting motion are available in the conversation artifact and await binary Git import; no claim of body-art approval is made. See assets/art/roster-keystone/furnace-abbot-hd-intake.json for exact file SHA-256 receipts. The existing Furnace Abbot v2 boss-animation suite remains available as a fallback.
+
+
+## Importing premium boss candidates to Git in individual batches
+
+The 1536x1024 original paintings and 240-frame candidate packs travel in
+downloadable ZIPs while their binary Git import is outstanding. The repository
+now includes a guarded importer which merges a single boss into the optional HD
+art manifest, checks each WebP's 24 decoded frame SHA-256 hashes, preserves all
+other characters, and commits each boss separately under **90 MiB**.
+
+From a checked-out JRPG repository branch (never main), run:
+
+    python -m pip install Pillow
+    python game/tools/import-hd-boss-pack.py /path/to/JRPG_HD_Boss_CaptainKaji_v1.zip --check
+    python game/tools/import-hd-boss-pack.py /path/to/JRPG_HD_Boss_CaptainKaji_v1.zip --commit --push
+    python game/tools/import-hd-boss-pack.py /path/to/JRPG_HD_Boss_WidowOfFog_v1.zip --commit --push
+    python game/tools/import-hd-boss-pack.py /path/to/JRPG_HD_Boss_FurnaceAbbot_v1.zip --commit --push
+
+Import records original source images separately in
+assets/art/hd-painted-boss-review-v1/<boss-id>/, and adds engine atlases and
+motion strips to game/assets/art/hd-painted-v1/. The importer updates the
+Roster Keystone's binary Git state only when a Git commit is requested;
+visual approval remains pending. It rejects any divergent pre-existing art.
+
+The existing original boss-v2 pixel assets and safe-area telegraphs remain
+untouched. Every full-resolution ZIP remains available through its conversation
+artifact until the corresponding binary import is pushed.
