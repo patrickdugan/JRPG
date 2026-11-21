@@ -1,0 +1,36 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "widow-of-fog",
+  "candidateStatus": "painted-review-candidate",
+  "visualApproval": "pending",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "sourceFile": "sources/widow-of-fog-six-poses-original.png",
+  "sourceSha256": "209e98b3151824ce4858ed5e5e3e3ae3e5dfafd09716edab88126c1260ef7efa",
+  "sixKeyAtlas": "assets/sheets/widow-of-fog.png",
+  "sixKeyAtlasSha256": "2df42dd4559057631957a67eaee908841cbe9c9b9d2ec37eb0188c11c1687970",
+  "poses": [
+    "idle",
+    "fog-glide",
+    "name-drag-windup",
+    "name-drag-release",
+    "receding-call-ring",
+    "defeat"
+  ],
+  "motion": {
+    "clips": 10,
+    "framesPerClip": 24,
+    "totalFrames": 240,
+    "decodedHashesVerified": true,
+    "alphaFromOriginal": true
+  },
+  "package": "JRPG_HD_Boss_WidowOfFog_v1.zip",
+  "packageSize": 12337618,
+  "packageSha256": "74633ea1b17d76252a49dcdd58e81a8487da8144242e68e143801424ad83a17e",
+  "binarySourceInGit": false,
+  "sourceDistribution": "conversation ZIP",
+  "engineIntegration": "optional HD body when package installed; default pixel boss remains fallback",
+  "notes": "Cross-pose optical flow avoided; 24 distinct frames per clip use rigid and cloth-like deformations of one painted source pose."
+}

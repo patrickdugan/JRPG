@@ -18,6 +18,8 @@ Do not infer final visual approval from generated image or motion file counts. T
 
 Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have a versioned 12-frame windup / 12-frame active VFX generator. The generated transparent images remain a separate art stream from boss body animation. **The six premium painted body masters are still pending** and old pixel boss animation remains the exact fallback. Source: [boss VFX documentation](../../../docs/52-hd-boss-vfx.md).
 
+**Widow of Fog candidate (Nov 21):** six newly painted key poses and 240 generated motion cells are packaged for direct art review, with the source hash recorded in [the Widow intake](widow-of-fog-hd-intake.json). These painted binaries remain outside the Git tree pending manual acceptance and upload. The six-boss VFX source, meanwhile, is tracked separately in this branch.
+
 ## Production checklist
 
 | Canonical ID | Kind | Family | Painted master | 24f motion | Binary Git | Engine | Visual review |

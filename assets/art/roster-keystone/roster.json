@@ -839,13 +839,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-ZIP",
+      "sixKeyCelSheet": "candidate-in-ZIP",
+      "hdMotion24": "candidate-in-ZIP",
       "targetClips": 10,
       "framesPerClip": 24,
       "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "engineIntegrated": "optional-hd-after-package-install",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -860,7 +860,9 @@
         "optIn": "?art=hd",
         "bodyPaintingApproved": false,
         "gameplayAuthority": false
-      }
+      },
+      "paintedReviewPackage": "JRPG_HD_Boss_WidowOfFog_v1.zip",
+      "paintedCandidateReceipt": "assets/art/roster-keystone/widow-of-fog-hd-intake.json"
     },
     {
       "id": "furnace-abbot",
