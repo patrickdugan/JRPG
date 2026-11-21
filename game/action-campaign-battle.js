@@ -72,6 +72,7 @@ import {
 } from './boss-combat-atlas.mjs';
 import { animationDrawPlacement, createAnimationSheetLoader } from './animation-clip-runtime.mjs';
 import { createHdPaintedArtRuntime, getHdArtMode } from './hd-painted-animation.mjs';
+import { hdKurozanePhaseId, selectHdKurozaneForm } from './hd-kurozane-phase.mjs';
 import {
   BOSS_ANIMATION_SUITE,
   bossAnimationManifestUrl,
@@ -416,6 +417,7 @@ elements.canvas.dataset.hdMotionClip = '';
 elements.canvas.dataset.hdMotionFrame = '';
 const hdPaintedArt = createHdPaintedArtRuntime({
   enabled: hdPaintedEnabled,
+  allowBossStudies: true,
   motionEnabled: hdMotionEnabled,
   onMotionChange: (id, clip, state) => {
     elements.canvas.dataset.hdMotionTemplate = id;
@@ -1754,12 +1756,20 @@ function drawActors(snapshot) {
     context.beginPath();
     context.ellipse(actor.position.x, actor.position.y + 2, actor.faction === 'player' ? 26 : 34, 7, 0, 0, Math.PI * 2);
     context.fill();
+    const bossForm = templateId(actor.id) === 'kurozane'
+      ? selectHdKurozaneForm(actor, session.bossPhaseDirector)
+      : null;
+    if (bossForm !== null) {
+      setCanvasDataset('hdBossPhase', hdKurozanePhaseId(session.bossPhaseDirector, actor));
+      setCanvasDataset('hdBossForm', String(bossForm));
+    }
     const drawActorBody = () => {
       // HD keyframe artwork only supplants the visible sprite after its
       // decoded atlas has passed its geometry check. Every other state uses
       // the original richly animated pixel path unchanged.
       if (hdPaintedArt.draw(context, actor, templateId(actor.id), {
         nowMs,
+        bossForm,
         phaseProgress: attackPhaseProgress(actor),
         reducedMotion: reducedMotion.matches,
       })) {
