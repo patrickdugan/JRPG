@@ -22,6 +22,27 @@
         "defeat"
       ],
       "sha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb"
+    },
+    "bell-warden-chiyo": {
+      "file": "sheets/bell-warden-chiyo.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 175,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "chain-cast-windup",
+        "chain-cast-active",
+        "ringing-count",
+        "defeat"
+      ],
+      "sha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c"
     }
   }
 }

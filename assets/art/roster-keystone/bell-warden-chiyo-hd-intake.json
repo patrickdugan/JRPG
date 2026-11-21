@@ -40,11 +40,15 @@
   },
   "package": "JRPG_HD_Boss_bell_warden_chiyo_v2.zip",
   "batch": "3-boss-chunked-git-import-20261121",
-  "binarySourceInGit": false,
+  "binarySourceInGit": true,
   "engineIntegration": "optional-hd-mode-after-import",
   "qualityNote": "Standalone premium-resolution painted source; Individual high-resolution six-pose painting with alpha; manual detail and animation polish pending.",
   "gameplayAuthority": false,
   "sourcePixelLimitations": "Standalone individual 1536x1024 RGBA six-pose painting; paintable figure details restored, manual animation/QC pending.",
   "packageSHA256": "bbdc7443ccf63a8e14f73117b07100561e8ca62eca2079ae025186a1982ccd09",
-  "binaryArchiveInGit": true
+  "binaryArchiveInGit": true,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }
