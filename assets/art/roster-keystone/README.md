@@ -18,68 +18,68 @@ Do not infer final visual approval from generated image or motion file counts. T
 
 | Canonical ID | Kind | Family | Painted master | 24f motion | Binary Git | Engine | Visual review |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `ren` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `aya` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `nikola-drazanic` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `mateus` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `genta` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `kiku` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `miyo-senda` | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `cinder-hound` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `ash-wisp` | regular-enemy | initial | pending | pending | pending | fallback-only | pending |
-| `bell-moth` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `tithe-enforcer` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `registry-hound` | regular-enemy | initial | pending | pending | pending | fallback-only | pending |
-| `drowned-retainer` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `lantern-leech` | regular-enemy | initial | pending | pending | pending | fallback-only | pending |
-| `salt-warden` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `ashen-spearman` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `ashen-banner-guard` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `forge-thrall` | regular-enemy | initial | pending | pending | pending | fallback-only | pending |
-| `bell-scribe` | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `mourning-ronin` | regular-enemy | humanoid | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `court-arquebusier` | regular-enemy | humanoid | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `veil-courier` | regular-enemy | humanoid | pending | pending | pending | fallback-only | pending |
-| `provincial-banner-guard` | regular-enemy | humanoid | pending | pending | pending | fallback-only | pending |
-| `storm-nue` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `dream-baku` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `twin-tail-nekomata` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `silk-jorogumo` | regular-enemy | beast | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `sickle-weasel` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `drum-tanuki` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `marsh-kappa-beast` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `ushi-oni-behemoth` | regular-enemy | beast | pending | pending | pending | fallback-only | pending |
-| `black-chrysanthemum-nest-woman` | regular-enemy | plant | pending | pending | pending | fallback-only | pending |
-| `razor-bamboo-stalker` | regular-enemy | plant | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
-| `spider-lily-ambusher` | regular-enemy | plant | pending | pending | pending | fallback-only | pending |
-| `lantern-vine-maw` | regular-enemy | plant | pending | pending | pending | fallback-only | pending |
-| `kurozane-court-human` | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| `kurozane-oni-armor` | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| `kurozane-demon-mode` | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| `kurozane-ward-broken` | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| `captain-kaji` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `widow-of-fog` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `furnace-abbot` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `ujiro` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `bell-warden-chiyo` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `lady-enma` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `yearless-bell` | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| `npc-speaker` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-interviewee` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-confined-person` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-courier` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-dock-worker` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-ferry-captain` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-market-seller` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-trade-broker` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-print-organizer` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-port-clerk` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-physician` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-resident` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-former-retainer` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-caretaker` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-net-mender` | npc | civilian | pending | pending | pending | fallback-only | pending |
-| `npc-post-keeper` | npc | civilian | pending | pending | pending | fallback-only | pending |
+| ren | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| aya | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| nikola-drazanic | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| mateus | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| genta | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| kiku | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| miyo-senda | party | playable | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| cinder-hound | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| ash-wisp | regular-enemy | initial | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| bell-moth | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| tithe-enforcer | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| registry-hound | regular-enemy | initial | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| drowned-retainer | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| lantern-leech | regular-enemy | initial | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| salt-warden | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| ashen-spearman | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| ashen-banner-guard | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| forge-thrall | regular-enemy | initial | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| bell-scribe | regular-enemy | initial | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| mourning-ronin | regular-enemy | humanoid | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| court-arquebusier | regular-enemy | humanoid | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| veil-courier | regular-enemy | humanoid | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| provincial-banner-guard | regular-enemy | humanoid | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| storm-nue | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| dream-baku | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| twin-tail-nekomata | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| silk-jorogumo | regular-enemy | beast | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| sickle-weasel | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| drum-tanuki | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| marsh-kappa-beast | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| ushi-oni-behemoth | regular-enemy | beast | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| black-chrysanthemum-nest-woman | regular-enemy | plant | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| razor-bamboo-stalker | regular-enemy | plant | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
+| spider-lily-ambusher | regular-enemy | plant | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| lantern-vine-maw | regular-enemy | plant | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
+| kurozane-court-human | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
+| kurozane-oni-armor | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
+| kurozane-demon-mode | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
+| kurozane-ward-broken | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
+| captain-kaji | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| widow-of-fog | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| furnace-abbot | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| ujiro | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| bell-warden-chiyo | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| lady-enma | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| yearless-bell | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| npc-speaker | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-interviewee | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-confined-person | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-courier | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-dock-worker | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-ferry-captain | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-market-seller | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-trade-broker | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-print-organizer | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-port-clerk | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-physician | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-resident | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-former-retainer | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-caretaker | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-net-mender | npc | civilian | pending | pending | pending | fallback-only | pending |
+| npc-post-keeper | npc | civilian | pending | pending | pending | fallback-only | pending |
 
 ## Acceptance gates
 

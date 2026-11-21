@@ -209,10 +209,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/ash-wisp.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/ash-wisp.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "bell-moth",
@@ -266,10 +267,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/registry-hound.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/registry-hound.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "drowned-retainer",
@@ -304,10 +306,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/lantern-leech.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/lantern-leech.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "salt-warden",
@@ -380,10 +383,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/forge-thrall.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/forge-thrall.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "bell-scribe",
@@ -456,10 +460,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/veil-courier.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/veil-courier.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "provincial-banner-guard",
@@ -475,10 +480,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/provincial-banner-guard.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/provincial-banner-guard.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "storm-nue",
@@ -494,10 +500,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/storm-nue.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/storm-nue.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "dream-baku",
@@ -513,10 +520,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/dream-baku.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/dream-baku.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "twin-tail-nekomata",
@@ -532,10 +540,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/twin-tail-nekomata.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/twin-tail-nekomata.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "silk-jorogumo",
@@ -570,10 +579,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/sickle-weasel.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/sickle-weasel.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "drum-tanuki",
@@ -589,10 +599,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/drum-tanuki.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/drum-tanuki.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "marsh-kappa-beast",
@@ -608,10 +619,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/marsh-kappa-beast.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/marsh-kappa-beast.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "ushi-oni-behemoth",
@@ -627,10 +639,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/ushi-oni-behemoth.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/ushi-oni-behemoth.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "black-chrysanthemum-nest-woman",
@@ -646,10 +659,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/black-chrysanthemum-nest-woman.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/black-chrysanthemum-nest-woman.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "razor-bamboo-stalker",
@@ -684,10 +698,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/spider-lily-ambusher.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/spider-lily-ambusher.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "lantern-vine-maw",
@@ -703,10 +718,11 @@
       "hdMotion24": "pending",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-source-derived-fallback",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/lantern-vine-maw.png"
+      "sourceDerivedOverlay": "game/assets/art/hd-painted-v1/overlay-missing-v1/sheets/lantern-vine-maw.png",
+      "sourceDerivedStatus": "committed-provisional"
     },
     {
       "id": "kurozane-court-human",
