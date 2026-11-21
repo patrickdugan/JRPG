@@ -1,0 +1,51 @@
+name: Kurozane HD phase binding and fallback
+on:
+  push:
+    branches: [feature/hd-boss-kurozane-phase-20261121]
+  pull_request:
+    paths:
+      - 'game/hd-kurozane-phase.mjs'
+      - 'game/hd-painted-animation.mjs'
+      - 'game/action-campaign-battle.js'
+      - 'game/tests/hd-kurozane-phase.test.mjs'
+      - 'assets/art/roster-keystone/**'
+      - '.github/workflows/hd-kurozane-phase.yml'
+  workflow_dispatch:
+
+jobs:
+  phase-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: cd game && npm run check
+      - name: Verify Kurozane phase keys and original HD fallback
+        run: |
+          node --test game/tests/hd-kurozane-phase.test.mjs game/tests/hd-painted-animation.test.mjs game/tests/hd-painted-motion.test.mjs game/tests/roster-keystone.test.mjs
+      - name: Check non-mutating boss-phase integration
+        run: |
+          node --test game/tests/action-campaign-battle-model.test.mjs game/tests/action-boss-phase.test.mjs game/tests/boss-phase-presentation-runtime.test.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing Chromium image QA
+        run: |
+          python -m pip install 'pillow>=11,<13' 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Exercise HD v2 runtime and six-key image fallback in Chromium
+        run: python game/tools/hd-motion-browser-smoke.py
+      - name: Verify all six Kurozane poses draw on actual Chromium canvas
+        run: python game/tools/hd-kurozane-browser-smoke.py
+      - name: Save browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kurozane-hd-phase-qa
+          path: |
+            artifacts/hd-motion-chromium.png
+            artifacts/hd-kurozane-phase-browser.png
+          if-no-files-found: ignore
