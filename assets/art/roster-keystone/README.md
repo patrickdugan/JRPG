@@ -2,14 +2,14 @@
 
 **Canonical identity and production-status ledger**. Source of truth for the 62-identity JRPG roster, cross-checked against the game's character source, boss source and NPC role taxonomy. [JSON index](./roster.json).
 
-Do not infer final visual approval from generated image or motion file counts. The existing HD motion sources in the downloadable ZIPs are uncommitted candidates. Each painted key sheet has six poses; each normal HD motion set contains 10 clips of 24 frames. Four Kurozane form identities share one six-clip study, pending engine-specific phase mapping.
+Do not infer final visual approval from generated image or motion file counts. The existing HD motion sources in the downloadable ZIPs are uncommitted candidates. Each painted key sheet has six poses; each normal HD motion set contains 10 clips of 24 frames. Four Kurozane form identities share one six-clip study. The optional battle renderer now binds its six study keys to the live court/bell/dawn phase IDs; the painted image binaries remain in the downloadable HD package and visual approval is still pending.
 
 | Type | Identities | Six-key painted candidates | 24-frame motion candidates | Missing HD | Existing pixel animation |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Playable party | 7 | 7 | 7 | 0 | 7 |
 | Regular enemies | 28 | 12 | 12 | 16 | 28 |
 | Major named bosses | 7 | 0 | 0 | 7 | 7 |
-| Kurozane forms | 4 | Shared form study | Shared 6-clip study | Phase mapping | 4 |
+| Kurozane forms | 4 | Shared form study | Shared 6-clip study | Phase-bound optional HD; binaries in ZIP | 4 |
 | Civilian NPC roles | 16 | 0 | 0 | 16 | 16 |
 
 **Existing HD candidate motion count**: 196 clips / 4,704 frames in downloadable packages, consisting of 70 party + 120 regular enemy + 6 Kurozane studies. Additional 160 regular-enemy clips / 3,840 frames are the immediate goal. A separate Git-committed *source-derived* lane may fill engine-visible gaps; it must retain honest provenance distinct from hand-painted HD masters.
@@ -53,10 +53,10 @@ Do not infer final visual approval from generated image or motion file counts. T
 | razor-bamboo-stalker | regular-enemy | plant | candidate-in-ZIP | candidate-in-ZIP | pending | optional-hd-mode | pending |
 | spider-lily-ambusher | regular-enemy | plant | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
 | lantern-vine-maw | regular-enemy | plant | pending | pending | source-derived committed | optional-source-derived-fallback | pending |
-| kurozane-court-human | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| kurozane-oni-armor | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| kurozane-demon-mode | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
-| kurozane-ward-broken | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapping-pending | pending |
+| kurozane-court-human | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
+| kurozane-oni-armor | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
+| kurozane-demon-mode | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
+| kurozane-ward-broken | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
 | captain-kaji | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
 | widow-of-fog | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
 | furnace-abbot | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
@@ -80,6 +80,12 @@ Do not infer final visual approval from generated image or motion file counts. T
 | npc-caretaker | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-net-mender | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-post-keeper | npc | civilian | pending | pending | pending | fallback-only | pending |
+
+## Kurozane painterly form selection
+
+The engine now selects the retained six-frame high-detail Kurozane study through the boss director, rather than guessing from HP alone. In `?art=hd` mode only, `court` uses source keys 01/02 (idle/committed action), `bell` uses keys 03/04, and `dawn` uses 05/06. Defeat holds key 06. The matching 24-frame `form-01` through `form-06` WebP studies are selected through the existing HD motion sampler; the six-key PNG is its immediate fallback. Source art must be installed from the prior HD ZIP before either lane becomes visible.
+
+The original tested boss v2 clip system remains the render fallback when these optional binary files are absent, fail decoding, or lack a valid boss phase. Kurozane's historical human, armor, and demon references survive unchanged. The binding is a presentation-only engineering acceptance, with review of effects, hand-articulated transitions and boss-specific poses still outstanding.
 
 ## Acceptance gates
 
