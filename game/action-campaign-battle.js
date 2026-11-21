@@ -71,6 +71,7 @@ import {
   hasBossCombatTemplate,
 } from './boss-combat-atlas.mjs';
 import { animationDrawPlacement, createAnimationSheetLoader } from './animation-clip-runtime.mjs';
+import { createHdPaintedArtRuntime, getHdArtMode } from './hd-painted-animation.mjs';
 import {
   BOSS_ANIMATION_SUITE,
   bossAnimationManifestUrl,
@@ -401,6 +402,26 @@ function loadArt(key) {
 }
 
 for (const key of ['party', 'partyAnimation', 'partyExtended', 'enemy', 'enemyAnimation', 'boss', 'stage', 'backdrop', 'backdropTiles', 'objective']) loadArt(key);
+
+// Developer opt-in rendered-art lane. Loading is lazy, per-template, and can
+// never feed back into the fixed-step kernel, objectives, collision or saves.
+const hdPaintedEnabled = getHdArtMode(window.location.search) === 'hd';
+elements.canvas.dataset.hdArtMode = hdPaintedEnabled ? 'hd' : 'classic';
+elements.canvas.dataset.hdArtState = hdPaintedEnabled ? 'loading' : 'off';
+elements.canvas.dataset.hdArtDrawCount = '0';
+const hdPaintedArt = createHdPaintedArtRuntime({
+  enabled: hdPaintedEnabled,
+  fetchJson: async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('HD asset HTTP ' + response.status);
+    return response.json();
+  },
+  createImage: () => new Image(),
+  onChange: (id, state) => {
+    elements.canvas.dataset.hdArtTemplate = id;
+    elements.canvas.dataset.hdArtState = state;
+  },
+});
 
 // v2 boss clips: lazily fetch only the bosses this encounter contains. Any
 // failure (fetch, validation, wrong sheet size) leaves the static atlas path.
@@ -1668,6 +1689,7 @@ function drawActors(snapshot) {
   const nowMs = snapshot.kernel.nowMs;
   const ordered = [...snapshot.kernel.actors].sort((a, b) => a.position.y - b.position.y || a.id.localeCompare(b.id));
   const actorLabels = [];
+  let hdArtDrawCount = 0;
   for (const actor of ordered) {
     if (actor.hp <= 0 && actor.statuses.some(({ id }) => id === 'dormant-summon')) continue;
     context.fillStyle = 'rgba(0,0,0,.42)';
@@ -1675,6 +1697,13 @@ function drawActors(snapshot) {
     context.ellipse(actor.position.x, actor.position.y + 2, actor.faction === 'player' ? 26 : 34, 7, 0, 0, Math.PI * 2);
     context.fill();
     const drawActorBody = () => {
+      // HD keyframe artwork only supplants the visible sprite after its
+      // decoded atlas has passed its geometry check. Every other state uses
+      // the original richly animated pixel path unchanged.
+      if (hdPaintedArt.draw(context, actor, templateId(actor.id))) {
+        hdArtDrawCount += 1;
+        return;
+      }
       if (actor.faction === 'player') drawParty(actor, nowMs);
       // Neutral actors (the epilogue's Unfiled Testimony) share the enemy sprite lane.
       else if (actor.faction === 'enemy' || actor.faction === 'neutral') drawEnemy(actor, nowMs);
@@ -1698,6 +1727,7 @@ function drawActors(snapshot) {
     }
     actorLabels.push(actorLabelRequest(actor, actor.id === snapshot.kernel.controlledActorId));
   }
+  setCanvasDataset('hdArtDrawCount', String(hdArtDrawCount));
   const partyStates = ordered.filter((actor) => actor.faction === 'player').map((actor) => {
     const state = partyPresentation.get(actor.id);
     const inner = state?.ring?.inner;
