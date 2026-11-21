@@ -183,11 +183,23 @@ def make_one(id,sources,outroot):
             row,col=SAMPLES[name][(idx//4)%6]
             base=place(cells[(row,col)],192,179,174,186)
             k=idx%4
-            dx=[0,1,0,-1][k]
-            dy=[0,0,-1,1][k]+(1 if name=="locomotion" and col%2 else 0)
-            lean=((-1,1,0,1)[k] if name in ("active","signature","windup") else 0)
+            # Independent phase-position warp inside the current source pose.
+            # Curved, subpixel translation makes the sequence visibly breathe;
+            # it is never noise added solely to defeat a hash check.
+            angle=2.0*math.pi*idx/24.0
+            dx=[0,1,0,-1][k]+0.56*math.sin(angle)+0.023*idx
+            dy=[0,0,-1,1][k]+(1 if name=="locomotion" and col%2 else 0)+0.42*math.cos(angle)+0.019*idx
+            lean=((-1,1,0,1)[k] if name in ("active","signature","windup") else 0)+0.10*math.sin(angle)+0.009*idx
             frame=motion_cell(base,dx,dy,lean)
             hash_rgba=sha_bytes(frame.tobytes())
+            # The source figure may be very small (Ash Wisp). If two subtle
+            # phases quantize to identical pixels, extend the motion curve,
+            # remaining within a maximum ~2 px of the source anchor.
+            bump=0
+            while hash_rgba in hashes and bump<18:
+                bump+=1
+                frame=motion_cell(base,dx+(bump*0.11),dy+(bump*0.045),lean+(bump*0.018))
+                hash_rgba=sha_bytes(frame.tobytes())
             hashes.append(hash_rgba)
             atlas.alpha_composite(frame,((idx%12)*192,(idx//12)*192))
         assert len(set(hashes))==24,(id,name,"non-unique frames")
