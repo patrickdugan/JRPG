@@ -1,3 +1,4 @@
+import { createHdMotionRuntime } from './hd-painted-motion.mjs';
 /**
  * Optional six-key painted animation source for Action Campaign.
  * Presentation only. No changes to fixed-step physics, hitboxes, objectives,
@@ -74,10 +75,11 @@ export function hdPaintedDrawPlan(actor,record,frame) {
   });
 }
 export function createHdPaintedArtRuntime({
-  fetchJson, createImage, root=HD_ART_ROOT, enabled=false, onChange=()=>{},
+  fetchJson, createImage, root=HD_ART_ROOT, enabled=false, motionEnabled=false, onMotionChange=()=>{}, onMotionFrame=()=>{}, onChange=()=>{},
 }={}) {
   if (typeof fetchJson !== 'function' || typeof createImage !== 'function')
     throw new TypeError('fetchJson and createImage must be functions');
+  const motion=createHdMotionRuntime({fetchJson,createImage,root,enabled:enabled&&motionEnabled,onChange:onMotionChange,onFrame:onMotionFrame});
   const states=new Map(),images=new Map(),inflight=new Map();
   let manifestPromise=null,disabledReason=null;
   function state(id,next) {
@@ -138,12 +140,13 @@ export function createHdPaintedArtRuntime({
     const id=resolveHdActorId(template);
     return enabled && id ? states.get(id)??'off' : 'off';
   }
-  function draw(ctx,actor,template) {
+  function draw(ctx,actor,template,options={}) {
     if (!enabled) return false;
     const id=resolveHdActorId(template);
     if (!id) return false;
     const item=images.get(id);
     if (!item) { request(id);return false; }
+    if(motion.draw(ctx,actor,id,item.record,options))return true;
     const frame=selectHdPose(actor,item.record);
     if (frame==null) return false;
     const plan=hdPaintedDrawPlan(actor,item.record,frame);
@@ -161,5 +164,6 @@ export function createHdPaintedArtRuntime({
     get(template){return images.get(resolveHdActorId(template))??null;},
     get enabled(){return enabled;},
     get disabledReason(){return disabledReason;},
+    motion,
   });
 }
