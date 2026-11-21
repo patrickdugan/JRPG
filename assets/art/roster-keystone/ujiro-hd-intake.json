@@ -39,8 +39,12 @@
   },
   "package": "JRPG_HD_Boss_ujiro_v1.zip",
   "batch": "JRPG_HD_Boss_FinalFour_20261121.zip",
-  "binarySourceInGit": false,
+  "binarySourceInGit": true,
   "engineIntegration": "optional-hd-mode-after-import",
   "qualityNote": "Standalone six-pose 1536x1024 RGBA painting, awaiting manual visual approval",
-  "gameplayAuthority": false
+  "gameplayAuthority": false,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }

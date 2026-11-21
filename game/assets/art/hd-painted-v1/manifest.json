@@ -127,6 +127,27 @@
         "defeat"
       ],
       "sha256": "d3dd3c49ef8a0b46f8277e5119e95665ac7f6622da36adec2aee6690735cd053"
+    },
+    "ujiro": {
+      "file": "sheets/ujiro.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 178,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "gavel-line-windup",
+        "gavel-line-active",
+        "seizure-order",
+        "retreat"
+      ],
+      "sha256": "8cbc02bc4f8fe375e6e071eec408e939be4fb60c1acd790795f7a35000879ae1"
     }
   }
 }
