@@ -36,7 +36,7 @@ The Roster Keystone stores each boss source SHA-256, final six-key atlas SHA-256
 
 The source-authored NPC field-motion generator covers the **16 canonical person roles** from `npc-field-suite.source.json`, producing **six clips of 24 derived frames per role** (96 clips and 2,304 cells). The native 32×48 role silhouettes remain authoritative; the new 128×192 WebP animation strips add smoother presentation when `?npcMotion=1` is specified. Standard world interactions, collision geometry, saves and encounter transitions remain unchanged.
 
-The generator and runtime are committed; CI will generate and commit the motion binaries after validation. These are **pixel-derived field-motion studies**, not 16 new individual premium painted NPC characters. Each roster record holds a distinct `npcFieldMotion` status, leaving premium `paintedKeyArt` pending. See [NPC field animation design and verification](../../../docs/54-civilian-npc-motion.md).
+The generator, runtime and all **96 actual WebP motion strips** are committed in Git at [`c1bd6f4`](https://github.com/patrickdugan/JRPG/commit/c1bd6f465c378853911e5930b6cf82834750065b). CI verified 2,304 distinct decoded frames and every asset SHA-256; all 16 civilian entries now carry `npcFieldMotion.binaryGit: true`. These are **pixel-derived field-motion studies**, not 16 new individual premium painted NPC characters. Each roster record holds a distinct `npcFieldMotion` status, leaving premium `paintedKeyArt` pending. See [NPC field animation design and verification](../../../docs/54-civilian-npc-motion.md).
 
 ## Production checklist
 
