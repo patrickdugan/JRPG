@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missing Enemy Motion Review · Bells of the Black Chrysanthemum</title>
+<style>
+:root{color-scheme:dark;font:15px/1.55 system-ui,sans-serif;background:#111820;color:#ede0ca}
+*{box-sizing:border-box}body{margin:0 auto;padding:22px;max-width:1220px}
+h1{font:normal clamp(29px,4vw,50px) Georgia,serif;margin:10px 0}
+p{max-width:900px;color:#cbbdaa}
+a{color:#e2b986}
+header{border-bottom:1px solid #71624f;padding-bottom:16px}
+main{display:grid;grid-template-columns:minmax(0,1.5fr) 310px;gap:22px;margin-top:24px}
+.stage{background:repeating-conic-gradient(#2c363c 0 25%,#39424a 0 50%) 50% / 32px 32px;border:1px solid #776955;min-height:490px;display:grid;place-items:center;padding:14px}
+canvas{display:block;max-width:100%;height:auto}
+.panel{border:1px solid #74604d;padding:18px;align-self:start;background:#1b252d}
+select,button{font:inherit;background:#25343a;color:#eee3d5;border:1px solid #917a55;padding:10px;width:100%}
+label{display:block;margin:13px 0 7px;font-size:12px;color:#dcc59b}
+button{margin-top:16px;cursor:pointer}
+footer{margin:22px 0 10px;color:#a9a293;font-size:13px}
+#status{font-family:ui-monospace,monospace}
+@media(max-width:750px){main{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body>
+<header><a href="./index.html?dev=1">Return to game</a><h1>Missing Enemy Motion</h1>
+<p>Sixteen canonical enemies built from existing source animation cels. These are source-derived provisional candidates, with premium painted masters still awaiting character-specific production approval.</p></header>
+<main><div class="stage"><canvas id="stage" width="384" height="384" role="img" aria-label="Selected enemy animation frame"></canvas></div>
+<section class="panel"><label for="actor">Enemy</label><select id="actor"></select>
+<label for="clip">Animation clip</label><select id="clip"></select>
+<button id="play" type="button" aria-pressed="false">Play motion</button>
+<button id="step" type="button">Next frame</button>
+<p id="status" role="status" aria-live="polite">Loading source-derived assets…</p>
+<p id="trace"></p><p>24 × 192 pixel cells per clip, 12 × 2 frames, with foot anchors and separate SHA-256 receipts.</p></section></main>
+<footer>Game physics, attack bands, hitboxes, and save data use the existing combat engine. This review page edits nothing.</footer>
+<script type="module" src="./hd-source-derived-review.js"></script></body></html>

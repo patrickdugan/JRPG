@@ -1,0 +1,104 @@
+name: JRPG Roster Keystone and missing enemy animation cels
+
+on:
+  push:
+    branches: [feature/roster-keystone-enemy-motion-20261121]
+    paths:
+      - 'assets/art/hd-missing-enemies-v1/build.py'
+      - 'assets/art/hd-missing-enemies-v1/verify.py'
+      - 'assets/art/hd-missing-enemies-v1/mark_status.py'
+      - 'assets/art/hd-missing-enemies-v1/README.md'
+      - 'game/action-campaign-battle.js'
+      - 'game/hd-source-derived-review.*'
+      - 'game/tools/hd-missing-browser-smoke.py'
+      - 'game/tests/roster-keystone.test.mjs'
+      - '.github/workflows/hd-missing-enemy-cels.yml'
+  pull_request:
+    paths:
+      - 'assets/art/hd-missing-enemies-v1/**'
+      - 'assets/art/roster-keystone/**'
+      - 'game/assets/art/hd-painted-v1/overlay-missing-v1/**'
+      - 'game/action-campaign-battle.js'
+      - 'game/hd-source-derived-review.*'
+      - 'game/tests/roster-keystone.test.mjs'
+      - '.github/workflows/hd-missing-enemy-cels.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jrpg-hd-missing-enemies-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-commit-missing-cels:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned image and browser tooling
+        run: |
+          python -m pip install 'pillow==11.3.0' 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Build 16 six-key sheets and 160 motion atlases
+        run: python assets/art/hd-missing-enemies-v1/build.py
+      - name: Verify decoded pixels, file hashes, exact roster and under-90MiB waves
+        run: |
+          python assets/art/hd-missing-enemies-v1/verify.py
+          node --test game/tests/roster-keystone.test.mjs game/tests/hd-painted-animation.test.mjs game/tests/hd-painted-motion.test.mjs
+      - name: Verify browser module syntax
+        run: cd game && npm run check
+      - name: Exercise actual canvas rendering in Chromium
+        run: python game/tools/hd-missing-browser-smoke.py
+      - name: Upload actual roster visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: missing-enemy-16-roster-visual-qa
+          path: |
+            artifacts/hd-missing-enemy-contact.jpg
+            artifacts/hd-missing-enemy-browser.png
+          if-no-files-found: ignore
+      - name: Commit generated enemy assets in batches below 90 MiB
+        if: github.event_name == 'push' && github.ref_name == 'feature/roster-keystone-enemy-motion-20261121'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          root='game/assets/art/hd-painted-v1/overlay-missing-v1'
+          for group in A B C D; do
+            case "$group" in
+              A) ids='ash-wisp registry-hound lantern-leech forge-thrall' ;;
+              B) ids='veil-courier provincial-banner-guard storm-nue dream-baku' ;;
+              C) ids='twin-tail-nekomata sickle-weasel drum-tanuki marsh-kappa-beast' ;;
+              D) ids='ushi-oni-behemoth black-chrysanthemum-nest-woman spider-lily-ambusher lantern-vine-maw' ;;
+            esac
+            for id in $ids; do
+              git add "$root/sheets/$id.png" "$root/motion/$id"
+            done
+            if ! git diff --cached --quiet; then
+              git commit -m "art(enemy): commit 24f source-derived cels wave $group (4 actors)"
+              git push origin HEAD:feature/roster-keystone-enemy-motion-20261121
+            fi
+          done
+          mkdir -p assets/art/hd-missing-enemies-v1/previews
+          cp artifacts/hd-missing-enemy-contact.jpg assets/art/hd-missing-enemies-v1/previews/source-derived-roster.jpg
+          python assets/art/hd-missing-enemies-v1/mark_status.py
+          git add "$root/manifest.json" "$root/motion-manifest.json" \
+            assets/art/hd-missing-enemies-v1/previews/source-derived-roster.jpg \
+            assets/art/roster-keystone/roster.json \
+            assets/art/roster-keystone/README.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'art(enemy): index all 160 committed 24f clips in roster keystone'
+            git push origin HEAD:feature/roster-keystone-enemy-motion-20261121
+          fi
