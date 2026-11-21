@@ -406,12 +406,28 @@ for (const key of ['party', 'partyAnimation', 'partyExtended', 'enemy', 'enemyAn
 // Developer opt-in rendered-art lane. Loading is lazy, per-template, and can
 // never feed back into the fixed-step kernel, objectives, collision or saves.
 const hdPaintedEnabled = getHdArtMode(window.location.search) === 'hd';
+const hdMotionEnabled = hdPaintedEnabled && laboratoryQuery.get('motion') !== '0';
 const hdEnemyCardTemplates = new Set(['silk-jorogumo', 'bell-moth', 'cinder-hound', 'razor-bamboo-stalker']);
 elements.canvas.dataset.hdArtMode = hdPaintedEnabled ? 'hd' : 'classic';
 elements.canvas.dataset.hdArtState = hdPaintedEnabled ? 'loading' : 'off';
 elements.canvas.dataset.hdArtDrawCount = '0';
+elements.canvas.dataset.hdMotionState = hdMotionEnabled ? 'loading' : 'off';
+elements.canvas.dataset.hdMotionClip = '';
+elements.canvas.dataset.hdMotionFrame = '';
 const hdPaintedArt = createHdPaintedArtRuntime({
   enabled: hdPaintedEnabled,
+  motionEnabled: hdMotionEnabled,
+  onMotionChange: (id, clip, state) => {
+    elements.canvas.dataset.hdMotionTemplate = id;
+    elements.canvas.dataset.hdMotionClip = clip;
+    elements.canvas.dataset.hdMotionState = state;
+  },
+  onMotionFrame: (id, clip, frame) => {
+    elements.canvas.dataset.hdMotionTemplate = id;
+    elements.canvas.dataset.hdMotionClip = clip;
+    elements.canvas.dataset.hdMotionFrame = String(frame);
+    elements.canvas.dataset.hdMotionState = 'ready';
+  },
   fetchJson: async (url) => {
     const response = await fetch(url);
     if (!response.ok) throw new Error('HD asset HTTP ' + response.status);
@@ -1712,7 +1728,11 @@ function drawActors(snapshot) {
       // HD keyframe artwork only supplants the visible sprite after its
       // decoded atlas has passed its geometry check. Every other state uses
       // the original richly animated pixel path unchanged.
-      if (hdPaintedArt.draw(context, actor, templateId(actor.id))) {
+      if (hdPaintedArt.draw(context, actor, templateId(actor.id), {
+        nowMs,
+        phaseProgress: attackPhaseProgress(actor),
+        reducedMotion: reducedMotion.matches,
+      })) {
         hdArtDrawCount += 1;
         return;
       }
