@@ -32,6 +32,12 @@ Magistrate Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have six-ke
 
 The Roster Keystone stores each boss source SHA-256, final six-key atlas SHA-256 and exact quality flag. The binary `PNG` and `WebP` assets are not yet in Git; the guarded importer can add them in per-boss commits under 90 MiB. See [import and verification guide](../../../docs/53-hd-boss-final-four.md). Pixel boss animation remains available, and the visuals have yet to pass the final art-review gate.
 
+## Sixteen civilian field-motion candidates
+
+The source-authored NPC field-motion generator covers the **16 canonical person roles** from `npc-field-suite.source.json`, producing **six clips of 24 derived frames per role** (96 clips and 2,304 cells). The native 32×48 role silhouettes remain authoritative; the new 128×192 WebP animation strips add smoother presentation when `?npcMotion=1` is specified. Standard world interactions, collision geometry, saves and encounter transitions remain unchanged.
+
+The generator and runtime are committed; CI will generate and commit the motion binaries after validation. These are **pixel-derived field-motion studies**, not 16 new individual premium painted NPC characters. Each roster record holds a distinct `npcFieldMotion` status, leaving premium `paintedKeyArt` pending. See [NPC field animation design and verification](../../../docs/54-civilian-npc-motion.md).
+
 ## Production checklist
 
 | Canonical ID | Kind | Family | Painted master | 24f motion | Binary Git | Engine | Visual review |
