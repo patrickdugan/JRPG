@@ -106,6 +106,27 @@
         "defeat"
       ],
       "sha256": "2df42dd4559057631957a67eaee908841cbe9c9b9d2ec37eb0188c11c1687970"
+    },
+    "furnace-abbot": {
+      "file": "sheets/furnace-abbot.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 205,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "hammer-decree-windup",
+        "hammer-decree-active",
+        "forge-sermon",
+        "defeat"
+      ],
+      "sha256": "d3dd3c49ef8a0b46f8277e5119e95665ac7f6622da36adec2aee6690735cd053"
     }
   }
 }
