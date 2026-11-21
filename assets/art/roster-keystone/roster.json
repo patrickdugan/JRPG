@@ -849,10 +849,11 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
-        "status": "generator-committed-awaiting-hosted-art-build",
-        "generator": "game/tools/build-hd-boss-vfx.py",
-        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
-        "cells": 24,
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
         "stages": [
           "windup",
           "active"
@@ -883,10 +884,11 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
-        "status": "generator-committed-awaiting-hosted-art-build",
-        "generator": "game/tools/build-hd-boss-vfx.py",
-        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
-        "cells": 24,
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
         "stages": [
           "windup",
           "active"
@@ -915,10 +917,11 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
-        "status": "generator-committed-awaiting-hosted-art-build",
-        "generator": "game/tools/build-hd-boss-vfx.py",
-        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
-        "cells": 24,
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
         "stages": [
           "windup",
           "active"
@@ -947,10 +950,11 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
-        "status": "generator-committed-awaiting-hosted-art-build",
-        "generator": "game/tools/build-hd-boss-vfx.py",
-        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
-        "cells": 24,
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
         "stages": [
           "windup",
           "active"
@@ -979,10 +983,11 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
-        "status": "generator-committed-awaiting-hosted-art-build",
-        "generator": "game/tools/build-hd-boss-vfx.py",
-        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
-        "cells": 24,
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
         "stages": [
           "windup",
           "active"
@@ -1011,10 +1016,11 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
-        "status": "generator-committed-awaiting-hosted-art-build",
-        "generator": "game/tools/build-hd-boss-vfx.py",
-        "artRoot": "game/assets/art/hd-boss-vfx-v1/",
-        "cells": 24,
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
         "stages": [
           "windup",
           "active"
