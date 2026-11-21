@@ -8,7 +8,7 @@ Do not infer final visual approval from generated image or motion file counts. T
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Playable party | 7 | 7 | 7 | 0 | 7 |
 | Regular enemies | 28 | 12 | 12 | 16 | 28 |
-| Major named bosses | 7 | 3 candidates (Kaji, Widow, Furnace) | 3 candidates | 4 need premium HD sources | 7 |
+| Major named bosses | 7 | 7 review candidates (4 individual, 3 composite) | 7 candidate sets | 3 still need standalone premium sources | 7 |
 | Kurozane forms | 4 | Shared form study | Shared 6-clip study | Phase-bound optional HD; binaries in ZIP | 4 |
 | Civilian NPC roles | 16 | 0 | 0 | 16 | 16 |
 
@@ -21,6 +21,12 @@ Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Be
 **Widow of Fog candidate (Nov 21):** six newly painted key poses and 240 generated motion cells are packaged for direct art review, with the source hash recorded in [the Widow intake](widow-of-fog-hd-intake.json). These painted binaries remain outside the Git tree pending manual acceptance and upload. The six-boss VFX source, meanwhile, is tracked separately in this branch.
 
 **Furnace Abbot candidate (Nov 21):** six new concept-quality key poses with the canonical Hammer Decree and Forge Sermon tells, ten generated 24-frame clips, and a separately validated installer. See [the Furnace intake](furnace-abbot-hd-intake.json); its binary PNG/WebP assets are distributed in the conversation ZIP pending Git upload and manual visual review. The light-source matte has provisional transparency and requires edge cleanup.
+
+## Final four named boss HD art candidates
+
+Magistrate Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have six-key candidate bodies and ten 24-frame motion clips each in `JRPG_HD_Boss_FinalFour_20261121.zip`. Ujiro uses an individually generated 1536×1024 painted source. Chiyo, Enma and Yearless Bell use small comparison-poster figures that remain subject to a premium full-resolution redraw. These four add **40 candidate clips and 960 derived frames** to the separate conversation-distributed art packages.
+
+The Roster Keystone stores each boss source SHA-256, final six-key atlas SHA-256 and exact quality flag. The binary `PNG` and `WebP` assets are not yet in Git; the guarded importer can add them in per-boss commits under 90 MiB. See [import and verification guide](../../../docs/53-hd-boss-final-four.md). Pixel boss animation remains available, and the visuals have yet to pass the final art-review gate.
 
 ## Production checklist
 
