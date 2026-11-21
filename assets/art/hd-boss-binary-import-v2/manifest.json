@@ -1,0 +1,196 @@
+{
+  "schema": "jrpg-hd-boss-binary-archives/2",
+  "revision": "2026-11-22-four-reviewed-archives",
+  "readyForImport": false,
+  "expectedBosses": [
+    "captain-kaji",
+    "widow-of-fog",
+    "furnace-abbot",
+    "ujiro"
+  ],
+  "packages": {
+    "captain-kaji": {
+      "archive": "JRPG_HD_Boss_CaptainKaji_v1.zip",
+      "bytes": 10176081,
+      "sha256": "a3c04a74fe458e14ecf5538d80e8ab0ddd7f270fac7d2f0c3d3251d9d9bec35c",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "37a561926c7cde1593ecce1b711b57e6a4eda58d"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "3f33044f8f62aa06f4bca27f59a5d0504ceae08e"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "7195a387a38463afa691757d7ac9f067abe79f6f"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "78a6a096ae3d79124788b9ae536526da7fecf919"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "810f70783f8daf07c1dfbf81b5654dcba16f58f5"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "43563840bf68cdaea890a5b3905cd9bc52852ed1"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/captain-kaji/part-06.bin",
+          "bytes": 1176081,
+          "gitBlobSHA1": "cff265f6edf15b667fdd03b0e98a87e0f6cb991d"
+        }
+      ]
+    },
+    "widow-of-fog": {
+      "archive": "JRPG_HD_Boss_WidowOfFog_v1.zip",
+      "bytes": 12337618,
+      "sha256": "74633ea1b17d76252a49dcdd58e81a8487da8144242e68e143801424ad83a17e",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "b74cfc1deaae2dd8f5070a7d161f768eff2e8fa7"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "cb89599e01074fca6c8ead2848196345601a23ef"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "3adab299d4f2a8f41449b4ddb442814e561d2261"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "a151b76029a412e16b8b0e9db7a1882cc1f8168e"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "c2f95062589ffa5fac3a4174d5580258333e5cf7"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "8bf43c0a256e2e919e5357a7dbe58ac0e344e7fa"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-06.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "3196b8353bdb5b16b64e7e40ece905fc3f8e60da"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-07.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "1040c70b2ae7d2d1e4b300f356a815a313aec03f"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/widow-of-fog/part-08.bin",
+          "bytes": 337618,
+          "gitBlobSHA1": "c4c83a838b5fa6e62397ce36ee24f1ac9b9e41cb"
+        }
+      ]
+    },
+    "furnace-abbot": {
+      "archive": "JRPG_HD_Boss_FurnaceAbbot_v1.zip",
+      "bytes": 11660729,
+      "sha256": "746a009bdd428f377b846519cb3dc40f476d043f27bd1ad9a02550f3a16110da",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "81833fba874490fb8cc62fb6e033ce7dea50340d"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "be2ef55c44fb30c49456816835d19e26b784452a"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "90e2f10997f1c2e788675997156cb2b533ed7af6"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "f89a487343aac06b6166642e0f0756acd254022b"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "1b61aa5a5fa6895cd00f81c242da7f3f1cfca690"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "3a59df1660d1f3b822206ea8facdd2e438e44d81"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-06.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "89bfeff3daf57a5de6784d4ce5857544ed71091e"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/furnace-abbot/part-07.bin",
+          "bytes": 1160729,
+          "gitBlobSHA1": "a3441ff51195c3f4d3e4a53320099e9ce41db1b3"
+        }
+      ]
+    },
+    "ujiro": {
+      "archive": "JRPG_HD_Boss_Ujiro_v1.zip",
+      "bytes": 9758816,
+      "sha256": "b307082bfa410fe87e7aad0c97fc0eb68bd00f8938f9d66547e18986903cf3cd",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "09ea191a6baa7fdffc982342895fca4f28771c27"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "40850ac8efca959de98c486d208e083a59627d4e"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "ea724759dbf97125f81be74ab35a17eb5d3ac23b"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "a810709aea79adaed77c4e327d46bd8f8f1a8c94"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "3b036361a1271a5728bb0fdac27cb933a4280600"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "1888738ec2670a185c03d2f23d5ff8b1302d10d5"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v2/ujiro/part-06.bin",
+          "bytes": 758816,
+          "gitBlobSHA1": "be54ab999714650706617ba61a5c901401f86bde"
+        }
+      ]
+    }
+  }
+}
