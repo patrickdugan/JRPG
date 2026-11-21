@@ -1,32 +1,37 @@
-# HD Painted Art: Action Campaign Integration
+# HD painted animation: Action Campaign engine integration
 
-The side-view action battle renderer now has a reversible, opt-in painted animation lane. Open
-\`game/action-campaign-battle.html?encounter=c1-cinder-hounds&lead=ren&support=miyo&art=hd\`
-on the game's normal HTTP server to preview it. Without \`art=hd\`, the original
-pixel sprites and all their timing remain the default.
+The action battle renderer now supports an **opt-in, reversible** painted animation mode:
 
-The \`game/hd-painted-animation.mjs\` loader reads a local \`manifest.json\`,
-loads only needed character atlases, checks exact image dimensions, selects
-one of six authored poses from the simulation's existing windup, active,
-recovery, movement, hit and defeat states, and draws the image at the existing
-foot anchor. Missing, invalid, or wrong-size sheets use the normal game
-sprite path. Collision, hitboxes, objectives, progression and saved state are
-unchanged.
+`game/action-campaign-battle.html?encounter=c1-cinder-hounds&lead=ren&support=miyo&art=hd`
 
-The companion \`JRPG_HD_Engine_Integration_v1.zip\` includes 72 painted
-key poses for seven party members, four enemies, and an unmapped Kurozane
-form study. The 12 RGBA atlases are each 2304x384, containing six 384x384
-frames. The boss form art is deliberately not auto-mapped onto ordinary
-attack phases. These are generated raster illustrations, not native editable
-SVG, and the six poses are a production study rather than finished in-betweens.
+Run the game's normal local HTTP server. With `art=hd`, the engine tries painted character atlases; without it, the original tested pixel-animation path stays active.
 
-Extract the ZIP and run \`python game/tools/install-hd-painted-art.py
-/path/to/extracted/JRPG_HD_Engine_Integration_v1\` from a JRPG checkout on
-this branch. The installer checks the SHA-256 of every copied atlas and writes
-only into \`game/assets/art/hd-painted-v1/\`.
+The renderer module `game/hd-painted-animation.mjs` loads a local manifest on demand, decodes only the requested character sprites, verifies the expected 2304×384 sheet dimensions, samples one of six key poses from the existing fixed-step combat state, and draws the chosen cel at the actor's original foot position. The routine changes neither damage timing nor collision, objectives, saves or settlements. A missing image or invalid manifest immediately falls through to the previous sprite renderer.
 
-The canvas records data-hd-art-mode, data-hd-art-state and
-data-hd-art-draw-count for browser validation. Before shipping the
-art as default, review native-size pose alignment, cell-boundary
-clipping, effects and Cinder Hound matte edges, then add more
-in-between frames and run a full campaign acceptance test.
+## Painted artwork package
+
+[JRPG HD Engine Integration, version 1] is distributed as a separate downloadable ZIP from the user conversation. It includes 12 transparent raster sprite atlases: seven party members, Silk Jorogumo, Bell Moth, Cinder Hound, Razor Bamboo Stalker, and a Kurozane transformation study. Each sheet has six 384×384 key poses, totaling 72. Kurozane's transformations are reserved for form-specific animation work; the runtime refuses to interpret them as ordinary attack phases.
+
+The pack also includes four 768×1152 enemy encounter cards. Each card retains its original high-resolution source in the ZIP, plus a hashed production copy. When HD mode loads a supported enemy and its card URL resolves, the battle HOSTILES panel exposes a link to the illustrated encounter card.
+
+These are detailed painted PNGs, with separate animation-source and card-source copies; no claim of editable SVG source or motion parity with the original 20–30-frame game animations is made.
+
+## Installing from the ZIP
+
+Unzip the package beside a local checkout of `feature/hd-painted-engine-integration`, then run:
+
+```sh
+python tools/install_hd_art.py /path/to/JRPG
+```
+
+The matching checkout-side command is `python game/tools/install-hd-painted-art.py /path/to/unpacked/JRPG_HD_Engine_Integration_v1`. Both installers check SHA-256 hashes of all 12 sprite sheets and four cards, then install them only under `game/assets/art/hd-painted-v1/`. Repeated installs keep the established pixel sprites intact.
+
+A downloadable offline gallery (`review.html`) previews all six cels for each identity. The `cards.html` gallery shows the four illustrated encounter cards.
+
+## Testing and release boundary
+
+The canvas exposes `data-hd-art-mode`, `data-hd-art-state`, and `data-hd-art-draw-count`. Node tests cover the exact actor-phase map, security of atlas filenames and geometry, and failure-safe rendering. GitHub Actions also exercises an actual Chromium browser with **synthetic test fixtures**, covering opt-in HD drawing, classic rendering, the card link and missing-art fallback; test fixtures are never used as shipping art.
+
+The existing complete Node suite includes art-builders that require cross-platform binary-identical PNGs. Their baseline has produced 13 mismatches on hosted Linux, even with the correct pinned Pillow 11.3.0. The CI run retains that test log separately and does not treat it as passing. HD-specific integration tests and browser tests are separate release gates.
+
+Final art acceptance requires in-game cropping/anchor QA, review of fading and overlapping effects, additional in-betweens and a full-route playable test before any default-art switch.
