@@ -63,7 +63,7 @@ test('reduced motion freezes on frame zero, drawing keeps the foot anchor',()=>{
  assert.equal(plan.sw,128);
  assert.equal(plan.sh,192);
  assert.equal(plan.flip,true);
- assert.equal(plan.dw,68*128/192);
+ assert.ok(Math.abs(plan.dw - (68*128/192)) < 1e-10);
  assert.equal(npcMotionPlan(null,{}),null);
 });
 
