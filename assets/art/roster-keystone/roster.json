@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21",
+  "revision": "2026-11-21-boss-vfx-furnace-intake",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -839,15 +839,31 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-ZIP",
+      "sixKeyCelSheet": "candidate-in-ZIP",
+      "hdMotion24": "candidate-in-ZIP",
       "targetClips": 10,
       "framesPerClip": 24,
       "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "engineIntegrated": "optional-hd-after-package-install",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "paintedReviewPackage": "JRPG_HD_Boss_WidowOfFog_v1.zip",
+      "paintedCandidateReceipt": "assets/art/roster-keystone/widow-of-fog-hd-intake.json"
     },
     {
       "id": "furnace-abbot",
@@ -858,15 +874,31 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-ZIP",
+      "sixKeyCelSheet": "candidate-in-ZIP",
+      "hdMotion24": "candidate-in-ZIP",
       "targetClips": 10,
       "framesPerClip": 24,
       "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "engineIntegrated": "optional-hd-after-package-install",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "paintedReviewPackage": "JRPG_HD_Boss_FurnaceAbbot_v1.zip",
+      "paintedCandidateReceipt": "assets/art/roster-keystone/furnace-abbot-hd-intake.json"
     },
     {
       "id": "ujiro",
@@ -885,7 +917,21 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "bell-warden-chiyo",
@@ -904,7 +950,21 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "lady-enma",
@@ -923,7 +983,21 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "yearless-bell",
@@ -942,7 +1016,21 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      }
     },
     {
       "id": "npc-speaker",

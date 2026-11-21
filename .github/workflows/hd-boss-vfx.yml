@@ -1,0 +1,80 @@
+name: HD boss effects - source render, review and commit
+on:
+  push:
+    branches: [feature/hd-boss-vfx-20261121]
+    paths:
+      - 'game/hd-boss-vfx*'
+      - 'game/action-campaign-battle.js'
+      - 'game/tools/build-hd-boss-vfx.py'
+      - 'game/tools/hd-boss-vfx-browser-smoke.py'
+      - 'game/tests/hd-boss-vfx.test.mjs'
+      - 'game/tests/hd-boss-art-intakes.test.mjs'
+      - 'game/tools/import-hd-boss-pack.py'
+      - 'game/assets/art/hd-boss-vfx-v1/**'
+      - 'docs/52-hd-boss-vfx.md'
+      - '.github/workflows/hd-boss-vfx.yml'
+      - 'assets/art/roster-keystone/**'
+  pull_request:
+    paths:
+      - 'game/hd-boss-vfx*'
+      - 'game/action-campaign-battle.js'
+      - 'game/tools/build-hd-boss-vfx.py'
+      - 'game/tools/hd-boss-vfx-browser-smoke.py'
+      - 'game/tests/hd-boss-vfx.test.mjs'
+      - 'game/tests/hd-boss-art-intakes.test.mjs'
+      - 'game/tools/import-hd-boss-pack.py'
+      - 'game/assets/art/hd-boss-vfx-v1/**'
+      - 'docs/52-hd-boss-vfx.md'
+      - '.github/workflows/hd-boss-vfx.yml'
+      - 'assets/art/roster-keystone/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: boss-vfx-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  make-and-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install painter and browser runtime
+        run: |
+          python -m pip install 'pillow>=11,<13' 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Build 12 RGBA attack atlases
+        run: python game/tools/build-hd-boss-vfx.py
+      - name: Verify exact reproducibility
+        run: python game/tools/build-hd-boss-vfx.py --check
+      - name: Verify source and candidates ledger
+        run: |
+          node --test game/tests/hd-boss-art-intakes.test.mjs
+          python -m py_compile game/tools/import-hd-boss-pack.py
+      - name: Verify phase sampler contracts
+        run: node --test game/tests/hd-boss-vfx.test.mjs
+      - name: Verify JavaScript syntax
+        run: cd game && npm run check
+      - name: Check all 144 effect cells in hosted Chromium
+        run: python game/tools/hd-boss-vfx-browser-smoke.py
+      - name: Archive visual inspection screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hd-boss-effects-browser-review
+          path: artifacts/hd-boss-vfx-studio.png
+          if-no-files-found: ignore
+      - name: Commit rendered PNG assets
+        if: github.event_name == 'push' && github.ref_name == 'feature/hd-boss-vfx-20261121'
+        run: |
+          git add game/assets/art/hd-boss-vfx-v1
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'art: check in 144 transparent boss attack VFX cells'
+            git push origin HEAD:feature/hd-boss-vfx-20261121
+          fi

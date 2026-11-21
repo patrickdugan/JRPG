@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Boss Attack Effects · Bells of the Black Chrysanthemum</title>
+<style>
+:root{color-scheme:dark;font:14px/1.55 system-ui;color:#f0e1d2;background:#0e1721}
+body{margin:0 auto;max-width:1150px;padding:24px}
+h1,h2{font-family:Georgia,serif;font-weight:400}
+h1{font-size:38px;margin:5px 0 12px}
+p{color:#beb3a4}a{color:#e0b77a}
+fieldset{border:1px solid #897563;display:flex;gap:16px;flex-wrap:wrap;padding:16px;margin:20px 0}
+label{display:flex;flex-direction:column;gap:6px}
+select,input{font:inherit;accent-color:#caa26c;color:#f0e1d2;background:#202c36;border:1px solid #897563;padding:8px}
+input[type=range]{width:250px}
+canvas{display:block;max-width:600px;width:100%;height:auto;border:1px solid #776d61;margin:0 auto;background:repeating-conic-gradient(#24323b 0% 25%,#1c262e 0% 50%) 50% / 24px 24px}
+.caption{margin:12px;text-align:center;color:#d8b786;font-family:monospace}
+span#readout{font-weight:700}
+</style></head>
+<body>
+<a href="./index.html?dev=1">Back to game developer mode</a>
+<p>JRPG · Art development · Boss source-authored telegraph VFX</p>
+<h1>Boss Attack Effects Studio</h1>
+<p>These effect frames augment existing animations. The combat kernel still controls attack timing, hitboxes, and which tiles are safe.</p>
+<fieldset>
+<label>Boss<select id="boss"></select></label>
+<label>Phase<select id="phase"><option value="windup">Windup / tell</option><option value="active">Active / release</option></select></label>
+<label>Frame<input id="frame" type="range" min="0" max="11" value="0"></label>
+</fieldset>
+<canvas width="512" height="512" id="preview" aria-label="Selected boss attack effect"></canvas>
+<div class="caption"><span id="readout" role="status"></span></div>
+<script type="module">
+import { HD_BOSS_VFX_NAMES, validateHdBossVfxManifest, validateHdBossSourceManifest } from './hd-boss-vfx.mjs';
+const boss=document.getElementById('boss'),phase=document.getElementById('phase');
+const frame=document.getElementById('frame'),readout=document.getElementById('readout');
+const canvas=document.getElementById('preview'),ctx=canvas.getContext('2d');
+for(const id of HD_BOSS_VFX_NAMES){const o=document.createElement('option');o.value=id;o.textContent=id.replaceAll('-',' ');boss.append(o);}
+const root='./assets/art/hd-boss-vfx-v1/';
+let image=null,manifest=null,token=0;
+try{
+ let response;
+ try {response=await fetch(root+'manifest.json');}
+ catch {response=null;}
+ if (response?.ok){
+   const candidate=await response.json();
+   if(validateHdBossVfxManifest(candidate).ok)manifest=candidate;
+ }
+ if(!manifest){
+   const source=await fetch(root+'source-manifest.json');
+   if(!source.ok)throw new Error('No committed VFX manifest: HTTP '+source.status);
+   const candidate=await source.json();
+   const verdict=validateHdBossSourceManifest(candidate);
+   if(!verdict.ok)throw new Error('Invalid vector source manifest: '+verdict.reason);
+   manifest=candidate;
+ }
+}catch(e){readout.textContent=String(e);throw e;}
+function draw(){
+ ctx.clearRect(0,0,512,512);
+ if(!image||!image.complete||image.naturalWidth!==3072)return;
+ const n=Number(frame.value);
+ ctx.drawImage(image,n*256,0,256,256,0,0,512,512);
+ readout.textContent=boss.value+' · '+phase.value+' · '+(n+1)+'/12';
+ canvas.dataset.boss=boss.value;canvas.dataset.phase=phase.value;canvas.dataset.frame=String(n);
+ canvas.dataset.loaded='true';
+}
+async function choose(){
+ const current=++token;image=null;canvas.dataset.loaded='false';
+ const id=boss.value,stage=phase.value;
+ const record=manifest.bosses[id]?.stages?.[stage];
+ if(!record)throw new Error('Missing art: '+id+'/'+stage);
+ const a=new Image();a.decoding='async';
+ a.onload=()=>{
+   if(current!==token)return;
+   if(a.naturalWidth!==3072||a.naturalHeight!==256)throw new Error('Wrong atlas size');
+   image=a;draw();
+ };
+ a.onerror=()=>{if(current===token)readout.textContent='Image unavailable: '+record.file;};
+ a.src=root+record.file;
+}
+boss.onchange=choose;phase.onchange=choose;frame.oninput=draw;
+await choose();
+</script>
+</body></html>
