@@ -33,7 +33,9 @@ test('four canonical names have independent six-pose and 240-cell receipts',()=>
 });
 test('low-resolution sources are labeled and never promoted to individual painted masters',()=>{
   assert.equal(readIntake('ujiro').figureSourcePixels[0],512);
-  for(const id of IDs.filter(x=>x!=='ujiro')){
+  assert.equal(readIntake('lady-enma').figureSourcePixels[0],512);
+  assert.equal(ledger.identities.find(x=>x.id==='lady-enma').hdBossBodyCandidate.sourceQuality,'individual-high-resolution-rgb-matted');
+  for(const id of IDs.filter(x=>!['ujiro','lady-enma'].includes(x))){
     assert.equal(readIntake(id).figureSourcePixels[0],128,id);
     assert.equal(ledger.identities.find(x=>x.id===id).hdBossBodyCandidate.sourceQuality,'small-comparison-extraction');
   }
