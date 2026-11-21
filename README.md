@@ -2,6 +2,12 @@
 
 An original, gothic historical-fantasy action JRPG set in a fictionalized early Edo Japan, where a vampiric Shogun turns persecution into a supernatural order. It combines top-down party exploration with side-view real-time combat, free movement, committed attack animations, post-animation cooldowns, and readable elemental detail.
 
+## Roster and animation production
+
+The **[Roster Keystone](ROSTER_KEYSTONE.md)** is the authoritative 62-identity production ledger, with per-character art sources, six-pose masters, 24-frame animation clips, Git status, engine integration, and human-review gates. The latest source-derived enemy wave includes **16 additional regular enemies / 160 committed WebP motion clips / 3,840 animation frames** in four Git asset commits. These provisional cells remain subordinate to the premium painted asset pack and the existing pixel-animation fallback.
+
+Review the generated animation candidates in [the browser motion studio](game/hd-source-derived-review.html), served through the normal game launcher.
+
 ## Play
 
 Double-click **`PLAY.cmd`** (Windows; needs Python 3 on PATH) or run `python game/tools/launch-game.py`. It serves the game at `http://127.0.0.1:8642/index.html` and opens the title screen. Progress saves automatically in your browser at that address, so always launch the same way. Choose **New Game** for a fresh run or **Continue** to resume.

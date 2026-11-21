@@ -1,0 +1,42 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "furnace-abbot",
+  "candidateStatus": "painted-review-candidate",
+  "visualApproval": "pending",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "sourceFile": "sources/furnace-abbot-six-poses-original.png",
+  "sourceSha256": "50178b4dbb3163b0868ca56f22d56e43b71dc0da7e19cc07db6d4bc0aa4a6923",
+  "sixKeyAtlas": "assets/sheets/furnace-abbot.png",
+  "sixKeyAtlasSha256": "d3dd3c49ef8a0b46f8277e5119e95665ac7f6622da36adec2aee6690735cd053",
+  "poses": [
+    "idle",
+    "advance",
+    "hammer-decree-windup",
+    "hammer-decree-active",
+    "forge-sermon",
+    "defeat"
+  ],
+  "motion": {
+    "clips": 10,
+    "framesPerClip": 24,
+    "totalFrames": 240,
+    "decodedHashesVerified": true,
+    "source": "one painted key per clip, subtle foot-anchored transformations; not fully articulated in-betweens"
+  },
+  "package": "JRPG_HD_Boss_FurnaceAbbot_v1.zip",
+  "packageSize": 11660729,
+  "packageSha256": "746a009bdd428f377b846519cb3dc40f476d043f27bd1ad9a02550f3a16110da",
+  "binarySourceInGit": false,
+  "sourceDistribution": "conversation ZIP",
+  "matteStatus": "provisional checkerboard removal; visual edge cleanup pending",
+  "engineIntegration": "optional HD body when package is installed; original boss clips remain default",
+  "verification": [
+    "240 decoded-frame hashes",
+    "idempotent install",
+    "preexisting asset preservation",
+    "conflicting art rejection"
+  ]
+}

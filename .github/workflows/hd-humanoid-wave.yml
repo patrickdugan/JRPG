@@ -1,0 +1,35 @@
+name: HD humanoid enemy wave contracts
+on:
+  push:
+    branches:
+      - feature/hd-humanoid-enemy-wave-20261121
+    paths:
+      - 'game/hd-humanoid-wave-catalog.mjs'
+      - 'game/tests/hd-humanoid-wave.test.mjs'
+      - 'docs/49-hd-humanoid-enemy-wave.md'
+      - '.github/workflows/hd-humanoid-wave.yml'
+  pull_request:
+    paths:
+      - 'game/hd-humanoid-wave-catalog.mjs'
+      - 'game/tests/hd-humanoid-wave.test.mjs'
+      - 'docs/49-hd-humanoid-enemy-wave.md'
+      - '.github/workflows/hd-humanoid-wave.yml'
+  workflow_dispatch:
+jobs:
+  verify-wave:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source modules
+        run: |
+          node --check game/hd-humanoid-wave-catalog.mjs
+          node --check game/tests/hd-humanoid-wave.test.mjs
+      - name: Check optional HD art renderer compatibility
+        run: |
+          node --test game/tests/hd-humanoid-wave.test.mjs
+          node --test game/tests/hd-painted-motion.test.mjs
+          node --test game/tests/hd-painted-animation.test.mjs
