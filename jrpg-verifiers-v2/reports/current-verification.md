@@ -2,14 +2,14 @@
 
 - Result: **INCOMPLETE**
 - DAG structure: **valid**
-- Generated: 2026-07-28T19:13:19.202Z
+- Generated: 2026-11-21T14:23:00.200Z
 - Nodes: 32
 
 | Status | Count |
 | --- | ---: |
 | optional-missing | 1 |
-| partial | 3 |
-| verified | 28 |
+| partial | 2 |
+| verified | 29 |
 
 ## Node results
 
@@ -25,7 +25,7 @@
 | presentation.world-shot | verified | 2 | - |
 | presentation.menu-shot | verified | 2 | - |
 | presentation.video-teaser | optional-missing | 0 | - |
-| production.staffing | partial | 1 | - |
+| production.staffing | verified | 2 | - |
 | engine.asset-management | verified | 2 | - |
 | engine.field | verified | 2 | - |
 | engine.battle | verified | 2 | - |
@@ -46,7 +46,7 @@
 | chapter.template | verified | 2 | - |
 | chapter.content | verified | 4 | - |
 | qa.final-playtests | partial | 2 | - |
-| qa.release-readiness | partial | 8 | qa.final-playtests, production.staffing |
+| qa.release-readiness | partial | 8 | qa.final-playtests |
 
 ## Direct evidence problems
 

@@ -78,10 +78,11 @@
       "artifacts": []
     },
     "production.staffing": {
-      "declaredStatus": "partial",
+      "declaredStatus": "ready",
       "sources": "dependencies",
       "artifacts": [
-        { "path": "docs/00-production-roadmap.md", "role": "production outline, not a committed staffing plan" }
+        { "path": "docs/56-staffing-and-contractor-plan.md", "role": "staffing, contractor sequence, decision ownership, and review-gate plan" },
+        { "path": "docs/00-production-roadmap.md", "role": "milestone execution order and role ownership" }
       ]
     },
     "engine.asset-management": {
