@@ -17,7 +17,9 @@
     "framesPerClip": 24,
     "fullCombatActors": 19,
     "formStudies": 1,
-    "binaryFilesCommitted": false
+    "binaryFilesCommitted": false,
+    "bossPhaseMapping": "court-bell-dawn-selects-six-study-keys",
+    "bossPhaseArtInGit": false
   },
   "targets": {
     "allIdentities": 62,
@@ -739,9 +741,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "kurozane-oni-armor",
@@ -758,9 +761,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "kurozane-demon-mode",
@@ -777,9 +781,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "kurozane-ward-broken",
@@ -796,9 +801,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "captain-kaji",
