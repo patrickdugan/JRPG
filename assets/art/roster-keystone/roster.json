@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21-chiyo-premium-civilian-motion-prototype",
+  "revision": "2026-11-21-npc-motion-git-verified",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -45,9 +45,13 @@
       "clips": 96,
       "cells": 2304,
       "framesPerClip": 24,
-      "binaryFilesCommitted": false,
+      "binaryFilesCommitted": true,
       "source": "original code native pixel sprite atlas",
-      "scope": "optional npc field animation; premium HD paintings remain pending"
+      "scope": "optional npc field animation; premium HD paintings remain pending",
+      "gitCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+      "committedBytes": 7835279,
+      "manifest": "game/assets/art/npc-motion-v1/manifest.json",
+      "hostedRun": 44914042962
     }
   },
   "targets": {
@@ -1125,7 +1129,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1148,8 +1152,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1171,7 +1179,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1194,8 +1202,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1217,7 +1229,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1240,8 +1252,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1263,7 +1279,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1286,8 +1302,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1309,7 +1329,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1332,8 +1352,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1355,7 +1379,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1378,8 +1402,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1401,7 +1429,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1424,8 +1452,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1447,7 +1479,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1470,8 +1502,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1493,7 +1529,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1516,8 +1552,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1539,7 +1579,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1562,8 +1602,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1585,7 +1629,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1608,8 +1652,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1631,7 +1679,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1654,8 +1702,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1677,7 +1729,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1700,8 +1752,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1723,7 +1779,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1746,8 +1802,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1769,7 +1829,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1792,8 +1852,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     },
     {
@@ -1815,7 +1879,7 @@
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "npcFieldMotion": {
-        "status": "generator-and-engine-committed-awaiting-generated-assets",
+        "status": "git-committed-source-derived-motion",
         "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
         "sourceAuthorship": "original-code-native-pixel-primitives",
         "sourceOnlyPoses": [
@@ -1838,8 +1902,12 @@
         "generator": "game/tools/build-npc-motion-v1.py",
         "generatedRoot": "game/assets/art/npc-motion-v1/",
         "engineMode": "?npcMotion=1",
-        "binaryGit": false,
-        "visualReview": "pending"
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
       }
     }
   ]
