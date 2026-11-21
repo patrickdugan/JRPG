@@ -44,3 +44,9 @@ On the feature branch, .github/workflows/npc-motion-v1.yml builds the 96 strips,
 ## Related boss-quality gate
 
 Bell Warden Chiyo has a new individual 1536×1024 painterly source with six key poses and 240 derived frames, replacing the previous small comparison-poster source. The package is JRPG_HD_Boss_Chiyo_Premium_v2.zip; exact source, sheet and archive hashes are in her Roster Keystone record. Its full-resolution image binaries require a separate authenticated local Git import. Lady Enma and Yearless Bell still need individual premium source art.
+
+## Verified binary Git delivery
+
+The hosted build [44914042962](https://github.com/patrickdugan/JRPG/actions/runs/44914042962) passed all image reproducibility, unique-frame, Node contract, JS syntax, and Chromium checks and committed its actual assets at [c1bd6f4](https://github.com/patrickdugan/JRPG/commit/c1bd6f465c378853911e5930b6cf82834750065b).
+
+The committed Git tree contains exactly 96 WebP strips and one JSON manifest totaling **7,835,279 bytes**, with 2,304 distinct decoded cell SHA-256 hashes. The original 32×48 NPC sprite atlas and all quest mechanics remain unchanged. Premium individual portrait/body paintings are still pending.
