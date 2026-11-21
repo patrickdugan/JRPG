@@ -1,0 +1,65 @@
+{
+  "schema": "jrpg-hd-boss-binary-archives/1",
+  "revision": "2026-11-21",
+  "readyForImport": false,
+  "expectedBosses": [
+    "lady-enma",
+    "bell-warden-chiyo",
+    "yearless-bell"
+  ],
+  "packages": {
+    "lady-enma": {
+      "archive": "JRPG_HD_Boss_lady_enma_v2.zip",
+      "bytes": 12561500,
+      "sha256": "d2399886c349316ca98c9d683f9eaa293ec10b78f3685054af05969edc811397",
+      "source": "individual 1536x1024 six-pose studio painting",
+      "parts": [
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-00.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "fa57eea01c6904e4c2d47ad62abe73ae90e950bc"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-01.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "290914271527853d39f1d74cdd1040043a8c18aa"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-02.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "3fe43e59312d1ea29da3fc3d7b8184820527aa01"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-03.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "da9a572a813d0172b4f84778620764b9dc3a6dd5"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-04.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "09805cf5969f43c32c7e1672daaca152cf0e08f0"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-05.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "5d3f5ff51faefe967ef724fb87915cbfed67c9f9"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-06.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "e45eb474f796e87a65ae33e0c603cd44c4906aa4"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-07.bin",
+          "bytes": 1500000,
+          "gitBlobSHA1": "708bbe475e91ab34dce0c022b321e51dc0388fbc"
+        },
+        {
+          "path": "assets/art/hd-boss-binary-import-v1/lady-enma-v2/part-08.bin",
+          "bytes": 561500,
+          "gitBlobSHA1": "ecf4e8ea77d0b8aa9993464ede1977e0ed2eb0dd"
+        }
+      ]
+    }
+  }
+}
