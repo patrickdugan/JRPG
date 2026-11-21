@@ -6,6 +6,7 @@ on:
       - 'assets/art/hd-boss-binary-import-v2/**'
       - 'game/tools/hydrate-hd-remaining-bosses.py'
       - 'game/tools/import-hd-boss-pack.py'
+      - 'game/tests/hd-seven-named-boss-art-git.test.mjs'
       - '.github/workflows/hd-remaining-boss-import.yml'
   workflow_dispatch:
 permissions:
@@ -64,6 +65,9 @@ jobs:
             --extract-dir "$RUNNER_TEMP/jrpg-remaining-boss-zips" --import-check
           node --test game/tests/hd-boss-art-intakes.test.mjs \
             game/tests/hd-boss-final-four-intake.test.mjs
+      - name: Verify all seven final boss source paintings and 70 runtime motion clips in Git
+        if: steps.prepared.outputs.ready == 'true'
+        run: node --test game/tests/hd-seven-named-boss-art-git.test.mjs
       - name: Pending archive upload guidance
         if: steps.prepared.outputs.ready != 'true'
         run: echo 'Waiting for all 31 exact Git blob parts before importing.'
