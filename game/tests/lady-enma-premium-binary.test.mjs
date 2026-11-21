@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve } from 'node:path';
+const root = resolve(import.meta.dirname, '../..');
+const intake = JSON.parse(readFileSync(resolve(root,'assets/art/roster-keystone/lady-enma-hd-intake.json'),'utf8'));
+const roster = JSON.parse(readFileSync(resolve(root,'assets/art/roster-keystone/roster.json'),'utf8'));
+const assetPath=resolve(root,'game/assets/art/hd-painted-v1/motion/lady-enma/idle.webp');
+test('real Lady Enma motion WebP committed byte-for-byte',()=>{
+  assert.equal(existsSync(assetPath),true);
+  const raw=readFileSync(assetPath);
+  assert.equal(raw.length,387126);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),'44e0fa74aa636ad7d831ed5de4e3bbe7adac4a4e60f9bd2ca5b498d9f5f0ca4c');
+  assert.equal(intake.gitBinaryProof.sha256,'44e0fa74aa636ad7d831ed5de4e3bbe7adac4a4e60f9bd2ca5b498d9f5f0ca4c');
+  assert.equal(intake.gitBinaryProof.verified,true);
+});
+test('review status and source provenance remain accurate',()=>{
+  const enma=roster.identities.find(x=>x.id==='lady-enma');
+  const yearless=roster.identities.find(x=>x.id==='yearless-bell');
+  assert.equal(enma.hdBossBodyCandidate.sourceQuality,'individual-high-resolution-rgb-matted');
+  assert.equal(enma.hdBossBodyCandidate.partialGitImportedClips[0],'idle');
+  assert.equal(intake.sourceSha256,enma.hdBossBodyCandidate.sourceSha256);
+  assert.equal(intake.sixKeyAtlasSha256,enma.hdBossBodyCandidate.sixKeySheetSha256);
+  assert.equal(enma.assetInGit,false);
+  assert.equal(enma.visualApproval,'pending');
+  assert.equal(yearless.hdBossBodyCandidate.sourceQuality,'small-comparison-extraction');
+  assert.equal(yearless.assetInGit,false);
+  assert.equal(yearless.visualApproval,'pending');
+});

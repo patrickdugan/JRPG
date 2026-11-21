@@ -44,7 +44,7 @@ test('final four named bosses have review-only body candidates with explicit pro
     assert.equal(receipt.motion.clipCount,10);
     assert.equal(receipt.motion.frameCount,240);
     assert.equal(row.visualApproval,'pending');
-    assert.match(receipt.qualityNote,id==='ujiro'?/Standalone six-pose/:/premium/);
+    assert.match(receipt.qualityNote,id==='ujiro'?/Standalone six-pose/:id==='lady-enma'?/Individual full-resolution/:/premium/);
     assert.match(row.hdBossBodyCandidate.sourceSha256,/^[a-f0-9]{64}$/);
   }
 });
