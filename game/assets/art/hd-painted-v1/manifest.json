@@ -1,0 +1,27 @@
+{
+  "schema": "bbc-hd-painted/1",
+  "frameCount": 6,
+  "actors": {
+    "lady-enma": {
+      "file": "sheets/lady-enma.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 186,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "cinder-fan-windup",
+        "cinder-parasol-wing",
+        "paired-ashes",
+        "defeat"
+      ],
+      "sha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb"
+    }
+  }
+}
