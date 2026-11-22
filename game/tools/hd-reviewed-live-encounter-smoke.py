@@ -44,7 +44,7 @@ PROBE = r"""(() => {
           const target=reviewed?'reviewed':'canonical';
           evidence[target]++;
           const urls=reviewed?evidence.reviewedUrls:evidence.canonicalUrls;
-          const name=source.slice(source.indexOf('/hd-painted-v1/')+15);
+          const name=source.slice(source.indexOf('/hd-painted-v1/'));
           urls[name]=(urls[name]||0)+1;
           const x=Number(args[1]), y=Number(args[2]);
           if (evidence.selectedFrames.length<60)
