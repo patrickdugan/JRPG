@@ -9,6 +9,10 @@ from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
 class Quiet(SimpleHTTPRequestHandler):
     def log_message(self,_fmt,*_args):pass
+    def do_GET(self):
+        if self.path=="/favicon.ico":
+            self.send_response(204);self.end_headers();return
+        super().do_GET()
 
 def main():
     server=ThreadingHTTPServer(("127.0.0.1",0),functools.partial(Quiet,directory=str(ROOT)))
@@ -18,7 +22,22 @@ def main():
     result={}
     try:
         with sync_playwright() as p:
-            browser=p.chromium.launch(headless=True)
+            try:
+                browser=p.chromium.launch(headless=True)
+            except Exception as err:
+                if "Executable doesn't exist" not in str(err):
+                    raise
+                for candidate in (
+                    Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+                    Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+                    Path.home()/r"AppData\Local\Google\Chrome\Application\chrome.exe",
+                    Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
+                ):
+                    if candidate.is_file():
+                        browser=p.chromium.launch(headless=True,executable_path=str(candidate))
+                        break
+                else:
+                    raise
             page=browser.new_page(viewport={"width":1440,"height":1060},reduced_motion="no-preference")
             page.set_default_timeout(20000)
             page.on("pageerror",lambda error:errors.append("page: "+str(error)))

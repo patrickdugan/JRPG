@@ -47,11 +47,22 @@ export function isJourneyFinished(record, runId) {
   return Boolean(record && runId && record.runId === runId);
 }
 
-export function createPlayerJourneyStorageAdapter(storage = globalThis.localStorage) {
+function resolveStorage(explicitStorage) {
+  if (explicitStorage !== undefined) return explicitStorage;
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export function createPlayerJourneyStorageAdapter(storage) {
   return Object.freeze({
     load() {
       try {
-        const raw = storage?.getItem(PLAYER_JOURNEY_STORAGE_KEY);
+        const resolved = resolveStorage(storage);
+        if (!resolved) return { ok: false, found: false, record: null };
+        const raw = resolved.getItem(PLAYER_JOURNEY_STORAGE_KEY);
         if (raw == null) return { ok: true, found: false, record: null };
         const parsed = validatePlayerJourneyRecord(JSON.parse(raw));
         return parsed.ok ? { ok: true, found: true, record: parsed.record } : { ok: false, found: true, record: null };
@@ -63,7 +74,9 @@ export function createPlayerJourneyStorageAdapter(storage = globalThis.localStor
       const checked = validatePlayerJourneyRecord(record);
       if (!checked.ok) return { ok: false, errors: checked.errors };
       try {
-        storage?.setItem(PLAYER_JOURNEY_STORAGE_KEY, JSON.stringify(checked.record));
+        const resolved = resolveStorage(storage);
+        if (!resolved) return { ok: false, errors: ['storage unavailable.'] };
+        resolved.setItem(PLAYER_JOURNEY_STORAGE_KEY, JSON.stringify(checked.record));
         return { ok: true };
       } catch {
         return { ok: false, errors: ['storage unavailable.'] };

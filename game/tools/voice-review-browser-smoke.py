@@ -27,6 +27,13 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, _format: str, *_args: object) -> None:
         return
 
+    def do_GET(self) -> None:
+        if self.path == '/favicon.ico':
+            self.send_response(204)
+            self.end_headers()
+            return
+        super().do_GET()
+
 
 def check(condition: bool, message: str) -> None:
     if not condition:

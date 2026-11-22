@@ -31,7 +31,7 @@ test('current Chrome smoke exercises a rendered pre-boss Storyworld lock and mir
     '            recovery_context = browser.new_context',
     '            recovery_context.close()',
   );
-  assert.match(recovery, /c3-04-lantern-boat-escort/);
+  assert.match(recovery, /c3-01-separate-arrivals/);
   assert.match(recovery, /sw3-sayos-warehouse-conditions/);
   assert.match(recovery, /"fieldMoveDisabled"\]\s*is True/);
   assert.match(recovery, /"battleHref"\]\s*is None/);

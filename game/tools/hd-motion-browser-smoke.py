@@ -85,7 +85,22 @@ window.result={idle,hit,fallback,cache:rt.motion.cacheSize,
   errors=[]
   try:
    with sync_playwright() as playwright:
-    browser=playwright.chromium.launch(headless=True)
+    try:
+     browser=playwright.chromium.launch(headless=True)
+    except Exception as err:
+     if "Executable doesn't exist" not in str(err):
+      raise
+     for candidate in (
+      Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+      Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+      Path.home()/r"AppData\Local\Google\Chrome\Application\chrome.exe",
+      Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
+     ):
+      if candidate.is_file():
+       browser=playwright.chromium.launch(headless=True,executable_path=str(candidate))
+       break
+     else:
+      raise
     page=browser.new_page(viewport={'width':900,'height':700})
     page.set_default_timeout(30000)
     page.on('pageerror',lambda error:errors.append(str(error)))
