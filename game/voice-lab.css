@@ -13,6 +13,11 @@
   --nikola: #c9a24a;
   --ren: #6fb0a8;
   --miyo: #8db5d8;
+  --aya: #79b8d1;
+  --kiku: #7cc49b;
+  --genta: #b8946e;
+  --lady-enma: #d66874;
+  --ujiro: #9ea3b8;
 }
 
 * { box-sizing: border-box; }
@@ -34,6 +39,34 @@ h1 { margin: 6px 0 8px; font-family: Georgia, "Times New Roman", serif; font-siz
 .segmented label:has(input:checked) { background: var(--paper); color: var(--ink); }
 .segmented input { position: absolute; opacity: 0; pointer-events: none; }
 .segmented label:has(input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 2px; }
+.filter-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  background: var(--panel-soft);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.filter-control select {
+  border: 0;
+  background: var(--panel-soft);
+  color: var(--paper);
+  font: inherit;
+  padding: 4px 2px;
+  cursor: pointer;
+}
+.filter-control:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
+.cast-brief {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--gold);
+  background: var(--panel);
+  color: var(--paper);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
 button, .review-import {
   padding: 8px 14px;
   border: 1px solid var(--line);
@@ -47,7 +80,14 @@ button:focus-visible, .review-import:focus-within { outline: 2px solid var(--gol
 button:disabled { opacity: 0.45; cursor: default; }
 .review-import input { display: block; max-width: 230px; margin-top: 6px; font-size: 0.8rem; }
 output { display: block; min-height: 1.5em; margin-top: 12px; color: var(--muted); font-size: 0.85rem; }
-.section-title { margin: 32px 0 10px; color: var(--gold); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.scene-banner {
+  margin: 28px 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  color: var(--paper);
+  font: 400 1.2rem Georgia, "Times New Roman", serif;
+}
+.section-title { margin: 24px 0 10px; color: var(--gold); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
 .line {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

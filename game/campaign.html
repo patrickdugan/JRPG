@@ -24,6 +24,16 @@
             <label class="audio-volume" for="audioVolume">Volume <input id="audioVolume" type="range" min="0" max="1" step="0.05" value="0.7"></label>
             <span id="audioStatus" class="audio-status" role="status" aria-live="polite">Sound off.</span>
           </div>
+          <div class="voice-controls" role="group" aria-label="Dialogue voice controls">
+            <button id="voiceToggle" type="button" aria-pressed="false">Voice: Off</button>
+            <label id="voiceLanguageWrap" class="voice-language" for="voiceLanguage" hidden>Lang
+              <select id="voiceLanguage" aria-label="Dialogue voice language">
+                <option value="en">EN</option>
+                <option value="ja">JA</option>
+              </select>
+            </label>
+            <span id="voiceStatus" class="voice-status" role="status" aria-live="polite">Subtitles always on.</span>
+          </div>
           <span id="runProofStatus" class="run-proof-status" role="status" aria-live="polite" aria-atomic="true" data-developer-only hidden>Save unavailable</span>
           <span id="recoveryStatus" class="recovery-status" role="status" aria-live="polite" aria-atomic="true" data-developer-only hidden>Autosave tools are available.</span>
           <a class="subtle-button" href="camp.html">Camp</a>

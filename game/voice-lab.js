@@ -1,24 +1,25 @@
 /** Developer listening page for the synthetic prototype and its local audition ledger. */
 import {
+  VOICE_CAST_NAMES,
   VOICE_REVIEW_STORAGE_KEY,
   VOICE_REVIEW_STATES,
   emptyVoiceReviewBook,
+  filterVoiceManifestLines,
   updateVoiceReview,
   validateVoiceReviewBook,
+  voiceManifestScenes,
+  voiceManifestSpeakers,
   voiceReviewIdentity,
   voiceReviewKey,
   voiceReviewSummary,
 } from './voice-review.mjs';
 
 const MANIFEST_URL = './assets/audio/voice-prototype-v1/manifest.json';
-const SPEAKER_NAMES = {
-  kurozane: 'Shogun Kurozane',
-  mateus: 'Father Mateus Avelar',
-  nikola: 'Nikola Dražanić',
-  ren: 'Ren Ishikawa',
-  miyo: 'Miyo Senda',
-};
 const DEFAULT_PAUSE_SECONDS = 0.4;
+const labTitle = document.querySelector('#labTitle');
+const sceneFilter = document.querySelector('#sceneFilter');
+const speakerFilter = document.querySelector('#speakerFilter');
+const castBrief = document.querySelector('#castBrief');
 const sceneElement = document.querySelector('#scene');
 const statusElement = document.querySelector('#status');
 const playScene = document.querySelector('#playScene');
@@ -40,12 +41,81 @@ function language() {
   return document.querySelector('input[name="lang"]:checked')?.value ?? 'en';
 }
 
+function selectedSceneId() {
+  return sceneFilter?.value ?? 'all';
+}
+
+function selectedSpeaker() {
+  return speakerFilter?.value ?? 'all';
+}
+
+function speakerName(speakerId) {
+  return manifest?.cast?.[speakerId]?.name ?? VOICE_CAST_NAMES[speakerId] ?? speakerId;
+}
+
 function entries() {
   if (!manifest) return [];
-  return Object.entries(manifest.lines)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([id, byLanguage]) => ({ id, ...byLanguage[language()], fallback: byLanguage.en ?? byLanguage.ja }))
-    .filter((entry) => entry.fallback);
+  return filterVoiceManifestLines(manifest, {
+    language: language(),
+    sceneId: selectedSceneId(),
+    speaker: selectedSpeaker(),
+  });
+}
+
+function populateFilters() {
+  if (!manifest) return;
+  const scenes = voiceManifestScenes(manifest);
+  const speakers = voiceManifestSpeakers(manifest);
+  const previousScene = selectedSceneId();
+  const previousSpeaker = selectedSpeaker();
+
+  sceneFilter.replaceChildren();
+  const allScenesOption = document.createElement('option');
+  allScenesOption.value = 'all';
+  allScenesOption.textContent = `All scenes (${Object.keys(manifest.lines ?? {}).length})`;
+  sceneFilter.append(allScenesOption);
+  for (const scene of scenes) {
+    const option = document.createElement('option');
+    option.value = scene.id;
+    option.textContent = `${scene.title} (${scene.lineIds.length})`;
+    sceneFilter.append(option);
+  }
+  sceneFilter.value = scenes.some((scene) => scene.id === previousScene) ? previousScene : 'all';
+
+  speakerFilter.replaceChildren();
+  const allSpeakersOption = document.createElement('option');
+  allSpeakersOption.value = 'all';
+  allSpeakersOption.textContent = `All characters (${speakers.length})`;
+  speakerFilter.append(allSpeakersOption);
+  for (const speaker of speakers) {
+    const option = document.createElement('option');
+    option.value = speaker.id;
+    option.textContent = speaker.name;
+    speakerFilter.append(option);
+  }
+  speakerFilter.value = speakers.some((speaker) => speaker.id === previousSpeaker) ? previousSpeaker : 'all';
+}
+
+function updateContextHeader() {
+  if (!manifest) return;
+  const scenes = voiceManifestScenes(manifest);
+  const activeScene = scenes.find((scene) => scene.id === selectedSceneId());
+  if (labTitle) {
+    labTitle.textContent = activeScene
+      ? activeScene.title
+      : (scenes.length > 1 ? 'Dawn at the Observatory & Extended Cast' : scenes[0].title);
+  }
+  const speakerId = selectedSpeaker();
+  const brief = speakerId !== 'all' ? manifest?.cast?.[speakerId]?.brief : '';
+  if (castBrief) {
+    castBrief.hidden = !brief;
+    castBrief.textContent = brief ? `${speakerName(speakerId)} — ${brief}` : '';
+  }
+}
+
+function formatCerPercent(cer) {
+  const pct = cer * 100;
+  return pct > 0 && pct < 10 ? `${pct.toFixed(1)}%` : `${pct.toFixed(0)}%`;
 }
 
 function metricsText(entry) {
@@ -57,14 +127,17 @@ function metricsText(entry) {
     entry.pitchRangeSemitones != null ? `pitch range ${entry.pitchRangeSemitones} st` : null,
     entry.loudnessRangeDb != null ? `loudness range ${entry.loudnessRangeDb} dB` : null,
     `take ${(entry.chosenTake ?? 0) + 1}/${entry.takes?.length ?? 1}`,
-    Number.isFinite(entry.cer) ? `ASR error ${(entry.cer * 100).toFixed(0)}%` : null,
+    Number.isFinite(entry.cer) ? `ASR error ${formatCerPercent(entry.cer)}` : null,
   ];
   return parts.filter(Boolean).join(' · ');
 }
 
 function showReviewSummary() {
   if (!manifest) return;
-  const count = voiceReviewSummary(reviews, manifest, language());
+  const count = voiceReviewSummary(reviews, manifest, language(), {
+    sceneId: selectedSceneId(),
+    speaker: selectedSpeaker(),
+  });
   reviewSummaryElement.textContent = `${count.accepted}/${count.total} accepted · ${count.retake} retakes · ${count.pronunciation} pronunciation · ${count.script} script/translation · ${count.pending} pending · ${count.audioReady} audio files listed`;
 }
 
@@ -127,13 +200,26 @@ function buildReviewControls(entry) {
 
 function render() {
   const lang = language();
+  const scenes = manifest ? voiceManifestScenes(manifest) : [];
+  const showSceneBanners = selectedSceneId() === 'all' && scenes.length > 1;
+  const sceneTitleById = new Map(scenes.map((scene) => [scene.id, scene.title]));
+  updateContextHeader();
   sceneElement.replaceChildren();
+  let currentScene = null;
   let section = null;
   for (const entry of entries()) {
     const meta = entry.file ? entry : entry.fallback;
+    if (showSceneBanners && entry.sceneId !== currentScene) {
+      currentScene = entry.sceneId;
+      section = null;
+      const banner = document.createElement('h2');
+      banner.className = 'scene-banner';
+      banner.textContent = sceneTitleById.get(currentScene) ?? currentScene;
+      sceneElement.append(banner);
+    }
     if (meta.section !== section) {
       section = meta.section;
-      const heading = document.createElement('h2');
+      const heading = document.createElement('h3');
       heading.className = 'section-title';
       heading.textContent = section ?? 'Scene';
       sceneElement.append(heading);
@@ -141,20 +227,23 @@ function render() {
     const article = document.createElement('article');
     article.className = `line${entry.file ? '' : ' missing'}`;
     article.dataset.lineId = entry.id;
+    article.dataset.sceneId = entry.sceneId ?? '';
+    article.dataset.speaker = meta.speaker ?? '';
     article.style.setProperty('--speaker', `var(--${meta.speaker})`);
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'play';
     button.textContent = '▶';
     button.disabled = !entry.file;
-    button.setAttribute('aria-label', `Play line ${entry.id}, ${SPEAKER_NAMES[meta.speaker] ?? meta.speaker}`);
+    button.setAttribute('aria-label', `Play line ${entry.id}, ${speakerName(meta.speaker)}`);
     button.addEventListener('click', () => {
       runToken += 1;
       void playEntry(entry);
     });
     const speaker = document.createElement('p');
     speaker.className = 'speaker';
-    speaker.textContent = `${entry.id} · ${SPEAKER_NAMES[meta.speaker] ?? meta.speaker}`;
+    const beatSuffix = meta.beatId ? ` · ${meta.beatId}` : '';
+    speaker.textContent = `${entry.id} · ${speakerName(meta.speaker)}${beatSuffix}`;
     const spokenText = document.createElement('p');
     spokenText.className = 'text';
     spokenText.lang = entry.file ? (entry.languageId === 'it' ? 'la' : lang) : 'en';
@@ -208,16 +297,22 @@ function playEntry(entry) {
     element?.classList.add('playing');
     element?.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     stopScene.disabled = false;
-    statusElement.textContent = `Playing ${entry.id} · ${SPEAKER_NAMES[entry.speaker] ?? entry.speaker}`;
+    statusElement.textContent = `Playing ${entry.id} · ${speakerName(entry.speaker)}`;
     audio.addEventListener('ended', () => done(), { once: true });
     audio.addEventListener('error', () => done(`Could not play ${entry.file}`), { once: true });
     audio.play().catch(() => done(`Playback unavailable for ${entry.id}.`));
   });
 }
 
+function sceneDefaultPauseSeconds(sceneId) {
+  if (!manifest) return DEFAULT_PAUSE_SECONDS;
+  const scene = voiceManifestScenes(manifest).find((candidate) => candidate.id === sceneId);
+  return scene?.defaultPauseSeconds ?? manifest.defaultPauseSeconds ?? DEFAULT_PAUSE_SECONDS;
+}
+
 /** Silence before a line is direction: the manifest carries the scene's per-line pauses. */
-function pauseBeforeMs(id) {
-  const seconds = manifest?.pauseBeforeSeconds?.[id] ?? manifest?.defaultPauseSeconds ?? DEFAULT_PAUSE_SECONDS;
+function pauseBeforeMs(entry) {
+  const seconds = manifest?.pauseBeforeSeconds?.[entry.id] ?? sceneDefaultPauseSeconds(entry.sceneId);
   return seconds * 1000;
 }
 
@@ -228,7 +323,7 @@ async function playAll() {
   for (const entry of entries()) {
     if (!entry.file) continue;
     if (!first) {
-      await new Promise((resolve) => setTimeout(resolve, pauseBeforeMs(entry.id)));
+      await new Promise((resolve) => setTimeout(resolve, pauseBeforeMs(entry)));
       if (token !== runToken) return;
     }
     first = false;
@@ -236,12 +331,13 @@ async function playAll() {
     if (token !== runToken) return;
   }
   stopScene.disabled = true;
-  statusElement.textContent = 'Scene complete.';
+  statusElement.textContent = 'Selection complete.';
 }
 
 function showReadyCount() {
-  const generated = entries().filter((entry) => entry.file).length;
-  statusElement.textContent = `${generated} lines ready in ${language() === 'ja' ? 'Japanese' : 'English'}.`;
+  const visible = entries();
+  const generated = visible.filter((entry) => entry.file).length;
+  statusElement.textContent = `${generated}/${visible.length} lines ready in ${language() === 'ja' ? 'Japanese' : 'English'}.`;
 }
 
 function loadSavedReviews() {
@@ -326,12 +422,20 @@ for (const input of document.querySelectorAll('input[name="lang"]')) {
     showReadyCount();
   });
 }
+for (const filterElement of [sceneFilter, speakerFilter]) {
+  filterElement?.addEventListener('change', () => {
+    stop();
+    render();
+    showReadyCount();
+  });
+}
 
 try {
   const response = await fetch(MANIFEST_URL, { cache: 'no-store' });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   manifest = await response.json();
   provenance.textContent = manifest.provenance ?? '';
+  populateFilters();
   loadSavedReviews();
   render();
   showReadyCount();

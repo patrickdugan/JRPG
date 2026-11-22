@@ -11,16 +11,29 @@
   <main class="lab-shell">
     <header>
       <p class="eyebrow">Voice prototype v1 · developer review</p>
-      <h1>Dawn at the Observatory</h1>
-      <p class="lede">The final confrontation and the rare confession reversal, performed in English and Japanese by synthetic voices. Not final casting.</p>
-      <div class="controls" role="group" aria-label="Playback">
+      <h1 id="labTitle">Dawn at the Observatory &amp; Extended Cast</h1>
+      <p class="lede">The final confrontation, the rare confession reversal, and ten-character cast auditions performed in English and Japanese by synthetic voices. Not final casting.</p>
+      <div class="controls" role="group" aria-label="Playback and filters">
         <div class="segmented" role="radiogroup" aria-label="Language">
           <label><input type="radio" name="lang" value="en" checked> English</label>
           <label><input type="radio" name="lang" value="ja"> 日本語</label>
         </div>
-        <button type="button" id="playScene">Play scene</button>
+        <label class="filter-control" for="sceneFilter">
+          <span>Scene</span>
+          <select id="sceneFilter">
+            <option value="all">All scenes</option>
+          </select>
+        </label>
+        <label class="filter-control" for="speakerFilter">
+          <span>Character</span>
+          <select id="speakerFilter">
+            <option value="all">All characters</option>
+          </select>
+        </label>
+        <button type="button" id="playScene">Play selection</button>
         <button type="button" id="stopScene" disabled>Stop</button>
       </div>
+      <p id="castBrief" class="cast-brief" hidden></p>
       <output id="status" aria-live="polite">Loading manifest…</output>
     </header>
     <section class="review-toolbar" aria-labelledby="reviewHeading">

@@ -118,9 +118,12 @@
       "section": "Duel four: Black Sun Concord",
       "direction": "Refusal without heat; the pain of seeing the trap clearly at last.",
       "en": "You asked me to become empty enough that usefulness felt like shelter.",
-      "ja": "お前が求めたのは、役に立つことが隠れ家に思えるほど、私が空っぽになることだった。",
+      "ja": "お前が求めたのは、役に立つことが隠れ家に思えるほど、私が、からっぽになることだった。",
       "exaggeration": 0.5,
-      "cfg": 0.35
+      "cfg": 0.35,
+      "cfgByLang": {
+        "ja": 0.5
+      }
     },
     {
       "id": "12",

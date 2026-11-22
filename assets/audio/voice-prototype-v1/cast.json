@@ -74,6 +74,74 @@
         "ja": "雲の縁は四つ数えるうちに晴れます。直射の光は三つ。そのあと鐘の影が覆います。間隔は声に出して数えます。"
       },
       "fx": { "default": { "reverb": 0.12 } }
+    },
+    "aya": {
+      "name": "Aya Shinohara",
+      "brief": "Shrine archivist, warder, and investigator. Measured archivist, warm under pressure; asks the question that makes everyone define terms. Careful neutral register.",
+      "reference": {
+        "en": { "voice": "af_heart", "lang": "a", "pitch": -0.5 },
+        "ja": { "voice": "jf_tebukuro", "lang": "j", "pitch": 0.0 }
+      },
+      "referenceText": {
+        "en": "Official register, courier packet, and collector copy. Keep each source distinct, mark every disputed date in plain ink, and leave room for another witness to answer.",
+        "ja": "公式の帳面と、飛脚の書状と、徴収役の写し。それぞれの出所を分け、食い違う日付はそのまま記して、次の証人の余白を残します。"
+      },
+      "fx": { "default": { "reverb": 0.12 } }
+    },
+    "kiku": {
+      "name": "Kiku Nawa",
+      "brief": "Village physician and care-network organizer. Brisk physician; bedside manner as command, where humor is impatience rather than cruelty. Clipped, practical.",
+      "reference": {
+        "en": { "voice": "af_kore", "lang": "a", "pitch": -0.5 },
+        "ja": { "voice": "jf_gongitsune", "lang": "j", "pitch": -0.5 }
+      },
+      "referenceText": {
+        "en": "Set the fever tincture beside the blue labels and keep pressure on that cloth. Medical triage decides urgency here; rank does not enter the boat list.",
+        "ja": "熱さましは青い札の横に置いて、その布はしっかり押さえなさい。ここでは手当ての順が先です。身分や印章は船の順番に入りません。"
+      },
+      "fx": { "default": { "reverb": 0.12 } }
+    },
+    "genta": {
+      "name": "Genta Mononobe",
+      "brief": "Former retainer turned steady engineer and shield-bearer. Reports, positions, load paths; calm makes the danger credible. Plain, low-key.",
+      "reference": {
+        "en": { "voice": "am_michael", "lang": "a", "pitch": -1.0 },
+        "ja": { "voice": "jm_kumo", "lang": "j", "pitch": -1.5 }
+      },
+      "referenceText": {
+        "en": "Low water holding and east shelf dry. Retreat remains eight exact steps behind us. I will brace the lintel on your signal and ask for nothing beyond that.",
+        "ja": "水位はまだ低い。東の棚も乾いている。退路はちょうど八歩後ろだ。合図があれば俺が梁を支える。それ以上の立場は求めん。"
+      },
+      "fx": { "default": { "reverb": 0.12 } }
+    },
+    "lady-enma": {
+      "name": "Lady Enma of Ash",
+      "brief": "Former court entertainer and Kurozane's Cinder Fan. Theatrical, fan-snap timing; every line staged for an audience, even when alone. Elegant court speech with performative flourishes.",
+      "reference": {
+        "en": { "voice": "af_bella", "lang": "a", "pitch": -1.0 },
+        "ja": { "voice": "jf_nezumi", "lang": "j", "pitch": -1.0 }
+      },
+      "referenceText": {
+        "en": "Six walkers, three keys, and a countryside pretending that lantern colors make it sovereign. All offers at a gate are threats; honest rulers merely make the ribbon visible.",
+        "ja": "六人の旅人に三つの鍵、それに提灯の色で主権を気取る村々でございますか。門の前で交わす申し出などすべて脅し。正直な主は、その飾り紐を見せるだけでございます。"
+      },
+      "fx": {
+        "default": { "reverb": 0.2, "drive": 0.03 },
+        "subdued": { "reverb": 0.12 }
+      }
+    },
+    "ujiro": {
+      "name": "Magistrate Ujiro Arata",
+      "brief": "Court magistrate and operational author of the census raids. Bureaucratic authority over cowardice; paperwork as violence, brave only when the room agrees. Officious formal speech that frays under pressure.",
+      "reference": {
+        "en": { "voice": "am_eric", "lang": "a", "pitch": 0.5 },
+        "ja": { "voice": "jm_kumo", "lang": "j", "pitch": 0.5 }
+      },
+      "referenceText": {
+        "en": "Resource triage is the business of a magistrate, not an assembly without standing. Efficient government anticipates the stories agitators invent when caught carrying stolen paper.",
+        "ja": "物資の振り分けは奉行の職務であり、資格なき集会の知るところではない。有能な政とは、不穏分子が盗んだ紙を手に言い立てる筋書きを先んじて封じるものだ。"
+      },
+      "fx": { "default": { "reverb": 0.15 } }
     }
   }
 }

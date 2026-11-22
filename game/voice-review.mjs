@@ -8,6 +8,19 @@ export const VOICE_REVIEW_STATES = Object.freeze({
   pronunciation: 'Pronunciation review',
   script: 'Script / translation review',
 });
+export const VOICE_CAST_NAMES = Object.freeze({
+  kurozane: 'Shogun Kurozane',
+  mateus: 'Father Mateus Avelar',
+  nikola: 'Nikola Dražanić',
+  ren: 'Ren Ishikawa',
+  miyo: 'Miyo Senda',
+  aya: 'Aya Shinohara',
+  kiku: 'Kiku Nawa',
+  genta: 'Genta Mononobe',
+  'lady-enma': 'Lady Enma of Ash',
+  ujiro: 'Magistrate Ujiro Arata',
+});
+const CANONICAL_SPEAKER_ORDER = Object.freeze(Object.keys(VOICE_CAST_NAMES));
 const LANGUAGES = new Set(['en', 'ja']);
 const MAX_NOTE_LENGTH = 1200;
 const MAX_RECORDS = 2000;
@@ -36,6 +49,106 @@ export function voiceReviewIdentity(manifest, language, lineId) {
 
 export function emptyVoiceReviewBook() {
   return { schemaVersion: VOICE_REVIEW_SCHEMA, entries: {} };
+}
+
+export function voiceManifestScenes(manifest) {
+  const allLineIds = Object.keys(manifest?.lines ?? {}).sort((a, b) => a.localeCompare(b));
+  if (Array.isArray(manifest?.scenes) && manifest.scenes.length > 0) {
+    const listed = manifest.scenes
+      .filter((scene) => isRecord(scene) && typeof scene.id === 'string')
+      .map((scene) => Object.freeze({
+        id: scene.id,
+        title: typeof scene.title === 'string' && scene.title ? scene.title : scene.id,
+        defaultPauseSeconds: Number.isFinite(scene.defaultPauseSeconds)
+          ? scene.defaultPauseSeconds
+          : (manifest?.defaultPauseSeconds ?? 0.4),
+        lineIds: Object.freeze(
+          Array.isArray(scene.lineIds)
+            ? scene.lineIds.map(String).filter((id) => Object.hasOwn(manifest?.lines ?? {}, id))
+            : allLineIds.filter((id) => {
+              const locales = manifest?.lines?.[id];
+              const meta = locales?.en ?? locales?.ja;
+              return meta?.sceneId === scene.id;
+            }),
+        ),
+      }));
+    if (listed.length > 0) return Object.freeze(listed);
+  }
+  return Object.freeze([
+    Object.freeze({
+      id: 'last-command',
+      title: 'Dawn at the Observatory — The Last Command',
+      defaultPauseSeconds: manifest?.defaultPauseSeconds ?? 0.4,
+      lineIds: Object.freeze(allLineIds),
+    }),
+  ]);
+}
+
+export function voiceManifestSpeakers(manifest) {
+  const seen = new Set();
+  for (const speakerId of Object.keys(manifest?.cast ?? {})) seen.add(speakerId);
+  for (const locales of Object.values(manifest?.lines ?? {})) {
+    for (const lang of ['en', 'ja']) {
+      if (typeof locales?.[lang]?.speaker === 'string') seen.add(locales[lang].speaker);
+    }
+  }
+  const orderedIds = [
+    ...CANONICAL_SPEAKER_ORDER.filter((id) => seen.has(id)),
+    ...[...seen].filter((id) => !CANONICAL_SPEAKER_ORDER.includes(id)).sort((a, b) => a.localeCompare(b)),
+  ];
+  return Object.freeze(orderedIds.map((id) => Object.freeze({
+    id,
+    name: manifest?.cast?.[id]?.name ?? VOICE_CAST_NAMES[id] ?? id,
+    brief: manifest?.cast?.[id]?.brief ?? '',
+  })));
+}
+
+function resolveLineSceneId(manifest, lineId, sceneIndex) {
+  const locales = manifest?.lines?.[lineId];
+  const explicit = locales?.en?.sceneId ?? locales?.ja?.sceneId;
+  if (typeof explicit === 'string' && explicit) return explicit;
+  return sceneIndex.get(lineId) ?? 'last-command';
+}
+
+export function filterVoiceManifestLines(manifest, {
+  language = 'en',
+  sceneId = 'all',
+  speaker = 'all',
+} = {}) {
+  if (!isRecord(manifest?.lines)) return [];
+  const scenes = voiceManifestScenes(manifest);
+  const sceneByLineId = new Map();
+  const orderedIds = [];
+  for (const scene of scenes) {
+    for (const id of scene.lineIds) {
+      if (!sceneByLineId.has(id)) {
+        sceneByLineId.set(id, scene.id);
+        orderedIds.push(id);
+      }
+    }
+  }
+  for (const id of Object.keys(manifest.lines).sort((a, b) => a.localeCompare(b))) {
+    if (!sceneByLineId.has(id)) orderedIds.push(id);
+  }
+  const results = [];
+  for (const id of orderedIds) {
+    const byLanguage = manifest.lines[id];
+    if (!isRecord(byLanguage)) continue;
+    const fallback = byLanguage.en ?? byLanguage.ja;
+    if (!fallback) continue;
+    const current = byLanguage[language];
+    const resolvedSceneId = resolveLineSceneId(manifest, id, sceneByLineId);
+    const resolvedSpeaker = current?.speaker ?? fallback.speaker;
+    if (sceneId !== 'all' && resolvedSceneId !== sceneId) continue;
+    if (speaker !== 'all' && resolvedSpeaker !== speaker) continue;
+    results.push({
+      id,
+      sceneId: resolvedSceneId,
+      ...current,
+      fallback,
+    });
+  }
+  return results;
 }
 
 export function validateVoiceReviewBook(input, manifest) {
@@ -93,14 +206,27 @@ export function updateVoiceReview(book, manifest, language, lineId, status, note
   return { schemaVersion: VOICE_REVIEW_SCHEMA, entries };
 }
 
-export function voiceReviewSummary(book, manifest, language = 'all') {
+export function voiceReviewSummary(book, manifest, language = 'all', {
+  sceneId = 'all',
+  speaker = 'all',
+} = {}) {
   const counts = Object.fromEntries(Object.keys(VOICE_REVIEW_STATES).map((state) => [state, 0]));
+  const scenes = voiceManifestScenes(manifest);
+  const sceneByLineId = new Map();
+  for (const scene of scenes) {
+    for (const id of scene.lineIds) {
+      if (!sceneByLineId.has(id)) sceneByLineId.set(id, scene.id);
+    }
+  }
   let available = 0;
   let audioReady = 0;
   for (const [id, locales] of Object.entries(manifest?.lines ?? {})) {
+    const resolvedSceneId = resolveLineSceneId(manifest, id, sceneByLineId);
+    if (sceneId !== 'all' && resolvedSceneId !== sceneId) continue;
     for (const lang of ['en', 'ja']) {
       if (language !== 'all' && language !== lang) continue;
       if (!locales?.[lang]) continue;
+      if (speaker !== 'all' && locales[lang].speaker !== speaker) continue;
       available++;
       if (locales[lang].file) audioReady++;
       const key = voiceReviewKey(lang, id);

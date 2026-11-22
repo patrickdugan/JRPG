@@ -2,6 +2,7 @@ import { CAMPAIGN, getAllChapters } from './content/campaign.mjs';
 import { applyPresentationMode, PRESENTATION_MODES } from './presentation-mode.mjs';
 import { getOpeningInteractionGate } from './opening-cadence.mjs';
 import { mountAudioControls } from './audio-controls.mjs';
+import { mountDialogueVoiceControls } from './dialogue-voice-runtime.mjs';
 import { getSceneAudioPresentation } from './scene-audio.mjs';
 import { LEVELS, TERRAIN_TAGS, getLevel, getLevelForChapter } from './content/levels.mjs';
 import { ENCOUNTERS, getEncounter, getEncounterForChapter } from './content/encounters.mjs';
@@ -480,6 +481,10 @@ const routeSummary = document.querySelector('#routeSummary');
 const routeStatus = document.querySelector('#routeStatus');
 const routeDueList = document.querySelector('#routeDueList');
 const pageAudio = mountAudioControls({ desiredLoop: 'exploration' });
+const dialogueVoice = mountDialogueVoiceControls({
+  getVolume: () => pageAudio.getState().masterVolume,
+});
+window.addEventListener('pagehide', () => dialogueVoice.cancel());
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const chapters = getAllChapters();
@@ -2179,6 +2184,13 @@ function renderStoryworldPanel(presentation) {
   storyworldText.textContent = encounter?.text ?? cluster.entry.text;
   const reaction = storyworldReactionForProgress(progress);
   storyworldReaction.textContent = reaction?.text ?? '';
+  void dialogueVoice.presentStoryworld({
+    clusterId: cluster.id,
+    phase: progress.phase,
+    reactionId: reaction?.id ?? '',
+    text: encounter?.text ?? cluster.entry.text,
+    reactionText: reaction?.text ?? '',
+  });
 
   const options = getVisibleStoryworldOptions(storyworldState, cluster.id);
   storyworldOptionDeck.replaceChildren(...options.map((option, index) => {
@@ -2268,6 +2280,14 @@ function renderDialogue(beat) {
   }
   const line = lines[progress.currentLineIndex ?? 0];
   sceneText.textContent = `${line.speaker}: ${line.line}`;
+  if (!progress.complete && !currentStoryworldBeforeBeatBlocked(beat)) {
+    void dialogueVoice.presentDialogueLine({
+      beatId: beat.id,
+      lineIndex: progress.currentLineIndex ?? 0,
+      speaker: line.speaker,
+      text: line.line,
+    });
+  }
   const interactionGate = currentDialogueInteractionGate(beat, progress);
   dialogueProgress.textContent = interactionGate
     ? interactionGate.prompt
@@ -3148,6 +3168,7 @@ function persistCurrentBeatCompletion({ nextFieldState = null, action = 'Scene c
 }
 
 function advance(direction) {
+  dialogueVoice.cancel();
   playtimeCategory = 'narrative';
   const routeRecords = scheduledBeatRecords();
   const currentIndex = routeRecords.findIndex((record) => record.beat.id === getBeat().id);
@@ -3207,6 +3228,7 @@ chapterList.addEventListener('click', (event) => {
   const unlocked = new Set(getUnlockedBeatIds(campaignState, progressionRouteOptions()));
   const target = chapter?.beats.filter((beat) => unlocked.has(beat.id)).at(-1);
   if (!chapter || !target) return;
+  dialogueVoice.cancel();
   playtimeCategory = 'narrative';
   const nextCampaignState = moveToBeat(campaignState, chapter.id, target.id, progressionRouteOptions());
   const storyLevel = getLevelForBeat(chapter, target);
@@ -3224,6 +3246,7 @@ chapterList.addEventListener('click', (event) => {
 choiceDeck.addEventListener('click', (event) => {
   const button = event.target.closest('[data-choice-id]');
   if (button) {
+    dialogueVoice.cancel();
     pageAudio.playCue('uiConfirm');
     choose(button.dataset.choiceId);
   }
@@ -3232,6 +3255,7 @@ choiceDeck.addEventListener('click', (event) => {
 storyworldOptionDeck.addEventListener('click', (event) => {
   const button = event.target.closest('[data-storyworld-option-id]');
   if (!button || storyworldPanel.hidden) return;
+  dialogueVoice.cancel();
   const clusterId = storyworldPanel.dataset.clusterId;
   commitStoryworldTransition(
     'Storyworld reaction',
@@ -3241,6 +3265,7 @@ storyworldOptionDeck.addEventListener('click', (event) => {
 
 storyworldContinue.addEventListener('click', () => {
   if (storyworldPanel.hidden) return;
+  dialogueVoice.cancel();
   const clusterId = storyworldPanel.dataset.clusterId;
   const progress = getStoryworldProgress(storyworldState, clusterId);
   const result = progress.phase === 'unseen'
@@ -3290,6 +3315,7 @@ continueDialogue.addEventListener('click', () => {
   if (!commitStateChanges('Dialogue progress', [
     { id: 'narrative', adapter: narrativeAdapter, previousState: narrativeState, nextState: result.state },
   ]).ok) return;
+  dialogueVoice.cancel();
   narrativeState = result.state;
   pageAudio.playCue('uiConfirm');
   render();
@@ -3729,6 +3755,7 @@ resetCampaign.addEventListener('click', () => {
     { id: 'storyworld', adapter: storyworldAdapter, previousState: storyworldState, nextState: nextStoryworldState },
   ]);
   if (!resetPersisted.ok) return;
+  dialogueVoice.cancel();
   campaignState = nextCampaignState;
   advancementState = nextAdvancementState;
   runReceiptState = receipt.state;
@@ -3845,6 +3872,7 @@ window.addEventListener('keydown', (event) => {
   }
   if (choiceNumber > 0 && choiceNumber <= (getBeat().choices ?? []).length) {
     event.preventDefault();
+    dialogueVoice.cancel();
     choose(getBeat().choices[choiceNumber - 1].id);
   }
 });

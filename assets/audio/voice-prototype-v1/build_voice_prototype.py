@@ -1,4 +1,4 @@
-"""Generate the Last Command voice prototype in English and Japanese.
+"""Generate the Last Command and extended cast voice prototype in English and Japanese.
 
 Pipeline per character and language:
 1. Kokoro-82M renders an original reference clip from a stock synthetic
@@ -31,10 +31,24 @@ REPO = SUITE.parents[2]
 RUNTIME = REPO / "game" / "assets" / "audio" / "voice-prototype-v1"
 SAMPLE_RATE_OUT = 24_000
 TARGET_LUFS = -18.0
+SCENE_SPECS = (
+    ("last-command", "scene-last-command.json"),
+    ("cast-auditions", "scene-cast-auditions.json"),
+)
 
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def line_base_seed(line_id: str) -> int:
+    if line_id.isdigit():
+        return int(line_id) * 100
+    if line_id.startswith("ca-") and line_id[3:].isdigit():
+        return 10_000 + int(line_id[3:]) * 100
+    digits = int(re.sub(r"\D", "", line_id) or "0")
+    prefix = sum(ord(ch) for ch in re.sub(r"\d", "", line_id))
+    return (prefix * 100 + digits) * 100
 
 
 def gpu_free_gb() -> float | None:
@@ -77,7 +91,7 @@ def render_reference(character_id: str, character: dict, lang: str, device: str)
 
     spec = character["reference"][lang]
     text = character["referenceText"][lang]
-    pipeline = KPipeline(lang_code=spec["lang"], device=device)
+    pipeline = KPipeline(lang_code=spec["lang"], repo_id="hexgrad/Kokoro-82M", device=device)
     chunks = [np.asarray(audio, dtype=np.float32) for _gs, _ps, audio in pipeline(text, voice=spec["voice"], speed=0.95)]
     audio = np.concatenate(chunks)
     if spec.get("pitch"):
@@ -254,12 +268,30 @@ def loudness_normalise(audio: np.ndarray, sample_rate: int) -> np.ndarray:
     return audio * (0.95 / peak) if peak > 0.95 else audio
 
 
+def load_all_scenes() -> list[tuple[str, str, dict]]:
+    loaded = []
+    for scene_id, filename in SCENE_SPECS:
+        path = SUITE / filename
+        if path.exists():
+            loaded.append((scene_id, filename, load_json(path)))
+    return loaded
+
+
+def default_beat_for_line(scene_id: str, line: dict) -> str | None:
+    if line.get("beatId"):
+        return str(line["beatId"])
+    if scene_id == "last-command":
+        return "sw10-corrections-desk" if line["id"].isdigit() and int(line["id"]) >= 18 else "c9-05-dawn-at-observatory"
+    return None
+
+
 # -------------------------------------------------------------------- main
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--langs", default="en,ja")
-    parser.add_argument("--lines", default="", help="Comma-separated line ids; default all.")
+    parser.add_argument("--scenes", default="all", help="Comma-separated scene ids (last-command,cast-auditions) or 'all'.")
+    parser.add_argument("--lines", default="", help="Comma-separated line ids; default all in selected scenes.")
     parser.add_argument("--takes", type=int, default=3)
     parser.add_argument("--device", default="auto", choices=["auto", "cuda", "cpu"])
     parser.add_argument("--min-free-gb", type=float, default=6.0)
@@ -277,17 +309,30 @@ def main() -> int:
     torch.set_num_threads(max(1, args.threads))
 
     cast = load_json(SUITE / "cast.json")["characters"]
-    scene = load_json(SUITE / "scene-last-command.json")
+    all_scenes = load_all_scenes()
+    wanted_scenes = None if args.scenes == "all" else {item.strip() for item in args.scenes.split(",") if item.strip()}
+    wanted_lines = {item.strip() for item in args.lines.split(",") if item.strip()}
     langs = [lang for lang in args.langs.split(",") if lang]
-    wanted = {item for item in args.lines.split(",") if item}
-    lines = [line for line in scene["lines"] if not wanted or line["id"] in wanted]
+
+    all_line_records: list[tuple[str, dict]] = []
+    selected_records: list[tuple[str, dict]] = []
+    for scene_id, _filename, scene_doc in all_scenes:
+        for line in scene_doc["lines"]:
+            all_line_records.append((scene_id, line))
+            if wanted_scenes is not None and scene_id not in wanted_scenes:
+                continue
+            if wanted_lines and line["id"] not in wanted_lines:
+                continue
+            selected_records.append((scene_id, line))
+
     device = pick_device(args.device, args.min_free_gb)
     asr_device = device if args.asr_device == "same" else args.asr_device
-    print(f"device={device} asr={asr_device} langs={langs} lines={len(lines)} takes={args.takes}", flush=True)
+    print(f"device={device} asr={asr_device} langs={langs} lines={len(selected_records)} takes={args.takes}", flush=True)
 
+    needed_speakers = sorted({line["speaker"] for _, line in selected_records}) if not args.references_only else sorted(cast.keys())
     references = {
         (speaker, lang): render_reference(speaker, cast[speaker], lang, "cpu")
-        for lang in langs for speaker in sorted({line["speaker"] for line in lines})
+        for lang in langs for speaker in needed_speakers
     }
     print(f"references ready: {len(references)}", flush=True)
     if args.references_only:
@@ -309,13 +354,49 @@ def main() -> int:
     transcribe = Transcriber(asr_device, args.whisper)
     manifest_path = RUNTIME / "manifest.json"
     manifest = load_json(manifest_path) if manifest_path.exists() else {"lines": {}}
+
+    pause_before = {}
+    scenes_manifest = []
+    default_pause = 0.4
+    for scene_id, filename, scene_doc in all_scenes:
+        if scene_id == "last-command":
+            default_pause = scene_doc.get("defaultPauseSeconds", 0.4)
+        for line in scene_doc["lines"]:
+            if "pauseBeforeSeconds" in line:
+                pause_before[line["id"]] = line["pauseBeforeSeconds"]
+        scenes_manifest.append({
+            "id": scene_id,
+            "script": filename,
+            "title": scene_doc.get("title", scene_id),
+            "defaultPauseSeconds": scene_doc.get("defaultPauseSeconds", default_pause),
+            "lineIds": [line["id"] for line in scene_doc["lines"]],
+        })
+
+    # Ensure existing rendered lines carry sceneId / beatId metadata even when skipped.
+    for scene_id, line in all_line_records:
+        existing_locales = manifest.get("lines", {}).get(line["id"], {})
+        beat_id = default_beat_for_line(scene_id, line)
+        for locale_entry in existing_locales.values():
+            if isinstance(locale_entry, dict):
+                locale_entry.setdefault("sceneId", scene_id)
+                if beat_id:
+                    locale_entry["beatId"] = beat_id
+
     manifest.update({
         "id": "voice-prototype-v1:last-command",
         "provenance": "AI-generated synthetic voices: Kokoro-82M reference timbres performed by Chatterbox Multilingual; every file carries the Perth watermark. No real person's voice is cloned.",
         "sampleRate": SAMPLE_RATE_OUT,
         "targetLufs": TARGET_LUFS,
-        "defaultPauseSeconds": scene.get("defaultPauseSeconds", 0.4),
-        "pauseBeforeSeconds": {line["id"]: line["pauseBeforeSeconds"] for line in scene["lines"] if "pauseBeforeSeconds" in line},
+        "defaultPauseSeconds": default_pause,
+        "pauseBeforeSeconds": pause_before,
+        "scenes": scenes_manifest,
+        "cast": {
+            speaker_id: {
+                "name": details["name"],
+                "brief": details["brief"],
+            }
+            for speaker_id, details in cast.items()
+        },
     })
 
     def save_manifest() -> None:
@@ -325,10 +406,12 @@ def main() -> int:
     save_manifest()
 
     for lang in langs:
-        for line in lines:
+        for scene_id, line in selected_records:
             speaker = line["speaker"]
             text = line[lang]
             language_id = line.get("language", {}).get(lang, lang)
+            exaggeration = float(line.get("exaggerationByLang", {}).get(lang, line["exaggeration"]))
+            cfg_weight = float(line.get("cfgByLang", {}).get(lang, line["cfg"]))
             reference = references[(speaker, lang)]
             existing = manifest["lines"].get(line["id"], {}).get(lang)
             if (not args.force and existing and existing.get("text") == text
@@ -336,8 +419,9 @@ def main() -> int:
                 print(f"  {lang} {line['id']} {speaker}: current, skipped", flush=True)
                 continue
             takes = []
+            base_seed = line_base_seed(line["id"])
             for take in range(args.takes):
-                seed = int(line["id"]) * 100 + take
+                seed = base_seed + take
                 torch.manual_seed(seed)
                 budget["tokens"] = speech_token_budget(text, language_id)
                 started = time.perf_counter()
@@ -345,11 +429,11 @@ def main() -> int:
                     text,
                     language_id=language_id,
                     audio_prompt_path=str(reference),
-                    exaggeration=float(line["exaggeration"]),
-                    cfg_weight=float(line["cfg"]),
+                    exaggeration=exaggeration,
+                    cfg_weight=cfg_weight,
                 )
                 audio = wav.squeeze().detach().cpu().numpy().astype(np.float32)
-                generated_seconds = round(time.perf_counter() - started, 1)
+                generated_seconds = round(time.perf_counter() - started, 2)
                 heard, chunks = transcribe(audio, model.sr, language_id, words=True)
                 audio, trimmed = trim_overrun(audio, model.sr, chunks, text, language_id)
                 if trimmed:
@@ -357,7 +441,7 @@ def main() -> int:
                 cer = char_error_rate(normalise_text(text, language_id), normalise_text(heard, language_id))
                 takes.append({"take": take, "seed": seed, "cer": round(cer, 3), "heard": heard, "trimmed": trimmed,
                               "tokenBudget": budget["tokens"], "seconds": generated_seconds, "audio": audio})
-                print(f"  {lang} {line['id']} {speaker} take {take}: cer={cer:.3f} trimmed={trimmed} heard={heard!r}", flush=True)
+                print(f"  {lang} {line['id']} {speaker} take {take}: cer={cer:.3f} trimmed={trimmed} ({generated_seconds}s) heard={heard!r}", flush=True)
             best = min(takes, key=lambda item: (item["cer"], abs(len(item["audio"]) / model.sr - 0.07 * len(text))))
             fx = cast[speaker].get("fx", {}).get(line.get("fx", "default"), cast[speaker].get("fx", {}).get("default", {}))
             performed = apply_fx(best["audio"], model.sr, fx)
@@ -367,15 +451,18 @@ def main() -> int:
             out = RUNTIME / lang / f"{line['id']}-{speaker}.ogg"
             out.parent.mkdir(parents=True, exist_ok=True)
             sf.write(out, performed, SAMPLE_RATE_OUT, format="OGG", subtype="VORBIS")
-            manifest["lines"].setdefault(line["id"], {})[lang] = {
+            beat_id = default_beat_for_line(scene_id, line)
+            entry_payload = {
                 "file": f"./assets/audio/voice-prototype-v1/{lang}/{out.name}",
                 "speaker": speaker,
+                "sceneId": scene_id,
+                **({"beatId": beat_id} if beat_id else {}),
                 "section": line["section"],
                 "direction": line["direction"],
                 "text": text,
                 "languageId": language_id,
-                "exaggeration": line["exaggeration"],
-                "cfgWeight": line["cfg"],
+                "exaggeration": exaggeration,
+                "cfgWeight": cfg_weight,
                 "fx": line.get("fx", "default"),
                 "chosenTake": best["take"],
                 "seed": best["seed"],
@@ -384,6 +471,7 @@ def main() -> int:
                 "takes": [{key: value for key, value in item.items() if key != "audio"} for item in takes],
                 **prosody_metrics(best["audio"], model.sr),
             }
+            manifest["lines"].setdefault(line["id"], {})[lang] = entry_payload
             save_manifest()
     print("done", flush=True)
     return 0

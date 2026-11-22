@@ -1,0 +1,130 @@
+{
+  "id": "voice-prototype-v1:cast-auditions",
+  "sceneId": "cast-auditions",
+  "title": "Extended Cast Auditions — Archive, Clinic, Gate & Tribunal",
+  "sources": [
+    "game/content/opening-slice-dialogue.mjs (p02-medicine-across-lane, p05-archive-promise)",
+    "game/content/dialogue/script-chapter4-chapter6.mjs (c6-03-tribunal)",
+    "game/content/dialogue/script-chapter7-epilogue.mjs (c8-03-black-gate-bargain, c8-05-gate-opened, c9-02-ujiros-last-ledger, c9-03-conservatory-offers, c9-05-dawn-at-observatory)",
+    "docs/32-lady-enma-recurring-antagonist.md",
+    "docs/04-detailed-outline.md"
+  ],
+  "translationStatus": "English lines are verbatim canonical Campaign script. Japanese lines are character-register draft translations awaiting native review.",
+  "defaultPauseSeconds": 0.5,
+  "lines": [
+    {
+      "id": "ca-01",
+      "speaker": "aya",
+      "beatId": "p05-archive-promise",
+      "section": "Aya Shinohara — Shrine archivist",
+      "direction": "Measured archivist at dawn; warm, steady resolve without raising her voice.",
+      "en": "It can prove a person existed when an office says otherwise.",
+      "ja": "役所の帳面が人を消しても、その人が確かにいたという証にはなります。",
+      "exaggeration": 0.42,
+      "cfg": 0.45
+    },
+    {
+      "id": "ca-02",
+      "speaker": "aya",
+      "beatId": "c9-03-conservatory-offers",
+      "section": "Aya Shinohara — Shrine archivist",
+      "direction": "Calm, exact refusal in the Conservatory; defines the ruler's gift for what it is.",
+      "en": "The perfect archive cannot be corrected because it is not a record. It is your verdict wearing shelves.",
+      "ja": "完璧な書庫に訂正の余地がないのは、それが記録ではないからです。棚の形をした、あなたの判決にすぎません。",
+      "exaggeration": 0.5,
+      "cfg": 0.42
+    },
+    {
+      "id": "ca-03",
+      "speaker": "kiku",
+      "beatId": "p02-medicine-across-lane",
+      "section": "Kiku Nawa — Village physician",
+      "direction": "Brisk physician in the rain lane; bedside manner as practical command.",
+      "en": "Then carry the bottle. Let someone else make the speech.",
+      "ja": "ならこの薬を運びなさい。演説は他の誰かに任せておけばいい。",
+      "exaggeration": 0.48,
+      "cfg": 0.46
+    },
+    {
+      "id": "ca-04",
+      "speaker": "kiku",
+      "beatId": "c9-05-dawn-at-observatory",
+      "section": "Kiku Nawa — Village physician",
+      "direction": "Clipped, dry impatience while binding Mateus's hand; humor is care, never cruelty.",
+      "en": "Good. Hold this cloth. Mourn your favorite method after you stop leaking on the evidence.",
+      "ja": "結構。この布を押さえて。お気に入りの術を惜しむのは、証拠に血を垂らすのをやめてからにしなさい。",
+      "exaggeration": 0.52,
+      "cfg": 0.45
+    },
+    {
+      "id": "ca-05",
+      "speaker": "genta",
+      "beatId": "c9-05-dawn-at-observatory",
+      "section": "Genta Mononobe — Former retainer",
+      "direction": "Steady battlefield report; low-key calm makes the succession trap credible.",
+      "en": "He is not bluffing. Three outer bells have begun requesting a succession command.",
+      "ja": "はったりではない。外郭の鐘が三つ、すでに継承の命令を求め始めている。",
+      "exaggeration": 0.4,
+      "cfg": 0.45
+    },
+    {
+      "id": "ca-06",
+      "speaker": "genta",
+      "beatId": "c9-03-conservatory-offers",
+      "section": "Genta Mononobe — Former retainer",
+      "direction": "Plain, unhurried accountability; refuses the comfort of unquestioned rank.",
+      "en": "The restored armor removes every person who could refuse my order. Rank without answer is only isolation with ceremony.",
+      "ja": "元に戻された鎧には、俺の命令を拒める者が一人もいない。答えを欠いた階級など、儀式をまとった孤立にすぎん。",
+      "exaggeration": 0.45,
+      "cfg": 0.42
+    },
+    {
+      "id": "ca-07",
+      "speaker": "lady-enma",
+      "beatId": "c8-03-black-gate-bargain",
+      "section": "Lady Enma of Ash — The Cinder Fan",
+      "fx": "default",
+      "direction": "Staged courtly bargain at the Black Gate; silky, poised, fan-snap timing.",
+      "en": "I offer arithmetic. Two lives placed in my custody, and selected roofs remain untouched by dawn.",
+      "ja": "わたくしが差し出すのは算術でございます。二つの命を預けてくだされば、選ばれた屋根だけは夜明けまで無傷でおきましょう。",
+      "exaggeration": 0.68,
+      "cfg": 0.4
+    },
+    {
+      "id": "ca-08",
+      "speaker": "lady-enma",
+      "beatId": "c8-05-gate-opened",
+      "section": "Lady Enma of Ash — The Cinder Fan",
+      "fx": "subdued",
+      "direction": "Third mask broken; ash cooled, theatrical flourish stripped down to a quiet warning.",
+      "en": "He will offer each of you the room where your oldest ache appears reasonable. Refuse the room, not the ache.",
+      "ja": "あの方は、あなた方それぞれの古い痛みが筋の通ったものに見える部屋を差し出します。痛みをではなく、その部屋を拒みなさいませ。",
+      "exaggeration": 0.45,
+      "cfg": 0.38,
+      "pauseBeforeSeconds": 0.8
+    },
+    {
+      "id": "ca-09",
+      "speaker": "ujiro",
+      "beatId": "c6-03-tribunal",
+      "section": "Magistrate Ujiro Arata — Court magistrate",
+      "direction": "Officious magistrate in command of the hall; paperwork wielded as certainty.",
+      "en": "Spectators do not set the docket. Disorder outside these doors is proof that agitators require containment.",
+      "ja": "傍聴人が審理の順序を決めるのではない。扉の外の混乱こそ、扇動者を封じ込めるべき証拠である。",
+      "exaggeration": 0.5,
+      "cfg": 0.44
+    },
+    {
+      "id": "ca-10",
+      "speaker": "ujiro",
+      "beatId": "c9-02-ujiros-last-ledger",
+      "section": "Magistrate Ujiro Arata — Court magistrate",
+      "direction": "Cornered before the dais; bureaucratic composure fraying into defensive heat.",
+      "en": "And feed every unprotected name in it to this room? You arrived too late to understand what preservation costs.",
+      "ja": "守りのない名前を、残らずこの広間に食わせろと言うのか！　保存の代償を知るには、お前たちは遅すぎたのだ！",
+      "exaggeration": 0.76,
+      "cfg": 0.38,
+      "pauseBeforeSeconds": 0.7
+    }
+  ]
+}
