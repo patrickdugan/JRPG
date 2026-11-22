@@ -409,17 +409,20 @@ for (const key of ['party', 'partyAnimation', 'partyExtended', 'enemy', 'enemyAn
 // never feed back into the fixed-step kernel, objectives, collision or saves.
 const hdPaintedEnabled = getHdArtMode(window.location.search) === 'hd';
 const hdMotionEnabled = hdPaintedEnabled && laboratoryQuery.get('motion') !== '0';
+const hdReviewedMotionEnabled = hdMotionEnabled && laboratoryQuery.get('motion') === 'reviewed';
 const hdEnemyCardTemplates = new Set(['silk-jorogumo', 'bell-moth', 'cinder-hound', 'razor-bamboo-stalker']);
 elements.canvas.dataset.hdArtMode = hdPaintedEnabled ? 'hd' : 'classic';
 elements.canvas.dataset.hdArtState = hdPaintedEnabled ? 'loading' : 'off';
 elements.canvas.dataset.hdArtDrawCount = '0';
 elements.canvas.dataset.hdMotionState = hdMotionEnabled ? 'loading' : 'off';
+elements.canvas.dataset.hdMotionLane = hdReviewedMotionEnabled ? 'reviewed' : 'canonical';
 elements.canvas.dataset.hdMotionClip = '';
 elements.canvas.dataset.hdMotionFrame = '';
 const hdPaintedArt = createHdPaintedArtRuntime({
   enabled: hdPaintedEnabled,
   allowBossStudies: true,
   motionEnabled: hdMotionEnabled,
+  reviewedMotionEnabled: hdReviewedMotionEnabled,
   onMotionChange: (id, clip, state) => {
     elements.canvas.dataset.hdMotionTemplate = id;
     elements.canvas.dataset.hdMotionClip = clip;
