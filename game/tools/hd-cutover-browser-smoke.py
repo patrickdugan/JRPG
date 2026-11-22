@@ -107,12 +107,22 @@ def run(real_candidate_dir: Path | None = None):
                     wait_until="domcontentloaded",
                 )
                 assert response and response.status == 200
-                page.wait_for_function(
-                    """() => document.querySelector('#original')?.dataset.phase === 'windup'
-                       && Number.isFinite(Number(document.querySelector('#baselineScore')?.textContent))
-                       && document.querySelector('#original')?.dataset.frame === '20'""",
-                    timeout=30000,
-                )
+                try:
+                    page.wait_for_function(
+                        """() => document.querySelector('#original')?.dataset.phase === 'windup'
+                           && Number.isFinite(Number(document.querySelector('#baselineScore')?.textContent))
+                           && document.querySelector('#original')?.dataset.frame === '20'""",
+                        timeout=15000,
+                    )
+                except Exception:
+                    print("Browser page initialization diagnostic:",
+                          {"status": page.locator("#status").inner_text(),
+                           "errors": errors,
+                           "originalData": page.locator("#original").evaluate("(node) => ({...node.dataset})"),
+                           "baseline": page.locator("#baselineScore").inner_text()},
+                          flush=True)
+                    page.screenshot(path=str(OUT / "failed-startup.png"), full_page=True)
+                    raise
                 assert page.locator("#originalCounter").inner_text() == "WINDUP 21 / 24"
                 assert page.locator("#capture").is_disabled()
                 page.locator("#candidate").set_input_files(candidate)
