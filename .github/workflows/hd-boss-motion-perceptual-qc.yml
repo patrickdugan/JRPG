@@ -1,0 +1,49 @@
+name: HD boss perceptual animation review
+
+on:
+  pull_request:
+    paths:
+      - "game/tools/audit-hd-boss-motion.py"
+      - "game/tools/tests/test_hd_boss_motion_qc.py"
+      - "game/assets/art/hd-painted-v1/motion/**"
+      - ".github/workflows/hd-boss-motion-perceptual-qc.yml"
+  push:
+    branches:
+      - "feature/hd-boss-perceptual-motion-audit-20261122"
+    paths:
+      - "game/tools/audit-hd-boss-motion.py"
+      - "game/tools/tests/test_hd_boss_motion_qc.py"
+      - ".github/workflows/hd-boss-motion-perceptual-qc.yml"
+  workflow_dispatch:
+
+jobs:
+  screening:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install image inspection dependency
+        run: python -m pip install "Pillow==11.1.0"
+      - name: Motion threshold regression tests
+        run: python -m unittest discover -s game/tools/tests -p "test_hd_boss_motion_qc.py" -v
+      - name: Scan the four committed boss animations
+        run: python game/tools/audit-hd-boss-motion.py --out out/hd-boss-motion-qc.json
+      - name: Emit review-hold count, keeping source assets unchanged
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("out/hd-boss-motion-qc.json").read_text())
+          for boss, clips in r["hold_clips"].items():
+              print(f"{boss}: {len(clips)} visually static candidates in {len(r['bosses'][boss]['clips'])} clips")
+          print("motion screening all passed:", r["passes_all_screening_gates"])
+          print("manual visual approval:", r["visual_approval"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hd-boss-perceptual-motion-report
+          path: out/hd-boss-motion-qc.json
+          if-no-files-found: error
