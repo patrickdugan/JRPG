@@ -76,11 +76,11 @@ export function hdPaintedDrawPlan(actor,record,frame) {
   });
 }
 export function createHdPaintedArtRuntime({
-  fetchJson, createImage, root=HD_ART_ROOT, enabled=false, motionEnabled=false, allowBossStudies=false, onMotionChange=()=>{}, onMotionFrame=()=>{}, onChange=()=>{},
+  fetchJson, createImage, root=HD_ART_ROOT, enabled=false, motionEnabled=false, reviewedMotionEnabled=false, allowBossStudies=false, onMotionChange=()=>{}, onMotionFrame=()=>{}, onChange=()=>{},
 }={}) {
   if (typeof fetchJson !== 'function' || typeof createImage !== 'function')
     throw new TypeError('fetchJson and createImage must be functions');
-  const motion=createHdMotionRuntime({fetchJson,createImage,root,enabled:enabled&&motionEnabled,onChange:onMotionChange,onFrame:onMotionFrame});
+  const motion=createHdMotionRuntime({fetchJson,createImage,root,enabled:enabled&&motionEnabled,reviewedMotionEnabled,onChange:onMotionChange,onFrame:onMotionFrame});
   const states=new Map(),images=new Map(),inflight=new Map();
   let manifestPromise=null,disabledReason=null;
   function state(id,next) {

@@ -68,15 +68,28 @@ def load_package(z):
             raise CandidateError('Frame hash mismatch or duplicate: '+name)
         output[path]=data
     review={}
-    raw=f'sources/{ident}-six-poses-original.png'
-    if prefix+raw in z.namelist():
-        review[f'assets/art/hd-painted-boss-review-v1/{ident}/six-pose-original.png']=z.read(prefix+raw)
-    if prefix+'intake.json' in z.namelist():
-        data=z.read(prefix+'intake.json')
-        j=readjson(data)
-        if j.get('bossId')!=ident or j.get('sixKeyAtlasSha256')!=record['sha256']:
+    receipt='intake.json'
+    intake=None
+    if prefix+receipt in z.namelist():
+        data=z.read(prefix+receipt)
+        intake=readjson(data)
+        if intake.get('bossId')!=ident or intake.get('sixKeyAtlasSha256')!=record['sha256']:
             raise CandidateError('Review intake mismatches source')
         review[f'assets/art/hd-painted-boss-review-v1/{ident}/intake.json']=data
+    raw=(intake or {}).get('sourceFile') or f'sources/{ident}-six-poses-original.png'
+    if not (isinstance(raw,str) and raw.startswith('sources/')
+            and raw.endswith('.png') and '..' not in Path(raw).parts
+            and '/' not in raw[len('sources/'):]):
+        raise CandidateError('Unsafe or missing review source path')
+    if prefix+raw in z.namelist():
+        source_bytes=z.read(prefix+raw)
+        if intake and intake.get('sourceSha256') and SHA(source_bytes)!=intake['sourceSha256']:
+            raise CandidateError('Review source SHA mismatch')
+        # Retain accurate source filename: comparison boards remain labeled
+        # as comparisons rather than misidentified full-resolution paintings.
+        review[f'assets/art/hd-painted-boss-review-v1/{ident}/{Path(raw).name}']=source_bytes
+    elif intake and intake.get('sourceSha256'):
+        raise CandidateError('Declared source absent from review package')
     return ident,record,motionactor,output,review
 
 def dump(data):return (json.dumps(data,indent=2,ensure_ascii=False)+'\n').encode('utf-8')

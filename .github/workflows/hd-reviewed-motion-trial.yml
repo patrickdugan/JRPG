@@ -1,0 +1,87 @@
+name: User-approved HD windup trial import
+on:
+  push:
+    branches: [feature/hd-reviewed-motion-runtime-20261122]
+    paths:
+      - 'game/hd-reviewed-motion.mjs'
+      - 'game/hd-painted-motion.mjs'
+      - 'game/hd-painted-animation.mjs'
+      - 'game/action-campaign-battle.js'
+      - 'game/tools/install-reviewed-hd-windups.py'
+      - 'game/tools/hd-reviewed-motion-browser-smoke.py'
+      - 'game/tests/hd-reviewed-motion.test.mjs'
+      - '.github/workflows/hd-reviewed-motion-trial.yml'
+  pull_request:
+    paths:
+      - 'game/hd-reviewed-motion.mjs'
+      - 'game/hd-painted-motion.mjs'
+      - 'game/hd-painted-animation.mjs'
+      - 'game/action-campaign-battle.js'
+      - 'game/tools/install-reviewed-hd-windups.py'
+      - 'game/tools/hd-reviewed-motion-browser-smoke.py'
+      - 'game/tests/hd-reviewed-motion.test.mjs'
+      - 'game/assets/art/hd-painted-v1/reviewed-motion/**'
+      - '.github/workflows/hd-reviewed-motion-trial.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: hd-user-approved-windups
+  cancel-in-progress: false
+jobs:
+  reviewed-windup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow, NumPy and isolated Chromium
+        run: |
+          python -m pip install 'pillow>=11,<13' 'numpy>=2,<3' playwright
+          python -m playwright install --with-deps chromium
+      - name: Regenerate exactly two reviewed windups from pinned original source art
+        run: python game/tools/install-reviewed-hd-windups.py --root . --install
+      - name: Verify original seven-boss art and exact reviewed WebP SHA-256
+        run: |
+          node --test game/tests/hd-seven-named-boss-art-git.test.mjs \
+            game/tests/hd-reviewed-motion.test.mjs \
+            game/tests/hd-painted-motion.test.mjs \
+            game/tests/hd-painted-animation.test.mjs
+          (cd game && npm run check)
+      - name: Real-browser opt-in and missing-preview source fallback
+        run: python game/tools/hd-reviewed-motion-browser-smoke.py
+      - name: Verify originals, Roster Keystone, and canonical 70 clips are unchanged
+        run: |
+          git diff --exit-code -- assets/art
+          git diff --exit-code -- game/assets/art/hd-painted-v1/manifest.json
+          git diff --exit-code -- game/assets/art/hd-painted-v1/motion-manifest.json
+          git diff --exit-code -- game/assets/art/hd-painted-v1/sheets
+          git diff --exit-code -- game/assets/art/hd-painted-v1/motion
+      - name: Commit only two source-reproduced preview WebPs and receipt manifest
+        if: github.event_name == 'push' && github.ref_name == 'feature/hd-reviewed-motion-runtime-20261122'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- game/assets/art/hd-painted-v1/reviewed-motion/manifest.json \
+            game/assets/art/hd-painted-v1/reviewed-motion/yearless-bell/windup.webp \
+            game/assets/art/hd-painted-v1/reviewed-motion/lady-enma/windup.webp
+          if ! git diff --cached --quiet; then
+            git commit -m "art: commit two SHA-verified user-approved optional HD windup trials"
+            git push origin HEAD:feature/hd-reviewed-motion-runtime-20261122
+          fi
+      - name: Upload verified browser screenshots and review receipt
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jrpg-two-approved-hd-windup-runtime-tests
+          path: artifacts/hd-reviewed-motion/
+          if-no-files-found: warn
+          retention-days: 14

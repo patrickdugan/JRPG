@@ -29,8 +29,12 @@
   "package": "JRPG_HD_Boss_WidowOfFog_v1.zip",
   "packageSize": 12337618,
   "packageSha256": "74633ea1b17d76252a49dcdd58e81a8487da8144242e68e143801424ad83a17e",
-  "binarySourceInGit": false,
+  "binarySourceInGit": true,
   "sourceDistribution": "conversation ZIP",
   "engineIntegration": "optional HD body when package installed; default pixel boss remains fallback",
-  "notes": "Cross-pose optical flow avoided; 24 distinct frames per clip use rigid and cloth-like deformations of one painted source pose."
+  "notes": "Cross-pose optical flow avoided; 24 distinct frames per clip use rigid and cloth-like deformations of one painted source pose.",
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }

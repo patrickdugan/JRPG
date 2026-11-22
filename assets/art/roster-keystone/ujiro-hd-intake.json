@@ -1,0 +1,50 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "ujiro",
+  "displayName": "Magistrate Ujiro Arata",
+  "candidateStatus": "review-candidate",
+  "reviewStatus": "manual-visual-approval-pending",
+  "sourceProvenance": "individual-rgba-1536x1024",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "figureSourcePixels": [
+    512,
+    512
+  ],
+  "sourceSha256": "a52be9962bd7390375830e662c4ea99e9f152b0000c3524016a788fbc395a575",
+  "sixKeyAtlasSha256": "8cbc02bc4f8fe375e6e071eec408e939be4fb60c1acd790795f7a35000879ae1",
+  "sourceFile": "sources/ujiro-six-poses-original.png",
+  "sixKeyAtlas": "assets/sheets/ujiro.png",
+  "poses": [
+    "idle",
+    "advance",
+    "gavel-line-windup",
+    "gavel-line-active",
+    "seizure-order",
+    "retreat"
+  ],
+  "drawHeight": 178,
+  "motion": {
+    "frameSize": [
+      192,
+      192
+    ],
+    "framesPerClip": 24,
+    "clipCount": 10,
+    "frameCount": 240,
+    "sourceDerivedDeformation": true,
+    "decodedFrameHashesVerifiedLocally": true
+  },
+  "package": "JRPG_HD_Boss_ujiro_v1.zip",
+  "batch": "JRPG_HD_Boss_FinalFour_20261121.zip",
+  "binarySourceInGit": true,
+  "engineIntegration": "optional-hd-mode-after-import",
+  "qualityNote": "Standalone six-pose 1536x1024 RGBA painting, awaiting manual visual approval",
+  "gameplayAuthority": false,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
+}

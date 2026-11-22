@@ -1,0 +1,48 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "furnace-abbot",
+  "candidateStatus": "review-candidate",
+  "sourceFile": "sources/furnace-abbot-six-poses-original.png",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "sourceSha256": "50178b4dbb3163b0868ca56f22d56e43b71dc0da7e19cc07db6d4bc0aa4a6923",
+  "sixKeyAtlas": "assets/sheets/furnace-abbot.png",
+  "sixKeyAtlasSha256": "d3dd3c49ef8a0b46f8277e5119e95665ac7f6622da36adec2aee6690735cd053",
+  "poses": [
+    "idle",
+    "advance",
+    "hammer-decree-windup",
+    "hammer-decree-active",
+    "forge-sermon",
+    "defeat"
+  ],
+  "motion": {
+    "provenance": "source-pose foot-anchored deformation, not hand-painted inbetweens",
+    "frameSize": [
+      192,
+      192
+    ],
+    "framesPerClip": 24,
+    "clipCount": 10,
+    "frameCount": 240,
+    "clipNames": [
+      "idle",
+      "locomotion",
+      "windup",
+      "active",
+      "recovery",
+      "guard",
+      "hurt",
+      "defeat",
+      "signature",
+      "stagger"
+    ],
+    "decodedFrameHashesVerified": true
+  },
+  "binarySourceInGit": false,
+  "binarySourceDistribution": "conversation-artifact",
+  "engineIntegration": "existing-hd-painted-runtime-after-install",
+  "reviewStatus": "manual-visual-acceptance-pending"
+}

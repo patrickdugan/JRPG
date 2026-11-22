@@ -1,0 +1,30 @@
+name: HD windup source reference bundle
+on:
+  push:
+    branches: [feature/hd-boss-windup-articulation-20261122]
+    paths:
+      - '.github/workflows/hd-windup-source-reference.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-reference:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare exact Git-tracked art reference files
+        run: |
+          mkdir -p artifacts/hd-windup-sources
+          cp game/assets/art/hd-painted-v1/sheets/yearless-bell.png artifacts/hd-windup-sources/yearless-bell-six-poses.png
+          cp game/assets/art/hd-painted-v1/sheets/lady-enma.png artifacts/hd-windup-sources/lady-enma-six-poses.png
+          cp game/assets/art/hd-painted-v1/motion/yearless-bell/windup.webp artifacts/hd-windup-sources/yearless-bell-windup-original.webp
+          cp game/assets/art/hd-painted-v1/motion/lady-enma/windup.webp artifacts/hd-windup-sources/lady-enma-windup-original.webp
+          cp game/assets/art/hd-painted-v1/motion/lady-enma/active.webp artifacts/hd-windup-sources/lady-enma-active-original.webp
+          sha256sum artifacts/hd-windup-sources/* > artifacts/hd-windup-sources/SHA256SUMS
+      - name: Upload source references for QA only
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-hd-windup-source-reference
+          path: artifacts/hd-windup-sources/
+          retention-days: 7

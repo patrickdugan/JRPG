@@ -45,9 +45,13 @@
   "package": "JRPG_HD_Boss_CaptainKaji_v1.zip",
   "packageSha256": "a3c04a74fe458e14ecf5538d80e8ab0ddd7f270fac7d2f0c3d3251d9d9bec35c",
   "packageFormat": "zip",
-  "binarySourceInGit": false,
+  "binarySourceInGit": true,
   "binarySourceDistribution": "conversation-artifact",
   "engineIntegration": "existing-hd-painted-runtime-after-install",
   "reviewStatus": "manual-visual-acceptance-pending",
-  "notes": "The 24 frames within a clip are source-derived deformations, not independently painted animation drawings. Existing authored boss v2 remains the fallback."
+  "notes": "The 24 frames within a clip are source-derived deformations, not independently painted animation drawings. Existing authored boss v2 remains the fallback.",
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }
