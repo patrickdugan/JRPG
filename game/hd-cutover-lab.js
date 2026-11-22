@@ -361,7 +361,7 @@ function wire(){
  ui.mode.addEventListener('change',setWindow);
  ui.backdrop.addEventListener('change',()=>{applyBackdrop();forgetScreenshot();});
  ui.speed.addEventListener('change',()=>{carry=0;forgetScreenshot();});
- ui.candidate.addEventListener('change',loadCandidate);
+ ui.input.addEventListener('change',loadCandidate);
  ui.receiptFile.addEventListener('change',loadReceiptFile);
  ui.timeline.addEventListener('input',()=>{stop();sequence=Number(ui.timeline.value);draw();});
  ui.prev.addEventListener('click',()=>step(-1));
