@@ -136,7 +136,7 @@ def run(root: Path, out: Path) -> dict:
     proof_board(original, candidate, record["poses"], out / "furnace-abbot-alpha-before-after.png")
     receipt = {
         "schema": "jrpg-hd-furnace-alpha-haze-candidate/1",
-        "bosssId": BOSS,
+        "bossId": BOSS,
         "provenance": {"sourcePaintingSha256": intake["sourceSha256"],
                        "originalSixPoseAtlasSha256": record["sha256"]},
         "candidateSha256": sha256(result_file.read_bytes()),
