@@ -86,8 +86,8 @@ python tools/browser-route-playthrough.py --stop-after-beat c3-01-separate-arriv
 | 3 | Flooded Cedars — Ash Wisps | 9.984 | 9.14 | 0.786 | 0 | 109 | 0 | — | Ren 135/140 |
 | 4 | Tithe Hound | 31.922 | 30.58 | 1.043 | 0 | 300 | 0 | `frantic` | Ren 138/149 |
 | 5 | Cedar Service Path — Cinder Hounds and Ash Wisp | 12.937 | 11.72 | 1.220 | 4 | 118 | 0 | — | Ren 137/158 |
-| 6 | Flooded Archive — Tithe Enforcer and Bell Moths | 12.954 | 11.78 | 1.136 | 3 | 123 | 0 | — | Lise 134/141, Ren 157/167 |
-| 7 | Father Mateus Avelar | 23.985 | 22.22 | 1.535 | 2 | 200 | 0 | `phase-3` | Lise 142/149, Ren 152/176 |
+| 6 | Flooded Archive — Tithe Enforcer and Bell Moths | 12.954 | 11.78 | 1.136 | 3 | 123 | 0 | — | Nikola 134/141, Ren 157/167 |
+| 7 | Father Mateus Avelar | 23.985 | 22.22 | 1.535 | 2 | 200 | 0 | `phase-3` | Nikola 142/149, Ren 152/176 |
 
 ---
 
