@@ -19,7 +19,7 @@ class Quiet(SimpleHTTPRequestHandler):
         pass
 
 def create_fixture(root: Path):
-    for name in ("hd-painted-animation.mjs", "hd-painted-motion.mjs", "hd-kurozane-phase.mjs"):
+    for name in ("hd-painted-animation.mjs", "hd-painted-motion.mjs", "hd-reviewed-motion.mjs", "hd-kurozane-phase.mjs"):
         shutil.copyfile(GAME / name, root / name)
     folder = root / "assets" / "art" / "hd-painted-v1"
     (folder / "sheets").mkdir(parents=True)

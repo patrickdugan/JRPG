@@ -6,6 +6,8 @@ on:
     paths:
       - 'game/hd-kurozane-phase.mjs'
       - 'game/hd-painted-animation.mjs'
+      - 'game/hd-reviewed-motion.mjs'
+      - 'game/tools/hd-kurozane-browser-smoke.py'
       - 'game/action-campaign-battle.js'
       - 'game/tests/hd-kurozane-phase.test.mjs'
       - 'assets/art/roster-keystone/**'

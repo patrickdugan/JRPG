@@ -1,0 +1,47 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "bell-warden-chiyo",
+  "displayName": "Bell Warden Chiyo",
+  "candidateStatus": "review-candidate",
+  "reviewStatus": "manual-visual-approval-pending",
+  "sourceFile": "sources/bell-warden-chiyo-six-poses-original.png",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "sourceSha256": "d0c2bd8ba9035bfae2c1c318b0b7b2198bddf32699290361bf3057610f36345e",
+  "sourceProvenance": "individual-rgba-1536x1024",
+  "sourcePixelLimitations": "individual full-resolution source",
+  "sixKeyAtlas": "assets/sheets/bell-warden-chiyo.png",
+  "sixKeyAtlasSha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c",
+  "poses": [
+    "idle",
+    "advance",
+    "chain-cast-windup",
+    "chain-cast-active",
+    "ringing-count",
+    "defeat"
+  ],
+  "motion": {
+    "provenance": "foot-anchored per-pose deformation of six painted keys; not independently hand-drawn inbetweens",
+    "framesPerClip": 24,
+    "clipCount": 10,
+    "frameCount": 240,
+    "clipNames": [
+      "idle",
+      "locomotion",
+      "windup",
+      "active",
+      "recovery",
+      "guard",
+      "hurt",
+      "defeat",
+      "signature",
+      "stagger"
+    ],
+    "decodedFrameHashesVerified": true
+  },
+  "binarySourceInGit": false,
+  "engineIntegration": "existing-hd-painted-runtime-after-binary-import",
+  "notes": "Source art is a development candidate. Original pixel boss combat and telegraphs continue to govern the encounter."
+}

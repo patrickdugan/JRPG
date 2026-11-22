@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21-npc-motion-git-verified",
+  "revision": "2026-11-22-seven-named-boss-runtime-candidates-in-git",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -38,7 +38,7 @@
       "archiveSHA256": "bbdc7443ccf63a8e14f73117b07100561e8ca62eca2079ae025186a1982ccd09",
       "clips": 10,
       "frames": 240,
-      "binariesInGit": false
+      "binariesInGit": true
     },
     "npcMotionSourceCandidate": {
       "identities": 16,
@@ -52,6 +52,47 @@
       "committedBytes": 7835279,
       "manifest": "game/assets/art/npc-motion-v1/manifest.json",
       "hostedRun": 44914042962
+    },
+    "bossPremiumArchives": {
+      "archiveBytesInGit": 36623667,
+      "archiveCount": 3,
+      "chunks": 26,
+      "sourceIntegrity": "SHA-256 and Git blob object SHA-1",
+      "runtimeImport": "complete-three-premium-candidates",
+      "clips": 30,
+      "frames": 720,
+      "visualApproval": "pending",
+      "runtimeAssetsInGit": true
+    },
+    "namedBossArtInGit": {
+      "candidateCount": 7,
+      "committedSourcePaintings": 7,
+      "sixPoseAtlases": 7,
+      "motionClips": 70,
+      "framesPerClip": 24,
+      "totalFrames": 1680,
+      "visualApproval": "pending",
+      "commits": {
+        "captain-kaji": "ece9e4d183b84dc2610300fe4c914304e8be7b3c",
+        "widow-of-fog": "e80eafc4f910cc9a8bfc3c9841ede9a200073620",
+        "furnace-abbot": "dfb4215d447c645beb5cc91986c60bfad933dd81",
+        "ujiro": "b6b2c51254c40354c80eabf67b844cc826337d8d"
+      },
+      "sourceArchives": {
+        "firstThree": {
+          "bytes": 36623667,
+          "parts": 26,
+          "manifest": "assets/art/hd-boss-binary-import-v1/manifest.json"
+        },
+        "remainingFour": {
+          "bytes": 43933244,
+          "parts": 31,
+          "manifest": "assets/art/hd-boss-binary-import-v2/manifest.json",
+          "importRun": "https://github.com/patrickdugan/JRPG/actions/runs/44935663172"
+        }
+      },
+      "engineStatus": "optional-hd-art",
+      "motionSource": "source-derived-frame-deformations"
     }
   },
   "targets": {
@@ -848,13 +889,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-after-art-import",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "sourcePaintingSha256": "a616f7d710cbf7005432ba6f3c9a2e8b2fcf8290a89173a6424b4f1e43522b16",
@@ -872,13 +913,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-after-package-install",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -907,13 +948,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-after-package-install",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -942,13 +983,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-mode-after-import",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -986,13 +1027,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-mode-after-import",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -1012,14 +1053,18 @@
       "hdBossBodyCandidate": {
         "status": "review-candidate",
         "sourceQuality": "individual-high-resolution",
+        "provenance": "individual-rgba-1536x1024",
         "sourceSha256": "d0c2bd8ba9035bfae2c1c318b0b7b2198bddf32699290361bf3057610f36345e",
         "sixKeySheetSha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c",
         "package": "JRPG_HD_Boss_bell_warden_chiyo_v2.zip",
+        "sixKeyPoses": 6,
         "motionClips": 10,
         "framesPerClip": 24,
         "totalFrames": 240,
-        "binaryGit": false,
-        "reviewStatus": "pending"
+        "archiveBytesNowCommittedInGit": true,
+        "looseRuntimeAssetsReady": false,
+        "visualApproval": "pending",
+        "notes": "Individual high-resolution six-pose painting with alpha; manual detail and animation polish pending."
       }
     },
     {
@@ -1031,13 +1076,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-mode-after-import",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -1056,14 +1101,19 @@
       },
       "hdBossBodyCandidate": {
         "status": "review-candidate",
-        "sourceQuality": "small-comparison-extraction",
-        "sourceSha256": "3a3fda4710918442cee1e4387b00ef1342442d582d8ebdf003d37a9d66fc42ed",
-        "sixKeySheetSha256": "20ab791d49b4aae80cf1a373923752775d70513f2057a36a166fe42c9a446c36",
-        "package": "JRPG_HD_Boss_lady_enma_v1.zip",
+        "sourceQuality": "individual-high-resolution",
+        "provenance": "individual-rgb-1536x1024-keyed-background",
+        "sourceSha256": "4f9a59824873f9a2303ad035e46ed05b3af3d0d89f109b5b45347fa45f91cd51",
+        "sixKeySheetSha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb",
+        "package": "JRPG_HD_Boss_lady_enma_v2.zip",
+        "sixKeyPoses": 6,
         "motionClips": 10,
         "framesPerClip": 24,
         "totalFrames": 240,
-        "binaryGit": false
+        "archiveBytesNowCommittedInGit": true,
+        "looseRuntimeAssetsReady": false,
+        "visualApproval": "pending",
+        "notes": "Standalone premium-resolution painted source; charcoal background matting and 24-frame deformation cels still need visual approval."
       }
     },
     {
@@ -1075,13 +1125,13 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "candidate-in-ZIP",
-      "sixKeyCelSheet": "candidate-in-ZIP",
-      "hdMotion24": "candidate-in-ZIP",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "optional-hd-mode-after-import",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
       "sourceDerivedOverlay": null,
       "hdBossVfx": {
@@ -1100,14 +1150,19 @@
       },
       "hdBossBodyCandidate": {
         "status": "review-candidate",
-        "sourceQuality": "small-comparison-extraction",
-        "sourceSha256": "3a3fda4710918442cee1e4387b00ef1342442d582d8ebdf003d37a9d66fc42ed",
-        "sixKeySheetSha256": "ba893b023619eb23dd092bfa1a012f320d860bef4580fb4c82fbc0181a547dbe",
-        "package": "JRPG_HD_Boss_yearless_bell_v1.zip",
+        "sourceQuality": "individual-high-resolution",
+        "provenance": "individual-rgb-1536x1024-white-checker-matted",
+        "sourceSha256": "4deaf9c4a7ceea818f084d938222415f3e786c498091b4b1155920b4519b20b7",
+        "sixKeySheetSha256": "3ccd3009bc336bacbfcd820f0d2935233e212eef4475f18fc360ffc9458f1e6b",
+        "package": "JRPG_HD_Boss_yearless_bell_v2.zip",
+        "sixKeyPoses": 6,
         "motionClips": 10,
         "framesPerClip": 24,
         "totalFrames": 240,
-        "binaryGit": false
+        "archiveBytesNowCommittedInGit": true,
+        "looseRuntimeAssetsReady": false,
+        "visualApproval": "pending",
+        "notes": "Individually generated mechanical boss painting with pale/checker matte separation. Silhouette cleanup and manual art review pending."
       }
     },
     {
