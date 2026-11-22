@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Civilian Field Animation Review · JRPG</title>
+<style>
+:root{color-scheme:dark;background:#131824;color:#eadfcf;font:15px/1.5 system-ui}
+body{margin:0 auto;max-width:1120px;padding:18px}
+h1,h2{font:normal 32px/1.15 Georgia,serif}
+.small{color:#aaabae}
+header{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+a{color:#e6bd78}
+fieldset{display:flex;flex-wrap:wrap;align-items:center;gap:24px;border:1px solid #705c49;padding:12px;margin:20px 0}
+label{display:flex;flex-direction:column;gap:4px}
+select,input{font:inherit;color:#eadfcf;background:#242b36;border:1px solid #80684e;padding:7px}
+input[type=range]{width:220px}
+#status{color:#d7be87}
+canvas{width:100%;height:auto;border:1px solid #6a594a;background:repeating-conic-gradient(#272e3b 0% 25%,#202531 0% 50%) 50% / 24px 24px}
+footer{color:#beb4a8}
+</style>
+</head><body>
+<header><div>
+<p class="small">Bells of the Black Chrysanthemum · Animation workshop</p>
+<h1>16 civilian field roles</h1>
+</div><a href="campaign.html?npcMotion=1">Open Campaign in NPC motion mode</a></header>
+<p>Source-authored animation studies from the canonical 32×48 pixel field roster. These are reusable presentation clips, with the original sprite atlas preserved as fallback.</p>
+<fieldset><label>Motion clip
+<select id="clip"><option>idle</option><option>walk</option><option>talk</option><option>work</option><option>react</option><option>leave</option></select></label>
+<label>Frame index <input id="frame" type="range" min="0" max="23" value="0"></label>
+<label><span>Playback</span><input id="play" type="checkbox" checked></label>
+<span id="status" role="status">Loading assets…</span></fieldset>
+<canvas id="roster" width="1040" height="912" aria-label="Sixteen civilian motion previews in four rows of four"></canvas>
+<footer>96 animation strips · 2,304 source-derived cells · opt in using ?npcMotion=1 · original game collision and interaction rules unchanged.</footer>
+<script type="module">
+import {NPC_FIELD_ROLES} from './npc-field-atlas.mjs';
+import {validateNpcMotionManifest} from './npc-motion-v1.mjs';
+const root='./assets/art/npc-motion-v1/';
+const clip=document.querySelector('#clip');
+const frame=document.querySelector('#frame');
+const play=document.querySelector('#play');
+const status=document.querySelector('#status');
+const canvas=document.querySelector('#roster');
+const ctx=canvas.getContext('2d');
+const base=await fetch(root+'manifest.json');
+if(!base.ok)throw new Error('HTTP '+base.status);
+const manifest=await base.json();
+const verdict=validateNpcMotionManifest(manifest);
+if(!verdict.ok)throw new Error('Invalid NPC motion manifest: '+verdict.reason);
+let images=new Map(),seq=0;
+async function load(){
+ const token=++seq;const next=new Map(),which=clip.value;
+ await Promise.all(NPC_FIELD_ROLES.map(role=>new Promise(resolve=>{
+   const file=manifest.roles[role].clips[which].file;
+   const image=new Image();
+   image.onload=()=>{
+     if(token===seq&&image.naturalWidth===1536&&image.naturalHeight===384)next.set(role,image);
+     resolve();
+   };
+   image.onerror=resolve;
+   image.src=root+file;
+ })));
+ if(token!==seq)return;
+ images=next;status.textContent=String(next.size)+'/16 '+which+' clips loaded';
+ draw();
+}
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ const n=Number(frame.value);
+ for(const [i,role] of NPC_FIELD_ROLES.entries()){
+   const x=(i%4)*260,y=Math.floor(i/4)*228;
+   ctx.fillStyle='rgba(7,10,20,.68)';ctx.fillRect(x+4,y+4,252,220);
+   ctx.fillStyle='#d8b87b';ctx.font='16px system-ui';
+   ctx.fillText(role.replaceAll('-',' '),x+15,y+26);
+   const im=images.get(role);
+   if(!im)continue;
+   ctx.imageSmoothingEnabled=true;
+   ctx.drawImage(im,(n%12)*128,Math.floor(n/12)*192,128,192,x+64,y+30,132,184);
+ }
+ canvas.dataset.clip=clip.value;canvas.dataset.frame=String(n);
+ canvas.dataset.loaded=String(images.size);
+}
+clip.onchange=load;frame.oninput=draw;
+let last=0;
+function tick(now){
+ if(play.checked && now-last>=75){
+   last=now;
+   frame.value=(Number(frame.value)+1)%24;
+   draw();
+ }
+ requestAnimationFrame(tick);
+}
+await load();requestAnimationFrame(tick);
+</script>
+</body></html>

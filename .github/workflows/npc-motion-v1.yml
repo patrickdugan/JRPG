@@ -1,0 +1,78 @@
+name: Civilian NPC motion - 16 roles and 2304 frames
+on:
+  push:
+    branches: [feature/hd-chiyo-npc-motion-20261121]
+    paths:
+      - 'game/tools/build-npc-motion-v1.py'
+      - 'game/tools/npc-motion-browser-smoke.py'
+      - 'game/npc-motion-v1.mjs'
+      - 'game/npc-motion-review.html'
+      - 'game/campaign.js'
+      - 'game/tests/npc-motion-v1.test.mjs'
+      - 'game/assets/art/npc-motion-v1/**'
+      - '.github/workflows/npc-motion-v1.yml'
+      - 'docs/54-civilian-npc-motion.md'
+      - 'assets/art/roster-keystone/**'
+  pull_request:
+    paths:
+      - 'game/tools/build-npc-motion-v1.py'
+      - 'game/npc-motion-v1.mjs'
+      - 'game/campaign.js'
+      - 'game/tests/npc-motion-v1.test.mjs'
+      - 'game/assets/art/npc-motion-v1/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: npc-motion-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  animation-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned image and browser tools
+        run: |
+          python -m pip install 'pillow==11.3.0' 'playwright==1.57.0'
+          python -m playwright install --with-deps chromium
+      - name: Build 16 original-source NPC field motion identities
+        run: python game/tools/build-npc-motion-v1.py
+      - name: Verify 96 exact strips and 2304 distinct decoded cells
+        run: python game/tools/build-npc-motion-v1.py --check
+      - name: Check motion manifest and isolation from gameplay
+        run: node --test game/tests/npc-motion-v1.test.mjs game/tests/npc-field-atlas.test.mjs
+      - name: Verify project JavaScript syntax
+        run: cd game && npm run check
+      - name: Verify all 16 roles and 6 clips in hosted Chromium
+        run: python game/tools/npc-motion-browser-smoke.py
+      - name: Show file sizes and enforce <90 MiB per asset
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files=[p for p in Path('game/assets/art/npc-motion-v1').rglob('*') if p.is_file()]
+          assert len(files)==97,(len(files),files)
+          for p in files:assert p.stat().st_size<90*1024*1024,p
+          print(f'{len(files)} generated files, {sum(p.stat().st_size for p in files):,} total bytes')
+          PY
+      - name: Save browser preview screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: civilian-npc-motion-review
+          path: artifacts/npc-motion-review.png
+          if-no-files-found: ignore
+      - name: Commit verified WebP bytes to the feature branch
+        if: github.event_name == 'push' && github.ref_name == 'feature/hd-chiyo-npc-motion-20261121'
+        run: |
+          git add game/assets/art/npc-motion-v1
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'art(npc): commit 96 field motion atlases and hash manifest'
+            git push origin HEAD:feature/hd-chiyo-npc-motion-20261121
+          fi

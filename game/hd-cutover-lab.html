@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Attack Cutover Lab · Bells of the Black Chrysanthemum</title>
+  <style>
+  :root{color-scheme:dark;font:15px/1.55 "Segoe UI",system-ui,sans-serif;--bg:#11171d;--panel:#202831;--border:#665e54;--gold:#d8ac72;color:#efe8db;background:var(--bg)}
+  *{box-sizing:border-box}body{margin:0;min-width:300px}
+  a{color:var(--gold)}h1,h2{font-family:Georgia,serif;font-weight:normal}
+  h1{font-size:clamp(35px,5vw,64px);margin:4px 0 14px;line-height:1.1}h2{font-size:28px;margin:0}
+  .top,.content{max-width:1400px;margin:auto;padding:28px 26px}
+  header{background:radial-gradient(ellipse at 70% 5%,#483524,transparent 65%),#141a21;border-bottom:1px solid var(--border)}
+  .eyebrow{font-size:11px;letter-spacing:.19em;color:var(--gold);font-weight:600}
+  .intro{max-width:890px;color:#c0b5a4;line-height:1.65;margin:0}
+  .back{display:inline-block;margin-bottom:22px;font-size:13px}
+  .panel{padding:19px;background:var(--panel);border:1px solid var(--border);margin:0 0 17px}
+  .control-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  label{display:block;color:#d9c3a7;font-size:12px}
+  label>span{display:block;margin-bottom:7px}
+  select,input,textarea,button{font:inherit}
+  select,textarea,input[type=file]{width:100%;background:#141d26;color:#f3e7da;border:1px solid #857766;padding:9px}
+  button{background:#42362c;border:1px solid #9a815e;padding:10px 14px;color:#f5e7d4;cursor:pointer}
+  button:hover:not(:disabled){background:#685039}
+  button:disabled{opacity:.45;cursor:default}
+  :focus-visible{outline:3px solid #e3c08c;outline-offset:2px}
+  .files{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:19px}
+  .help,.warning{font-size:12px;color:#bcb0a2;line-height:1.65}
+  .warning{color:#eacb9e}
+  .status{font:12px/1.55 ui-monospace,monospace;color:#dec7a0;margin-top:13px}
+  .motion-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+  .motion-box{background:#171d24;border:1px solid #5a564f;padding:16px}
+  .motion-box h2{font-size:24px}.motion-box p{color:#c0b1a0;font-size:12px;margin:5px 0 13px}
+  .stage{position:relative;display:grid;place-items:center;max-width:480px;aspect-ratio:1;overflow:hidden;margin:auto;border:1px solid #655e56}
+  .stage[data-backdrop=charcoal]{background:radial-gradient(ellipse at 50% 35%,#50515a,#171c25 80%)}
+  .stage[data-backdrop=parchment]{background:linear-gradient(130deg,#d9c9b1,#b2a58f)}
+  .stage[data-backdrop=checker]{background:repeating-conic-gradient(#58636b 0 25%,#748087 0 50%) 50%/32px 32px}
+  canvas{display:block;width:100%;height:auto}
+  .corner{position:absolute;bottom:9px;right:10px;padding:4px 9px;color:#ffe1b4;background:#10161ddc;font:12px ui-monospace,monospace}
+  .transport{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .transport button{min-width:43px}.transport button:first-child{min-width:130px}
+  .scrub{flex:1;min-width:220px;accent-color:var(--gold)}
+  .scrub-block{display:flex;align-items:center;gap:14px;margin-top:16px}
+  .readout{font:12px ui-monospace,monospace;color:#e4c89d;min-width:176px;text-align:right}
+  .measure-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .measure{border:1px solid #5e5952;background:#171e25;padding:12px;min-width:0}
+  .measure .num{font:30px Georgia,serif;color:#e8c898;display:block}
+  .measure span{font-size:11px;color:#bfb5a8}
+  .review{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:18px}
+  .review button{width:100%;margin-top:9px;text-align:left}
+  textarea{min-height:100px;resize:vertical}
+  .hide{display:none}
+  .footer{max-width:1400px;margin:0 auto;color:#968e82;padding:12px 26px 35px;font-size:12px}
+  @media(max-width:860px){.control-grid{grid-template-columns:repeat(2,1fr)}.review{grid-template-columns:1fr 1fr}.review>div:last-child{grid-column:1/-1}.measure-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:570px){.control-grid,.motion-row,.review,.files{grid-template-columns:1fr}.review>div:last-child{grid-column:auto}.content,.top{padding:18px}.measure-grid{grid-template-columns:1fr 1fr}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="back" href="./hd-boss-review.html">Return to seven-boss art review</a>
+    <p class="eyebrow">JRPG · HD BOSS ART · INDEPENDENT REVIEW SURFACE</p>
+    <h1>Attack Cutover Lab</h1>
+    <p class="intro">Compare an uploaded windup study with its original Git-tracked animation, frame by frame. Both lanes enter the same original active attack at the exact phase boundary. Source artwork, save data, and the Roster Keystone stay untouched.</p>
+  </div>
+</header>
+<main class="content">
+  <section class="panel" aria-label="Review settings">
+    <div class="control-grid">
+      <label><span>Boss</span><select id="boss"><option value="yearless-bell">Yearless Bell</option><option value="lady-enma">Lady Enma</option></select></label>
+      <label><span>Playback region</span><select id="mode"><option value="cutover">Last four + first four</option><option value="full">Full 48-frame sequence</option></select></label>
+      <label><span>Proofing background</span><select id="backdrop"><option value="charcoal">Charcoal</option><option value="parchment">Warm paper</option><option value="checker">Transparency checker</option></select></label>
+      <label><span>Playback speed</span><select id="speed"><option value="0.25">0.25×</option><option value="0.5" selected>0.5×</option><option value="1">1× source timing</option><option value="2">2×</option></select></label>
+    </div>
+    <div class="files">
+      <label><span>Proposed 2304 × 384 windup WebP</span><input type="file" id="candidate" accept=".webp,image/webp"></label>
+      <label><span>Matching generator receipt JSON</span><input type="file" id="receiptFile" accept=".json,application/json"></label>
+    </div>
+    <p class="help">Download candidate WebPs and the matching receipt from the approved-for-review CI artifacts in PR #24 or PR #26. The browser checks the exact uploaded file SHA-256 against the generator's receipt. Source CI owns the decoded-frame hash verification.</p>
+    <p class="status" role="status" aria-live="polite" id="status">Reading source manifests…</p>
+  </section>
+  <section class="panel">
+    <div class="motion-row">
+      <div class="motion-box">
+        <h2>Original</h2><p>Git-tracked source windup → original active attack</p>
+        <div class="stage" data-backdrop="charcoal"><canvas id="original" width="384" height="384" role="img" aria-label="Original boss animation"></canvas><span class="corner" id="originalCounter">WINDUP 21 / 24</span></div>
+      </div>
+      <div class="motion-box">
+        <h2>Candidate</h2><p id="candidateCaption">Identical to original until a verified candidate is loaded</p>
+        <div class="stage" data-backdrop="charcoal"><canvas id="proposed" width="384" height="384" role="img" aria-label="Proposed boss animation"></canvas><span class="corner" id="candidateCounter">WINDUP 21 / 24</span></div>
+      </div>
+    </div>
+    <div class="scrub-block">
+      <div class="transport"><button type="button" id="play" aria-pressed="false">Play both</button><button id="prev" type="button" aria-label="Previous frame">‹</button><button id="next" type="button" aria-label="Next frame">›</button></div>
+      <input class="scrub" id="timeline" type="range" min="20" max="27" step="1" value="20" aria-label="Frame in combined windup and active timeline">
+      <span id="readout" class="readout">WINDUP 21 / 24</span>
+    </div>
+    <p class="warning">At the phase change the same original active animation appears in both lanes. Candidate transitions are art studies and do not change attack timing or trigger gameplay events.</p>
+  </section>
+  <section class="panel">
+    <h2>Cutover measurements</h2>
+    <p class="help">Browser-rendered 48px grayscale metrics compare windup frame 24 to active frame 1, over the union of visible foreground regions. Scores guide inspection and are separate from the source generator's Python metrics.</p>
+    <div class="measure-grid">
+      <div class="measure"><span>Original seam</span><strong class="num" id="baselineScore">—</strong><span>Grayscale / 255</span></div>
+      <div class="measure"><span>Candidate seam</span><strong class="num" id="candidateScore">—</strong><span>Grayscale / 255</span></div>
+      <div class="measure"><span>Candidate / original</span><strong class="num" id="ratioScore">—</strong><span>Smaller indicates a softer cut</span></div>
+      <div class="measure"><span>Candidate file SHA</span><strong class="num" id="verifiedStatus">—</strong><span>Checked against CI receipt</span></div>
+    </div>
+  </section>
+  <section class="panel review">
+    <div><label for="decision"><span>Human review recommendation</span></label><select id="decision"><option value="unreviewed">Needs inspection</option><option value="needs-keys">Requires new transition keys</option><option value="ready-for-human-signoff">Ready for final human signoff</option></select><p class="help">Local recommendation only. Canonical approval stays pending.</p></div>
+    <div><label for="notes"><span>Hinge, wrist, hem, attack readability, and lighting notes</span></label><textarea id="notes" maxlength="2400" placeholder="Identify the exact frame where the pose or effect jumps…"></textarea></div>
+    <div><span class="eyebrow">REPRODUCIBLE EVIDENCE</span><button type="button" id="capture" disabled>Capture both lanes (PNG)</button><button type="button" id="downloadReceipt" disabled>Download paired receipt (JSON)</button><button type="button" id="exportNotes">Export review notes</button><p class="help">PNG and JSON are downloaded locally. Neither updates the game.</p></div>
+  </section>
+</main>
+<div class="footer">Review sandbox · painted candidates awaiting artist signoff · exact classic gameplay fallback preserved</div>
+<script type="module" src="./hd-cutover-lab.js"></script>
+</body></html>

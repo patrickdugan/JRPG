@@ -5,6 +5,8 @@ on:
   pull_request:
     paths:
       - 'game/hd-painted-animation.mjs'
+      - 'game/hd-reviewed-motion.mjs'
+      - 'game/tools/hd-motion-browser-smoke.py'
       - 'game/hd-painted-motion.mjs'
       - 'game/action-campaign-battle.js'
       - 'game/tests/hd-painted-motion.test.mjs'

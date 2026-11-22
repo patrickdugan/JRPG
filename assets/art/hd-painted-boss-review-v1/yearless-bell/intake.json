@@ -1,0 +1,47 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "yearless-bell",
+  "displayName": "Yearless Bell",
+  "candidateStatus": "review-candidate",
+  "reviewStatus": "manual-visual-approval-pending",
+  "sourceFile": "sources/yearless-bell-six-poses-original.png",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "sourceSha256": "4deaf9c4a7ceea818f084d938222415f3e786c498091b4b1155920b4519b20b7",
+  "sourceProvenance": "individual-rgb-1536x1024-white-checker-matted",
+  "sourcePixelLimitations": "original background was printed/checkered; keyed alpha has fine halo/artifact risk; full QA required",
+  "sixKeyAtlas": "assets/sheets/yearless-bell.png",
+  "sixKeyAtlasSha256": "3ccd3009bc336bacbfcd820f0d2935233e212eef4475f18fc360ffc9458f1e6b",
+  "poses": [
+    "idle",
+    "sway",
+    "yearless-ring-windup",
+    "yearless-ring-active",
+    "ward-stagger",
+    "collapse"
+  ],
+  "motion": {
+    "provenance": "source-pose foot anchored deform, not independent hand-drawn cels",
+    "framesPerClip": 24,
+    "clipCount": 10,
+    "frameCount": 240,
+    "clipNames": [
+      "idle",
+      "locomotion",
+      "windup",
+      "active",
+      "recovery",
+      "guard",
+      "hurt",
+      "defeat",
+      "signature",
+      "stagger"
+    ],
+    "decodedFrameHashesVerified": true
+  },
+  "binarySourceInGit": false,
+  "engineIntegration": "existing-hd-painted-runtime-after-binary-import",
+  "notes": "Improved individual high-resolution mechanical boss source. Original boss pixel clips remain gameplay fallback."
+}
