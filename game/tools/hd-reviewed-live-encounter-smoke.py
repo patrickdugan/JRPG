@@ -29,7 +29,7 @@ CASES = (
 PROBE = r"""(() => {
   if (window.__liveHdEvidence) return;
   const evidence = {reviewed:0, canonical:0, reviewedUrls:{},
-    canonicalUrls:{}, selectedFrames:[], observedSources:{}, drawCalls:0};
+    canonicalUrls:{}, selectedFrames:[], observedSources:{}, phaseEvents:[], drawCalls:0};
   window.__liveHdEvidence = evidence;
   const original=CanvasRenderingContext2D.prototype.drawImage;
   CanvasRenderingContext2D.prototype.drawImage=function(...args) {
@@ -49,6 +49,10 @@ PROBE = r"""(() => {
           const x=Number(args[1]), y=Number(args[2]);
           if (evidence.selectedFrames.length<60)
             evidence.selectedFrames.push({target,name,x,y});
+          if ((name.includes('yearless-bell/')||name.includes('lady-enma/'))
+              && (name.includes('/windup.webp')||name.includes('/active.webp'))
+              && evidence.phaseEvents.length<1000)
+            evidence.phaseEvents.push({target,name,x,y,t:performance.now()});
         }
       }
       evidence.drawCalls++;
@@ -114,12 +118,14 @@ def run_session(context, base: str, boss: str, encounter: str, title: str,
     evidence = []
     desired = "/reviewed-motion/" + boss + "/windup.webp"
     fallback = "/motion/" + boss + "/windup.webp"
+    active_path = "/motion/" + boss + "/active.webp"
+    windup_screenshot_taken = False
     elapsed = 0
     # The browser clock keeps the authored simulation and requestAnimationFrame
     # in sync while avoiding a wall-clock wait for natural enemy windups.
     while elapsed < max_ms:
-        page.clock.run_for(500)
-        elapsed += 500
+        page.clock.run_for(100)
+        elapsed += 100
         state = snapshot(page)
         evidence.append({
             "elapsedMs": elapsed,
@@ -131,9 +137,18 @@ def run_session(context, base: str, boss: str, encounter: str, title: str,
         })
         urls = state["instrumentation"]["reviewedUrls"]
         canonical = state["instrumentation"]["canonicalUrls"]
-        if mode == "reviewed" and not block_candidate and any(desired in key for key in urls):
-            break
-        if (mode != "reviewed" or block_candidate) and any(fallback in key for key in canonical):
+        expected_windup = (any(desired in key for key in urls)
+                           if mode == "reviewed" and not block_candidate
+                           else any(fallback in key for key in canonical))
+        expected_active = any(active_path in key for key in canonical)
+        if expected_windup and not windup_screenshot_taken:
+            OUT.mkdir(parents=True, exist_ok=True)
+            stem = ("reviewed" if mode == "reviewed" and not block_candidate
+                    else "blocked-review" if block_candidate else "canonical")
+            page.screenshot(path=str(OUT / (boss + "-" + stem + "-windup.png")),
+                            full_page=True)
+            windup_screenshot_taken = True
+        if expected_windup and expected_active:
             break
         if state["outcome"]:
             break
@@ -152,12 +167,18 @@ def run_session(context, base: str, boss: str, encounter: str, title: str,
         "reviewedDrawn":last["instrumentation"]["reviewedUrls"],
         "paintedDrawCalls":last["instrumentation"]["drawCalls"],
         "sourceDrawSamples":last["instrumentation"]["selectedFrames"][:20],
+        "phaseDrawEvents":last["instrumentation"]["phaseEvents"][:400],
+        "firstActiveEvent":next((e for e in last["instrumentation"]["phaseEvents"]
+                                 if active_path in e["name"]), None),
+        "windupScreenshotSaved":windup_screenshot_taken,
         "phaseSamples":evidence,"errors":errors,
         "encounterOutcome":last["outcome"],
     }
     page.close()
     assert not errors, errors
     assert last["storageUnchanged"], result
+    assert result["firstActiveEvent"] is not None, (
+        "Live authored attack never displayed the canonical active WebP", result)
     if mode == "reviewed" and not block_candidate:
         assert any(desired in key for key in result["reviewedDrawn"]), (
             "Live boss attack failed to draw reviewed windup", result)
@@ -217,6 +238,7 @@ def run(max_ms=20000):
         "encounters":[x[1] for x in CASES],
         "reviewedWebPsActuallyDrawn":2,
         "canonicalAndMissingPreviewFallbacks":4,
+        "authoredActiveAttackClipsDrawn":6,
         "sourceArtAndRosterUnchanged":True,
     },indent=2))
     return receipt
