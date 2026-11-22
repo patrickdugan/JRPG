@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Seven Boss Art Review · Bells of the Black Chrysanthemum</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./hd-boss-review.css">
+</head>
+<body>
+  <a class="skip" href="#reviewMain">Skip to art review</a>
+  <header class="masthead">
+    <div class="topline"><a href="./index.html?dev=1">← Game / Developer tools</a><span>ART DEPARTMENT · PRIVATE REVIEW SURFACE</span></div>
+    <div class="heading">
+      <div>
+        <p class="eyebrow">THE BLACK CHRYSANTHEMUM · PRODUCTION ARCHIVE</p>
+        <h1>The Seven <em>Bosses</em></h1>
+        <p class="lede">Original paintings, six authored key poses, and seventy source-derived motion studies. Inspect the silhouettes, matte edges, attack tells, and transitions before signing off the candidates.</p>
+      </div>
+      <div class="ledger" aria-label="Archive totals"><b>07</b><span>PAINTED BOSSES</span><b>70</b><span>ANIMATION CLIPS</span><b>1,680</b><span>HASHED FRAME CELLS</span></div>
+    </div>
+  </header>
+  <main id="reviewMain" class="content">
+    <div class="sectionhead"><h2>Roster <span>01 / 07</span></h2><p>Visual acceptance remains pending in the canonical Roster Keystone.</p></div>
+    <nav id="bossRail" class="boss-rail" aria-label="Select a named boss"></nav>
+    <div class="control-strip">
+      <div><strong id="activeBoss">Loading archive…</strong><span id="sourceMeta">Waiting for source manifests</span></div>
+      <label for="backdrop">Proofing backdrop
+        <select id="backdrop">
+          <option value="checker">Transparency checker</option>
+          <option value="dark">Shadow / charcoal</option>
+          <option value="light">Warm parchment</option>
+          <option value="arena">Studio arena mockup</option>
+        </select>
+      </label>
+    </div>
+    <div class="art-comparison">
+      <section class="panel original-panel" aria-labelledby="originalTitle">
+        <div class="panel-heading"><div><span class="section-index">01 · SOURCE</span><h2 id="originalTitle">Original painting</h2></div><small>1536 × 1024 · archived PNG</small></div>
+        <div class="art-ground source-ground" data-backdrop="checker"><img id="sourceImage" alt="Original six-pose painted source" crossorigin="anonymous"></div>
+        <p class="panel-note">The preserved master. Zoom in through your browser to inspect line quality, retained background matte, and silhouette edges.</p>
+      </section>
+      <section class="panel motion-panel" aria-labelledby="motionTitle">
+        <div class="panel-heading"><div><span class="section-index">02 · MOTION</span><h2 id="motionTitle">Frame-by-frame study</h2></div><small id="clipMeta">24 cells · 12 × 2 strip</small></div>
+        <div class="motion-layout">
+          <div class="art-ground motion-ground" data-backdrop="checker"><canvas id="motionCanvas" width="384" height="384" role="img" aria-label="Selected HD boss animation frame"></canvas><span class="frame-counter" id="frameCounter">01 / 24</span></div>
+          <div class="play-panel">
+            <label for="clip">Motion clip</label><select id="clip" aria-label="Motion clip"></select>
+            <label for="speed">Playback rate</label>
+            <select id="speed"><option value="0.25">0.25× · forensic</option><option value="0.5">0.5× · inspect</option><option value="1" selected>1× · source timing</option><option value="2">2× · fast</option><option value="4">4× · stress</option></select>
+            <div class="play-buttons"><button id="play" type="button" aria-pressed="false">▶ Play</button><button id="stepBack" type="button" title="Previous frame">‹</button><button id="stepNext" type="button" title="Next frame">›</button></div>
+            <label for="frame">Frame <output id="frameReadout" for="frame">1 / 24</output></label>
+            <input id="frame" type="range" min="0" max="23" value="0" step="1">
+            <p class="technical" id="motionTechnical">Motion is reconstructed from painted key poses.</p>
+          </div>
+        </div>
+        <p class="panel-note">Playback shows the actual committed 2304 × 384 WebP atlas. Motion remains a source-derived deformation study rather than independently drawn in-betweens.</p>
+      </section>
+    </div>
+    <section class="panel keys-panel" aria-labelledby="keyTitle">
+      <div class="panel-heading"><div><span class="section-index">03 · SILHOUETTE</span><h2 id="keyTitle">Six key poses</h2></div><small>384 × 384 pixels per pose · click to inspect its source-derived motion</small></div>
+      <div id="poseGrid" class="pose-grid" aria-label="Six original pose cells"></div>
+    </section>
+    <section class="panel review-panel" aria-labelledby="qaTitle">
+      <div class="panel-heading"><div><span class="section-index">04 · EVALUATION</span><h2 id="qaTitle">Visual review ledger</h2></div><small>Local review notes only · canonical approval remains independent</small></div>
+      <div class="review-layout">
+        <div class="review-fields">
+          <label for="bossDecision">Boss-wide recommendation</label>
+          <select id="bossDecision"><option value="unreviewed">Awaiting visual review</option><option value="needs-fixes">Needs art cleanup</option><option value="ready-for-signoff">Ready for human signoff</option></select>
+          <label for="bossNote">Overall silhouette, matte, anatomy, and integration notes</label>
+          <textarea id="bossNote" rows="4" maxlength="3000" placeholder="Record where the source painting or atlas needs attention…"></textarea>
+        </div>
+        <div class="review-fields">
+          <label for="clipDecision">Selected clip recommendation</label>
+          <select id="clipDecision"><option value="unreviewed">Awaiting visual review</option><option value="needs-fixes">Needs motion cleanup</option><option value="ready-for-signoff">Ready for human signoff</option></select>
+          <label for="clipNote">Frame continuity, foot anchoring, windup readability</label>
+          <textarea id="clipNote" rows="4" maxlength="3000" placeholder="Example: foot drift between frames 11–14; halo on guard hand…"></textarea>
+        </div>
+        <div class="review-evidence">
+          <div class="evidence-label">EVIDENCE / LOCAL EXPORT</div>
+          <p>Capture a PNG comparison sheet, then download its JSON receipt with exact boss, frame, clip, source hashes, and reviewer notes.</p>
+          <button id="capture" type="button">Capture PNG comparison</button>
+          <button id="receipt" type="button" disabled>Download JSON receipt</button>
+          <button id="exportDraft" type="button">Export all review notes</button>
+          <p class="subtle">Downloads stay on your machine. Choosing “ready for signoff” is a review recommendation, not Roster Keystone approval.</p>
+        </div>
+      </div>
+    </section>
+    <p id="eventStatus" class="event-status" role="status" aria-live="polite">Reading the seven-boss Git art manifests…</p>
+  </main>
+  <footer>Build-side art review · Gameplay timing, hitboxes, boss phases, and save data remain under the existing engine.</footer>
+  <script type="module" src="./hd-boss-review.js"></script>
+</body>
+</html>
