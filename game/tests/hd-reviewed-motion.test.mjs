@@ -97,18 +97,26 @@ function fakeImage(path){
 test('reviewed loader uses candidate only with opt-in and keeps canonical fallback',async()=>{
   const catalog=exampleManifest();
   const make=(enabled,overlay)=> {
-    const urls=[];
+    const urls=[],frames=[];
     const runtime=createHdMotionRuntime({
       enabled:true,reviewedMotionEnabled:enabled,
       fetchJson:async url=>url.endsWith('motion-manifest.json')?motion:overlay,
       createImage:()=>fakeImage(urls),
+      onFrame:(id,clip,index,origin)=>frames.push({id,clip,index,origin}),
     });
-    return {runtime,urls};
+    return {runtime,urls,frames};
   };
-  let {runtime,urls}=make(true,catalog);
+  let {runtime,urls,frames}=make(true,catalog);
   const reviewed=await runtime.request('yearless-bell','windup',sourceFor('yearless-bell'));
   assert.equal(reviewed.origin,'reviewed');
   assert.match(urls[0],/reviewed-motion\/yearless-bell\/windup\.webp$/);
+  const actor={id:'yearless-bell',hp:100,active:true,grounded:true,facing:1,
+    position:{x:120,y:220},movementIntent:{x:0},activeAttack:{phase:'windup'},
+    activeManeuver:null,hitStunRemainingMs:0,staggerRemainingMs:0};
+  const ctx={save(){},restore(){},translate(){},scale(){},drawImage(){}};
+  assert.equal(runtime.draw(ctx,actor,'yearless-bell',sourceFor('yearless-bell'),
+    {phaseProgress:.98,nowMs:140}),true);
+  assert.deepEqual(frames.at(-1),{id:'yearless-bell',clip:'windup',index:23,origin:'reviewed'});
   const active=await runtime.request('yearless-bell','active',sourceFor('yearless-bell'));
   assert.equal(active.origin,'canonical');
   assert.match(urls[1],/motion\/yearless-bell\/active\.webp$/);
