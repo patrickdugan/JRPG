@@ -6,6 +6,7 @@ windup clip. The fixture is never written into the engine asset directory.
 """
 from __future__ import annotations
 
+import argparse
 import functools
 import hashlib
 import json
@@ -31,7 +32,7 @@ def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def prepare_fixture(dir: Path):
+def prepare_fixture(dir: Path, real_candidate_dir: Path | None = None):
     manifest = json.loads((ROOT / "game/assets/art/hd-painted-v1/motion-manifest.json").read_text())
     source = manifest["actors"][BOSS]["clipSet"]
     original = ROOT / "game/assets/art/hd-painted-v1" / source["windup"]["path"]
@@ -66,10 +67,21 @@ def prepare_fixture(dir: Path):
     bad["bosses"][BOSS]["leadInWebPSha256"] = "f" * 64
     wrong = dir / "wrong-sha-receipt.json"
     wrong.write_text(json.dumps(bad), encoding="utf-8")
+    if real_candidate_dir is not None:
+        real = real_candidate_dir / (BOSS + "-windup-effect-leadin.webp")
+        real_receipt = real_candidate_dir / "effect-leadin-receipts.json"
+        if not real.is_file() or not real_receipt.is_file():
+            raise ValueError("Real source-generated effect candidate is absent")
+        proof = json.loads(real_receipt.read_text(encoding="utf-8"))
+        official = proof["bosses"][BOSS]
+        assert official["leadInWebPSha256"] == digest(real.read_bytes())
+        assert official["immutableActiveSha256"] == source["active"]["sha256"]
+        assert len(official["decodedFrameHashes"]) == 24
+        path, receipt = real, real_receipt
     return path, receipt, wrong, manifest
 
 
-def run():
+def run(real_candidate_dir: Path | None = None):
     OUT.mkdir(parents=True, exist_ok=True)
     roster_path = ROOT / "assets/art/roster-keystone/roster.json"
     roster_sha = digest(roster_path.read_bytes())
@@ -82,7 +94,7 @@ def run():
     url = "http://127.0.0.1:" + str(server.server_address[1])
     try:
         with tempfile.TemporaryDirectory() as tmp:
-            candidate, receipt, wrong, manifest = prepare_fixture(Path(tmp))
+            candidate, receipt, wrong, manifest = prepare_fixture(Path(tmp), real_candidate_dir)
             with sync_playwright() as playwright:
                 browser = playwright.chromium.launch(headless=True)
                 context = browser.new_context(
@@ -176,7 +188,10 @@ def run():
         worker.join(timeout=5)
     assert digest(roster_path.read_bytes()) == roster_sha
     result = {
-        "ok": True, "source": "real original Git images; disposable synthetic upload fixture",
+        "ok": True,
+        "source": ("real Git source and regenerated effect candidate"
+                   if real_candidate_dir is not None
+                   else "real original Git images; disposable synthetic upload fixture"),
         "candidateHashMatchedReceipt": True,
         "incorrectReceiptRejected": True,
         "phaseBoundaryStepping": True,
@@ -191,4 +206,7 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--real-candidate-dir", type=Path, default=None)
+    args = parser.parse_args()
+    run(args.real_candidate_dir.resolve() if args.real_candidate_dir else None)
