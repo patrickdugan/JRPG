@@ -16,6 +16,6 @@ Node tests: `node --test game/tests/hd-cutover-lab.test.mjs`.
 
 Browser smoke: `python game/tools/hd-cutover-browser-smoke.py`, after installing Pillow and Playwright with Chromium.
 
-The smoke uses real committed original clips and a disposable synthetic candidate for testing invalid/valid receipt behavior. The fixture is expressly unrelated to artistic quality.
+The hosted workflow regenerates the actual Yearless Bell and Lady Enma effects-prelude candidates from SHA-pinned source paintings, then tests a real Yearless WebP upload and its CI receipt in Chromium. It also injects an incorrect-hash control to prove the evidence gate rejects mismatched bytes. Standalone local smoke defaults to a disposable synthetic candidate fixture. Neither the real generator preview nor the synthetic fixture constitutes artistic approval.
 
 The existing runtime WebPs, original source art and ZIPs, hitboxes, timing, game saves and seven visual approvals stay untouched and pending.
