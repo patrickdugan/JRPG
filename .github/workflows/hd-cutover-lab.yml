@@ -18,6 +18,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: hd-cutover-lab-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   review-browser:
     runs-on: ubuntu-24.04
