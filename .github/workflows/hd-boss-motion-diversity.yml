@@ -1,0 +1,41 @@
+name: Seven-boss motion diversity audit
+on:
+  push:
+    branches: [feature/hd-motion-diversity-20261122]
+    paths:
+      - 'game/tools/hd-boss-motion-diversity.py'
+      - 'game/tools/test_hd_boss_motion_diversity.py'
+      - '.github/workflows/hd-boss-motion-diversity.yml'
+  pull_request:
+    paths:
+      - 'game/tools/hd-boss-motion-diversity.py'
+      - 'game/tools/test_hd_boss_motion_diversity.py'
+      - '.github/workflows/hd-boss-motion-diversity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  perceptual-motion-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow and NumPy
+        run: python -m pip install 'pillow>=11,<13' 'numpy>=2,<3'
+      - name: Test invisible RGB, real articulation and rigid movement controls
+        run: python -m unittest discover -s game/tools -p test_hd_boss_motion_diversity.py -v
+      - name: Measure all 70 real WebP animations and make seven timeline boards
+        run: python game/tools/hd-boss-motion-diversity.py --root . --output-dir artifacts/hd-motion-diversity
+      - name: Validate no game art or visual approval state was changed
+        run: git diff --exit-code -- game/assets/art/hd-painted-v1 assets/art
+      - name: Upload timeline boards and perceptual motion metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-seven-boss-perceptual-motion
+          path: artifacts/hd-motion-diversity/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,27 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "widow-of-fog",
+  "sourceFile": "sources/widow-of-fog-six-poses-original.png",
+  "sourceSha256": "209e98b3151824ce4858ed5e5e3e3ae3e5dfafd09716edab88126c1260ef7efa",
+  "sixKeyAtlas": "assets/sheets/widow-of-fog.png",
+  "sixKeyAtlasSha256": "2df42dd4559057631957a67eaee908841cbe9c9b9d2ec37eb0188c11c1687970",
+  "poses": [
+    "idle",
+    "fog-glide",
+    "name-drag-windup",
+    "name-drag-release",
+    "receding-call-ring",
+    "defeat"
+  ],
+  "motion": {
+    "clips": 10,
+    "framesPerClip": 24,
+    "totalFrames": 240,
+    "decodedHashesVerified": true
+  },
+  "candidateStatus": "painted-review-candidate",
+  "binarySourceInGit": false,
+  "provenance": "ImageGen six-pose 1536x1024 RGBA, alpha-preserving cropping, rigid source-derived motion",
+  "engineIntegration": "install into game/assets/art/hd-painted-v1 after base HD pack",
+  "visualApproval": "pending"
+}

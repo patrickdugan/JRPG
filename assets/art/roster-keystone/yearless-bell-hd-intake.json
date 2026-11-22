@@ -1,0 +1,52 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "yearless-bell",
+  "displayName": "Yearless Bell",
+  "candidateStatus": "review-candidate",
+  "reviewStatus": "manual-visual-approval-pending",
+  "sourceProvenance": "individual-rgb-1536x1024-white-checker-matted",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "figureSourcePixels": [
+    512,
+    512
+  ],
+  "sourceSha256": "4deaf9c4a7ceea818f084d938222415f3e786c498091b4b1155920b4519b20b7",
+  "sixKeyAtlasSha256": "3ccd3009bc336bacbfcd820f0d2935233e212eef4475f18fc360ffc9458f1e6b",
+  "sourceFile": "sources/yearless-bell-six-poses-original.png",
+  "sixKeyAtlas": "assets/sheets/yearless-bell.png",
+  "poses": [
+    "idle",
+    "sway",
+    "yearless-ring-windup",
+    "yearless-ring-active",
+    "ward-stagger",
+    "collapse"
+  ],
+  "drawHeight": 206,
+  "motion": {
+    "frameSize": [
+      192,
+      192
+    ],
+    "framesPerClip": 24,
+    "clipCount": 10,
+    "frameCount": 240,
+    "sourceDerivedDeformation": true,
+    "decodedFrameHashesVerifiedLocally": true,
+    "decodedFrameHashesVerified": true
+  },
+  "package": "JRPG_HD_Boss_yearless_bell_v2.zip",
+  "batch": "3-boss-chunked-git-import-20261121",
+  "binarySourceInGit": true,
+  "engineIntegration": "optional-hd-mode-after-import",
+  "qualityNote": "Standalone premium-resolution painted source; Individually generated mechanical boss painting with pale/checker matte separation. Silhouette cleanup and manual art review pending.",
+  "gameplayAuthority": false,
+  "binaryArchiveInGit": true,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
+}

@@ -1,0 +1,377 @@
+{
+  "actors": {
+    "ash-wisp": {
+      "drawHeight": 124,
+      "facing": "right",
+      "file": "sheets/ash-wisp.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "7639d3e491181372fc76b991368818e7f73efb1aab239ef595669f65233cd669",
+      "sourceFile": "assets/art/enemy-animation-suite-v2/sources/ash-wisp-source-v2.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "black-chrysanthemum-nest-woman": {
+      "drawHeight": 146,
+      "facing": "right",
+      "file": "sheets/black-chrysanthemum-nest-woman.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "82273a0a47102deff82889189761d103d5e43527b27864ad9f7c40027fb07774",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/black-chrysanthemum-nest-woman-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "dream-baku": {
+      "drawHeight": 158,
+      "facing": "right",
+      "file": "sheets/dream-baku.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "163b4c65d35f33d38beb9d7f224006efbf531eff3ad5d8f344348303f106773e",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/dream-baku-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "drum-tanuki": {
+      "drawHeight": 158,
+      "facing": "right",
+      "file": "sheets/drum-tanuki.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "36678cd65e47b8891a5c5e2902e0648801ed3ef7dac2eb3c6030c69332afcef4",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/drum-tanuki-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "forge-thrall": {
+      "drawHeight": 144,
+      "facing": "right",
+      "file": "sheets/forge-thrall.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "ac50bd426cec20ead6f7612f42f9665ff8795dfd2b61a8d1615176f8c1fc5689",
+      "sourceFile": "assets/art/enemy-animation-suite-v2/sources/forge-thrall-source-v2.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "lantern-leech": {
+      "drawHeight": 122,
+      "facing": "right",
+      "file": "sheets/lantern-leech.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "18e3e8ce321290a5a729af80df3f9337b897e9a58580eaff8ed659819466f8e2",
+      "sourceFile": "assets/art/enemy-animation-suite-v2/sources/lantern-leech-source-v2.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "lantern-vine-maw": {
+      "drawHeight": 145,
+      "facing": "right",
+      "file": "sheets/lantern-vine-maw.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "10e7c0f6578afbf82163c5bd3a695e6cfd2807765765bfaab313435b22c9b871",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/lantern-vine-maw-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "marsh-kappa-beast": {
+      "drawHeight": 158,
+      "facing": "right",
+      "file": "sheets/marsh-kappa-beast.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "be755661b70b9c7c64c3038956a438d3a41c411ea3c32e43aefac7f3180d54d8",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/marsh-kappa-beast-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "provincial-banner-guard": {
+      "drawHeight": 144,
+      "facing": "right",
+      "file": "sheets/provincial-banner-guard.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "c6a8441511e6b3a61824576c623fe7dab9cda0bbfe11587b0bc0ae3f53750a2b",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/provincial-banner-guard-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "registry-hound": {
+      "drawHeight": 133,
+      "facing": "right",
+      "file": "sheets/registry-hound.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "4e7b81bd381926a81d685a1706f3408a24632a903139f3d9eb2f68ef68363e90",
+      "sourceFile": "assets/art/enemy-animation-suite-v2/sources/registry-hound-source-v2.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "sickle-weasel": {
+      "drawHeight": 119,
+      "facing": "right",
+      "file": "sheets/sickle-weasel.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "c3e039d6d09667225fb3025d083f006c20ca86cc3c6f7798a03168936143cf06",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/sickle-weasel-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "spider-lily-ambusher": {
+      "drawHeight": 145,
+      "facing": "right",
+      "file": "sheets/spider-lily-ambusher.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "e85941ad4a24e4efe023ff77ef187a4c5cb7e5129b15240b15694d42ba846f79",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/spider-lily-ambusher-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "storm-nue": {
+      "drawHeight": 119,
+      "facing": "right",
+      "file": "sheets/storm-nue.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "f07a0d9a1b91c61c9a243f0e843639221e0ad7e0f05c05e5b1aac0543ea6ccde",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/storm-nue-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "twin-tail-nekomata": {
+      "drawHeight": 119,
+      "facing": "right",
+      "file": "sheets/twin-tail-nekomata.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "3d2cfa36881bd5d2f30dcca95bd3a46b4664a77cf298f7d404ba12f50c85f6d4",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/twin-tail-nekomata-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "ushi-oni-behemoth": {
+      "drawHeight": 158,
+      "facing": "right",
+      "file": "sheets/ushi-oni-behemoth.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "e3a8784297d712c086552d7971e6e358d4a1bb94db3fa905e9b606e92a7ca7c7",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/ushi-oni-behemoth-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    },
+    "veil-courier": {
+      "drawHeight": 135,
+      "facing": "right",
+      "file": "sheets/veil-courier.png",
+      "foot": [
+        192,
+        374
+      ],
+      "group": "enemy",
+      "height": 384,
+      "poses": [
+        "idle",
+        "move",
+        "windup",
+        "active",
+        "hurt",
+        "defeat"
+      ],
+      "sha256": "45509c7d51dee6b00cd7a6703c04475dd23b6562d62b3ef328ddebd4ac2abedf",
+      "sourceFile": "assets/art/enemy-animation-suite-v3/sources/veil-courier-source-v3.png",
+      "sourceProvenance": "AI-stylized source animation board; derived PNG key poses",
+      "width": 2304
+    }
+  },
+  "frameCount": 6,
+  "schema": "bbc-hd-painted/1",
+  "scope": "16 missing regular enemies; source-derived from existing high-resolution boards",
+  "status": "review-candidate-source-derived",
+  "version": 1
+}
