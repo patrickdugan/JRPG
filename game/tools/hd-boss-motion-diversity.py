@@ -204,7 +204,7 @@ def run(root: Path, out: Path) -> dict:
         "bossCount": 7, "motionClipCount": 70, "decodedFrameCount": 1680,
         "allDecodedFrameHashesVerified": True, "originalAssetWrites": 0,
         "manualVisualApproval": "pending", "nearStaticReviewCandidates": count_near,
-        "rigidShiftReviewCandidates": count_rigid, "bossses": reports,
+        "rigidShiftReviewCandidates": count_rigid, "bosses": reports,
         "rankedNearStatic": ranked,
     }
     (out / "motion-metrics.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
