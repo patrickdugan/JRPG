@@ -47,8 +47,9 @@ export function validateHdArtManifest(manifest) {
   return {ok:true,reason:'ok'};
 }
 /** Select one key from immutable game state. Kurozane forms need separate mapping. */
-export function selectHdPose(actor, record) {
-  if (!actor || !record || record.group === 'boss-study') return null;
+export function selectHdPose(actor, record, { bossForm = null } = {}) {
+  if (!actor || !record) return null;
+  if (record.group === 'boss-study') return Number.isInteger(bossForm) && bossForm >= 1 && bossForm <= 6 ? bossForm - 1 : null;
   if (actor.hp <= 0 || actor.active === false) return 5;
   if (actor.staggerRemainingMs > 0 || actor.hitStunRemainingMs > 0)
     return record.group === 'party' ? 5 : 4;
@@ -75,11 +76,11 @@ export function hdPaintedDrawPlan(actor,record,frame) {
   });
 }
 export function createHdPaintedArtRuntime({
-  fetchJson, createImage, root=HD_ART_ROOT, enabled=false, motionEnabled=false, onMotionChange=()=>{}, onMotionFrame=()=>{}, onChange=()=>{},
+  fetchJson, createImage, root=HD_ART_ROOT, enabled=false, motionEnabled=false, reviewedMotionEnabled=false, allowBossStudies=false, onMotionChange=()=>{}, onMotionFrame=()=>{}, onChange=()=>{},
 }={}) {
   if (typeof fetchJson !== 'function' || typeof createImage !== 'function')
     throw new TypeError('fetchJson and createImage must be functions');
-  const motion=createHdMotionRuntime({fetchJson,createImage,root,enabled:enabled&&motionEnabled,onChange:onMotionChange,onFrame:onMotionFrame});
+  const motion=createHdMotionRuntime({fetchJson,createImage,root,enabled:enabled&&motionEnabled,reviewedMotionEnabled,onChange:onMotionChange,onFrame:onMotionFrame});
   const states=new Map(),images=new Map(),inflight=new Map();
   let manifestPromise=null,disabledReason=null;
   function state(id,next) {
@@ -118,7 +119,7 @@ export function createHdPaintedArtRuntime({
     state(id,'loading');
     const task=loadManifest().then(manifest=>{
       const rec=manifest.actors[id];
-      if (!rec || rec.group==='boss-study') { state(id,'unavailable'); return null; }
+      if (!rec || (rec.group==='boss-study' && (!allowBossStudies || id !== 'kurozane'))) { state(id,'unavailable'); return null; }
       return loadImage(root+rec.file).then(image=>{
         if (image.naturalWidth !== rec.width || image.naturalHeight !== rec.height) {
           state(id,'wrong-size');return null;
@@ -147,7 +148,7 @@ export function createHdPaintedArtRuntime({
     const item=images.get(id);
     if (!item) { request(id);return false; }
     if(motion.draw(ctx,actor,id,item.record,options))return true;
-    const frame=selectHdPose(actor,item.record);
+    const frame=selectHdPose(actor,item.record,options);
     if (frame==null) return false;
     const plan=hdPaintedDrawPlan(actor,item.record,frame);
     if (!plan) return false;

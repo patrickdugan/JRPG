@@ -1,0 +1,153 @@
+{
+  "schema": "bbc-hd-painted/1",
+  "frameCount": 6,
+  "actors": {
+    "lady-enma": {
+      "file": "sheets/lady-enma.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 186,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "cinder-fan-windup",
+        "cinder-parasol-wing",
+        "paired-ashes",
+        "defeat"
+      ],
+      "sha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb"
+    },
+    "bell-warden-chiyo": {
+      "file": "sheets/bell-warden-chiyo.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 175,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "chain-cast-windup",
+        "chain-cast-active",
+        "ringing-count",
+        "defeat"
+      ],
+      "sha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c"
+    },
+    "yearless-bell": {
+      "file": "sheets/yearless-bell.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 194,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "sway",
+        "yearless-ring-windup",
+        "yearless-ring-active",
+        "ward-stagger",
+        "collapse"
+      ],
+      "sha256": "3ccd3009bc336bacbfcd820f0d2935233e212eef4475f18fc360ffc9458f1e6b"
+    },
+    "captain-kaji": {
+      "file": "sheets/captain-kaji.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 194,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "charge",
+        "crane-surge-windup",
+        "salt-cut-active",
+        "chain-haul-guard",
+        "defeat"
+      ],
+      "sha256": "a616f7d710cbf7005432ba6f3c9a2e8b2fcf8290a89173a6424b4f1e43522b16"
+    },
+    "widow-of-fog": {
+      "file": "sheets/widow-of-fog.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 188,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "fog-glide",
+        "name-drag-windup",
+        "name-drag-release",
+        "receding-call-ring",
+        "defeat"
+      ],
+      "sha256": "2df42dd4559057631957a67eaee908841cbe9c9b9d2ec37eb0188c11c1687970"
+    },
+    "furnace-abbot": {
+      "file": "sheets/furnace-abbot.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 205,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "hammer-decree-windup",
+        "hammer-decree-active",
+        "forge-sermon",
+        "defeat"
+      ],
+      "sha256": "d3dd3c49ef8a0b46f8277e5119e95665ac7f6622da36adec2aee6690735cd053"
+    },
+    "ujiro": {
+      "file": "sheets/ujiro.png",
+      "width": 2304,
+      "height": 384,
+      "foot": [
+        192,
+        368
+      ],
+      "drawHeight": 178,
+      "facing": "right",
+      "group": "enemy",
+      "poses": [
+        "idle",
+        "advance",
+        "gavel-line-windup",
+        "gavel-line-active",
+        "seizure-order",
+        "retreat"
+      ],
+      "sha256": "8cbc02bc4f8fe375e6e071eec408e939be4fb60c1acd790795f7a35000879ae1"
+    }
+  }
+}

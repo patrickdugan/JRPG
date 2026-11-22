@@ -53,7 +53,7 @@ def fixture(folder):
 def run():
  with tempfile.TemporaryDirectory() as temp:
   root=Path(temp)
-  for name in ('hd-painted-animation.mjs','hd-painted-motion.mjs'):
+  for name in ('hd-painted-animation.mjs','hd-painted-motion.mjs','hd-reviewed-motion.mjs'):
    shutil.copyfile(GAME/name,root/name)
   folder=root/'assets/art/hd-painted-v1'
   fixture(folder)
