@@ -81,13 +81,13 @@ The generator, runtime and all **96 actual WebP motion strips** are committed in
 | kurozane-oni-armor | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
 | kurozane-demon-mode | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
 | kurozane-ward-broken | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
-| captain-kaji | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
-| widow-of-fog | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
-| furnace-abbot | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
-| ujiro | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
-| bell-warden-chiyo | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
-| lady-enma | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
-| yearless-bell | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| captain-kaji | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
+| widow-of-fog | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
+| furnace-abbot | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
+| ujiro | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
+| bell-warden-chiyo | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
+| lady-enma | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
+| yearless-bell | named-boss | major-boss | candidate-in-Git | candidate-in-Git | yes | optional-hd-mode | pending |
 | npc-speaker | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-interviewee | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-confined-person | npc | civilian | pending | pending | pending | fallback-only | pending |
@@ -104,24 +104,6 @@ The generator, runtime and all **96 actual WebP motion strips** are committed in
 | npc-caretaker | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-net-mender | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-post-keeper | npc | civilian | pending | pending | pending | fallback-only | pending |
-
-## Kurozane painterly form selection
-
-The engine now selects the retained six-frame high-detail Kurozane study through the boss director, rather than guessing from HP alone. In `?art=hd` mode only, `court` uses source keys 01/02 (idle/committed action), `bell` uses keys 03/04, and `dawn` uses 05/06. Defeat holds key 06. The matching 24-frame `form-01` through `form-06` WebP studies are selected through the existing HD motion sampler; the six-key PNG is its immediate fallback. Source art must be installed from the prior HD ZIP before either lane becomes visible.
-
-The original tested boss v2 clip system remains the render fallback when these optional binary files are absent, fail decoding, or lack a valid boss phase. Kurozane's historical human, armor, and demon references survive unchanged. The binding is a presentation-only engineering acceptance, with review of effects, hand-articulated transitions and boss-specific poses still outstanding.
-
-## Captain Kaji's HD painted source (review candidate)
-
-The six-key painted original preserves his salt-cut sword, chain-haul hook, spool reel, scarred captain's face, and Crane Surge overhead tell. The source SHA-256 is `a616f7d710cbf7005432ba6f3c9a2e8b2fcf8290a89173a6424b4f1e43522b16`; the package `JRPG_HD_Boss_CaptainKaji_v1.zip` includes 6 isolated PNG key poses, a six-key engine PNG, ten 24-frame derived WebP motion strips and a checksum-verifying installer. Source and clip integrity tests pass locally. The source painting, six-key PNG atlas and ten animation WebP files are now counted as Git-committed review assets. Human acceptance and dedicated animation in-betweens are still open.
-
-## All seven named boss HD art candidates committed to Git (November 22)
-
-All seven named bosses now have **seven original full-resolution source paintings, seven transparent six-key engine sheets and 70 WebP motion strips**, representing **1,680 source-derived frames**. All are in Git and load through the opt-in `?art=hd` renderer. The original pixel animation remains the fallback and authoritative attack timing remains unchanged. Every figure and clip remains **pending manual visual approval**, and derived frame hashes are integrity checks rather than evidence of hand-authored articulation.
-
-The latest four original archives, Captain Kaji, Widow of Fog, Furnace Abbot and Magistrate Ujiro, were committed as 31 exact Git chunks (43,933,244 bytes). [The strict hosted import](https://github.com/patrickdugan/JRPG/actions/runs/44935663172) rebuilt all four archives, validated their checksums and imported 40 clips/960 frames. The earlier three premium boss archives, Bell Warden Chiyo, Lady Enma and Yearless Bell, contributed 30 clips/720 frames. **All named boss source paintings, PNG key sheets and WebP files are now in the Git repository.**
-
-Browse [original paintings](../../../assets/art/hd-painted-boss-review-v1/) and [runtime art](../../../game/assets/art/hd-painted-v1/). The proof receipts are [archive v1](../hd-boss-binary-import-v1/manifest.json) and [archive v2](../hd-boss-binary-import-v2/manifest.json). The Roster Keystone JSON records each individual import and review status.
 
 ## Acceptance gates
 
