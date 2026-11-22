@@ -416,6 +416,7 @@ elements.canvas.dataset.hdArtState = hdPaintedEnabled ? 'loading' : 'off';
 elements.canvas.dataset.hdArtDrawCount = '0';
 elements.canvas.dataset.hdMotionState = hdMotionEnabled ? 'loading' : 'off';
 elements.canvas.dataset.hdMotionLane = hdReviewedMotionEnabled ? 'reviewed' : 'canonical';
+elements.canvas.dataset.hdMotionActualSource = 'pending';
 elements.canvas.dataset.hdMotionClip = '';
 elements.canvas.dataset.hdMotionFrame = '';
 const hdPaintedArt = createHdPaintedArtRuntime({
@@ -428,7 +429,8 @@ const hdPaintedArt = createHdPaintedArtRuntime({
     elements.canvas.dataset.hdMotionClip = clip;
     elements.canvas.dataset.hdMotionState = state;
   },
-  onMotionFrame: (id, clip, frame) => {
+  onMotionFrame: (id, clip, frame, origin) => {
+    elements.canvas.dataset.hdMotionActualSource = origin ?? 'canonical';
     elements.canvas.dataset.hdMotionTemplate = id;
     elements.canvas.dataset.hdMotionClip = clip;
     elements.canvas.dataset.hdMotionFrame = String(frame);
