@@ -33,6 +33,12 @@ jobs:
         run: |
           node --test game/tests/hd-seven-named-boss-art-git.test.mjs
           git diff --exit-code -- assets/art game/assets/art/hd-painted-v1
+      - name: Include exact original active WebPs for independent visual inspection
+        run: |
+          mkdir -p artifacts/hd-boss-attack-seams/original-active-reference
+          cp game/assets/art/hd-painted-v1/motion/yearless-bell/active.webp artifacts/hd-boss-attack-seams/original-active-reference/yearless-bell-active.webp
+          cp game/assets/art/hd-painted-v1/motion/lady-enma/active.webp artifacts/hd-boss-attack-seams/original-active-reference/lady-enma-active.webp
+          sha256sum artifacts/hd-boss-attack-seams/original-active-reference/* > artifacts/hd-boss-attack-seams/original-active-reference/SHA256SUMS
       - name: Upload exact transition GIFs, full contact sheets, perceptual scores and candidates
         if: always()
         uses: actions/upload-artifact@v4
