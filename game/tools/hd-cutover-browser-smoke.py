@@ -140,9 +140,14 @@ def run(real_candidate_dir: Path | None = None):
                 assert page.locator("#capture").is_enabled()
                 assert page.locator("#proposed").get_attribute("data-verified") == "true"
                 page.locator("#decision").select_option("needs-keys")
-                page.locator("#notes").fill(
-                    "Synthetic fixture: inspect Yearless Bell attachment at frame 24."
+                automated_note = (
+                    "AUTOMATED CI REVIEW (real source-regenerated WebP): inspect "
+                    "Yearless Bell attachment at frame 24."
+                    if real_candidate_dir is not None else
+                    "AUTOMATED CI REVIEW (synthetic fixture): inspect "
+                    "Yearless Bell attachment at frame 24."
                 )
+                page.locator("#notes").fill(automated_note)
                 page.locator("#backdrop").select_option("parchment")
                 page.locator("#speed").select_option("0.25")
                 for _ in range(4):
@@ -178,7 +183,7 @@ def run(real_candidate_dir: Path | None = None):
                     "() => document.querySelector('#original')?.dataset.phase === 'windup'",
                     timeout=30000,
                 )
-                assert page.locator("#notes").input_value().startswith("Synthetic fixture")
+                assert page.locator("#notes").input_value().startswith("AUTOMATED CI REVIEW")
                 page.emulate_media(reduced_motion="reduce")
                 page.locator("#play").click()
                 assert page.locator("#play").get_attribute("aria-pressed") == "false"
