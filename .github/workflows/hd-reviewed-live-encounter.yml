@@ -1,0 +1,56 @@
+name: Live Action Campaign HD reviewed boss windups
+on:
+  push:
+    branches: [feature/hd-reviewed-live-encounter-smoke-20261122]
+    paths:
+      - 'game/tools/hd-reviewed-live-encounter-smoke.py'
+      - '.github/workflows/hd-reviewed-live-encounter.yml'
+  pull_request:
+    paths:
+      - 'game/tools/hd-reviewed-live-encounter-smoke.py'
+      - '.github/workflows/hd-reviewed-live-encounter.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: hd-reviewed-live-encounter-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  live-encounter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source source-identity and preserved battle model contracts
+        run: |
+          (cd game && npm run check)
+          node --test game/tests/hd-reviewed-motion.test.mjs \
+            game/tests/hd-seven-named-boss-art-git.test.mjs \
+            game/tests/action-campaign-battle-model.test.mjs
+      - name: Install Chromium for actual rendered encounter smoke
+        run: |
+          python -m pip install 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Exercise chapter-eight and chapter-nine authored boss battles at virtual-time speed
+        run: python game/tools/hd-reviewed-live-encounter-smoke.py --virtual-ms 18000
+      - name: Verify canonical painted atlas and approvals stayed unchanged
+        run: |
+          git diff --exit-code -- assets/art/roster-keystone/
+          git diff --exit-code -- game/assets/art/hd-painted-v1/manifest.json
+          git diff --exit-code -- game/assets/art/hd-painted-v1/motion-manifest.json
+          git diff --exit-code -- game/assets/art/hd-painted-v1/sheets/
+          git diff --exit-code -- game/assets/art/hd-painted-v1/motion/
+      - name: Upload authored encounter evidence, six gameplay screens, and traced canvas URLs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-reviewed-hd-live-action-campaign
+          path: artifacts/hd-reviewed-live-encounter/
+          if-no-files-found: warn
+          retention-days: 14

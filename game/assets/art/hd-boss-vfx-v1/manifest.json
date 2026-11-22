@@ -1,0 +1,398 @@
+{
+  "schema": "bbc-hd-boss-vfx/1",
+  "provenance": "code-authored graphical VFX on existing boss attacks",
+  "gameplayAuthority": "none",
+  "frameSize": [
+    256,
+    256
+  ],
+  "framesPerStage": 12,
+  "stageCount": 12,
+  "totalCells": 144,
+  "bosses": {
+    "widow-of-fog": {
+      "label": "Widow of Fog",
+      "strike": "Name Drag",
+      "signature": "Receding Call",
+      "mode": "fog",
+      "stages": {
+        "windup": {
+          "file": "widow-of-fog-windup.png",
+          "sha256": "06945d07cc474ebf8d0ab8ec170dea4e65965dd7cad64d13b913cf4ddfddd73c",
+          "bytes": 696301,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "e08e6790c33a2c17bf9bb5627fe7da26f34144588f840ec07ac0cb73b8dc9df1",
+            "b0974e444b4e6200f57832e7008a04e5160b98ebac1e6294347b987be978f04b",
+            "9ed786f748b81fe101391cce2afedd1b9e233db2767667d1300ad4a1fa73cb76",
+            "77d41d6157904a21cc0ddf68c6aed31cbd0ef333f2ea9a81f812d84dbd560261",
+            "92ef54c7655393c0871540a51a9df7e3e2d459c68adac916d76dfa97b4f49773",
+            "bda5b6200e090c4b10de7fd913550320167f522a76fc01e5ee52807852eb6a40",
+            "9029b1f7ee70ed068732eeee42023c6de4375feef731f25d7c6342e75d309f07",
+            "8090ae772999c0a492b33f244756ff267b7b12f9aad7705429a46bceb559427c",
+            "9e1edffd58da1f8cf509d5ef452668a34abe516f447b3f7378bd958e6a1e42e1",
+            "78166b90d80efc02e307ea292d4b6763a58d39b7f77a83ebdfe2685b88d12650",
+            "a5624c6330f8b34ed4a11c79b9ea810c8992de4ef4b9dd50bbae75895d802101",
+            "de67ff45236848ec5c4556dce3332911039e121b4a2e3e57f3508d56590a02a7"
+          ]
+        },
+        "active": {
+          "file": "widow-of-fog-active.png",
+          "sha256": "1863371a1c2b80f92affd853b06f18a0be5e5fb65ec1fb239eaf02b46c2fb183",
+          "bytes": 743147,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "34940db7787cae6fc0cdc90ed42f53e57076e401f7b701267c13b3cfd2a713b3",
+            "8fa0265cd9b0a08174089476e1501d13696d40702d8caa3e76eeb49ce503f2f6",
+            "8faa3cfcc5927ed4d7fde099d79c3807291bf2a29f7561833ca3880237a6b30b",
+            "3d0c14e1afc205788d05183e557e3e6dc555cc8ddcf8a536ba4e0b72ea3403e9",
+            "ab3a5aca568ad222fec9fe3183514059c3827974e4c0a0aab031301cd41f1706",
+            "2621a0a4d1c4749b2737029903e29e83ff4c840d3e8f17aee9ed0086056c56bb",
+            "fcbcf3bd8de813ba9a42520e24c52e327167132fe2e37f721b087c479154fa65",
+            "c3b1ba8885503cac98aad2a0e9d5aab85ac57afc4cc279bd98a23160d9619301",
+            "6ebfbcce29844da9652675faa4dd56693c4ebfca648574640df239065d5c99ea",
+            "ef20728e84f1e9e85d26c085c9ce0aad6ccb311ef3faad44e07a1307b446e9b7",
+            "ad0614d6387f28444e98b8da73c79f46d383298bf402000f3dfb862061c44884",
+            "e1ac483d2de5400caa0d3d4e36b4b178c68bc617009eb93d8815192dc0dcfbfc"
+          ]
+        }
+      }
+    },
+    "furnace-abbot": {
+      "label": "Furnace Abbot",
+      "strike": "Hammer Decree",
+      "signature": "Forge Sermon",
+      "mode": "furnace",
+      "stages": {
+        "windup": {
+          "file": "furnace-abbot-windup.png",
+          "sha256": "83f20f945b3fa31021f5583d7018c9ccafdd0d0013b79f420f90e4b1b1e7065d",
+          "bytes": 382040,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "bf6459ec7dea7466bac7a9f9a1bc7cd8d552783cd871c8023f3909a77685a83e",
+            "9523dc522bec01ef59fcf795efe48c9c3e31aa9e567fcc949a4c6e381675493d",
+            "d81420da93963302573b39a2eed0eeff2fd02747a89b578ecbb6393e0317b0e5",
+            "d9dd5b1438e5e499ba2a8db327a0574e82c7724ac9a896f2ea650c73703b3d63",
+            "8d9fac95a79b6f6fd41994a21df54f5a3079303177467c24fb4bc636ec212a32",
+            "7282b61d7d0610fa8cbe8ec7d87463dca93a6d847633b8fb4436e08b62bca624",
+            "a0ca0097f5336ee3db191859e0c8c276deb5f0293ee9f0a055f6a9bc6ee7ca24",
+            "cd8a5eed028a36e912167186cf6df79b005336f322285091f75a33cfbca3bec6",
+            "a950c72dc62bc6eab7c5ebb0d93a4434e02f70e2dc55cb06313da446382f5cd5",
+            "ed0094176348228611aed2eef68354def3e452da2e2dece96192afee480bd38c",
+            "a87d92861de3dad97d081e0a5d6568c5ab76ad6f1613294035fa244eee9e1822",
+            "fbe9fee884407269c3ded821e7539cf4b0ad59f63e5d0f91845e3306c86b5cc2"
+          ]
+        },
+        "active": {
+          "file": "furnace-abbot-active.png",
+          "sha256": "b7bd95b6fcf0d1c46ad853a8247ed38f6aef251bde53ad38deb3d3741ca66cef",
+          "bytes": 471201,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "f250eebd4bc59d979f649cf007994a253ca7327c102c517bc13e7695a902ad99",
+            "bf4dc8a7408c9675e2a69b0a6cb105566d186e207b126c8449ddc6eacc7ece07",
+            "b9a1d5b431af93acb71456cd4b49cd66a5e9476315b58fc277d6c21c80c5b18b",
+            "9eb17dbbdad4a04cecea19642833a2e6d66179984bd8101f14857c6fdd8322ae",
+            "af330747c1117c795484579413f4295f3071e682f43f2981e298dd082e099ea6",
+            "5a8df1f1c6232d266bf8d3905cb6c82853e72efbc375f47ba893deb7582fa151",
+            "27462d71193771fa7fee5c4a4d26fccc3985681a17dbb44b773c1d85aa861660",
+            "af9d00b378c178d32869336c0a4154057896f1c70197595f5834fcfbd345fcbc",
+            "ddebd67d6e3cad209095441608b5b3c772c9e1e3614c656f108e318fcf4891bc",
+            "affc82de3e87ac5de79473544ded35ef2854b6a2fc17d9ae3cbed5731f1d5b1c",
+            "b05a37b7b2113826d60953f0f849315ad70e4b33d370c36e2b2235b148eb0e90",
+            "dcc1512971b6cbe356f81f0b0223adae6f39a7272486ba9b750b26bd2c1699e3"
+          ]
+        }
+      }
+    },
+    "ujiro": {
+      "label": "Magistrate Ujiro Arata",
+      "strike": "Gavel Line",
+      "signature": "Seizure Order",
+      "mode": "writ",
+      "stages": {
+        "windup": {
+          "file": "ujiro-windup.png",
+          "sha256": "9e740d3dba589ee57a6210fb5f9fc4e576e254ec9143f243ca72d266264d5d51",
+          "bytes": 175026,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "ad2f618c19d5a2e82eb53836f126585a1b6a73d9a0c0693a328dc03a143246d5",
+            "0290692f50e707fea3dd513b4547122673e320160d735c6c4f236bfe70fa0f4f",
+            "1eff042e863dedb3cd448011582b6779fae694700d67fc1701523c011995bb7c",
+            "527c15ff31ce6ea26025a7f08389f6bad2d4b7e37aacb1e180adad250b5b85d4",
+            "e35603035e3502f92c1d1287b11cd3a188b0b9a218b67a09828afd0c08338e25",
+            "827c3c50576ffbea511faca913c45c6f65c257c8e374e3db6de3af69fc7dc7e9",
+            "28313ea65d5b22a5d02df7c7f858f7f9fd91be34f23abe094c4521fbeba43b93",
+            "61dc4cefb7389a27f37c49a375468f1029914bb19d1c7b226e48c38948c34049",
+            "14d74812d0cfe4dccbbe0dd22bd1c0b39bb98ff2c3f41f81ea9f3196dd1dd562",
+            "6a738239656a5c8ad1d4c40c5e76c8e348022d63f6409af4b4fe877aca4dca01",
+            "e831848de1f9a3da64042117bb3520b59661739cdeb95fa4be28a574465f56c6",
+            "f00e83d17d9db688f2ba8569d7015c61882ddc4e0e92805f877fe79c4ef08dd7"
+          ]
+        },
+        "active": {
+          "file": "ujiro-active.png",
+          "sha256": "cace3376c4b028806f27afa3ffbb82dc8309101f35af9849f19713834de4d1bc",
+          "bytes": 214437,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "52bfd94ebaf0d928f61386f8b3697918f294d1eab93153c52a5f845f942302b1",
+            "f583118116516d4441df04af3ee380bc94425cf10deefbf0f7f53d3f18af4af1",
+            "b9c5d3b8f19bfdbc00fd5f8542ffa3ec878135572c86236673d390e3138de143",
+            "4d0771175405cda92b0ef919606b369745842f6ba183a54b3fa22c79d252bcdb",
+            "bf69ab41689b7e01f1e61509b3e1499f9d4b4c63de36790ea70bc81ee52d97b6",
+            "87cfa2c7e7381061d8e1b797e53f4dfe22b05f8a17efe7b3844353279e59d4d4",
+            "805a82c5d994f4767f85f34b120fef86a7fdb545a3268d750befb5420dd86641",
+            "32db1975bea62a780588a9c6051a367cea2b9b744fd4bfa4006f54d8a96737ca",
+            "380cec13ac140e47219bcc1bc0d12351348f37737fa85244e00d883396f961f3",
+            "3d1a0778e37b80ed571dea2e058a4cd9feda06799d741d3a0090f18f5053aaa4",
+            "84d85f44adf752662c8642950f0c6dfa0fef2dbb1146298dfc106cc0f98e01e9",
+            "68368bcad3bfdad13ea0b27a70baf0bf62a8cb6271e5f10b35d2726440628532"
+          ]
+        }
+      }
+    },
+    "bell-warden-chiyo": {
+      "label": "Bell Warden Chiyo",
+      "strike": "Chain Cast",
+      "signature": "Ringing Count",
+      "mode": "bell",
+      "stages": {
+        "windup": {
+          "file": "bell-warden-chiyo-windup.png",
+          "sha256": "9d3279767e793794c99a602cf447951ec4d3eb61ddce693e4b4de0310eea8885",
+          "bytes": 589565,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "c4e1ae4e57908a0b94ef4383336bdcda85d08060c74872a658d119bf478fa2d2",
+            "2716abaee5183af30bd855f0ed7a07a997b3b51b57ccf6c15d95cd20d6cb21b6",
+            "3de795d4ead3aaf98495ec299504d8295cb8fc7f236614869a6284004b8f65a3",
+            "c38cdf968dcbb8b2c508cdba51a9c797a7b35d2ac2592fc17133bd086bdc218d",
+            "58c9a61201a128e5f75cad5f86966eb2449e753988717f4ba5c4ee98cc747290",
+            "ed8b1f904b64702fc74449bf271fda61a7d2a9729aaf99dda803a908c900b9f8",
+            "e7c8f9697f0fe8785650fbcd804f20e156b8faabdea8e64f73b5d201faaa6b62",
+            "63c002deb3cd264c91ebaed89e8e1a7d81b7039789bad506ca9a1838ebd997b7",
+            "d8b8401d06d7e4d4da6e3b5b13979ccbceafe4bed29fb0e747a8ac7ee82844d2",
+            "88f284e3978d8d908b6e1ecadf4d0a4e1f12769519569b830c59edb989306017",
+            "75b2ca280a9b1b5a9743ea79df674cd52a9e6d1ccfc1ed8873f99f6e1c7e7367",
+            "c3c6007d92eb95d55e55381f059ce8602f13332b8558f6e5816b3583a43b9fe0"
+          ]
+        },
+        "active": {
+          "file": "bell-warden-chiyo-active.png",
+          "sha256": "23b5b0d2780c254fdce25363e97a2e202660bd77b469d13c48f231c0e9c2efb0",
+          "bytes": 708324,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "3ddeb6a9957b6e43501c112d1943ea7e9e4f47a90f90132cdc56a9573f67d7c6",
+            "e5bb05c5fb140eb88fee21f65db8da46ee868168bf7fff2efc8691da18ae56a8",
+            "787aad6b8b31d5f75872b4a981638283ecd03cfbe8eaca830a36667dbed56bc7",
+            "06ad228dc0c839b90f14bb13d7c28335170c06940e55f1fb9b876c5086d589fe",
+            "f4424cc191ee41370eb3465473344ffda556701907a29996ff30bf199cc943a0",
+            "47cbbb55030201f7acd7ed68419b692c1f18f889fcc0b665ed8530433a9220a4",
+            "f6261537bf5b182d5f98e5b3c41f0f773c658b0d861600d759b42e476ad38cf9",
+            "0f2060d6b0aedf0b3ce236e41c34a3c168c5668dd168fc95c02d21fc10e9a0ee",
+            "447e2adc6c47547638a59f9b6bd293aed778b6f312ae1d8ba4145426881bc36b",
+            "c4573fc33ce69bd0a5ff7e6ba1c547bc86362c7468195baefc1285be88631920",
+            "75852e5773e87332ff8888d9441ddef8461174c13648caa2d368d5f21175fb05",
+            "38e624de1073a3f892de4150008990186a5180cca6d70be5b0a707c051a20bb2"
+          ]
+        }
+      }
+    },
+    "lady-enma": {
+      "label": "Lady Enma of Ash",
+      "strike": "Cinder Parasol Wing",
+      "signature": "Paired Ashes",
+      "mode": "fan",
+      "stages": {
+        "windup": {
+          "file": "lady-enma-windup.png",
+          "sha256": "7ed8ce3ccd42540e330df0e3d255e6993df5b7222a6a1f3e314a6d411c617141",
+          "bytes": 219461,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "447af334931e327ca47e1b0dda3cfa27e6e78f89bd9a3a19905b428ea7b8e4ad",
+            "03832329754d8866e0beef626058b6acc83e8db1cd05509d2365baef774640df",
+            "92820bd7a9395570b4cdeed3fd2ce70c5f7939bd60f802b6a477dccc2041f4d2",
+            "818200424090927cd10b58ff7ffdedfa42d3738376ac1b77abf16409af8bcfb9",
+            "333568c4705263155df32d2e8c55968d376b7e4d474003184ad609b7a65e7648",
+            "fca593253a2b6611c6fa2490cb8249e50857383cd7577936b6d840303c4bea84",
+            "43b082995eb4cf3163b062ebf507a784b1f91daa8ce6336e2029806c95f6a76f",
+            "b08cb8e9f8fac2611be91b4854c44b27b7d13a24e5d33e69963a057d1e617628",
+            "faa959921451a6b060d30f77bd2706e7f83c5eb9c306fc1d41e8ca5f8282d83c",
+            "e86403ecacd87594938322dd46be24524effba173cd6194aec0bfcf8b018f8ba",
+            "61195f33b068f759e284f41163c94f1ae6ab80a75bf51dbd5fc5440228f9b738",
+            "6adc5e8cf4bb80cefa1a983cff203adcc69bb99aa4754c1576868c551c243bc4"
+          ]
+        },
+        "active": {
+          "file": "lady-enma-active.png",
+          "sha256": "3f5a4456dcd0912177b3313291b276d43da1aac2de3d1a96d353b15dcf24db6e",
+          "bytes": 361720,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "5fff2b75f7329468ae7cc230123ba5b42c8364d399bc64a419b8eab346401191",
+            "082a5d4eb90a533d33f91440b50a707ba89a6f442c8a5092dea8d0d52fcc8ff0",
+            "e5032b3bd3e707042d2bfe6cda34934dde5d356969ebd88e69c5886b3a062752",
+            "b203454424c8653785d80aab30d9dcca8d955dcc412131d2214d956e99b5902c",
+            "336094af2fd3e985895943710d9472cd865c586e703e2966a3bdda7d69c75edc",
+            "516224fdc8da358e8fff1ffe440ef0d57b511d9a1fd1edba20b3ce4401479299",
+            "77ac6c87b64c4d41f09cbd2f7ed8c0e20f3b1893af14b03a3b5211bfac2a4859",
+            "04d3382df562843783abb3b13424deedbb11d91db2b6441254a96b1a7051f132",
+            "19ad189cdaaca541870110cf72dadcf75a3f4790c6d46843e3d3be7a70d86f2e",
+            "1bb990228f550315f3c38db0cb4afd1a985ed3b5d94f204c0cea6c3f7f9a81c6",
+            "485abfe1e9c5f4d9f795f355a24f23f4119519cde0ec52739d421e62be0e5d13",
+            "d1d3ed5c08a350785dedabdf4aec921e097c1d49a55289d7475e9a9df6dc6294"
+          ]
+        }
+      }
+    },
+    "yearless-bell": {
+      "label": "Yearless Bell",
+      "strike": "Yearless Ring (near)",
+      "signature": "Yearless Ring",
+      "mode": "time",
+      "stages": {
+        "windup": {
+          "file": "yearless-bell-windup.png",
+          "sha256": "727a134c66958b9236ca3b42a6f53a77e3ae869a63e996dd0aa0ef71d91af46a",
+          "bytes": 292874,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "c5f9844aa81b7078cd83f277597d5e583a20cfca72387358f5de906030ae922f",
+            "369d8fc0b79b7e652cc613742f8547edcf2476917a15452a762c8cf9050a7036",
+            "4f036f954c8accb08010e18a846e40ae688850e059bf7f3dd2b0d26dd271c2c6",
+            "48abb302b7088e1952bdba1f9044af577dbfb740378efce9755eff44dfd1b736",
+            "5bc417cec35bfd0d11d8e4f0f7fa67b4152e4e96d686d2f9573016e9881316c2",
+            "fa6fc94ada43e17b2e35b8b7c713b46a11b5d3a97799dba6d1be477ee6970a63",
+            "0c27a3855b6cbc4998eddb8fc2e8fbbbdd4e73f109deb75c556c3c3825139373",
+            "ba874e0827135e8565830e818caa2245de9e1464bd2913cb0c3e9edf1019e264",
+            "74a4cf7ee1d2a5aa5712a6fee339c414088504da0f295d32daf36620e2206033",
+            "2897da0acd4b620c7621c2661a60e15148b817407548140b9c198c596f6da8f1",
+            "4c88d81e253cb72e7d2a20c5f0e82d3d1e55ba80c6b778c0ca6a00d3bb6210bf",
+            "de01b2a78c90f972e60ec2fe5182f01bc092c8b15425c3e387db211b4fa896e9"
+          ]
+        },
+        "active": {
+          "file": "yearless-bell-active.png",
+          "sha256": "8f69a9e39208c20a6ad4beefc5bc2594260b2a045d472212991329d8bb519623",
+          "bytes": 370319,
+          "frames": 12,
+          "cell": [
+            256,
+            256
+          ],
+          "dimensions": [
+            3072,
+            256
+          ],
+          "decodedFrameSHA256": [
+            "6f59dc628ce35b113eed07ec047dd90b85dc38444069c5b6982890e68f53bb24",
+            "d7196b07a397e633e5cfde75d94df45ef0ee6c9f786eadfabaccca591c35f224",
+            "2ef38cf7f61b1494bec82c0d51963d005d352f4ea641218c50a0d4914bc34562",
+            "fdab1a71a4a6e9fb82d1c7e42854d4c462712e9cf8a754c9180f4cdce5f74aeb",
+            "bd2d4b4e9ab4f8a96996eb7c836e6e073365cdaec95c4415e92ab5c56190240a",
+            "d32f7c658261f7d1468749f9e7eabd6a0b24d25e2337fd4fcfe76c6fc6ae8fd2",
+            "19c3d1c11d74cd10acf69600da2efaedb6f1f926a2e8e614e56f236562c56f41",
+            "156df45654544a5fd2d9056c1a81897fb46b97f58912eb0cadaa4edeb96aa8f6",
+            "bd16ff88fa2eca110823cf451c553735c4f6c85ddbcd5efd3e332880e31b805e",
+            "886479fded15b9318ee1f60354be37f81b1a9c27c206db4abf556ac9594c8e18",
+            "4933c2624e755e946998a8f1e5bef0428c36b6f86d23dfc2c6c16c67f2f46d65",
+            "61934c5b70eb32df50e42fb72f5aa0d9064d8843001163b4d0ef0f46b3a6f97e"
+          ]
+        }
+      }
+    }
+  }
+}

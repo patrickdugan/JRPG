@@ -1,0 +1,40 @@
+name: Furnace Abbot alpha haze candidate
+on:
+  push:
+    branches: [feature/hd-furnace-alpha-haze-20261122]
+    paths:
+      - 'game/tools/hd-furnace-alpha-haze.py'
+      - 'game/tools/test_hd_furnace_alpha_haze.py'
+      - '.github/workflows/hd-furnace-alpha-haze.yml'
+  pull_request:
+    paths:
+      - 'game/tools/hd-furnace-alpha-haze.py'
+      - 'game/tools/test_hd_furnace_alpha_haze.py'
+      - '.github/workflows/hd-furnace-alpha-haze.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  furnace-alpha:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'pillow>=11,<13'
+      - name: Synthetic mask protection, near-field smoke and change budget tests
+        run: python -m unittest discover -s game/tools -p test_hd_furnace_alpha_haze.py -v
+      - name: Reconstruct proposal from source-verified original Git atlas
+        run: python game/tools/hd-furnace-alpha-haze.py --root . --output-dir artifacts/hd-furnace-alpha-haze
+      - name: Originals, WebP clips, source ZIPs and Roster Keystone remain untouched
+        run: git diff --exit-code -- assets/art game/assets/art/hd-painted-v1
+      - name: Upload human-review comparison, hotspots, PNG and metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-furnace-alpha-haze-review-only
+          path: artifacts/hd-furnace-alpha-haze/
+          retention-days: 14
+          if-no-files-found: warn

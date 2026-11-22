@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "project": "Bells of the Black Chrysanthemum",
-  "revision": "2026-11-21",
+  "revision": "2026-11-22-seven-named-boss-runtime-candidates-in-git",
   "purpose": "Canonical roster and explicit HD animation production status. All statuses are grounded in branch and offline-pack receipts.",
   "sourceOfTruth": {
     "characters": "assets/art/late-snes-roster-suite-v1/late-snes-roster-suite.source.json",
@@ -17,7 +17,83 @@
     "framesPerClip": 24,
     "fullCombatActors": 19,
     "formStudies": 1,
-    "binaryFilesCommitted": false
+    "binaryFilesCommitted": false,
+    "bossPhaseMapping": "court-bell-dawn-selects-six-study-keys",
+    "bossPhaseArtInGit": false,
+    "bossFinalFour": {
+      "package": "JRPG_HD_Boss_FinalFour_20261121.zip",
+      "identities": 4,
+      "poses": 24,
+      "motionClips": 40,
+      "frameCount": 960,
+      "allFrameHashesVerifiedLocally": true,
+      "binaryFilesCommitted": false,
+      "lowerResolutionCompositeSubjects": 3
+    },
+    "chiyoPremiumV2": {
+      "package": "JRPG_HD_Boss_Chiyo_Premium_v2.zip",
+      "individualArchive": "JRPG_HD_Boss_bell_warden_chiyo_v2.zip",
+      "sourceSha256": "d0c2bd8ba9035bfae2c1c318b0b7b2198bddf32699290361bf3057610f36345e",
+      "keyAtlasSha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c",
+      "archiveSHA256": "bbdc7443ccf63a8e14f73117b07100561e8ca62eca2079ae025186a1982ccd09",
+      "clips": 10,
+      "frames": 240,
+      "binariesInGit": true
+    },
+    "npcMotionSourceCandidate": {
+      "identities": 16,
+      "clips": 96,
+      "cells": 2304,
+      "framesPerClip": 24,
+      "binaryFilesCommitted": true,
+      "source": "original code native pixel sprite atlas",
+      "scope": "optional npc field animation; premium HD paintings remain pending",
+      "gitCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+      "committedBytes": 7835279,
+      "manifest": "game/assets/art/npc-motion-v1/manifest.json",
+      "hostedRun": 44914042962
+    },
+    "bossPremiumArchives": {
+      "archiveBytesInGit": 36623667,
+      "archiveCount": 3,
+      "chunks": 26,
+      "sourceIntegrity": "SHA-256 and Git blob object SHA-1",
+      "runtimeImport": "complete-three-premium-candidates",
+      "clips": 30,
+      "frames": 720,
+      "visualApproval": "pending",
+      "runtimeAssetsInGit": true
+    },
+    "namedBossArtInGit": {
+      "candidateCount": 7,
+      "committedSourcePaintings": 7,
+      "sixPoseAtlases": 7,
+      "motionClips": 70,
+      "framesPerClip": 24,
+      "totalFrames": 1680,
+      "visualApproval": "pending",
+      "commits": {
+        "captain-kaji": "ece9e4d183b84dc2610300fe4c914304e8be7b3c",
+        "widow-of-fog": "e80eafc4f910cc9a8bfc3c9841ede9a200073620",
+        "furnace-abbot": "dfb4215d447c645beb5cc91986c60bfad933dd81",
+        "ujiro": "b6b2c51254c40354c80eabf67b844cc826337d8d"
+      },
+      "sourceArchives": {
+        "firstThree": {
+          "bytes": 36623667,
+          "parts": 26,
+          "manifest": "assets/art/hd-boss-binary-import-v1/manifest.json"
+        },
+        "remainingFour": {
+          "bytes": 43933244,
+          "parts": 31,
+          "manifest": "assets/art/hd-boss-binary-import-v2/manifest.json",
+          "importRun": "https://github.com/patrickdugan/JRPG/actions/runs/44935663172"
+        }
+      },
+      "engineStatus": "optional-hd-art",
+      "motionSource": "source-derived-frame-deformations"
+    }
   },
   "targets": {
     "allIdentities": 62,
@@ -739,9 +815,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "kurozane-oni-armor",
@@ -758,9 +835,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "kurozane-demon-mode",
@@ -777,9 +855,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "kurozane-ward-broken",
@@ -796,9 +875,10 @@
       "targetClips": null,
       "framesPerClip": null,
       "assetInGit": false,
-      "engineIntegrated": "phase-mapping-pending",
+      "engineIntegrated": "phase-mapped-optional-hd",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossPhaseMapping": "court/rest:01,cast:02;bell/rest:03,cast:04;dawn/rest:05,cast:06"
     },
     {
       "id": "captain-kaji",
@@ -809,15 +889,20 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "sourcePaintingSha256": "a616f7d710cbf7005432ba6f3c9a2e8b2fcf8290a89173a6424b4f1e43522b16",
+      "reviewPackage": "JRPG_HD_Boss_CaptainKaji_v1.zip",
+      "motionClipsCandidate": 10,
+      "motionFramesCandidate": 240,
+      "provenance": "painted-six-key-source-and-foot-anchored-derived-motion"
     },
     {
       "id": "widow-of-fog",
@@ -828,15 +913,31 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "paintedReviewPackage": "JRPG_HD_Boss_WidowOfFog_v1.zip",
+      "paintedCandidateReceipt": "assets/art/roster-keystone/widow-of-fog-hd-intake.json"
     },
     {
       "id": "furnace-abbot",
@@ -847,15 +948,31 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "paintedReviewPackage": "JRPG_HD_Boss_FurnaceAbbot_v1.zip",
+      "paintedCandidateReceipt": "assets/art/roster-keystone/furnace-abbot-hd-intake.json"
     },
     {
       "id": "ujiro",
@@ -866,15 +983,40 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "hdBossBodyCandidate": {
+        "status": "review-candidate",
+        "sourceQuality": "individual-high-resolution",
+        "sourceSha256": "a52be9962bd7390375830e662c4ea99e9f152b0000c3524016a788fbc395a575",
+        "sixKeySheetSha256": "8cbc02bc4f8fe375e6e071eec408e939be4fb60c1acd790795f7a35000879ae1",
+        "package": "JRPG_HD_Boss_ujiro_v1.zip",
+        "motionClips": 10,
+        "framesPerClip": 24,
+        "totalFrames": 240,
+        "binaryGit": false
+      }
     },
     {
       "id": "bell-warden-chiyo",
@@ -885,15 +1027,45 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "hdBossBodyCandidate": {
+        "status": "review-candidate",
+        "sourceQuality": "individual-high-resolution",
+        "provenance": "individual-rgba-1536x1024",
+        "sourceSha256": "d0c2bd8ba9035bfae2c1c318b0b7b2198bddf32699290361bf3057610f36345e",
+        "sixKeySheetSha256": "729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c",
+        "package": "JRPG_HD_Boss_bell_warden_chiyo_v2.zip",
+        "sixKeyPoses": 6,
+        "motionClips": 10,
+        "framesPerClip": 24,
+        "totalFrames": 240,
+        "archiveBytesNowCommittedInGit": true,
+        "looseRuntimeAssetsReady": false,
+        "visualApproval": "pending",
+        "notes": "Individual high-resolution six-pose painting with alpha; manual detail and animation polish pending."
+      }
     },
     {
       "id": "lady-enma",
@@ -904,15 +1076,45 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "hdBossBodyCandidate": {
+        "status": "review-candidate",
+        "sourceQuality": "individual-high-resolution",
+        "provenance": "individual-rgb-1536x1024-keyed-background",
+        "sourceSha256": "4f9a59824873f9a2303ad035e46ed05b3af3d0d89f109b5b45347fa45f91cd51",
+        "sixKeySheetSha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb",
+        "package": "JRPG_HD_Boss_lady_enma_v2.zip",
+        "sixKeyPoses": 6,
+        "motionClips": 10,
+        "framesPerClip": 24,
+        "totalFrames": 240,
+        "archiveBytesNowCommittedInGit": true,
+        "looseRuntimeAssetsReady": false,
+        "visualApproval": "pending",
+        "notes": "Standalone premium-resolution painted source; charcoal background matting and 24-frame deformation cels still need visual approval."
+      }
     },
     {
       "id": "yearless-bell",
@@ -923,15 +1125,45 @@
       "conceptPath": "assets/art/boss-animation-suite-v2/boss-animation-suite-v2.source.json",
       "sourceAnimationPath": null,
       "baselinePixel": "complete",
-      "paintedKeyArt": "pending",
-      "sixKeyCelSheet": "pending",
-      "hdMotion24": "pending",
+      "paintedKeyArt": "candidate-in-Git",
+      "sixKeyCelSheet": "candidate-in-Git",
+      "hdMotion24": "candidate-in-Git",
       "targetClips": 10,
       "framesPerClip": 24,
-      "assetInGit": false,
-      "engineIntegrated": "fallback-only",
+      "assetInGit": true,
+      "engineIntegrated": "optional-hd-mode",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "hdBossVfx": {
+        "status": "source-art-committed-svg",
+        "sourceManifest": "game/assets/art/hd-boss-vfx-v1/source-manifest.json",
+        "generatedManifest": "game/assets/art/hd-boss-vfx-v1/manifest.json",
+        "sourceFrames": 24,
+        "compiledPNG": "runner-queued",
+        "stages": [
+          "windup",
+          "active"
+        ],
+        "optIn": "?art=hd",
+        "bodyPaintingApproved": false,
+        "gameplayAuthority": false
+      },
+      "hdBossBodyCandidate": {
+        "status": "review-candidate",
+        "sourceQuality": "individual-high-resolution",
+        "provenance": "individual-rgb-1536x1024-white-checker-matted",
+        "sourceSha256": "4deaf9c4a7ceea818f084d938222415f3e786c498091b4b1155920b4519b20b7",
+        "sixKeySheetSha256": "3ccd3009bc336bacbfcd820f0d2935233e212eef4475f18fc360ffc9458f1e6b",
+        "package": "JRPG_HD_Boss_yearless_bell_v2.zip",
+        "sixKeyPoses": 6,
+        "motionClips": 10,
+        "framesPerClip": 24,
+        "totalFrames": 240,
+        "archiveBytesNowCommittedInGit": true,
+        "looseRuntimeAssetsReady": false,
+        "visualApproval": "pending",
+        "notes": "Individually generated mechanical boss painting with pale/checker matte separation. Silhouette cleanup and manual art review pending."
+      }
     },
     {
       "id": "npc-speaker",
@@ -950,7 +1182,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-interviewee",
@@ -969,7 +1232,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-confined-person",
@@ -988,7 +1282,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-courier",
@@ -1007,7 +1332,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-dock-worker",
@@ -1026,7 +1382,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-ferry-captain",
@@ -1045,7 +1432,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-market-seller",
@@ -1064,7 +1482,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-trade-broker",
@@ -1083,7 +1532,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-print-organizer",
@@ -1102,7 +1582,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-port-clerk",
@@ -1121,7 +1632,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-physician",
@@ -1140,7 +1682,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-resident",
@@ -1159,7 +1732,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-former-retainer",
@@ -1178,7 +1782,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-caretaker",
@@ -1197,7 +1832,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-net-mender",
@@ -1216,7 +1882,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     },
     {
       "id": "npc-post-keeper",
@@ -1235,7 +1932,38 @@
       "assetInGit": false,
       "engineIntegrated": "fallback-only",
       "visualApproval": "pending",
-      "sourceDerivedOverlay": null
+      "sourceDerivedOverlay": null,
+      "npcFieldMotion": {
+        "status": "git-committed-source-derived-motion",
+        "sourceAsset": "assets/art/npc-field-suite/npc-field-atlas.png",
+        "sourceAuthorship": "original-code-native-pixel-primitives",
+        "sourceOnlyPoses": [
+          "south-idle",
+          "south-gesture"
+        ],
+        "clipNames": [
+          "idle",
+          "walk",
+          "talk",
+          "work",
+          "react",
+          "leave"
+        ],
+        "clips": 6,
+        "framesPerClip": 24,
+        "candidateFrames": 144,
+        "provenance": "smooth subpixel deformation of canonical native pixel field sprites",
+        "animatedSourceApproved": false,
+        "generator": "game/tools/build-npc-motion-v1.py",
+        "generatedRoot": "game/assets/art/npc-motion-v1/",
+        "engineMode": "?npcMotion=1",
+        "binaryGit": true,
+        "visualReview": "pending",
+        "manifestPath": "game/assets/art/npc-motion-v1/manifest.json",
+        "sourceAtlasSha256": "813935f2aac88941916380c31bacf3e99bc5ffd1ad6dec1687c8a02266e82441",
+        "buildCommit": "c1bd6f465c378853911e5930b6cf82834750065b",
+        "clipHashesVerified": true
+      }
     }
   ]
 }

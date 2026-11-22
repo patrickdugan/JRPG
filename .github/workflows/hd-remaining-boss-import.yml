@@ -1,0 +1,73 @@
+name: Import remaining four painted HD boss archives
+on:
+  push:
+    branches: [feature/hd-remaining-boss-binary-import-20261122]
+    paths:
+      - 'assets/art/hd-boss-binary-import-v2/**'
+      - 'game/tools/hydrate-hd-remaining-bosses.py'
+      - 'game/tools/import-hd-boss-pack.py'
+      - 'game/tests/hd-seven-named-boss-art-git.test.mjs'
+      - '.github/workflows/hd-remaining-boss-import.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: final-four-boss-git-import-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify-and-import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image verifier
+        run: python -m pip install 'pillow>=11,<13'
+      - name: Inspect staged parts and strict readiness gate
+        id: prepared
+        run: |
+          python game/tools/hydrate-hd-remaining-bosses.py
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=json.loads(Path('assets/art/hd-boss-binary-import-v2/manifest.json').read_text())
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write(f"ready={'true' if r.get('readyForImport') else 'false'}\n")
+          print('Ready for import?',r.get('readyForImport'))
+          PY
+      - name: Rebuild all four archives and verify ZIP and decoded WebP hashes
+        if: steps.prepared.outputs.ready == 'true'
+        run: |
+          python game/tools/hydrate-hd-remaining-bosses.py --require-complete \
+            --extract-dir "$RUNNER_TEMP/jrpg-remaining-boss-zips" --import-check
+          node --test game/tests/hd-boss-art-intakes.test.mjs \
+            game/tests/hd-boss-final-four-intake.test.mjs
+          ( cd game && npm run check )
+      - name: Commit four source-preserving imported boss artwork batches
+        if: steps.prepared.outputs.ready == 'true' && github.ref_name == 'feature/hd-remaining-boss-binary-import-20261122'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -B feature/hd-remaining-boss-binary-import-20261122
+          python game/tools/import-hd-boss-pack.py "$RUNNER_TEMP/jrpg-remaining-boss-zips/JRPG_HD_Boss_CaptainKaji_v1.zip" --commit --push
+          python game/tools/import-hd-boss-pack.py "$RUNNER_TEMP/jrpg-remaining-boss-zips/JRPG_HD_Boss_WidowOfFog_v1.zip" --commit --push
+          python game/tools/import-hd-boss-pack.py "$RUNNER_TEMP/jrpg-remaining-boss-zips/JRPG_HD_Boss_FurnaceAbbot_v1.zip" --commit --push
+          python game/tools/import-hd-boss-pack.py "$RUNNER_TEMP/jrpg-remaining-boss-zips/JRPG_HD_Boss_Ujiro_v1.zip" --commit --push
+      - name: Recheck imported source and motion manifests
+        if: steps.prepared.outputs.ready == 'true'
+        run: |
+          python game/tools/hydrate-hd-remaining-bosses.py --require-complete \
+            --extract-dir "$RUNNER_TEMP/jrpg-remaining-boss-zips" --import-check
+          node --test game/tests/hd-boss-art-intakes.test.mjs \
+            game/tests/hd-boss-final-four-intake.test.mjs
+      - name: Verify all seven final boss source paintings and 70 runtime motion clips in Git
+        if: steps.prepared.outputs.ready == 'true'
+        run: node --test game/tests/hd-seven-named-boss-art-git.test.mjs
+      - name: Pending archive upload guidance
+        if: steps.prepared.outputs.ready != 'true'
+        run: echo 'Waiting for all 31 exact Git blob parts before importing.'
