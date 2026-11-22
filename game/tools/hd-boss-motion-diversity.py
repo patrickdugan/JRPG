@@ -93,6 +93,15 @@ def analyze_motion(frames: list[Image.Image]) -> dict:
         raise ValueError("Expected 24 source-derived 192px frames")
     small = [perceptual_frame(frame) for frame in frames]
     distances = [float(np.abs(a - small[0]).mean()) for a in small]
+    # Distinguish real limb motion from changes diluted by empty image area.
+    masks = [np.asarray(frame.getchannel("A").resize(
+        (DOWNSAMPLE, DOWNSAMPLE), Image.Resampling.BILINEAR), dtype=np.uint8) >= 24
+        for frame in frames]
+    foreground_distances = []
+    for image, mask in zip(small, masks):
+        union = mask | masks[0]
+        foreground_distances.append(
+            float(np.abs(image - small[0])[union].mean()) if union.any() else 0.0)
     changes = [float(np.abs(small[i + 1] - small[i]).mean()) for i in range(23)]
     alignments = []
     explanations = []
@@ -112,6 +121,7 @@ def analyze_motion(frames: list[Image.Image]) -> dict:
     x_travel = max(x for x, y in anchored) - min(x for x, y in anchored) if anchored else 0.0
     y_travel = max(y for x, y in anchored) - min(y for x, y in anchored) if anchored else 0.0
     max_visible = max(distances)
+    max_foreground = max(foreground_distances)
     median_alignment = float(np.median(explanations)) if explanations else 0.0
     median_adjacent = float(np.median(changes))
     # These flags only prioritize manual playback inspection, never art approval.
@@ -120,6 +130,9 @@ def analyze_motion(frames: list[Image.Image]) -> dict:
         "thumbnailSize": [48, 48],
         "grayscaleBackdropRGB": list(COLOR_BG),
         "maxVisibleDifferenceFromFirst": round(max_visible, 4),
+        "maxForegroundDifferenceFromFirst": round(max_foreground, 4),
+        "medianForegroundDifferenceFromFirst": round(float(np.median(foreground_distances)), 4),
+        "framesDifferentFromFirstAt4Foreground": sum(d > 4.0 for d in foreground_distances),
         "medianVisibleDifferenceFromFirst": round(float(np.median(distances)), 4),
         "framesDifferentFromFirstAt2": sum(d > 2.0 for d in distances),
         "medianAdjacentGrayscaleMAE": round(median_adjacent, 4),
@@ -128,8 +141,9 @@ def analyze_motion(frames: list[Image.Image]) -> dict:
         "alignmentsVsFirst": alignments,
         "silhouetteCentroidXTravelPx": round(x_travel, 3),
         "silhouetteCentroidYTravelPx": round(y_travel, 3),
-        "nearStaticReviewCandidate": max_visible < 2.0,
-        "rigidShiftReviewCandidate": max_visible >= 2.0 and median_alignment >= .70,
+        "nearStaticReviewCandidate": max_visible < 2.0 and max_foreground < 4.0,
+        "rigidShiftReviewCandidate": (max_visible >= 2.0 or max_foreground >= 4.0)
+        and median_alignment >= .70,
         "qualityInterpretation": "Perceptual grayscale 48px thumbnail MAE is a motion triage proxy, not an articulation verdict",
     }
 
@@ -192,11 +206,12 @@ def run(root: Path, out: Path) -> dict:
         reports[id] = entry
     ranked = sorted((
         {"id": id, "clip": clip, "maxVisibleDifferenceFromFirst": m["maxVisibleDifferenceFromFirst"],
+         "maxForegroundDifferenceFromFirst": m["maxForegroundDifferenceFromFirst"],
          "translationExplainedFractionMedian": m["translationExplainedFractionMedian"],
          "nearStaticReviewCandidate": m["nearStaticReviewCandidate"],
          "rigidShiftReviewCandidate": m["rigidShiftReviewCandidate"]}
         for id, actor in reports.items() for clip, m in actor.items()
-    ), key=lambda row: row["maxVisibleDifferenceFromFirst"])
+    ), key=lambda row: row["maxForegroundDifferenceFromFirst"])
     count_near = sum(x["nearStaticReviewCandidate"] for x in ranked)
     count_rigid = sum(x["rigidShiftReviewCandidate"] for x in ranked)
     result = {
@@ -213,19 +228,20 @@ def run(root: Path, out: Path) -> dict:
              "All 1680 decoded RGBA hashes match their source receipts.",
              f"**Near-static thumbnail candidates: {count_near}/70. Rigid-shift candidates: {count_rigid}/70.**",
              "These are review cues rather than failed-art or passed-art judgements.", "",
-             "## Lowest measured visible variation from first frame", "",
-             "| Boss | Clip | Max grayscale Δ/255 | Visibly changed frames >2/255 | Translation explained |",
+             "## Lowest measured foreground variation from first frame", "",
+             "| Boss | Clip | Max foreground Δ/255 | Foreground changed frames >4/255 | Translation explained |",
              "| --- | --- | ---: | ---: | ---: |"]
     for x in ranked[:25]:
         m = reports[x["id"]][x["clip"]]
-        lines.append(f"| {x['id']} | {x['clip']} | {m['maxVisibleDifferenceFromFirst']:.3f} | "
-                     f"{m['framesDifferentFromFirstAt2']}/24 | "
+        lines.append(f"| {x['id']} | {x['clip']} | {m['maxForegroundDifferenceFromFirst']:.3f} | "
+                     f"{m['framesDifferentFromFirstAt4Foreground']}/24 | "
                      f"{m['translationExplainedFractionMedian']:.1%} |")
     lines += ["", "## Review interpretation", "",
               "These clips contain 24 hash-distinct source-derived deformation cells, not individually",
               "articulated animation drawings. A pixel hash can differ for changes outside visible",
               "silhouettes; this audit composites onto a neutral backing and compares downsampled",
-              "grayscale appearance. Translation alignment is limited to ±3 48px-thumbnail pixels.",
+              "grayscale appearance, both globally and inside the foreground union mask. "
+              "Translation alignment is limited to ±3 48px-thumbnail pixels.",
               "Check the seven timeline contact sheets, then review full-speed windup and active",
               "attacks in the browser studio and optional ?art=hd gameplay mode before approval.", ""]
     (out / "motion-report.md").write_text("\n".join(lines), encoding="utf-8")
