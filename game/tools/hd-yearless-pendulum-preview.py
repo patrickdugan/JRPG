@@ -38,7 +38,16 @@ def sha256(data: bytes) -> str:
 
 
 def pendulum_angles():
-    return [DEGREES * math.sin(2 * math.pi * i / PERIOD_FRAMES) for i in range(PERIOD_FRAMES)]
+    # Mild harmonics model asymmetric return dynamics. A perfect sine visits
+    # identical angles in both travel directions, yielding duplicate visible
+    # cells despite changing velocity.
+    result = []
+    for i in range(PERIOD_FRAMES):
+        t = 2 * math.pi * i / PERIOD_FRAMES
+        result.append(DEGREES * math.sin(t)
+                      + 0.45 * math.sin(2 * t + 0.37)
+                      + 0.15 * math.sin(3 * t + 0.21))
+    return result
 
 
 def mask_swingable_bell(pose: Image.Image):
