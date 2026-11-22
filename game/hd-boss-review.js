@@ -415,6 +415,11 @@ function composeScreenshot() {
 async function capture() {
   if (!sourceImage || !keyImage || !motionImage || !intake) return;
   stop();
+  const selection = {
+    bossId, clipId, frame, backdrop: el.backdrop.value, speed: playSpeed,
+    intake, draft: sanitizeReviewDraft(draft),
+  };
+  const reviewAtCapture = JSON.stringify(selection.draft);
   el.capture.disabled = true;
   invalidateEvidence();
   try {
@@ -424,12 +429,16 @@ async function capture() {
     if (!crypto.subtle) throw new Error('Secure context required to hash PNG receipt');
     const digest = await crypto.subtle.digest('SHA-256', await png.arrayBuffer());
     const screenshotSha256 = [...new Uint8Array(digest)].map(n => n.toString(16).padStart(2, '0')).join('');
+    if (bossId !== selection.bossId || clipId !== selection.clipId ||
+        frame !== selection.frame || el.backdrop.value !== selection.backdrop ||
+        playSpeed !== selection.speed || JSON.stringify(sanitizeReviewDraft(draft)) !== reviewAtCapture)
+      throw new Error('Selection or notes changed during capture. Capture the current frame again.');
     const stamp = time();
     const json = buildVisualReceipt({
-      bossId, clipId, frame, backdrop: el.backdrop.value, speed: playSpeed,
-      timestamp: stamp, screenshotSha256, intake, keys, motion, roster, draft,
+      ...selection, timestamp: stamp, screenshotSha256, keys, motion, roster,
     });
-    const base = 'jrpg-review-' + bossId + '-' + clipId + '-f' + String(frame + 1).padStart(2, '0');
+    const base = 'jrpg-review-' + selection.bossId + '-' + selection.clipId +
+      '-f' + String(selection.frame + 1).padStart(2, '0');
     lastReceipt = { data: json, name: base + '.json' };
     el.receipt.disabled = false;
     downloadBlob(png, base + '.png');
