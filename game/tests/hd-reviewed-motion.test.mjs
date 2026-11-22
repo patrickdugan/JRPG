@@ -144,3 +144,53 @@ test('installed clip assets are byte-identical to user-approved CI candidate rec
     assert.equal(clip.frameRGBAsha256.length,24);
   }
 });
+
+
+test('short active attacks prefetch canonical release art during reviewed boss windup',async()=>{
+  const catalog=exampleManifest();
+  const ctx={save(){},restore(){},translate(){},scale(){},drawImage(){}};
+  const actor={id:'yearless-bell',hp:100,active:true,grounded:true,facing:1,
+    position:{x:200,y:250},movementIntent:{x:0},
+    activeAttack:{phase:'windup',elapsedMs:300},activeManeuver:null,
+    staggerRemainingMs:0,hitStunRemainingMs:0};
+
+  function make(reviewedMotionEnabled){
+    const urls=[];
+    const rt=createHdMotionRuntime({
+      enabled:true,reviewedMotionEnabled,
+      fetchJson:async url=>url.endsWith('/motion-manifest.json')?motion:catalog,
+      createImage:()=>fakeImage(urls),
+    });
+    return {rt,urls};
+  }
+  const reviewed=make(true);
+  const origin=sourceFor('yearless-bell');
+  await reviewed.rt.request('yearless-bell','windup',origin);
+  assert.equal(reviewed.rt.get('yearless-bell','active'),null);
+  assert.equal(reviewed.rt.draw(ctx,actor,'yearless-bell',origin,
+    {phaseProgress:.45,nowMs:300}),true);
+  // Active is fetched before the short phase starts, without changing the
+  // actor's activeAttack, source manifest, or the original frame timing.
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.ok(reviewed.urls.some(url=>url.endsWith('/motion/yearless-bell/active.webp')),reviewed.urls);
+  assert.equal(reviewed.rt.get('yearless-bell','active')?.origin,'canonical');
+  assert.equal(reviewed.rt.get('yearless-bell','active')?.clip.frameMs,
+    motion.actors['yearless-bell'].clipSet.active.frameMs);
+  assert.equal(actor.activeAttack.phase,'windup');
+
+  const canonical=make(false);
+  await canonical.rt.request('yearless-bell','windup',origin);
+  assert.equal(canonical.rt.draw(ctx,actor,'yearless-bell',origin,
+    {phaseProgress:.45,nowMs:300}),true);
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(canonical.rt.get('yearless-bell','active'),null);
+  assert.ok(!canonical.urls.some(url=>url.endsWith('/motion/yearless-bell/active.webp')));
+
+  const enma=make(true);
+  const enmaActor={...actor,id:'lady-enma'};
+  const enmaSource=sourceFor('lady-enma');
+  await enma.rt.request('lady-enma','windup',enmaSource);
+  enma.rt.draw(ctx,enmaActor,'lady-enma',enmaSource,{phaseProgress:.55,nowMs:450});
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(enma.rt.get('lady-enma','active')?.origin,'canonical');
+});
