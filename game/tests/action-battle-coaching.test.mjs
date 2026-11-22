@@ -69,3 +69,62 @@ test('the first-clear ready gate covers exactly the seven opening action encount
   assert.equal(isOpeningActionEncounter('c3-dock-patrol'), false);
   assert.equal(Object.isFrozen(OPENING_ACTION_ENCOUNTER_IDS), true);
 });
+
+
+test('seven HD painted boss encounters and Kurozane teach authored counterplay', () => {
+  const reads = new Map([
+    ['c3-captain-kaji', /Chain Haul|hook path/u],
+    ['c4-widow-of-fog', /High Tide|Low Tide/u],
+    ['c5-furnace-abbot', /Overheated/u],
+    ['c6-ujiro', /Seizure Order/u],
+    ['c7-bell-warden-chiyo', /fourth bell count/u],
+    ['c8-lady-enma', /Paired Ashes/u],
+    ['c9-yearless-bell', /four bell nodes|four nodes/u],
+    ['c9-kurozane', /Umbral heals Kurozane/u],
+  ]);
+  for (const [id, expectedRead] of reads) {
+    const coaching = getActionBattleCoaching(id);
+    assert.equal(coaching.encounterId, id);
+    assert.notEqual(coaching.title, 'Fight, read, recover');
+    assert.equal(coaching.steps.length, 3);
+    assert.match([coaching.title, coaching.summary, ...coaching.steps].join(' '), expectedRead);
+    assert.equal(Object.isFrozen(coaching), true);
+    assert.equal(Object.isFrozen(coaching.steps), true);
+  }
+});
+
+test('late-fight coaching follows only the presented phase and outcome', () => {
+  const furnace = getActionBattleCoaching('c5-furnace-abbot', {
+    bossPhase: { phaseId: 'sigil-break' },
+  });
+  assert.match(furnace.summary, /Mateus breaks his court sigil/u);
+
+  const enmaWing = getActionBattleCoaching('c8-lady-enma', {
+    bossPhase: { phaseId: 'cinder-wing' },
+  });
+  assert.match(enmaWing.steps.join(' '), /Cinder Parasol Wing/u);
+  const enmaYield = getActionBattleCoaching('c8-lady-enma', {
+    bossPhase: { phaseId: 'subdued-for-terms' },
+  });
+  assert.match(enmaYield.summary, /custody/u);
+  assert.match(getActionBattleCoaching('c8-lady-enma', {
+    outcome: 'victory',
+  }).title, /subdued/u);
+
+  const court = getActionBattleCoaching('c9-kurozane', {
+    bossPhase: { phaseId: 'court' },
+  });
+  const bell = getActionBattleCoaching('c9-kurozane', {
+    bossPhase: { phaseId: 'bell' },
+  });
+  const dawn = getActionBattleCoaching('c9-kurozane', {
+    bossPhase: { phaseId: 'dawn' },
+  });
+  const cleared = getActionBattleCoaching('c9-kurozane', { outcome: 'victory' });
+  assert.match(court.title, /court command/u);
+  assert.match(bell.title, /bell-phase/u);
+  assert.match(dawn.title, /dawn recovery/u);
+  assert.match(cleared.title, /Evacuate/u);
+  assert.notEqual(bell.summary, dawn.summary);
+  assert.match(getActionBattleCoaching('unknown').summary, /Move freely/u);
+});
