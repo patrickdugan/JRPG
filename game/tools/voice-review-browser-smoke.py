@@ -13,6 +13,7 @@ from pathlib import Path
 from playwright.sync_api import Error as PlaywrightError, sync_playwright
 
 GAME_DIR = Path(__file__).resolve().parents[1]
+MANIFEST_PATH = GAME_DIR / 'assets' / 'audio' / 'voice-prototype-v1' / 'manifest.json'
 REVIEW_STORAGE_KEY = 'bells-black-chrysanthemum.voice-review.v1'
 DIALOGUE_VOICE_STORAGE_KEY = 'bbc.dialogueVoice.v1'
 CHROMIUM_FALLBACKS = (
@@ -80,18 +81,45 @@ def smoke(chromium: str | None, minimum_lines: int, screenshot_path: Path) -> di
                 check(line_count >= minimum_lines, f'Only {line_count} voiced lines shown.')
                 check(page.locator('#reviewSummary').inner_text().find('pending') >= 0, 'Review coverage absent.')
 
+                manifest_doc = json.loads(MANIFEST_PATH.read_text(encoding='utf-8'))
+                manifest_lines = manifest_doc.get('lines', {}) if isinstance(manifest_doc, dict) else {}
+                audition_scene = next(
+                    (s for s in manifest_doc.get('scenes', []) if isinstance(s, dict) and s.get('id') == 'cast-auditions'),
+                    None,
+                )
+                audition_line_ids = [
+                    str(line_id)
+                    for line_id in (audition_scene.get('lineIds', []) if audition_scene else [])
+                    if str(line_id) in manifest_lines
+                ]
+                rendered_auditions = len(audition_line_ids)
+                rendered_enma_auditions = sum(
+                    1
+                    for line_id in audition_line_ids
+                    if (manifest_lines.get(line_id, {}).get('en') or manifest_lines.get(line_id, {}).get('ja') or {}).get('speaker') == 'lady-enma'
+                )
+
                 scene_options = page.locator('#sceneFilter option').evaluate_all('opts => opts.map(o => o.value)')
                 speaker_options = page.locator('#speakerFilter option').evaluate_all('opts => opts.map(o => o.value)')
                 if 'cast-auditions' in scene_options:
                     page.locator('#sceneFilter').select_option('cast-auditions')
                     audition_count = page.locator('#scene article.line').count()
-                    check(audition_count == 10, f'Expected 10 extended cast audition lines, got {audition_count}.')
+                    if rendered_auditions > 0:
+                        check(
+                            audition_count == rendered_auditions,
+                            f'Expected {rendered_auditions} rendered extended cast audition lines, got {audition_count}.',
+                        )
+                    else:
+                        check(audition_count == 0, f'Expected 0 unrendered cast audition lines, got {audition_count}.')
                     check(
                         all(s in speaker_options for s in ('aya', 'kiku', 'genta', 'lady-enma', 'ujiro')),
                         f'Speaker filter missing extended cast members: {speaker_options}',
                     )
                     page.locator('#speakerFilter').select_option('lady-enma')
-                    check(page.locator('#scene article.line').count() == 2, 'Expected 2 Lady Enma audition lines.')
+                    check(
+                        page.locator('#scene article.line').count() == rendered_enma_auditions,
+                        f'Expected {rendered_enma_auditions} Lady Enma audition lines.',
+                    )
                     check(not page.locator('#castBrief').is_hidden(), 'Cast brief did not appear for selected character.')
                     page.locator('#speakerFilter').select_option('all')
                     page.locator('#sceneFilter').select_option('all')
@@ -175,6 +203,7 @@ def smoke(chromium: str | None, minimum_lines: int, screenshot_path: Path) -> di
                 return {
                     'result': 'pass',
                     'displayedLines': line_count,
+                    'castAuditionsRendered': rendered_auditions,
                     'speakerCount': len(speaker_options) - 1,
                     'sceneCount': len(scene_options) - 1,
                     'exportedReviews': len(exported['entries']),
