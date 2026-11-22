@@ -99,7 +99,7 @@ def frame_metrics(frames: list[Image.Image], *, clip: str) -> dict:
     keys = [0]
     for i in range(1, FRAMES):
         if all(_silhouette_difference(masks[i], masks[j]) >= 0.08
-               and _mean_rgb_delta(images[i], images[j]) >= 0.035 for j in keys):
+               and _mean_rgb_delta(images[i], images[j]) >= 0.025 for j in keys):
             keys.append(i)
 
     rgb = [_mean_rgb_delta(images[0], images[i]) for i in range(1, FRAMES)]
