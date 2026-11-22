@@ -6,6 +6,8 @@ on:
       - 'game/action-battle-coaching.mjs'
       - 'game/tests/action-battle-coaching.test.mjs'
       - 'game/tools/late-boss-gameplay-smoke.py'
+      - 'game/tools/audit_late_boss_route.py'
+      - 'game/tools/test_late_boss_route_audit.py'
       - '.github/workflows/jrpg-late-boss-gameplay.yml'
   pull_request:
     paths:
@@ -14,6 +16,11 @@ on:
       - 'game/tools/late-boss-gameplay-smoke.py'
       - '.github/workflows/jrpg-late-boss-gameplay.yml'
   workflow_dispatch:
+    inputs:
+      full_route:
+        description: 'Attempt a rendered-control full narrative route through credits'
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -33,6 +40,7 @@ jobs:
         run: |
           npm run check
           npm test
+          python -m unittest discover -s tools -p 'test_late_boss_route_audit.py'
       - name: Install Chromium for the actual Action Campaign
         run: |
           python -m pip install 'playwright>=1.55,<1.59'
@@ -51,5 +59,39 @@ jobs:
         with:
           name: jrpg-late-boss-gameplay-lab
           path: artifacts/late-boss-gameplay/
+          if-no-files-found: warn
+          retention-days: 14
+
+  full-rendered-route:
+    if: github.event_name == 'workflow_dispatch' && inputs.full_route
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium for a browser-controlled complete route
+        run: |
+          python -m pip install 'playwright>=1.55,<1.59'
+          python -m playwright install --with-deps chromium
+      - name: Run the existing rendered-control journey and audit all boss victories
+        run: |
+          mkdir -p artifacts/late-boss-full-route
+          CHROME_PATH=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          python game/tools/browser-route-playthrough.py \
+            --chromium "$CHROME_PATH" --max-scenes 100 --max-seconds 4800 \
+            --max-action-restarts 3 \
+            > artifacts/late-boss-full-route/route.json
+          python game/tools/audit_late_boss_route.py \
+            --input artifacts/late-boss-full-route/route.json \
+            --output artifacts/late-boss-full-route/audit.json \
+            --require-complete
+      - name: Preserve full-route receipt and any blocker
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-chapter-3-9-rendered-route
+          path: artifacts/late-boss-full-route/
           if-no-files-found: warn
           retention-days: 14
