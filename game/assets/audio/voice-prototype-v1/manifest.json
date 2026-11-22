@@ -27,7 +27,9 @@
         "durationSeconds": 0.76,
         "pitchMedianHz": 481.4,
         "pitchRangeSemitones": 2.6,
-        "loudnessRangeDb": 31.9
+        "loudnessRangeDb": 31.9,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/25-kurozane.ogg",
@@ -75,7 +77,9 @@
         "durationSeconds": 0.76,
         "pitchMedianHz": 80.8,
         "pitchRangeSemitones": 4.3,
-        "loudnessRangeDb": 32.0
+        "loudnessRangeDb": 32.0,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "18": {
@@ -116,7 +120,9 @@
         "durationSeconds": 1.55,
         "pitchMedianHz": 124.2,
         "pitchRangeSemitones": 13.1,
-        "loudnessRangeDb": 18.0
+        "loudnessRangeDb": 18.0,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/18-mateus.ogg",
@@ -155,13 +161,17 @@
         "durationSeconds": 2.07,
         "pitchMedianHz": 137.8,
         "pitchRangeSemitones": 5.7,
-        "loudnessRangeDb": 21.7
+        "loudnessRangeDb": 21.7,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "01": {
       "en": {
         "file": "./assets/audio/voice-prototype-v1/en/01-kurozane.ogg",
         "speaker": "kurozane",
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory",
         "section": "Duel one: the immortal sovereign",
         "direction": "Regal contempt from above; unhurried, enjoying the echo.",
         "text": "You have cracked my Bell and mistaken damage for mortality. Dawn is an old clerk; it has declared me dead before.",
@@ -171,23 +181,41 @@
         "fx": "oni",
         "chosenTake": 0,
         "seed": 100,
-        "cer": 0.022,
-        "heard": "You have cracked my bell and mistaken damage for mortality. Don is an old clerk. It has declared me dead before.",
+        "cer": 0.0,
+        "heard": "You have cracked my bell and mistaken damage for mortality. Dawn is an old clerk. It has declared me dead before.",
         "takes": [
           {
             "take": 0,
             "seed": 100,
-            "cer": 0.022,
-            "heard": "You have cracked my bell and mistaken damage for mortality. Don is an old clerk. It has declared me dead before.",
+            "cer": 0.0,
+            "heard": "You have cracked my bell and mistaken damage for mortality. Dawn is an old clerk. It has declared me dead before.",
             "trimmed": false,
             "tokenBudget": 355,
-            "seconds": 184.9
+            "seconds": 29.02
+          },
+          {
+            "take": 1,
+            "seed": 101,
+            "cer": 0.0,
+            "heard": "You have cracked my bell and mistaken damage for mortality. Dawn is an old clerk. It has declared me dead before.",
+            "trimmed": false,
+            "tokenBudget": 355,
+            "seconds": 36.14
+          },
+          {
+            "take": 2,
+            "seed": 102,
+            "cer": 0.0,
+            "heard": "You have cracked my bell and mistaken damage for mortality. Dawn is an old clerk. It has declared me dead before.",
+            "trimmed": false,
+            "tokenBudget": 355,
+            "seconds": 167.98
           }
         ],
-        "durationSeconds": 6.08,
-        "pitchMedianHz": 87.3,
-        "pitchRangeSemitones": 9.3,
-        "loudnessRangeDb": 28.4
+        "durationSeconds": 6.44,
+        "pitchMedianHz": 85.8,
+        "pitchRangeSemitones": 12.4,
+        "loudnessRangeDb": 29.5
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/01-kurozane.ogg",
@@ -235,13 +263,17 @@
         "durationSeconds": 9.56,
         "pitchMedianHz": 87.8,
         "pitchRangeSemitones": 8.1,
-        "loudnessRangeDb": 30.8
+        "loudnessRangeDb": 30.8,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "02": {
       "en": {
         "file": "./assets/audio/voice-prototype-v1/en/02-kurozane.ogg",
         "speaker": "kurozane",
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory",
         "section": "Duel one: the immortal sovereign",
         "direction": "Persuasive, almost kind; each clause a ledger entry. Twist the knife on 'You counted them for me.'",
         "text": "I made appetite predictable. A tax instead of a raid. A registry instead of a pogrom. Fewer graves, Father. You counted them for me.",
@@ -261,13 +293,31 @@
             "heard": "I made appetite predictable. A tax instead of a raid. A registry instead of a pogrom. Fewer graves, father. You counted them for me.",
             "trimmed": false,
             "tokenBudget": 408,
-            "seconds": 152.1
+            "seconds": 49.58
+          },
+          {
+            "take": 1,
+            "seed": 201,
+            "cer": 0.0,
+            "heard": "i made appetite predictable a tax instead of a raid a registry instead of a pogrom fewer graves father you counted them for me",
+            "trimmed": false,
+            "tokenBudget": 408,
+            "seconds": 37.79
+          },
+          {
+            "take": 2,
+            "seed": 202,
+            "cer": 0.0,
+            "heard": "I made appetite predictable, a tax instead of a raid, a registry instead of a pogrom, fewer graves, father, you counted them for me.",
+            "trimmed": false,
+            "tokenBudget": 408,
+            "seconds": 34.14
           }
         ],
-        "durationSeconds": 10.0,
-        "pitchMedianHz": 84.9,
-        "pitchRangeSemitones": 11.6,
-        "loudnessRangeDb": 28.5
+        "durationSeconds": 9.48,
+        "pitchMedianHz": 78.3,
+        "pitchRangeSemitones": 10.5,
+        "loudnessRangeDb": 29.1
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/02-kurozane.ogg",
@@ -315,7 +365,9 @@
         "durationSeconds": 10.2,
         "pitchMedianHz": 77.4,
         "pitchRangeSemitones": 9.1,
-        "loudnessRangeDb": 28.0
+        "loudnessRangeDb": 28.0,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "03": {
@@ -347,11 +399,15 @@
         "durationSeconds": 5.76,
         "pitchMedianHz": 134.3,
         "pitchRangeSemitones": 12.9,
-        "loudnessRangeDb": 21.3
+        "loudnessRangeDb": 21.3,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/03-mateus.ogg",
         "speaker": "mateus",
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory",
         "section": "Duel one: the immortal sovereign",
         "direction": "Low, exhausted, precise. Guilt held under the voice, not performed.",
         "text": "墓が減ったのは、その中でまだ息をしている者を数えるなと、お前に教えられたからだ。",
@@ -359,8 +415,8 @@
         "exaggeration": 0.55,
         "cfgWeight": 0.4,
         "fx": "default",
-        "chosenTake": 2,
-        "seed": 302,
+        "chosenTake": 3,
+        "seed": 303,
         "cer": 0.045,
         "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
         "takes": [
@@ -371,7 +427,7 @@
             "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
             "trimmed": false,
             "tokenBudget": 305,
-            "seconds": 23.7
+            "seconds": 19.2
           },
           {
             "take": 1,
@@ -380,7 +436,7 @@
             "heard": "墓が減ったのは、そのあたでまだ息をしているものを数えるなとお前に教えられたからだ。",
             "trimmed": false,
             "tokenBudget": 305,
-            "seconds": 29.8
+            "seconds": 18.93
           },
           {
             "take": 2,
@@ -389,13 +445,22 @@
             "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
             "trimmed": true,
             "tokenBudget": 305,
-            "seconds": 41.5
+            "seconds": 36.15
+          },
+          {
+            "take": 3,
+            "seed": 303,
+            "cer": 0.045,
+            "heard": "墓が減ったのはその後でまだ息をしているものを数えるなとお前に教えられたからだ",
+            "trimmed": false,
+            "tokenBudget": 305,
+            "seconds": 11.42
           }
         ],
-        "durationSeconds": 5.69,
-        "pitchMedianHz": 134.7,
-        "pitchRangeSemitones": 11.6,
-        "loudnessRangeDb": 20.2
+        "durationSeconds": 5.64,
+        "pitchMedianHz": 135.5,
+        "pitchRangeSemitones": 10.1,
+        "loudnessRangeDb": 18.7
       }
     },
     "04": {
@@ -427,7 +492,9 @@
         "durationSeconds": 7.68,
         "pitchMedianHz": 126.0,
         "pitchRangeSemitones": 21.4,
-        "loudnessRangeDb": 28.1
+        "loudnessRangeDb": 28.1,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/04-nikola.ogg",
@@ -475,7 +542,9 @@
         "durationSeconds": 8.4,
         "pitchMedianHz": 125.7,
         "pitchRangeSemitones": 16.6,
-        "loudnessRangeDb": 27.0
+        "loudnessRangeDb": 27.0,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "05": {
@@ -507,7 +576,9 @@
         "durationSeconds": 6.48,
         "pitchMedianHz": 127.5,
         "pitchRangeSemitones": 9.6,
-        "loudnessRangeDb": 26.7
+        "loudnessRangeDb": 26.7,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/05-mateus.ogg",
@@ -555,7 +626,9 @@
         "durationSeconds": 8.0,
         "pitchMedianHz": 135.5,
         "pitchRangeSemitones": 28.9,
-        "loudnessRangeDb": 21.5
+        "loudnessRangeDb": 21.5,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "06": {
@@ -587,7 +660,9 @@
         "durationSeconds": 3.28,
         "pitchMedianHz": 100.9,
         "pitchRangeSemitones": 17.1,
-        "loudnessRangeDb": 31.7
+        "loudnessRangeDb": 31.7,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/06-nikola.ogg",
@@ -635,7 +710,9 @@
         "durationSeconds": 3.28,
         "pitchMedianHz": 102.4,
         "pitchRangeSemitones": 20.5,
-        "loudnessRangeDb": 30.5
+        "loudnessRangeDb": 30.5,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "07": {
@@ -667,7 +744,9 @@
         "durationSeconds": 8.4,
         "pitchMedianHz": 82.4,
         "pitchRangeSemitones": 8.6,
-        "loudnessRangeDb": 27.4
+        "loudnessRangeDb": 27.4,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/07-kurozane.ogg",
@@ -715,7 +794,9 @@
         "durationSeconds": 10.48,
         "pitchMedianHz": 89.4,
         "pitchRangeSemitones": 7.9,
-        "loudnessRangeDb": 28.2
+        "loudnessRangeDb": 28.2,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "08": {
@@ -747,7 +828,9 @@
         "durationSeconds": 5.92,
         "pitchMedianHz": 129.4,
         "pitchRangeSemitones": 13.1,
-        "loudnessRangeDb": 21.9
+        "loudnessRangeDb": 21.9,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/08-mateus.ogg",
@@ -795,7 +878,9 @@
         "durationSeconds": 8.68,
         "pitchMedianHz": 136.3,
         "pitchRangeSemitones": 12.4,
-        "loudnessRangeDb": 17.6
+        "loudnessRangeDb": 17.6,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "09": {
@@ -827,7 +912,9 @@
         "durationSeconds": 8.04,
         "pitchMedianHz": 162.0,
         "pitchRangeSemitones": 18.9,
-        "loudnessRangeDb": 28.9
+        "loudnessRangeDb": 28.9,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/09-miyo.ogg",
@@ -875,7 +962,9 @@
         "durationSeconds": 6.4,
         "pitchMedianHz": 269.4,
         "pitchRangeSemitones": 9.6,
-        "loudnessRangeDb": 20.1
+        "loudnessRangeDb": 20.1,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "10": {
@@ -907,11 +996,15 @@
         "durationSeconds": 4.4,
         "pitchMedianHz": 83.9,
         "pitchRangeSemitones": 8.9,
-        "loudnessRangeDb": 26.0
+        "loudnessRangeDb": 26.0,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/10-kurozane.ogg",
         "speaker": "kurozane",
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory",
         "section": "Duel four: Black Sun Concord",
         "direction": "Intimate, seductive, almost fatherly; a voice offering a warm room.",
         "text": "アヴェラール、帰ってこい。善くなれと言ったことはない。役に立てと言っただけだ。",
@@ -919,43 +1012,52 @@
         "exaggeration": 0.45,
         "cfgWeight": 0.3,
         "fx": "oni",
-        "chosenTake": 2,
-        "seed": 1002,
+        "chosenTake": 0,
+        "seed": 1000,
         "cer": 0.056,
-        "heard": "アムラール帰ってこいよくなれと言ったことはない 役に立てと言っただけだ",
+        "heard": "アメラール帰ってこいよくなれと言ったことはない役に立てと言っただけだ",
         "takes": [
           {
             "take": 0,
             "seed": 1000,
-            "cer": 0.083,
-            "heard": "アメラール帰ってこいよくなれと言ったことがない役に立てと言っただけだ",
+            "cer": 0.056,
+            "heard": "アメラール帰ってこいよくなれと言ったことはない役に立てと言っただけだ",
             "trimmed": false,
             "tokenBudget": 298,
-            "seconds": 18.3
+            "seconds": 11.6
           },
           {
             "take": 1,
             "seed": 1001,
             "cer": 0.056,
-            "heard": "アベラール返ってこいよくなれと言ったことはない役に立てと言っただけだ",
+            "heard": "アベラール帰って来いよくなれと言ったことはない役に立てと言っただけだ",
             "trimmed": false,
             "tokenBudget": 298,
-            "seconds": 32.9
+            "seconds": 12.48
           },
           {
             "take": 2,
             "seed": 1002,
             "cer": 0.056,
-            "heard": "アムラール帰ってこいよくなれと言ったことはない 役に立てと言っただけだ",
+            "heard": "アムラール帰って来いよくなれと言ったことはない 役に立てと言っただけだ",
             "trimmed": false,
             "tokenBudget": 298,
-            "seconds": 23.0
+            "seconds": 13.79
+          },
+          {
+            "take": 3,
+            "seed": 1003,
+            "cer": 0.056,
+            "heard": "アベラール帰って来いよくなれと言ったことはない役に立てと言っただけだ",
+            "trimmed": false,
+            "tokenBudget": 298,
+            "seconds": 15.49
           }
         ],
-        "durationSeconds": 6.72,
-        "pitchMedianHz": 79.6,
-        "pitchRangeSemitones": 7.9,
-        "loudnessRangeDb": 31.4
+        "durationSeconds": 5.56,
+        "pitchMedianHz": 78.3,
+        "pitchRangeSemitones": 5.8,
+        "loudnessRangeDb": 30.0
       }
     },
     "11": {
@@ -987,82 +1089,77 @@
         "durationSeconds": 4.48,
         "pitchMedianHz": 133.9,
         "pitchRangeSemitones": 30.4,
-        "loudnessRangeDb": 25.2
+        "loudnessRangeDb": 25.2,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/11-mateus.ogg",
         "speaker": "mateus",
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory",
         "section": "Duel four: Black Sun Concord",
         "direction": "Refusal without heat; the pain of seeing the trap clearly at last.",
-        "text": "お前が求めたのは、役に立つことが隠れ家に思えるほど、私が空っぽになることだった。",
+        "text": "お前が求めたのは、役に立つことが隠れ家に思えるほど、私が、からっぽになることだった。",
         "languageId": "ja",
         "exaggeration": 0.5,
-        "cfgWeight": 0.35,
+        "cfgWeight": 0.5,
         "fx": "default",
-        "chosenTake": 4,
-        "seed": 1104,
-        "cer": 0.087,
-        "heard": "お膳が求めたのは役に立つことがかくれいえに思えるほど私があっぽになることだった",
+        "chosenTake": 1,
+        "seed": 1101,
+        "cer": 0.043,
+        "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が空っぽになることだった",
         "takes": [
           {
             "take": 0,
             "seed": 1100,
-            "cer": 0.13,
-            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私があっ歩になることだった",
+            "cer": 0.043,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が空っぽになることだった",
             "trimmed": false,
-            "tokenBudget": 305,
-            "seconds": 49.5
+            "tokenBudget": 318,
+            "seconds": 21.62
           },
           {
             "take": 1,
             "seed": 1101,
-            "cer": 0.109,
-            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私がアップになることだった",
+            "cer": 0.043,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が空っぽになることだった",
             "trimmed": false,
-            "tokenBudget": 305,
-            "seconds": 14.7
+            "tokenBudget": 318,
+            "seconds": 13.97
           },
           {
             "take": 2,
             "seed": 1102,
-            "cer": 0.13,
-            "heard": "お膳が求めたのは役に立つことがかくれえに思えるほど私があっぼになることだった",
+            "cer": 0.043,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が空っぽになることだった",
             "trimmed": false,
-            "tokenBudget": 305,
-            "seconds": 15.3
+            "tokenBudget": 318,
+            "seconds": 17.64
           },
           {
             "take": 3,
             "seed": 1103,
-            "cer": 0.152,
-            "heard": "お膳が求めたのは役に立つことが隠れいに思えるほど私があっ歩になることだった",
+            "cer": 0.065,
+            "heard": "お膳が求めたのは役に立つことが隠れいに思えるほど私が空っぽになることだった",
             "trimmed": false,
-            "tokenBudget": 305,
-            "seconds": 19.4
+            "tokenBudget": 318,
+            "seconds": 24.87
           },
           {
             "take": 4,
             "seed": 1104,
-            "cer": 0.087,
-            "heard": "お膳が求めたのは役に立つことがかくれいえに思えるほど私があっぽになることだった",
+            "cer": 0.043,
+            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が空っぽになることだった",
             "trimmed": false,
-            "tokenBudget": 305,
-            "seconds": 18.9
-          },
-          {
-            "take": 5,
-            "seed": 1105,
-            "cer": 0.13,
-            "heard": "お膳が求めたのは役に立つことが隠れ家に思えるほど私が悪歩になることだった",
-            "trimmed": false,
-            "tokenBudget": 305,
-            "seconds": 18.7
+            "tokenBudget": 318,
+            "seconds": 18.74
           }
         ],
-        "durationSeconds": 6.52,
-        "pitchMedianHz": 127.1,
-        "pitchRangeSemitones": 12.4,
-        "loudnessRangeDb": 21.1
+        "durationSeconds": 5.64,
+        "pitchMedianHz": 133.1,
+        "pitchRangeSemitones": 10.2,
+        "loudnessRangeDb": 20.2
       }
     },
     "12": {
@@ -1094,7 +1191,9 @@
         "durationSeconds": 1.84,
         "pitchMedianHz": 120.0,
         "pitchRangeSemitones": 9.0,
-        "loudnessRangeDb": 21.9
+        "loudnessRangeDb": 21.9,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/12-mateus.ogg",
@@ -1142,7 +1241,9 @@
         "durationSeconds": 1.34,
         "pitchMedianHz": 151.2,
         "pitchRangeSemitones": 4.6,
-        "loudnessRangeDb": 21.5
+        "loudnessRangeDb": 21.5,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "13": {
@@ -1174,7 +1275,9 @@
         "durationSeconds": 3.28,
         "pitchMedianHz": 108.2,
         "pitchRangeSemitones": 17.3,
-        "loudnessRangeDb": 30.4
+        "loudnessRangeDb": 30.4,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/13-nikola.ogg",
@@ -1222,7 +1325,9 @@
         "durationSeconds": 2.16,
         "pitchMedianHz": 139.9,
         "pitchRangeSemitones": 17.8,
-        "loudnessRangeDb": 31.2
+        "loudnessRangeDb": 31.2,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "14": {
@@ -1254,7 +1359,9 @@
         "durationSeconds": 1.17,
         "pitchMedianHz": 137.4,
         "pitchRangeSemitones": 10.4,
-        "loudnessRangeDb": 22.1
+        "loudnessRangeDb": 22.1,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/14-mateus.ogg",
@@ -1302,7 +1409,9 @@
         "durationSeconds": 1.12,
         "pitchMedianHz": 126.0,
         "pitchRangeSemitones": 11.8,
-        "loudnessRangeDb": 25.0
+        "loudnessRangeDb": 25.0,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "15": {
@@ -1334,7 +1443,9 @@
         "durationSeconds": 5.45,
         "pitchMedianHz": 86.8,
         "pitchRangeSemitones": 10.1,
-        "loudnessRangeDb": 23.9
+        "loudnessRangeDb": 23.9,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/15-kurozane.ogg",
@@ -1382,7 +1493,9 @@
         "durationSeconds": 9.24,
         "pitchMedianHz": 80.1,
         "pitchRangeSemitones": 9.0,
-        "loudnessRangeDb": 31.1
+        "loudnessRangeDb": 31.1,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "16": {
@@ -1432,7 +1545,9 @@
         "durationSeconds": 6.68,
         "pitchMedianHz": 127.1,
         "pitchRangeSemitones": 12.9,
-        "loudnessRangeDb": 21.3
+        "loudnessRangeDb": 21.3,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/16-mateus.ogg",
@@ -1480,7 +1595,9 @@
         "durationSeconds": 9.2,
         "pitchMedianHz": 143.5,
         "pitchRangeSemitones": 9.2,
-        "loudnessRangeDb": 20.4
+        "loudnessRangeDb": 20.4,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "17": {
@@ -1530,7 +1647,9 @@
         "durationSeconds": 6.66,
         "pitchMedianHz": 125.0,
         "pitchRangeSemitones": 16.3,
-        "loudnessRangeDb": 19.7
+        "loudnessRangeDb": 19.7,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/17-ren.ogg",
@@ -1578,7 +1697,9 @@
         "durationSeconds": 7.24,
         "pitchMedianHz": 110.4,
         "pitchRangeSemitones": 9.1,
-        "loudnessRangeDb": 28.5
+        "loudnessRangeDb": 28.5,
+        "sceneId": "last-command",
+        "beatId": "c9-05-dawn-at-observatory"
       }
     },
     "19": {
@@ -1628,7 +1749,9 @@
         "durationSeconds": 3.32,
         "pitchMedianHz": 81.0,
         "pitchRangeSemitones": 7.0,
-        "loudnessRangeDb": 21.5
+        "loudnessRangeDb": 21.5,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/19-kurozane.ogg",
@@ -1676,7 +1799,9 @@
         "durationSeconds": 3.48,
         "pitchMedianHz": 100.9,
         "pitchRangeSemitones": 10.3,
-        "loudnessRangeDb": 32.6
+        "loudnessRangeDb": 32.6,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "20": {
@@ -1726,7 +1851,9 @@
         "durationSeconds": 2.56,
         "pitchMedianHz": 120.0,
         "pitchRangeSemitones": 13.4,
-        "loudnessRangeDb": 23.0
+        "loudnessRangeDb": 23.0,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/20-mateus.ogg",
@@ -1774,7 +1901,9 @@
         "durationSeconds": 3.96,
         "pitchMedianHz": 134.7,
         "pitchRangeSemitones": 10.0,
-        "loudnessRangeDb": 20.6
+        "loudnessRangeDb": 20.6,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "21": {
@@ -1824,7 +1953,9 @@
         "durationSeconds": 1.63,
         "pitchMedianHz": 166.8,
         "pitchRangeSemitones": 19.3,
-        "loudnessRangeDb": 29.2
+        "loudnessRangeDb": 29.2,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/21-kurozane.ogg",
@@ -1872,7 +2003,9 @@
         "durationSeconds": 3.56,
         "pitchMedianHz": 80.1,
         "pitchRangeSemitones": 6.2,
-        "loudnessRangeDb": 35.9
+        "loudnessRangeDb": 35.9,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "22": {
@@ -1922,7 +2055,9 @@
         "durationSeconds": 3.68,
         "pitchMedianHz": 125.0,
         "pitchRangeSemitones": 7.3,
-        "loudnessRangeDb": 18.5
+        "loudnessRangeDb": 18.5,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/22-mateus.ogg",
@@ -1970,7 +2105,9 @@
         "durationSeconds": 5.0,
         "pitchMedianHz": 135.9,
         "pitchRangeSemitones": 12.1,
-        "loudnessRangeDb": 31.8
+        "loudnessRangeDb": 31.8,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "23": {
@@ -2020,7 +2157,9 @@
         "durationSeconds": 2.44,
         "pitchMedianHz": 108.2,
         "pitchRangeSemitones": 15.3,
-        "loudnessRangeDb": 21.1
+        "loudnessRangeDb": 21.1,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/23-nikola.ogg",
@@ -2068,7 +2207,9 @@
         "durationSeconds": 2.52,
         "pitchMedianHz": 126.0,
         "pitchRangeSemitones": 10.3,
-        "loudnessRangeDb": 22.7
+        "loudnessRangeDb": 22.7,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "24": {
@@ -2118,7 +2259,9 @@
         "durationSeconds": 3.48,
         "pitchMedianHz": 137.8,
         "pitchRangeSemitones": 28.9,
-        "loudnessRangeDb": 21.4
+        "loudnessRangeDb": 21.4,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/24-mateus.ogg",
@@ -2166,7 +2309,9 @@
         "durationSeconds": 3.52,
         "pitchMedianHz": 133.1,
         "pitchRangeSemitones": 27.7,
-        "loudnessRangeDb": 26.1
+        "loudnessRangeDb": 26.1,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "26": {
@@ -2216,7 +2361,9 @@
         "durationSeconds": 2.76,
         "pitchMedianHz": 124.2,
         "pitchRangeSemitones": 13.6,
-        "loudnessRangeDb": 21.1
+        "loudnessRangeDb": 21.1,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/26-mateus.ogg",
@@ -2264,7 +2411,9 @@
         "durationSeconds": 4.08,
         "pitchMedianHz": 122.1,
         "pitchRangeSemitones": 22.5,
-        "loudnessRangeDb": 22.6
+        "loudnessRangeDb": 22.6,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     },
     "27": {
@@ -2314,7 +2463,9 @@
         "durationSeconds": 5.64,
         "pitchMedianHz": 84.4,
         "pitchRangeSemitones": 9.7,
-        "loudnessRangeDb": 25.9
+        "loudnessRangeDb": 25.9,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       },
       "ja": {
         "file": "./assets/audio/voice-prototype-v1/ja/27-kurozane.ogg",
@@ -2362,7 +2513,9 @@
         "durationSeconds": 7.0,
         "pitchMedianHz": 87.3,
         "pitchRangeSemitones": 30.2,
-        "loudnessRangeDb": 26.8
+        "loudnessRangeDb": 26.8,
+        "sceneId": "last-command",
+        "beatId": "sw10-corrections-desk"
       }
     }
   },
@@ -2373,6 +2526,105 @@
   "defaultPauseSeconds": 0.4,
   "pauseBeforeSeconds": {
     "18": 1.2,
-    "25": 1.5
+    "25": 1.5,
+    "ca-08": 0.8,
+    "ca-10": 0.7
+  },
+  "scenes": [
+    {
+      "id": "last-command",
+      "script": "scene-last-command.json",
+      "title": "Dawn at the Observatory — The Last Command",
+      "defaultPauseSeconds": 0.4,
+      "lineIds": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27"
+      ]
+    },
+    {
+      "id": "cast-auditions",
+      "script": "scene-cast-auditions.json",
+      "title": "Extended Cast Auditions — Archive, Clinic, Gate & Tribunal",
+      "defaultPauseSeconds": 0.5,
+      "lineIds": [
+        "ca-01",
+        "ca-02",
+        "ca-03",
+        "ca-04",
+        "ca-05",
+        "ca-06",
+        "ca-07",
+        "ca-08",
+        "ca-09",
+        "ca-10"
+      ]
+    }
+  ],
+  "cast": {
+    "kurozane": {
+      "name": "Shogun Kurozane",
+      "brief": "Centuries-old vampire sovereign. Deep, slow, courtly, enjoys his own cadence. Loses the sovereign resonance as he becomes mortal."
+    },
+    "mateus": {
+      "name": "Father Mateus Avelar",
+      "brief": "Portuguese-born former Jesuit and court translator turned vampire priest. Weary baritone, scholarly precision; restraint until the confession breaks him."
+    },
+    "nikola": {
+      "name": "Nikola Dražanić",
+      "brief": "Croatian-born vampire hunter of a self-mythologizing house. Confident, theatrical, one degree too pleased with himself; gravity appears without warning."
+    },
+    "ren": {
+      "name": "Ren Ishikawa",
+      "brief": "Young courier turned resistance lead. Plain, quick, unpretentious; quiet authority rather than speeches."
+    },
+    "miyo": {
+      "name": "Miyo Senda",
+      "brief": "Weather scholar and Mateus's granddaughter. Clear, controlled, exact; anger arrives as precision."
+    },
+    "aya": {
+      "name": "Aya Shinohara",
+      "brief": "Shrine archivist, warder, and investigator. Measured archivist, warm under pressure; asks the question that makes everyone define terms. Careful neutral register."
+    },
+    "kiku": {
+      "name": "Kiku Nawa",
+      "brief": "Village physician and care-network organizer. Brisk physician; bedside manner as command, where humor is impatience rather than cruelty. Clipped, practical."
+    },
+    "genta": {
+      "name": "Genta Mononobe",
+      "brief": "Former retainer turned steady engineer and shield-bearer. Reports, positions, load paths; calm makes the danger credible. Plain, low-key."
+    },
+    "lady-enma": {
+      "name": "Lady Enma of Ash",
+      "brief": "Former court entertainer and Kurozane's Cinder Fan. Theatrical, fan-snap timing; every line staged for an audience, even when alone. Elegant court speech with performative flourishes."
+    },
+    "ujiro": {
+      "name": "Magistrate Ujiro Arata",
+      "brief": "Court magistrate and operational author of the census raids. Bureaucratic authority over cowardice; paperwork as violence, brave only when the room agrees. Officious formal speech that frays under pressure."
+    }
   }
 }
