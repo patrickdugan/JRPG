@@ -1,0 +1,43 @@
+name: HD boss windup articulation studies
+on:
+  push:
+    branches: [feature/hd-boss-windup-articulation-20261122]
+    paths:
+      - 'game/tools/hd-boss-windup-articulation.py'
+      - 'game/tools/test_hd_boss_windup_articulation.py'
+      - '.github/workflows/hd-boss-windup-articulation.yml'
+  pull_request:
+    paths:
+      - 'game/tools/hd-boss-windup-articulation.py'
+      - 'game/tools/test_hd_boss_windup_articulation.py'
+      - '.github/workflows/hd-boss-windup-articulation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review-candidates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow and NumPy
+        run: python -m pip install 'pillow>=11,<13' 'numpy>=2,<3'
+      - name: Test stable figures, source-key interpolation, and 24-frame atlases
+        run: python -m unittest discover -s game/tools -p test_hd_boss_windup_articulation.py -v
+      - name: Generate both windup strips from independently verified original paintings
+        run: python game/tools/hd-boss-windup-articulation.py --root . --output-dir artifacts/hd-boss-windup-studies
+      - name: Verify original seven-boss runtime manifests and SHA-256 receipts
+        run: node --test game/tests/hd-seven-named-boss-art-git.test.mjs
+      - name: Assert candidate generation preserved canonical assets and the roster
+        run: git diff --exit-code -- game/assets/art/hd-painted-v1 assets/art
+      - name: Upload candidate WebPs, moving masks and comparison timeline sheets
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jrpg-two-boss-windup-articulation-review
+          path: artifacts/hd-boss-windup-studies/
+          retention-days: 14
+          if-no-files-found: warn

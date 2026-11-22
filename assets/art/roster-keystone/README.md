@@ -2,7 +2,7 @@
 
 **Canonical identity and production-status ledger**. Source of truth for the 62-identity JRPG roster, cross-checked against the game's character source, boss source and NPC role taxonomy. [JSON index](./roster.json).
 
-Do not infer final visual approval from generated image or motion file counts. The existing HD motion sources in the downloadable ZIPs are uncommitted candidates. Each painted key sheet has six poses; each normal HD motion set contains 10 clips of 24 frames. Four Kurozane form identities share one six-clip study. The optional battle renderer now binds its six study keys to the live court/bell/dawn phase IDs; the painted image binaries remain in the downloadable HD package and visual approval is still pending.
+Do not infer final visual approval from generated image or motion file counts. Playable and selected enemy painted motion candidates still live in review ZIPs; all seven named boss originals and runtime PNG/WebP sets are now committed to Git. Each painted key sheet has six poses; each normal HD motion set contains 10 clips of 24 frames. Four Kurozane form identities share one six-clip study. The optional battle renderer now binds its six study keys to the live court/bell/dawn phase IDs; the painted image binaries remain in the downloadable HD package and visual approval is still pending.
 
 | Type | Identities | Six-key painted candidates | 24-frame motion candidates | Missing HD | Existing pixel animation |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -16,15 +16,15 @@ Do not infer final visual approval from generated image or motion file counts. T
 
 ## Six-boss HD presentation VFX (review lane)
 
-Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have a versioned 12-frame windup / 12-frame active VFX generator. The generated transparent images remain a separate art stream from boss body animation. **The six premium painted body masters are still pending** and old pixel boss animation remains the exact fallback. Source: [boss VFX documentation](../../../docs/52-hd-boss-vfx.md).
+Widow of Fog, Furnace Abbot, Ujiro, Bell Warden Chiyo, Lady Enma and Yearless Bell now have a versioned 12-frame windup / 12-frame active VFX generator. The generated transparent images remain a separate art stream from boss body animation. **All six boss body candidates are now Git-tracked with manual visual approval still pending** and old pixel boss animation remains the exact fallback. Source: [boss VFX documentation](../../../docs/52-hd-boss-vfx.md).
 
-**Widow of Fog candidate (Nov 21):** six newly painted key poses and 240 generated motion cells are packaged for direct art review, with the source hash recorded in [the Widow intake](widow-of-fog-hd-intake.json). These painted binaries remain outside the Git tree pending manual acceptance and upload. The six-boss VFX source, meanwhile, is tracked separately in this branch.
+**Widow of Fog candidate (Nov 21):** six newly painted key poses and 240 generated motion cells are packaged for direct art review, with the source hash recorded in [the Widow intake](widow-of-fog-hd-intake.json). These exact source and runtime binaries are committed in Git, with manual visual approval still pending. The six-boss VFX source, meanwhile, is tracked separately in this branch.
 
-**Furnace Abbot candidate (Nov 21):** six new concept-quality key poses with the canonical Hammer Decree and Forge Sermon tells, ten generated 24-frame clips, and a separately validated installer. See [the Furnace intake](furnace-abbot-hd-intake.json); its binary PNG/WebP assets are distributed in the conversation ZIP pending Git upload and manual visual review. The light-source matte has provisional transparency and requires edge cleanup.
+**Furnace Abbot candidate (Nov 21):** six new concept-quality key poses with the canonical Hammer Decree and Forge Sermon tells, ten generated 24-frame clips, and a separately validated installer. See [the Furnace intake](furnace-abbot-hd-intake.json); its exact original painting and runtime PNG/WebP assets are committed in Git. Manual visual review is pending. The light-source matte has provisional transparency and requires edge cleanup.
 
 ## Chiyo individual premium-source redraw
 
-Bell Warden Chiyo now has a standalone 1536×1024 RGBA six-pose source replacing the low-resolution comparison-crop candidate. The revised package `JRPG_HD_Boss_Chiyo_Premium_v2.zip` includes ten 24-frame clips and preserves hashes of the source and prepared six-key atlas in `bell-warden-chiyo-hd-intake.json`. The image binaries remain in the downloadable package until Git import; `assetInGit` remains false and visual approval stays pending.
+Bell Warden Chiyo now has a standalone 1536×1024 RGBA six-pose source replacing the low-resolution comparison-crop candidate. The revised package `JRPG_HD_Boss_Chiyo_Premium_v2.zip` includes ten 24-frame clips and preserves hashes of the source and prepared six-key atlas in `bell-warden-chiyo-hd-intake.json`. The revised image binaries are now committed to Git; the matching Roster Keystone entry records `assetInGit: true` and visual approval remains pending.
 
 ## Final four named boss HD art candidates
 
@@ -81,13 +81,13 @@ The generator, runtime and all **96 actual WebP motion strips** are committed in
 | kurozane-oni-armor | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
 | kurozane-demon-mode | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
 | kurozane-ward-broken | kurozane-form | kurozane | shared-study-in-ZIP | shared-six-clip-study | pending | phase-mapped-optional-hd | pending |
-| captain-kaji | named-boss | major-boss | candidate-in-ZIP | 240-frame candidate-in-ZIP | pending | optional-HD-after-install | pending |
-| widow-of-fog | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| furnace-abbot | named-boss | major-boss | candidate-in-ZIP | candidate-in-ZIP | candidate-in-ZIP | optional-hd-after-package-install | candidate-in-ZIP |
-| ujiro | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| bell-warden-chiyo | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| lady-enma | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
-| yearless-bell | named-boss | major-boss | pending | pending | pending | fallback-only | pending |
+| captain-kaji | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| widow-of-fog | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| furnace-abbot | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| ujiro | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| bell-warden-chiyo | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| lady-enma | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
+| yearless-bell | named-boss | major-boss | candidate-in-Git | candidate-in-Git | committed | optional-hd-mode | pending |
 | npc-speaker | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-interviewee | npc | civilian | pending | pending | pending | fallback-only | pending |
 | npc-confined-person | npc | civilian | pending | pending | pending | fallback-only | pending |
@@ -113,7 +113,15 @@ The original tested boss v2 clip system remains the render fallback when these o
 
 ## Captain Kaji's HD painted source (review candidate)
 
-The six-key painted original preserves his salt-cut sword, chain-haul hook, spool reel, scarred captain's face, and Crane Surge overhead tell. The source SHA-256 is `a616f7d710cbf7005432ba6f3c9a2e8b2fcf8290a89173a6424b4f1e43522b16`; the package `JRPG_HD_Boss_CaptainKaji_v1.zip` includes 6 isolated PNG key poses, a six-key engine PNG, ten 24-frame derived WebP motion strips and a checksum-verifying installer. Source and clip integrity tests pass locally. These painterly binaries are in the conversation download and remain to be imported into Git; they are **not** counted as Git-committed artwork. Human acceptance and dedicated animation in-betweens are still open.
+The six-key painted original preserves his salt-cut sword, chain-haul hook, spool reel, scarred captain's face, and Crane Surge overhead tell. The source SHA-256 is `a616f7d710cbf7005432ba6f3c9a2e8b2fcf8290a89173a6424b4f1e43522b16`; the package `JRPG_HD_Boss_CaptainKaji_v1.zip` includes 6 isolated PNG key poses, a six-key engine PNG, ten 24-frame derived WebP motion strips and a checksum-verifying installer. Source and clip integrity tests pass locally. The source painting, six-key PNG atlas and ten animation WebP files are now counted as Git-committed review assets. Human acceptance and dedicated animation in-betweens are still open.
+
+## All seven named boss HD art candidates committed to Git (November 22)
+
+All seven named bosses now have **seven original full-resolution source paintings, seven transparent six-key engine sheets and 70 WebP motion strips**, representing **1,680 source-derived frames**. All are in Git and load through the opt-in `?art=hd` renderer. The original pixel animation remains the fallback and authoritative attack timing remains unchanged. Every figure and clip remains **pending manual visual approval**, and derived frame hashes are integrity checks rather than evidence of hand-authored articulation.
+
+The latest four original archives, Captain Kaji, Widow of Fog, Furnace Abbot and Magistrate Ujiro, were committed as 31 exact Git chunks (43,933,244 bytes). [The strict hosted import](https://github.com/patrickdugan/JRPG/actions/runs/44935663172) rebuilt all four archives, validated their checksums and imported 40 clips/960 frames. The earlier three premium boss archives, Bell Warden Chiyo, Lady Enma and Yearless Bell, contributed 30 clips/720 frames. **All named boss source paintings, PNG key sheets and WebP files are now in the Git repository.**
+
+Browse [original paintings](../../../assets/art/hd-painted-boss-review-v1/) and [runtime art](../../../game/assets/art/hd-painted-v1/). The proof receipts are [archive v1](../hd-boss-binary-import-v1/manifest.json) and [archive v2](../hd-boss-binary-import-v2/manifest.json). The Roster Keystone JSON records each individual import and review status.
 
 ## Acceptance gates
 
@@ -127,4 +135,4 @@ The reviewer should update statuses in `roster.json` with every approved or comm
 
 ## Final three premium boss source archives committed as Git binaries
 
-Lady Enma, Bell Warden Chiyo and Yearless Bell each have a new individual 1536×1024 source and a ten-clip motion candidate. All three **original, exact source ZIP archives** are now stored as 1.5 MB SHA-verified Git binary chunks under `assets/art/hd-boss-binary-import-v1/`. The hosted import job reconstructs these bytes and commits the unpacked runtime images in separate under-90-MiB Git commits. Original pixel boss clips and gameplay hitboxes remain authoritative. All high-resolution candidates need final visual approval. See [binary import documentation](../../../docs/55-hd-final-boss-binary-import.md).
+Lady Enma, Bell Warden Chiyo and Yearless Bell each have a new individual 1536×1024 source and a ten-clip motion candidate. All three **original, exact source ZIP archives** are now stored as 1.5 MB SHA-verified Git binary chunks under `assets/art/hd-boss-binary-import-v1/`. The hosted job has reconstructed these bytes and committed the unpacked runtime images in separate under-90-MiB Git commits. Original pixel boss clips and gameplay hitboxes remain authoritative. All high-resolution candidates need final visual approval. See [binary import documentation](../../../docs/55-hd-final-boss-binary-import.md).
