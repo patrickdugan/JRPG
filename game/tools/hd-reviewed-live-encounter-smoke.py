@@ -174,6 +174,11 @@ def run_session(context, base: str, boss: str, encounter: str, title: str,
         "phaseSamples":evidence,"errors":errors,
         "encounterOutcome":last["outcome"],
     }
+    event = result["firstActiveEvent"]
+    result["firstActiveFrameNumber"] = (
+        1 + round(event["x"] / 192) + round(event["y"] / 192) * 12
+        if event is not None else None
+    )
     page.close()
     assert not errors, errors
     assert last["storageUnchanged"], result
@@ -182,6 +187,8 @@ def run_session(context, base: str, boss: str, encounter: str, title: str,
     if mode == "reviewed" and not block_candidate:
         assert any(desired in key for key in result["reviewedDrawn"]), (
             "Live boss attack failed to draw reviewed windup", result)
+        assert result["firstActiveFrameNumber"] <= 6, (
+            "Active attack missed its opening painted release frames on cold load", result)
     else:
         assert not result["reviewedDrawn"], (
             "Canonical/missing-asset lane drew reviewed artwork", result)
