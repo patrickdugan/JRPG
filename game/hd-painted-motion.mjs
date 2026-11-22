@@ -1,4 +1,4 @@
-import { reviewedMotionFor, REVIEWED_MOTION_MANIFEST } from './hd-reviewed-motion.mjs';
+import { reviewedMotionFor, REVIEWED_BOSSES, REVIEWED_MOTION_MANIFEST } from './hd-reviewed-motion.mjs';
 /**
  * 24-frame painted-key motion delivery. Presentation only.
  * WebP clips are derived single-pose deformations, not individually hand-drawn frames.
@@ -146,7 +146,14 @@ export function createHdMotionRuntime({fetchJson,createImage,root='./assets/art/
     const s=selectHdMotionClip(actor,original,options);
     if(!s)return false;
     const entry=get(id,s.clip);
-    if(!entry){request(id,s.clip,original);return false}
+    if(!entry)request(id,s.clip,original);
+    // In the short attack-active phase, a cold WebP fetch can miss the
+    // release's opening frames. Prefetch the canonical active clip during
+    // the preceding windup for the two explicitly reviewed boss trials.
+    // This remains presentation-only and never changes attack state/timing.
+    if(reviewedMotionEnabled && s.clip==='windup' && REVIEWED_BOSSES.includes(id)
+       && !get(id,'active'))request(id,'active',original);
+    if(!entry)return false;
     const now=Number.isFinite(options.nowMs)?options.nowMs:0;
     if(actor.hp<=0||actor.active===false){
       if(!deathAt.has(actor.id))deathAt.set(actor.id,now);
