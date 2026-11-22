@@ -23,7 +23,7 @@ Outputs in GitHub Actions artifacts:
 
 Perceptual motion is measured by grayscale mean absolute difference after
 compositing each frame onto an identical RGB backdrop. A 48×48 thumbnail
-suppresses subpixel quantization noise. Thumbnail shift alignment over ±3
+suppresses subpixel quantization noise. A second metric averages changes inside the union of the first and selected silhouettes, so articulated limbs do not disappear into empty background. Thumbnail shift alignment over ±3
 pixels estimates how much change a rigid translation can explain. Bounding
 box centroid travel provides a second descriptive measure.
 
