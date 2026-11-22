@@ -157,7 +157,7 @@ export function createHdMotionRuntime({fetchJson,createImage,root='./assets/art/
     ctx.save();ctx.imageSmoothingEnabled=true;ctx.translate(p.anchorX,p.anchorY);
     if(p.flip)ctx.scale(-1,1);
     ctx.drawImage(entry.image,p.sx,p.sy,p.sw,p.sh,p.dx,p.dy,p.dw,p.dh);
-    ctx.restore();onFrame(id,s.clip,index);return true;
+    ctx.restore();onFrame(id,s.clip,index,entry.origin);return true;
   }
   return Object.freeze({request,draw,get,
     get cacheSize(){return cached.size},get pendingCount(){return pending.size},
