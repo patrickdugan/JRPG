@@ -72,6 +72,8 @@ import {
 } from './boss-combat-atlas.mjs';
 import { animationDrawPlacement, createAnimationSheetLoader } from './animation-clip-runtime.mjs';
 import { createHdPaintedArtRuntime, getHdArtMode } from './hd-painted-animation.mjs';
+import { createHdBossVfxRuntime, HD_BOSS_VFX_NAMES } from './hd-boss-vfx.mjs';
+import { hdKurozanePhaseId, selectHdKurozaneForm } from './hd-kurozane-phase.mjs';
 import {
   BOSS_ANIMATION_SUITE,
   bossAnimationManifestUrl,
@@ -407,22 +409,28 @@ for (const key of ['party', 'partyAnimation', 'partyExtended', 'enemy', 'enemyAn
 // never feed back into the fixed-step kernel, objectives, collision or saves.
 const hdPaintedEnabled = getHdArtMode(window.location.search) === 'hd';
 const hdMotionEnabled = hdPaintedEnabled && laboratoryQuery.get('motion') !== '0';
+const hdReviewedMotionEnabled = hdMotionEnabled && laboratoryQuery.get('motion') === 'reviewed';
 const hdEnemyCardTemplates = new Set(['silk-jorogumo', 'bell-moth', 'cinder-hound', 'razor-bamboo-stalker']);
 elements.canvas.dataset.hdArtMode = hdPaintedEnabled ? 'hd' : 'classic';
 elements.canvas.dataset.hdArtState = hdPaintedEnabled ? 'loading' : 'off';
 elements.canvas.dataset.hdArtDrawCount = '0';
 elements.canvas.dataset.hdMotionState = hdMotionEnabled ? 'loading' : 'off';
+elements.canvas.dataset.hdMotionLane = hdReviewedMotionEnabled ? 'reviewed' : 'canonical';
+elements.canvas.dataset.hdMotionActualSource = 'pending';
 elements.canvas.dataset.hdMotionClip = '';
 elements.canvas.dataset.hdMotionFrame = '';
 const hdPaintedArt = createHdPaintedArtRuntime({
   enabled: hdPaintedEnabled,
+  allowBossStudies: true,
   motionEnabled: hdMotionEnabled,
+  reviewedMotionEnabled: hdReviewedMotionEnabled,
   onMotionChange: (id, clip, state) => {
     elements.canvas.dataset.hdMotionTemplate = id;
     elements.canvas.dataset.hdMotionClip = clip;
     elements.canvas.dataset.hdMotionState = state;
   },
-  onMotionFrame: (id, clip, frame) => {
+  onMotionFrame: (id, clip, frame, origin) => {
+    elements.canvas.dataset.hdMotionActualSource = origin ?? 'canonical';
     elements.canvas.dataset.hdMotionTemplate = id;
     elements.canvas.dataset.hdMotionClip = clip;
     elements.canvas.dataset.hdMotionFrame = String(frame);
@@ -448,6 +456,66 @@ const hdPaintedArt = createHdPaintedArtRuntime({
         link.hidden = false;
       }).catch(() => {}); // The card is optional; a failed request leaves the link hidden.
     }
+  },
+});
+
+// Committed source-derived animation bridge for the 16 regular enemies whose
+// premium painted six-pose masters remain in production. This art lane comes
+// AFTER the first-party painted pack. Both lanes are presentation-only.
+// Presentation-only VFX for six named bosses. Existing pixel/painted boss
+// bodies remain untouched and the fixed-step kernel owns telegraph timings.
+const hdBossVfx = createHdBossVfxRuntime({
+  enabled: hdPaintedEnabled,
+  fetchJson: async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Boss VFX HTTP '+response.status);
+    return response.json();
+  },
+  createImage: () => new Image(),
+  onChange: (id, stage, state) => {
+    elements.canvas.dataset.hdBossVfxId = id;
+    elements.canvas.dataset.hdBossVfxStage = stage;
+    elements.canvas.dataset.hdBossVfxState = state;
+  },
+  onFrame: (id, stage, frame) => {
+    elements.canvas.dataset.hdBossVfxId = id;
+    elements.canvas.dataset.hdBossVfxStage = stage;
+    elements.canvas.dataset.hdBossVfxFrame = String(frame);
+    elements.canvas.dataset.hdBossVfxState = 'ready';
+  },
+});
+if (hdPaintedEnabled) {
+  for (const template of new Set(Object.values(session.actorTemplates ?? {}))) {
+    if (!HD_BOSS_VFX_NAMES.includes(template)) continue;
+    void hdBossVfx.request(template, 'windup');
+    void hdBossVfx.request(template, 'active');
+  }
+}
+
+const hdMissingArt = createHdPaintedArtRuntime({
+  root: './assets/art/hd-painted-v1/overlay-missing-v1/',
+  enabled: hdPaintedEnabled,
+  motionEnabled: hdMotionEnabled,
+  fetchJson: async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Source-derived art HTTP ' + response.status);
+    return response.json();
+  },
+  createImage: () => new Image(),
+  onChange: (id, state) => {
+    elements.canvas.dataset.hdSourceDerivedId = id;
+    elements.canvas.dataset.hdSourceDerivedState = state;
+  },
+  onMotionChange: (id, clip, state) => {
+    elements.canvas.dataset.hdSourceDerivedId = id;
+    elements.canvas.dataset.hdSourceDerivedClip = clip;
+    elements.canvas.dataset.hdSourceDerivedMotionState = state;
+  },
+  onMotionFrame: (id, clip, frame) => {
+    elements.canvas.dataset.hdSourceDerivedId = id;
+    elements.canvas.dataset.hdSourceDerivedClip = clip;
+    elements.canvas.dataset.hdSourceDerivedFrame = String(frame);
+    elements.canvas.dataset.hdSourceDerivedMotionState = 'ready';
   },
 });
 
@@ -1724,11 +1792,28 @@ function drawActors(snapshot) {
     context.beginPath();
     context.ellipse(actor.position.x, actor.position.y + 2, actor.faction === 'player' ? 26 : 34, 7, 0, 0, Math.PI * 2);
     context.fill();
+    const bossForm = templateId(actor.id) === 'kurozane'
+      ? selectHdKurozaneForm(actor, session.bossPhaseDirector)
+      : null;
+    if (bossForm !== null) {
+      setCanvasDataset('hdBossPhase', hdKurozanePhaseId(session.bossPhaseDirector, actor));
+      setCanvasDataset('hdBossForm', String(bossForm));
+    }
     const drawActorBody = () => {
       // HD keyframe artwork only supplants the visible sprite after its
       // decoded atlas has passed its geometry check. Every other state uses
       // the original richly animated pixel path unchanged.
       if (hdPaintedArt.draw(context, actor, templateId(actor.id), {
+        nowMs,
+        bossForm,
+        phaseProgress: attackPhaseProgress(actor),
+        reducedMotion: reducedMotion.matches,
+      })) {
+        hdArtDrawCount += 1;
+        return;
+      }
+      // Source-derived fallback remains separate from approved painterly HD.
+      if (hdMissingArt.draw(context, actor, templateId(actor.id), {
         nowMs,
         phaseProgress: attackPhaseProgress(actor),
         reducedMotion: reducedMotion.matches,
@@ -1741,6 +1826,12 @@ function drawActors(snapshot) {
       else if (actor.faction === 'enemy' || actor.faction === 'neutral') drawEnemy(actor, nowMs);
     };
     drawActorBody();
+    // Cosmetic effect sampled from the same immutable phase used by the
+    // existing telegraph. Always rendered over the original boss art.
+    hdBossVfx.draw(context, actor, templateId(actor.id), {
+      phaseProgress: attackPhaseProgress(actor),
+      reducedMotion: reducedMotion.matches,
+    });
     if (actor.faction === 'player') drawCooldownRing(actor, nowMs);
     if (actor.hitFlashRemainingMs > 0) {
       context.save();

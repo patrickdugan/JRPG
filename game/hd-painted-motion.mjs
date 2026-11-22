@@ -1,3 +1,4 @@
+import { reviewedMotionFor, REVIEWED_BOSSES, REVIEWED_MOTION_MANIFEST } from './hd-reviewed-motion.mjs';
 /**
  * 24-frame painted-key motion delivery. Presentation only.
  * WebP clips are derived single-pose deformations, not individually hand-drawn frames.
@@ -73,17 +74,23 @@ export function hdMotionDrawPlan(actor,original,c,index){
     flip:Number(actor?.facing)<0};
 }
 export function createHdMotionRuntime({fetchJson,createImage,root='./assets/art/hd-painted-v1/',
-  enabled=false,maxCachedClips=24,onChange=()=>{},onFrame=()=>{}}={}){
+  enabled=false,reviewedMotionEnabled=false,maxCachedClips=24,onChange=()=>{},onFrame=()=>{}}={}){
   if(typeof fetchJson!=='function'||typeof createImage!=='function')throw new TypeError('fetchJson and createImage required');
   if(!Number.isInteger(maxCachedClips)||maxCachedClips<1)throw new RangeError('invalid cache capacity');
   const cached=new Map(),pending=new Map(),failed=new Set(),deathAt=new Map();
-  let manifestPromise=null,manifestError=null;
+  let manifestPromise=null,manifestError=null,reviewedPromise=null;
   const key=(id,clip)=>id+'/'+clip;
   function manifest(){
     if(!manifestPromise)manifestPromise=Promise.resolve().then(()=>fetchJson(root+HD_MOTION_MANIFEST))
        .then(m=>{const checked=validateHdMotionManifest(m);if(!checked.ok)throw new Error(checked.reason);return m})
        .catch(e=>{manifestError=String(e?.message||e);return null});
     return manifestPromise;
+  }
+  function reviewedManifest(){
+    if(!reviewedMotionEnabled)return Promise.resolve(null);
+    if(!reviewedPromise)reviewedPromise=Promise.resolve().then(()=>fetchJson(root+REVIEWED_MOTION_MANIFEST))
+      .catch(()=>null);
+    return reviewedPromise;
   }
   function loadImage(path){
     return new Promise((resolve,reject)=>{
@@ -102,17 +109,30 @@ export function createHdMotionRuntime({fetchJson,createImage,root='./assets/art/
     if(failed.has(k))return Promise.resolve(null);
     if(pending.has(k))return pending.get(k);
     onChange(id,name,'loading');
-    const task=manifest().then(m=>{
+    const task=manifest().then(async m=>{
       const record=m?.actors?.[id],clip=record?.clipSet?.[name];
       if(!clip||record.sourceSheetSha256!==source.sha256||record.drawHeight!==source.drawHeight||
          record.group!==source.group)return null;
-      return loadImage(root+clip.path).then(image=>{
-        if(image.naturalWidth!==clip.width||image.naturalHeight!==clip.height)return null;
-        const result={image,clip,record};
-        cached.set(k,result);
-        while(cached.size>maxCachedClips)cached.delete(cached.keys().next().value);
-        return result;
-      });
+      // Reviewed clip art is a separate optional lane, never a manifest rewrite.
+      // Its source hash and attack timing must match canonical HD source metadata.
+      const approved=reviewedMotionFor(await reviewedManifest(),id,name,m);
+      if(approved){
+        try{
+          const image=await loadImage(root+approved.path);
+          if(image.naturalWidth===approved.width&&image.naturalHeight===approved.height){
+            const result={image,clip:approved,record,origin:'reviewed'};
+            cached.set(k,result);
+            while(cached.size>maxCachedClips)cached.delete(cached.keys().next().value);
+            return result;
+          }
+        }catch{ /* A missing preview should use the SHA-receipted canonical WebP. */ }
+      }
+      const image=await loadImage(root+clip.path);
+      if(image.naturalWidth!==clip.width||image.naturalHeight!==clip.height)return null;
+      const result={image,clip,record,origin:'canonical'};
+      cached.set(k,result);
+      while(cached.size>maxCachedClips)cached.delete(cached.keys().next().value);
+      return result;
     }).catch(()=>null).then(r=>{pending.delete(k);if(!r)failed.add(k);onChange(id,name,r?'ready':'unavailable');return r});
     pending.set(k,task);return task;
   }
@@ -126,7 +146,14 @@ export function createHdMotionRuntime({fetchJson,createImage,root='./assets/art/
     const s=selectHdMotionClip(actor,original,options);
     if(!s)return false;
     const entry=get(id,s.clip);
-    if(!entry){request(id,s.clip,original);return false}
+    if(!entry)request(id,s.clip,original);
+    // In the short attack-active phase, a cold WebP fetch can miss the
+    // release's opening frames. Prefetch the canonical active clip during
+    // the preceding windup for the two explicitly reviewed boss trials.
+    // This remains presentation-only and never changes attack state/timing.
+    if(reviewedMotionEnabled && s.clip==='windup' && REVIEWED_BOSSES.includes(id)
+       && !get(id,'active'))request(id,'active',original);
+    if(!entry)return false;
     const now=Number.isFinite(options.nowMs)?options.nowMs:0;
     if(actor.hp<=0||actor.active===false){
       if(!deathAt.has(actor.id))deathAt.set(actor.id,now);
@@ -137,7 +164,7 @@ export function createHdMotionRuntime({fetchJson,createImage,root='./assets/art/
     ctx.save();ctx.imageSmoothingEnabled=true;ctx.translate(p.anchorX,p.anchorY);
     if(p.flip)ctx.scale(-1,1);
     ctx.drawImage(entry.image,p.sx,p.sy,p.sw,p.sh,p.dx,p.dy,p.dw,p.dh);
-    ctx.restore();onFrame(id,s.clip,index);return true;
+    ctx.restore();onFrame(id,s.clip,index,entry.origin);return true;
   }
   return Object.freeze({request,draw,get,
     get cacheSize(){return cached.size},get pendingCount(){return pending.size},

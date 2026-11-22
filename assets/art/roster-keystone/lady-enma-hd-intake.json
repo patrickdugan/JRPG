@@ -1,0 +1,52 @@
+{
+  "schema": "bbc-hd-boss-art-intake/1",
+  "bossId": "lady-enma",
+  "displayName": "Lady Enma of Ash",
+  "candidateStatus": "review-candidate",
+  "reviewStatus": "manual-visual-approval-pending",
+  "sourceProvenance": "individual-rgb-1536x1024-keyed-background",
+  "sourceResolution": [
+    1536,
+    1024
+  ],
+  "figureSourcePixels": [
+    512,
+    512
+  ],
+  "sourceSha256": "4f9a59824873f9a2303ad035e46ed05b3af3d0d89f109b5b45347fa45f91cd51",
+  "sixKeyAtlasSha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb",
+  "sourceFile": "sources/lady-enma-six-poses-original.png",
+  "sixKeyAtlas": "assets/sheets/lady-enma.png",
+  "poses": [
+    "idle",
+    "advance",
+    "cinder-fan-windup",
+    "cinder-parasol-wing",
+    "paired-ashes",
+    "defeat"
+  ],
+  "drawHeight": 181,
+  "motion": {
+    "frameSize": [
+      192,
+      192
+    ],
+    "framesPerClip": 24,
+    "clipCount": 10,
+    "frameCount": 240,
+    "sourceDerivedDeformation": true,
+    "decodedFrameHashesVerifiedLocally": true,
+    "decodedFrameHashesVerified": true
+  },
+  "package": "JRPG_HD_Boss_lady_enma_v2.zip",
+  "batch": "3-boss-chunked-git-import-20261121",
+  "binarySourceInGit": true,
+  "engineIntegration": "optional-hd-mode-after-import",
+  "qualityNote": "Standalone premium-resolution painted source; Standalone premium-resolution painted source; charcoal background matting and 24-frame deformation cels still need visual approval.",
+  "gameplayAuthority": false,
+  "binaryArchiveInGit": true,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
+}

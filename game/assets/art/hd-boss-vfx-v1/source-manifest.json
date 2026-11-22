@@ -1,0 +1,86 @@
+{
+  "schema": "bbc-hd-boss-vfx-source/1",
+  "provenance": "source-authored editable vector VFX; boss bodies remain separately animated",
+  "gameplayAuthority": "none",
+  "frameSize": [
+    256,
+    256
+  ],
+  "framesPerStage": 12,
+  "stageCount": 12,
+  "totalCells": 144,
+  "bosses": {
+    "widow-of-fog": {
+      "stages": {
+        "windup": {
+          "file": "vector-sources/widow-of-fog-windup.svg",
+          "gitBlob": "cafa54fa555fab2ffe1fdbcd29c8f4a58d207436"
+        },
+        "active": {
+          "file": "vector-sources/widow-of-fog-active.svg",
+          "gitBlob": "2dac2a65aea4947dd5d308235f56f7a815996058"
+        }
+      }
+    },
+    "furnace-abbot": {
+      "stages": {
+        "windup": {
+          "file": "vector-sources/furnace-abbot-windup.svg",
+          "gitBlob": "59428d3e58d852b2c3259bc93968fac511e0fd0f"
+        },
+        "active": {
+          "file": "vector-sources/furnace-abbot-active.svg",
+          "gitBlob": "859bb64fcc1eba557fdf0cd85ded37bfbdafa2bb"
+        }
+      }
+    },
+    "ujiro": {
+      "stages": {
+        "windup": {
+          "file": "vector-sources/ujiro-windup.svg",
+          "gitBlob": "7dcbd754648842247fd91327788c7df2429a43d7"
+        },
+        "active": {
+          "file": "vector-sources/ujiro-active.svg",
+          "gitBlob": "78d5b3bb7322d2c85af6f1d6aa6576407d522d37"
+        }
+      }
+    },
+    "bell-warden-chiyo": {
+      "stages": {
+        "windup": {
+          "file": "vector-sources/bell-warden-chiyo-windup.svg",
+          "gitBlob": "f9890f1a0aea51f722613605905f4e8c59a3d54a"
+        },
+        "active": {
+          "file": "vector-sources/bell-warden-chiyo-active.svg",
+          "gitBlob": "cfc4d95e50dd0bb45233185f322801df9981bab6"
+        }
+      }
+    },
+    "lady-enma": {
+      "stages": {
+        "windup": {
+          "file": "vector-sources/lady-enma-windup.svg",
+          "gitBlob": "19164bd85b2b591e027696f8389f12c5c6310e51"
+        },
+        "active": {
+          "file": "vector-sources/lady-enma-active.svg",
+          "gitBlob": "572bfd3b32df700655fda64145c2f5fdc655ade4"
+        }
+      }
+    },
+    "yearless-bell": {
+      "stages": {
+        "windup": {
+          "file": "vector-sources/yearless-bell-windup.svg",
+          "gitBlob": "037a817b402c325adbd14c272d7dcb91a5d475ba"
+        },
+        "active": {
+          "file": "vector-sources/yearless-bell-active.svg",
+          "gitBlob": "9107e1b96865c692a15398002557b44c25a4b866"
+        }
+      }
+    }
+  }
+}

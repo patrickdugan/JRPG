@@ -1,0 +1,41 @@
+name: Yearless Bell articulated idle preview
+on:
+  push:
+    branches: [feature/yearless-bell-pendulum-preview-20261122]
+    paths:
+      - 'game/tools/hd-yearless-pendulum-preview.py'
+      - 'game/tools/test_hd_yearless_pendulum_preview.py'
+      - '.github/workflows/hd-yearless-pendulum-preview.yml'
+  pull_request:
+    paths:
+      - 'game/tools/hd-yearless-pendulum-preview.py'
+      - 'game/tools/test_hd_yearless_pendulum_preview.py'
+      - '.github/workflows/hd-yearless-pendulum-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image and motion metrics dependencies
+        run: python -m pip install 'pillow>=11,<13' 'numpy>=2,<3'
+      - name: Check hinge, 24 distinct decoded WebP frames and loop continuity
+        run: python -m unittest discover -s game/tools -p test_hd_yearless_pendulum_preview.py -v
+      - name: Produce SHA-verified candidate and compare to original idle motion
+        run: python game/tools/hd-yearless-pendulum-preview.py --root . --output-dir artifacts/yearless-pendulum
+      - name: Assert immutable runtime art and Roster Keystone
+        run: git diff --exit-code -- assets/art game/assets/art/hd-painted-v1
+      - name: Publish candidate WebP, comparison contact board and provenance receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-yearless-bell-idle-pendulum-candidate
+          path: artifacts/yearless-pendulum/
+          retention-days: 14
+          if-no-files-found: warn
