@@ -1,0 +1,53 @@
+name: HD boss attack cutover review lab
+on:
+  push:
+    branches: [feature/hd-cutover-candidate-lab-20261122]
+    paths:
+      - 'game/hd-cutover-lab*'
+      - 'game/hd-boss-review.html'
+      - 'game/tests/hd-cutover-lab.test.mjs'
+      - 'game/tools/hd-cutover-browser-smoke.py'
+      - '.github/workflows/hd-cutover-lab.yml'
+  pull_request:
+    paths:
+      - 'game/hd-cutover-lab*'
+      - 'game/hd-boss-review.html'
+      - 'game/tests/hd-cutover-lab.test.mjs'
+      - 'game/tools/hd-cutover-browser-smoke.py'
+      - '.github/workflows/hd-cutover-lab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify canonical source, exact phase boundary and independent review receipt
+        run: |
+          node --test game/tests/hd-cutover-lab.test.mjs \
+            game/tests/hd-seven-named-boss-art-git.test.mjs
+          (cd game && npm run check)
+      - name: Install Pillow and isolated Chromium
+        run: |
+          python -m pip install 'pillow>=11,<13' playwright
+          python -m playwright install --with-deps chromium
+      - name: Browser exercise with synthetic uploaded WebP and original committed boss art
+        run: python game/tools/hd-cutover-browser-smoke.py
+      - name: Verify source art and canonical approval were unchanged
+        run: git diff --exit-code -- assets/art game/assets/art/hd-painted-v1
+      - name: Upload full-page screenshot and SHA-verified evidence pair
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jrpg-boss-attack-cutover-review-browser
+          path: artifacts/hd-cutover-browser/
+          if-no-files-found: warn
+          retention-days: 14
