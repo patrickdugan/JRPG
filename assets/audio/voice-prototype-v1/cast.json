@@ -142,6 +142,64 @@
         "ja": "物資の振り分けは奉行の職務であり、資格なき集会の知るところではない。有能な政とは、不穏分子が盗んだ紙を手に言い立てる筋書きを先んじて封じるものだ。"
       },
       "fx": { "default": { "reverb": 0.15 } }
+    },
+    "captain-kaji": {
+      "name": "Captain Kaji",
+      "brief": "Salt-scarred harbor captain and hook-and-crane commander at Sodegaura. Gruff low-mid voice; brusque port discipline that treats people as manifest cargo.",
+      "reference": {
+        "en": { "voice": "am_adam", "lang": "a", "pitch": -1.5 },
+        "ja": { "voice": "jm_kumo", "lang": "j", "pitch": -2.0 }
+      },
+      "referenceText": {
+        "en": "The lantern boat missed its assigned inspection window. Move every passenger into sealed holding and brace the crane brake before the tide turns.",
+        "ja": "提灯船は指定の検分刻限を過ぎた。乗客はすべて封鎖倉へ移せ。潮が変わる前に荷揚げ機の歯止めを掛けろ。"
+      },
+      "fx": { "default": { "reverb": 0.16, "drive": 0.08 } }
+    },
+    "widow-of-fog": {
+      "name": "Widow-of-Fog",
+      "brief": "Spectral mourning tide-phase ghost gathered from names scratched off ship manifests. Hollow, airy cadence carried on harbor fog and receding water.",
+      "reference": {
+        "en": { "voice": "af_sky", "lang": "a", "pitch": -1.0 },
+        "ja": { "voice": "jf_tebukuro", "lang": "j", "pitch": -1.5 }
+      },
+      "referenceText": {
+        "en": "The ship's ledger crossed out every drowned name before the reef cleared. Listen to the rising water; we still answer when the harbor forgets.",
+        "ja": "船の帳面は、暗礁が晴れる前に沈んだ名をすべて削り消した。満ちる潮の音を聴きなさい。港が忘れても、私たちはまだ応えています。"
+      },
+      "fx": {
+        "default": { "pitch": -0.5, "reverb": 0.52 },
+        "low-tide": { "pitch": -1.0, "reverb": 0.36 }
+      }
+    },
+    "furnace-abbot": {
+      "name": "Furnace Abbot",
+      "brief": "Booming kiln-hall zealot and forge command construct guarding the black-alloy archive. Deep chesty voice with metallic forge reverb.",
+      "reference": {
+        "en": { "voice": "am_fenrir", "lang": "a", "pitch": -2.0 },
+        "ja": { "voice": "jm_kumo", "lang": "j", "pitch": -3.5 }
+      },
+      "referenceText": {
+        "en": "The archive recognizes its interpreter. Stand within the kiln seal and your old errors will be forged back into obedience. The court is the only record that survives you.",
+        "ja": "書庫は通訳者を記憶している。窯の印の内側に立てば、かつての過ちも再び服従へと鍛え直される。お前たちの後に残る記録は、公儀ただ一つだ。"
+      },
+      "fx": {
+        "default": { "pitch": -1.5, "sub": 0.22, "reverb": 0.44, "drive": 0.12 },
+        "cooled": { "pitch": -0.5, "sub": 0.08, "reverb": 0.24 }
+      }
+    },
+    "bell-warden-chiyo": {
+      "name": "Bell Warden Chiyo",
+      "brief": "Precise, severe bell-tower warden overseeing the aqueduct chain countdown. Clipped cold cadence; treats rescue timing as a mechanical schedule.",
+      "reference": {
+        "en": { "voice": "af_sarah", "lang": "a", "pitch": -0.5 },
+        "ja": { "voice": "jf_alpha", "lang": "j", "pitch": -1.5 }
+      },
+      "referenceText": {
+        "en": "Three links remain on the aqueduct wheel. Step out of sequence and the chain drops on schedule. Sentiment does not slow iron.",
+        "ja": "水路の滑車に残る鎖は三節。手順を誤れば、鎖は定刻どおり落ちます。感傷で鉄は遅れません。"
+      },
+      "fx": { "default": { "reverb": 0.24 } }
     }
   }
 }

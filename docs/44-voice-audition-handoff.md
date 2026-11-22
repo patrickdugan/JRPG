@@ -1,6 +1,6 @@
 # Voice audition ledger and render handoff
 
-The developer Voice Lab (`game/voice-lab.html`) is the listening and acceptance desk for the synthetic **Dawn at the Observatory** prototype. It uses the authored voice manifest; the canonical English and Japanese script remains with the game content. The same review workflow can be used for future Gemini and locally rendered batches once their manifests are integrated.
+The developer Voice Lab (`game/voice-lab.html`) is the listening and acceptance desk for the synthetic voice prototype suites (`last-command`, `cast-auditions`, `battle-barks`, and `trio-highlights` across all 14 speaking roles; see [`docs/57-voice-cast-and-campaign-playback.md`](57-voice-cast-and-campaign-playback.md)). It uses the authored voice manifest; the canonical English and Japanese script remains with the game content. The same review workflow can be used for future Gemini and locally rendered batches once their manifests are integrated.
 
 ## Reviewer workflow
 
@@ -19,7 +19,7 @@ The standalone browser check at `game/tools/voice-review-browser-smoke.py` tests
 Run locally:
 
 ```bash
-node --test game/tests/voice-review.test.mjs
+node --test game/tests/voice-review.test.mjs game/tests/dialogue-voice-runtime.test.mjs game/tests/battle-bark-runtime.test.mjs
 python -m pip install playwright
 python -m playwright install chromium
 python game/tools/voice-review-browser-smoke.py

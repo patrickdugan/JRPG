@@ -45,6 +45,7 @@ import {
   resolveCompactActionKeyUp,
 } from './action-input-grammar.mjs';
 import { getDefaultBrowserStorage } from './browser-storage.mjs';
+import { createBattleBarkRuntime } from './battle-bark-runtime.mjs';
 import { getBattleStageArt } from './battle-stage-art.mjs';
 import {
   ACTION_STAGE_BACKDROP_SUITE,
@@ -336,6 +337,18 @@ elements.canvas.dataset.sliceMode = String(sliceMode);
 elements.canvas.dataset.canonicalMode = String(canonicalMode);
 elements.canvas.dataset.introRequired = String(introRequired);
 elements.canvas.dataset.introReady = String(encounterStarted);
+
+const battleBarkRuntime = createBattleBarkRuntime({
+  storage: canonicalStorage,
+  resolveAttackSlot: (actorId, attackId) => (
+    getActionCampaignAttackChoices(session, actorId).findIndex((choice) => choice.id === attackId)
+  ),
+  onStateChange: (state) => {
+    elements.canvas.dataset.battleBarkState = state.statusKind;
+    if (state.lastBarkId) elements.canvas.dataset.lastBattleBarkId = state.lastBarkId;
+  },
+});
+elements.canvas.dataset.battleBarkState = battleBarkRuntime.getState().statusKind;
 elements.stageLabel.textContent = canonicalMode ? 'SIDE-VIEW BATTLE STAGE' : 'SIDE-VIEW TRAINING STAGE';
 elements.partyTitle.textContent = BATTLE_FIGHTER_ACTOR_IDS.length > 1 ? 'Tag fighters' : 'Solo fighter';
 elements.partyReadout.setAttribute('aria-label', 'Combat party');
@@ -592,6 +605,7 @@ function beginEncounter() {
   playtimeLastSample = now;
   playtimeLastActivity = now;
   const snapshot = snapshotActionCampaignBattle(session);
+  void battleBarkRuntime.playEncounterIntro(snapshot);
   announce(`${session.encounter.name} begins. Movement is live.`);
   renderDom(snapshot);
   draw(snapshot, 0);
@@ -628,11 +642,17 @@ function queueManeuver(maneuverId) {
 function queueTagSwitch(direction = 1) {
   if (!encounterStarted || hidden || session.outcome) return;
   const result = switchActionCampaignActor(session, direction);
+  const snapshot = snapshotActionCampaignBattle(session);
   if (!result.ok) {
     const wait = result.remainingMs > 0 ? ` (${result.remainingMs} ms)` : '';
     announce(`Tag unavailable: ${String(result.reason).replaceAll('-', ' ')}${wait}.`);
+  } else {
+    void battleBarkRuntime.handleCombatEvents(
+      [{ type: 'control-switch', actorId: result.actorId ?? snapshot.kernel.controlledActorId }],
+      snapshot,
+    );
   }
-  renderDom(snapshotActionCampaignBattle(session));
+  renderDom(snapshot);
 }
 
 function controlledActorIsGrounded() {
@@ -738,6 +758,7 @@ function describeEvent(event, snapshot) {
 }
 
 function consumeSnapshotEvents(snapshot, inputRequest = null) {
+  void battleBarkRuntime.handleCombatEvents(snapshot.recentEvents, snapshot);
   for (const event of snapshot.recentEvents) {
     announce(describeEvent(event, snapshot));
     if (event.type === 'hit') {
@@ -2546,6 +2567,10 @@ function restart() {
   elements.continueCampaign.hidden = true;
   elements.continueCampaign.setAttribute('aria-disabled', 'true');
   clearHeld();
+  battleBarkRuntime.resetEncounter();
+  if (encounterStarted) {
+    void battleBarkRuntime.playEncounterIntro(snapshotActionCampaignBattle(session));
+  }
   announce(`Restarted ${session.encounter.name}.`);
   elements.canvas.focus();
 }
@@ -2779,6 +2804,10 @@ announce(introRequired
       : `${session.encounter.name} loaded. This is an isolated training session.`
     : initial.objective.message);
 renderDom(initial);
+if (encounterStarted) {
+  void battleBarkRuntime.playEncounterIntro(initial);
+}
+window.addEventListener('pagehide', () => battleBarkRuntime.destroy());
 requestAnimationFrame(frame);
 
 globalThis.__ACTION_CAMPAIGN_BATTLE__ = Object.freeze({

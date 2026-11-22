@@ -23,8 +23,10 @@ import re
 import time
 import unicodedata
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import numpy as np
+if TYPE_CHECKING:
+    import numpy as np
 
 SUITE = Path(__file__).resolve().parent
 REPO = SUITE.parents[2]
@@ -34,6 +36,8 @@ TARGET_LUFS = -18.0
 SCENE_SPECS = (
     ("last-command", "scene-last-command.json"),
     ("cast-auditions", "scene-cast-auditions.json"),
+    ("battle-barks", "scene-battle-barks.json"),
+    ("trio-highlights", "scene-trio-highlights.json"),
 )
 
 
@@ -46,6 +50,10 @@ def line_base_seed(line_id: str) -> int:
         return int(line_id) * 100
     if line_id.startswith("ca-") and line_id[3:].isdigit():
         return 10_000 + int(line_id[3:]) * 100
+    if line_id.startswith("bb-") and line_id[3:].isdigit():
+        return 20_000 + int(line_id[3:]) * 100
+    if line_id.startswith("th-") and line_id[3:].isdigit():
+        return 30_000 + int(line_id[3:]) * 100
     digits = int(re.sub(r"\D", "", line_id) or "0")
     prefix = sum(ord(ch) for ch in re.sub(r"\d", "", line_id))
     return (prefix * 100 + digits) * 100
@@ -86,6 +94,7 @@ def render_reference(character_id: str, character: dict, lang: str, device: str)
     # Kokoro is needed only to render a missing reference, so a machine that
     # just performs lines can skip it (misaki[ja] builds pyopenjtalk from source).
     import librosa
+    import numpy as np
     import soundfile as sf
     from kokoro import KPipeline
 
@@ -160,6 +169,8 @@ class Transcriber:
         encoder.forward = forward_without_attentions
 
     def __call__(self, audio: np.ndarray, sample_rate: int, lang: str, *, words: bool = False):
+        import numpy as np
+
         result = self.pipe(
             {"raw": audio.astype(np.float32), "sampling_rate": sample_rate},
             generate_kwargs={"language": {"en": "english", "ja": "japanese", "it": "italian"}[lang], "task": "transcribe"},
@@ -179,6 +190,8 @@ def speech_token_budget(text: str, lang: str) -> int:
 
 def trim_overrun(audio: np.ndarray, sample_rate: int, chunks: list[dict], script: str, lang: str) -> tuple[np.ndarray, bool]:
     """Cut a babbled tail: keep the shortest transcript prefix that best matches the script."""
+    import numpy as np
+
     if not chunks:
         return audio, False
     target = normalise_text(script, lang)
@@ -206,6 +219,7 @@ def trim_overrun(audio: np.ndarray, sample_rate: int, chunks: list[dict], script
 
 def prosody_metrics(audio: np.ndarray, sample_rate: int) -> dict:
     import librosa
+    import numpy as np
 
     f0, voiced, _ = librosa.pyin(audio, fmin=60, fmax=500, sr=sample_rate, frame_length=1024)
     f0 = f0[voiced] if voiced is not None else np.array([])
@@ -223,6 +237,8 @@ def prosody_metrics(audio: np.ndarray, sample_rate: int) -> dict:
 # ---------------------------------------------------------------------- fx
 
 def hall_impulse(sample_rate: int, seconds: float = 2.2, seed: int = 7) -> np.ndarray:
+    import numpy as np
+
     rng = np.random.default_rng(seed)
     length = int(sample_rate * seconds)
     t = np.arange(length) / sample_rate
@@ -237,6 +253,7 @@ def hall_impulse(sample_rate: int, seconds: float = 2.2, seed: int = 7) -> np.nd
 
 def apply_fx(audio: np.ndarray, sample_rate: int, fx: dict) -> np.ndarray:
     import librosa
+    import numpy as np
     from scipy.signal import butter, fftconvolve, sosfilt
 
     dry = audio.astype(np.float32)
@@ -258,6 +275,7 @@ def apply_fx(audio: np.ndarray, sample_rate: int, fx: dict) -> np.ndarray:
 
 
 def loudness_normalise(audio: np.ndarray, sample_rate: int) -> np.ndarray:
+    import numpy as np
     import pyloudnorm
 
     meter = pyloudnorm.Meter(sample_rate)
@@ -290,9 +308,24 @@ def default_beat_for_line(scene_id: str, line: dict) -> str | None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--langs", default="en,ja")
-    parser.add_argument("--scenes", default="all", help="Comma-separated scene ids (last-command,cast-auditions) or 'all'.")
+    parser.add_argument(
+        "--scenes",
+        default="all",
+        help="Comma-separated scene ids (last-command,cast-auditions,battle-barks,trio-highlights) or 'all'.",
+    )
     parser.add_argument("--lines", default="", help="Comma-separated line ids; default all in selected scenes.")
     parser.add_argument("--takes", type=int, default=3)
+    parser.add_argument(
+        "--adaptive",
+        action="store_true",
+        help="Stop generating extra takes for a line once a take reaches --cer-threshold.",
+    )
+    parser.add_argument(
+        "--cer-threshold",
+        type=float,
+        default=0.05,
+        help="Character error rate ceiling that triggers early stopping when --adaptive is set (default: 0.05).",
+    )
     parser.add_argument("--device", default="auto", choices=["auto", "cuda", "cpu"])
     parser.add_argument("--min-free-gb", type=float, default=6.0)
     parser.add_argument("--whisper", default="openai/whisper-large-v3-turbo")
@@ -303,6 +336,7 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="Regenerate lines that already have current output.")
     args = parser.parse_args()
 
+    import numpy as np
     import soundfile as sf
     import torch
 
@@ -327,7 +361,11 @@ def main() -> int:
 
     device = pick_device(args.device, args.min_free_gb)
     asr_device = device if args.asr_device == "same" else args.asr_device
-    print(f"device={device} asr={asr_device} langs={langs} lines={len(selected_records)} takes={args.takes}", flush=True)
+    print(
+        f"device={device} asr={asr_device} langs={langs} lines={len(selected_records)} "
+        f"takes={args.takes} adaptive={args.adaptive} cer_threshold={args.cer_threshold}",
+        flush=True,
+    )
 
     needed_speakers = sorted({line["speaker"] for _, line in selected_records}) if not args.references_only else sorted(cast.keys())
     references = {
@@ -372,7 +410,7 @@ def main() -> int:
             "lineIds": [line["id"] for line in scene_doc["lines"]],
         })
 
-    # Ensure existing rendered lines carry sceneId / beatId metadata even when skipped.
+    # Ensure existing rendered lines carry sceneId / beatId / bark metadata even when skipped.
     for scene_id, line in all_line_records:
         existing_locales = manifest.get("lines", {}).get(line["id"], {})
         beat_id = default_beat_for_line(scene_id, line)
@@ -381,6 +419,12 @@ def main() -> int:
                 locale_entry.setdefault("sceneId", scene_id)
                 if beat_id:
                     locale_entry["beatId"] = beat_id
+                if line.get("barkType"):
+                    locale_entry["barkType"] = line["barkType"]
+                if line.get("actorId"):
+                    locale_entry["actorId"] = line["actorId"]
+                if line.get("phaseId"):
+                    locale_entry["phaseId"] = line["phaseId"]
 
     manifest.update({
         "id": "voice-prototype-v1:last-command",
@@ -442,6 +486,9 @@ def main() -> int:
                 takes.append({"take": take, "seed": seed, "cer": round(cer, 3), "heard": heard, "trimmed": trimmed,
                               "tokenBudget": budget["tokens"], "seconds": generated_seconds, "audio": audio})
                 print(f"  {lang} {line['id']} {speaker} take {take}: cer={cer:.3f} trimmed={trimmed} ({generated_seconds}s) heard={heard!r}", flush=True)
+                if args.adaptive and cer <= args.cer_threshold:
+                    print(f"  {lang} {line['id']} {speaker}: adaptive early-stop at take {take} (cer={cer:.3f} <= {args.cer_threshold})", flush=True)
+                    break
             best = min(takes, key=lambda item: (item["cer"], abs(len(item["audio"]) / model.sr - 0.07 * len(text))))
             fx = cast[speaker].get("fx", {}).get(line.get("fx", "default"), cast[speaker].get("fx", {}).get("default", {}))
             performed = apply_fx(best["audio"], model.sr, fx)
@@ -457,6 +504,9 @@ def main() -> int:
                 "speaker": speaker,
                 "sceneId": scene_id,
                 **({"beatId": beat_id} if beat_id else {}),
+                **({"actorId": line["actorId"]} if line.get("actorId") else {}),
+                **({"barkType": line["barkType"]} if line.get("barkType") else {}),
+                **({"phaseId": line["phaseId"]} if line.get("phaseId") else {}),
                 "section": line["section"],
                 "direction": line["direction"],
                 "text": text,

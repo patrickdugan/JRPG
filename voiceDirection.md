@@ -28,8 +28,12 @@ Working notes for character voices in English and Japanese. The current prototyp
 | **Genta** | Steady engineer | Reports, positions, load paths. Calm makes the danger credible. | Plain, low-key. |
 | **Lady Enma of Ash** | Former court entertainer; theatrical, fan-snap timing | Every line staged for an audience, even when alone. Three masks, three temperatures. | Elegant court speech with performative flourishes. |
 | **Magistrate Ujiro Arata** | Bureaucratic authority over cowardice | Paperwork as violence; brave only when the room agrees. | Officious formal speech that frays under pressure. |
+| **Captain Kaji** | Salt-scarred harbor captain; gruff low-mid voice | Brusque port discipline; treats passengers and cargo as one manifest. | Coarse harbor command (俺 / ろ imperatives). |
+| **Widow-of-Fog** | Spectral mourning ghost; hollow, airy cadence | Drifts on tide rhythm; quiet sorrow over erased manifest names. | Soft polite mourning tone carried through reverb. |
+| **Furnace Abbot** | Booming kiln-hall zealot; deep chesty forge resonance | Metallic authority; speaks of obedience as casting iron. | Archaic, booming kiln-hall decrees. |
+| **Bell Warden Chiyo** | Severe bell-tower warden; clipped cold cadence | Treats rescue timing as a mechanical schedule; zero warmth. | Crisp, frigid です/ます precision. |
 
-Only Kurozane, Mateus, Nikola, Ren, and Miyo are in the current prototype. The other briefs are starting points for later scenes.
+All 14 roles (7 playable party members + 7 speaking named bosses) are defined in `assets/audio/voice-prototype-v1/cast.json`. Four scene scripts are authored: `scene-last-command.json` (27 lines, rendered EN+JA), `scene-cast-auditions.json` (10 lines), `scene-battle-barks.json` (90 combat barks across all 14 roles), and `scene-trio-highlights.json` (80 verbatim dramatic lines including all 30 remaining Shogun Kurozane lines). See [`docs/57-voice-cast-and-campaign-playback.md`](docs/57-voice-cast-and-campaign-playback.md) for the scoped GPU budget and opt-in playback contracts.
 
 ## The final confrontation: intensity map
 
@@ -116,9 +120,9 @@ The generator is resumable: it skips any line whose output file exists and whose
 5. Render. On first run this downloads Chatterbox Multilingual, Kokoro, and Whisper large-v3-turbo into the Hugging Face cache:
    ```powershell
    $env:PYTHONIOENCODING = "utf-8"
-   .\.venv-voice\Scripts\python assets\audio\voice-prototype-v1\build_voice_prototype.py --langs en,ja --takes 3 --device cuda
+   .\.venv-voice\Scripts\python assets\audio\voice-prototype-v1\build_voice_prototype.py --langs en,ja --scenes cast-auditions,battle-barks,trio-highlights --takes 3 --adaptive --cer-threshold 0.05 --device cuda
    ```
-   Use `--takes 3` on GPU so the ASR check can pick the cleanest take. Use `--lines 18,22 --force` to retake specific lines.
+   Use `--takes 3 --adaptive --cer-threshold 0.05` on GPU so the ASR check early-stops as soon as a clean take lands (~2.5× faster than fixed 3-take passes; ~1.6–2.6 GPU-h EN or ~3.1–4.6 GPU-h EN+JA for the 180 queued lines). Use `--scenes last-command --lines 18,22 --force` to retake specific lines.
 
    On a GPU with less than about 6 GB of VRAM, add `--asr-device cpu` so Whisper runs on the CPU and Chatterbox keeps the GPU to itself.
 6. Bring the results back: commit `game/assets/audio/voice-prototype-v1/` (OGG files and `manifest.json`) on the branch, or copy that folder over.
@@ -136,9 +140,8 @@ For each line, on the listening page:
 
 ## Open work
 
-- All 27 lines are rendered in both languages. English 01–15, 18, and 25 are single-take renders from the first pass; retake them with `--takes 3` if a cleaner take is wanted.
+- All 27 `last-command` lines are rendered in both languages. English 01–15, 18, and 25 are single-take renders from the first pass; retake them with `--takes 3 --adaptive` if a cleaner take is wanted.
 - Japanese line 11 (Mateus): every take drops the か of 空っぽ (Whisper hears あっぽ). The kept take scores 8.7% but the word is still wrong. Try a higher CFG for this line, or a different word in the draft translation.
-- Native Japanese review of the draft translation and of every Japanese take. Listen first to 03 (その中で heard as その後で), 10 (アヴェラール heard as アムラール), and 11.
-- Per-line pauses in the eventual dialogue runner (the listening page already reads them from the manifest).
-- An opt-in voice setting in the Campaign dialogue runner, with subtitles always on.
-- Extend the cast to Aya, Kiku, Genta, Lady Enma, and Ujiro for their key scenes.
+- Native Japanese review of the draft translations (`last-command`, `cast-auditions`, `battle-barks`, `trio-highlights`) and of every Japanese take. Listen first to 03 (その中で heard as その後で), 10 (アヴェラール heard as アムラール), and 11.
+- GPU batch render of the 180 queued clips (`cast-auditions` 10 + `battle-barks` 90 + `trio-highlights` 80) once the RTX 5080 is free; see [`docs/57-voice-cast-and-campaign-playback.md`](docs/57-voice-cast-and-campaign-playback.md) for copy-paste commands.
+- Opt-in Campaign dialogue playback (`game/dialogue-voice-runtime.mjs`) and opt-in Action Battle bark playback (`game/battle-bark-runtime.mjs`) are wired and default-OFF under `bbc.dialogueVoice.v1` with subtitles always on.
