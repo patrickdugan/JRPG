@@ -35,3 +35,7 @@ Every candidate remains tagged `visualApproval: pending` even after importing. T
 ## Whole cast progress
 
 There are seven named boss review candidates across available ZIP packages: Captain Kaji, Widow of Fog, Furnace Abbot, Ujiro, Chiyo, Enma and Yearless Bell. Four have individual detailed six-pose sources; three use lower-resolution comparison-board crops. Full production-grade animation and visual approval remain separate milestones. The Roster Keystone records the canonical counts of 62 total identities, including 7 playable, 28 regular enemies, 7 named bosses, 4 Kurozane forms and 16 civilian roles.
+
+## Superseding source note: Bell Warden Chiyo
+
+The lower-resolution Chiyo comparison-crop candidate described in this original November 21 four-boss intake was superseded by the standalone 1536×1024 Chiyo painted sheet. The new package is `JRPG_HD_Boss_Chiyo_Premium_v2.zip` and has source SHA-256 `d0c2bd8ba9035bfae2c1c318b0b7b2198bddf32699290361bf3057610f36345e`; its updated six-key atlas SHA-256 is `729edb96c783409b59ee7187edb035f45a2ae5fb9cce7685bd42297bd26d968c`. The original image binaries remain in the separate downloadable archive pending authenticated Git import. Lady Enma and Yearless Bell are the two remaining standalone premium-redraw priorities.
