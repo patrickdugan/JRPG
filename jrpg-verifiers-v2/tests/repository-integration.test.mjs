@@ -26,12 +26,14 @@ test("the current JRPG adapter remains structurally valid and honest about open 
 
   assert.equal(report.structurallyValid, true);
   assert.equal(report.nodes.length, 32);
-  assert.equal(report.counts.verified, 28);
+  assert.equal(report.counts.verified, 29);
   assert.equal(report.counts["optional-missing"], 1);
-  assert.equal(report.counts.partial, 3);
-  assert.deepEqual(report.requiredIncomplete, ["production.staffing", "qa.final-playtests", "qa.release-readiness"]);
+  assert.equal(report.counts.partial, 2);
+  assert.equal(report.counts.invalid ?? 0, 0);
+  assert.equal(report.nodes.find((node) => node.id === "production.staffing").status, "verified");
+  assert.deepEqual(report.requiredIncomplete, ["qa.final-playtests", "qa.release-readiness"]);
   assert.equal(report.nodes.find((node) => node.id === "presentation.video-teaser").status, "optional-missing");
-  assert.deepEqual(report.nodes.find((node) => node.id === "qa.release-readiness").blockedBy, ["qa.final-playtests", "production.staffing"]);
+  assert.deepEqual(report.nodes.find((node) => node.id === "qa.release-readiness").blockedBy, ["qa.final-playtests"]);
 });
 
 test("all shipped JSON manifests and schemas parse", async () => {

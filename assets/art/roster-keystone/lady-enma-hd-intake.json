@@ -4,18 +4,18 @@
   "displayName": "Lady Enma of Ash",
   "candidateStatus": "review-candidate",
   "reviewStatus": "manual-visual-approval-pending",
-  "sourceProvenance": "comparison-board-128px-poses",
+  "sourceProvenance": "individual-rgb-1536x1024-keyed-background",
   "sourceResolution": [
     1536,
     1024
   ],
   "figureSourcePixels": [
-    128,
-    128
+    512,
+    512
   ],
-  "sourceSha256": "3a3fda4710918442cee1e4387b00ef1342442d582d8ebdf003d37a9d66fc42ed",
-  "sixKeyAtlasSha256": "20ab791d49b4aae80cf1a373923752775d70513f2057a36a166fe42c9a446c36",
-  "sourceFile": "sources/comparison-board-original.png",
+  "sourceSha256": "4f9a59824873f9a2303ad035e46ed05b3af3d0d89f109b5b45347fa45f91cd51",
+  "sixKeyAtlasSha256": "7e96c5eb829def0e7ffc6e62668afc8c0879e3818bd7a1aaa5c5e0f75da86ceb",
+  "sourceFile": "sources/lady-enma-six-poses-original.png",
   "sixKeyAtlas": "assets/sheets/lady-enma.png",
   "poses": [
     "idle",
@@ -35,12 +35,18 @@
     "clipCount": 10,
     "frameCount": 240,
     "sourceDerivedDeformation": true,
-    "decodedFrameHashesVerifiedLocally": true
+    "decodedFrameHashesVerifiedLocally": true,
+    "decodedFrameHashesVerified": true
   },
-  "package": "JRPG_HD_Boss_lady_enma_v1.zip",
-  "batch": "JRPG_HD_Boss_FinalFour_20261121.zip",
-  "binarySourceInGit": false,
+  "package": "JRPG_HD_Boss_lady_enma_v2.zip",
+  "batch": "3-boss-chunked-git-import-20261121",
+  "binarySourceInGit": true,
   "engineIntegration": "optional-hd-mode-after-import",
-  "qualityNote": "Painted figures extracted from a small comparison poster, each ~128px wide; upscaling supplies no new details. Standalone premium painted source pending.",
-  "gameplayAuthority": false
+  "qualityNote": "Standalone premium-resolution painted source; Standalone premium-resolution painted source; charcoal background matting and 24-frame deformation cels still need visual approval.",
+  "gameplayAuthority": false,
+  "binaryArchiveInGit": true,
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }

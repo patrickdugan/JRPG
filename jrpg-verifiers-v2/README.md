@@ -96,10 +96,9 @@ To change the production model, edit the DAG rather than the verifier. Keep ever
 
 ## Current repository read
 
-The included adapter currently reports 28 verified nodes, one optional missing teaser, and three partial required nodes:
+The included adapter currently reports 29 verified nodes (including `production.staffing` via `docs/56-staffing-and-contractor-plan.md`), one optional missing teaser, and two partial required nodes:
 
-- staffing and contractor planning;
-- current-build human playtest evidence;
-- release-readiness synthesis, which remains blocked by both of the above.
+- current-build human playtest evidence (`qa.final-playtests`);
+- release-readiness synthesis (`qa.release-readiness`), which remains blocked by `qa.final-playtests`.
 
-That is the intended result: substantial production evidence is recognized, while plans and automated receipts are not promoted into human validation.
+That is the intended result: substantial production evidence and concrete contractor staffing are recognized, while plans and automated receipts are not promoted into human validation or external cultural sign-off.

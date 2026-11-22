@@ -29,7 +29,7 @@
   "package": "JRPG_HD_Boss_FurnaceAbbot_v1.zip",
   "packageSize": 11660729,
   "packageSha256": "746a009bdd428f377b846519cb3dc40f476d043f27bd1ad9a02550f3a16110da",
-  "binarySourceInGit": false,
+  "binarySourceInGit": true,
   "sourceDistribution": "conversation ZIP",
   "matteStatus": "provisional checkerboard removal; visual edge cleanup pending",
   "engineIntegration": "optional HD body when package is installed; original boss clips remain default",
@@ -38,5 +38,9 @@
     "idempotent install",
     "preexisting asset preservation",
     "conflicting art rejection"
-  ]
+  ],
+  "gitImport": {
+    "status": "candidate-imported",
+    "visualApproval": "pending"
+  }
 }

@@ -31,12 +31,13 @@ test('four canonical names have independent six-pose and 240-cell receipts',()=>
     assert.ok(fs.existsSync(path.join(ROOT,'game/assets/art/boss-animation-suite-v2',id+'.json')),id);
   }
 });
-test('low-resolution sources are labeled and never promoted to individual painted masters',()=>{
-  assert.equal(readIntake('ujiro').figureSourcePixels[0],512);
-  for(const id of IDs.filter(x=>x!=='ujiro')){
-    assert.equal(readIntake(id).figureSourcePixels[0],128,id);
-    assert.equal(ledger.identities.find(x=>x.id===id).hdBossBodyCandidate.sourceQuality,'small-comparison-extraction');
+test('all four final boss sources now have individual HD source candidates',()=>{
+  for(const id of IDs){
+    const intake=readIntake(id);
+    assert.equal(intake.figureSourcePixels[0],512,id);
+    assert.equal(ledger.identities.find(x=>x.id===id).hdBossBodyCandidate.sourceQuality,'individual-high-resolution');
   }
+  assert.match(readIntake('yearless-bell').sourceProvenance,/checker-matted/);
 });
 test('total new review batch is exactly 40 clips and 960 frames',()=>{
   assert.deepEqual(ledger.knownPackage.bossFinalFour.motionClips,40);

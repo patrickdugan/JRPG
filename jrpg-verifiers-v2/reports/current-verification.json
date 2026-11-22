@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "kind": "jrpg-verification-report",
-  "generatedAt": "2026-07-28T19:13:18.856Z",
+  "generatedAt": "2026-11-21T14:22:52.884Z",
   "environment": {
     "id": "jrpg-game-design-verifiers-v2",
     "directory": "C:\\projects\\JRPG\\jrpg-verifiers-v2"
@@ -52,12 +52,11 @@
   "ok": false,
   "structurallyValid": true,
   "counts": {
-    "verified": 28,
+    "verified": 29,
     "optional-missing": 1,
-    "partial": 3
+    "partial": 2
   },
   "requiredIncomplete": [
-    "production.staffing",
     "qa.final-playtests",
     "qa.release-readiness"
   ],
@@ -147,7 +146,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 4233,
+        "words": 4271,
         "kinds": [
           "markdown"
         ]
@@ -160,9 +159,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 28968,
-          "words": 4233,
-          "sha256": "846b8f7db4e2a8ded7767373e9d0a58be436787f41ed69052b43415e1460f92f",
+          "bytes": 29284,
+          "words": 4271,
+          "sha256": "e3323c8af355c9a81ed2ff218ef22c15d8795c9f2a98bc64a6c98e24f49643b7",
           "errors": []
         }
       ],
@@ -422,7 +421,7 @@
       },
       "metrics": {
         "artifacts": 1,
-        "words": 3412,
+        "words": 4994,
         "kinds": [
           "markdown"
         ]
@@ -435,9 +434,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 25678,
-          "words": 3412,
-          "sha256": "c4676b67501e1ac5002bda7677d967b72079ab3b221cee7235d13624f68c8dbb",
+          "bytes": 38052,
+          "words": 4994,
+          "sha256": "23413c3df2866ac7b6af4551864676000e391a94cdb997cf169fc7f8b745dcc0",
           "errors": []
         }
       ],
@@ -479,7 +478,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3020,
+        "words": 3156,
         "kinds": [
           "image",
           "markdown"
@@ -505,9 +504,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 21460,
-          "words": 3020,
-          "sha256": "c35ddf67203c55857d20919c16bc2ec477c5aa432527c0c88525738a09e8196e",
+          "bytes": 22534,
+          "words": 3156,
+          "sha256": "b84066e5ce403cb2f28cf45afcc2693d88bf30b7893f322e54658fc180e9799d",
           "errors": []
         }
       ],
@@ -547,7 +546,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3020,
+        "words": 3156,
         "kinds": [
           "image",
           "markdown"
@@ -573,9 +572,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 21460,
-          "words": 3020,
-          "sha256": "c35ddf67203c55857d20919c16bc2ec477c5aa432527c0c88525738a09e8196e",
+          "bytes": 22534,
+          "words": 3156,
+          "sha256": "b84066e5ce403cb2f28cf45afcc2693d88bf30b7893f322e54658fc180e9799d",
           "errors": []
         }
       ],
@@ -615,7 +614,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3373,
+        "words": 3553,
         "kinds": [
           "markdown",
           "source"
@@ -629,9 +628,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 3065,
-          "words": 353,
-          "sha256": "5797d7bf4f8962708271d2fc1dd1c1d6563de1e1a893d951a59f32fdb9672023",
+          "bytes": 3450,
+          "words": 397,
+          "sha256": "66e438c4b21ba4e80e077c92ed35523a3c6a59ab67b1a6c362edc63aa5d5c74e",
           "errors": []
         },
         {
@@ -641,9 +640,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 21460,
-          "words": 3020,
-          "sha256": "c35ddf67203c55857d20919c16bc2ec477c5aa432527c0c88525738a09e8196e",
+          "bytes": 22534,
+          "words": 3156,
+          "sha256": "b84066e5ce403cb2f28cf45afcc2693d88bf30b7893f322e54658fc180e9799d",
           "errors": []
         }
       ],
@@ -708,8 +707,8 @@
       "kind": "document",
       "required": true,
       "templateAnchor": "Contractors/Staff",
-      "declaredStatus": "partial",
-      "status": "partial",
+      "declaredStatus": "ready",
+      "status": "verified",
       "dependsOn": [
         "design.vision",
         "design.technical-gdd",
@@ -742,23 +741,35 @@
         ]
       },
       "metrics": {
-        "artifacts": 1,
-        "words": 1564,
+        "artifacts": 2,
+        "words": 4740,
         "kinds": [
           "markdown"
         ]
       },
       "artifacts": [
         {
-          "path": "docs/00-production-roadmap.md",
-          "role": "production outline, not a committed staffing plan",
+          "path": "docs/56-staffing-and-contractor-plan.md",
+          "role": "staffing, contractor sequence, decision ownership, and review-gate plan",
           "kinds": [
             "markdown"
           ],
           "exists": true,
-          "bytes": 11612,
-          "words": 1564,
-          "sha256": "d53cd7d016ebc554e7e54a2f52abfc59ca19376ebcdd1a9fcc9e43e35d1cd911",
+          "bytes": 26029,
+          "words": 3119,
+          "sha256": "63ea89121d6845b999dc3bbce52216ff4e1f622eab9e8c8ab20e12fd6dea8737",
+          "errors": []
+        },
+        {
+          "path": "docs/00-production-roadmap.md",
+          "role": "milestone execution order and role ownership",
+          "kinds": [
+            "markdown"
+          ],
+          "exists": true,
+          "bytes": 12000,
+          "words": 1621,
+          "sha256": "11c2b07bc4f8900939d441eea6202d89a53d473ed7faab43935c9dad8095757e",
           "errors": []
         }
       ],
@@ -1179,7 +1190,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 4749,
+        "words": 5369,
         "kinds": [
           "data",
           "markdown"
@@ -1193,9 +1204,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 30837,
-          "words": 4452,
-          "sha256": "ba2fd7ff56d649ab2433d34189fb88dfc1d0e8f5885e22034932ec840c45eb86",
+          "bytes": 34924,
+          "words": 5072,
+          "sha256": "00330dc2140900a4728bec5655d997a61f3c9a9b42f5cf1cdf50ebf4ee000269",
           "errors": []
         },
         {
@@ -1318,7 +1329,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 16655,
+        "words": 17213,
         "kinds": [
           "markdown",
           "source"
@@ -1344,9 +1355,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 174732,
-          "words": 15200,
-          "sha256": "c55e76b9f49789e0c3e29c27c4e4ecca07cd2c051c5fc08feb191458b00b4a3a",
+          "bytes": 180904,
+          "words": 15758,
+          "sha256": "f6b1eecf2bf32877776d90815e58599f6043b1fa6bf35f0610219b1e5da8643e",
           "errors": []
         }
       ],
@@ -1387,7 +1398,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 15899,
+        "words": 15901,
         "kinds": [
           "markdown",
           "source"
@@ -1413,9 +1424,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 144168,
-          "words": 13770,
-          "sha256": "fc765e16844a997ae9ebe853424acaf5aab1913f37c8927edc3d1b84706f8cfc",
+          "bytes": 144202,
+          "words": 13772,
+          "sha256": "643c894b52aacacdeb68dd3d3a1de571696f2c252ec6e5748423a72a04cdb068",
           "errors": []
         }
       ],
@@ -1599,7 +1610,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3412,
+        "words": 4994,
         "kinds": [
           "image",
           "markdown"
@@ -1613,9 +1624,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 25678,
-          "words": 3412,
-          "sha256": "c4676b67501e1ac5002bda7677d967b72079ab3b221cee7235d13624f68c8dbb",
+          "bytes": 38052,
+          "words": 4994,
+          "sha256": "23413c3df2866ac7b6af4551864676000e391a94cdb997cf169fc7f8b745dcc0",
           "errors": []
         },
         {
@@ -1948,7 +1959,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 1847,
+        "words": 1868,
         "kinds": [
           "markdown",
           "source",
@@ -1976,9 +1987,9 @@
             "test"
           ],
           "exists": true,
-          "bytes": 14948,
-          "words": 1497,
-          "sha256": "2c6cbfb20c3b9f1b6ea4bc1d25f3a76dee10625737b8a044ee67bcc8f5ad75b6",
+          "bytes": 15104,
+          "words": 1518,
+          "sha256": "24646981d5ffca80c3abdbd3690ba18e00d90e7b00f88d5766356814e1074028",
           "errors": []
         }
       ],
@@ -2038,7 +2049,7 @@
       },
       "metrics": {
         "artifacts": 2,
-        "words": 3019,
+        "words": 3076,
         "kinds": [
           "markdown"
         ]
@@ -2063,9 +2074,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 11612,
-          "words": 1564,
-          "sha256": "d53cd7d016ebc554e7e54a2f52abfc59ca19376ebcdd1a9fcc9e43e35d1cd911",
+          "bytes": 12000,
+          "words": 1621,
+          "sha256": "11c2b07bc4f8900939d441eea6202d89a53d473ed7faab43935c9dad8095757e",
           "errors": []
         }
       ],
@@ -2280,8 +2291,7 @@
         "production.staffing"
       ],
       "blockedBy": [
-        "qa.final-playtests",
-        "production.staffing"
+        "qa.final-playtests"
       ],
       "contract": {
         "minimumArtifacts": 3,
@@ -2309,7 +2319,7 @@
       },
       "metrics": {
         "artifacts": 8,
-        "words": 10964,
+        "words": 11813,
         "kinds": [
           "data",
           "markdown",
@@ -2325,9 +2335,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 34660,
-          "words": 4578,
-          "sha256": "7c825b3ce50e930d097733f93d76051dc7cb437bb080cce1a89876bc32242aa2",
+          "bytes": 41148,
+          "words": 5282,
+          "sha256": "016d7ce50ab8716ab4b4eb4281bdfe3d1918fcd1920481a158aad676bd4fc327",
           "errors": []
         },
         {
@@ -2373,9 +2383,9 @@
             "markdown"
           ],
           "exists": true,
-          "bytes": 10829,
+          "bytes": 10827,
           "words": 1530,
-          "sha256": "3ed7868407b55b7fba4a8c74613da5c23f4d331302698cca0d76d887d43d11ed",
+          "sha256": "96099b8492c4117c5a0fcfe09833623da8820ed0d217f201125e0b34d52fbc61",
           "errors": []
         },
         {
@@ -2385,9 +2395,9 @@
             "source"
           ],
           "exists": true,
-          "bytes": 5141,
-          "words": 545,
-          "sha256": "bf9c8c4867fcb640056bdf29419003aab202d6def1244cba2f7b93589c2a7b82",
+          "bytes": 6179,
+          "words": 669,
+          "sha256": "f181aa4316856f9ff2bf4e0571032dc8fd2769b067fe8776805feff58307f885",
           "errors": []
         },
         {
@@ -2410,9 +2420,9 @@
             "test"
           ],
           "exists": true,
-          "bytes": 14948,
-          "words": 1497,
-          "sha256": "2c6cbfb20c3b9f1b6ea4bc1d25f3a76dee10625737b8a044ee67bcc8f5ad75b6",
+          "bytes": 15104,
+          "words": 1518,
+          "sha256": "24646981d5ffca80c3abdbd3690ba18e00d90e7b00f88d5766356814e1074028",
           "errors": []
         }
       ],

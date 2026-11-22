@@ -2,11 +2,13 @@
 
 An original, gothic historical-fantasy action JRPG set in a fictionalized early Edo Japan, where a vampiric Shogun turns persecution into a supernatural order. It combines top-down party exploration with side-view real-time combat, free movement, committed attack animations, post-animation cooldowns, and readable elemental detail.
 
-## Roster and animation production
+## Roster, art streams, and verifier posture
 
-The **[Roster Keystone](ROSTER_KEYSTONE.md)** is the authoritative 62-identity production ledger, with per-character art sources, six-pose masters, 24-frame animation clips, Git status, engine integration, and human-review gates. The latest source-derived enemy wave includes **16 additional regular enemies / 160 committed WebP motion clips / 3,840 animation frames** in four Git asset commits. These provisional cells remain subordinate to the premium painted asset pack and the existing pixel-animation fallback.
+The **[Roster Keystone](ROSTER_KEYSTONE.md)** ([`assets/art/roster-keystone/roster.json`](assets/art/roster-keystone/roster.json)) is the authoritative 62-identity production ledger (7 playable party, 28 regular enemies, 7 named bosses, 4 Kurozane forms, and 16 civilian NPC roles), tracking canonical pixel suites alongside opt-in candidate streams and explicit human-review gates:
 
-Review the generated animation candidates in [the browser motion studio](game/hd-source-derived-review.html), served through the normal game launcher.
+- **Opt-in `?art=hd` painted & source-derived combat motion ([`docs/48`](docs/48-hd-paint-engine.md)–[`docs/49`](docs/49-hd-motion-inbetweens.md), [`docs/52`](docs/52-hd-boss-vfx.md)–[`docs/53`](docs/53-hd-boss-final-four.md)):** `game/hd-painted-animation.mjs` and `game/hd-painted-motion.mjs` drive six-pose 2304×384 painted sheets and 24-frame WebP motion strips on demand, including phase-bound Kurozane `court`/`bell`/`dawn` form selection (`game/hd-kurozane-phase.mjs`), **16 Git-committed source-derived regular enemies / 160 WebP clips / 3,840 frames** (`overlay-missing-v1`), **144 committed six-boss HD presentation VFX cels** (`hd-boss-vfx-v1`), and **seven checksummed named-boss HD candidate intakes** (standalone 1536×1024 paintings for Captain Kaji, Widow of Fog, Furnace Abbot, and Ujiro; ~128 px comparison-poster extractions flagged for standalone repaint on Bell Warden Chiyo, Lady Enma, and Yearless Bell). All HD candidates remain subordinate to the canonical 20–30-frame pixel suites (`party-animation-suite-v2`, `boss-animation-suite-v2`, `kurozane-boss-clips-v2`) and hold `visualApproval: pending`.
+- **July concept recovery, 62-actor Gothic SVG studies, and Voice Lab ([`docs/44`](docs/44-voice-audition-handoff.md)–[`docs/46`](docs/46-svg-motion-cells.md)):** original July 2026 character/world PNG blobs (`july-illustrations-v1`), **69 vector-native Gothic SVG strips / 686 cells** across all 62 identities (`svg-cel-suite-v1`), and the 27-line synthetic EN/JA *Last Command* prototype (`voice-prototype-v1`, non-shippable pending human actors and native Japanese direction) are wired into dedicated browser review desks: [source-derived motion](game/hd-source-derived-review.html), [boss HD VFX](game/hd-boss-vfx-review.html), [Gothic SVG studio](game/svg-motion-studio.html), [July illustration archive](game/illustration-review.html), and [Voice Lab](game/voice-lab.html).
+- **Production DAG (`jrpg-verifiers-v2`):** **29/32 nodes verified**, `1` optional teaser planned, and `2` human-gated nodes (`qa.final-playtests`, `qa.release-readiness`) kept honestly `partial` while contractor execution follows the [staffing and contractor plan](docs/56-staffing-and-contractor-plan.md).
 
 ## Play
 
@@ -22,7 +24,7 @@ A complete story run takes a few hours. Finishing the story unlocks **Finish the
 
 ## Current milestone
 
-Side-view real-time action is now the canonical campaign combat route. The [integrated action campaign battle](game/action-campaign-battle.html) runs all real encounters and authored side-view stages with free movement, grounded jumping, fixed attack commitments, visible post-animation cooldowns, level-scaled timer recovery, typed damage, deterministic companions/enemies, cooldown-preserving party switching, shipped sprites, Storyworld context, active-play telemetry, and atomic campaign settlement. All 18 objective families are authoritative, including escort/incapacitation tokens, protected scenery, countdown extractions, and attackable phase objects. Authored pulls, pushes, statuses, summons, weak points, defensive windows, Mateus's 25% Blood Ward, and typed HP/cadence boss phases execute through deterministic action seams. Nikola and Mateus can perform Black Sun Concord as an atomic two-character cast while retaining each typed hit and native cooldown. The complete tactical controller remains available as the explicit per-tab rollback at `campaign.html?legacyBattle=1`.
+Side-view real-time action is now the canonical campaign combat route. The [integrated action campaign battle](game/action-campaign-battle.html) runs all real encounters and authored side-view stages with free movement, grounded jumping, fixed attack commitments, visible post-animation cooldowns, level-scaled timer recovery, typed damage, deterministic companions/enemies, cooldown-preserving party switching, authored enemy AI priority tables, neutral-chip and wind-up poise interrupts, exact world-hitbox telegraphs, simulation-preserving hit-stop and boss phase beats ([`docs/42`](docs/42-combat-feel-pass.md)), tiered readable enemy tells and 160 ms jump/input leniency buffers ([`docs/43`](docs/43-timing-windows-pass.md)), shipped 20–30-frame party/boss pixel clips (`party-animation-suite-v2`, `boss-animation-suite-v2`, `kurozane-boss-clips-v2`), 20 side-view backdrops, 28 objective sprite kinds, Storyworld context, active-play telemetry, and atomic campaign settlement. All 18 objective families are authoritative, including escort/incapacitation tokens, protected scenery, countdown extractions, and attackable phase objects. Authored pulls, pushes, statuses, summons, weak points, defensive windows, Mateus's 25% Blood Ward, and typed HP/cadence boss phases execute through deterministic action seams. Nikola and Mateus can perform Black Sun Concord as an atomic two-character cast while retaining each typed hit and native cooldown. The complete tactical controller remains available as the explicit per-tab rollback at `campaign.html?legacyBattle=1`.
 
 The repository now has a playable campaign spine alongside the deliberately small **FP-0 Combat Proof**. The Campaign Atlas contains 60 authored campaign scenes and 40 Storyworld scenes, for a 100-scene catalog. A complete nonlinear run now plays 76 scenes on Ash or 77 on Salt/Paper. The Act III war table selects three of four regional operations, changes their order, skips the fourth operation and its owned Storyworld cluster, drives an exact eight-sequence Act III plan, chooses one of three playable Act IV approach maps, and feeds explicit Act V surrender/civil-war parameters. All four operations now own a decision cluster, so every route plays eleven decisions and eleven consequences. Every Act III–IV decision reaction reads at least four prior threads and every consequence reaction reads four, converting consent, evidence, accountability, and care into evacuation, Oni disruption, bell intelligence, garrison defection, and succession capacity. The balance audit measures immediate effect-vector separation, cumulative path travel, endpoint displacement, route/ending centroid distance, and inclination margins rather than relying only on ending frequency. Lady Enma of Ash escalates through three boss fights before a dedicated spool records death, rotating custody, or a revocable negotiated defection. The final after-boss cluster, **The Last Command**, carries five confrontation tactics through thirteen dramatic flows into four political endings: Kurozane's living abdication under mortal custody, public abdication followed by witnessed seppuku at dawn, a prepared execution that preserves civil command, or an unprepared execution/failed parley that mobilizes the succession vacuum into civil war. The rare confession performs an exact reversal of Kurozane’s accumulated pride; ordinary histories use bounded inclination nudges. Exact options, deterministic reactions, bounded state effects, route-aware receipts, and later battle-context cards persist under the clean run. The authored catalog still gates at 23 explicitly bound encounters and 34 tested conditional route chains. Exact collision-aware exploration drives nearby interactions, timed and conditional hazards, placed encounter triggers, field loot, and conditional exits from level data.
 
@@ -54,6 +56,7 @@ The prior 154-second isolated Chrome gate on narrative run prefix `0e7e0b72` cov
 - [Detailed outline](docs/04-detailed-outline.md)
 - [Art direction](docs/05-art-direction.md)
 - [Master asset list](docs/06-master-asset-list.md)
+- [First-playable QA card](docs/07-first-playable-qa.md)
 - [Campaign content pipeline](docs/08-campaign-content-pipeline.md)
 - [Level and encounter bible](docs/09-level-and-encounter-bible.md)
 - [Animation bible](docs/10-animation-bible.md)
@@ -69,11 +72,33 @@ The prior 154-second isolated Chrome gate on narrative run prefix `0e7e0b72` cov
 - [Historical and cultural audit note](docs/20-historical-cultural-audit.md)
 - [Takamine battle-environment production brief](docs/21-takamine-battle-environment-brief.md)
 - [Storyworld sequence production map](docs/22-storyworld-sequence-production-map.md)
-- [Five-act master Storyworld plan](docs/38-five-act-master-storyworld-plan.md)
 - [Current-build accessibility audit](docs/23-current-build-accessibility-audit.md)
 - [External cultural review packet](docs/24-external-cultural-review-packet.md)
 - [Combat balance audit](docs/25-combat-balance-audit.md)
 - [Real-time action-combat pivot](docs/26-real-time-action-combat-pivot.md)
+- [Action-route balance receipt](docs/27-action-route-balance-receipt.md)
+- [Opening-slice blind playtest protocol](docs/28-opening-slice-blind-playtest.md)
+- [Opening-slice rendered route receipt](docs/29-opening-slice-route-receipt.md)
+- [Lady Enma recurring antagonist](docs/32-lady-enma-recurring-antagonist.md)
+- [Miyo Senda — Fourfold Weather Scholar](docs/33-miyo-senda-fourfold-weather-scholar.md)
+- [Act I — The Hidden Shore](docs/34-act-i-the-hidden-shore.md)
+- [Act II — The Bishop Beneath the Bell](docs/35-act-ii-the-bishop-beneath-the-bell.md)
+- [Act V — The Last Command](docs/36-act-v-the-last-command.md)
+- [Acts IV and V level design](docs/37-act-iv-and-v-level-design.md)
+- [Five-act master Storyworld plan](docs/38-five-act-master-storyworld-plan.md)
+- [Storyworld path and effect balance](docs/39-storyworld-path-and-effect-balance.md)
+- [Top-to-bottom game evaluation and balance pass](docs/40-top-to-bottom-game-evaluation-and-balance-pass.md)
 - [Action-combat full-route playthrough receipt](docs/41-action-route-playthrough-receipt.md)
+- [Combat-feel pass: authored AI, poise, telegraphs, impact](docs/42-combat-feel-pass.md)
+- [Timing-windows pass: readable tells, punish windows, interrupts](docs/43-timing-windows-pass.md)
+- [Voice audition ledger and render handoff](docs/44-voice-audition-handoff.md)
+- [July 2026 illustration recovery and art direction](docs/45-july-illustration-recovery.md)
+- [SVG motion cells: 62-identity source art pass](docs/46-svg-motion-cells.md)
+- [HD painted animation: Action Campaign engine integration](docs/48-hd-paint-engine.md)
+- [HD painted motion v2: 24-cell animation integration](docs/49-hd-motion-inbetweens.md)
+- [HD painted humanoid enemy wave](docs/49-hd-humanoid-enemy-wave.md)
+- [Boss HD presentation effects: 144-cel source pass](docs/52-hd-boss-vfx.md)
+- [Final four HD boss review intake](docs/53-hd-boss-final-four.md)
+- [Staffing and contractor plan](docs/56-staffing-and-contractor-plan.md)
 
 Run [`game/`](game/README.md) and open `http://localhost:8080/campaign.html` for the canonical action-combat campaign, `http://localhost:8080/action-campaign-battle.html?encounter=c1-cinder-hounds` for the isolated Action Lab, `http://localhost:8080/action-battle-prototype.html` for the small feel proof, `http://localhost:8080/camp.html` for Camp & Loadout, or `http://localhost:8080/credits.html` for the explicit ending boundary. Add `?legacyBattle=1` to Campaign for the tactical rollback. Production-reference art and its reproducible prompt record are in [`assets/production/`](assets/production/README.md).

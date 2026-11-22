@@ -180,6 +180,7 @@ import {
   npcFieldAtlasImageHasExpectedSize,
   resolveNpcFieldRole,
 } from './npc-field-atlas.mjs';
+import { createNpcMotionRuntime } from './npc-motion-v1.mjs';
 import { resolveFieldCharacterPresentation } from './field-character-presentation.mjs';
 import {
   FIELD_TERRAIN_ATLAS,
@@ -325,6 +326,30 @@ npcFieldAtlasImage.addEventListener('error', () => {
   renderCurrentSceneDirection();
 }, { once: true });
 npcFieldAtlasImage.src = NPC_FIELD_ATLAS.url;
+const npcMotionEnabled = campaignQuery.get('npcMotion') === '1';
+mapCanvas.dataset.npcMotionMode = npcMotionEnabled ? 'enabled' : 'off';
+// All 16 roles come from the canonical NPC field atlas; metadata decides who
+// is a person. This animation layer has no effect on interaction geometry.
+const npcMotionRuntime = createNpcMotionRuntime({
+  enabled: npcMotionEnabled,
+  fetchJson: async (url) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('NPC motion HTTP ' + response.status);
+    return response.json();
+  },
+  createImage: () => new Image(),
+  onChange: (role, clip, state) => {
+    mapCanvas.dataset.npcMotionRole = role;
+    mapCanvas.dataset.npcMotionClip = clip;
+    mapCanvas.dataset.npcMotionState = state;
+  },
+  onFrame: (role, clip, index) => {
+    mapCanvas.dataset.npcMotionRole = role;
+    mapCanvas.dataset.npcMotionClip = clip;
+    mapCanvas.dataset.npcMotionFrame = String(index);
+    mapCanvas.dataset.npcMotionState = 'ready';
+  },
+});
 const fieldTerrainAtlasImage = new Image();
 let fieldTerrainAtlasState = 'loading';
 mapCanvas.dataset.terrainArtState = fieldTerrainAtlasState;
@@ -1365,7 +1390,14 @@ function drawNpcFieldMarker(role, px, py, cell, { badge = null } = {}) {
   mapCtx.beginPath();
   mapCtx.ellipse(px, footY, cell * 0.22, cell * 0.07, 0, 0, Math.PI * 2);
   mapCtx.fill();
-  mapCtx.drawImage(
+  const renderedMotion = npcMotionRuntime.draw(mapCtx, role, pose, {
+    nowMs: performance.now(),
+    anchorX: px,
+    footY,
+    drawHeight,
+    reducedMotion: reducedMotion.matches,
+  });
+  if (!renderedMotion) mapCtx.drawImage(
     npcFieldAtlasImage,
     frame.x,
     frame.y,
