@@ -37,10 +37,12 @@ jobs:
           (cd game && npm run check)
       - name: Install Pillow and isolated Chromium
         run: |
-          python -m pip install 'pillow>=11,<13' playwright
+          python -m pip install 'pillow>=11,<13' 'numpy>=2,<3' playwright
           python -m playwright install --with-deps chromium
-      - name: Browser exercise with synthetic uploaded WebP and original committed boss art
-        run: python game/tools/hd-cutover-browser-smoke.py
+      - name: Reconstruct the actual Yearless and Enma effect-prelude review candidates
+        run: python game/tools/hd-boss-active-effect-leadin.py --root . --output-dir artifacts/hd-cutover-browser/real-source-candidates
+      - name: Browser exercise using real candidate WebP, SHA receipt, and invalid-hash control
+        run: python game/tools/hd-cutover-browser-smoke.py --real-candidate-dir artifacts/hd-cutover-browser/real-source-candidates
       - name: Verify source art and canonical approval were unchanged
         run: git diff --exit-code -- assets/art game/assets/art/hd-painted-v1
       - name: Upload full-page screenshot and SHA-verified evidence pair
