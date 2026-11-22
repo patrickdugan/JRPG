@@ -23,6 +23,9 @@ on:
         default: false
 permissions:
   contents: read
+concurrency:
+  group: jrpg-late-boss-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   late-boss-lab:
     runs-on: ubuntu-24.04
@@ -63,7 +66,7 @@ jobs:
           retention-days: 14
 
   full-rendered-route:
-    if: github.event_name == 'workflow_dispatch' && inputs.full_route
+    if: (github.event_name == 'workflow_dispatch' && inputs.full_route) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[full-route]'))
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
