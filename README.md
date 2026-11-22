@@ -99,6 +99,10 @@ The prior 154-second isolated Chrome gate on narrative run prefix `0e7e0b72` cov
 - [HD painted humanoid enemy wave](docs/49-hd-humanoid-enemy-wave.md)
 - [Boss HD presentation effects: 144-cel source pass](docs/52-hd-boss-vfx.md)
 - [Final four HD boss review intake](docs/53-hd-boss-final-four.md)
+- [Civilian NPC 24-frame field motion](docs/54-civilian-npc-motion.md)
+- [Final HD boss binary import receipts](docs/55-hd-final-boss-binary-import.md)
 - [Staffing and contractor plan](docs/56-staffing-and-contractor-plan.md)
+- [Voice cast, battle barks, and opt-in playback](docs/57-voice-cast-and-campaign-playback.md)
+- [Integrated browser, smoke, and FP-1 route verification](docs/58-integrated-browser-and-route-verification.md)
 
 Run [`game/`](game/README.md) and open `http://localhost:8080/campaign.html` for the canonical action-combat campaign, `http://localhost:8080/action-campaign-battle.html?encounter=c1-cinder-hounds` for the isolated Action Lab, `http://localhost:8080/action-battle-prototype.html` for the small feel proof, `http://localhost:8080/camp.html` for Camp & Loadout, or `http://localhost:8080/credits.html` for the explicit ending boundary. Add `?legacyBattle=1` to Campaign for the tactical rollback. Production-reference art and its reproducible prompt record are in [`assets/production/`](assets/production/README.md).
