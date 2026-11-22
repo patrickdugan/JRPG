@@ -73,7 +73,7 @@ function playMotion() {
    if(timer===null)return;
    // Cycle meaningful animation bands, avoiding random time-based phase mixing.
    const cycle=mode==='action'?[0,1,2,3,5,5,6,6,7,0,9,9,7,0]:actor.group==='npc'?[0,1,0,1]:[0,1,0,1];
-   const current=cycle[Math.floor((now-playStarted)/170)%cycle.length];
+   const current=cycle[Math.floor(Math.max(0,now-playStarted)/170)%cycle.length];
    if(current!==oldIndex)showFrame(current);
    oldIndex=current;timer=requestAnimationFrame(tick);
  }

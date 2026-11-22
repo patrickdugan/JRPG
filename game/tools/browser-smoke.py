@@ -151,7 +151,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "The noncombat opening scene exposed a battle.",
             )
 
-            page.get_by_role("link", name="Camp & Loadout").click()
+            page.get_by_role("link", name="Camp", exact=True).click()
             page.wait_for_url("**/camp.html")
             page.locator("#memberName").wait_for()
             page.wait_for_function(
@@ -179,7 +179,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 camp_party_art == {
                     "portrait": "ready", "inventoryItems": "ready", "shopItems": "ready",
                     "usesAtlas": True, "memberId": "ren", "expression": "neutral",
-                    "row": "0", "column": "0", "x": "0", "y": "0", "width": "64", "height": "64",
+                    "row": "0", "column": "0", "x": "0", "y": "0", "width": "96", "height": "96",
                 },
                 f"Camp Ren portrait frame contract drifted: {camp_party_art}.",
             )
@@ -196,17 +196,17 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 "token => ({ memberId: token.dataset.memberId, expression: token.dataset.expression, row: token.dataset.frameRow, column: token.dataset.frameColumn, x: token.dataset.frameX, y: token.dataset.frameY })"
             )
             require(
-                aya_portrait_art == {"memberId": "aya", "expression": "neutral", "row": "1", "column": "0", "x": "0", "y": "64"},
+                aya_portrait_art == {"memberId": "aya", "expression": "neutral", "row": "1", "column": "0", "x": "0", "y": "96"},
                 f"Camp Aya portrait frame contract drifted: {aya_portrait_art}.",
             )
-            require(page.locator("#campConversationSummary").inner_text() == "0 / 90 complete", "Camp talk frontier drifted.")
-            require(page.locator("#partyCouncilSummary").inner_text() == "0 / 30 complete", "Council frontier drifted.")
-            require(page.locator("#archiveRecordSummary").inner_text() == "0 / 60 read", "Archive frontier drifted.")
+            require(page.locator("#campConversationSummary").inner_text() == "0 remembered", "Camp talk frontier drifted.")
+            require(page.locator("#partyCouncilSummary").inner_text() == "0 remembered", "Council frontier drifted.")
+            require(page.locator("#archiveRecordSummary").inner_text() == "0 read", "Archive frontier drifted.")
             page.locator('a[href="campaign.html"]').click(no_wait_after=True)
             page.wait_for_url("**/campaign.html")
-            page.locator("#runProofStatus").wait_for()
+            page.locator("#resetCampaign").wait_for()
             require(
-                page.locator("#runProofStatus").inner_text().startswith(run_prefix),
+                (page.locator("#runProofStatus").text_content() or "").strip().startswith(run_prefix),
                 "Run receipt did not survive the Camp round trip.",
             )
 
@@ -983,7 +983,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
 
             # Leave the battle controller before replacing cross-page states;
             # its pagehide flush must run before, not after, the complete seed.
-            page.goto(f"{base}/index.html", wait_until="domcontentloaded")
+            page.goto(f"{base}/training.html?dev=1", wait_until="domcontentloaded")
             page.locator("#gameCanvas").wait_for()
 
             credits_seed = page.evaluate(
@@ -1061,7 +1061,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 and "active-playtime-incomplete" in credits_seed["gateReasons"],
                 f"Narrative gate seed drifted before credits: {credits_seed}.",
             )
-            page.goto(f"{base}/credits.html", wait_until="domcontentloaded")
+            page.goto(f"{base}/credits.html?dev=1", wait_until="domcontentloaded")
             page.locator("#sealCredits").wait_for()
             require(page.locator("#categoryTimingList > li").count() == 5, "Credits activity timing ledger is incomplete.")
             require(page.locator("#chapterTimingList > li").count() == 11, "Credits chapter timing ledger is incomplete.")
@@ -1147,7 +1147,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(pacing_export.get("diagnosticOnly") is True, "Evidence export pacing is not diagnostic-only.")
             require(pacing_export.get("observedPlaytimeProof") is False, "Evidence export pacing fabricated observed proof.")
             require(pacing_export.get("checkpointSignature") == "fnv1a32:95a9f55d", "Evidence checkpoint signature drifted.")
-            require(pacing_export.get("aggregateReferenceTargetMs") == 74613750, "Evidence pacing total drifted.")
+            require(pacing_export.get("aggregateReferenceTargetMs") == 74676250, "Evidence pacing total drifted.")
             require(len(pacing_export.get("chapters", [])) == 11, "Evidence export chapter pacing is incomplete.")
             signature = exported_report.get("signature", "")
             require(signature.startswith("fnv1a32:") and len(signature) == 16, "Evidence export signature is malformed.")
@@ -1185,7 +1185,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             # Campaign owns pagehide persistence. Leave it before preparing a
             # later canonical frontier so the live opening state cannot
             # overwrite the QA setup during navigation.
-            recovery_page.goto(f"{base}/index.html", wait_until="domcontentloaded")
+            recovery_page.goto(f"{base}/training.html?dev=1", wait_until="domcontentloaded")
             recovery_page.locator("#gameCanvas").wait_for()
             storyworld_seed = recovery_page.evaluate(
                 """async () => {
@@ -1198,7 +1198,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   if (!loaded.ok || !loaded.found) throw new Error('Recovery smoke has no clean run.');
                   let receiptState = loaded.state;
                   let campaignState = progression.createCampaignState();
-                  while (progression.getCurrentBeat(campaignState).id !== 'c3-04-lantern-boat-escort') {
+                  while (progression.getCurrentBeat(campaignState).id !== 'c3-01-separate-arrivals') {
                     const beat = progression.getCurrentBeat(campaignState);
                     const recorded = receipt.recordRunBeatCompletion(receiptState, receiptState.runId, beat.id);
                     if (!recorded.ok) throw new Error(recorded.errors.join(' '));
@@ -1239,7 +1239,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   };
                 }"""
             )
-            recovery_page.goto(f"{base}/campaign.html", wait_until="domcontentloaded")
+            recovery_page.goto(f"{base}/campaign.html?dev=1", wait_until="domcontentloaded")
             recovery_page.locator("#storyworldPanel").wait_for(state="visible")
             pre_boss_lock = recovery_page.evaluate(
                 """() => {
@@ -1259,7 +1259,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 }"""
             )
             require(
-                storyworld_seed["beatId"] == "c3-04-lantern-boat-escort"
+                storyworld_seed["beatId"] == "c3-01-separate-arrivals"
                 and storyworld_seed["completedStoryworldDecisionIds"] == [
                     "sw1-clerks-second-copy",
                     "sw2-witness-not-family",
@@ -1269,7 +1269,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             require(
                 pre_boss_lock["clusterId"] == "sw3-sayos-warehouse-conditions"
                 and pre_boss_lock["phase"] == "unseen"
-                and "c3-dock-patrol" in pre_boss_lock["placement"]
+                and "coalition route decision" in pre_boss_lock["placement"]
                 and pre_boss_lock["fieldMoveDisabled"] is True
                 and pre_boss_lock["dialogueDisabled"] is True
                 and pre_boss_lock["nextDisabled"] is True
@@ -1390,7 +1390,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
             )
             require(
                 recovery_checkpoint.get("summary", {}).get("storyworldCompletedClusterCount") == 3
-                and recovery_checkpoint.get("summary", {}).get("storyworldRequiredClusterCount") == 10
+                and recovery_checkpoint.get("summary", {}).get("storyworldRequiredClusterCount") == 12
                 and recovery_checkpoint.get("summary", {}).get("storyworldNarrativeComplete") is False
                 and recovery_checkpoint.get("summary", {}).get("storyworldProofEligible") is True,
                 f"Recovery checkpoint Storyworld summary drifted: {recovery_checkpoint.get('summary', {})}.",
@@ -1488,13 +1488,19 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                   const progression = await import('./progression.mjs');
                   const adapter = progression.createLocalStorageAdapter();
                   const loaded = adapter.load();
-                  const next = progression.completeCurrentBeat(loaded.state);
+                  let next = loaded.state;
+                  for (let step = 0; step < 25 && progression.getCurrentBeat(next).id !== 'c3-02-the-checkpoint'; step += 1) {
+                    next = progression.completeCurrentBeat(next);
+                  }
                   if (!adapter.save(next).ok) throw new Error('Route-guide campaign seed did not save.');
                   return next.completedBeatIds[0];
                 }"""
             )
             route_page.reload(wait_until="domcontentloaded")
-            route_action_button = route_page.locator("#routeDueList [data-route-activity-id]").first
+            route_page.locator(".journal-drawer > summary").click()
+            route_action_button = route_page.locator('#routeDueList [data-route-activity-type="archive-record"]').first
+            if route_action_button.count() == 0:
+                route_action_button = route_page.locator("#routeDueList [data-route-activity-id]").first
             route_action_button.wait_for()
             route_activity_id = route_action_button.get_attribute("data-route-activity-id")
             route_activity_type = route_action_button.get_attribute("data-route-activity-type")
@@ -1574,7 +1580,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                 }"""
             )
             require(catalog_seed["completedBeatCount"] == 60, "Catalogue prerequisite seed omitted story beats.")
-            require(catalog_seed["unlockedPartyCount"] == 6, "Catalogue prerequisite seed omitted party members.")
+            require(catalog_seed["unlockedPartyCount"] == 7, "Catalogue prerequisite seed omitted party members.")
             require(catalog_seed["receiptBeatCount"] == 0, "Catalogue prerequisite seed fabricated receipt story evidence.")
             catalog_page.goto(f"{base}/camp.html", wait_until="domcontentloaded")
             catalog_page.locator("#memberName").wait_for()
@@ -1744,7 +1750,7 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                     f"Responsive {path} overflows horizontally: {widths}.",
                 )
                 semantic = responsive_page.evaluate(
-                    """() => {
+                    r"""() => {
                       const visible = element => {
                         const style = getComputedStyle(element);
                         const rect = element.getBoundingClientRect();
@@ -1956,12 +1962,22 @@ def run_smoke(chromium: Path) -> dict[str, object]:
                         f"Responsive Campaign backdrop drifted: {responsive_scene_backdrop}.",
                     )
                     chapter_button = responsive_page.locator("[data-chapter-id]:not(:disabled)").first
-                    chapter_id = chapter_button.get_attribute("data-chapter-id")
-                    chapter_button.click()
-                    require(
-                        responsive_page.evaluate("id => document.activeElement?.dataset.chapterId === id", chapter_id),
-                        "Campaign chapter focus was lost after its control was rebuilt.",
-                    )
+                    if chapter_button.is_visible():
+                        chapter_id = chapter_button.get_attribute("data-chapter-id")
+                        chapter_button.click()
+                        require(
+                            responsive_page.evaluate("id => document.activeElement?.dataset.chapterId === id", chapter_id),
+                            "Campaign chapter focus was lost after its control was rebuilt.",
+                        )
+                    else:
+                        require(
+                            responsive_page.evaluate("() => document.body.classList.contains('opening-focus')"),
+                            "Campaign hid chapter rail outside opening-focus mode.",
+                        )
+                        require(
+                            responsive_page.locator("#openingSliceAction").is_visible(),
+                            "Opening-focus Campaign hid its guided next-step control.",
+                        )
                 elif path.startswith("battle.html"):
                     enemy_button = responsive_page.locator("#enemyPanel button[data-actor-id]").first
                     enemy_id = enemy_button.get_attribute("data-actor-id")

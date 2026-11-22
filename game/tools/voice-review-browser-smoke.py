@@ -20,6 +20,13 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, _format: str, *_args: object) -> None:
         return
 
+    def do_GET(self) -> None:
+        if self.path == '/favicon.ico':
+            self.send_response(204)
+            self.end_headers()
+            return
+        super().do_GET()
+
 
 def check(condition: bool, message: str) -> None:
     if not condition:
@@ -40,7 +47,23 @@ def smoke(chromium: str | None, minimum_lines: int, screenshot_path: Path) -> di
             opts: dict[str, object] = {'headless': True, 'args': ['--no-sandbox']}
             if chromium:
                 opts['executable_path'] = chromium
-            browser = playwright.chromium.launch(**opts)
+            try:
+                browser = playwright.chromium.launch(**opts)
+            except Exception as err:
+                if chromium or "Executable doesn't exist" not in str(err):
+                    raise
+                for candidate in (
+                    Path(r'C:\Program Files\Google\Chrome\Application\chrome.exe'),
+                    Path(r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'),
+                    Path.home() / r'AppData\Local\Google\Chrome\Application\chrome.exe',
+                    Path(r'C:\Program Files\Microsoft\Edge\Application\msedge.exe'),
+                ):
+                    if candidate.is_file():
+                        opts['executable_path'] = str(candidate)
+                        browser = playwright.chromium.launch(**opts)
+                        break
+                else:
+                    raise
             context = browser.new_context(viewport={'width': 1365, 'height': 960}, accept_downloads=True)
             page = context.new_page()
             page.set_default_timeout(20_000)

@@ -18,6 +18,13 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, _format: str, *_args: object) -> None:
         pass
 
+    def do_GET(self) -> None:
+        if self.path == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
+            return
+        super().do_GET()
+
 
 def smoke() -> dict:
     server = ThreadingHTTPServer(
@@ -29,7 +36,22 @@ def smoke() -> dict:
     base = f"http://127.0.0.1:{server.server_address[1]}"
     try:
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(headless=True)
+            try:
+                browser = playwright.chromium.launch(headless=True)
+            except Exception as err:
+                if "Executable doesn't exist" not in str(err):
+                    raise
+                for candidate in (
+                    Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+                    Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+                    Path.home() / r"AppData\Local\Google\Chrome\Application\chrome.exe",
+                    Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
+                ):
+                    if candidate.is_file():
+                        browser = playwright.chromium.launch(headless=True, executable_path=str(candidate))
+                        break
+                else:
+                    raise
             context = browser.new_context(viewport={"width": 1420, "height": 1040}, accept_downloads=True)
             page = context.new_page()
             page.set_default_timeout(20000)

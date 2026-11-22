@@ -19,7 +19,22 @@ def check():
     errors=[]
     try:
         with sync_playwright() as p:
-            browser=p.chromium.launch(headless=True)
+            try:
+                browser=p.chromium.launch(headless=True)
+            except Exception as err:
+                if "Executable doesn't exist" not in str(err):
+                    raise
+                for candidate in (
+                    Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe"),
+                    Path(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"),
+                    Path.home()/r"AppData\Local\Google\Chrome\Application\chrome.exe",
+                    Path(r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"),
+                ):
+                    if candidate.is_file():
+                        browser=p.chromium.launch(headless=True,executable_path=str(candidate))
+                        break
+                else:
+                    raise
             page=browser.new_page(viewport={"width":1280,"height":1000},reduced_motion="reduce")
             page.set_default_timeout(20_000)
             page.on("pageerror",lambda e:errors.append(str(e)))
