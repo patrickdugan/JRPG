@@ -28,6 +28,7 @@ class MotionDiversityTest(unittest.TestCase):
         self.assertEqual(len({hashlib.sha256(f.tobytes()).hexdigest() for f in frames}), 24)
         metrics = audit.analyze_motion(frames)
         self.assertEqual(metrics["maxVisibleDifferenceFromFirst"], 0)
+        self.assertEqual(metrics["maxForegroundDifferenceFromFirst"], 0)
         self.assertEqual(metrics["framesDifferentFromFirstAt2"], 0)
         self.assertTrue(metrics["nearStaticReviewCandidate"])
         self.assertFalse(metrics["rigidShiftReviewCandidate"])
@@ -35,7 +36,8 @@ class MotionDiversityTest(unittest.TestCase):
     def test_visible_animated_arm_increases_measured_motion(self):
         frames = [frame(i, arm=True) for i in range(24)]
         metrics = audit.analyze_motion(frames)
-        self.assertGreater(metrics["maxVisibleDifferenceFromFirst"], 2)
+        self.assertGreater(metrics["maxForegroundDifferenceFromFirst"], 4)
+        self.assertGreater(metrics["maxVisibleDifferenceFromFirst"], 1.0)
         self.assertFalse(metrics["nearStaticReviewCandidate"])
         self.assertGreater(metrics["maxAdjacentGrayscaleMAE"], 0)
 
